@@ -634,10 +634,16 @@ def check_theme(theme: str, theme_data: dict[str, Any], *, verbose: bool = False
         verified_regions = []
         module_name = COUNT_PROVENANCE_MODULES.get(theme)
         if module_name and doc_name == str(html_path.relative_to(ROOT)):
-            verified_selectors = import_module(module_name).verified_selectors
+            module = import_module(module_name)
             try:
+                selectors = dict(module.verified_selectors(text, ROOT))
+                # 非公開正典の数え直しで照合する節（意見の推移など）は、別関数に分けてある。
+                # 公開CIは非公開正典を読めないので、verified_selectors の側には入れない。
+                private = getattr(module, "private_verified_selectors", None)
+                if private is not None:
+                    selectors.update(private(text, ROOT))
                 verified_regions = [(selector_regions(text, [selector]), reason)
-                                    for selector, reason in verified_selectors(text, ROOT).items()]
+                                    for selector, reason in selectors.items()]
             except (ValueError, KeyError, OSError) as exc:
                 raise ProvenanceError(str(exc)) from exc
         numbers = extract_numbers(text, doc_name)

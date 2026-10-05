@@ -185,6 +185,54 @@
   .tide-slope-wrap{display:none}.tide-mobile-rows{display:block;margin-top:12px}
 }
 /* TIDE_CARD_END */
+
+/* TREND_CARD_START */
+.trend-card{max-width:1180px;margin:18px auto 0;padding:26px 28px;border:1px solid #d9e2ef;border-radius:20px;background:#fff;box-shadow:0 16px 40px rgba(18,35,64,.09);color:var(--ink)}
+.trend-head{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:12px}
+.trend-kicker{display:inline-flex;margin:0;padding:5px 10px;border-radius:999px;background:#eaf1ff;color:#315bd8;font-size:13px;font-weight:900}
+.trend-asof{display:inline-flex;padding:8px 12px;border-radius:12px;background:#f3f6fb;color:#26364f;font-size:14px;font-weight:900;white-space:nowrap}
+.trend-tabs{display:flex;gap:6px;width:max-content;max-width:100%;margin:0 0 16px;padding:4px;border-radius:12px;background:#eef3f9}
+.trend-tab{min-height:38px;padding:8px 14px;border:0;border-radius:9px;background:transparent;color:#53647c;font:inherit;font-size:13px;font-weight:900;cursor:pointer}
+.trend-tab[aria-pressed="true"]{background:#13223d;color:#fff;box-shadow:0 4px 12px rgba(18,35,64,.15)}
+.trend-panel[hidden]{display:none}
+.trend-card h2{margin:0 0 10px;font-size:26px;letter-spacing:-.02em;line-height:1.4}
+.trend-lead{margin:0 0 8px;color:#26364f;font-size:16px;line-height:1.85}
+.trend-legend{display:flex;flex-wrap:wrap;gap:6px 18px;margin:16px 0 4px;padding:0;list-style:none;color:#26364f;font-size:13px;font-weight:800}
+.trend-legend li{display:inline-flex;align-items:center;gap:7px}
+.trend-stage{position:relative;margin-top:6px;outline:none;touch-action:pan-y}
+.trend-stage:focus-visible{box-shadow:0 0 0 3px #bcd0ff;border-radius:10px}
+.trend-svg{display:block;max-width:100%;overflow:visible}
+.trend-grid{stroke:#e4e9f1;stroke-width:1}
+.trend-cross{stroke:#9aa8bd;stroke-width:1;opacity:0;pointer-events:none}
+.trend-tick{fill:#66758b;font-size:12px;font-weight:700}
+.trend-end{fill:#0b1d3a;font-size:13px;font-weight:900}
+.trend-tip{position:absolute;top:6px;z-index:2;min-width:190px;padding:10px 12px;border:1px solid #d9e2ef;border-radius:12px;background:#fff;box-shadow:0 10px 28px rgba(18,35,64,.16);pointer-events:none;font-size:12px;line-height:1.5}
+.trend-tip[hidden]{display:none}
+.trend-tip p{margin:0}.trend-tip-head{margin-bottom:5px!important;color:#66758b;font-weight:800}
+.trend-tip-row{display:flex;align-items:center;gap:8px;padding:1px 0}
+.trend-tip-row i{width:14px;height:2px;border-radius:2px;flex:none}
+.trend-tip-row b{min-width:46px;color:#0b1d3a;font-size:14px;font-weight:900}
+.trend-tip-row span{color:#4b5c74;font-weight:700}
+.trend-table-wrap{margin-top:18px;overflow-x:auto;border-radius:12px;outline:none}
+.trend-table-wrap:focus-visible{box-shadow:0 0 0 3px #bcd0ff}
+.trend-table{width:100%;min-width:560px;border-collapse:collapse;font-size:14px}
+.trend-table caption{padding:0 0 8px;color:#66758b;font-size:13px;font-weight:800;text-align:left}
+.trend-table th,.trend-table td{padding:8px 10px;border-top:1px solid #e4e9f1;text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.trend-table thead th{border-top:0;border-bottom:1px solid #cdd7e5;color:#4b5c74;font-size:12px;font-weight:900;white-space:normal;vertical-align:bottom}
+.trend-table tbody th{text-align:left;color:#26364f;font-weight:900}
+.trend-table .is-latest th,.trend-table .is-latest td{background:#f3f6fb;color:#0b1d3a;font-weight:900}
+.trend-note{margin:16px 0 0;padding:14px 0 0;border-top:1px solid #e4e9f1;color:#66758b;font-size:12px;line-height:1.75;list-style:none}
+.trend-note li+li{margin-top:3px}
+.trend-short{display:none}
+@media(max-width:640px){.trend-card{padding:20px 16px;border-radius:16px}.trend-card h2{font-size:21px}.trend-lead{font-size:15px}.trend-asof{white-space:normal}
+.trend-full{display:none}.trend-short{display:inline}
+.trend-table-wrap{overflow-x:visible}.trend-table{min-width:0;table-layout:fixed;font-size:12.5px}
+.trend-table th,.trend-table td{padding:7px 3px}
+.trend-table thead th{padding:7px 2px;font-size:11px;line-height:1.35}
+.trend-table tbody th{width:17%}.trend-table td.col-n{width:15%}
+.trend-table--wide{font-size:11.5px}.trend-table--wide .col-n{display:none}.trend-table--wide tbody th{width:18%}.trend-table--wide thead th{font-size:10.5px}}
+@media print{.trend-tip{display:none!important}}
+/* TREND_CARD_END */
 </style>
   <link rel="stylesheet" href="topic-modern.css?v=32">
   <script src="topic-modern.js?v=14" defer></script>
@@ -1961,6 +2009,196 @@ try {
   }
 })();
 </script>
+<!-- TREND_CARD_START -->
+<section class="trend-card" id="consumption-tax-cut-trend" aria-label="SNS上の意見の推移">
+  <div class="trend-head">
+    <p class="trend-kicker">SNS上の意見の推移</p>
+    <span class="trend-asof">2026年10月3日時点</span>
+  </div>
+  <div class="trend-tabs" role="group" aria-label="推移の見方を切り替え"><button type="button" class="trend-tab" data-trend-tab="stance" aria-controls="consumption-tax-cut-trend-panel-stance" aria-pressed="true">立場の変化</button><button type="button" class="trend-tab" data-trend-tab="issue" aria-controls="consumption-tax-cut-trend-panel-issue" aria-pressed="false">論点の変化</button></div>
+  <div class="trend-panel" id="consumption-tax-cut-trend-panel-stance" data-trend-panel="stance">
+    <h2 id="consumption-tax-cut-trend-panel-stance-title">消費税減税の賛成・反対の割合は変わった？</h2>
+    <p class="trend-lead">2026年10月3日の収集分では、消費税減税に関する意見の投稿のうち、減税推進が37.9%でした。条件付き賛成・政府案に不満は16.4%、減税反対・慎重は33.5%、中立・情報は12.2%です。</p><p class="trend-lead">7月28日から10月3日までの9回の収集を、日付順に並べました。「減税推進」は7月28日の48.9%から37.9%へ、11.0ポイント下がりました。「減税反対・慎重」は7月28日の26.6%から33.5%へ、6.9ポイント上がりました。どちらも、ぶれの範囲を超える差です。途中には、9月17日から9月24日にかけて「減税推進」が6.9ポイント上がった回もあり、一直線の変化ではありません。</p>
+    <ul class="trend-legend" aria-label="凡例"><li><svg width="26" height="12" viewBox="0 0 26 12" aria-hidden="true"><line x1="0" y1="6" x2="26" y2="6" stroke="#10b981" stroke-width="2" stroke-linecap="round"/><g transform="translate(13 6)" fill="#10b981"><circle r="4.5"/></g></svg><span>減税推進</span></li><li><svg width="26" height="12" viewBox="0 0 26 12" aria-hidden="true"><line x1="0" y1="6" x2="26" y2="6" stroke="#f59e0b" stroke-width="2" stroke-linecap="round"/><g transform="translate(13 6)" fill="#f59e0b"><path d="M-1-1H1V1H-1Z" transform="scale(4.5)"/></g></svg><span>条件付き賛成・政府案に不満</span></li><li><svg width="26" height="12" viewBox="0 0 26 12" aria-hidden="true"><line x1="0" y1="6" x2="26" y2="6" stroke="#ef476f" stroke-width="2" stroke-linecap="round"/><g transform="translate(13 6)" fill="#ef476f"><path d="M0-1.35L1.35 0L0 1.35L-1.35 0Z" transform="scale(4.5)"/></g></svg><span>減税反対・慎重</span></li><li><svg width="26" height="12" viewBox="0 0 26 12" aria-hidden="true"><line x1="0" y1="6" x2="26" y2="6" stroke="#64748b" stroke-width="2" stroke-linecap="round"/><g transform="translate(13 6)" fill="#64748b"><path d="M0-1.3L1.3 1.05L-1.3 1.05Z" transform="scale(4.5)"/></g></svg><span>中立・情報</span></li></ul>
+    <div class="trend-stage" data-trend-stage tabindex="0" role="group" aria-label="推移グラフ。左右の矢印キーで収集回を切り替えると、その回の数字が出ます。">
+      <div class="trend-tip" data-trend-tip hidden></div>
+    </div>
+    <div class="trend-table-wrap" tabindex="0" role="region" aria-label="収集回ごとの立場別の割合の表"><table class="trend-table"><caption>収集回ごとの立場別の割合（意見の投稿に占める割合）</caption><thead><tr><th scope="col">収集日</th><th scope="col" class="col-n">意見数</th><th scope="col"><span class="trend-full">減税推進</span><span class="trend-short">減税推進</span></th><th scope="col"><span class="trend-full">条件付き賛成・政府案に不満</span><span class="trend-short">条件付き<br>賛成</span></th><th scope="col"><span class="trend-full">減税反対・慎重</span><span class="trend-short">反対・<br>慎重</span></th><th scope="col"><span class="trend-full">中立・情報</span><span class="trend-short">中立・<br>情報</span></th></tr></thead><tbody><tr id="consumption-tax-cut-trend-panel-stance-row-2026-07-28"><th scope="row">7月28日</th><td class="col-n">612件</td><td>48.9%</td><td>17.8%</td><td>26.6%</td><td>6.7%</td></tr><tr id="consumption-tax-cut-trend-panel-stance-row-2026-08-03"><th scope="row">8月3日</th><td class="col-n">611件</td><td>50.1%</td><td>17.8%</td><td>25.5%</td><td>6.5%</td></tr><tr id="consumption-tax-cut-trend-panel-stance-row-2026-08-10"><th scope="row">8月10日</th><td class="col-n">574件</td><td>45.1%</td><td>18.5%</td><td>28.6%</td><td>7.8%</td></tr><tr id="consumption-tax-cut-trend-panel-stance-row-2026-08-17"><th scope="row">8月17日</th><td class="col-n">545件</td><td>48.4%</td><td>16.7%</td><td>22.6%</td><td>12.3%</td></tr><tr id="consumption-tax-cut-trend-panel-stance-row-2026-08-24"><th scope="row">8月24日</th><td class="col-n">510件</td><td>47.6%</td><td>17.1%</td><td>28.8%</td><td>6.5%</td></tr><tr id="consumption-tax-cut-trend-panel-stance-row-2026-09-01"><th scope="row">9月1日</th><td class="col-n">506件</td><td>51.4%</td><td>16.4%</td><td>24.3%</td><td>7.9%</td></tr><tr id="consumption-tax-cut-trend-panel-stance-row-2026-09-17"><th scope="row">9月17日</th><td class="col-n">532件</td><td>38.2%</td><td>22.9%</td><td>29.9%</td><td>9.0%</td></tr><tr id="consumption-tax-cut-trend-panel-stance-row-2026-09-24"><th scope="row">9月24日</th><td class="col-n">450件</td><td>45.1%</td><td>16.0%</td><td>29.3%</td><td>9.6%</td></tr><tr id="consumption-tax-cut-trend-panel-stance-row-2026-10-03" class="is-latest"><th scope="row">10月3日</th><td class="col-n">483件</td><td>37.9%</td><td>16.4%</td><td>33.5%</td><td>12.2%</td></tr></tbody></table></div>
+    <ul class="trend-note"><li>集計の対象は、各回で初めて見つかった投稿のうち、消費税減税について意見を述べた投稿です。同じ検索語のセットで集め、AIで立場を分類しています。同じ投稿は重ねて数えません。</li><li>Xの投稿サンプルの構成比であり、世論調査ではありません。同じ人の意見が動いたことも、世論全体の変化も示しません。</li><li>各回の意見は<span id="consumption-tax-cut-trend-panel-stance-n-range">450〜612件</span>です。投稿の拾い方に偏りがない場合でも、割合には±4ポイント前後のぶれが出ます。「ぶれの範囲」はこの目安で判定しています。</li><li>収集日は日本時間です。収集の間隔は6〜16日で、一定ではありません。</li><li>各回とも、投稿の84%以上は、収集日の前の7日間に書かれたものです。</li></ul>
+  </div>
+  <div class="trend-panel" id="consumption-tax-cut-trend-panel-issue" data-trend-panel="issue" hidden>
+    <h2 id="consumption-tax-cut-trend-panel-issue-title">消費税減税で語られる論点は変わった？</h2>
+    <p class="trend-lead">2026年10月3日の収集分では、消費税減税に関する意見の投稿のうち、主な論点が最も多いのは「減税の対象範囲」の29.0%でした。続いて「公約と政治不信」が27.5%、「減税の効果」が21.4%です。</p><p class="trend-lead">7月28日から10月3日までの9回の収集を、日付順に並べました。主な論点が「公約と政治不信」の投稿は、7月28日の44.1%から27.5%へ、16.6ポイント下がりました。主な論点が「減税の対象範囲」の投稿は、7月28日の15.8%から29.0%へ、13.2ポイント上がりました。どちらも、ぶれの範囲を超える差です。途中には、8月24日から9月1日にかけて主な論点が「公約と政治不信」の投稿が7.8ポイント上がった回もあり、一直線の変化ではありません。</p>
+    <ul class="trend-legend" aria-label="凡例"><li><svg width="26" height="12" viewBox="0 0 26 12" aria-hidden="true"><line x1="0" y1="6" x2="26" y2="6" stroke="#2a78d6" stroke-width="2" stroke-linecap="round"/><g transform="translate(13 6)" fill="#2a78d6"><circle r="4.5"/></g></svg><span>減税の対象範囲</span></li><li><svg width="26" height="12" viewBox="0 0 26 12" aria-hidden="true"><line x1="0" y1="6" x2="26" y2="6" stroke="#eb6834" stroke-width="2" stroke-linecap="round"/><g transform="translate(13 6)" fill="#eb6834"><path d="M-1-1H1V1H-1Z" transform="scale(4.5)"/></g></svg><span>財源と社会保障</span></li><li><svg width="26" height="12" viewBox="0 0 26 12" aria-hidden="true"><line x1="0" y1="6" x2="26" y2="6" stroke="#1baf7a" stroke-width="2" stroke-linecap="round"/><g transform="translate(13 6)" fill="#1baf7a"><path d="M0-1.35L1.35 0L0 1.35L-1.35 0Z" transform="scale(4.5)"/></g></svg><span>減税の効果</span></li><li><svg width="26" height="12" viewBox="0 0 26 12" aria-hidden="true"><line x1="0" y1="6" x2="26" y2="6" stroke="#eda100" stroke-width="2" stroke-linecap="round"/><g transform="translate(13 6)" fill="#eda100"><path d="M0-1.3L1.3 1.05L-1.3 1.05Z" transform="scale(4.5)"/></g></svg><span>給付など他策との比較</span></li><li><svg width="26" height="12" viewBox="0 0 26 12" aria-hidden="true"><line x1="0" y1="6" x2="26" y2="6" stroke="#e87ba4" stroke-width="2" stroke-linecap="round"/><g transform="translate(13 6)" fill="#e87ba4"><path d="M0 1.3L1.3-1.05L-1.3-1.05Z" transform="scale(4.5)"/></g></svg><span>事業者の実務負担</span></li><li><svg width="26" height="12" viewBox="0 0 26 12" aria-hidden="true"><line x1="0" y1="6" x2="26" y2="6" stroke="#4a3aa7" stroke-width="2" stroke-linecap="round"/><g transform="translate(13 6)" fill="#4a3aa7"><path d="M-.5-1.5H.5V-.5H1.5V.5H.5V1.5H-.5V.5H-1.5V-.5H-.5Z" transform="scale(4.5)"/></g></svg><span>公約と政治不信</span></li></ul>
+    <div class="trend-stage" data-trend-stage tabindex="0" role="group" aria-label="推移グラフ。左右の矢印キーで収集回を切り替えると、その回の数字が出ます。">
+      <div class="trend-tip" data-trend-tip hidden></div>
+    </div>
+    <div class="trend-table-wrap" tabindex="0" role="region" aria-label="収集回ごとの論点別の割合の表"><table class="trend-table trend-table--wide"><caption>収集回ごとの論点別の割合（「その他」を除く意見の投稿に占める割合）</caption><thead><tr><th scope="col">収集日</th><th scope="col" class="col-n">意見数</th><th scope="col"><span class="trend-full">減税の対象範囲</span><span class="trend-short">対象<br>範囲</span></th><th scope="col"><span class="trend-full">財源と社会保障</span><span class="trend-short">財源・<br>社保</span></th><th scope="col"><span class="trend-full">減税の効果</span><span class="trend-short">減税の<br>効果</span></th><th scope="col"><span class="trend-full">給付など他策との比較</span><span class="trend-short">給付等<br>比較</span></th><th scope="col"><span class="trend-full">事業者の実務負担</span><span class="trend-short">事業者<br>負担</span></th><th scope="col"><span class="trend-full">公約と政治不信</span><span class="trend-short">公約・<br>不信</span></th></tr></thead><tbody><tr id="consumption-tax-cut-trend-panel-issue-row-2026-07-28"><th scope="row">7月28日</th><td class="col-n">606件</td><td>15.8%</td><td>10.6%</td><td>18.8%</td><td>7.6%</td><td>3.1%</td><td>44.1%</td></tr><tr id="consumption-tax-cut-trend-panel-issue-row-2026-08-03"><th scope="row">8月3日</th><td class="col-n">604件</td><td>22.5%</td><td>10.9%</td><td>15.7%</td><td>8.4%</td><td>4.0%</td><td>38.4%</td></tr><tr id="consumption-tax-cut-trend-panel-issue-row-2026-08-10"><th scope="row">8月10日</th><td class="col-n">566件</td><td>26.0%</td><td>14.5%</td><td>18.7%</td><td>6.7%</td><td>3.0%</td><td>31.1%</td></tr><tr id="consumption-tax-cut-trend-panel-issue-row-2026-08-17"><th scope="row">8月17日</th><td class="col-n">531件</td><td>24.7%</td><td>11.7%</td><td>18.6%</td><td>5.8%</td><td>2.8%</td><td>36.3%</td></tr><tr id="consumption-tax-cut-trend-panel-issue-row-2026-08-24"><th scope="row">8月24日</th><td class="col-n">503件</td><td>27.4%</td><td>14.5%</td><td>21.3%</td><td>6.4%</td><td>1.4%</td><td>29.0%</td></tr><tr id="consumption-tax-cut-trend-panel-issue-row-2026-09-01"><th scope="row">9月1日</th><td class="col-n">500件</td><td>22.6%</td><td>13.8%</td><td>20.8%</td><td>4.2%</td><td>1.8%</td><td>36.8%</td></tr><tr id="consumption-tax-cut-trend-panel-issue-row-2026-09-17"><th scope="row">9月17日</th><td class="col-n">522件</td><td>23.8%</td><td>18.2%</td><td>17.6%</td><td>6.1%</td><td>4.0%</td><td>30.3%</td></tr><tr id="consumption-tax-cut-trend-panel-issue-row-2026-09-24"><th scope="row">9月24日</th><td class="col-n">441件</td><td>27.2%</td><td>13.8%</td><td>14.3%</td><td>7.5%</td><td>3.9%</td><td>33.3%</td></tr><tr id="consumption-tax-cut-trend-panel-issue-row-2026-10-03" class="is-latest"><th scope="row">10月3日</th><td class="col-n">473件</td><td>29.0%</td><td>7.0%</td><td>21.4%</td><td>9.7%</td><td>5.5%</td><td>27.5%</td></tr></tbody></table></div>
+    <ul class="trend-note"><li>集計の対象は、各回で初めて見つかった投稿のうち、消費税減税について意見を述べた投稿です。AIが主な論点を1つに分類しています。複数の話題に触れる投稿も、1つにだけ数えます。「その他」は除いて割合を出しています。同じ投稿は重ねて数えません。</li><li>Xの投稿サンプルの構成比であり、世論調査ではありません。同じ人の意見が動いたことも、世論全体の変化も示しません。</li><li>各回の意見は<span id="consumption-tax-cut-trend-panel-issue-n-range">441〜606件</span>です。投稿の拾い方に偏りがない場合でも、割合には±4ポイント前後のぶれが出ます。「ぶれの範囲」はこの目安で判定しています。</li><li>収集日は日本時間です。収集の間隔は6〜16日で、一定ではありません。</li><li>各回とも、投稿の83%以上は、収集日の前の7日間に書かれたものです。</li></ul>
+  </div>
+  <script>
+(() => {
+  const root = document.getElementById("consumption-tax-cut-trend");
+  if (!root) return;
+  const panels = {"stance":{"labels":["減税推進","条件付き賛成・政府案に不満","減税反対・慎重","中立・情報"],"colors":["#10b981","#f59e0b","#ef476f","#64748b"],"shapes":["circle","square","diamond","triangle"],"emph":[],"rounds":[{"d":"2026-07-28","n":612,"v":[48.9,17.8,26.6,6.7]},{"d":"2026-08-03","n":611,"v":[50.1,17.8,25.5,6.5]},{"d":"2026-08-10","n":574,"v":[45.1,18.5,28.6,7.8]},{"d":"2026-08-17","n":545,"v":[48.4,16.7,22.6,12.3]},{"d":"2026-08-24","n":510,"v":[47.6,17.1,28.8,6.5]},{"d":"2026-09-01","n":506,"v":[51.4,16.4,24.3,7.9]},{"d":"2026-09-17","n":532,"v":[38.2,22.9,29.9,9.0]},{"d":"2026-09-24","n":450,"v":[45.1,16.0,29.3,9.6]},{"d":"2026-10-03","n":483,"v":[37.9,16.4,33.5,12.2]}],"aria":"7月28日から10月3日までの9回の収集について、立場ごとの割合の推移を示す折れ線グラフです。同じ数字は下の表にあります。"},"issue":{"labels":["減税の対象範囲","財源と社会保障","減税の効果","給付など他策との比較","事業者の実務負担","公約と政治不信"],"colors":["#2a78d6","#eb6834","#1baf7a","#eda100","#e87ba4","#4a3aa7"],"shapes":["circle","square","diamond","triangle","triangle-down","plus"],"emph":[5,0],"rounds":[{"d":"2026-07-28","n":606,"v":[15.8,10.6,18.8,7.6,3.1,44.1]},{"d":"2026-08-03","n":604,"v":[22.5,10.9,15.7,8.4,4.0,38.4]},{"d":"2026-08-10","n":566,"v":[26.0,14.5,18.7,6.7,3.0,31.1]},{"d":"2026-08-17","n":531,"v":[24.7,11.7,18.6,5.8,2.8,36.3]},{"d":"2026-08-24","n":503,"v":[27.4,14.5,21.3,6.4,1.4,29.0]},{"d":"2026-09-01","n":500,"v":[22.6,13.8,20.8,4.2,1.8,36.8]},{"d":"2026-09-17","n":522,"v":[23.8,18.2,17.6,6.1,4.0,30.3]},{"d":"2026-09-24","n":441,"v":[27.2,13.8,14.3,7.5,3.9,33.3]},{"d":"2026-10-03","n":473,"v":[29.0,7.0,21.4,9.7,5.5,27.5]}],"aria":"7月28日から10月3日までの9回の収集について、論点ごとの割合の推移を示す折れ線グラフです。同じ数字は下の表にあります。"}};
+  const NS = "http://www.w3.org/2000/svg";
+  const SHAPES = {"circle":null,"square":"M-1-1H1V1H-1Z","diamond":"M0-1.35L1.35 0L0 1.35L-1.35 0Z","triangle":"M0-1.3L1.3 1.05L-1.3 1.05Z","triangle-down":"M0 1.3L1.3-1.05L-1.3-1.05Z","plus":"M-.5-1.5H.5V-.5H1.5V.5H.5V1.5H-.5V.5H-1.5V-.5H-.5Z"};
+  const el = (name, attrs, text) => {
+    const node = document.createElementNS(NS, name);
+    Object.keys(attrs || {}).forEach(k => node.setAttribute(k, attrs[k]));
+    if (text != null) node.textContent = text;
+    return node;
+  };
+  const mark = (shape, cx, cy, r, color) => {
+    const path = SHAPES[shape];
+    if (!path) return el("circle", {cx, cy, r, fill: color});
+    return el("path", {d: path, transform: `translate(${cx} ${cy}) scale(${r})`, fill: color});
+  };
+  const jp = d => { const [, m, dd] = d.split("-"); return Number(m) + "月" + Number(dd) + "日"; };
+  const sh = d => { const [, m, dd] = d.split("-"); return Number(m) + "/" + Number(dd); };
+
+  function chart(panel, data) {
+    const stage = panel.querySelector("[data-trend-stage]");
+    const tip = panel.querySelector("[data-trend-tip]");
+    if (!stage || !tip) return {draw() {}};
+    const days = data.rounds.map(r => Date.parse(r.d + "T00:00:00Z") / 86400000);
+    const lastIndex = data.rounds.length - 1;
+    let active = lastIndex;
+    let geom = null;
+
+    function draw() {
+      if (panel.hidden) return;
+      const W = Math.max(280, Math.floor(stage.clientWidth));
+      const small = W < 520;
+      const H = small ? 300 : 340;
+      const m = {t: 14, r: small ? 52 : 60, b: 34, l: small ? 38 : 44};
+      const pw = W - m.l - m.r, ph = H - m.t - m.b;
+      const top = Math.max(10, Math.ceil(Math.max(...data.rounds.flatMap(r => r.v)) / 10) * 10);
+      const x0 = days[0], x1 = days[lastIndex];
+      const X = i => m.l + (x1 === x0 ? pw / 2 : (days[i] - x0) / (x1 - x0) * pw);
+      const Y = v => m.t + ph - v / top * ph;
+      stage.querySelector("svg")?.remove();
+      const svg = el("svg", {viewBox: `0 0 ${W} ${H}`, width: W, height: H, role: "img", "aria-label": data.aria});
+      svg.setAttribute("class", "trend-svg");
+      for (let v = 0; v <= top; v += 10) {
+        svg.appendChild(el("line", {x1: m.l, x2: m.l + pw, y1: Y(v), y2: Y(v), class: "trend-grid"}));
+        svg.appendChild(el("text", {x: m.l - 8, y: Y(v) + 4, "text-anchor": "end", class: "trend-tick"}, v + "%"));
+      }
+      const shown = [];
+      data.rounds.forEach((r, i) => {
+        if (shown.length && X(i) - X(shown[shown.length - 1]) < 46) return;
+        shown.push(i);
+      });
+      if (shown[shown.length - 1] !== lastIndex) {
+        while (shown.length > 1 && X(lastIndex) - X(shown[shown.length - 1]) < 46) shown.pop();
+        shown.push(lastIndex);
+      }
+      shown.forEach(i => svg.appendChild(el("text", {x: X(i), y: H - 10, "text-anchor": i === 0 ? "start" : (i === lastIndex ? "end" : "middle"), class: "trend-tick"}, sh(data.rounds[i].d))));
+      const cross = el("line", {y1: m.t, y2: m.t + ph, class: "trend-cross"});
+      svg.appendChild(cross);
+      const dim = s => data.emph.length > 0 && data.emph.indexOf(s) < 0;
+      data.labels.forEach((label, s) => {
+        const points = data.rounds.map((r, i) => `${X(i).toFixed(1)},${Y(r.v[s]).toFixed(1)}`).join(" ");
+        svg.appendChild(el("polyline", {points, fill: "none", stroke: data.colors[s], "stroke-width": dim(s) ? 2 : (data.emph.length ? 3 : 2), "stroke-opacity": dim(s) ? 0.5 : 1, "stroke-linejoin": "round", "stroke-linecap": "round"}));
+      });
+      data.labels.forEach((label, s) => {
+        data.rounds.forEach((r, i) => {
+          const g = el("g", {opacity: dim(s) ? 0.6 : 1});
+          g.appendChild(mark(data.shapes[s], X(i), Y(r.v[s]), 5.5, "#fff"));
+          g.appendChild(mark(data.shapes[s], X(i), Y(r.v[s]), 3.5, data.colors[s]));
+          svg.appendChild(g);
+        });
+      });
+      const ends = data.labels.map((l, s) => ({s, y: Y(data.rounds[lastIndex].v[s])})).sort((a, b) => a.y - b.y);
+      for (let k = 1; k < ends.length; k++) if (ends[k].y - ends[k - 1].y < 14) ends[k].y = ends[k - 1].y + 14;
+      ends.forEach(e => svg.appendChild(el("text", {x: X(lastIndex) + 12, y: e.y + 4, class: "trend-end"}, data.rounds[lastIndex].v[e.s].toFixed(1) + "%")));
+      stage.appendChild(svg);
+      geom = {X, W, cross};
+      select(active, false);
+    }
+
+    function select(i, show) {
+      active = i;
+      if (!geom) return;
+      const r = data.rounds[i];
+      geom.cross.setAttribute("x1", geom.X(i));
+      geom.cross.setAttribute("x2", geom.X(i));
+      geom.cross.style.opacity = show ? 1 : 0;
+      tip.hidden = !show;
+      if (!show) return;
+      tip.textContent = "";
+      const head = document.createElement("p");
+      head.className = "trend-tip-head";
+      head.textContent = jp(r.d) + "の収集分（意見" + r.n + "件）";
+      tip.appendChild(head);
+      data.labels.forEach((label, s) => {
+        const row = document.createElement("p");
+        row.className = "trend-tip-row";
+        const key = document.createElement("i");
+        key.style.background = data.colors[s];
+        const value = document.createElement("b");
+        value.textContent = r.v[s].toFixed(1) + "%";
+        const name = document.createElement("span");
+        name.textContent = label;
+        row.append(key, value, name);
+        tip.appendChild(row);
+      });
+      // 縦線の脇に出す。右半分の回は左側、左半分の回は右側へ寄せ、その回の点に重ねない。
+      const x = geom.X(i);
+      const wide = tip.offsetWidth || 190;
+      const left = x > geom.W / 2 ? x - wide - 14 : x + 14;
+      tip.style.left = Math.min(Math.max(left, 0), geom.W - wide) + "px";
+    }
+
+    function nearest(clientX) {
+      const box = stage.getBoundingClientRect();
+      const x = clientX - box.left;
+      let best = 0, gap = Infinity;
+      data.rounds.forEach((r, i) => { const d = Math.abs(geom.X(i) - x); if (d < gap) { gap = d; best = i; } });
+      return best;
+    }
+    stage.addEventListener("pointermove", e => geom && select(nearest(e.clientX), true));
+    stage.addEventListener("pointerleave", () => select(active, false));
+    stage.addEventListener("focus", () => select(active, true));
+    stage.addEventListener("blur", () => select(active, false));
+    stage.addEventListener("keydown", e => {
+      if (e.key === "ArrowLeft" || e.key === "ArrowRight") {
+        e.preventDefault();
+        select(Math.min(Math.max(active + (e.key === "ArrowRight" ? 1 : -1), 0), lastIndex), true);
+      } else if (e.key === "Home" || e.key === "End") {
+        e.preventDefault();
+        select(e.key === "Home" ? 0 : lastIndex, true);
+      }
+    });
+    return {draw};
+  }
+
+  const charts = {};
+  const nodes = {};
+  root.querySelectorAll("[data-trend-panel]").forEach(panel => {
+    const kind = panel.getAttribute("data-trend-panel");
+    nodes[kind] = panel;
+    if (panels[kind]) charts[kind] = chart(panel, panels[kind]);
+  });
+  const tabs = root.querySelectorAll("[data-trend-tab]");
+  function show(kind) {
+    if (!nodes[kind]) return;
+    Object.keys(nodes).forEach(k => { nodes[k].hidden = k !== kind; });
+    tabs.forEach(t => t.setAttribute("aria-pressed", t.getAttribute("data-trend-tab") === kind ? "true" : "false"));
+    if (charts[kind]) charts[kind].draw();
+  }
+  tabs.forEach(t => t.addEventListener("click", () => show(t.getAttribute("data-trend-tab"))));
+  const fromHash = Object.keys(nodes).find(k => location.hash === "#" + nodes[k].id);
+  show(fromHash || Object.keys(nodes)[0]);
+  let timer = 0;
+  window.addEventListener("resize", () => {
+    clearTimeout(timer);
+    timer = setTimeout(() => Object.keys(nodes).forEach(k => { if (!nodes[k].hidden && charts[k]) charts[k].draw(); }), 120);
+  });
+})();
+</script>
+</section>
+<!-- TREND_CARD_END -->
 <!-- TIDE_CARD_END --></section>
 
 <!-- CLAIM_AUDIT_START -->
