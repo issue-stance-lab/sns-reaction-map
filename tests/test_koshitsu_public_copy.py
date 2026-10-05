@@ -73,12 +73,12 @@ class KoshitsuPublicCopyTests(unittest.TestCase):
         self.assertEqual(
             {item["label"]: item["count"] for item in self.data["issues"]},
             {
-                "男系vs女系": 495,
-                "旧宮家養子縁組": 314,
-                "その他": 261,
-                "立法手続き・民主主義": 253,
-                "愛子さま・皇族の地位": 239,
-                "女性天皇・女系天皇": 214,
+                "男系vs女系": 570,
+                "旧宮家養子縁組": 347,
+                "その他": 299,
+                "立法手続き・民主主義": 281,
+                "愛子さま・皇族の地位": 260,
+                "女性天皇・女系天皇": 259,
             },
         )
         self.assertTrue(all(item["sub"]["status"] == "reread" for item in self.data["issues"]))
@@ -87,7 +87,7 @@ class KoshitsuPublicCopyTests(unittest.TestCase):
                 next(reason["count"] for reason in item["sub"]["items"] if reason["id"] == "__unread__")
                 for item in self.data["issues"]
             ],
-            [140, 87, 86, 52, 92, 74],
+            [215, 120, 86, 80, 92, 74],
         )
         soup = BeautifulSoup(self.html, "html.parser")
         self.assertEqual(len(soup.select('template[id^="koshitsu-tenpakai-reading-"]')), 6)
