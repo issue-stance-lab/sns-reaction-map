@@ -39,8 +39,40 @@ class TrendProvenanceTest(unittest.TestCase):
 
     def test_tampered_cell_is_rejected(self) -> None:
         i = self.source.index("consumption-tax-cut-trend-panel-issue-row-")
-        j = self.source.index("%</td>", i)
+        j = self.source.index('<span class="trend-c">', i)
         broken = self.source[:j - 1] + ("9" if self.source[j - 1] != "9" else "8") + self.source[j:]
+        self.assertNotEqual(broken, self.source)
+        with self.assertRaises(ValueError):
+            provenance.private_verified_selectors(broken, ROOT)
+
+    def test_tampered_count_in_a_cell_is_rejected(self) -> None:
+        i = self.source.index("consumption-tax-cut-trend-panel-stance-row-")
+        j = self.source.index("件）</span>", i)
+        broken = self.source[:j - 1] + ("9" if self.source[j - 1] != "9" else "8") + self.source[j:]
+        self.assertNotEqual(broken, self.source)
+        with self.assertRaises(ValueError) as caught:
+            provenance.private_verified_selectors(broken, ROOT)
+        self.assertIn("数え直し", str(caught.exception))
+
+    def test_every_cell_shows_its_count_and_the_recount_agrees(self) -> None:
+        rows = re.findall(r'<tr id="consumption-tax-cut-trend-panel-stance-row-[^"]+".*?</tr>', self.source, re.S)
+        self.assertGreaterEqual(len(rows), 2)
+        for row in rows:
+            self.assertEqual(row.count('<span class="trend-c">'), 4)  # 立場4つ
+        self.assertTrue(provenance.private_verified_selectors(self.source, ROOT))
+
+    def test_stale_tooltip_data_is_rejected_even_when_the_table_is_right(self) -> None:
+        """表の数字は合っていても、グラフ（ツールチップ・画像の指紋）が読む埋め込みデータの件数が古ければ止める。"""
+        found = re.search(r'"c":\[(\d+)', self.source)
+        self.assertIsNotNone(found)
+        digit = int(found.group(1)) + 1
+        broken = self.source[:found.start(1)] + str(digit) + self.source[found.end(1):]
+        with self.assertRaises(ValueError) as caught:
+            provenance.private_verified_selectors(broken, ROOT)
+        self.assertIn("埋め込みデータ", str(caught.exception))
+
+    def test_missing_chart_data_is_rejected(self) -> None:
+        broken = self.source.replace("const panels = ", "const gone = ")
         with self.assertRaises(ValueError):
             provenance.private_verified_selectors(broken, ROOT)
 
