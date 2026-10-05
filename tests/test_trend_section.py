@@ -556,7 +556,7 @@ class ShareBlockTest(unittest.TestCase):
 
     def test_stance_and_issue_panels_have_a_share_block_but_not_the_reason_panel(self) -> None:
         section = self.render()
-        self.assertEqual(section.count('<details class="trend-share">'), 2)
+        self.assertEqual(section.count('<details class="trend-share" open>'), 2)  # 畳まずに開いて出す
         reason_panel = section[section.index('data-trend-panel="reason"'):section.index("<script>")]
         self.assertNotIn("<details", reason_panel)
 
@@ -765,6 +765,82 @@ class CountsTest(unittest.TestCase):
         pro = info["items"][0]
         self.assertEqual((pro["label"], pro["start_count"], pro["end_count"]), (PRO, 300, 100))
         self.assertEqual(pro["start_count"] / series[0]["n"] * 100, pro["start"])
+
+
+class XPostButtonTest(unittest.TestCase):
+    """「Xで投稿する」。共有URLのUTMとクリック計測は、サイト共通の window.buildShareUrl / trackShareClick を通す。"""
+
+    def render(self) -> str:
+        rows = wave("2026-09-01", {PRO: 300, CON: 100}) + wave("2026-09-08", {PRO: 100, CON: 300})
+        with tempfile.TemporaryDirectory() as tmp:
+            path = write(rows, Path(tmp))
+            stance = trend.load_rounds(path, BASE, "stance")
+            issue = trend.load_rounds(path, BASE, "issue")
+        return trend.render_section(SLUG, stance, issue, events=[])
+
+    @staticmethod
+    def weight(text: str) -> int:
+        """Xの文字数の数え方（日本語など広い文字は2、URLは23）。改行は1。"""
+        return sum(2 if ord(char) > 0x2FF else 1 for char in text) + 23 + 1
+
+    def test_each_panel_has_one_button_with_the_post_text_and_page_url(self) -> None:
+        import html as htmllib
+        section = self.render()
+        buttons = re.findall(r'<button type="button" class="trend-share-btn trend-share-xbtn" data-trend-x="(\w+)" data-share-url="([^"]*)" data-share-panel="([^"]*)" data-share-text="([^"]*)">', section)
+        self.assertEqual([item[0] for item in buttons], ["stance", "issue"])
+        for kind, url, panel, text in buttons:
+            self.assertEqual(url, "https://sns-reaction-map.jp/consumption-tax-cut-reaction-map.html")
+            self.assertEqual(panel, f"consumption-tax-cut-trend-panel-{kind}")
+            body = htmllib.unescape(text)
+            # 合成データでは立場だけが動き、論点は動かない（動かなければ「大きな変化はありません」と書く）
+            self.assertTrue(body.startswith("消費税減税：「減税推進」の割合が下がり、「減税反対・慎重」が上がった" if kind == "stance" else "消費税減税：論点の割合に、大きな変化はありません"), body)
+            self.assertIn("2026年9月8日時点", body)
+            self.assertIn("世論調査ではありません", body)
+            self.assertTrue(body.endswith("#SNS反応まっぷ"))
+            self.assertLessEqual(self.weight(body), 280)
+        self.assertIn("Xで投稿する", section)
+
+    def test_the_note_says_the_image_is_not_attached_automatically(self) -> None:
+        section = self.render()
+        self.assertIn("画像は自動では付かない", section)
+        self.assertIn("下の「画像をダウンロード」で保存して添付してください", section)
+
+    def test_longest_possible_post_text_still_fits_in_x(self) -> None:
+        """どの立場・論点の組み合わせの見出しでも、投稿文がXの上限（280字分）に収まる。"""
+        for kind in ("stance", "issue"):
+            labels = BASE[trend.KINDS[kind]["labels_key"]]
+            for a in labels:
+                for b in labels:
+                    if a == b:
+                        continue
+                    for delta_b in (7.0, -7.0):
+                        lines = trend.glance_lines(kind, [{"label": a, "delta": -9.0, "beyond": True}, {"label": b, "delta": delta_b, "beyond": True}])
+                        text = trend.x_post_text("消費税減税", lines, "2026年10月3日")
+                        self.assertLessEqual(self.weight(text), 280, (a, b))
+        quiet = trend.glance_lines("stance", [{"label": PRO, "delta": 1.0, "beyond": False}, {"label": CON, "delta": -1.0, "beyond": False}])
+        self.assertLessEqual(self.weight(trend.x_post_text("消費税減税", quiet, "2026年10月3日")), 280)
+
+    def test_script_goes_through_the_shared_utm_helper_and_tracks_the_click(self) -> None:
+        section = self.render()
+        self.assertIn('typeof window.buildShareUrl === "function"', section)
+        self.assertIn('build(base, "trend_share")', section)
+        self.assertIn('window.trackShareClick("trend_share")', section)
+        self.assertIn("https://x.com/intent/tweet?text=", section)
+        self.assertIn("utm_source=share_button&utm_medium=social&utm_campaign=", section)  # 共通の関数が無いときの保険（同じUTM）
+        self.assertNotIn("encodeURIComponent(location.href)", section)  # UTMなしのURLを共有しない
+        self.assertIn('"_blank", "noopener"', section)
+
+    def test_the_shared_link_opens_the_same_panel(self) -> None:
+        section = self.render()
+        self.assertIn('+ "#" + button.getAttribute("data-share-panel")', section)
+
+    def test_no_button_when_the_theme_does_not_distribute_images(self) -> None:
+        original = trend.TREND_THEMES[SLUG]["share_images"]
+        trend.TREND_THEMES[SLUG]["share_images"] = False
+        try:
+            self.assertNotIn('data-trend-x="stance"', self.render())
+        finally:
+            trend.TREND_THEMES[SLUG]["share_images"] = original
 
 
 if __name__ == "__main__":

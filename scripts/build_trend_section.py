@@ -608,6 +608,21 @@ def _reason_table(info: dict, panel_id: str) -> str:
 
 # ------------------------------------------------------------ 画像で使う（ダウンロード・埋め込み）
 
+X_HASHTAG = "#SNS反応まっぷ"
+X_ICON = (
+    '<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 '
+    '8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>'
+)
+
+
+def x_post_text(name: str, lines: list[str], when: str) -> str:
+    """「Xで投稿する」で開く投稿画面の下書き。見出しの文と、世論調査ではないことを入れる。
+
+    日本語は1字で2字分に数えられ、全体で280字分まで（URLは23字分）。最も長い見出しでも収まる長さにしてある。
+    """
+    return f"{name}：{''.join(lines)}\nSNS上の意見の推移（{when}時点）。世論調査ではありません。\n{X_HASHTAG}"
+
+
 def image_alt(slug: str, kind: str, series: list[dict], labels: list[str], variant: str = "detail") -> str:
     """画像の代替テキスト。最新の割合まで書く（画像検索と読み上げに効く）。"""
     last = series[-1]
@@ -669,10 +684,15 @@ def _share_block(slug: str, kind: str, series: list[dict], labels: list[str], pa
     if not TREND_THEMES[slug].get("share_images"):
         return ""
     items = "\n        ".join(_share_item(slug, kind, variant, series, labels, panel_id) for variant in IMAGE_VARIANTS)
-    return f"""<details class="trend-share">
+    post = x_post_text(TREND_THEMES[slug]["name"], glance(slug, kind, series, labels)["lines"], jp_date(series[-1]["date"], year=True))
+    return f"""<details class="trend-share" open>
       <summary>このグラフを画像で使う</summary>
       <div class="trend-share-body">
         <p class="trend-share-lead">貼る場所に合わせて、2種類の画像があります。</p>
+        <div class="trend-share-x">
+          <button type="button" class="trend-share-btn trend-share-xbtn" data-trend-x="{kind}" data-share-url="{page_url(slug)}" data-share-panel="{panel_id}" data-share-text="{html.escape(post, quote=True)}">{X_ICON}Xで投稿する</button>
+          <span class="trend-share-xnote">投稿画面が開きます。画像は自動では付かないので、下の「画像をダウンロード」で保存して添付してください（おすすめはひと目版です）。</span>
+        </div>
         <div class="trend-share-grid">
         {items}
         </div>
@@ -915,6 +935,15 @@ TREND_JS = r"""
     status.textContent = ok ? "コピーしました" : "選択しました。コピーしてください";
     track("trend_image_copy", button.getAttribute("data-trend-copy"), button.getAttribute("data-variant"));
   }));
+  // 「Xで投稿する」。共有URLのUTMとクリック計測は、サイト共通の window.buildShareUrl / trackShareClick（topic-modern.js）を通す。
+  root.querySelectorAll("[data-trend-x]").forEach(button => button.addEventListener("click", () => {
+    const base = button.getAttribute("data-share-url");
+    const build = typeof window.buildShareUrl === "function" ? window.buildShareUrl : (u, c) => u + (u.indexOf("?") === -1 ? "?" : "&") + "utm_source=share_button&utm_medium=social&utm_campaign=" + c;
+    const url = build(base, "trend_share") + "#" + button.getAttribute("data-share-panel");
+    window.open("https://x.com/intent/tweet?text=" + encodeURIComponent(button.getAttribute("data-share-text")) + "&url=" + encodeURIComponent(url), "_blank", "noopener");
+    if (typeof window.trackShareClick === "function") window.trackShareClick("trend_share");
+    track("trend_x_post", button.getAttribute("data-trend-x"));
+  }));
   root.querySelectorAll("[data-trend-download]").forEach(link => link.addEventListener("click", () => track("trend_image_download", link.getAttribute("data-trend-download"), link.getAttribute("data-variant"))));
   const tabs = root.querySelectorAll("[data-trend-tab]");
   function show(kind) {
@@ -989,6 +1018,10 @@ def trend_css() -> str:
 .trend-share summary{{padding:12px 16px;color:#26364f;font-size:14px;font-weight:900;cursor:pointer}}
 .trend-share-body{{padding:4px 16px 16px}}
 .trend-share-lead{{margin:0 0 12px;color:#26364f;font-size:13px;font-weight:700;line-height:1.7}}
+.trend-share-x{{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin:0 0 14px}}
+.trend-share-xbtn{{gap:7px;border-color:#000;background:#000;color:#fff}}
+.trend-share-xbtn:hover{{background:#26364f;border-color:#26364f}}
+.trend-share-xnote{{flex:1 1 260px;color:#4b5c74;font-size:12.5px;line-height:1.7}}
 .trend-share-grid{{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}}
 .trend-share-item{{min-width:0;padding:12px;border:1px solid #e1e7f0;border-radius:10px;background:#fff}}
 .trend-share-name{{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 10px;margin:0;font-size:16px;line-height:1.5}}
