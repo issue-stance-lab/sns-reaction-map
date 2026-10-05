@@ -9,6 +9,8 @@
 文章中の数字・増減・「ぶれの範囲」の判定も同じ計算結果から作るので、手で書き換えない。
 収集日は fetched_at（UTC）を日本時間に直した日付。更新回のフォルダ名（日本時間）と揃う。
 
+見出し（H2）の末尾と右上のバッジには、最新の収集日を「○年○月○日時点」と出す。更新のたびに自動で変わる。
+
 潮目ウィジェットの枠（TIDE_CARD_START〜END）の中に入れる。潮目は更新のたびに丸ごと
 作り直されるため、この節も同じ呼び出しで貼り直す（refresh_adapters 側から render_for を呼ぶ）。
 """
@@ -533,6 +535,7 @@ def trend_css() -> str:
 .trend-tab[aria-pressed="true"]{{background:#13223d;color:#fff;box-shadow:0 4px 12px rgba(18,35,64,.15)}}
 .trend-panel[hidden]{{display:none}}
 .trend-card h2{{margin:0 0 10px;font-size:26px;letter-spacing:-.02em;line-height:1.4}}
+.trend-h2-date{{display:inline-block;margin-left:.5em;color:#66758b;font-size:.56em;font-weight:800;letter-spacing:0;white-space:nowrap}}
 .trend-lead{{margin:0 0 8px;color:#26364f;font-size:16px;line-height:1.85}}
 .trend-legend{{display:flex;flex-wrap:wrap;gap:6px 18px;margin:16px 0 4px;padding:0;list-style:none;color:#26364f;font-size:13px;font-weight:800}}
 .trend-legend li{{display:inline-flex;align-items:center;gap:7px}}
@@ -561,7 +564,7 @@ def trend_css() -> str:
 .trend-note{{margin:16px 0 0;padding:14px 0 0;border-top:1px solid #e4e9f1;color:#66758b;font-size:12px;line-height:1.75;list-style:none}}
 .trend-note li+li{{margin-top:3px}}
 .trend-short{{display:none}}
-@media(max-width:640px){{.trend-card{{padding:20px 16px;border-radius:16px}}.trend-card h2{{font-size:21px}}.trend-lead{{font-size:15px}}.trend-asof{{white-space:normal}}
+@media(max-width:640px){{.trend-card{{padding:20px 16px;border-radius:16px}}.trend-card h2{{font-size:21px}}.trend-h2-date{{display:block;margin-left:0;margin-top:2px;font-size:.62em}}.trend-lead{{font-size:15px}}.trend-asof{{white-space:normal}}
 .trend-full{{display:none}}.trend-short{{display:inline}}
 .trend-table-wrap{{overflow-x:visible}}.trend-table{{min-width:0;table-layout:fixed;font-size:12.5px}}
 .trend-table th,.trend-table td{{padding:7px 3px}}
@@ -610,7 +613,7 @@ def _panel(slug: str, kind: str, series: list[dict], *, hidden: bool) -> tuple[s
     )
     hidden_attr = " hidden" if hidden else ""
     markup = f"""  <div class="trend-panel" id="{panel_id}" data-trend-panel="{kind}"{hidden_attr}>
-    <h2 id="{panel_id}-title">{html.escape(theme["headings"][kind])}</h2>
+    <h2 id="{panel_id}-title">{html.escape(theme["headings"][kind])}<span class="trend-h2-date">（{jp_date(last["date"], year=True)}時点）</span></h2>
     {lead}
     {_legend(labels, colors, shapes)}
     <div class="trend-stage" data-trend-stage tabindex="0" role="group" aria-label="推移グラフ。左右の矢印キーで収集回を切り替えると、その回の数字が出ます。">
