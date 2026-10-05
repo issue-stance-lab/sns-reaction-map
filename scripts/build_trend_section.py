@@ -82,6 +82,8 @@ TREND_THEMES = {
         "events_file": "configs/consumption-tax-background.json",
         # 「反対・慎重の理由」タブで内訳を出す立場（inject_tide_widget.THEMES の stance_labels のどれか）。
         "focus_stance": "減税反対・慎重",
+        # 立場・論点のグラフを、単体の画像（PNG）としても配る（scripts/build_trend_images.py）。
+        "share_images": True,
         # スマホの表の見出し用（\n で折り返す）。凡例・ツールチップ・PCの表は正式名を使う。
         "short_labels": {
             "stance": ["減税推進", "条件付き\n賛成", "反対・\n慎重", "中立・\n情報"],
@@ -91,10 +93,31 @@ TREND_THEMES = {
 }
 
 REASON_TAB = "反対・慎重の理由"
+
+# 単体で配る画像（scripts/build_trend_images.py が作る）。公開URLは正式ドメイン。
+SITE_HOST = "sns-reaction-map.jp"
+SITE_URL = f"https://{SITE_HOST}/"
+IMAGE_DIR = Path("docs/images/trend")
+IMAGE_SIZE = (1200, 675)
+EMBED_SIZE = (600, 338)
+# 課題77 案5「図表・データの利用条件」。方針変更なのでオーナー（CEO）の承認が要る。承認前は公開しない。
+EMBED_TERMS = (
+    "出典（SNS反応まっぷ）とリンクを明記すれば、記事・ブログ・授業・SNSで自由に使えます。"
+    "画像の切り取りや、数字・注意書きの書き換えはしないでください。"
+)
 EVENT_DATE_RE = re.compile(r"(\d{4})年(\d{1,2})月(\d{1,2})日")
 
 Z95 = 1.96
 WINDOW_DAYS = 7
+
+
+def image_filename(slug: str, kind: str) -> str:
+    """画像検索で何の図か分かるファイル名（テーマ・立場か論点・推移）。"""
+    return f"{slug}-{kind}-trend.png"
+
+
+def page_url(slug: str) -> str:
+    return SITE_URL + Path(_theme_base(slug)["html"]).name
 
 
 def _theme_base(slug: str) -> dict:
@@ -520,6 +543,57 @@ def _reason_table(info: dict, panel_id: str) -> str:
     )
 
 
+# ------------------------------------------------------------ 画像で使う（ダウンロード・埋め込み）
+
+def image_alt(slug: str, kind: str, series: list[dict], labels: list[str]) -> str:
+    """画像の代替テキスト。最新の割合まで書く（画像検索と読み上げに効く）。"""
+    last = series[-1]
+    latest = "、".join(f"{label}{pct(last['shares'][label])}" for label in labels)
+    return (
+        f"{TREND_THEMES[slug]['headings'][kind]} SNS上の意見の推移の折れ線グラフ（{jp_date(last['date'], year=True)}時点）。"
+        f"最新の割合は、{latest}。Xの投稿サンプルの分析で、世論調査ではありません。"
+    )
+
+
+def embed_code(slug: str, kind: str, alt: str, panel_id: str) -> str:
+    """他のサイトに貼る埋め込みコード。画像に出典のリンクを付ける。"""
+    image_url = SITE_URL + str(IMAGE_DIR.relative_to("docs")) + "/" + image_filename(slug, kind)
+    page = page_url(slug)
+    width, height = EMBED_SIZE
+    return (
+        f'<a href="{page}#{panel_id}"><img src="{image_url}" alt="{html.escape(alt, quote=True)}" '
+        f'width="{width}" height="{height}" style="max-width:100%;height:auto"></a>\n'
+        f'<p>出典：<a href="{page}">SNS反応まっぷ</a>（Xの投稿サンプルの分析。世論調査ではありません）</p>'
+    )
+
+
+def _share_block(slug: str, kind: str, series: list[dict], labels: list[str], panel_id: str) -> str:
+    if not TREND_THEMES[slug].get("share_images"):
+        return ""
+    relative = str(IMAGE_DIR.relative_to("docs")) + "/" + image_filename(slug, kind)  # ページからの相対パス
+    alt = image_alt(slug, kind, series, labels)
+    code = embed_code(slug, kind, alt, panel_id)
+    width, height = IMAGE_SIZE
+    heading = TREND_THEMES[slug]["headings"][kind]
+    last = jp_date(series[-1]["date"], year=True)
+    return f"""<details class="trend-share">
+      <summary>このグラフを画像で使う</summary>
+      <div class="trend-share-body">
+        <figure class="trend-share-fig">
+          <a href="{relative}"><img src="{relative}" width="{width}" height="{height}" loading="lazy" decoding="async" alt="{html.escape(alt, quote=True)}"></a>
+          <figcaption>「{html.escape(heading)}」の画像です（PNG、{width}×{height}）。{last}時点の数字で、更新のたびに最新の数字に差し替わります。</figcaption>
+        </figure>
+        <p class="trend-share-terms">{html.escape(EMBED_TERMS)}</p>
+        <div class="trend-share-actions">
+          <a class="trend-share-btn" href="{relative}" download data-trend-download="{kind}">画像をダウンロード</a>
+          <button type="button" class="trend-share-btn" data-trend-copy="{kind}">埋め込みコードをコピー</button>
+          <span class="trend-share-status" role="status" aria-live="polite"></span>
+        </div>
+        <textarea class="trend-share-code" readonly rows="5" aria-label="埋め込みコード">{html.escape(code)}</textarea>
+      </div>
+    </details>"""
+
+
 def _shape_svg(shape: str, r: float) -> str:
     path = SHAPE_PATHS[shape]
     if path is None:
@@ -729,6 +803,19 @@ TREND_JS = r"""
     nodes[kind] = panel;
     if (panels[kind]) charts[kind] = chart(panel, panels[kind]);
   });
+  // 画像のダウンロード・埋め込みコードのコピー（計測つき）。計測が無くても動く。
+  const track = (name, kind) => { if (typeof gtag === "function") gtag("event", name, {theme: "__SLUG__", panel: kind}); };
+  root.querySelectorAll("[data-trend-copy]").forEach(button => button.addEventListener("click", async () => {
+    const body = button.closest(".trend-share-body");
+    const area = body.querySelector("textarea");
+    const status = body.querySelector(".trend-share-status");
+    let ok = false;
+    try { await navigator.clipboard.writeText(area.value); ok = true; }
+    catch (error) { area.focus(); area.select(); try { ok = document.execCommand("copy"); } catch (inner) { ok = false; } }
+    status.textContent = ok ? "コピーしました" : "選択しました。コピーしてください";
+    track("trend_image_copy", button.getAttribute("data-trend-copy"));
+  }));
+  root.querySelectorAll("[data-trend-download]").forEach(link => link.addEventListener("click", () => track("trend_image_download", link.getAttribute("data-trend-download"))));
   const tabs = root.querySelectorAll("[data-trend-tab]");
   function show(kind) {
     if (!nodes[kind]) return;
@@ -796,6 +883,18 @@ def trend_css() -> str:
 .trend-table--reason thead th:first-child,.trend-table--reason thead th:nth-child(3){{text-align:left}}
 .trend-bar{{display:block;height:8px;min-width:2px;margin-bottom:3px;border-radius:0 4px 4px 0;background:#2a78d6}}
 .trend-bar-cell b{{color:#0b1d3a;font-size:14px;font-weight:900}}
+.trend-share{{margin-top:18px;border:1px solid #e1e7f0;border-radius:12px;background:#f9fbfe}}
+.trend-share summary{{padding:12px 16px;color:#26364f;font-size:14px;font-weight:900;cursor:pointer}}
+.trend-share-body{{padding:4px 16px 16px}}
+.trend-share-fig{{margin:0}}
+.trend-share-fig img{{display:block;width:100%;height:auto;border:1px solid #e1e7f0;border-radius:8px;background:#fff}}
+.trend-share-fig figcaption{{margin-top:6px;color:#66758b;font-size:12px;line-height:1.7}}
+.trend-share-terms{{margin:12px 0 0;color:#26364f;font-size:13px;font-weight:700;line-height:1.7}}
+.trend-share-actions{{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin-top:10px}}
+.trend-share-btn{{display:inline-flex;align-items:center;min-height:38px;padding:8px 14px;border:1px solid #d9e2ef;border-radius:9px;background:#fff;color:#20314d;font:inherit;font-size:13px;font-weight:900;text-decoration:none;cursor:pointer}}
+.trend-share-btn:hover{{background:#f3f6fb}}
+.trend-share-status{{color:#047857;font-size:13px;font-weight:800}}
+.trend-share-code{{display:block;width:100%;margin-top:10px;padding:10px 12px;border:1px solid #d9e2ef;border-radius:8px;background:#fff;color:#26364f;font:12px/1.6 ui-monospace,SFMono-Regular,Menlo,monospace;resize:vertical}}
 .trend-table-wrap{{margin-top:18px;overflow-x:auto;border-radius:12px;outline:none}}
 .trend-table-wrap:focus-visible{{box-shadow:0 0 0 3px #bcd0ff}}
 .trend-table{{width:100%;min-width:560px;border-collapse:collapse;font-size:14px}}
@@ -869,6 +968,7 @@ def _panel(slug: str, kind: str, series: list[dict], *, hidden: bool, events: li
     </div>
     {_events_block(panel_id, kind, series, labels, events)}
     {_table(series, labels, theme["short_labels"][kind], kind, panel_id)}
+    {_share_block(slug, kind, series, labels, panel_id)}
     <ul class="trend-note">{notes}</ul>
   </div>"""
     return markup, data
@@ -928,6 +1028,7 @@ def render_section(
         tabs = f'  <div class="trend-tabs" role="group" aria-label="推移の見方を切り替え">{buttons}</div>\n'
     script = (
         TREND_JS.replace("__ID__", widget_id)
+        .replace("__SLUG__", slug)
         .replace("__DATA__", json.dumps(panels, ensure_ascii=False, separators=(",", ":")))
         .replace("__SHAPES__", json.dumps(SHAPE_PATHS, separators=(",", ":")))
     )

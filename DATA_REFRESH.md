@@ -565,6 +565,12 @@ collect_at を迎えたテーマにデータを追加した後、以下を順番
   - 「反対・慎重の理由」タブ（立場が「減税反対・慎重」の投稿の論点別の内訳）も、同じ呼び出しで貼り直される。
     数字検査が正典から数え直して照合する。注目する立場を変えるときは `TREND_THEMES.focus_stance` と
     `consumption_tax_count_provenance._FOCUS_STANCE` の両方を直す
+  - 単体で配る画像（`docs/images/trend/consumption-tax-cut-{stance,issue}-trend.png`。ページの「このグラフを画像で使う」から
+    ダウンロード・埋め込みできる）も、同じ呼び出し（`adapter.build`）が作って公開物に加える（`scripts/build_trend_images.py`）。
+    日本語フォント（macOS のヒラギノ角ゴシック）が無い環境では作れず、そこで止まる。
+    公開向け検査（`scripts/verify_trend_images.py`）が、画像のPNGに入れた数字の指紋と最新の収集日を、ページの数字と照合する。
+    手で作り直すときは `python3 scripts/build_trend_images.py --topic consumption-tax-cut --apply`
+    利用条件の文言（`build_trend_section.EMBED_TERMS`）は方針変更なのでオーナー承認が要る
   - 累積候補を渡さない呼び方（部分更新・テスト）でも、正典（`THEMES.yaml` の `sample_file`）から作る。
     正典も無い隔離環境では、既存の節をそのまま残す（黙って消さない）
   - `python3 scripts/verify_number_provenance.py consumption-tax-cut` が、表の各行を正典から独立に数え直して照合する。

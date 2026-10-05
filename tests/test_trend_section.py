@@ -544,5 +544,71 @@ class SectionWithEventsTest(unittest.TestCase):
         self.assertIn('"events":[]', section)
 
 
+class ShareBlockTest(unittest.TestCase):
+    def render(self) -> str:
+        rows = wave("2026-09-01", {PRO: 5, CON: 5}) + wave("2026-09-17", {PRO: 3, CON: 7})
+        with tempfile.TemporaryDirectory() as tmp:
+            path = write(rows, Path(tmp))
+            stance = trend.load_rounds(path, BASE, "stance")
+            issue = trend.load_rounds(path, BASE, "issue")
+            reason = trend.load_reasons(path, BASE, CON)
+        return trend.render_section(SLUG, stance, issue, reason=reason, events=[])
+
+    def test_stance_and_issue_panels_have_a_share_block_but_not_the_reason_panel(self) -> None:
+        section = self.render()
+        self.assertEqual(section.count('<details class="trend-share">'), 2)
+        reason_panel = section[section.index('data-trend-panel="reason"'):section.index("<script>")]
+        self.assertNotIn("<details", reason_panel)
+
+    def test_image_is_referenced_relative_to_the_page_and_downloadable(self) -> None:
+        section = self.render()
+        self.assertIn('<img src="images/trend/consumption-tax-cut-stance-trend.png" width="1200" height="675"', section)
+        self.assertIn('href="images/trend/consumption-tax-cut-issue-trend.png" download data-trend-download="issue"', section)
+        self.assertIn('data-trend-copy="stance"', section)
+
+    def test_alt_text_has_the_title_as_of_date_and_latest_numbers(self) -> None:
+        section = self.render()
+        alt = re.search(r'<img src="images/trend/consumption-tax-cut-stance-trend.png"[^>]*alt="([^"]*)"', section).group(1)
+        self.assertIn("消費税減税の賛成・反対の割合は変わった？", alt)
+        self.assertIn("2026年9月17日時点", alt)
+        self.assertIn("減税推進30.0%", alt)
+        self.assertIn("減税反対・慎重70.0%", alt)
+        self.assertIn("世論調査ではありません", alt)
+
+    def test_embed_code_points_at_the_public_image_with_a_credit_link(self) -> None:
+        import html as htmllib
+        section = self.render()
+        code = htmllib.unescape(re.search(r'<textarea class="trend-share-code"[^>]*>(.*?)</textarea>', section, re.S).group(1))
+        page = "https://sns-reaction-map.jp/consumption-tax-cut-reaction-map.html"
+        self.assertIn(f'<a href="{page}#consumption-tax-cut-trend-panel-stance">', code)
+        self.assertIn('<img src="https://sns-reaction-map.jp/images/trend/consumption-tax-cut-stance-trend.png"', code)
+        self.assertIn('width="600" height="338"', code)
+        self.assertIn(f'出典：<a href="{page}">SNS反応まっぷ</a>', code)
+        self.assertIn("世論調査ではありません", code)
+
+    def test_embed_code_alt_is_attribute_safe(self) -> None:
+        code = trend.embed_code(SLUG, "stance", 'a"b<c>', "panel")
+        self.assertIn('alt="a&quot;b&lt;c&gt;"', code)
+
+    def test_terms_are_shown_next_to_the_download(self) -> None:
+        section = self.render()
+        self.assertIn(trend.EMBED_TERMS, section)
+        self.assertIn("出典", trend.EMBED_TERMS)
+
+    def test_no_share_block_when_the_theme_does_not_distribute_images(self) -> None:
+        original = trend.TREND_THEMES[SLUG]["share_images"]
+        trend.TREND_THEMES[SLUG]["share_images"] = False
+        try:
+            self.assertNotIn("trend-share", self.render().replace(".trend-share", ""))
+        finally:
+            trend.TREND_THEMES[SLUG]["share_images"] = original
+
+    def test_analytics_calls_are_guarded(self) -> None:
+        section = self.render()
+        self.assertIn('typeof gtag === "function"', section)
+        self.assertIn('"trend_image_copy"', section)
+        self.assertIn('"trend_image_download"', section)
+
+
 if __name__ == "__main__":
     unittest.main()

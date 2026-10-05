@@ -164,6 +164,22 @@ def finalize(root: Path, current_date: str) -> None:
     )
 
 
+def _build_images(stage: Path, candidate: Path) -> dict[Path, Path]:
+    """単体で配る画像（意見の推移の折れ線）を2回作り、同じバイト列になることを確かめて公開物にする。
+
+    日本語フォントが無い環境では作れず、ここで止まる（文字が□の画像を公開しない）。
+    """
+    from build_trend_images import render_for as render_images  # type: ignore[import-not-found]
+    from build_trend_section import IMAGE_DIR  # type: ignore[import-not-found]
+
+    first = render_images(TOPIC, candidate, stage / "trend-images")
+    second = render_images(TOPIC, candidate, stage / "idempotence" / "trend-images")
+    for kind, path in first.items():
+        if path.read_bytes() != second[kind].read_bytes():
+            raise ValueError(f"消費税減税の推移画像（{kind}）は同じ候補の2回目実行でバイト列が変わりました")
+    return {IMAGE_DIR / path.name: path for path in first.values()}
+
+
 def build(root: Path, stage: Path, current_date: str) -> dict[Path, Path]:
     """候補を2回生成し、2回目に差分がない場合だけ公開対象を返す。"""
     candidate = stage / "cumulative-candidate.json"
@@ -193,4 +209,5 @@ def build(root: Path, stage: Path, current_date: str) -> dict[Path, Path]:
     if changed:
         raise ValueError("保護タグの個数が変わりました: " + ", ".join(changed))
 
-    return {PAGE: first_page}
+    # ページと同じ累積候補から、推移の画像も作って一緒に公開する（ページの <img> がこの画像を指す）。
+    return {PAGE: first_page, **_build_images(stage, candidate)}
