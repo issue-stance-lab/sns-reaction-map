@@ -64,7 +64,7 @@ class TrendProvenanceTest(unittest.TestCase):
             twice = page.read_text(encoding="utf-8")
         self.assertEqual(once, twice)
         self.assertEqual(once.count("<!-- TREND_CARD_START -->"), 1)
-        self.assertEqual(once.count('data-trend-panel="'), 2)
+        self.assertEqual(once.count('data-trend-panel="'), 3)  # 立場・論点・反対慎重の理由
         self.assertEqual(once.count("<!-- TIDE_CARD_START -->"), 1)
 
 
@@ -115,7 +115,7 @@ class NextRoundTest(unittest.TestCase):
             self.assertIn(f"-row-{NEW_DAY}", panel)
         self.assertIn("2026年10月10日時点", html)
         # 見出し（H2）の末尾の日付も、右上のバッジと同じく最新の収集日になる。
-        self.assertEqual(html.count('<span class="trend-h2-date">（2026年10月10日時点）</span>'), 2)
+        self.assertEqual(html.count('<span class="trend-h2-date">（2026年10月10日時点）</span>'), 3)  # 3つのタブ
         self.assertNotIn("（2026年10月3日時点）", html)
         self.assertEqual(html.count("<!-- TREND_CARD_START -->"), 1)
 
@@ -125,6 +125,9 @@ class NextRoundTest(unittest.TestCase):
         result = provenance.private_verified_selectors(first, ROOT, sample_file=self.cumulative)
         self.assertIn(f"#consumption-tax-cut-trend-panel-stance-row-{NEW_DAY}", result)
         self.assertIn(f"#consumption-tax-cut-trend-panel-issue-row-{NEW_DAY}", result)
+        # 「反対・慎重の理由」の表も、新しい回を含めた数え直しで照合を通る。
+        self.assertIn("#consumption-tax-cut-trend-panel-reason-row-0", result)
+        self.assertIn("#consumption-tax-cut-trend-panel-reason-total", result)
 
     def test_old_page_is_rejected_once_data_has_advanced(self) -> None:
         """データだけ進んで節が古いままなら、検査が止める（貼り直し漏れ）。"""
@@ -142,7 +145,7 @@ class NextRoundTest(unittest.TestCase):
         adapter._apply_tide(self.root, self.page, self.current, NEW_DAY)  # 隔離環境: 正典も累積も無い
         html = self.page.read_text(encoding="utf-8")
         self.assertEqual(html.count("<!-- TREND_CARD_START -->"), 1)
-        self.assertEqual(html.count('data-trend-panel="'), 2)
+        self.assertEqual(html.count('data-trend-panel="'), 3)
 
     def test_canonical_path_matches_themes_yaml(self) -> None:
         themes = yaml.safe_load((ROOT / "THEMES.yaml").read_text(encoding="utf-8"))["themes"]
@@ -156,6 +159,57 @@ class PresenceTest(unittest.TestCase):
         self.assertNotEqual(gone, source)
         with self.assertRaises(ValueError):
             provenance.private_verified_selectors(gone, ROOT)
+
+
+class EventsAndReasonTamperTest(unittest.TestCase):
+    def setUp(self) -> None:
+        self.source = PAGE.read_text(encoding="utf-8")
+
+    def test_published_page_passes_events_and_reason_checks(self) -> None:
+        result = provenance.private_verified_selectors(self.source, ROOT)
+        self.assertTrue(any("-event-timeline-" in key for key in result))
+        self.assertEqual(len([k for k in result if "panel-reason-row-" in k]), 6)
+
+    def test_missing_event_item_is_rejected(self) -> None:
+        gone = re.sub(r'<li class="trend-event" id="consumption-tax-cut-trend-panel-stance-event-timeline-2026-09-15">.*?</li>', "", self.source, count=1, flags=re.S)
+        self.assertNotEqual(gone, self.source)
+        with self.assertRaises(ValueError):
+            provenance.private_verified_selectors(gone, ROOT)
+
+    def test_changed_event_title_is_rejected(self) -> None:
+        changed = self.source.replace("大綱を閣議決定、法案化する内容が具体化</p>", "大綱を閣議決定した</p>", 1)
+        self.assertNotEqual(changed, self.source)
+        with self.assertRaises(ValueError):
+            provenance.private_verified_selectors(changed, ROOT)
+
+    def test_tampered_reason_cell_is_rejected(self) -> None:
+        i = self.source.index('id="consumption-tax-cut-trend-panel-reason-row-0"')
+        j = self.source.index("件</td>", i)
+        broken = self.source[:j - 1] + ("9" if self.source[j - 1] != "9" else "8") + self.source[j:]
+        with self.assertRaises(ValueError):
+            provenance.private_verified_selectors(broken, ROOT)
+
+    def test_tampered_reason_total_is_rejected(self) -> None:
+        match = re.search(r'(<span id="consumption-tax-cut-trend-panel-reason-total">)(\d+)(件</span>)', self.source)
+        broken = self.source.replace(match.group(0), match.group(1) + str(int(match.group(2)) + 1) + match.group(3), 1)
+        with self.assertRaises(ValueError):
+            provenance.private_verified_selectors(broken, ROOT)
+
+    def test_missing_reason_tab_is_rejected(self) -> None:
+        gone = re.sub(r'<div class="trend-panel" id="consumption-tax-cut-trend-panel-reason".*?\n  </div>', "", self.source, count=1, flags=re.S)
+        self.assertNotEqual(gone, self.source)
+        with self.assertRaises(ValueError):
+            provenance.private_verified_selectors(gone, ROOT)
+
+    def test_unreadable_timeline_date_is_stopped_by_the_checker(self) -> None:
+        config = json.loads((ROOT / "configs/consumption-tax-background.json").read_text(encoding="utf-8"))
+        config["timeline"][0]["date"] = "2026年7月"
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "configs").mkdir()
+            (root / "configs/consumption-tax-background.json").write_text(json.dumps(config, ensure_ascii=False), encoding="utf-8")
+            with self.assertRaises(ValueError):
+                provenance._config_events(root)
 
 
 if __name__ == "__main__":

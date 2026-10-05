@@ -558,6 +558,13 @@ collect_at を迎えたテーマにデータを追加した後、以下を順番
   手では直さない。`adapter.build` が潮目と一緒に、昇格前の累積候補（`cumulative-candidate.json`）から貼り直す
   （`scripts/build_trend_section.py`）。新しい回は表に1行、グラフに1点増え、「○年○月○日時点」も最新の収集日になる
   - 各タブの見出し（H2）の末尾と右上のバッジの「○年○月○日時点」も、同じ呼び出しで最新の収集日になる（手では直さない）
+  - グラフの縦線と「同じ期間にあった出来事」は、ページの年表（`configs/consumption-tax-background.json` の `timeline`）から作る。
+    年表に出来事を足したら、次の更新で自動で入る。急ぐときは `python3 scripts/build_trend_section.py --topic consumption-tax-cut --apply`。
+    日付は「2026年9月15日」の形で書く（月までしか書けない行は、グラフに出せず数字検査が止める）。
+    直前・直後の回の比較は事実だけを書き、原因は書かない。出来事の一次資料リンクは年表の `links` を使う
+  - 「反対・慎重の理由」タブ（立場が「減税反対・慎重」の投稿の論点別の内訳）も、同じ呼び出しで貼り直される。
+    数字検査が正典から数え直して照合する。注目する立場を変えるときは `TREND_THEMES.focus_stance` と
+    `consumption_tax_count_provenance._FOCUS_STANCE` の両方を直す
   - 累積候補を渡さない呼び方（部分更新・テスト）でも、正典（`THEMES.yaml` の `sample_file`）から作る。
     正典も無い隔離環境では、既存の節をそのまま残す（黙って消さない）
   - `python3 scripts/verify_number_provenance.py consumption-tax-cut` が、表の各行を正典から独立に数え直して照合する。

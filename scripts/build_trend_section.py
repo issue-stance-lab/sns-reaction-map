@@ -76,7 +76,12 @@ TREND_THEMES = {
         "headings": {
             "stance": "消費税減税の賛成・反対の割合は変わった？",
             "issue": "消費税減税で語られる論点は変わった？",
+            "reason": "消費税減税に反対・慎重な投稿は、何を理由に挙げている？",
         },
+        # グラフの縦線と「同じ期間にあった出来事」の元。ページの年表と同じ設定ファイル。
+        "events_file": "configs/consumption-tax-background.json",
+        # 「反対・慎重の理由」タブで内訳を出す立場（inject_tide_widget.THEMES の stance_labels のどれか）。
+        "focus_stance": "減税反対・慎重",
         # スマホの表の見出し用（\n で折り返す）。凡例・ツールチップ・PCの表は正式名を使う。
         "short_labels": {
             "stance": ["減税推進", "条件付き\n賛成", "反対・\n慎重", "中立・\n情報"],
@@ -84,6 +89,9 @@ TREND_THEMES = {
         },
     },
 }
+
+REASON_TAB = "反対・慎重の理由"
+EVENT_DATE_RE = re.compile(r"(\d{4})年(\d{1,2})月(\d{1,2})日")
 
 Z95 = 1.96
 WINDOW_DAYS = 7
@@ -315,6 +323,203 @@ def note_lines(series: list[dict], labels: list[str], name: str, kind: str = "st
     return lines
 
 
+# ------------------------------------------------------------ 出来事（年表）
+
+def load_events(slug: str) -> list[dict]:
+    """ページの年表（設定ファイル）から、日付つきの出来事を読む。日付を読めない行は飛ばす。
+
+    飛ばした行は、数字検査（consumption_tax_count_provenance）が設定ファイルと突き合わせて止める。
+    データ更新そのものを、年表の書き方で止めないための分け方。
+    """
+    path = TREND_THEMES[slug].get("events_file")
+    if not path:
+        return []
+    data = json.loads((ROOT / path).read_text(encoding="utf-8"))
+    events = []
+    for item in data.get("timeline", []):
+        found = EVENT_DATE_RE.fullmatch(str(item.get("date", "")).strip())
+        if not found:
+            continue
+        iso = dt.date(int(found[1]), int(found[2]), int(found[3])).isoformat()
+        events.append({
+            "id": item["id"], "date": iso, "title": item["title"],
+            "links": [(url, label) for url, label in item.get("links", [])],
+        })
+    return sorted(events, key=lambda event: (event["date"], event["id"]))
+
+
+def events_in_range(events: list[dict], first: str, last: str) -> list[dict]:
+    """グラフの期間（最初の収集日〜最新の収集日）に入る出来事だけ。"""
+    return [event for event in events if first <= event["date"] <= last]
+
+
+def event_moves(series: list[dict], labels: list[str], event_date: str) -> dict | None:
+    """出来事の直前の回と直後の回を比べ、ぶれを超えて動いたものを返す。
+
+    直前＝出来事の日より前で最後の回、直後＝出来事の日以後で最初の回。
+    収集日が出来事と同じ日なら、その回は「直後」に数える（グラフのツールチップと同じ規則）。
+    """
+    before = [item for item in series if item["date"] < event_date]
+    after = [item for item in series if item["date"] >= event_date]
+    if not before or not after:
+        return None
+    a, b = before[-1], after[0]
+    moved = []
+    for label in labels:
+        delta = round(b["shares"][label] - a["shares"][label], 1)
+        if delta != 0 and beyond_noise(a, b, label):
+            moved.append((label, delta))
+    moved.sort(key=lambda pair: (-abs(pair[1]), labels.index(pair[0])))
+    gap = (dt.date.fromisoformat(b["date"]) - dt.date.fromisoformat(a["date"])).days
+    return {"before": a, "after": b, "gap": gap, "moved": moved[:3]}
+
+
+def event_sentences(moves: dict, kind: str) -> list[str]:
+    """出来事の前後の動きを、事実だけで書く。原因は書かない。"""
+    a, b = moves["before"], moves["after"]
+    out = [f"直後の{jp_date(b['date'])}の回を、直前の{jp_date(a['date'])}の回と比べました。"]
+    if not moves["moved"]:
+        out.append("ぶれの範囲を超える動きはありませんでした。")
+    else:
+        prefix = "主な論点の割合で、" if kind == "issue" else ""
+        down = [(label, delta) for label, delta in moves["moved"] if delta < 0]
+        up = [(label, delta) for label, delta in moves["moved"] if delta > 0]
+        for verb, group in (("下がった", down), ("上がった", up)):
+            if group:
+                out.append(f"{prefix}{verb}のは" + "と".join(f"「{label}」の{abs(delta):.1f}ポイント" for label, delta in group) + "です。")
+                prefix = ""
+        out.append("この差はぶれの範囲を超えています。" if len(moves["moved"]) == 1 else "どれもぶれの範囲を超える差です。")
+    out.append(f"回の間隔は{moves['gap']}日あります。")
+    return out
+
+
+def event_id(panel_id: str, event: dict) -> str:
+    return f"{panel_id}-event-{event['id']}"
+
+
+def _events_block(panel_id: str, kind: str, series: list[dict], labels: list[str], events: list[dict]) -> str:
+    if not events:
+        return ""
+    items = []
+    for number, event in enumerate(events, start=1):
+        sources = "".join(
+            f'<a href="{html.escape(url, quote=True)}" target="_blank" rel="noopener">{html.escape(label)}</a>'
+            for url, label in event["links"]
+        )
+        source = f'<p class="trend-event-src">一次資料: {sources}</p>' if sources else ""
+        moves = event_moves(series, labels, event["date"])
+        text = "".join(event_sentences(moves, kind)) if moves else ""
+        moves_html = f'<p class="trend-event-moves">{html.escape(text)}</p>' if text else ""
+        items.append(
+            f'<li class="trend-event" id="{event_id(panel_id, event)}">'
+            f'<span class="trend-event-badge" aria-hidden="true">{number}</span>'
+            f'<div><p class="trend-event-head"><b>{jp_date(event["date"])}</b> {html.escape(event["title"])}</p>'
+            f"{source}{moves_html}</div></li>"
+        )
+    return (
+        '<div class="trend-events">'
+        "<h3>同じ期間にあった出来事</h3>"
+        '<p class="trend-events-note">グラフの縦線の番号と対応します。年表に載せた出来事だけです。'
+        "出来事が原因だと示すものではありません。</p>"
+        f'<ol class="trend-event-list">{"".join(items)}</ol></div>'
+    )
+
+
+# ------------------------------------------------------------ 反対・慎重の理由（論点の内訳）
+
+def _half_up(value: float) -> int:
+    return int(value + 0.5)
+
+
+def load_reasons(path: Path, base: dict, stance_label: str) -> dict:
+    """ある立場の投稿が、どの論点を主に語っているか。全収集回を合わせた内訳と、回ごとの幅。"""
+    rows = json.loads(path.read_text(encoding="utf-8"))
+    issues = base["issue_labels"]
+    per_round: dict[str, dict[str, int]] = defaultdict(lambda: defaultdict(int))
+    for row in rows:
+        classification = row.get("classification", {})
+        fetched = row.get("fetched_at")
+        if not fetched or not _keep(classification, base):
+            continue
+        if classification.get("stance") != stance_label or classification.get("main_issue") not in issues:
+            continue
+        per_round[collected_date(fetched)][classification["main_issue"]] += 1
+    days = sorted(per_round)
+    totals = {label: sum(per_round[day].get(label, 0) for day in days) for label in issues}
+    n = sum(totals.values())
+    round_n = [sum(per_round[day].values()) for day in days]
+    items = []
+    for label in sorted(issues, key=lambda name: (-totals[name], issues.index(name))):
+        shares = [per_round[day].get(label, 0) / sum(per_round[day].values()) * 100 for day in days]
+        items.append({
+            "label": label, "count": totals[label], "share": round(totals[label] / n * 100, 1),
+            "lo": _half_up(min(shares)), "hi": _half_up(max(shares)),
+        })
+    return {
+        "stance": stance_label, "n": n, "rounds": len(days),
+        "first": days[0], "last": days[-1],
+        "n_min": min(round_n), "n_max": max(round_n),
+        "median_margin": round(margin(50, int(statistics.median(round_n)))),
+        "items": items,
+    }
+
+
+def _wrap_once(text: str, fragment: str, element_id: str) -> str:
+    """文中の1か所だけを、数字検査が照合できる目印（span）で包む。"""
+    return html.escape(text).replace(html.escape(fragment), f'<span id="{element_id}">{html.escape(fragment)}</span>', 1)
+
+
+def reason_paragraphs(info: dict, name: str) -> list[tuple[str, tuple[str, str] | None]]:
+    """（文章, 目印で包む断片とid）の並び。"""
+    top = info["items"][:3]
+    lo_hi = f"{top[0]['lo']}〜{top[0]['hi']}%"
+    total = f"{info['n']}件"
+    spread = f"{info['n_min']}〜{info['n_max']}件"
+    return [
+        (f"{jp_date(info['first'])}から{jp_date(info['last'])}までの{info['rounds']}回の収集で、{name}について立場が「{info['stance']}」の投稿は{total}ありました。"
+         f"主な論点は、「{top[0]['label']}」が{pct(top[0]['share'])}、「{top[1]['label']}」が{pct(top[1]['share'])}、"
+         f"「{top[2]['label']}」が{pct(top[2]['share'])}でした。", (total, "total")),
+        (f"回ごとの割合は、「{top[0]['label']}」で{lo_hi}の間を動いています。"
+         f"1回あたりの「{info['stance']}」の投稿は{spread}と少なく、ぶれが大きいため、全期間でまとめました。", (spread, "n-range-lead")),
+    ]
+
+
+def reason_notes(info: dict, name: str) -> list[tuple[str, tuple[str, str] | None]]:
+    spread = f"{info['n_min']}〜{info['n_max']}件"
+    return [
+        (f"集計の対象は、各回で初めて見つかった投稿のうち、{name}について立場が「{info['stance']}」の投稿です。"
+         "AIが立場と主な論点を分類しています。「その他」は除いて割合を出しています。", None),
+        ("Xの投稿サンプルの構成比であり、世論調査ではありません。"
+         "同じ人の意見が動いたことも、世論全体の変化も示しません。", None),
+        ("論点は話題の分類で、賛否の理由そのものではありません。"
+         "論点ごとの理由は、ページ上の論点別の解説で確かめられます。", None),
+        (f"1回あたりの「{info['stance']}」の投稿は{spread}です。割合には±{info['median_margin']}ポイント前後のぶれが出ます。"
+         "「回ごとの幅」は、各回の割合の最小と最大です。", (spread, "n-range-note")),
+        ("収集日は日本時間です。", None),
+    ]
+
+
+def reason_row_id(panel_id: str, index: int) -> str:
+    return f"{panel_id}-row-{index}"
+
+
+def _reason_table(info: dict, panel_id: str) -> str:
+    body = "".join(
+        f'<tr id="{reason_row_id(panel_id, index)}"><th scope="row">{html.escape(item["label"])}</th>'
+        f'<td>{item["count"]}件</td>'
+        f'<td class="trend-bar-cell"><span class="trend-bar" style="width:{item["share"]}%"></span><b>{pct(item["share"])}</b></td>'
+        f'<td>{item["lo"]}〜{item["hi"]}%</td></tr>'
+        for index, item in enumerate(info["items"])
+    )
+    return (
+        f'<div class="trend-table-wrap" tabindex="0" role="region" aria-label="{html.escape(info["stance"])}の投稿の論点別の内訳の表">'
+        '<table class="trend-table trend-table--reason">'
+        f"<caption>{html.escape(info['stance'])}の投稿の主な論点（「その他」を除く、全期間）</caption>"
+        '<thead><tr><th scope="col">論点</th><th scope="col">件数</th><th scope="col">割合</th><th scope="col">回ごとの幅</th></tr></thead>'
+        f"<tbody>{body}</tbody></table></div>"
+    )
+
+
 def _shape_svg(shape: str, r: float) -> str:
     path = SHAPE_PATHS[shape]
     if path is None:
@@ -396,11 +601,12 @@ TREND_JS = r"""
       const W = Math.max(280, Math.floor(stage.clientWidth));
       const small = W < 520;
       const H = small ? 300 : 340;
-      const m = {t: 14, r: small ? 52 : 60, b: 34, l: small ? 38 : 44};
+      const m = {t: data.events.length ? 26 : 14, r: small ? 52 : 60, b: 34, l: small ? 38 : 44};
       const pw = W - m.l - m.r, ph = H - m.t - m.b;
       const top = Math.max(10, Math.ceil(Math.max(...data.rounds.flatMap(r => r.v)) / 10) * 10);
       const x0 = days[0], x1 = days[lastIndex];
-      const X = i => m.l + (x1 === x0 ? pw / 2 : (days[i] - x0) / (x1 - x0) * pw);
+      const XD = day => m.l + (x1 === x0 ? pw / 2 : (day - x0) / (x1 - x0) * pw);
+      const X = i => XD(days[i]);
       const Y = v => m.t + ph - v / top * ph;
       stage.querySelector("svg")?.remove();
       const svg = el("svg", {viewBox: `0 0 ${W} ${H}`, width: W, height: H, role: "img", "aria-label": data.aria});
@@ -419,6 +625,13 @@ TREND_JS = r"""
         shown.push(lastIndex);
       }
       shown.forEach(i => svg.appendChild(el("text", {x: X(i), y: H - 10, "text-anchor": i === 0 ? "start" : (i === lastIndex ? "end" : "middle"), class: "trend-tick"}, sh(data.rounds[i].d))));
+      // 出来事の縦線と番号（下の「同じ期間にあった出来事」の番号と対応）。原因を示すものではない。
+      data.events.forEach(e => {
+        const ex = XD(Date.parse(e.d + "T00:00:00Z") / 86400000);
+        svg.appendChild(el("line", {x1: ex, x2: ex, y1: 14, y2: m.t + ph, class: "trend-event-line"}));
+        svg.appendChild(el("circle", {cx: ex, cy: 10, r: 8, class: "trend-event-dot"}));
+        svg.appendChild(el("text", {x: ex, y: 13.5, "text-anchor": "middle", class: "trend-event-no"}, String(e.n)));
+      });
       const cross = el("line", {y1: m.t, y2: m.t + ph, class: "trend-cross"});
       svg.appendChild(cross);
       const dim = s => data.emph.length > 0 && data.emph.indexOf(s) < 0;
@@ -467,6 +680,17 @@ TREND_JS = r"""
         name.textContent = label;
         row.append(key, value, name);
         tip.appendChild(row);
+      });
+      // 直前の回のあとから、この回までにあった出来事（日付がこの回と同じ日なら、この回に数える）。
+      const before = i > 0 ? days[i - 1] : -Infinity;
+      data.events.forEach(e => {
+        const day = Date.parse(e.d + "T00:00:00Z") / 86400000;
+        if (day > before && day <= days[i]) {
+          const note = document.createElement("p");
+          note.className = "trend-tip-event";
+          note.textContent = "出来事" + e.n + "：" + jp(e.d) + " " + e.t;
+          tip.appendChild(note);
+        }
       });
       // 縦線の脇に出す。右半分の回は左側、左半分の回は右側へ寄せ、その回の点に重ねない。
       const x = geom.X(i);
@@ -553,6 +777,25 @@ def trend_css() -> str:
 .trend-tip-row i{{width:14px;height:2px;border-radius:2px;flex:none}}
 .trend-tip-row b{{min-width:46px;color:#0b1d3a;font-size:14px;font-weight:900}}
 .trend-tip-row span{{color:#4b5c74;font-weight:700}}
+.trend-tip-event{{margin-top:5px!important;padding-top:5px;border-top:1px solid #e4e9f1;color:#26364f;font-weight:800;line-height:1.5}}
+.trend-event-line{{stroke:#7b8aa3;stroke-width:1;pointer-events:none}}
+.trend-event-dot{{fill:#fff;stroke:#53647c;stroke-width:1.5}}
+.trend-event-no{{fill:#26364f;font-size:11px;font-weight:900;pointer-events:none}}
+.trend-events{{margin-top:20px}}
+.trend-events h3{{margin:0 0 6px;font-size:17px;letter-spacing:-.01em}}
+.trend-events-note{{margin:0 0 10px;color:#66758b;font-size:13px;line-height:1.7}}
+.trend-event-list{{display:grid;gap:10px;margin:0;padding:0;list-style:none}}
+.trend-event{{display:grid;grid-template-columns:24px 1fr;gap:10px;padding:12px 14px;border:1px solid #e1e7f0;border-radius:12px;background:#f9fbfe}}
+.trend-event-badge{{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border:1.5px solid #53647c;border-radius:50%;background:#fff;color:#26364f;font-size:12px;font-weight:900}}
+.trend-event p{{margin:0}}
+.trend-event-head{{color:#0b1d3a;font-size:15px;font-weight:700;line-height:1.6}}
+.trend-event-src{{margin-top:2px!important;color:#66758b;font-size:12px;line-height:1.6}}
+.trend-event-src a{{color:#315bd8;word-break:break-all}}
+.trend-event-moves{{margin-top:6px!important;color:#26364f;font-size:14px;line-height:1.75}}
+.trend-table--reason td.trend-bar-cell{{min-width:150px;text-align:left}}
+.trend-table--reason thead th:first-child,.trend-table--reason thead th:nth-child(3){{text-align:left}}
+.trend-bar{{display:block;height:8px;min-width:2px;margin-bottom:3px;border-radius:0 4px 4px 0;background:#2a78d6}}
+.trend-bar-cell b{{color:#0b1d3a;font-size:14px;font-weight:900}}
 .trend-table-wrap{{margin-top:18px;overflow-x:auto;border-radius:12px;outline:none}}
 .trend-table-wrap:focus-visible{{box-shadow:0 0 0 3px #bcd0ff}}
 .trend-table{{width:100%;min-width:560px;border-collapse:collapse;font-size:14px}}
@@ -570,12 +813,15 @@ def trend_css() -> str:
 .trend-table th,.trend-table td{{padding:7px 3px}}
 .trend-table thead th{{padding:7px 2px;font-size:11px;line-height:1.35}}
 .trend-table tbody th{{width:17%}}.trend-table td.col-n{{width:15%}}
+.trend-table--reason{{font-size:12.5px}}.trend-table--reason thead th{{font-size:11px}}.trend-table--reason td.trend-bar-cell{{min-width:0}}
+.trend-table--reason tbody th{{width:34%;white-space:normal;line-height:1.4}}.trend-table--reason td:nth-of-type(1){{width:15%}}.trend-table--reason td:nth-of-type(3){{width:17%}}
+.trend-event{{padding:11px 12px}}.trend-event-head{{font-size:14px}}.trend-event-moves{{font-size:13px}}
 .trend-table--wide{{font-size:11.5px}}.trend-table--wide .col-n{{display:none}}.trend-table--wide tbody th{{width:18%}}.trend-table--wide thead th{{font-size:10.5px}}}}
 @media print{{.trend-tip{{display:none!important}}}}
 {CSS_END}"""
 
 
-def _panel(slug: str, kind: str, series: list[dict], *, hidden: bool) -> tuple[str, dict]:
+def _panel(slug: str, kind: str, series: list[dict], *, hidden: bool, events: list[dict] | None = None) -> tuple[str, dict]:
     base = _theme_base(slug)
     theme = TREND_THEMES[slug]
     spec = KINDS[kind]
@@ -589,8 +835,10 @@ def _panel(slug: str, kind: str, series: list[dict], *, hidden: bool) -> tuple[s
         )
     last = series[-1]
     axis = "立場" if kind == "stance" else "論点"
+    events = events_in_range(events or [], series[0]["date"], last["date"])
     data = {
         "labels": labels,
+        "events": [{"d": event["date"], "n": number, "t": event["title"]} for number, event in enumerate(events, start=1)],
         "colors": colors,
         "shapes": shapes,
         "emph": emphasized(series, labels),
@@ -619,30 +867,63 @@ def _panel(slug: str, kind: str, series: list[dict], *, hidden: bool) -> tuple[s
     <div class="trend-stage" data-trend-stage tabindex="0" role="group" aria-label="推移グラフ。左右の矢印キーで収集回を切り替えると、その回の数字が出ます。">
       <div class="trend-tip" data-trend-tip hidden></div>
     </div>
+    {_events_block(panel_id, kind, series, labels, events)}
     {_table(series, labels, theme["short_labels"][kind], kind, panel_id)}
     <ul class="trend-note">{notes}</ul>
   </div>"""
     return markup, data
 
 
-def render_section(slug: str, stance_series: list[dict], issue_series: list[dict] | None = None) -> str:
+def _reason_panel(slug: str, info: dict, *, hidden: bool) -> str:
+    theme = TREND_THEMES[slug]
+    panel_id = f"{slug}-trend-panel-reason"
+    lead = "".join(
+        f'<p class="trend-lead">{_wrap_once(text, wrap[0], f"{panel_id}-{wrap[1]}") if wrap else html.escape(text)}</p>'
+        for text, wrap in reason_paragraphs(info, theme["name"])
+    )
+    notes = "".join(
+        f"<li>{_wrap_once(text, wrap[0], f'{panel_id}-{wrap[1]}') if wrap else html.escape(text)}</li>"
+        for text, wrap in reason_notes(info, theme["name"])
+    )
+    hidden_attr = " hidden" if hidden else ""
+    return f"""  <div class="trend-panel" id="{panel_id}" data-trend-panel="reason"{hidden_attr}>
+    <h2 id="{panel_id}-title">{html.escape(theme["headings"]["reason"])}<span class="trend-h2-date">（{jp_date(info["last"], year=True)}時点）</span></h2>
+    {lead}
+    {_reason_table(info, panel_id)}
+    <ul class="trend-note">{notes}</ul>
+  </div>"""
+
+
+def render_section(
+    slug: str,
+    stance_series: list[dict],
+    issue_series: list[dict] | None = None,
+    *,
+    reason: dict | None = None,
+    events: list[dict] | None = None,
+) -> str:
     if len(stance_series) < 2 or (issue_series is not None and len(issue_series) < 2):
         raise ValueError("推移を出すには2回以上の収集が必要です")
     widget_id = f"{slug}-trend"
-    with_tabs = issue_series is not None
-    stance_markup, stance_data = _panel(slug, "stance", stance_series, hidden=False)
+    stance_markup, stance_data = _panel(slug, "stance", stance_series, hidden=False, events=events)
     panels = {"stance": stance_data}
     markup = [stance_markup]
+    tab_order = ["stance"]
     if issue_series is not None:
-        issue_markup, issue_data = _panel(slug, "issue", issue_series, hidden=True)
+        issue_markup, issue_data = _panel(slug, "issue", issue_series, hidden=True, events=events)
         markup.append(issue_markup)
         panels["issue"] = issue_data
+        tab_order.append("issue")
+    if reason is not None:
+        markup.append(_reason_panel(slug, reason, hidden=True))
+        tab_order.append("reason")
     tabs = ""
-    if with_tabs:
+    if len(tab_order) > 1:
+        names = {kind: KINDS[kind]["tab"] for kind in ("stance", "issue")} | {"reason": REASON_TAB}
         buttons = "".join(
             f'<button type="button" class="trend-tab" data-trend-tab="{kind}" aria-controls="{widget_id}-panel-{kind}" '
-            f'aria-pressed="{"true" if kind == "stance" else "false"}">{KINDS[kind]["tab"]}</button>'
-            for kind in ("stance", "issue")
+            f'aria-pressed="{"true" if kind == "stance" else "false"}">{names[kind]}</button>'
+            for kind in tab_order
         )
         tabs = f'  <div class="trend-tabs" role="group" aria-label="推移の見方を切り替え">{buttons}</div>\n'
     script = (
@@ -650,7 +931,7 @@ def render_section(slug: str, stance_series: list[dict], issue_series: list[dict
         .replace("__DATA__", json.dumps(panels, ensure_ascii=False, separators=(",", ":")))
         .replace("__SHAPES__", json.dumps(SHAPE_PATHS, separators=(",", ":")))
     )
-    latest = max(stance_series[-1]["date"], issue_series[-1]["date"] if issue_series else "")
+    latest = max(stance_series[-1]["date"], issue_series[-1]["date"] if issue_series else "", reason["last"] if reason else "")
     return f"""{START}
 <section class="trend-card" id="{widget_id}" aria-label="SNS上の意見の推移">
   <div class="trend-head">
@@ -692,9 +973,15 @@ def keep_existing(old_html: str, new_html: str) -> str:
 
 def render_for(slug: str, page_html: str, source: Path) -> str:
     base = _theme_base(slug)
+    theme = TREND_THEMES[slug]
     stance = load_rounds(source, base, "stance")
     issue = load_rounds(source, base, "issue") if base.get("issue_labels") else None
-    return insert_into_html(page_html, render_section(slug, stance, issue), trend_css())
+    focus = theme.get("focus_stance")
+    if focus is not None and focus not in base["stance_labels"]:
+        raise ValueError(f"{slug}: focus_stance「{focus}」が stance_labels にありません")
+    reason = load_reasons(source, base, focus) if focus and issue is not None else None
+    events = load_events(slug)
+    return insert_into_html(page_html, render_section(slug, stance, issue, reason=reason, events=events), trend_css())
 
 
 def main() -> int:

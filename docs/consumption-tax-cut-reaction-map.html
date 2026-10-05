@@ -214,6 +214,25 @@
 .trend-tip-row i{width:14px;height:2px;border-radius:2px;flex:none}
 .trend-tip-row b{min-width:46px;color:#0b1d3a;font-size:14px;font-weight:900}
 .trend-tip-row span{color:#4b5c74;font-weight:700}
+.trend-tip-event{margin-top:5px!important;padding-top:5px;border-top:1px solid #e4e9f1;color:#26364f;font-weight:800;line-height:1.5}
+.trend-event-line{stroke:#7b8aa3;stroke-width:1;pointer-events:none}
+.trend-event-dot{fill:#fff;stroke:#53647c;stroke-width:1.5}
+.trend-event-no{fill:#26364f;font-size:11px;font-weight:900;pointer-events:none}
+.trend-events{margin-top:20px}
+.trend-events h3{margin:0 0 6px;font-size:17px;letter-spacing:-.01em}
+.trend-events-note{margin:0 0 10px;color:#66758b;font-size:13px;line-height:1.7}
+.trend-event-list{display:grid;gap:10px;margin:0;padding:0;list-style:none}
+.trend-event{display:grid;grid-template-columns:24px 1fr;gap:10px;padding:12px 14px;border:1px solid #e1e7f0;border-radius:12px;background:#f9fbfe}
+.trend-event-badge{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border:1.5px solid #53647c;border-radius:50%;background:#fff;color:#26364f;font-size:12px;font-weight:900}
+.trend-event p{margin:0}
+.trend-event-head{color:#0b1d3a;font-size:15px;font-weight:700;line-height:1.6}
+.trend-event-src{margin-top:2px!important;color:#66758b;font-size:12px;line-height:1.6}
+.trend-event-src a{color:#315bd8;word-break:break-all}
+.trend-event-moves{margin-top:6px!important;color:#26364f;font-size:14px;line-height:1.75}
+.trend-table--reason td.trend-bar-cell{min-width:150px;text-align:left}
+.trend-table--reason thead th:first-child,.trend-table--reason thead th:nth-child(3){text-align:left}
+.trend-bar{display:block;height:8px;min-width:2px;margin-bottom:3px;border-radius:0 4px 4px 0;background:#2a78d6}
+.trend-bar-cell b{color:#0b1d3a;font-size:14px;font-weight:900}
 .trend-table-wrap{margin-top:18px;overflow-x:auto;border-radius:12px;outline:none}
 .trend-table-wrap:focus-visible{box-shadow:0 0 0 3px #bcd0ff}
 .trend-table{width:100%;min-width:560px;border-collapse:collapse;font-size:14px}
@@ -231,6 +250,9 @@
 .trend-table th,.trend-table td{padding:7px 3px}
 .trend-table thead th{padding:7px 2px;font-size:11px;line-height:1.35}
 .trend-table tbody th{width:17%}.trend-table td.col-n{width:15%}
+.trend-table--reason{font-size:12.5px}.trend-table--reason thead th{font-size:11px}.trend-table--reason td.trend-bar-cell{min-width:0}
+.trend-table--reason tbody th{width:34%;white-space:normal;line-height:1.4}.trend-table--reason td:nth-of-type(1){width:15%}.trend-table--reason td:nth-of-type(3){width:17%}
+.trend-event{padding:11px 12px}.trend-event-head{font-size:14px}.trend-event-moves{font-size:13px}
 .trend-table--wide{font-size:11.5px}.trend-table--wide .col-n{display:none}.trend-table--wide tbody th{width:18%}.trend-table--wide thead th{font-size:10.5px}}
 @media print{.trend-tip{display:none!important}}
 /* TREND_CARD_END */
@@ -2016,7 +2038,7 @@ try {
     <p class="trend-kicker">SNS上の意見の推移</p>
     <span class="trend-asof">2026年10月3日時点</span>
   </div>
-  <div class="trend-tabs" role="group" aria-label="推移の見方を切り替え"><button type="button" class="trend-tab" data-trend-tab="stance" aria-controls="consumption-tax-cut-trend-panel-stance" aria-pressed="true">立場の変化</button><button type="button" class="trend-tab" data-trend-tab="issue" aria-controls="consumption-tax-cut-trend-panel-issue" aria-pressed="false">論点の変化</button></div>
+  <div class="trend-tabs" role="group" aria-label="推移の見方を切り替え"><button type="button" class="trend-tab" data-trend-tab="stance" aria-controls="consumption-tax-cut-trend-panel-stance" aria-pressed="true">立場の変化</button><button type="button" class="trend-tab" data-trend-tab="issue" aria-controls="consumption-tax-cut-trend-panel-issue" aria-pressed="false">論点の変化</button><button type="button" class="trend-tab" data-trend-tab="reason" aria-controls="consumption-tax-cut-trend-panel-reason" aria-pressed="false">反対・慎重の理由</button></div>
   <div class="trend-panel" id="consumption-tax-cut-trend-panel-stance" data-trend-panel="stance">
     <h2 id="consumption-tax-cut-trend-panel-stance-title">消費税減税の賛成・反対の割合は変わった？<span class="trend-h2-date">（2026年10月3日時点）</span></h2>
     <p class="trend-lead">2026年10月3日の収集分では、消費税減税に関する意見の投稿のうち、減税推進が37.9%でした。条件付き賛成・政府案に不満は16.4%、減税反対・慎重は33.5%、中立・情報は12.2%です。</p><p class="trend-lead">7月28日から10月3日までの9回の収集を、日付順に並べました。「減税推進」は7月28日の48.9%から37.9%へ、11.0ポイント下がりました。「減税反対・慎重」は7月28日の26.6%から33.5%へ、6.9ポイント上がりました。どちらも、ぶれの範囲を超える差です。途中には、9月17日から9月24日にかけて「減税推進」が6.9ポイント上がった回もあり、一直線の変化ではありません。</p>
@@ -2024,6 +2046,7 @@ try {
     <div class="trend-stage" data-trend-stage tabindex="0" role="group" aria-label="推移グラフ。左右の矢印キーで収集回を切り替えると、その回の数字が出ます。">
       <div class="trend-tip" data-trend-tip hidden></div>
     </div>
+    <div class="trend-events"><h3>同じ期間にあった出来事</h3><p class="trend-events-note">グラフの縦線の番号と対応します。年表に載せた出来事だけです。出来事が原因だと示すものではありません。</p><ol class="trend-event-list"><li class="trend-event" id="consumption-tax-cut-trend-panel-stance-event-timeline-2026-07-30"><span class="trend-event-badge" aria-hidden="true">1</span><div><p class="trend-event-head"><b>7月30日</b> 税率引下げと給付付き税額控除の検討を表明</p><p class="trend-event-src">一次資料: <a href="https://www.kantei.go.jp/jp/105/statement/2026/0730kaiken.html" target="_blank" rel="noopener">首相官邸「『飲食料品に係る消費税率の引下げ』及び『給付付き税額控除』についての会見」（令和8年7月30日）</a></p><p class="trend-event-moves">直後の8月3日の回を、直前の7月28日の回と比べました。ぶれの範囲を超える動きはありませんでした。回の間隔は6日あります。</p></div></li><li class="trend-event" id="consumption-tax-cut-trend-panel-stance-event-timeline-2026-08-05"><span class="trend-event-badge" aria-hidden="true">2</span><div><p class="trend-event-head"><b>8月5日</b> 「1%・2年間」の方針を初めて閣議決定</p><p class="trend-event-src">一次資料: <a href="https://www.kantei.go.jp/jp/kakugi/2026/kakugi-2026080501.html" target="_blank" rel="noopener">首相官邸「『給付付き税額控除』の制度導入の基本方針について」（令和8年8月5日閣議決定）</a></p><p class="trend-event-moves">直後の8月10日の回を、直前の8月3日の回と比べました。ぶれの範囲を超える動きはありませんでした。回の間隔は7日あります。</p></div></li><li class="trend-event" id="consumption-tax-cut-trend-panel-stance-event-timeline-2026-09-15"><span class="trend-event-badge" aria-hidden="true">3</span><div><p class="trend-event-head"><b>9月15日</b> 大綱を閣議決定、法案化する内容が具体化</p><p class="trend-event-src">一次資料: <a href="https://www.cas.go.jp/jp/seisaku/shouhizei_zeigakukoujo/pdf/sankou4.pdf" target="_blank" rel="noopener">内閣「飲食料品消費税率の臨時的な引下げ及び就業者負担軽減支援金の導入に関する大綱」（令和8年9月15日閣議決定）</a></p><p class="trend-event-moves">直後の9月17日の回を、直前の9月1日の回と比べました。下がったのは「減税推進」の13.2ポイントです。上がったのは「条件付き賛成・政府案に不満」の6.5ポイントと「減税反対・慎重」の5.6ポイントです。どれもぶれの範囲を超える差です。回の間隔は16日あります。</p></div></li></ol></div>
     <div class="trend-table-wrap" tabindex="0" role="region" aria-label="収集回ごとの立場別の割合の表"><table class="trend-table"><caption>収集回ごとの立場別の割合（意見の投稿に占める割合）</caption><thead><tr><th scope="col">収集日</th><th scope="col" class="col-n">意見数</th><th scope="col"><span class="trend-full">減税推進</span><span class="trend-short">減税推進</span></th><th scope="col"><span class="trend-full">条件付き賛成・政府案に不満</span><span class="trend-short">条件付き<br>賛成</span></th><th scope="col"><span class="trend-full">減税反対・慎重</span><span class="trend-short">反対・<br>慎重</span></th><th scope="col"><span class="trend-full">中立・情報</span><span class="trend-short">中立・<br>情報</span></th></tr></thead><tbody><tr id="consumption-tax-cut-trend-panel-stance-row-2026-07-28"><th scope="row">7月28日</th><td class="col-n">612件</td><td>48.9%</td><td>17.8%</td><td>26.6%</td><td>6.7%</td></tr><tr id="consumption-tax-cut-trend-panel-stance-row-2026-08-03"><th scope="row">8月3日</th><td class="col-n">611件</td><td>50.1%</td><td>17.8%</td><td>25.5%</td><td>6.5%</td></tr><tr id="consumption-tax-cut-trend-panel-stance-row-2026-08-10"><th scope="row">8月10日</th><td class="col-n">574件</td><td>45.1%</td><td>18.5%</td><td>28.6%</td><td>7.8%</td></tr><tr id="consumption-tax-cut-trend-panel-stance-row-2026-08-17"><th scope="row">8月17日</th><td class="col-n">545件</td><td>48.4%</td><td>16.7%</td><td>22.6%</td><td>12.3%</td></tr><tr id="consumption-tax-cut-trend-panel-stance-row-2026-08-24"><th scope="row">8月24日</th><td class="col-n">510件</td><td>47.6%</td><td>17.1%</td><td>28.8%</td><td>6.5%</td></tr><tr id="consumption-tax-cut-trend-panel-stance-row-2026-09-01"><th scope="row">9月1日</th><td class="col-n">506件</td><td>51.4%</td><td>16.4%</td><td>24.3%</td><td>7.9%</td></tr><tr id="consumption-tax-cut-trend-panel-stance-row-2026-09-17"><th scope="row">9月17日</th><td class="col-n">532件</td><td>38.2%</td><td>22.9%</td><td>29.9%</td><td>9.0%</td></tr><tr id="consumption-tax-cut-trend-panel-stance-row-2026-09-24"><th scope="row">9月24日</th><td class="col-n">450件</td><td>45.1%</td><td>16.0%</td><td>29.3%</td><td>9.6%</td></tr><tr id="consumption-tax-cut-trend-panel-stance-row-2026-10-03" class="is-latest"><th scope="row">10月3日</th><td class="col-n">483件</td><td>37.9%</td><td>16.4%</td><td>33.5%</td><td>12.2%</td></tr></tbody></table></div>
     <ul class="trend-note"><li>集計の対象は、各回で初めて見つかった投稿のうち、消費税減税について意見を述べた投稿です。同じ検索語のセットで集め、AIで立場を分類しています。同じ投稿は重ねて数えません。</li><li>Xの投稿サンプルの構成比であり、世論調査ではありません。同じ人の意見が動いたことも、世論全体の変化も示しません。</li><li>各回の意見は<span id="consumption-tax-cut-trend-panel-stance-n-range">450〜612件</span>です。投稿の拾い方に偏りがない場合でも、割合には±4ポイント前後のぶれが出ます。「ぶれの範囲」はこの目安で判定しています。</li><li>収集日は日本時間です。収集の間隔は6〜16日で、一定ではありません。</li><li>各回とも、投稿の84%以上は、収集日の前の7日間に書かれたものです。</li></ul>
   </div>
@@ -2034,14 +2057,21 @@ try {
     <div class="trend-stage" data-trend-stage tabindex="0" role="group" aria-label="推移グラフ。左右の矢印キーで収集回を切り替えると、その回の数字が出ます。">
       <div class="trend-tip" data-trend-tip hidden></div>
     </div>
+    <div class="trend-events"><h3>同じ期間にあった出来事</h3><p class="trend-events-note">グラフの縦線の番号と対応します。年表に載せた出来事だけです。出来事が原因だと示すものではありません。</p><ol class="trend-event-list"><li class="trend-event" id="consumption-tax-cut-trend-panel-issue-event-timeline-2026-07-30"><span class="trend-event-badge" aria-hidden="true">1</span><div><p class="trend-event-head"><b>7月30日</b> 税率引下げと給付付き税額控除の検討を表明</p><p class="trend-event-src">一次資料: <a href="https://www.kantei.go.jp/jp/105/statement/2026/0730kaiken.html" target="_blank" rel="noopener">首相官邸「『飲食料品に係る消費税率の引下げ』及び『給付付き税額控除』についての会見」（令和8年7月30日）</a></p><p class="trend-event-moves">直後の8月3日の回を、直前の7月28日の回と比べました。主な論点の割合で、下がったのは「公約と政治不信」の5.7ポイントです。上がったのは「減税の対象範囲」の6.7ポイントです。どれもぶれの範囲を超える差です。回の間隔は6日あります。</p></div></li><li class="trend-event" id="consumption-tax-cut-trend-panel-issue-event-timeline-2026-08-05"><span class="trend-event-badge" aria-hidden="true">2</span><div><p class="trend-event-head"><b>8月5日</b> 「1%・2年間」の方針を初めて閣議決定</p><p class="trend-event-src">一次資料: <a href="https://www.kantei.go.jp/jp/kakugi/2026/kakugi-2026080501.html" target="_blank" rel="noopener">首相官邸「『給付付き税額控除』の制度導入の基本方針について」（令和8年8月5日閣議決定）</a></p><p class="trend-event-moves">直後の8月10日の回を、直前の8月3日の回と比べました。主な論点の割合で、下がったのは「公約と政治不信」の7.3ポイントです。この差はぶれの範囲を超えています。回の間隔は7日あります。</p></div></li><li class="trend-event" id="consumption-tax-cut-trend-panel-issue-event-timeline-2026-09-15"><span class="trend-event-badge" aria-hidden="true">3</span><div><p class="trend-event-head"><b>9月15日</b> 大綱を閣議決定、法案化する内容が具体化</p><p class="trend-event-src">一次資料: <a href="https://www.cas.go.jp/jp/seisaku/shouhizei_zeigakukoujo/pdf/sankou4.pdf" target="_blank" rel="noopener">内閣「飲食料品消費税率の臨時的な引下げ及び就業者負担軽減支援金の導入に関する大綱」（令和8年9月15日閣議決定）</a></p><p class="trend-event-moves">直後の9月17日の回を、直前の9月1日の回と比べました。主な論点の割合で、下がったのは「公約と政治不信」の6.5ポイントです。上がったのは「事業者の実務負担」の2.2ポイントです。どれもぶれの範囲を超える差です。回の間隔は16日あります。</p></div></li></ol></div>
     <div class="trend-table-wrap" tabindex="0" role="region" aria-label="収集回ごとの論点別の割合の表"><table class="trend-table trend-table--wide"><caption>収集回ごとの論点別の割合（「その他」を除く意見の投稿に占める割合）</caption><thead><tr><th scope="col">収集日</th><th scope="col" class="col-n">意見数</th><th scope="col"><span class="trend-full">減税の対象範囲</span><span class="trend-short">対象<br>範囲</span></th><th scope="col"><span class="trend-full">財源と社会保障</span><span class="trend-short">財源・<br>社保</span></th><th scope="col"><span class="trend-full">減税の効果</span><span class="trend-short">減税の<br>効果</span></th><th scope="col"><span class="trend-full">給付など他策との比較</span><span class="trend-short">給付等<br>比較</span></th><th scope="col"><span class="trend-full">事業者の実務負担</span><span class="trend-short">事業者<br>負担</span></th><th scope="col"><span class="trend-full">公約と政治不信</span><span class="trend-short">公約・<br>不信</span></th></tr></thead><tbody><tr id="consumption-tax-cut-trend-panel-issue-row-2026-07-28"><th scope="row">7月28日</th><td class="col-n">606件</td><td>15.8%</td><td>10.6%</td><td>18.8%</td><td>7.6%</td><td>3.1%</td><td>44.1%</td></tr><tr id="consumption-tax-cut-trend-panel-issue-row-2026-08-03"><th scope="row">8月3日</th><td class="col-n">604件</td><td>22.5%</td><td>10.9%</td><td>15.7%</td><td>8.4%</td><td>4.0%</td><td>38.4%</td></tr><tr id="consumption-tax-cut-trend-panel-issue-row-2026-08-10"><th scope="row">8月10日</th><td class="col-n">566件</td><td>26.0%</td><td>14.5%</td><td>18.7%</td><td>6.7%</td><td>3.0%</td><td>31.1%</td></tr><tr id="consumption-tax-cut-trend-panel-issue-row-2026-08-17"><th scope="row">8月17日</th><td class="col-n">531件</td><td>24.7%</td><td>11.7%</td><td>18.6%</td><td>5.8%</td><td>2.8%</td><td>36.3%</td></tr><tr id="consumption-tax-cut-trend-panel-issue-row-2026-08-24"><th scope="row">8月24日</th><td class="col-n">503件</td><td>27.4%</td><td>14.5%</td><td>21.3%</td><td>6.4%</td><td>1.4%</td><td>29.0%</td></tr><tr id="consumption-tax-cut-trend-panel-issue-row-2026-09-01"><th scope="row">9月1日</th><td class="col-n">500件</td><td>22.6%</td><td>13.8%</td><td>20.8%</td><td>4.2%</td><td>1.8%</td><td>36.8%</td></tr><tr id="consumption-tax-cut-trend-panel-issue-row-2026-09-17"><th scope="row">9月17日</th><td class="col-n">522件</td><td>23.8%</td><td>18.2%</td><td>17.6%</td><td>6.1%</td><td>4.0%</td><td>30.3%</td></tr><tr id="consumption-tax-cut-trend-panel-issue-row-2026-09-24"><th scope="row">9月24日</th><td class="col-n">441件</td><td>27.2%</td><td>13.8%</td><td>14.3%</td><td>7.5%</td><td>3.9%</td><td>33.3%</td></tr><tr id="consumption-tax-cut-trend-panel-issue-row-2026-10-03" class="is-latest"><th scope="row">10月3日</th><td class="col-n">473件</td><td>29.0%</td><td>7.0%</td><td>21.4%</td><td>9.7%</td><td>5.5%</td><td>27.5%</td></tr></tbody></table></div>
     <ul class="trend-note"><li>集計の対象は、各回で初めて見つかった投稿のうち、消費税減税について意見を述べた投稿です。AIが主な論点を1つに分類しています。複数の話題に触れる投稿も、1つにだけ数えます。「その他」は除いて割合を出しています。同じ投稿は重ねて数えません。</li><li>Xの投稿サンプルの構成比であり、世論調査ではありません。同じ人の意見が動いたことも、世論全体の変化も示しません。</li><li>各回の意見は<span id="consumption-tax-cut-trend-panel-issue-n-range">441〜606件</span>です。投稿の拾い方に偏りがない場合でも、割合には±4ポイント前後のぶれが出ます。「ぶれの範囲」はこの目安で判定しています。</li><li>収集日は日本時間です。収集の間隔は6〜16日で、一定ではありません。</li><li>各回とも、投稿の83%以上は、収集日の前の7日間に書かれたものです。</li></ul>
+  </div>
+  <div class="trend-panel" id="consumption-tax-cut-trend-panel-reason" data-trend-panel="reason" hidden>
+    <h2 id="consumption-tax-cut-trend-panel-reason-title">消費税減税に反対・慎重な投稿は、何を理由に挙げている？<span class="trend-h2-date">（2026年10月3日時点）</span></h2>
+    <p class="trend-lead">7月28日から10月3日までの9回の収集で、消費税減税について立場が「減税反対・慎重」の投稿は<span id="consumption-tax-cut-trend-panel-reason-total">1315件</span>ありました。主な論点は、「減税の効果」が38.1%、「財源と社会保障」が22.9%、「公約と政治不信」が18.8%でした。</p><p class="trend-lead">回ごとの割合は、「減税の効果」で28〜46%の間を動いています。1回あたりの「減税反対・慎重」の投稿は<span id="consumption-tax-cut-trend-panel-reason-n-range-lead">120〜162件</span>と少なく、ぶれが大きいため、全期間でまとめました。</p>
+    <div class="trend-table-wrap" tabindex="0" role="region" aria-label="減税反対・慎重の投稿の論点別の内訳の表"><table class="trend-table trend-table--reason"><caption>減税反対・慎重の投稿の主な論点（「その他」を除く、全期間）</caption><thead><tr><th scope="col">論点</th><th scope="col">件数</th><th scope="col">割合</th><th scope="col">回ごとの幅</th></tr></thead><tbody><tr id="consumption-tax-cut-trend-panel-reason-row-0"><th scope="row">減税の効果</th><td>501件</td><td class="trend-bar-cell"><span class="trend-bar" style="width:38.1%"></span><b>38.1%</b></td><td>28〜46%</td></tr><tr id="consumption-tax-cut-trend-panel-reason-row-1"><th scope="row">財源と社会保障</th><td>301件</td><td class="trend-bar-cell"><span class="trend-bar" style="width:22.9%"></span><b>22.9%</b></td><td>14〜33%</td></tr><tr id="consumption-tax-cut-trend-panel-reason-row-2"><th scope="row">公約と政治不信</th><td>247件</td><td class="trend-bar-cell"><span class="trend-bar" style="width:18.8%"></span><b>18.8%</b></td><td>14〜25%</td></tr><tr id="consumption-tax-cut-trend-panel-reason-row-3"><th scope="row">給付など他策との比較</th><td>137件</td><td class="trend-bar-cell"><span class="trend-bar" style="width:10.4%"></span><b>10.4%</b></td><td>5〜14%</td></tr><tr id="consumption-tax-cut-trend-panel-reason-row-4"><th scope="row">事業者の実務負担</th><td>70件</td><td class="trend-bar-cell"><span class="trend-bar" style="width:5.3%"></span><b>5.3%</b></td><td>2〜12%</td></tr><tr id="consumption-tax-cut-trend-panel-reason-row-5"><th scope="row">減税の対象範囲</th><td>59件</td><td class="trend-bar-cell"><span class="trend-bar" style="width:4.5%"></span><b>4.5%</b></td><td>2〜9%</td></tr></tbody></table></div>
+    <ul class="trend-note"><li>集計の対象は、各回で初めて見つかった投稿のうち、消費税減税について立場が「減税反対・慎重」の投稿です。AIが立場と主な論点を分類しています。「その他」は除いて割合を出しています。</li><li>Xの投稿サンプルの構成比であり、世論調査ではありません。同じ人の意見が動いたことも、世論全体の変化も示しません。</li><li>論点は話題の分類で、賛否の理由そのものではありません。論点ごとの理由は、ページ上の論点別の解説で確かめられます。</li><li>1回あたりの「減税反対・慎重」の投稿は<span id="consumption-tax-cut-trend-panel-reason-n-range-note">120〜162件</span>です。割合には±8ポイント前後のぶれが出ます。「回ごとの幅」は、各回の割合の最小と最大です。</li><li>収集日は日本時間です。</li></ul>
   </div>
   <script>
 (() => {
   const root = document.getElementById("consumption-tax-cut-trend");
   if (!root) return;
-  const panels = {"stance":{"labels":["減税推進","条件付き賛成・政府案に不満","減税反対・慎重","中立・情報"],"colors":["#10b981","#f59e0b","#ef476f","#64748b"],"shapes":["circle","square","diamond","triangle"],"emph":[],"rounds":[{"d":"2026-07-28","n":612,"v":[48.9,17.8,26.6,6.7]},{"d":"2026-08-03","n":611,"v":[50.1,17.8,25.5,6.5]},{"d":"2026-08-10","n":574,"v":[45.1,18.5,28.6,7.8]},{"d":"2026-08-17","n":545,"v":[48.4,16.7,22.6,12.3]},{"d":"2026-08-24","n":510,"v":[47.6,17.1,28.8,6.5]},{"d":"2026-09-01","n":506,"v":[51.4,16.4,24.3,7.9]},{"d":"2026-09-17","n":532,"v":[38.2,22.9,29.9,9.0]},{"d":"2026-09-24","n":450,"v":[45.1,16.0,29.3,9.6]},{"d":"2026-10-03","n":483,"v":[37.9,16.4,33.5,12.2]}],"aria":"7月28日から10月3日までの9回の収集について、立場ごとの割合の推移を示す折れ線グラフです。同じ数字は下の表にあります。"},"issue":{"labels":["減税の対象範囲","財源と社会保障","減税の効果","給付など他策との比較","事業者の実務負担","公約と政治不信"],"colors":["#2a78d6","#eb6834","#1baf7a","#eda100","#e87ba4","#4a3aa7"],"shapes":["circle","square","diamond","triangle","triangle-down","plus"],"emph":[5,0],"rounds":[{"d":"2026-07-28","n":606,"v":[15.8,10.6,18.8,7.6,3.1,44.1]},{"d":"2026-08-03","n":604,"v":[22.5,10.9,15.7,8.4,4.0,38.4]},{"d":"2026-08-10","n":566,"v":[26.0,14.5,18.7,6.7,3.0,31.1]},{"d":"2026-08-17","n":531,"v":[24.7,11.7,18.6,5.8,2.8,36.3]},{"d":"2026-08-24","n":503,"v":[27.4,14.5,21.3,6.4,1.4,29.0]},{"d":"2026-09-01","n":500,"v":[22.6,13.8,20.8,4.2,1.8,36.8]},{"d":"2026-09-17","n":522,"v":[23.8,18.2,17.6,6.1,4.0,30.3]},{"d":"2026-09-24","n":441,"v":[27.2,13.8,14.3,7.5,3.9,33.3]},{"d":"2026-10-03","n":473,"v":[29.0,7.0,21.4,9.7,5.5,27.5]}],"aria":"7月28日から10月3日までの9回の収集について、論点ごとの割合の推移を示す折れ線グラフです。同じ数字は下の表にあります。"}};
+  const panels = {"stance":{"labels":["減税推進","条件付き賛成・政府案に不満","減税反対・慎重","中立・情報"],"events":[{"d":"2026-07-30","n":1,"t":"税率引下げと給付付き税額控除の検討を表明"},{"d":"2026-08-05","n":2,"t":"「1%・2年間」の方針を初めて閣議決定"},{"d":"2026-09-15","n":3,"t":"大綱を閣議決定、法案化する内容が具体化"}],"colors":["#10b981","#f59e0b","#ef476f","#64748b"],"shapes":["circle","square","diamond","triangle"],"emph":[],"rounds":[{"d":"2026-07-28","n":612,"v":[48.9,17.8,26.6,6.7]},{"d":"2026-08-03","n":611,"v":[50.1,17.8,25.5,6.5]},{"d":"2026-08-10","n":574,"v":[45.1,18.5,28.6,7.8]},{"d":"2026-08-17","n":545,"v":[48.4,16.7,22.6,12.3]},{"d":"2026-08-24","n":510,"v":[47.6,17.1,28.8,6.5]},{"d":"2026-09-01","n":506,"v":[51.4,16.4,24.3,7.9]},{"d":"2026-09-17","n":532,"v":[38.2,22.9,29.9,9.0]},{"d":"2026-09-24","n":450,"v":[45.1,16.0,29.3,9.6]},{"d":"2026-10-03","n":483,"v":[37.9,16.4,33.5,12.2]}],"aria":"7月28日から10月3日までの9回の収集について、立場ごとの割合の推移を示す折れ線グラフです。同じ数字は下の表にあります。"},"issue":{"labels":["減税の対象範囲","財源と社会保障","減税の効果","給付など他策との比較","事業者の実務負担","公約と政治不信"],"events":[{"d":"2026-07-30","n":1,"t":"税率引下げと給付付き税額控除の検討を表明"},{"d":"2026-08-05","n":2,"t":"「1%・2年間」の方針を初めて閣議決定"},{"d":"2026-09-15","n":3,"t":"大綱を閣議決定、法案化する内容が具体化"}],"colors":["#2a78d6","#eb6834","#1baf7a","#eda100","#e87ba4","#4a3aa7"],"shapes":["circle","square","diamond","triangle","triangle-down","plus"],"emph":[5,0],"rounds":[{"d":"2026-07-28","n":606,"v":[15.8,10.6,18.8,7.6,3.1,44.1]},{"d":"2026-08-03","n":604,"v":[22.5,10.9,15.7,8.4,4.0,38.4]},{"d":"2026-08-10","n":566,"v":[26.0,14.5,18.7,6.7,3.0,31.1]},{"d":"2026-08-17","n":531,"v":[24.7,11.7,18.6,5.8,2.8,36.3]},{"d":"2026-08-24","n":503,"v":[27.4,14.5,21.3,6.4,1.4,29.0]},{"d":"2026-09-01","n":500,"v":[22.6,13.8,20.8,4.2,1.8,36.8]},{"d":"2026-09-17","n":522,"v":[23.8,18.2,17.6,6.1,4.0,30.3]},{"d":"2026-09-24","n":441,"v":[27.2,13.8,14.3,7.5,3.9,33.3]},{"d":"2026-10-03","n":473,"v":[29.0,7.0,21.4,9.7,5.5,27.5]}],"aria":"7月28日から10月3日までの9回の収集について、論点ごとの割合の推移を示す折れ線グラフです。同じ数字は下の表にあります。"}};
   const NS = "http://www.w3.org/2000/svg";
   const SHAPES = {"circle":null,"square":"M-1-1H1V1H-1Z","diamond":"M0-1.35L1.35 0L0 1.35L-1.35 0Z","triangle":"M0-1.3L1.3 1.05L-1.3 1.05Z","triangle-down":"M0 1.3L1.3-1.05L-1.3-1.05Z","plus":"M-.5-1.5H.5V-.5H1.5V.5H.5V1.5H-.5V.5H-1.5V-.5H-.5Z"};
   const el = (name, attrs, text) => {
@@ -2072,11 +2102,12 @@ try {
       const W = Math.max(280, Math.floor(stage.clientWidth));
       const small = W < 520;
       const H = small ? 300 : 340;
-      const m = {t: 14, r: small ? 52 : 60, b: 34, l: small ? 38 : 44};
+      const m = {t: data.events.length ? 26 : 14, r: small ? 52 : 60, b: 34, l: small ? 38 : 44};
       const pw = W - m.l - m.r, ph = H - m.t - m.b;
       const top = Math.max(10, Math.ceil(Math.max(...data.rounds.flatMap(r => r.v)) / 10) * 10);
       const x0 = days[0], x1 = days[lastIndex];
-      const X = i => m.l + (x1 === x0 ? pw / 2 : (days[i] - x0) / (x1 - x0) * pw);
+      const XD = day => m.l + (x1 === x0 ? pw / 2 : (day - x0) / (x1 - x0) * pw);
+      const X = i => XD(days[i]);
       const Y = v => m.t + ph - v / top * ph;
       stage.querySelector("svg")?.remove();
       const svg = el("svg", {viewBox: `0 0 ${W} ${H}`, width: W, height: H, role: "img", "aria-label": data.aria});
@@ -2095,6 +2126,13 @@ try {
         shown.push(lastIndex);
       }
       shown.forEach(i => svg.appendChild(el("text", {x: X(i), y: H - 10, "text-anchor": i === 0 ? "start" : (i === lastIndex ? "end" : "middle"), class: "trend-tick"}, sh(data.rounds[i].d))));
+      // 出来事の縦線と番号（下の「同じ期間にあった出来事」の番号と対応）。原因を示すものではない。
+      data.events.forEach(e => {
+        const ex = XD(Date.parse(e.d + "T00:00:00Z") / 86400000);
+        svg.appendChild(el("line", {x1: ex, x2: ex, y1: 14, y2: m.t + ph, class: "trend-event-line"}));
+        svg.appendChild(el("circle", {cx: ex, cy: 10, r: 8, class: "trend-event-dot"}));
+        svg.appendChild(el("text", {x: ex, y: 13.5, "text-anchor": "middle", class: "trend-event-no"}, String(e.n)));
+      });
       const cross = el("line", {y1: m.t, y2: m.t + ph, class: "trend-cross"});
       svg.appendChild(cross);
       const dim = s => data.emph.length > 0 && data.emph.indexOf(s) < 0;
@@ -2143,6 +2181,17 @@ try {
         name.textContent = label;
         row.append(key, value, name);
         tip.appendChild(row);
+      });
+      // 直前の回のあとから、この回までにあった出来事（日付がこの回と同じ日なら、この回に数える）。
+      const before = i > 0 ? days[i - 1] : -Infinity;
+      data.events.forEach(e => {
+        const day = Date.parse(e.d + "T00:00:00Z") / 86400000;
+        if (day > before && day <= days[i]) {
+          const note = document.createElement("p");
+          note.className = "trend-tip-event";
+          note.textContent = "出来事" + e.n + "：" + jp(e.d) + " " + e.t;
+          tip.appendChild(note);
+        }
       });
       // 縦線の脇に出す。右半分の回は左側、左半分の回は右側へ寄せ、その回の点に重ねない。
       const x = geom.X(i);

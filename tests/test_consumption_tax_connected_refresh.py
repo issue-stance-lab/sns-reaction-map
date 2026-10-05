@@ -129,7 +129,7 @@ class ConnectedRefreshTests(unittest.TestCase):
         self.assertEqual(connected.validate(first), [])
         # 潮目の貼り直しを通っても、枠の中の「意見の推移」（立場・論点の2タブ）が1つだけ残る。
         self.assertEqual(first.count('<!-- TREND_CARD_START -->'), 1)
-        self.assertEqual(first.count('data-trend-panel="'), 2)
+        self.assertEqual(first.count('data-trend-panel="'), 3)  # 立場・論点・反対慎重の理由
         self.assertEqual(adapter.vote_fingerprint(first), adapter.vote_fingerprint(self.source))
 
     def test_changed_aggregate_rank_refreshes_counts_focus_and_keeps_relationships(self):
