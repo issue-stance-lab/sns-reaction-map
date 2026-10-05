@@ -310,6 +310,8 @@ def glance(slug: str, kind: str, series: list[dict], labels: list[str]) -> dict:
             "index": labels.index(label),
             "start": first["shares"][label],
             "end": last["shares"][label],
+            "start_count": first["counts"][label],
+            "end_count": last["counts"][label],
             "delta": info["deltas"][label],
             "beyond": beyond_noise(first, last, label),
         }
@@ -707,7 +709,9 @@ def _table(series: list[dict], labels: list[str], short_labels: list[str], kind:
     )
     body = []
     for index, item in enumerate(series):
-        cells = "".join(f"<td>{pct(item['shares'][label])}</td>" for label in labels)
+        cells = "".join(
+            f"<td>{pct(item['shares'][label])}<span class=\"trend-c\">（{item['counts'][label]}件）</span></td>" for label in labels
+        )
         current = ' class="is-latest"' if index == len(series) - 1 else ""
         # 行のidは scripts/consumption_tax_count_provenance.py が正典と1行ずつ照合するための目印。
         body.append(
@@ -719,7 +723,7 @@ def _table(series: list[dict], labels: list[str], short_labels: list[str], kind:
     return (
         f'<div class="trend-table-wrap" tabindex="0" role="region" aria-label="収集回ごとの{axis}の割合の表">'
         f'<table class="trend-table{" trend-table--wide" if wide else ""}">'
-        f"<caption>収集回ごとの{axis}の割合（{unit}）</caption>"
+        f"<caption>収集回ごとの{axis}の割合（{unit}）。割合の下のかっこ内は、その{axis[:2]}の投稿の数</caption>"
         f'<thead><tr><th scope="col">収集日</th><th scope="col" class="col-n">意見数</th>{head}</tr></thead>'
         f"<tbody>{''.join(body)}</tbody></table></div>"
     )
@@ -760,7 +764,8 @@ TREND_JS = r"""
       const W = Math.max(280, Math.floor(stage.clientWidth));
       const small = W < 520;
       const H = small ? 300 : 340;
-      const m = {t: data.events.length ? 26 : 14, r: small ? 52 : 60, b: 34, l: small ? 38 : 44};
+      const hasCounts = data.rounds.every(r => r.c);
+      const m = {t: data.events.length ? 26 : 14, r: (small ? 52 : 60) + (hasCounts ? (small ? 38 : 56) : 0), b: 34, l: small ? 38 : 44};
       const pw = W - m.l - m.r, ph = H - m.t - m.b;
       const top = Math.max(10, Math.ceil(Math.max(...data.rounds.flatMap(r => r.v)) / 10) * 10);
       const x0 = days[0], x1 = days[lastIndex];
@@ -808,7 +813,11 @@ TREND_JS = r"""
       });
       const ends = data.labels.map((l, s) => ({s, y: Y(data.rounds[lastIndex].v[s])})).sort((a, b) => a.y - b.y);
       for (let k = 1; k < ends.length; k++) if (ends[k].y - ends[k - 1].y < 14) ends[k].y = ends[k - 1].y + 14;
-      ends.forEach(e => svg.appendChild(el("text", {x: X(lastIndex) + 12, y: e.y + 4, class: "trend-end"}, data.rounds[lastIndex].v[e.s].toFixed(1) + "%")));
+      ends.forEach(e => {
+        const label = el("text", {x: X(lastIndex) + 12, y: e.y + 4, class: "trend-end"}, data.rounds[lastIndex].v[e.s].toFixed(1) + "%");
+        if (hasCounts) label.appendChild(el("tspan", {dx: 5, class: "trend-end-n"}, data.rounds[lastIndex].c[e.s] + "件"));
+        svg.appendChild(label);
+      });
       stage.appendChild(svg);
       geom = {X, W, cross};
       select(active, false);
@@ -838,6 +847,12 @@ TREND_JS = r"""
         const name = document.createElement("span");
         name.textContent = label;
         row.append(key, value, name);
+        if (r.c) {
+          const count = document.createElement("span");
+          count.className = "trend-tip-n";
+          count.textContent = "（" + r.c[s] + "件）";
+          row.appendChild(count);
+        }
         tip.appendChild(row);
       });
       // 直前の回のあとから、この回までにあった出来事（日付がこの回と同じ日なら、この回に数える）。
@@ -942,6 +957,7 @@ def trend_css() -> str:
 .trend-cross{{stroke:#9aa8bd;stroke-width:1;opacity:0;pointer-events:none}}
 .trend-tick{{fill:#66758b;font-size:12px;font-weight:700}}
 .trend-end{{fill:#0b1d3a;font-size:13px;font-weight:900}}
+.trend-end-n{{fill:#66758b;font-size:11px;font-weight:700}}
 .trend-tip{{position:absolute;top:6px;z-index:2;min-width:190px;padding:10px 12px;border:1px solid #d9e2ef;border-radius:12px;background:#fff;box-shadow:0 10px 28px rgba(18,35,64,.16);pointer-events:none;font-size:12px;line-height:1.5}}
 .trend-tip[hidden]{{display:none}}
 .trend-tip p{{margin:0}}.trend-tip-head{{margin-bottom:5px!important;color:#66758b;font-weight:800}}
@@ -949,6 +965,7 @@ def trend_css() -> str:
 .trend-tip-row i{{width:14px;height:2px;border-radius:2px;flex:none}}
 .trend-tip-row b{{min-width:46px;color:#0b1d3a;font-size:14px;font-weight:900}}
 .trend-tip-row span{{color:#4b5c74;font-weight:700}}
+.trend-tip-row .trend-tip-n{{margin-left:auto;padding-left:8px;color:#66758b;white-space:nowrap}}
 .trend-tip-event{{margin-top:5px!important;padding-top:5px;border-top:1px solid #e4e9f1;color:#26364f;font-weight:800;line-height:1.5}}
 .trend-event-line{{stroke:#7b8aa3;stroke-width:1;pointer-events:none}}
 .trend-event-dot{{fill:#fff;stroke:#53647c;stroke-width:1.5}}
@@ -995,6 +1012,8 @@ def trend_css() -> str:
 .trend-table thead th{{border-top:0;border-bottom:1px solid #cdd7e5;color:#4b5c74;font-size:12px;font-weight:900;white-space:normal;vertical-align:bottom}}
 .trend-table tbody th{{text-align:left;color:#26364f;font-weight:900}}
 .trend-table .is-latest th,.trend-table .is-latest td{{background:#f3f6fb;color:#0b1d3a;font-weight:900}}
+.trend-c{{display:block;margin-top:1px;color:#66758b;font-size:11px;font-weight:700;line-height:1.3}}
+.trend-table .is-latest .trend-c{{color:#53647c}}
 .trend-note{{margin:16px 0 0;padding:14px 0 0;border-top:1px solid #e4e9f1;color:#66758b;font-size:12px;line-height:1.75;list-style:none}}
 .trend-note li+li{{margin-top:3px}}
 .trend-short{{display:none}}
@@ -1002,12 +1021,12 @@ def trend_css() -> str:
 .trend-full{{display:none}}.trend-short{{display:inline}}
 .trend-table-wrap{{overflow-x:visible}}.trend-table{{min-width:0;table-layout:fixed;font-size:12.5px}}
 .trend-table th,.trend-table td{{padding:7px 3px}}
-.trend-table thead th{{padding:7px 2px;font-size:11px;line-height:1.35}}
+.trend-table thead th{{padding:7px 2px;font-size:11px;line-height:1.35}}.trend-c{{font-size:10.5px}}
 .trend-table tbody th{{width:17%}}.trend-table td.col-n{{width:15%}}
 .trend-table--reason{{font-size:12.5px}}.trend-table--reason thead th{{font-size:11px}}.trend-table--reason td.trend-bar-cell{{min-width:0}}
 .trend-table--reason tbody th{{width:34%;white-space:normal;line-height:1.4}}.trend-table--reason td:nth-of-type(1){{width:15%}}.trend-table--reason td:nth-of-type(3){{width:17%}}
 .trend-event{{padding:11px 12px}}.trend-event-head{{font-size:14px}}.trend-event-moves{{font-size:13px}}
-.trend-table--wide{{font-size:11.5px}}.trend-table--wide .col-n{{display:none}}.trend-table--wide tbody th{{width:18%}}.trend-table--wide thead th{{font-size:10.5px}}}}
+.trend-table--wide{{font-size:11.5px}}.trend-table--wide .trend-c{{font-size:9px;letter-spacing:-.04em}}.trend-table--wide td{{padding-left:1px;padding-right:1px}}.trend-table--wide .col-n{{display:none}}.trend-table--wide tbody th{{width:16%}}.trend-table--wide thead th{{font-size:10.5px}}}}
 @media print{{.trend-tip{{display:none!important}}}}
 {CSS_END}"""
 
@@ -1033,7 +1052,14 @@ def _panel(slug: str, kind: str, series: list[dict], *, hidden: bool, events: li
         "colors": colors,
         "shapes": shapes,
         "emph": emphasized(series, labels),
-        "rounds": [{"d": item["date"], "n": item["n"], "v": [item["shares"][label] for label in labels]} for item in series],
+        "rounds": [
+            {
+                "d": item["date"], "n": item["n"],
+                "v": [item["shares"][label] for label in labels],
+                "c": [item["counts"][label] for label in labels],
+            }
+            for item in series
+        ],
         "aria": (
             f"{jp_date(series[0]['date'])}から{jp_date(last['date'])}までの{len(series)}回の収集について、"
             f"{axis}ごとの割合の推移を示す折れ線グラフです。同じ数字は下の表にあります。"

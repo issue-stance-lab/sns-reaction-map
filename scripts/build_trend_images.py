@@ -87,7 +87,14 @@ def series_digest(labels: list[str], rounds: list[dict]) -> str:
 
 
 def rounds_for_digest(series: list[dict], labels: list[str]) -> list[dict]:
-    return [{"d": item["date"], "n": item["n"], "v": [item["shares"][label] for label in labels]} for item in series]
+    return [
+        {
+            "d": item["date"], "n": item["n"],
+            "v": [item["shares"][label] for label in labels],
+            "c": [item["counts"][label] for label in labels],
+        }
+        for item in series
+    ]
 
 
 # ------------------------------------------------------------ 印（ページのグラフと同じ形）
@@ -230,7 +237,7 @@ def image_texts(slug: str, kind: str, series: list[dict]) -> dict:
         "period": f"{trend.jp_date(series[0]['date'])}〜{trend.jp_date(series[-1]['date'])}の{len(series)}回の収集",
         "notes": [
             "Xの投稿サンプルをAIで分類した構成比です。世論調査ではありません。",
-            f"各回の意見は{info['n_min']}〜{info['n_max']}件で、割合には±{info['median_margin']}ポイント前後のぶれがあります。",
+            f"各回の意見は{info['n_min']}〜{info['n_max']}件（最新は{series[-1]['n']}件）で、割合には±{info['median_margin']}ポイント前後のぶれがあります。",
         ],
     }
 
@@ -267,8 +274,8 @@ def render_detail_image(slug: str, kind: str, series: list[dict]) -> Image.Image
     legend_bottom = y
 
     # 作図領域
-    left, right = 104, 1046
-    top, bottom = legend_bottom + 34, 548
+    left, right = 104, 1000  # 右に、最新の割合と件数を書く場所を残す
+    top, bottom = legend_bottom + 34, 528  # 下に、日付と各回の意見の件数を2段で書く
     max_value = max(v for item in series for v in item["shares"].values() if isinstance(v, (int, float)))
     ceiling = max(10, math.ceil(max_value / 10) * 10)
     first_day = _day(series[0]["date"])
@@ -293,10 +300,13 @@ def render_detail_image(slug: str, kind: str, series: list[dict]) -> Image.Image
         while len(shown) > 1 and x_of(series[-1]["date"]) - x_of(shown[-1]) < 62:
             shown.pop()
         shown.append(series[-1]["date"])
+    n_of = {item["date"]: item["n"] for item in series}
     for date in shown:
         month, day = (int(part) for part in date.split("-")[1:])
         anchor = "ls" if date == series[0]["date"] else ("rs" if date == series[-1]["date"] else "ms")
-        c.text(x_of(date), bottom + 30, f"{month}/{day}", 17, MUTED, anchor=anchor)
+        c.text(x_of(date), bottom + 27, f"{month}/{day}", 17, MUTED, anchor=anchor)
+        c.text(x_of(date), bottom + 47, f"{n_of[date]}件", 14, MUTED, anchor=anchor)
+    c.text(left - 12, bottom + 47, "意見数", 14, MUTED, anchor="rs")
 
     dimmed = lambda s: bool(emph) and s not in emph  # noqa: E731
     for s, label in enumerate(labels):
@@ -318,7 +328,9 @@ def render_detail_image(slug: str, kind: str, series: list[dict]) -> Image.Image
             yy = placed[-1][0] + 24
         placed.append((yy, s))
     for yy, s in placed:
-        c.text(right + 18, yy + 7, f"{series[-1]['shares'][labels[s]]:.1f}%", 21, INK, bold=True)
+        value = f"{series[-1]['shares'][labels[s]]:.1f}%"
+        c.text(right + 18, yy + 7, value, 21, INK, bold=True)
+        c.text(right + 18 + c.text_width(value, 21, True) + 9, yy + 7, f"{series[-1]['counts'][labels[s]]}件", 16, MUTED)
 
     # 足もと: 出典と注意書き
     c.line([(margin_x, 586), (WIDTH - margin_x, 586)], AXIS, 1.2)
@@ -385,7 +397,8 @@ def render_summary_image(slug: str, kind: str, series: list[dict]) -> Image.Imag
         c.text(mx, 142 + number * 66, line, size, INK, bold=True)
 
     # 説明の行（左: 何の割合か / 右: 回数）
-    unit = "意見の投稿に占める割合" if kind == "stance" else "「その他」を除く意見の投稿の割合"
+    unit = "意見の投稿に占める割合と件数" if kind == "stance" else "「その他」を除く意見の投稿の割合と件数"
+    noun = "立場" if kind == "stance" else "論点"
     caption = f"最初と最新の差が大きい2つ（{unit}）"
     count = f"{len(series)}回の収集"
     cap_size = 24
@@ -396,7 +409,7 @@ def render_summary_image(slug: str, kind: str, series: list[dict]) -> Image.Imag
 
     # 作図領域（右に、系列名と最新値を直接書く場所を残す）
     left, right = 150, 804
-    px_first, px_last = 206, 770
+    px_first, px_last = 232, 770
     top, bottom = 296, 536
     colors, shapes = spec["colors"], spec["shapes"]
     ceiling, step = summary_ceiling(max(max(item["start"], item["end"], *(r["shares"][item["label"]] for r in series)) for item in items))
@@ -431,13 +444,15 @@ def render_summary_image(slug: str, kind: str, series: list[dict]) -> Image.Imag
         c.marker(shape, x_of(first["date"]), y_of(item["start"]), 14, "#ffffff")
         c.marker(shape, x_of(first["date"]), y_of(item["start"]), 10.5, color)
 
-    # 最初の値（高い方は点の上、低い方は点の下）
+    # 最初の値と件数（高い方は点の上、低い方は点の下）
     ordered = sorted(items, key=lambda item: -item["start"])
     for number, item in enumerate(ordered):
-        value = f"{_half_up(item['start'])}%"
+        value, count = f"{_half_up(item['start'])}%", f"{item['start_count']}件"
         y = y_of(item["start"])
         baseline = y - 26 if number == 0 else min(y + 56, bottom - 8)  # 0%の軸に重ならないようにする
-        c.text(px_first, baseline, value, 36, INK, bold=True, anchor="ms")
+        x0 = max(px_first - (c.text_width(value, 36, True) + 10 + c.text_width(count, 22)) / 2, left - 8)  # 縦軸の目盛りの文字に重ねない
+        c.text(x0, baseline, value, 36, INK, bold=True)
+        c.text(x0 + c.text_width(value, 36, True) + 10, baseline, count, 22, MUTED)
 
     # 右端: 最新の値と系列名（重なる行は上下に離す）
     label_x = px_last + 52
@@ -461,15 +476,18 @@ def render_summary_image(slug: str, kind: str, series: list[dict]) -> Image.Imag
         row_y = block["top"] + 26  # 値の行の中心
         c.dashed((px_last + 6, y_of(item["end"])), (label_x - 8, row_y), LEADER, 2.2)
         c.marker(shape, label_x + 12, row_y, 12, color)
-        c.text(label_x + 36, row_y + 19, f"{_half_up(item['end'])}%", 54, INK, bold=True)
+        end_value = f"{_half_up(item['end'])}%"
+        c.text(label_x + 36, row_y + 19, end_value, 54, INK, bold=True)
+        c.text(label_x + 36 + c.text_width(end_value, 54, True) + 12, row_y + 19, f"{item['end_count']}件", 26, MUTED)
         for number, line in enumerate(block["lines"]):
             c.text(label_x, row_y + 26 + 8 + 28 + number * 34, line, 28, INK2, bold=True)
 
-    # 足もと: 出典と注意書き
-    c.line([(mx, 588), (WIDTH - mx, 588)], AXIS, 1.2)
-    c.text(mx, 624, f"出典：SNS反応まっぷ（{trend.SITE_HOST}）", 28, INK, bold=True)
+    # 足もと: 出典と注意書き（件数の見方と、意見の合計の件数）
     margin = info["info"]["median_margin"]
-    c.text(mx, 658, f"Xの投稿をAIで分類した割合で、世論調査ではありません。割合には±{margin}ポイント前後のぶれがあります。", 22, MUTED)
+    c.line([(mx, 584), (WIDTH - mx, 584)], AXIS, 1.2)
+    c.text(mx, 614, f"出典：SNS反応まっぷ（{trend.SITE_HOST}）", 28, INK, bold=True)
+    c.text(mx, 641, f"Xの投稿をAIで分類した割合で、世論調査ではありません。割合には±{margin}ポイント前後のぶれがあります。", 21, MUTED)
+    c.text(mx, 666, f"件数は、その{noun}の投稿の数です。意見の合計は、最初の回が{first['n']}件、最新の回が{last['n']}件です。", 21, MUTED)
     return c.finish()
 
 

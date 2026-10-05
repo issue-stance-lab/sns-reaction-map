@@ -80,6 +80,19 @@ class ShapesAndDigestTest(unittest.TestCase):
         self.assertNotEqual(digest, images.series_digest(["賛成", "反対"], rounds))
         self.assertNotEqual(digest, images.series_digest(["反対", "賛成"], rounds[:1] + rounds[1:]))
 
+    def test_digest_changes_when_only_a_count_changes(self) -> None:
+        """割合が同じでも件数が違えば、別のデータ（件数入りの画像が古いまま残らない）。"""
+        a = [{"d": "2026-09-01", "n": 10, "v": [60.0, 40.0], "c": [6, 4]}]
+        b = [{"d": "2026-09-01", "n": 20, "v": [60.0, 40.0], "c": [12, 8]}]
+        self.assertNotEqual(images.series_digest(["賛成", "反対"], a), images.series_digest(["賛成", "反対"], b))
+
+    def test_rounds_for_digest_carries_counts(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            series = trend.load_rounds(write(synthetic_rows(), Path(tmp)), BASE, "stance")
+        rounds = images.rounds_for_digest(series, STANCES)
+        self.assertEqual(rounds[0]["c"], [series[0]["counts"][label] for label in STANCES])
+        self.assertEqual(sum(rounds[0]["c"]), rounds[0]["n"])
+
     def test_digest_matches_what_the_page_embeds(self) -> None:
         """ページの節に埋めるデータと、画像側の rounds_for_digest が同じ形になること。"""
         with tempfile.TemporaryDirectory() as tmp:
@@ -103,6 +116,12 @@ class TextsTest(unittest.TestCase):
         self.assertIn("世論調査ではありません", texts["notes"][0])
         self.assertIn("9月1日〜9月15日の3回の収集", texts["period"])
         self.assertTrue(texts["notes"][1].startswith("各回の意見は"))
+
+    def test_detail_note_gives_the_latest_count(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            series = trend.load_rounds(write(synthetic_rows(), Path(tmp)), BASE, "stance")
+        texts = images.image_texts(SLUG, "stance", series)
+        self.assertIn(f"最新は{series[-1]['n']}件", texts["notes"][1])
 
     def test_issue_image_says_other_is_excluded(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -262,6 +281,16 @@ class RenderTest(unittest.TestCase):
         with mock.patch.object(trend, "glance_lines", return_value=lines):
             image = images.render_image(SLUG, "stance", series, "summary")
         self.assertEqual(image.size, (1200, 675))
+
+    def test_count_labels_stay_inside_the_image_even_for_large_numbers(self) -> None:
+        """件数の桁が増えても（9999件）、右端の文字が画像の外へ出ない。現実の最大に近い割合（99%台）で見る。"""
+        regular, bold = images.find_fonts()
+        canvas = images.Canvas(regular, bold)
+        label_x = 770 + 52  # ひと目版の右端の値の位置（px_last + 52）
+        summary_right = label_x + 36 + canvas.text_width("99%", 54, True) + 12 + canvas.text_width("9999件", 26)
+        self.assertLessEqual(summary_right, images.WIDTH - 40)
+        detail_right = 1000 + 18 + canvas.text_width("99.9%", 21, True) + 9 + canvas.text_width("9999件", 16)
+        self.assertLessEqual(detail_right, images.WIDTH - 24)
 
     def test_adapter_builds_images_as_public_targets_twice_identically(self) -> None:
         stage = Path(self.temp.name) / "stage"

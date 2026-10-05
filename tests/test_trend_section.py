@@ -716,5 +716,56 @@ class GlanceTest(unittest.TestCase):
                     self.assertIn(f"「{b}」", "".join(lines))
 
 
+class CountsTest(unittest.TestCase):
+    """割合だけでなく、実際の投稿数（件数）も表・ツールチップ・グラフのデータに出す。"""
+
+    def render(self) -> tuple[str, list[dict]]:
+        rows = wave("2026-09-01", {PRO: 5, CON: 5}) + wave("2026-09-17", {PRO: 3, CON: 7})
+        with tempfile.TemporaryDirectory() as tmp:
+            path = write(rows, Path(tmp))
+            stance = trend.load_rounds(path, BASE, "stance")
+            issue = trend.load_rounds(path, BASE, "issue")
+        return trend.render_section(SLUG, stance, issue, events=[]), stance
+
+    def test_each_table_cell_has_the_percentage_and_the_count(self) -> None:
+        section, _ = self.render()
+        self.assertIn('<td>50.0%<span class="trend-c">（5件）</span></td>', section)
+        self.assertIn('<td>30.0%<span class="trend-c">（3件）</span></td>', section)
+        self.assertIn('<td>0.0%<span class="trend-c">（0件）</span></td>', section)  # 0件の立場も出す
+
+    def test_table_caption_explains_the_small_number(self) -> None:
+        section, _ = self.render()
+        self.assertIn("割合の下のかっこ内は、その立場の投稿の数", section)
+        self.assertIn("割合の下のかっこ内は、その論点の投稿の数", section)
+
+    def test_chart_data_carries_counts_next_to_shares(self) -> None:
+        section, stance = self.render()
+        panels = json.loads(re.search(r"const panels = (\{.*\});\n\s*const NS", section, re.S).group(1))
+        for kind in ("stance", "issue"):
+            for item in panels[kind]["rounds"]:
+                self.assertEqual(len(item["c"]), len(item["v"]))
+                self.assertTrue(all(isinstance(value, int) for value in item["c"]))
+        first = panels["stance"]["rounds"][0]
+        self.assertEqual(first["n"], 10)
+        self.assertEqual(first["c"], [5, 0, 5, 0])
+        self.assertEqual(sum(first["c"]), first["n"])
+        self.assertEqual([round(count / first["n"] * 100, 1) for count in first["c"]], first["v"])
+
+    def test_tooltip_script_shows_the_count_when_the_data_has_it(self) -> None:
+        section, _ = self.render()
+        self.assertIn('count.className = "trend-tip-n"', section)
+        self.assertIn('"（" + r.c[s] + "件）"', section)
+        self.assertIn("if (r.c)", section)  # 件数のない古いデータでも壊れない
+
+    def test_glance_items_carry_the_start_and_end_counts(self) -> None:
+        rows = wave("2026-09-01", {PRO: 300, CON: 100}) + wave("2026-09-08", {PRO: 100, CON: 300})
+        with tempfile.TemporaryDirectory() as tmp:
+            series = trend.load_rounds(write(rows, Path(tmp)), BASE, "stance")
+        info = trend.glance(SLUG, "stance", series, LABELS)
+        pro = info["items"][0]
+        self.assertEqual((pro["label"], pro["start_count"], pro["end_count"]), (PRO, 300, 100))
+        self.assertEqual(pro["start_count"] / series[0]["n"] * 100, pro["start"])
+
+
 if __name__ == "__main__":
     unittest.main()

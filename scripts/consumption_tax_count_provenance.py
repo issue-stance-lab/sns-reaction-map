@@ -21,11 +21,12 @@ _JST = dt.timezone(dt.timedelta(hours=9))
 _TREND_ID = 'consumption-tax-cut-trend'
 _FOCUS_STANCE = '減税反対・慎重'  # 「反対・慎重の理由」タブで内訳を出す立場
 _EVENT_DATE = re.compile(r'(\d{4})年(\d{1,2})月(\d{1,2})日')
+_PANELS = re.compile(r'const panels = (\{.*\});\n\s*const NS', re.S)
 
 
 def _trend_rounds(root: Path, field: str, labels: list[str],
-                  sample_file: Path | None = None) -> dict[str, tuple[int, list[float]]]:
-    """正典から、日本時間の収集日ごとの（件数, 各ラベルの割合）を数え直す。"""
+                  sample_file: Path | None = None) -> dict[str, tuple[int, list[float], list[int]]]:
+    """正典から、日本時間の収集日ごとの（意見の件数, 各ラベルの割合, 各ラベルの投稿数）を数え直す。"""
     if sample_file is None:
         themes = yaml.safe_load((root / 'THEMES.yaml').read_text())['themes']
         sample_file = root / themes['consumption-tax-cut']['sample_file']
@@ -40,7 +41,7 @@ def _trend_rounds(root: Path, field: str, labels: list[str],
     result = {}
     for day, counter in per_day.items():
         n = sum(counter.values())
-        result[day] = (n, [round(counter[label] / n * 100, 1) for label in labels])
+        result[day] = (n, [round(counter[label] / n * 100, 1) for label in labels], [counter[label] for label in labels])
     return result
 
 
@@ -107,12 +108,22 @@ def private_verified_selectors(source: str, root: Path, *, sample_file: Path | N
         if [r.get('id') for r in rows] != [f'{panel_id}-row-{d}' for d in dates]:
             raise ValueError(f'推移の表の収集回が正典と一致しません（貼り直し漏れの可能性）: {kind}')
         for row, day in zip(rows, dates):
-            n, shares = actual[day]
+            n, shares, counts = actual[day]
             _, month, date = day.split('-')
-            expected = f'{int(month)}月{int(date)}日{n}件' + ''.join(f'{share:.1f}%' for share in shares)
+            expected = f'{int(month)}月{int(date)}日{n}件' + ''.join(
+                f'{share:.1f}%（{count}件）' for share, count in zip(shares, counts))
             if row.get_text(types=None) != expected:
                 raise ValueError(f'推移の表の数字が正典の数え直しと一致しません: {row.get("id")} ← {expected}')
             result['#' + row['id']] = f'THEMES.yaml の sample_file を日本時間の収集日で数え直した{kind}別の件数と割合'
+        # グラフ（と、ツールチップ・単体の画像の指紋）が読む埋め込みデータも、同じ数え直しと一致するか。
+        # 表だけ合っていて、ツールチップの割合・件数が古いまま残る事故を止める。
+        found = _PANELS.search(source)
+        if not found:
+            raise ValueError('推移のグラフの埋め込みデータが見つかりません')
+        shown = json.loads(found.group(1)).get(kind, {}).get('rounds')
+        expected_rounds = [{'d': d, 'n': actual[d][0], 'v': actual[d][1], 'c': actual[d][2]} for d in dates]
+        if shown != expected_rounds:
+            raise ValueError(f'推移のグラフの埋め込みデータ（割合・件数）が正典の数え直しと一致しません: {kind}')
         ns = [actual[d][0] for d in dates]
         span = soup.select('#' + panel_id + '-n-range')
         if len(span) != 1 or span[0].get_text(types=None) != f'{min(ns)}〜{max(ns)}件':
