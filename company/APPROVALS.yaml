@@ -1,5 +1,5 @@
 version: 1
-updated_at: "2026-10-03"
+updated_at: "2026-10-05"
 
 rules:
   required_for:
@@ -1631,3 +1631,35 @@ items:
     result_evidence:
       - "https://sns-reaction-map.jp/koshitsu-tenpakai-reaction-map.html"
       - "https://sns-reaction-map.jp/"
+
+  - id: approval-20261005-002
+    department: engineering-data
+    action: important_policy_change
+    summary: "消費税減税の推移グラフを画像（ひと目版・詳細版）で配り、図表の利用条件（出典とリンクを明記すれば自由に利用可）を公開する"
+    reason: "Xや記事に貼れる図を配り、画像検索と引用からの流入を狙う。細かい図は縮めると読めないため、貼り付け用のひと目版と、数字の確認用の詳細版の2種類にした"
+    risks:
+      - "利用条件は「出典（SNS反応まっぷ）とリンクを明記すれば、記事・ブログ・授業・SNSで自由に使えます。画像の切り取りや、数字・注意書きの書き換えはしないでください。」。一度出すと、あとで変えても既に使われた画像は残る"
+      - "画像だけが切り出されて世論調査と誤読される恐れがある。画像に出典・時点・『世論調査ではありません』とぶれの注意書きを入れ、見出しはぶれの範囲を超えた動きだけ言い切る"
+      - "画像は日本語フォントのある環境でだけ作れる。毎週の更新でgitの履歴が約360KBずつ増える"
+      - "画像検索に載るかは公開後にSearch Consoleで確認する。実機のスマホでの見え方は未確認"
+    recommendation: approve
+    evidence:
+      - quality/reviews/2026-10-05-task77-trend-image-distribution.md
+      - scripts/build_trend_images.py
+      - scripts/verify_trend_images.py
+    status: completed
+    requested_at: "2026-10-05"
+    decided_at: "2026-10-05"
+    decision_note: >-
+      オーナーが本対話で、利用条件の文言（案）と、ひと目版・詳細版の違いの説明を確認した上で「公開して」と指示し、公開した。
+      公開後、文言への承認を明示的に確認したところ、オーナーが「承認」と回答した（2026-10-05）。
+      対象は消費税減税の推移画像の分で、引用パックページ・iframe埋め込み・他テーマへの展開は含まない。
+    completed_at: "2026-10-05"
+    result_note: >-
+      main 57992cd7で公開（作業用ブランチをマージして push）。全1460テスト（4件skip）、公開検査、GitHub Actionsの
+      公開ファイル検査とPages配信が成功。本番で画像4枚（立場・論点 × ひと目版・詳細版）がHTTP 200・1200×675で配信され、
+      ページの「このグラフを画像で使う」から表示できることとコンソールにエラーが無いことを確認した。
+    result_evidence:
+      - "https://sns-reaction-map.jp/consumption-tax-cut-reaction-map.html"
+      - "https://sns-reaction-map.jp/images/trend/consumption-tax-cut-stance-trend-summary.png"
+      - "https://sns-reaction-map.jp/images/trend/consumption-tax-cut-issue-trend-summary.png"

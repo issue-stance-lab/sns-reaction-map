@@ -574,7 +574,7 @@ collect_at を迎えたテーマにデータを追加した後、以下を順番
     （項目名を長くしたら `HEADLINE_MIN_SIZE` と見出しの文型を見直す）。
     公開向け検査（`scripts/verify_trend_images.py`）が、4枚それぞれのPNGに入れた数字の指紋・種類・最新の収集日を、ページの数字と照合する。
     手で作り直すときは `python3 scripts/build_trend_images.py --topic consumption-tax-cut --apply`
-    利用条件の文言（`build_trend_section.EMBED_TERMS`）は方針変更なのでオーナー承認が要る
+    利用条件の文言（`build_trend_section.EMBED_TERMS`）は2026-10-05にオーナーが承認済み（approval-20261005-002）。文言を変えるときは再度承認が要る
   - 累積候補を渡さない呼び方（部分更新・テスト）でも、正典（`THEMES.yaml` の `sample_file`）から作る。
     正典も無い隔離環境では、既存の節をそのまま残す（黙って消さない）
   - `python3 scripts/verify_number_provenance.py consumption-tax-cut` が、表の各行を正典から独立に数え直して照合する。
