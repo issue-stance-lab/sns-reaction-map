@@ -102,7 +102,7 @@ class ConnectedContentTests(unittest.TestCase):
 
     def test_missing_runtime_or_source_only_content_is_rejected(self):
         for before, after in [('consumption-tax-connected.js?v=8', 'missing.js'),
-                              ('consumption-tax-connected-page.js?v=8', 'missing.js'),
+                              ('consumption-tax-connected-page.js?v=9', 'missing.js'),
                               ('class="sunk"', 'class="missing-source"'),
                               (connected.BRIDGE_START, '/* missing bridge */')]:
             with self.subTest(before=before):

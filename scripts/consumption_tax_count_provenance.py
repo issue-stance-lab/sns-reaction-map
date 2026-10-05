@@ -135,10 +135,13 @@ def private_verified_selectors(source: str, root: Path, *, sample_file: Path | N
     非公開正典（social-samples/）を読むので、公開CIでは呼ばない。数字検査（verify_number_provenance.py）が
     verified_selectors と合わせて呼ぶ。
     """
+    if 'id="consumption-tax-cut-tide-widget"' in source:
+        # 2026-10-05に潮目カードは外した（前回との比較は推移の冒頭の1行と帯）。古い更新処理や単体スクリプトで戻ってきたら止める。
+        raise ValueError('潮目カードが戻っています。消費税減税は、潮目を外して「意見の推移」に一本化しています')
     if 'id="' + _TREND_ID + '"' not in source:
-        if 'id="consumption-tax-cut-tide-widget"' in source:
-            # 潮目はあるのに推移が無い。潮目の貼り直しで枠ごと消えた可能性が高い。
-            raise ValueError('「意見の推移」の節がありません（潮目の貼り直しで消えた可能性）')
+        if 'class="update-dashboard"' in source:
+            # 枠はあるのに推移が無い。ページの作り直しで中身が消えた可能性が高い。
+            raise ValueError('「意見の推移」の節がありません（ページの作り直しで消えた可能性）')
         return {}
     from inject_tide_widget import THEMES  # 立場・論点の並びの定義だけを使う（計算は使わない）
     base = next(item for item in THEMES if item['slug'] == 'consumption-tax-cut')

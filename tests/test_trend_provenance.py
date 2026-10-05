@@ -83,21 +83,20 @@ class TrendProvenanceTest(unittest.TestCase):
             provenance.private_verified_selectors(stale, ROOT)
 
     def test_adapter_rebuilds_the_section_into_a_fresh_page(self) -> None:
-        """adapter の潮目貼り直しで、潮目の枠の中の推移も（2回とも同じ形で）入り直す。"""
-        updates = sorted((ROOT / "social-samples/updates/consumption-tax-cut").glob("*/classified.json"))
-        latest = updates[-1]
+        """adapter の貼り直しで、推移の枠の中の節が（2回とも同じ形で）入り直す。潮目カードは戻らない。"""
         sample = ROOT / "social-samples/consumption-tax-cut_hermes_arena_classified.json"
         with tempfile.TemporaryDirectory() as tmp:
             page = Path(tmp) / "page.html"
             shutil.copy(PAGE, page)
-            adapter._apply_tide(ROOT, page, latest, latest.parent.name, sample)
+            adapter._apply_trend(ROOT, page, sample)
             once = page.read_text(encoding="utf-8")
-            adapter._apply_tide(ROOT, page, latest, latest.parent.name, sample)
+            adapter._apply_trend(ROOT, page, sample)
             twice = page.read_text(encoding="utf-8")
         self.assertEqual(once, twice)
         self.assertEqual(once.count("<!-- TREND_CARD_START -->"), 1)
         self.assertEqual(once.count('data-trend-panel="'), 3)  # 立場・論点・反対慎重の理由
-        self.assertEqual(once.count("<!-- TIDE_CARD_START -->"), 1)
+        self.assertEqual(once.count('<section class="update-dashboard">'), 1)
+        self.assertNotIn("tide-widget", once)
 
 
 class NextRoundTest(unittest.TestCase):
@@ -125,18 +124,11 @@ class NextRoundTest(unittest.TestCase):
         self.fresh = self.synthetic_round()
         self.cumulative = self.root / "cumulative.json"
         self.cumulative.write_text(json.dumps(json.loads(CANON.read_text(encoding="utf-8")) + self.fresh, ensure_ascii=False), encoding="utf-8")
-        updates = self.root / "social-samples/updates/consumption-tax-cut"
-        latest = sorted((ROOT / "social-samples/updates/consumption-tax-cut").glob("*/classified.json"))[-1]
-        (updates / latest.parent.name).mkdir(parents=True)
-        shutil.copy(latest, updates / latest.parent.name / "classified.json")
-        (updates / NEW_DAY).mkdir()
-        self.current = updates / NEW_DAY / "classified.json"
-        self.current.write_text(json.dumps(self.fresh, ensure_ascii=False), encoding="utf-8")
         self.page = self.root / "page.html"
         shutil.copy(PAGE, self.page)
 
     def rebuild(self) -> str:
-        adapter._apply_tide(self.root, self.page, self.current, NEW_DAY, self.cumulative)
+        adapter._apply_trend(self.root, self.page, self.cumulative)
         return self.page.read_text(encoding="utf-8")
 
     def test_new_round_extends_both_tabs_and_updates_the_date(self) -> None:
@@ -168,13 +160,13 @@ class NextRoundTest(unittest.TestCase):
 
     def test_without_cumulative_it_rebuilds_from_the_canonical_file(self) -> None:
         shutil.copytree(ROOT / "social-samples", self.root / "social-samples", dirs_exist_ok=True, ignore=shutil.ignore_patterns("updates"))
-        adapter._apply_tide(self.root, self.page, self.current, NEW_DAY)
+        adapter._apply_trend(self.root, self.page)
         html = self.page.read_text(encoding="utf-8")
         self.assertEqual(html.count("<!-- TREND_CARD_START -->"), 1)
         self.assertNotIn(f"-row-{NEW_DAY}", html)  # 正典に新しい回は無いので、既存の9回のまま
 
     def test_without_any_source_the_existing_section_is_kept(self) -> None:
-        adapter._apply_tide(self.root, self.page, self.current, NEW_DAY)  # 隔離環境: 正典も累積も無い
+        adapter._apply_trend(self.root, self.page)  # 隔離環境: 正典も累積も無い
         html = self.page.read_text(encoding="utf-8")
         self.assertEqual(html.count("<!-- TREND_CARD_START -->"), 1)
         self.assertEqual(html.count('data-trend-panel="'), 3)
@@ -185,12 +177,26 @@ class NextRoundTest(unittest.TestCase):
 
 
 class PresenceTest(unittest.TestCase):
-    def test_tide_without_trend_is_rejected(self) -> None:
+    def test_frame_without_trend_is_rejected(self) -> None:
         source = PAGE.read_text(encoding="utf-8")
         gone = re.sub(r"<!-- TREND_CARD_START -->.*?<!-- TREND_CARD_END -->", "", source, count=1, flags=re.S)
         self.assertNotEqual(gone, source)
         with self.assertRaises(ValueError):
             provenance.private_verified_selectors(gone, ROOT)
+
+    def test_a_returned_tide_card_is_rejected(self) -> None:
+        """古い更新処理や単体スクリプトで、外したはずの潮目カードが戻ってきたら止める。"""
+        source = PAGE.read_text(encoding="utf-8")
+        returned = source.replace('<section class="update-dashboard">', '<section class="update-dashboard"><section class="tide-card" id="consumption-tax-cut-tide-widget"></section>', 1)
+        self.assertNotEqual(returned, source)
+        with self.assertRaises(ValueError) as caught:
+            provenance.private_verified_selectors(returned, ROOT)
+        self.assertIn("潮目カードが戻っています", str(caught.exception))
+
+    def test_the_published_page_has_no_tide_card(self) -> None:
+        source = PAGE.read_text(encoding="utf-8")
+        self.assertNotIn("tide-widget", source)
+        self.assertNotIn("TIDE_CARD", source)
 
 
 class EventsAndReasonTamperTest(unittest.TestCase):

@@ -554,8 +554,11 @@ collect_at を迎えたテーマにデータを追加した後、以下を順番
 - [ ] `aria-desc` 内の件数
 - [ ] `datasets` JS変数（`max`・`headline`・`rows` の `previous`/`current` 値）
 - [ ] `tide-widget-note` 注釈テキスト（収集件数・日付・背景説明）
-- [ ] 消費税減税だけ: 潮目の枠の中の「意見の推移」（`#consumption-tax-cut-trend`、立場・論点の2タブ）。
-  手では直さない。`adapter.build` が潮目と一緒に、昇格前の累積候補（`cumulative-candidate.json`）から貼り直す
+- [ ] 消費税減税だけ: **潮目カードは出さない**（2026-10-05に外した。上の `tide-` の項目は他のテーマ向け）。前回との比較は、
+  次の「意見の推移」の冒頭の1行とグラフの帯が見せる。`consumption-tax-cut-tide-widget` が戻ると数字検査が止める
+- [ ] 消費税減税だけ: 外枠（`<section class="update-dashboard">`）の中の「意見の推移」（`#consumption-tax-cut-trend`、立場・論点・理由の3タブ）。
+  手では直さない。`adapter.build` が、昇格前の累積候補（`cumulative-candidate.json`）から貼り直す。
+  枠は、ページ生成器（`build_consumption_tax_page.py`）が `<!-- TREND_CARD_END --></section>` を目印に、外して差し戻す
   （`scripts/build_trend_section.py`）。新しい回は表に1行、グラフに1点増え、「○年○月○日時点」も最新の収集日になる
   - 各タブの見出し（H2）の末尾と右上のバッジの「○年○月○日時点」も、同じ呼び出しで最新の収集日になる（手では直さない）
   - グラフの縦線と「同じ期間にあった出来事」は、ページの年表（`configs/consumption-tax-background.json` の `timeline`）から作る。
@@ -631,7 +634,7 @@ collect_at を迎えたテーマにデータを追加した後、以下を順番
 **注意事項:**
 - `hero-total-samples` は全 topic-card の「投稿 XX件」の合計値。新テーマ公開直後に更新漏れが起きやすいので都度合算して確認する。
 - 割れ度スコアを変更するとランキング順位も変わる。DOM 順序（first-child が金色）も連動して並び替えること。
-- 論点アリーナ（P=[...] データ）は今回の分類結果を反映していないが、潮目ウィジェットで最新比較を表示しているため、現状はそのままでよい。
+- 論点アリーナ（P=[...] データ）は今回の分類結果を反映していないが、潮目ウィジェット（消費税減税は推移）で最新比較を表示しているため、現状はそのままでよい。
 
 ---
 
