@@ -319,5 +319,230 @@ class TabsTest(unittest.TestCase):
         self.assertEqual(once.count(trend.START), 1)
 
 
+def stance_wave(day: str, counts: dict[str, int], issue: str = SCOPE) -> list[dict]:
+    rows = []
+    for stance, n in counts.items():
+        rows += [row(f"{day}T03:00:00.000Z", stance, issue=issue) for _ in range(n)]
+    return rows
+
+
+class EventsTest(unittest.TestCase):
+    def series(self, *rounds: tuple[str, dict[str, int]]) -> list[dict]:
+        rows: list[dict] = []
+        for day, counts in rounds:
+            rows += wave(day, counts)
+        with tempfile.TemporaryDirectory() as tmp:
+            return trend.load_rounds(write(rows, Path(tmp)), BASE, "stance")
+
+    def test_load_events_reads_the_page_timeline_in_date_order(self) -> None:
+        events = trend.load_events(SLUG)
+        self.assertEqual([e["date"] for e in events], sorted(e["date"] for e in events))
+        self.assertIn("2026-09-15", [e["date"] for e in events])
+        self.assertTrue(all(e["title"] and isinstance(e["links"], list) for e in events))
+
+    def test_events_with_unreadable_dates_are_skipped_not_fatal(self) -> None:
+        config = {"timeline": [
+            {"id": "ok", "date": "2026年9月15日", "title": "出来事", "links": [["https://example.jp/", "資料"]]},
+            {"id": "ng", "date": "2026年9月", "title": "日付が月までしかない"},
+        ]}
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "events.json"
+            path.write_text(json.dumps(config, ensure_ascii=False), encoding="utf-8")
+            original = trend.TREND_THEMES[SLUG]["events_file"]
+            trend.TREND_THEMES[SLUG]["events_file"] = str(path)  # 絶対パスは ROOT を上書きする
+            try:
+                events = trend.load_events(SLUG)
+            finally:
+                trend.TREND_THEMES[SLUG]["events_file"] = original
+        self.assertEqual([e["id"] for e in events], ["ok"])
+
+    def test_events_in_range_is_inclusive_of_both_ends(self) -> None:
+        events = [{"date": d} for d in ("2026-07-27", "2026-07-28", "2026-08-05", "2026-10-03", "2026-10-04")]
+        picked = trend.events_in_range(events, "2026-07-28", "2026-10-03")
+        self.assertEqual([e["date"] for e in picked], ["2026-07-28", "2026-08-05", "2026-10-03"])
+
+    def test_moves_compare_the_round_before_with_the_round_after(self) -> None:
+        series = self.series(
+            ("2026-09-01", {PRO: 500, COND: 200, CON: 200, NEUTRAL: 100}),
+            ("2026-09-17", {PRO: 300, COND: 300, CON: 300, NEUTRAL: 100}),
+            ("2026-09-24", {PRO: 300, COND: 300, CON: 300, NEUTRAL: 100}),
+        )
+        moves = trend.event_moves(series, LABELS, "2026-09-15")
+        self.assertEqual((moves["before"]["date"], moves["after"]["date"], moves["gap"]), ("2026-09-01", "2026-09-17", 16))
+        self.assertEqual([(label, delta) for label, delta in moves["moved"]], [(PRO, -20.0), (COND, 10.0), (CON, 10.0)])
+
+    def test_round_on_the_event_day_counts_as_after(self) -> None:
+        series = self.series(("2026-09-01", {PRO: 5, CON: 5}), ("2026-09-15", {PRO: 5, CON: 5}))
+        moves = trend.event_moves(series, LABELS, "2026-09-15")
+        self.assertEqual(moves["after"]["date"], "2026-09-15")
+
+    def test_no_moves_when_the_event_has_no_round_on_one_side(self) -> None:
+        series = self.series(("2026-09-01", {PRO: 5, CON: 5}), ("2026-09-08", {PRO: 5, CON: 5}))
+        self.assertIsNone(trend.event_moves(series, LABELS, "2026-08-01"))
+        self.assertIsNone(trend.event_moves(series, LABELS, "2026-09-20"))
+
+    def test_small_changes_are_not_reported_as_moves(self) -> None:
+        series = self.series(("2026-09-01", {PRO: 51, CON: 49}), ("2026-09-08", {PRO: 47, CON: 53}))
+        moves = trend.event_moves(series, LABELS, "2026-09-05")
+        self.assertEqual(moves["moved"], [])
+        sentences = trend.event_sentences(moves, "stance")
+        self.assertIn("ぶれの範囲を超える動きはありませんでした。", sentences)
+
+    def test_sentences_state_facts_and_never_a_cause(self) -> None:
+        series = self.series(
+            ("2026-09-01", {PRO: 500, COND: 200, CON: 200, NEUTRAL: 100}),
+            ("2026-09-17", {PRO: 300, COND: 300, CON: 300, NEUTRAL: 100}),
+        )
+        moves = trend.event_moves(series, LABELS, "2026-09-15")
+        sentences = trend.event_sentences(moves, "stance")
+        text = "".join(sentences)
+        self.assertIn("直後の9月17日の回を、直前の9月1日の回と比べました。", text)
+        self.assertIn("下がったのは「減税推進」の20.0ポイントです。", text)
+        self.assertIn("上がったのは「条件付き賛成・政府案に不満」の10.0ポイントと「減税反対・慎重」の10.0ポイントです。", text)
+        self.assertIn("どれもぶれの範囲を超える差です。", text)
+        self.assertIn("回の間隔は16日あります。", text)
+        for word in ("影響", "原因", "せいで", "のため", "によって", "により"):
+            self.assertNotIn(word, text)
+        self.assertLess(max(len(s) for s in sentences), 80)
+
+    def test_single_move_uses_singular_wording(self) -> None:
+        series = self.series(
+            ("2026-09-01", {PRO: 500, COND: 100, CON: 300, NEUTRAL: 100}),
+            ("2026-09-17", {PRO: 300, COND: 100, CON: 300, NEUTRAL: 300}),
+        )
+        moves = trend.event_moves(series, LABELS, "2026-09-15")
+        sentences = trend.event_sentences(moves, "stance")
+        self.assertEqual(len(moves["moved"]), 2)
+        one = {"before": moves["before"], "after": moves["after"], "gap": 16, "moved": moves["moved"][:1]}
+        self.assertIn("この差はぶれの範囲を超えています。", trend.event_sentences(one, "stance"))
+        self.assertIn("どれもぶれの範囲を超える差です。", sentences)
+
+    def test_issue_wording_names_the_axis(self) -> None:
+        series = self.series(("2026-09-01", {PRO: 5, CON: 5}), ("2026-09-08", {PRO: 5, CON: 5}))
+        moves = {"before": series[0], "after": series[1], "gap": 7, "moved": [(TRUST, -6.5), (BUSINESS, 2.2)]}
+        text = "".join(trend.event_sentences(moves, "issue"))
+        self.assertIn("主な論点の割合で、下がったのは「公約と政治不信」の6.5ポイントです。", text)
+        self.assertIn("上がったのは「事業者の実務負担」の2.2ポイントです。", text)
+
+
+class ReasonTest(unittest.TestCase):
+    def reasons(self, *rounds: tuple[str, dict[str, int]]) -> dict:
+        rows: list[dict] = []
+        for day, counts in rounds:
+            rows += issue_wave_for_stance(day, CON, counts)
+            rows += issue_wave_for_stance(day, PRO, {SCOPE: 40})  # 別の立場は数えない
+        rows += [row("2026-09-01T03:00:00Z", CON, relevant=False, issue=EFFECT)]  # 関連なしは数えない
+        with tempfile.TemporaryDirectory() as tmp:
+            return trend.load_reasons(write(rows, Path(tmp)), BASE, CON)
+
+    def test_counts_only_the_focus_stance_and_excludes_other(self) -> None:
+        info = self.reasons(
+            ("2026-09-01", {EFFECT: 6, FINANCE: 3, "その他": 5}),
+            ("2026-09-08", {EFFECT: 2, FINANCE: 2, TRUST: 1}),
+        )
+        self.assertEqual(info["n"], 14)
+        self.assertEqual((info["rounds"], info["n_min"], info["n_max"]), (2, 5, 9))
+        self.assertEqual([item["label"] for item in info["items"]][:2], [EFFECT, FINANCE])
+        self.assertEqual(info["items"][0]["count"], 8)
+        self.assertEqual(info["items"][0]["share"], 57.1)
+        self.assertEqual(sum(item["count"] for item in info["items"]), 14)
+
+    def test_range_is_the_min_and_max_round_share_rounded_half_up(self) -> None:
+        info = self.reasons(("2026-09-01", {EFFECT: 1, FINANCE: 1}), ("2026-09-08", {EFFECT: 3, FINANCE: 1}))
+        effect = next(item for item in info["items"] if item["label"] == EFFECT)
+        self.assertEqual((effect["lo"], effect["hi"]), (50, 75))  # 50% と 75%
+        finance = next(item for item in info["items"] if item["label"] == FINANCE)
+        self.assertEqual((finance["lo"], finance["hi"]), (25, 50))
+
+    def test_issues_without_posts_still_appear_with_zero(self) -> None:
+        info = self.reasons(("2026-09-01", {EFFECT: 2}), ("2026-09-08", {EFFECT: 2}))
+        self.assertEqual(len(info["items"]), len(ISSUES))
+        self.assertEqual(info["items"][-1]["count"], 0)
+
+    def test_text_says_the_stance_in_quotes_and_each_sentence_is_short(self) -> None:
+        info = self.reasons(
+            ("2026-09-01", {EFFECT: 60, FINANCE: 30, TRUST: 20}),
+            ("2026-09-08", {EFFECT: 40, FINANCE: 40, TRUST: 30}),
+        )
+        paragraphs = trend.reason_paragraphs(info, "消費税減税")
+        text = "".join(p for p, _ in paragraphs)
+        self.assertIn("立場が「減税反対・慎重」の投稿は220件ありました。", text)
+        self.assertIn("全期間でまとめました。", text)
+        notes = "".join(n for n, _ in trend.reason_notes(info, "消費税減税"))
+        self.assertIn("論点は話題の分類で、賛否の理由そのものではありません。", notes)
+        self.assertIn("世論調査ではありません", notes)
+        for paragraph, _ in paragraphs + trend.reason_notes(info, "消費税減税"):
+            for sentence in paragraph.split("。"):
+                self.assertLess(len(sentence), 80)
+
+    def test_wrap_marks_exactly_one_fragment(self) -> None:
+        wrapped = trend._wrap_once("1回は120〜162件で、別の回は120〜162件です。", "120〜162件", "x-id")
+        self.assertEqual(wrapped.count('<span id="x-id">'), 1)
+
+
+def issue_wave_for_stance(day: str, stance: str, counts: dict[str, int]) -> list[dict]:
+    rows = []
+    for issue, n in counts.items():
+        rows += [row(f"{day}T03:00:00.000Z", stance, issue=issue) for _ in range(n)]
+    return rows
+
+
+class SectionWithEventsTest(unittest.TestCase):
+    def render(self) -> str:
+        rows = wave("2026-09-01", {PRO: 5, CON: 5}) + wave("2026-09-17", {PRO: 3, CON: 7})
+        with tempfile.TemporaryDirectory() as tmp:
+            path = write(rows, Path(tmp))
+            stance = trend.load_rounds(path, BASE, "stance")
+            issue = trend.load_rounds(path, BASE, "issue")
+            reason = trend.load_reasons(path, BASE, CON)
+        events = [e for e in trend.load_events(SLUG)]
+        return trend.render_section(SLUG, stance, issue, reason=reason, events=events)
+
+    def test_three_tabs_and_events_on_both_charts(self) -> None:
+        section = self.render()
+        self.assertEqual(section.count("data-trend-tab="), 3)
+        self.assertIn(">反対・慎重の理由<", section)
+        self.assertEqual(section.count('data-trend-panel="'), 3)
+        self.assertIn('data-trend-panel="reason" hidden', section)
+        # 9/1〜9/17 の間にある出来事は 9/15 の1件だけ（7/30・8/5 はグラフの期間の外）
+        self.assertEqual(section.count('class="trend-event"'), 2)  # 立場と論点に1件ずつ
+        self.assertIn('"events":[{"d":"2026-09-15","n":1,', section)
+
+    def test_events_only_inside_the_chart_period(self) -> None:
+        section = self.render()
+        self.assertNotIn("2026-07-30", section)
+        self.assertNotIn("検討を表明", section)
+
+    def test_event_list_links_open_in_new_tab_safely(self) -> None:
+        section = self.render()
+        self.assertIn('target="_blank" rel="noopener"', section)
+
+    def test_every_event_item_carries_a_checkable_id(self) -> None:
+        section = self.render()
+        self.assertIn('id="consumption-tax-cut-trend-panel-stance-event-timeline-2026-09-15"', section)
+        self.assertIn('id="consumption-tax-cut-trend-panel-issue-event-timeline-2026-09-15"', section)
+
+    def test_reason_panel_has_rows_for_every_issue_and_marked_numbers(self) -> None:
+        section = self.render()
+        panel = section[section.index('data-trend-panel="reason"'):]
+        self.assertEqual(panel.count('<tr id="consumption-tax-cut-trend-panel-reason-row-'), len(ISSUES))
+        self.assertIn('id="consumption-tax-cut-trend-panel-reason-total"', panel)
+        self.assertIn('id="consumption-tax-cut-trend-panel-reason-n-range-lead"', panel)
+        self.assertIn('id="consumption-tax-cut-trend-panel-reason-n-range-note"', panel)
+
+    def test_reason_heading_has_the_date_too(self) -> None:
+        section = self.render()
+        self.assertEqual(section.count('<span class="trend-h2-date">（2026年9月17日時点）</span>'), 3)
+
+    def test_without_reason_or_events_the_old_layout_is_unchanged(self) -> None:
+        rows = wave("2026-09-01", {PRO: 5, CON: 5}) + wave("2026-09-08", {PRO: 4, CON: 6})
+        with tempfile.TemporaryDirectory() as tmp:
+            stance = trend.load_rounds(write(rows, Path(tmp)), BASE, "stance")
+        section = trend.render_section(SLUG, stance)
+        self.assertNotIn('class="trend-events"', section)
+        self.assertNotIn("data-trend-tab=", section)
+        self.assertIn('"events":[]', section)
+
+
 if __name__ == "__main__":
     unittest.main()

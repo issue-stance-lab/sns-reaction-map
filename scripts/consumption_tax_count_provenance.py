@@ -10,6 +10,7 @@
 from collections import Counter, defaultdict
 import datetime as dt
 import json
+import re
 from pathlib import Path
 
 from bs4 import BeautifulSoup
@@ -18,6 +19,8 @@ import yaml
 
 _JST = dt.timezone(dt.timedelta(hours=9))
 _TREND_ID = 'consumption-tax-cut-trend'
+_FOCUS_STANCE = '減税反対・慎重'  # 「反対・慎重の理由」タブで内訳を出す立場
+_EVENT_DATE = re.compile(r'(\d{4})年(\d{1,2})月(\d{1,2})日')
 
 
 def _trend_rounds(root: Path, field: str, labels: list[str],
@@ -39,6 +42,44 @@ def _trend_rounds(root: Path, field: str, labels: list[str],
         n = sum(counter.values())
         result[day] = (n, [round(counter[label] / n * 100, 1) for label in labels])
     return result
+
+
+def _config_events(root: Path) -> list[tuple[str, str, str]]:
+    """ページの年表（設定ファイル）から、（ISO日付, id, 題名）を独立に読む。読めない日付は止める。"""
+    data = json.loads((root / 'configs/consumption-tax-background.json').read_text())
+    events = []
+    for item in data['timeline']:
+        found = _EVENT_DATE.fullmatch(str(item['date']).strip())
+        if not found:
+            raise ValueError(f'年表の日付を読めません（推移のグラフに出せません）: {item["id"]} {item["date"]}')
+        events.append((dt.date(int(found[1]), int(found[2]), int(found[3])).isoformat(), item['id'], item['title']))
+    return sorted(events)
+
+
+def _reason_recount(root: Path, issues: list[str], sample_file: Path | None = None) -> dict:
+    """正典から、注目する立場の投稿が主に語る論点を数え直す（全回の合計と、回ごとの割合の幅）。"""
+    if sample_file is None:
+        themes = yaml.safe_load((root / 'THEMES.yaml').read_text())['themes']
+        sample_file = root / themes['consumption-tax-cut']['sample_file']
+    per_day = defaultdict(Counter)
+    for row in json.loads(Path(sample_file).read_text()):
+        c = row.get('classification') or {}
+        if not (c.get('is_relevant') and c.get('is_opinion')):
+            continue
+        if c.get('stance') != _FOCUS_STANCE or c.get('main_issue') not in issues:
+            continue
+        fetched = dt.datetime.fromisoformat(row['fetched_at'].replace('Z', '+00:00'))
+        per_day[fetched.astimezone(_JST).date().isoformat()][c['main_issue']] += 1
+    days = sorted(per_day)
+    totals = {label: sum(per_day[d][label] for d in days) for label in issues}
+    n = sum(totals.values())
+    round_n = [sum(per_day[d].values()) for d in days]
+    rows = []
+    for label in sorted(issues, key=lambda name: (-totals[name], issues.index(name))):
+        shares = [per_day[d][label] / sum(per_day[d].values()) * 100 for d in days]
+        rows.append(f'{label}{totals[label]}件{round(totals[label] / n * 100, 1):.1f}%'
+                    f'{int(min(shares) + 0.5)}〜{int(max(shares) + 0.5)}%')
+    return {'rows': rows, 'total': f'{n}件', 'spread': f'{min(round_n)}〜{max(round_n)}件'}
 
 
 def private_verified_selectors(source: str, root: Path, *, sample_file: Path | None = None) -> dict[str, str]:
@@ -77,6 +118,35 @@ def private_verified_selectors(source: str, root: Path, *, sample_file: Path | N
         if len(span) != 1 or span[0].get_text(types=None) != f'{min(ns)}〜{max(ns)}件':
             raise ValueError(f'推移の節の「各回の意見の件数」が正典と一致しません: {kind}')
         result['#' + panel_id + '-n-range'] = '同じ数え直しの最小〜最大'
+        # グラフの縦線と「同じ期間にあった出来事」: 年表（設定ファイル）の、グラフの期間に入る分と一致するか。
+        first, last = dates[0], dates[-1]
+        expected = [(d, i, t) for d, i, t in _config_events(root) if first <= d <= last]
+        items = soup.select(f'#{panel_id} li.trend-event')
+        if [li.get('id') for li in items] != [f'{panel_id}-event-{i}' for _, i, _ in expected]:
+            raise ValueError(f'推移の「同じ期間にあった出来事」が年表と一致しません（貼り直し漏れの可能性）: {kind}')
+        for li, (d, i, title) in zip(items, expected):
+            _, month, date = d.split('-')
+            head = li.select_one('.trend-event-head')
+            if head is None or head.get_text(types=None) != f'{int(month)}月{int(date)}日 {title}':
+                raise ValueError(f'推移の出来事の日付・題名が年表と一致しません: {li.get("id")}')
+            result['#' + li['id']] = f'configs/consumption-tax-background.json の年表（{i}）'
+    # 「反対・慎重の理由」タブ: 立場が注目する立場の投稿の、論点ごとの件数・割合・回ごとの幅。
+    panel_id = f'{_TREND_ID}-panel-reason'
+    if not soup.select('#' + panel_id):
+        raise ValueError('「反対・慎重の理由」のタブがありません（貼り直しで消えた可能性）')
+    recount = _reason_recount(root, base['issue_labels'], sample_file)
+    rows = soup.select(f'#{panel_id} tbody tr')
+    if len(rows) != len(recount['rows']):
+        raise ValueError('「反対・慎重の理由」の表の行数が正典と一致しません（貼り直し漏れの可能性）')
+    for index, (row, expected_text) in enumerate(zip(rows, recount['rows'])):
+        if row.get('id') != f'{panel_id}-row-{index}' or row.get_text(types=None) != expected_text:
+            raise ValueError(f'「反対・慎重の理由」の表の数字が正典の数え直しと一致しません: {row.get("id")} ← {expected_text}')
+        result['#' + row['id']] = f'THEMES.yaml の sample_file で「{_FOCUS_STANCE}」の投稿を論点別に数え直した件数・割合・回ごとの幅'
+    for suffix, expected_text in (('total', recount['total']), ('n-range-lead', recount['spread']), ('n-range-note', recount['spread'])):
+        found = soup.select(f'#{panel_id}-{suffix}')
+        if len(found) != 1 or found[0].get_text(types=None) != expected_text:
+            raise ValueError(f'「反対・慎重の理由」の件数（{suffix}）が正典と一致しません: {expected_text}')
+        result[f'#{panel_id}-{suffix}'] = '同じ数え直し'
     return result
 
 

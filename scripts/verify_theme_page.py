@@ -455,6 +455,12 @@ def verify_page_count_spans(theme: str, page: str, planet_mode: bool = False) ->
         for block in re.finditer(r'<nav class="planet" id="fallback-nav".*?</nav>', page, flags=re.DOTALL):
             exempt_ranges.append(block.span())
 
+    # 「意見の推移」の節（scripts/build_trend_section.py）は生成器が作り、数字検査
+    # （verify_number_provenance.py → consumption_tax_count_provenance.private_verified_selectors）が
+    # 表の各行と件数を正典の数え直しと1つずつ照合する。更新で貼り直しが漏れても、そちらが止める。
+    for block in re.finditer(r'<section class="trend-card".*?</section>', page, flags=re.DOTALL):
+        exempt_ranges.append(block.span())
+
     def _exempt(pos: int) -> bool:
         return any(start <= pos < end for start, end in exempt_ranges)
 
