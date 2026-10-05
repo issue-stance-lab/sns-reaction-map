@@ -10,6 +10,7 @@
 from collections import Counter, defaultdict
 import datetime as dt
 import json
+import math
 import re
 from pathlib import Path
 
@@ -22,6 +23,10 @@ _TREND_ID = 'consumption-tax-cut-trend'
 _FOCUS_STANCE = '減税反対・慎重'  # 「反対・慎重の理由」タブで内訳を出す立場
 _EVENT_DATE = re.compile(r'(\d{4})年(\d{1,2})月(\d{1,2})日')
 _PANELS = re.compile(r'const panels = (\{.*\});\n\s*const NS', re.S)
+_PREVIOUS = re.compile(
+    r'前回（(\d+)月(\d+)日）から今回（(\d+)月(\d+)日）にかけて、'
+    r'(?:どの項目の割合も変わりませんでした。|(?:主な論点が)?「(.+?)」(?:の投稿)?は、?([\d.]+)%から([\d.]+)%へ、'
+    r'([\d.]+)ポイント(上がり|下がり)ました。ぶれの範囲(を超える|に収まる)差です。)')
 
 
 def _trend_rounds(root: Path, field: str, labels: list[str],
@@ -83,6 +88,47 @@ def _reason_recount(root: Path, issues: list[str], sample_file: Path | None = No
     return {'rows': rows, 'total': f'{n}件', 'spread': f'{min(round_n)}〜{max(round_n)}件'}
 
 
+def _check_previous_sentence(soup, panel_id: str, kind: str, labels: list[str], dates: list[str],
+                             actual: dict) -> None:
+    """推移の冒頭の「前回から今回にかけて…」の1行を、正典の数え直しと照合する。
+
+    直前の回と最新の回の日付、取り上げた項目がいちばん大きく動いた項目であること、前回と今回の割合、
+    増減の向きと大きさ、「ぶれの範囲」の判定（95%）を、ここで独立に数え直して突き合わせる。
+    """
+    node = soup.select_one('#' + panel_id + '-prev')
+    if len(dates) < 2:
+        if node is not None:
+            raise ValueError(f'収集が1回なのに、前回との比較の1行があります: {kind}')
+        return
+    if node is None:
+        raise ValueError(f'推移の冒頭に、前回との比較の1行がありません: {kind}')
+    found = _PREVIOUS.fullmatch(node.get_text(types=None))
+    if not found:
+        raise ValueError(f'前回との比較の1行の形を読めません: {kind}')
+    previous_day, last_day = dates[-2], dates[-1]
+    shown_days = (f'{int(previous_day[5:7])}月{int(previous_day[8:])}日', f'{int(last_day[5:7])}月{int(last_day[8:])}日')
+    if (f'{int(found[1])}月{int(found[2])}日', f'{int(found[3])}月{int(found[4])}日') != shown_days:
+        raise ValueError(f'前回との比較の1行の日付が、正典の直前の回・最新の回と一致しません: {kind}')
+    (n0, share0, count0), (n1, share1, count1) = (actual[previous_day][0], actual[previous_day][1], actual[previous_day][2]), \
+        (actual[last_day][0], actual[last_day][1], actual[last_day][2])
+    deltas = [round(b - a, 1) for a, b in zip(share0, share1)]
+    top = max(range(len(labels)), key=lambda i: (abs(deltas[i]), -i))
+    if found[5] is None:
+        if deltas[top] != 0:
+            raise ValueError(f'前回との比較の1行は「変わらない」ですが、正典では動いています: {kind}')
+        return
+    if found[5] != labels[top]:
+        raise ValueError(f'前回との比較の1行が、いちばん大きく動いた項目（{labels[top]}）を取り上げていません: {kind}')
+    if (float(found[6]), float(found[7])) != (share0[top], share1[top]):
+        raise ValueError(f'前回との比較の1行の割合が、正典の数え直しと一致しません: {kind}')
+    if float(found[8]) != abs(deltas[top]) or (found[9] == '上がり') != (deltas[top] > 0):
+        raise ValueError(f'前回との比較の1行の増減が、正典の数え直しと一致しません: {kind}')
+    p0, p1 = count0[top] / n0, count1[top] / n1
+    beyond = abs(p1 - p0) > 1.96 * math.sqrt(p0 * (1 - p0) / n0 + p1 * (1 - p1) / n1)
+    if (found[10] == 'を超える') != beyond:
+        raise ValueError(f'前回との比較の1行の「ぶれの範囲」の判定が、正典の数え直しと一致しません: {kind}')
+
+
 def private_verified_selectors(source: str, root: Path, *, sample_file: Path | None = None) -> dict[str, str]:
     """推移の節の表の行と「N〜M件」を、非公開正典の数え直しと照合する。
 
@@ -124,6 +170,7 @@ def private_verified_selectors(source: str, root: Path, *, sample_file: Path | N
         expected_rounds = [{'d': d, 'n': actual[d][0], 'v': actual[d][1], 'c': actual[d][2]} for d in dates]
         if shown != expected_rounds:
             raise ValueError(f'推移のグラフの埋め込みデータ（割合・件数）が正典の数え直しと一致しません: {kind}')
+        _check_previous_sentence(soup, panel_id, kind, base[key], dates, actual)
         ns = [actual[d][0] for d in dates]
         span = soup.select('#' + panel_id + '-n-range')
         if len(span) != 1 or span[0].get_text(types=None) != f'{min(ns)}〜{max(ns)}件':

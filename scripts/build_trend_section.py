@@ -383,6 +383,28 @@ def lead_paragraphs(series: list[dict], labels: list[str], name: str, kind: str 
     ]
 
 
+def previous_sentence(series: list[dict], labels: list[str], kind: str = "stance") -> str | None:
+    """直前の回と最新の回を比べた1行。いちばん大きく動いた項目を取り上げ、ぶれの範囲の判定を添える。
+
+    潮目（前回と今回の比較）が見せていた内容を、推移に取り込んだもの。収集が1回だけなら出さない。
+    """
+    if len(series) < 2:
+        return None
+    previous, last = series[-2], series[-1]
+    deltas = {label: round(last["shares"][label] - previous["shares"][label], 1) for label in labels}
+    label = max(labels, key=lambda name: (abs(deltas[name]), -labels.index(name)))
+    delta = deltas[label]
+    verdict = "ぶれの範囲を超える差です。" if beyond_noise(previous, last, label) else "ぶれの範囲に収まる差です。"
+    if delta == 0:
+        return f"前回（{jp_date(previous['date'])}）から今回（{jp_date(last['date'])}）にかけて、どの項目の割合も変わりませんでした。"
+    word = "下がり" if delta < 0 else "上がり"
+    particle = "は" if kind == "stance" else "は、"
+    return (
+        f"前回（{jp_date(previous['date'])}）から今回（{jp_date(last['date'])}）にかけて、{subject(kind, label)}{particle}"
+        f"{pct(previous['shares'][label])}から{pct(last['shares'][label])}へ、{abs(delta):.1f}ポイント{word}ました。{verdict}"
+    )
+
+
 def note_lines(series: list[dict], labels: list[str], name: str, kind: str = "stance") -> list[str]:
     info = summary(series, labels)
     if kind == "stance":
@@ -778,9 +800,19 @@ TREND_JS = r"""
     const lastIndex = data.rounds.length - 1;
     let active = lastIndex;
     let geom = null;
+    // 再生（時間経過の動き）。動きを減らす設定の端末・古いブラウザでは使わず、最初から完成した状態で出す。
+    const kind = panel.getAttribute("data-trend-panel");
+    const playBtn = panel.querySelector("[data-trend-play]");
+    const reduced = !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+    const canAnimate = !reduced && lastIndex >= 1 && "IntersectionObserver" in window && typeof requestAnimationFrame === "function";
+    let pending = canAnimate;   // 画面に入ったら1回だけ自動で再生する。それまでは、線を描く前の状態で待つ
+    let playing = false, frame = 0, shownIndex = -1;
+    if (playBtn) playBtn.hidden = !canAnimate;
+    const setPlayLabel = on => { if (playBtn) playBtn.textContent = on ? "■ 最後まで表示" : "▶ 変化を再生"; };
 
     function draw() {
       if (panel.hidden) return;
+      stopPlay();
       const W = Math.max(280, Math.floor(stage.clientWidth));
       const small = W < 520;
       const H = small ? 300 : 340;
@@ -795,6 +827,14 @@ TREND_JS = r"""
       stage.querySelector("svg")?.remove();
       const svg = el("svg", {viewBox: `0 0 ${W} ${H}`, width: W, height: H, role: "img", "aria-label": data.aria});
       svg.setAttribute("class", "trend-svg");
+      // 線・点・帯は、この「窓」の中だけに見える。再生では窓を左から右へ広げる（完成した絵を隠しておいて見せていく）。
+      const clipId = panel.id + "-clip";
+      const clipRect = el("rect", {x: 0, y: 0, width: W, height: H});
+      const defs = el("defs");
+      const clip = el("clipPath", {id: clipId});
+      clip.appendChild(clipRect);
+      defs.appendChild(clip);
+      svg.appendChild(defs);
       for (let v = 0; v <= top; v += 10) {
         svg.appendChild(el("line", {x1: m.l, x2: m.l + pw, y1: Y(v), y2: Y(v), class: "trend-grid"}));
         svg.appendChild(el("text", {x: m.l - 8, y: Y(v) + 4, "text-anchor": "end", class: "trend-tick"}, v + "%"));
@@ -818,32 +858,99 @@ TREND_JS = r"""
       });
       const cross = el("line", {y1: m.t, y2: m.t + ph, class: "trend-cross"});
       svg.appendChild(cross);
+      const body = el("g", {"clip-path": `url(#${clipId})`});
+      // 直前の回から最新の回までの帯（潮目が見せていた「前回→今回」）。収集が3回以上のときだけ。
+      if (lastIndex >= 2) {
+        const bx = X(lastIndex - 1), bw = X(lastIndex) - bx;
+        body.appendChild(el("rect", {x: bx, y: m.t, width: bw, height: ph, class: "trend-band"}));
+        body.appendChild(el("text", {x: bx + bw, y: m.t + 11, "text-anchor": "end", class: "trend-band-label"}, "前回→今回"));
+      }
       const dim = s => data.emph.length > 0 && data.emph.indexOf(s) < 0;
       data.labels.forEach((label, s) => {
         const points = data.rounds.map((r, i) => `${X(i).toFixed(1)},${Y(r.v[s]).toFixed(1)}`).join(" ");
-        svg.appendChild(el("polyline", {points, fill: "none", stroke: data.colors[s], "stroke-width": dim(s) ? 2 : (data.emph.length ? 3 : 2), "stroke-opacity": dim(s) ? 0.5 : 1, "stroke-linejoin": "round", "stroke-linecap": "round"}));
+        body.appendChild(el("polyline", {points, fill: "none", stroke: data.colors[s], "stroke-width": dim(s) ? 2 : (data.emph.length ? 3 : 2), "stroke-opacity": dim(s) ? 0.5 : 1, "stroke-linejoin": "round", "stroke-linecap": "round"}));
       });
       data.labels.forEach((label, s) => {
         data.rounds.forEach((r, i) => {
           const g = el("g", {opacity: dim(s) ? 0.6 : 1});
           g.appendChild(mark(data.shapes[s], X(i), Y(r.v[s]), 5.5, "#fff"));
           g.appendChild(mark(data.shapes[s], X(i), Y(r.v[s]), 3.5, data.colors[s]));
-          svg.appendChild(g);
+          body.appendChild(g);
         });
       });
+      svg.appendChild(body);
+      const endsGroup = el("g", {class: "trend-ends"});
       const ends = data.labels.map((l, s) => ({s, y: Y(data.rounds[lastIndex].v[s])})).sort((a, b) => a.y - b.y);
       for (let k = 1; k < ends.length; k++) if (ends[k].y - ends[k - 1].y < 14) ends[k].y = ends[k - 1].y + 14;
       ends.forEach(e => {
         const label = el("text", {x: X(lastIndex) + 12, y: e.y + 4, class: "trend-end"}, data.rounds[lastIndex].v[e.s].toFixed(1) + "%");
         if (hasCounts) label.appendChild(el("tspan", {dx: 5, class: "trend-end-n"}, data.rounds[lastIndex].c[e.s] + "件"));
-        svg.appendChild(label);
+        endsGroup.appendChild(label);
       });
+      svg.appendChild(endsGroup);
       stage.appendChild(svg);
-      geom = {X, W, cross};
+      geom = {X, XD, W, cross, clipRect, endsGroup};
       select(active, false);
+      if (pending) {   // 自動再生を待つ間は、線を描く前の状態
+        clipRect.setAttribute("width", 0);
+        endsGroup.classList.add("is-hidden");
+      }
     }
 
-    function select(i, show) {
+    // 再生: 窓を左（最初の回）から右（最新の回）へ広げる。各回に届くたびに、その回の数字を吹き出しで見せる。
+    // 点と点の間の数字は出さない（直線でつないでいるだけで、その間の割合は測っていないため）。
+    function play() {
+      if (!geom || !canAnimate || panel.hidden) return;
+      stopPlay();
+      pending = false;
+      playing = true;
+      shownIndex = -1;
+      setPlayLabel(true);
+      geom.endsGroup.classList.add("is-hidden");
+      const start = performance.now(), sweep = 3200, hold = 900;
+      const step = now => {
+        const elapsed = now - start;
+        const t = Math.min(1, elapsed / sweep);
+        const head = days[0] + (days[lastIndex] - days[0]) * (0.5 - Math.cos(Math.PI * t) / 2);
+        geom.clipRect.setAttribute("width", geom.XD(head) + 6);
+        let passed = 0;
+        days.forEach((d, i) => { if (d <= head + 1e-9) passed = i; });
+        if (passed !== shownIndex) { shownIndex = passed; select(passed, true, geom.W < 520); }
+        if (elapsed < sweep + hold) frame = requestAnimationFrame(step); else finish();
+      };
+      frame = requestAnimationFrame(step);
+    }
+
+    function stopPlay() {
+      if (frame) cancelAnimationFrame(frame);
+      frame = 0;
+      if (playing) { playing = false; setPlayLabel(false); }
+    }
+
+    // 最後まで表示する（再生の終わり・「最後まで表示」・キー操作・印刷の前）。
+    function finish() {
+      pending = false;
+      stopPlay();
+      if (!geom) return;
+      geom.clipRect.setAttribute("width", geom.W);
+      geom.endsGroup.classList.remove("is-hidden");
+      select(lastIndex, false);
+    }
+
+    if (canAnimate) {
+      new IntersectionObserver(entries => {
+        if (pending && !panel.hidden && entries.some(entry => entry.isIntersecting)) play();
+      }, {threshold: 0.35}).observe(stage);
+    }
+    if (playBtn) {
+      playBtn.addEventListener("click", () => {
+        if (playing) { finish(); return; }
+        play();
+        track("trend_play", kind);
+      });
+    }
+
+    function select(i, show, compact) {
       active = i;
       if (!geom) return;
       const r = data.rounds[i];
@@ -853,10 +960,16 @@ TREND_JS = r"""
       tip.hidden = !show;
       if (!show) return;
       tip.textContent = "";
+      tip.classList.toggle("is-compact", !!compact);   // 狭い画面の再生中は、日付と意見数だけの小さな表示（グラフを覆わない）
       const head = document.createElement("p");
       head.className = "trend-tip-head";
       head.textContent = jp(r.d) + "の収集分（意見" + r.n + "件）";
       tip.appendChild(head);
+      if (compact) {
+        const wide = tip.offsetWidth || 150;
+        tip.style.left = Math.min(Math.max(geom.X(i) - wide / 2, 0), geom.W - wide) + "px";
+        return;
+      }
       data.labels.forEach((label, s) => {
         const row = document.createElement("p");
         row.className = "trend-tip-row";
@@ -900,11 +1013,12 @@ TREND_JS = r"""
       data.rounds.forEach((r, i) => { const d = Math.abs(geom.X(i) - x); if (d < gap) { gap = d; best = i; } });
       return best;
     }
-    stage.addEventListener("pointermove", e => geom && select(nearest(e.clientX), true));
-    stage.addEventListener("pointerleave", () => select(active, false));
-    stage.addEventListener("focus", () => select(active, true));
-    stage.addEventListener("blur", () => select(active, false));
+    stage.addEventListener("pointermove", e => geom && !playing && select(nearest(e.clientX), true));
+    stage.addEventListener("pointerleave", () => { if (!playing) select(active, false); });
+    stage.addEventListener("focus", () => { if (!playing) select(active, true); });
+    stage.addEventListener("blur", () => { if (!playing) select(active, false); });
     stage.addEventListener("keydown", e => {
+      if (playing) finish();   // キーを押したら、再生を止めて最後まで表示する
       if (e.key === "ArrowLeft" || e.key === "ArrowRight") {
         e.preventDefault();
         select(Math.min(Math.max(active + (e.key === "ArrowRight" ? 1 : -1), 0), lastIndex), true);
@@ -913,7 +1027,7 @@ TREND_JS = r"""
         select(e.key === "Home" ? 0 : lastIndex, true);
       }
     });
-    return {draw};
+    return {draw, finish, replay() { if (!pending) play(); }};
   }
 
   const charts = {};
@@ -950,11 +1064,12 @@ TREND_JS = r"""
     if (!nodes[kind]) return;
     Object.keys(nodes).forEach(k => { nodes[k].hidden = k !== kind; });
     tabs.forEach(t => t.setAttribute("aria-pressed", t.getAttribute("data-trend-tab") === kind ? "true" : "false"));
-    if (charts[kind]) charts[kind].draw();
+    if (charts[kind]) { charts[kind].draw(); charts[kind].replay(); }   // タブを切り替えるたびに、もう一度再生する（初回は画面に入ったときに自動で）
   }
   tabs.forEach(t => t.addEventListener("click", () => show(t.getAttribute("data-trend-tab"))));
   const fromHash = Object.keys(nodes).find(k => location.hash === "#" + nodes[k].id);
   show(fromHash || Object.keys(nodes)[0]);
+  window.addEventListener("beforeprint", () => Object.keys(charts).forEach(k => charts[k].finish()));
   let timer = 0;
   window.addEventListener("resize", () => {
     clearTimeout(timer);
@@ -977,7 +1092,17 @@ def trend_css() -> str:
 .trend-card h2{{margin:0 0 10px;font-size:26px;letter-spacing:-.02em;line-height:1.4}}
 .trend-h2-date{{display:inline-block;margin-left:.5em;color:#66758b;font-size:.56em;font-weight:800;letter-spacing:0;white-space:nowrap}}
 .trend-lead{{margin:0 0 8px;color:#26364f;font-size:16px;line-height:1.85}}
-.trend-legend{{display:flex;flex-wrap:wrap;gap:6px 18px;margin:16px 0 4px;padding:0;list-style:none;color:#26364f;font-size:13px;font-weight:800}}
+.trend-legend-row{{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 16px;margin:16px 0 4px}}
+.trend-legend{{display:flex;flex-wrap:wrap;gap:6px 18px;margin:0;padding:0;list-style:none;color:#26364f;font-size:13px;font-weight:800}}
+.trend-play{{flex:none;min-height:34px;padding:6px 12px;border:1px solid #d9e2ef;border-radius:999px;background:#fff;color:#315bd8;font:inherit;font-size:13px;font-weight:900;cursor:pointer}}
+.trend-play:hover{{background:#eaf1ff}}
+.trend-play[hidden]{{display:none}}
+.trend-prev{{display:flex;gap:10px;align-items:flex-start;margin:4px 0 0;padding:10px 12px;border-radius:12px;background:#f1f5ff;color:#13223d;font-size:15px;font-weight:800;line-height:1.75}}
+.trend-prev-key{{flex:none;width:14px;height:14px;margin-top:6px;border-radius:3px;background:#b8c9f5}}
+.trend-band{{fill:#315bd8;fill-opacity:.1;pointer-events:none}}
+.trend-band-label{{fill:#315bd8;font-size:10.5px;font-weight:900;paint-order:stroke;stroke:#fff;stroke-width:3px;pointer-events:none}}
+.trend-ends{{transition:opacity .4s}}
+.trend-ends.is-hidden{{opacity:0}}
 .trend-legend li{{display:inline-flex;align-items:center;gap:7px}}
 .trend-stage{{position:relative;margin-top:6px;outline:none;touch-action:pan-y}}
 .trend-stage:focus-visible{{box-shadow:0 0 0 3px #bcd0ff;border-radius:10px}}
@@ -989,6 +1114,8 @@ def trend_css() -> str:
 .trend-end-n{{fill:#66758b;font-size:11px;font-weight:700}}
 .trend-tip{{position:absolute;top:6px;z-index:2;min-width:190px;padding:10px 12px;border:1px solid #d9e2ef;border-radius:12px;background:#fff;box-shadow:0 10px 28px rgba(18,35,64,.16);pointer-events:none;font-size:12px;line-height:1.5}}
 .trend-tip[hidden]{{display:none}}
+.trend-tip.is-compact{{min-width:0;padding:6px 10px;white-space:nowrap}}
+.trend-tip.is-compact .trend-tip-head{{margin:0!important}}
 .trend-tip p{{margin:0}}.trend-tip-head{{margin-bottom:5px!important;color:#66758b;font-weight:800}}
 .trend-tip-row{{display:flex;align-items:center;gap:8px;padding:1px 0}}
 .trend-tip-row i{{width:14px;height:2px;border-radius:2px;flex:none}}
@@ -1060,7 +1187,8 @@ def trend_css() -> str:
 .trend-table--reason tbody th{{width:34%;white-space:normal;line-height:1.4}}.trend-table--reason td:nth-of-type(1){{width:15%}}.trend-table--reason td:nth-of-type(3){{width:17%}}
 .trend-event{{padding:11px 12px}}.trend-event-head{{font-size:14px}}.trend-event-moves{{font-size:13px}}
 .trend-table--wide{{font-size:11.5px}}.trend-table--wide .trend-c{{font-size:9px;letter-spacing:-.04em}}.trend-table--wide td{{padding-left:1px;padding-right:1px}}.trend-table--wide .col-n{{display:none}}.trend-table--wide tbody th{{width:16%}}.trend-table--wide thead th{{font-size:10.5px}}}}
-@media print{{.trend-tip{{display:none!important}}}}
+@media print{{.trend-tip{{display:none!important}}.trend-play{{display:none!important}}}}
+@media (prefers-reduced-motion:reduce){{.trend-ends{{transition:none}}}}
 {CSS_END}"""
 
 
@@ -1103,6 +1231,12 @@ def _panel(slug: str, kind: str, series: list[dict], *, hidden: bool, events: li
         f'<p class="trend-lead">{html.escape(text)}</p>'
         for text in lead_paragraphs(series, labels, theme["name"], kind)
     )
+    previous = previous_sentence(series, labels, kind)
+    # 帯の色の見本を先頭に付け、グラフの「前回→今回」の帯と結びつける
+    previous_block = (
+        f'<p class="trend-prev" id="{panel_id}-prev"><span class="trend-prev-key" aria-hidden="true"></span>{html.escape(previous)}</p>'
+        if previous else ""
+    )
     span = range_text(summary(series, labels))
     wrapped = f'<span id="{panel_id}-n-range">{span}</span>'
     notes = "".join(
@@ -1113,7 +1247,11 @@ def _panel(slug: str, kind: str, series: list[dict], *, hidden: bool, events: li
     markup = f"""  <div class="trend-panel" id="{panel_id}" data-trend-panel="{kind}"{hidden_attr}>
     <h2 id="{panel_id}-title">{html.escape(theme["headings"][kind])}<span class="trend-h2-date">（{jp_date(last["date"], year=True)}時点）</span></h2>
     {lead}
-    {_legend(labels, colors, shapes)}
+    {previous_block}
+    <div class="trend-legend-row">
+      {_legend(labels, colors, shapes)}
+      <button type="button" class="trend-play" data-trend-play hidden>▶ 変化を再生</button>
+    </div>
     <div class="trend-stage" data-trend-stage tabindex="0" role="group" aria-label="推移グラフ。左右の矢印キーで収集回を切り替えると、その回の数字が出ます。">
       <div class="trend-tip" data-trend-tip hidden></div>
     </div>

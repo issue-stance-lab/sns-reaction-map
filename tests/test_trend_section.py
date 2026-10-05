@@ -843,5 +843,117 @@ class XPostButtonTest(unittest.TestCase):
             trend.TREND_THEMES[SLUG]["share_images"] = original
 
 
+class PreviousSentenceTest(unittest.TestCase):
+    """推移の冒頭の「前回から今回にかけて…」の1行（潮目が見せていた内容）。"""
+
+    def sentence(self, rows: list[dict], kind: str = "stance") -> str | None:
+        with tempfile.TemporaryDirectory() as tmp:
+            series = trend.load_rounds(write(rows, Path(tmp)), BASE, kind)
+        return trend.previous_sentence(series, BASE[trend.KINDS[kind]["labels_key"]], kind)
+
+    def test_biggest_move_between_the_last_two_rounds_is_stated_with_a_noise_verdict(self) -> None:
+        rows = (
+            wave("2026-09-01", {PRO: 50, CON: 50})
+            + wave("2026-09-08", {PRO: 300, CON: 100})
+            + wave("2026-09-15", {PRO: 100, CON: 300})
+        )
+        text = self.sentence(rows)
+        self.assertEqual(
+            text,
+            "前回（9月8日）から今回（9月15日）にかけて、「減税推進」は75.0%から25.0%へ、50.0ポイント下がりました。"
+            "ぶれの範囲を超える差です。",
+        )
+
+    def test_small_move_says_it_is_within_the_noise(self) -> None:
+        rows = wave("2026-09-01", {PRO: 5, CON: 5}) + wave("2026-09-08", {PRO: 5, CON: 5}) + wave("2026-09-15", {PRO: 4, CON: 6})
+        self.assertIn("ぶれの範囲に収まる差です。", self.sentence(rows))
+
+    def test_the_latest_two_rounds_are_used_not_the_first_one(self) -> None:
+        rows = wave("2026-09-01", {PRO: 90, CON: 10}) + wave("2026-09-08", {PRO: 50, CON: 50}) + wave("2026-09-15", {PRO: 50, CON: 50})
+        self.assertEqual(self.sentence(rows), "前回（9月8日）から今回（9月15日）にかけて、どの項目の割合も変わりませんでした。")
+
+    def test_ties_go_to_the_earlier_label_and_direction_words_follow_the_sign(self) -> None:
+        rows = wave("2026-09-01", {PRO: 10, CON: 10}) + wave("2026-09-08", {PRO: 15, CON: 5})
+        text = self.sentence(rows)
+        self.assertIn("「減税推進」は50.0%から75.0%へ、25.0ポイント上がりました。", text)
+
+    def test_issue_sentence_says_posts_whose_main_issue_it_is(self) -> None:
+        rows = issue_wave("2026-09-01", {SCOPE: 10, TRUST: 90}) + issue_wave("2026-09-08", {SCOPE: 90, TRUST: 10})
+        text = self.sentence(rows, "issue")
+        self.assertIn("主な論点が「減税の対象範囲」の投稿は、10.0%から90.0%へ、80.0ポイント上がりました。", text)
+
+    def test_one_round_has_no_sentence(self) -> None:
+        self.assertIsNone(self.sentence(wave("2026-09-01", {PRO: 5, CON: 5})))
+
+    def test_panels_show_the_sentence_with_a_key_and_a_hidden_play_button(self) -> None:
+        rows = wave("2026-09-01", {PRO: 5, CON: 5}) + wave("2026-09-08", {PRO: 4, CON: 6}) + wave("2026-09-15", {PRO: 3, CON: 7})
+        with tempfile.TemporaryDirectory() as tmp:
+            path = write(rows, Path(tmp))
+            stance = trend.load_rounds(path, BASE, "stance")
+            issue = trend.load_rounds(path, BASE, "issue")
+        section = trend.render_section(SLUG, stance, issue, events=[])
+        for kind in ("stance", "issue"):
+            self.assertIn(f'<p class="trend-prev" id="consumption-tax-cut-trend-panel-{kind}-prev"><span class="trend-prev-key" aria-hidden="true"></span>前回（9月8日）から今回（9月15日）にかけて', section)
+        self.assertEqual(section.count('data-trend-play hidden>▶ 変化を再生</button>'), 2)  # 動かせる端末だけ、JSが表示する
+        self.assertEqual(section.count('<div class="trend-legend-row">'), 2)
+
+
+class PlaybackScriptTest(unittest.TestCase):
+    """再生（時間経過の動き）の取り決め。実際の動きは、ブラウザで確認している。"""
+
+    def script(self) -> str:
+        rows = wave("2026-09-01", {PRO: 5, CON: 5}) + wave("2026-09-08", {PRO: 4, CON: 6}) + wave("2026-09-15", {PRO: 3, CON: 7})
+        with tempfile.TemporaryDirectory() as tmp:
+            stance = trend.load_rounds(write(rows, Path(tmp)), BASE, "stance")
+        return trend.render_section(SLUG, stance, events=[])
+
+    def test_motion_is_skipped_when_the_device_asks_for_less(self) -> None:
+        text = self.script()
+        self.assertIn('window.matchMedia("(prefers-reduced-motion: reduce)")', text)
+        self.assertIn("const canAnimate = !reduced &&", text)
+        self.assertIn("playBtn.hidden = !canAnimate", text)  # 動かさない端末では、ボタンも出さない
+
+    def test_the_finished_chart_is_the_complete_one_and_anything_can_skip_to_it(self) -> None:
+        text = self.script()
+        self.assertIn("function finish()", text)
+        self.assertIn('geom.clipRect.setAttribute("width", geom.W)', text)
+        self.assertIn("if (playing) finish();", text)  # キー操作で最後まで表示する
+        self.assertIn('window.addEventListener("beforeprint"', text)
+        self.assertIn("最後まで表示", text)
+
+    def test_the_line_is_revealed_by_a_window_not_redrawn_with_in_between_numbers(self) -> None:
+        text = self.script()
+        self.assertIn('"clip-path": `url(#${clipId})`', text)
+        self.assertIn("geom.clipRect.setAttribute(\"width\", geom.XD(head) + 6)", text)
+        self.assertIn("点と点の間の数字は出さない", text)
+        self.assertNotIn("lerp", text)  # 点の間の割合を補間して見せない
+
+    def test_it_plays_once_when_scrolled_into_view_and_again_on_tab_switch(self) -> None:
+        text = self.script()
+        self.assertIn("new IntersectionObserver", text)
+        self.assertIn("threshold: 0.35", text)
+        self.assertIn("charts[kind].replay()", text)
+        self.assertIn("let pending = canAnimate;", text)
+
+    def test_narrow_screens_show_only_the_date_while_playing_so_the_line_stays_visible(self) -> None:
+        text = self.script()
+        self.assertIn("select(passed, true, geom.W < 520)", text)
+        self.assertIn('tip.classList.toggle("is-compact", !!compact)', text)
+        self.assertIn(".trend-tip.is-compact{min-width:0", trend.trend_css())
+
+    def test_hovering_does_not_move_the_tooltip_while_playing(self) -> None:
+        text = self.script()
+        self.assertIn("geom && !playing && select(nearest(e.clientX), true)", text)
+
+    def test_the_band_between_the_last_two_rounds_needs_three_rounds(self) -> None:
+        text = self.script()
+        self.assertIn("if (lastIndex >= 2) {", text)
+        self.assertIn('class: "trend-band"', text)
+        self.assertIn('"前回→今回"', text)
+
+    def test_manual_replay_is_measured(self) -> None:
+        self.assertIn('track("trend_play", kind)', self.script())
+
+
 if __name__ == "__main__":
     unittest.main()

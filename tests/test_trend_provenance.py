@@ -244,5 +244,69 @@ class EventsAndReasonTamperTest(unittest.TestCase):
                 provenance._config_events(root)
 
 
+class PreviousSentenceProvenanceTest(unittest.TestCase):
+    """推移の冒頭の「前回から今回にかけて…」の1行が、正典の数え直しと一致すること。"""
+
+    def setUp(self) -> None:
+        self.source = PAGE.read_text(encoding="utf-8")
+
+    def sentence(self, kind: str) -> str:
+        found = re.search(rf'<p class="trend-prev" id="consumption-tax-cut-trend-panel-{kind}-prev"><span[^>]*></span>(.*?)</p>', self.source, re.S)
+        self.assertIsNotNone(found)
+        return found.group(1)
+
+    def test_published_sentences_pass(self) -> None:
+        self.assertTrue(provenance.private_verified_selectors(self.source, ROOT))
+
+    def reject(self, kind: str, change) -> str:
+        """1行を change で書き換えたページを検査にかけ、止まること（ValueError）と、その理由の文を返す。"""
+        text = self.sentence(kind)
+        changed = change(text)
+        self.assertNotEqual(changed, text)
+        with self.assertRaises(ValueError) as caught:
+            provenance.private_verified_selectors(self.source.replace(text, changed), ROOT)
+        return str(caught.exception)
+
+    def test_changed_percentage_is_rejected(self) -> None:
+        number = re.search(r"から([\d.]+)%へ", self.sentence("stance")).group(1)
+        reason = self.reject("stance", lambda text: text.replace(f"から{number}%へ", "から99.9%へ"))
+        self.assertIn("前回との比較", reason)
+
+    def test_swapped_direction_is_rejected(self) -> None:
+        def swap(text: str) -> str:
+            return text.replace("下がりました", "上がりました") if "下がりました" in text else text.replace("上がりました", "下がりました")
+
+        self.assertIn("増減", self.reject("stance", swap))
+
+    def test_wrong_noise_verdict_is_rejected(self) -> None:
+        def flip(text: str) -> str:
+            if "を超える差です。" in text:
+                return text.replace("を超える差です。", "に収まる差です。")
+            return text.replace("に収まる差です。", "を超える差です。")
+
+        self.assertIn("ぶれの範囲", self.reject("issue", flip))
+
+    def test_stale_dates_are_rejected(self) -> None:
+        reason = self.reject("stance", lambda text: re.sub(r"今回（\d+月\d+日）", "今回（1月1日）", text))
+        self.assertIn("日付", reason)
+
+    def test_missing_sentence_is_rejected(self) -> None:
+        broken = re.sub(r'<p class="trend-prev" id="consumption-tax-cut-trend-panel-stance-prev">.*?</p>', "", self.source, flags=re.S)
+        self.assertNotEqual(broken, self.source)
+        with self.assertRaises(ValueError):
+            provenance.private_verified_selectors(broken, ROOT)
+
+    def test_a_less_than_biggest_mover_is_rejected(self) -> None:
+        """いちばん大きく動いた項目ではない項目を取り上げていたら止める。"""
+        text = self.sentence("stance")
+        labels = ["減税推進", "条件付き賛成・政府案に不満", "減税反対・慎重", "中立・情報"]
+        current = re.search(r"「(.+?)」", text).group(1)
+        other = next(label for label in labels if label != current)
+        broken = self.source.replace(text, text.replace(f"「{current}」", f"「{other}」", 1))
+        self.assertNotEqual(broken, self.source)
+        with self.assertRaises(ValueError):
+            provenance.private_verified_selectors(broken, ROOT)
+
+
 if __name__ == "__main__":
     unittest.main()
