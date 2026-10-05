@@ -1601,3 +1601,25 @@ items:
       - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/37171171071"
       - "https://sns-reaction-map.jp/constitutional-amendment-reaction-map.html"
       - "https://sns-reaction-map.jp/"
+
+  - id: approval-20261005-001
+    department: engineering-data
+    action: website_publication
+    summary: "皇室典範テーマの収集結果294件と意見240件をWebsiteへ公開する（累積2,565件・意見2,016件）"
+    reason: "公開候補の検査（数字の出所・ページ・再読台帳）を通し、オーナーが本対話で、疑義13件を次回以降の宿題とする案1（このまま公開）を承認したため"
+    risks:
+      - "SNS公開投稿のサンプル分析であり、社会全体の世論を示すものではない"
+      - "別セッションの読み取り専用の品質監査は未実施（オーナーが了承）"
+      - "本文確認で付与済みの賛否・意見判定に疑義が13件出たが、原本の判定は変えていない（賛否のずれ8件・意見でない疑い5件）"
+      - "提供元AIが高リスクとして拒否した5件は、本文確認のうえ人手で判定した"
+      - "公開後の件数、表示、GitHub Actions、実サイトを確認する"
+    recommendation: approve
+    evidence:
+      - ".staging/refresh/koshitsu-tenpakai/20261005_101105/promotion-manifest.json"
+      - "quality/reviews/2026-10-05-koshitsu-refresh-review.md"
+      - "themes/koshitsu-tenpakai.md"
+    status: approved
+    requested_at: "2026-10-05"
+    decided_at: "2026-10-05"
+    decision_note: >-
+      オーナーが本対話で「1で進めて」と明示して承認（案1: このまま公開。疑義13件は次回以降の宿題）。
