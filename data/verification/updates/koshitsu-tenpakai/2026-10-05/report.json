@@ -1,0 +1,88 @@
+{
+  "checks": {
+    "raw_equals_duplicates_plus_new": true,
+    "new_equals_classified": true,
+    "candidate_count": true,
+    "candidate_unique": true
+  },
+  "raw": 327,
+  "duplicates": 33,
+  "new": 294,
+  "relevant": 294,
+  "opinions": 240,
+  "opinion_flag_available": true,
+  "candidate": 2565,
+  "classification_errors": 0,
+  "status": "validated",
+  "topic": "koshitsu-tenpakai",
+  "date": "2026-10-05",
+  "run_id": "20261005_101105",
+  "taxonomy": {
+    "compatible": true,
+    "canonical_without_main_issue": false,
+    "unknown_issues": [],
+    "unknown_stances": []
+  },
+  "timings": {
+    "smoke_seconds": 7.83,
+    "fetch_seconds": 49.76,
+    "classify_seconds": 3096.86
+  },
+  "provenance": {
+    "schema_version": 1,
+    "classifier": {
+      "script": "scripts/classify_koshitsu_arena_hermes.py",
+      "script_sha256": "4ab2c3a815e1908edc273b33b09fc5e5619d9a39c1f17ad7654e38fde045eb19",
+      "taxonomy_sha256": "1cb7d3f5be310fb4501e7349f09e9bcb323dd5e8beffd99c3f4e7da26c14fd01"
+    },
+    "input": {
+      "raw_sha256": "12c2dd2edc8ec69e1a88f76421c0b5c832d5eb3b59790339be7cb8cf500f17ba",
+      "raw_records": 327,
+      "new_sha256": "aa4d51c94abcff40d600d2932b7a1d6d766bc0dd74ba32d2de23720f6de4b369"
+    },
+    "sources": {
+      "yahoo_realtime": 327
+    },
+    "model": {
+      "name": "kimi-k2.7-code",
+      "provider": "opencode-go",
+      "config_source": "config.yaml:model.default"
+    },
+    "output": {
+      "classified_sha256": "743bf4cec06fac9559bea88ae8d55066ceb7a031dc2b8146e59848e75c1f22e9"
+    }
+  },
+  "next_collect_at": "2026-10-15",
+  "manual_labels": [
+    {
+      "tweet_id": "2106304166322901214",
+      "reason": "upstream_refused（提供元AIが高リスクとして拒否）を本文確認のうえ人手で判定",
+      "labeled_by": "editor",
+      "labeled_at": "2026-10-05"
+    },
+    {
+      "tweet_id": "2106302948347371576",
+      "reason": "upstream_refused（提供元AIが高リスクとして拒否）を本文確認のうえ人手で判定",
+      "labeled_by": "editor",
+      "labeled_at": "2026-10-05"
+    },
+    {
+      "tweet_id": "2106301897535832144",
+      "reason": "upstream_refused（提供元AIが高リスクとして拒否）を本文確認のうえ人手で判定",
+      "labeled_by": "editor",
+      "labeled_at": "2026-10-05"
+    },
+    {
+      "tweet_id": "2106296657319178415",
+      "reason": "upstream_refused（提供元AIが高リスクとして拒否）を本文確認のうえ人手で判定",
+      "labeled_by": "editor",
+      "labeled_at": "2026-10-05"
+    },
+    {
+      "tweet_id": "2106295050091344188",
+      "reason": "upstream_refused（提供元AIが高リスクとして拒否）を本文確認のうえ人手で判定",
+      "labeled_by": "editor",
+      "labeled_at": "2026-10-05"
+    }
+  ]
+}

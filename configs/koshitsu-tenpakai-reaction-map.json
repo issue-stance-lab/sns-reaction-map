@@ -321,6 +321,13 @@
       {
         "value": 21,
         "reason": "「合わせて21件」。data/verification/koshitsu-tenpakai-claims.json の該当投稿6主張ぶんの単純合計（scripts/build_koshitsu_process_sections.py が算出、重複なし）"
+      },
+      {
+        "value": 215,
+        "selectors": [
+          "islands"
+        ],
+        "reason": "「男系vs女系」の「まだ読み直していない分」。論点の意見570件から、本文確認済み355件（data/koshitsu-tenpakai_issues-reread.json）を引いた差（scripts/koshitsu_count_provenance.py の gap と同じ式）"
       }
     ],
     "exclude_selectors": [

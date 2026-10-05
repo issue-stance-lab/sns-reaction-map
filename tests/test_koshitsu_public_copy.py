@@ -68,8 +68,8 @@ class KoshitsuPublicCopyTests(unittest.TestCase):
         self.assertEqual(trust.apply_theme(self.html, theme, config), self.html)
 
     def test_counts_review_state_posts_sources_and_storage_notice_remain(self):
-        self.assertEqual(self.data["totals"], {"collected": 2271, "opinions": 1776})
-        self.assertIn("収集した2,271件のうち意見と判定した1,776件", self.html)
+        self.assertEqual(self.data["totals"], {"collected": 2565, "opinions": 2016})
+        self.assertIn("収集した2,565件のうち意見と判定した2,016件", self.html)
         self.assertEqual(
             {item["label"]: item["count"] for item in self.data["issues"]},
             {
