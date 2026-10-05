@@ -173,7 +173,7 @@ def apply(source: str, *, activate: bool = False, topic: str = TOPIC) -> str:
         START + '\n<link rel="stylesheet" href="consumption-tax-connected.css?v=8">\n'
         '<script id="tax-connected-data" type="application/json">' + payload + '</script>\n'
         '<script src="consumption-tax-connected.js?v=8" defer></script>\n'
-        '<script src="consumption-tax-connected-page.js?v=8" defer></script>\n' + END
+        '<script src="consumption-tax-connected-page.js?v=9" defer></script>\n' + END
     )
     if START in source:
         pattern = re.escape(START) + r".*?" + re.escape(END)
@@ -230,7 +230,7 @@ def validate(source: str) -> list[str]:
                      "#bg-title", "#ck-title", "#claim-audit", "#issue-cards", "#guesses", "#quiz", "#ocean",
                      'link[href="consumption-tax-connected.css?v=8"]',
                      'script[src="consumption-tax-connected.js?v=8"][defer]',
-                     'script[src="consumption-tax-connected-page.js?v=8"][defer]'):
+                     'script[src="consumption-tax-connected-page.js?v=9"][defer]'):
         one(selector)
     if source.count(BRIDGE_START) != 1 or source.count(BRIDGE_END) != 1:
         problems.append("山と共通状態をつなぐ処理が1組ではありません")

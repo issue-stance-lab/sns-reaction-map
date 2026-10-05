@@ -56,13 +56,6 @@
   });
   selectDate(events.length-1,false);
   background.querySelector('.bg-jump a').textContent='選んだ論点に戻る ↑';
-  const tide = document.getElementById('consumption-tax-cut-tide-widget');
-  if (tide) {
-    const heading=document.createElement('h2');heading.textContent='収集した投稿の変化';tide.prepend(heading);
-    const note=document.createElement('p');note.className='tax-comparison-note';
-    note.textContent='制度の経緯と、投稿サンプルの比較は別の情報です。この差だけで、制度決定の影響や同じ人の意見の変化は判断できません。';
-    tide.appendChild(note);
-  }
   function fold(element, label) {
     if(!element)return;
     const details=document.createElement('details');details.className='tax-fold';

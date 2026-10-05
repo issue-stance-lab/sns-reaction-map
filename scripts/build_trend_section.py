@@ -11,8 +11,12 @@
 
 見出し（H2）の末尾と右上のバッジには、最新の収集日を「○年○月○日時点」と出す。更新のたびに自動で変わる。
 
-潮目ウィジェットの枠（TIDE_CARD_START〜END）の中に入れる。潮目は更新のたびに丸ごと
-作り直されるため、この節も同じ呼び出しで貼り直す（refresh_adapters 側から render_for を呼ぶ）。
+ページの外枠（`<section class="update-dashboard">`）の中に入れる。枠はページ生成器
+（build_consumption_tax_page.py）が作り直しても残し、中の節は更新のたびに adapter が render_for で貼り直す。
+
+2026-10-05 まで、この枠には「世論の潮目」（前回と今回の2回比較）のカードが同居していた。内容が推移と
+重なるため、潮目は外して推移に一本化した（前回との比較は previous_sentence と、グラフの「前回→今回」の帯）。
+古い形のページを直すには `--drop-tide`（drop_tide_card）を使う。
 """
 
 from __future__ import annotations
@@ -36,7 +40,11 @@ START = "<!-- TREND_CARD_START -->"
 END = "<!-- TREND_CARD_END -->"
 CSS_START = "/* TREND_CARD_START */"
 CSS_END = "/* TREND_CARD_END */"
+# 旧形式（潮目カードと同居していた頃）の目印。drop_tide_card だけが使う。
+TIDE_START = "<!-- TIDE_CARD_START -->"
 TIDE_END = "<!-- TIDE_CARD_END -->"
+TIDE_CSS_RE = re.compile(r"/\* TIDE_CARD_START \*/.*?/\* TIDE_CARD_END \*/\n?", re.S)
+DASHBOARD_OPEN = '<section class="update-dashboard">'
 
 # 折れ線の端の印。色だけに頼らないよう、系列ごとに違う形を使う。単位パス（半径1）。
 SHAPE_PATHS = {
@@ -1081,6 +1089,7 @@ TREND_JS = r"""
 
 def trend_css() -> str:
     return f"""{CSS_START}
+.update-dashboard{{padding:18px min(4vw,40px) 34px;background:var(--bg)}}
 .trend-card{{max-width:1180px;margin:18px auto 0;padding:26px 28px;border:1px solid #d9e2ef;border-radius:20px;background:#fff;box-shadow:0 16px 40px rgba(18,35,64,.09);color:var(--ink)}}
 .trend-head{{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:12px}}
 .trend-kicker{{display:inline-flex;margin:0;padding:5px 10px;border-radius:999px;background:#eaf1ff;color:#315bd8;font-size:13px;font-weight:900}}
@@ -1177,6 +1186,7 @@ def trend_css() -> str:
 .trend-note{{margin:16px 0 0;padding:14px 0 0;border-top:1px solid #e4e9f1;color:#66758b;font-size:12px;line-height:1.75;list-style:none}}
 .trend-note li+li{{margin-top:3px}}
 .trend-short{{display:none}}
+@media(max-width:720px){{.update-dashboard{{padding:10px 10px 24px}}}}
 @media(max-width:640px){{.trend-card{{padding:20px 16px;border-radius:16px}}.trend-card h2{{font-size:21px}}.trend-h2-date{{display:block;margin-left:0;margin-top:2px;font-size:.62em}}.trend-lead{{font-size:15px}}.trend-asof{{white-space:normal}}
 .trend-full{{display:none}}.trend-short{{display:inline}}
 .trend-table-wrap{{overflow-x:visible}}.trend-table{{min-width:0;table-layout:fixed;font-size:12.5px}}
@@ -1335,24 +1345,46 @@ def render_section(
 
 
 def insert_into_html(page_html: str, section: str, css: str) -> str:
-    """節を TIDE_CARD_END の直前（潮目の枠の中）へ入れる。すでにあれば置き換える。"""
+    """ページにある推移の節（START〜END）を置き換える。節が無いページには入れない（止める）。
+
+    枠（update-dashboard）はページ生成器が残すので、ここでは中の節だけを差し替える。
+    """
     pattern = re.compile(re.escape(START) + r".*?" + re.escape(END), re.S)
-    if pattern.search(page_html):
-        page_html = pattern.sub(lambda _m: section, page_html, count=1)
-    else:
-        if TIDE_END not in page_html:
-            raise ValueError("潮目の枠（TIDE_CARD_END）が見つかりません")
-        page_html = page_html.replace(TIDE_END, section + "\n" + TIDE_END, 1)
+    if not pattern.search(page_html):
+        if TIDE_END in page_html:
+            raise ValueError("古い形のページです（潮目カードと同居）。`--drop-tide` で推移だけの形に直してください")
+        raise ValueError("意見の推移の枠（update-dashboard）が見つかりません")
+    page_html = pattern.sub(lambda _m: section, page_html, count=1)
     css_pattern = re.compile(re.escape(CSS_START) + r".*?" + re.escape(CSS_END), re.S)
     if css_pattern.search(page_html):
         return css_pattern.sub(lambda _m: css, page_html, count=1)
     return page_html.replace("</style>", "\n" + css + "\n</style>", 1)
 
 
+def drop_tide_card(page_html: str) -> str:
+    """古い形のページ（潮目カードと推移が同じ枠にある）から、潮目カードとそのCSSを外す。
+
+    枠は残し、中身を推移だけにする。すでに外してあるページは、そのまま返す（何度流しても同じ）。
+    枠の先頭にあった潮目の目印（TIDE_CARD_*）と、枠の見出し用の aria-label も外す。
+    """
+    if TIDE_END not in page_html:
+        return page_html
+    start = page_html.index('<section class="update-dashboard"')
+    trend_start = page_html.index(START)
+    trend_end = page_html.index(END) + len(END)
+    close = page_html.index(TIDE_END, trend_end) + len(TIDE_END)
+    if not page_html[close:].startswith("</section>"):
+        raise ValueError("潮目の枠の終わり（</section>）が見つかりません")
+    close += len("</section>")
+    dashboard = DASHBOARD_OPEN + page_html[trend_start:trend_end] + "</section>"
+    page_html = page_html[:start] + dashboard + page_html[close:]
+    return TIDE_CSS_RE.sub("", page_html, count=1)
+
+
 def keep_existing(old_html: str, new_html: str) -> str:
     """作り直す元データが無いとき、古いページにあった節を新しいページへそのまま移す。
 
-    潮目の枠ごと入れ替わる処理で、節が黙って消えないようにするための保険。
+    ページの作り直しで、節が黙って消えないようにするための保険。
     正典が使える通常の更新では render_for で数え直すので、これは使わない。
     """
     found = re.search(re.escape(START) + r".*?" + re.escape(END), old_html, re.S)
@@ -1380,6 +1412,7 @@ def main() -> int:
     parser.add_argument("--source", type=Path, help="分類済みJSON（省略時はTHEMES.yamlのsample_file）")
     parser.add_argument("--page", type=Path, help="対象のHTML（省略時はTHEMES.yamlと同じ公開ページ）")
     parser.add_argument("--apply", action="store_true", help="HTMLへ書き込む（付けなければ表だけ表示）")
+    parser.add_argument("--drop-tide", action="store_true", help="古い形のページから、潮目カードを外す（--apply と一緒に使う）")
     args = parser.parse_args()
 
     import yaml
@@ -1394,7 +1427,10 @@ def main() -> int:
         for item in load_rounds(source, base, kind):
             print(item["date"], item["n"], *(f"{item['shares'][label]:5.1f}" for label in labels))
     if args.apply:
-        page.write_text(render_for(args.topic, page.read_text(encoding="utf-8"), source), encoding="utf-8")
+        html = page.read_text(encoding="utf-8")
+        if args.drop_tide:
+            html = drop_tide_card(html)
+        page.write_text(render_for(args.topic, html, source), encoding="utf-8")
         print(f"書き込みました: {page}")
     return 0
 

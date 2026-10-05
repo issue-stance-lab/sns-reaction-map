@@ -153,6 +153,8 @@ THEMES = [
     {
         # adapter（refresh_adapters/consumption_tax.py）が更新回どうしの比較で作り直すので、
         # prev_file / cur_file は使わない（前回・今回は social-samples/updates/ の実データ）。
+        # 2026-10-05 以降、消費税減税のページには潮目カードを出さない（「意見の推移」に一本化）。
+        # ここは立場・論点の並びと絞り込みの定義（scripts/build_trend_section.py が読む）としてだけ残してある。
         "slug": "consumption-tax-cut",
         "html": "docs/consumption-tax-cut-reaction-map.html",
         "widget_id": "consumption-tax-cut-tide-widget",

@@ -4,9 +4,9 @@
 ここは refresh_topic.py --promote から呼ばれ、候補を2回作って差分がないこと、
 投票の選択肢（論点7×立場4＝28通り）と保護タグが変わらないことだけを見る。
 
-「世論の潮目」は更新回どうしの比較なので、生成のたびに貼り直す
-（ページ生成器は回の区別を持たないため、残っていれば必ず外す作りにしてある）。
-潮目の枠の中にある「意見の推移」（scripts/build_trend_section.py）も同じ呼び出しで貼り直す。
+ページの「意見の推移」（scripts/build_trend_section.py）は、更新のたびに累積候補から貼り直す
+（ページ生成器は回の区別を持たないため、枠ごといったん外して差し戻す作りにしてある）。
+2026-10-05に「世論の潮目」（前回と今回の2回比較）は外し、前回との比較は推移の冒頭の1行と帯に移した。
 """
 
 from __future__ import annotations
@@ -19,9 +19,6 @@ from pathlib import Path
 
 TOPIC = "consumption-tax-cut"
 PAGE = Path("docs/consumption-tax-cut-reaction-map.html")
-# 更新回がまだ1回も無かった頃の比較対象。潮目ウィジェットの「前回」に使う。
-LEGACY_PREVIOUS_WAVE = Path("social-samples/consumption-tax-cut_hermes_arena_classified.json")
-LEGACY_PREVIOUS_DATE = "2026-07-28"
 # 「意見の推移」を数え直す既定の元データ。THEMES.yaml の sample_file と同じファイル。
 # adapter.build は昇格前の累積候補を渡す。渡されないとき（部分更新など）は正典から作る。
 CANONICAL = Path("social-samples/consumption-tax-cut_hermes_arena_classified.json")
@@ -51,72 +48,21 @@ def vote_fingerprint(html: str) -> tuple[str, tuple[str, ...], tuple[str, ...], 
     return topic.group(1), issue_keys, stance_keys, len(issue_keys) * len(stance_keys)
 
 
-def _latest_previous_wave(root: Path, current_date: str) -> tuple[Path, str]:
-    updates = root / "social-samples" / "updates" / TOPIC
-    candidates = sorted(
-        (path.parent.name, path)
-        for path in updates.glob("*/classified.json")
-        if path.parent.name < current_date
-    )
-    if candidates:
-        return candidates[-1][1], candidates[-1][0]
-    return root / LEGACY_PREVIOUS_WAVE, LEGACY_PREVIOUS_DATE
+def _apply_trend(root: Path, page: Path, cumulative: Path | None = None) -> None:
+    """ページの「意見の推移」の節を、累積候補（無ければ正典）から数え直して貼り直す。
 
-
-def _label(value: str) -> str:
-    _, month, day = value.split("-")
-    return f"{int(month)}月{int(day)}日"
-
-
-def _apply_tide(root: Path, page: Path, current_wave: Path, current_date: str, cumulative: Path | None = None) -> None:
+    枠（update-dashboard）はページ生成器が残している。2026-10-05に「世論の潮目」は外したので、
+    前回との比較は、推移の冒頭の1行とグラフの帯（build_trend_section）が見せる。
+    """
     sys.path.insert(0, str(root / "scripts"))
-    from inject_tide_widget import (  # type: ignore[import-not-found]
-        THEMES,
-        _load_tide_css,
-        generate_tide_section,
-        inject_into_html,
-        load_classified,
-    )
-
-    base = next(item for item in THEMES if item["slug"] == TOPIC).copy()
-    previous_path, previous_date = _latest_previous_wave(root, current_date)
-    if not previous_path.is_file():
-        raise FileNotFoundError(f"前回更新回がありません: {previous_path}")
-    if not current_wave.is_file():
-        raise FileNotFoundError(f"今回更新回がありません: {current_wave}")
-    if "synthetic" in previous_path.name:
-        raise ValueError(f"合成データを潮目の比較対象にはできません: {previous_path}")
-    base["prev_label"] = _label(previous_date)
-    base["cur_label"] = _label(current_date)
-    base["note"] = (
-        f"比較対象：{base['prev_label']}収集分のうち意見投稿／"
-        f"{base['cur_label']}収集分のうち意見投稿。同じ検索語セットで取得した投稿をAIで分類しています。"
-        "サンプルの構成比の変化であり、同じ人の意見が移動したことや世論全体の変化を示すものではありません。"
-    )
-    previous = load_classified(
-        previous_path,
-        base["use_relevance_filter"],
-        base.get("exclude_stances"),
-        base.get("exclude_issues"),
-    )
-    current = load_classified(
-        current_wave,
-        base["use_relevance_filter"],
-        base.get("exclude_stances"),
-        base.get("exclude_issues"),
-    )
-    tide = generate_tide_section(base, previous, current)
     from consumption_tax_connected import apply as connect_page
-    from build_trend_section import keep_existing, render_for  # type: ignore[import-not-found]
-    previous_html = page.read_text(encoding="utf-8")
-    html = inject_into_html(page, tide, _load_tide_css())
-    # 収集回ごとの「意見の推移」は潮目の枠の中に入る。潮目を作り直すと枠ごと入れ替わるので、ここで貼り直す。
+    from build_trend_section import render_for  # type: ignore[import-not-found]
+
+    html = page.read_text(encoding="utf-8")
     source = cumulative if cumulative is not None else root / CANONICAL
     if source.is_file():
         html = render_for(TOPIC, html, source)
-    else:
-        # 元データが無い隔離環境（テストなど）でも、節を黙って消さない。
-        html = keep_existing(previous_html, html)
+    # 元データが無い隔離環境（テストなど）では、既存の節をそのまま残す（黙って消さない）。
     page.write_text(connect_page(html), encoding="utf-8")
 
 
@@ -184,16 +130,15 @@ def build(root: Path, stage: Path, current_date: str) -> dict[Path, Path]:
     """候補を2回生成し、2回目に差分がない場合だけ公開対象を返す。"""
     candidate = stage / "cumulative-candidate.json"
     current_page = root / PAGE
-    current_wave = root / "social-samples" / "updates" / TOPIC / current_date / "classified.json"
     first_page = stage / "page-candidate.html"
     second_page = stage / "idempotence" / "page-candidate.html"
     second_page.parent.mkdir(parents=True, exist_ok=True)
 
     before_vote = vote_fingerprint(current_page.read_text(encoding="utf-8"))
     _run_builder(root, candidate, current_page, first_page)
-    _apply_tide(root, first_page, current_wave, current_date, candidate)
+    _apply_trend(root, first_page, candidate)
     _run_builder(root, candidate, first_page, second_page)
-    _apply_tide(root, second_page, current_wave, current_date, candidate)
+    _apply_trend(root, second_page, candidate)
 
     if _digest(first_page) != _digest(second_page):
         raise ValueError("消費税減税adapterは同じ候補の2回目実行で差分が出ました")

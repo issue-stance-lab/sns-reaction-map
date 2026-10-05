@@ -1473,18 +1473,19 @@ def build(
     # 中身（前回の収集回×今回の収集回の比較）はこのスクリプトの管轄外で、
     # adapter（scripts/refresh_adapters/consumption_tax.py）が生成のたびに
     # 貼り直す。ここでは中身は作り直さず、既にあれば抜き出していったん外す。
+    # 外すのは「意見の推移」の枠（update-dashboard）。2026-10-05に潮目カードは外し、枠の中は推移だけになった。
     # 戻す先（bukatsu-chiikiと同じ位置＝claim-audit・一次資料クイズの直前。
     # オーナー指摘 2026-09-20）は17番の後ろで差し戻す。17番がCLAIM_STARTごと
     # PLANET_SECTION_ENDの直後へ動かし直すため、ここで先に戻すと動かした後に
     # 取り残されて位置がずれる（症状3、2026-09-21）。
-    tide_marker = "<!-- TIDE_CARD_END --></section>"
-    existing_tide = ""
-    if '<section class="update-dashboard"' in html and tide_marker in html:
-        tide_start = html.index('<section class="update-dashboard"')
-        tide_end = html.index(tide_marker) + len(tide_marker)
-        existing_tide = html[tide_start:tide_end]
-        html = html[:tide_start] + html[tide_end:]
-    # 潮目を外したあと・貼る前の空行を必ず2行に揃える。揃えないと、貼り直しのたびに
+    dashboard_marker = "<!-- TREND_CARD_END --></section>"
+    existing_dashboard = ""
+    if '<section class="update-dashboard"' in html and dashboard_marker in html:
+        dashboard_start = html.index('<section class="update-dashboard"')
+        dashboard_end = html.index(dashboard_marker) + len(dashboard_marker)
+        existing_dashboard = html[dashboard_start:dashboard_end]
+        html = html[:dashboard_start] + html[dashboard_end:]
+    # 枠を外したあと・貼る前の空行を必ず2行に揃える。揃えないと、貼り直しのたびに
     # 空行が増えていき、adapterの冪等性検査（2回目で差分なし）が通らない。
     # 次に来るのは、テンプレートに「6つの論点」セクションが残っている初回だけ
     # explainer-section、削除済みなら拡大モーダルのdiv。
@@ -1707,11 +1708,11 @@ def build(
     html = html[:idx] + "\n\n" + audit + html[idx:]
     write_claim_provenance(verification_dest)
 
-    # --- 17.4. 潮目ウィジェットを一次資料クイズの直前へ差し戻す -------------
-    # 5番で外した潮目ウィジェットを、動かし終わって確定したCLAIM_STARTの
+    # --- 17.4. 「意見の推移」の枠を一次資料クイズの直前へ差し戻す -------------
+    # 5番で外した推移の枠を、動かし終わって確定したCLAIM_STARTの
     # 直前へ戻す（bukatsu-chiikiと同じ位置。オーナー指摘 2026-09-20）。
-    if existing_tide:
-        html = html.replace(CLAIM_START, existing_tide + "\n\n" + CLAIM_START, 1)
+    if existing_dashboard:
+        html = html.replace(CLAIM_START, existing_dashboard + "\n\n" + CLAIM_START, 1)
 
     # --- 17.5. 論点ごとのX投稿 -------------------------------------------
     # CLAIM_AUDITと同じ「後付けの補完処理」。claim_auditの直後（CLAIM_END）に置く。
@@ -2080,24 +2081,24 @@ def main() -> int:
         rows = json.loads((args.input or CANONICAL).read_text(encoding="utf-8"))
         html = page.read_text(encoding="utf-8")
         audit = claim_audit(rows)
-        # このマーカーごと動かし直すため、直前にある潮目ウィジェットを先に
+        # このマーカーごと動かし直すため、直前にある推移の枠を先に
         # 抜き出しておかないと置き去りになる（build()の5番・17番と同じ理由。
         # 症状3の再発防止、2026-09-21）。
-        tide_marker = "<!-- TIDE_CARD_END --></section>"
-        existing_tide = ""
-        if '<section class="update-dashboard"' in html and tide_marker in html:
-            tide_start = html.index('<section class="update-dashboard"')
-            tide_end = html.index(tide_marker) + len(tide_marker)
-            existing_tide = html[tide_start:tide_end]
-            html = html[:tide_start] + html[tide_end:]
+        dashboard_marker = "<!-- TREND_CARD_END --></section>"
+        existing_dashboard = ""
+        if '<section class="update-dashboard"' in html and dashboard_marker in html:
+            dashboard_start = html.index('<section class="update-dashboard"')
+            dashboard_end = html.index(dashboard_marker) + len(dashboard_marker)
+            existing_dashboard = html[dashboard_start:dashboard_end]
+            html = html[:dashboard_start] + html[dashboard_end:]
         if CLAIM_START in html and CLAIM_END in html:
             start = html.index(CLAIM_START)
             end = html.index(CLAIM_END) + len(CLAIM_END)
             html = html[:start] + html[end:]
         idx = html.index(CLAIM_ANCHOR) + len(CLAIM_ANCHOR)
         html = html[:idx] + "\n\n" + audit + html[idx:]
-        if existing_tide:
-            html = html.replace(CLAIM_START, existing_tide + "\n\n" + CLAIM_START, 1)
+        if existing_dashboard:
+            html = html.replace(CLAIM_START, existing_dashboard + "\n\n" + CLAIM_START, 1)
         write_claim_provenance(args.verification_dest)
         page.write_text(finish(html), encoding="utf-8")
         print(f"updated claim audit in {page}")

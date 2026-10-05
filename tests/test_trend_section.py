@@ -145,7 +145,7 @@ class WordingTest(unittest.TestCase):
 class InsertTest(unittest.TestCase):
     PAGE = (
         "<html><head><style>body{}</style></head><body>"
-        '<section class="update-dashboard"><!-- TIDE_CARD_START --><div>潮目</div><!-- TIDE_CARD_END --></section>'
+        '<section class="update-dashboard"><!-- TREND_CARD_START --><div>古い推移</div><!-- TREND_CARD_END --></section>'
         "</body></html>"
     )
 
@@ -154,15 +154,17 @@ class InsertTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             return trend.load_rounds(write(rows, Path(tmp)), BASE)
 
-    def test_inserts_inside_tide_frame_once_and_is_idempotent(self) -> None:
+    def test_replaces_the_section_inside_the_frame_once_and_is_idempotent(self) -> None:
         section = trend.render_section(SLUG, self.series())
         once = trend.insert_into_html(self.PAGE, section, trend.trend_css())
         twice = trend.insert_into_html(once, section, trend.trend_css())
         self.assertEqual(once, twice)
         self.assertEqual(once.count(trend.START), 1)
         self.assertEqual(once.count(trend.CSS_START), 1)
-        self.assertLess(once.index(trend.END), once.index("<!-- TIDE_CARD_END -->"))
-        self.assertGreater(once.index(trend.START), once.index("<!-- TIDE_CARD_START -->"))
+        self.assertEqual(once.count('<section class="update-dashboard">'), 1)  # 枠は残る
+        self.assertGreater(once.index(trend.START), once.index('<section class="update-dashboard">'))
+        self.assertLess(once.index(trend.END), once.index("</section>", once.index(trend.END)))
+        self.assertNotIn("古い推移", once)
 
     def test_replaces_old_section_with_new_numbers(self) -> None:
         section = trend.render_section(SLUG, self.series())
@@ -173,9 +175,16 @@ class InsertTest(unittest.TestCase):
         self.assertNotIn("2026年9月8日時点", updated)
         self.assertEqual(updated.count(trend.START), 1)
 
-    def test_requires_tide_frame(self) -> None:
-        with self.assertRaises(ValueError):
+    def test_requires_the_frame(self) -> None:
+        with self.assertRaises(ValueError) as caught:
             trend.insert_into_html("<html><style></style></html>", "x", "y")
+        self.assertIn("update-dashboard", str(caught.exception))
+
+    def test_an_old_page_with_the_tide_card_is_told_to_drop_it_first(self) -> None:
+        old_page = '<section class="update-dashboard"><!-- TIDE_CARD_START --><div>潮目</div><!-- TIDE_CARD_END --></section>'
+        with self.assertRaises(ValueError) as caught:
+            trend.insert_into_html(old_page, "x", "y")
+        self.assertIn("--drop-tide", str(caught.exception))
 
     def test_needs_two_rounds(self) -> None:
         with self.assertRaises(ValueError):
@@ -841,6 +850,47 @@ class XPostButtonTest(unittest.TestCase):
             self.assertNotIn('data-trend-x="stance"', self.render())
         finally:
             trend.TREND_THEMES[SLUG]["share_images"] = original
+
+
+class DropTideCardTest(unittest.TestCase):
+    """古い形（潮目カードと推移が同じ枠）のページから、潮目カードだけを外す。"""
+
+    OLD = (
+        "<html><head><style>/* TIDE_CARD_START */\n.update-dashboard{padding:1px}.tide-card{x:1}\n/* TIDE_CARD_END */\n"
+        ".keep{y:2}</style></head><body><p>前</p>"
+        '<section class="update-dashboard" aria-label="世論の潮目"><!-- TIDE_CARD_START -->\n'
+        '<section class="tide-card" id="consumption-tax-cut-tide-widget"><script>/*潮目*/</script></section>\n'
+        "<!-- TREND_CARD_START -->\n<section class=\"trend-card\">推移</section>\n<!-- TREND_CARD_END -->\n"
+        "<!-- TIDE_CARD_END --></section><p>後</p></body></html>"
+    )
+
+    def test_the_tide_card_and_its_markers_and_css_are_gone_and_the_trend_stays(self) -> None:
+        new = trend.drop_tide_card(self.OLD)
+        for gone in ("tide-card", "tide-widget", "TIDE_CARD", "世論の潮目", "潮目"):
+            self.assertNotIn(gone, new)
+        self.assertIn('<section class="update-dashboard"><!-- TREND_CARD_START -->', new)
+        self.assertIn("<!-- TREND_CARD_END --></section><p>後</p>", new)
+        self.assertIn("推移", new)
+        self.assertIn(".keep{y:2}", new)  # ほかのCSSは残す
+        self.assertTrue(new.index("<p>前</p>") < new.index("update-dashboard") < new.index("<p>後</p>"))
+
+    def test_running_it_again_changes_nothing(self) -> None:
+        once = trend.drop_tide_card(self.OLD)
+        self.assertEqual(trend.drop_tide_card(once), once)
+
+    def test_a_page_without_the_tide_card_is_returned_as_is(self) -> None:
+        page = '<section class="update-dashboard"><!-- TREND_CARD_START -->x<!-- TREND_CARD_END --></section>'
+        self.assertEqual(trend.drop_tide_card(page), page)
+
+    def test_a_broken_frame_stops_instead_of_cutting_the_page(self) -> None:
+        broken = self.OLD.replace("<!-- TIDE_CARD_END --></section>", "<!-- TIDE_CARD_END -->")
+        with self.assertRaises(ValueError):
+            trend.drop_tide_card(broken)
+
+    def test_the_trend_css_carries_the_frame_padding_the_tide_css_used_to_give(self) -> None:
+        css = trend.trend_css()
+        self.assertIn(".update-dashboard{padding:18px min(4vw,40px) 34px;background:var(--bg)}", css)
+        self.assertIn("@media(max-width:720px){.update-dashboard{padding:10px 10px 24px}}", css)
 
 
 class PreviousSentenceTest(unittest.TestCase):

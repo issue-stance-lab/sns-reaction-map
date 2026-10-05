@@ -42,13 +42,13 @@ class ConnectedRefreshTests(unittest.TestCase):
         if result.returncode:
             raise AssertionError(result.stdout + result.stderr)
 
-    def test_full_builder_and_adapter_tide_are_idempotent(self):
-        first = self.stage / "tide-first.html"
+    def test_full_builder_and_adapter_trend_are_idempotent(self):
+        first = self.stage / "trend-first.html"
         first.write_text(self.source)
-        adapter._apply_tide(ROOT, first, ROOT / "social-samples/updates/consumption-tax-cut/2026-09-17/classified.json", "2026-09-17")
-        second = self.stage / "tide-second.html"
+        adapter._apply_trend(ROOT, first)
+        second = self.stage / "trend-second.html"
         self.run_builder("--html-template", str(first), "--output-html", str(second))
-        adapter._apply_tide(ROOT, second, ROOT / "social-samples/updates/consumption-tax-cut/2026-09-17/classified.json", "2026-09-17")
+        adapter._apply_trend(ROOT, second)
         self.assertEqual(first.read_bytes(), second.read_bytes())
         before = (ROOT / "docs/consumption-tax-cut-reaction-map.html").read_text()
         self.assertEqual(adapter.vote_fingerprint(before), adapter.vote_fingerprint(second.read_text()))
@@ -87,25 +87,26 @@ class ConnectedRefreshTests(unittest.TestCase):
         self.assertEqual(connected.validate(first), [])
         self.assertIn('id="classroom-title"', first)
 
-    def test_tide_uses_supplied_waves_instead_of_prototype_dates_and_counts(self):
-        # 本文を再分類せず、隔離した更新回を渡して表示データの追従だけを確認する。
-        root = self.stage / 'changed-waves'
-        rows = json.loads(CANONICAL.read_text())
-        opinions = [r for r in rows if r.get('classification', {}).get('is_opinion')
-                    and r['classification'].get('is_relevant')]
-        previous = root / 'social-samples/updates/consumption-tax-cut/2026-09-20/classified.json'
-        current = root / 'social-samples/updates/consumption-tax-cut/2026-09-21/classified.json'
-        for path, count in ((previous, 11), (current, 23)):
-            path.parent.mkdir(parents=True, exist_ok=True)
-            path.write_text(json.dumps(opinions[:count], ensure_ascii=False))
-        page = root / 'candidate.html'; page.write_text(self.source)
-        adapter._apply_tide(root, page, current, '2026-09-21')
-        from bs4 import BeautifulSoup
-        tide = BeautifulSoup(page.read_text(), 'html.parser').select_one('#consumption-tax-cut-tide-widget')
-        self.assertIn('9月20日 → 9月21日', tide.get_text())
-        self.assertIn('前回収集分11件と今回収集分23件', tide.get_text())
-        self.assertNotIn('8月24日', tide.get_text())
-        self.assertIn('consumption-tax-connected-page.js?v=8', page.read_text())
+    def test_page_has_no_tide_card_and_keeps_exactly_one_trend_section(self):
+        """2026-10-05に「世論の潮目」は外した。ページ生成器と更新処理を通しても、潮目は戻らず、推移は1つだけ残る。"""
+        page = self.stage / "no-tide.html"
+        page.write_text(self.source)
+        adapter._apply_trend(ROOT, page)
+        html = page.read_text()
+        self.assertNotIn("consumption-tax-cut-tide-widget", html)
+        self.assertNotIn("tide-card", html)
+        self.assertNotIn("TIDE_CARD", html)
+        self.assertNotIn("世論の潮目", html)
+        self.assertEqual(html.count('<section class="update-dashboard">'), 1)
+        self.assertEqual(html.count("<!-- TREND_CARD_START -->"), 1)
+        self.assertIn("<!-- TREND_CARD_END --></section>", html)  # ページ生成器が枠ごと外して戻すための目印
+        self.assertIn('consumption-tax-connected-page.js?v=9', html)
+
+    def test_the_trend_frame_stays_in_front_of_the_claim_audit(self):
+        """ページ生成器の作り直し（枠ごと外して差し戻す）を通っても、枠の位置は一次資料クイズの直前のまま。"""
+        html = self.source
+        self.assertLess(html.index("<!-- TREND_CARD_END -->"), html.index("<!-- CLAIM_AUDIT_START -->"))
+        self.assertEqual(html.count('<section class="update-dashboard">'), 1)
 
     def test_sequential_refresh_finishing_and_number_sync_are_idempotent(self):
         from build_consumption_tax_page import apply_public_counts
@@ -114,12 +115,11 @@ class ConnectedRefreshTests(unittest.TestCase):
         lesson = json.loads((ROOT / 'configs/classroom/consumption-tax-cut.json').read_text())
         public = json.loads((ROOT / 'data/public/themes/consumption-tax-cut.json').read_text())
         path = self.stage / 'sequential.html'
-        wave = sorted((ROOT / 'social-samples/updates/consumption-tax-cut').glob('*/classified.json'))[-1]
         def pipeline(source):
             _, source, failures = refresh(connected.TOPIC, source=source)
             self.assertEqual(failures, [])
             path.write_text(source)
-            adapter._apply_tide(ROOT, path, wave, wave.parent.name)
+            adapter._apply_trend(ROOT, path)
             source = trust.apply_theme(path.read_text(), theme, config)
             source = classroom.apply_theme(source, connected.TOPIC, lesson, public)
             source = trust.apply_observations_only(source, theme)
@@ -127,7 +127,7 @@ class ConnectedRefreshTests(unittest.TestCase):
         first = pipeline(self.source)
         self.assertEqual(pipeline(first), first)
         self.assertEqual(connected.validate(first), [])
-        # 潮目の貼り直しを通っても、枠の中の「意見の推移」（立場・論点の2タブ）が1つだけ残る。
+        # 推移の貼り直しを通っても、枠の中の「意見の推移」（立場・論点・理由の3タブ）が1つだけ残る。
         self.assertEqual(first.count('<!-- TREND_CARD_START -->'), 1)
         self.assertEqual(first.count('data-trend-panel="'), 3)  # 立場・論点・反対慎重の理由
         self.assertEqual(adapter.vote_fingerprint(first), adapter.vote_fingerprint(self.source))
