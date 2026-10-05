@@ -6,6 +6,7 @@
 
 「世論の潮目」は更新回どうしの比較なので、生成のたびに貼り直す
 （ページ生成器は回の区別を持たないため、残っていれば必ず外す作りにしてある）。
+潮目の枠の中にある「意見の推移」（scripts/build_trend_section.py）も同じ呼び出しで貼り直す。
 """
 
 from __future__ import annotations
@@ -21,6 +22,9 @@ PAGE = Path("docs/consumption-tax-cut-reaction-map.html")
 # 更新回がまだ1回も無かった頃の比較対象。潮目ウィジェットの「前回」に使う。
 LEGACY_PREVIOUS_WAVE = Path("social-samples/consumption-tax-cut_hermes_arena_classified.json")
 LEGACY_PREVIOUS_DATE = "2026-07-28"
+# 「意見の推移」を数え直す既定の元データ。THEMES.yaml の sample_file と同じファイル。
+# adapter.build は昇格前の累積候補を渡す。渡されないとき（部分更新など）は正典から作る。
+CANONICAL = Path("social-samples/consumption-tax-cut_hermes_arena_classified.json")
 VOTE_TOPIC = "consumption-tax-cut-issue-stance-v1"
 VOTE_CHOICES = 28
 PROTECTED = (
@@ -64,7 +68,7 @@ def _label(value: str) -> str:
     return f"{int(month)}月{int(day)}日"
 
 
-def _apply_tide(root: Path, page: Path, current_wave: Path, current_date: str) -> None:
+def _apply_tide(root: Path, page: Path, current_wave: Path, current_date: str, cumulative: Path | None = None) -> None:
     sys.path.insert(0, str(root / "scripts"))
     from inject_tide_widget import (  # type: ignore[import-not-found]
         THEMES,
@@ -103,7 +107,17 @@ def _apply_tide(root: Path, page: Path, current_wave: Path, current_date: str) -
     )
     tide = generate_tide_section(base, previous, current)
     from consumption_tax_connected import apply as connect_page
-    page.write_text(connect_page(inject_into_html(page, tide, _load_tide_css())), encoding="utf-8")
+    from build_trend_section import keep_existing, render_for  # type: ignore[import-not-found]
+    previous_html = page.read_text(encoding="utf-8")
+    html = inject_into_html(page, tide, _load_tide_css())
+    # 収集回ごとの「意見の推移」は潮目の枠の中に入る。潮目を作り直すと枠ごと入れ替わるので、ここで貼り直す。
+    source = cumulative if cumulative is not None else root / CANONICAL
+    if source.is_file():
+        html = render_for(TOPIC, html, source)
+    else:
+        # 元データが無い隔離環境（テストなど）でも、節を黙って消さない。
+        html = keep_existing(previous_html, html)
+    page.write_text(connect_page(html), encoding="utf-8")
 
 
 def _run_builder(root: Path, candidate: Path, template: Path, output: Path) -> None:
@@ -161,9 +175,9 @@ def build(root: Path, stage: Path, current_date: str) -> dict[Path, Path]:
 
     before_vote = vote_fingerprint(current_page.read_text(encoding="utf-8"))
     _run_builder(root, candidate, current_page, first_page)
-    _apply_tide(root, first_page, current_wave, current_date)
+    _apply_tide(root, first_page, current_wave, current_date, candidate)
     _run_builder(root, candidate, first_page, second_page)
-    _apply_tide(root, second_page, current_wave, current_date)
+    _apply_tide(root, second_page, current_wave, current_date, candidate)
 
     if _digest(first_page) != _digest(second_page):
         raise ValueError("消費税減税adapterは同じ候補の2回目実行で差分が出ました")
