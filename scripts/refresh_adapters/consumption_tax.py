@@ -17,6 +17,8 @@ import subprocess
 import sys
 from pathlib import Path
 
+from scripts.refresh_adapters import trend_support
+
 TOPIC = "consumption-tax-cut"
 PAGE = Path("docs/consumption-tax-cut-reaction-map.html")
 # 「意見の推移」を数え直す既定の元データ。THEMES.yaml の sample_file と同じファイル。
@@ -56,13 +58,9 @@ def _apply_trend(root: Path, page: Path, cumulative: Path | None = None) -> None
     """
     sys.path.insert(0, str(root / "scripts"))
     from consumption_tax_connected import apply as connect_page
-    from build_trend_section import render_for  # type: ignore[import-not-found]
 
-    html = page.read_text(encoding="utf-8")
     source = cumulative if cumulative is not None else root / CANONICAL
-    if source.is_file():
-        html = render_for(TOPIC, html, source)
-    # 元データが無い隔離環境（テストなど）では、既存の節をそのまま残す（黙って消さない）。
+    html = trend_support.render_trend(root, TOPIC, page.read_text(encoding="utf-8"), source)
     page.write_text(connect_page(html), encoding="utf-8")
 
 
@@ -111,19 +109,8 @@ def finalize(root: Path, current_date: str) -> None:
 
 
 def _build_images(stage: Path, candidate: Path) -> dict[Path, Path]:
-    """単体で配る画像（意見の推移の折れ線）を2回作り、同じバイト列になることを確かめて公開物にする。
-
-    日本語フォントが無い環境では作れず、ここで止まる（文字が□の画像を公開しない）。
-    """
-    from build_trend_images import render_for as render_images  # type: ignore[import-not-found]
-    from build_trend_section import IMAGE_DIR  # type: ignore[import-not-found]
-
-    first = render_images(TOPIC, candidate, stage / "trend-images")
-    second = render_images(TOPIC, candidate, stage / "idempotence" / "trend-images")
-    for (kind, variant), path in first.items():
-        if path.read_bytes() != second[(kind, variant)].read_bytes():
-            raise ValueError(f"消費税減税の推移画像（{kind}/{variant}）は同じ候補の2回目実行でバイト列が変わりました")
-    return {IMAGE_DIR / path.name: path for path in first.values()}
+    """単体で配る画像（意見の推移の折れ線）を作る（作り方は trend_support.build_images）。"""
+    return trend_support.build_images(Path(__file__).resolve().parents[2], TOPIC, stage, candidate)
 
 
 def build(root: Path, stage: Path, current_date: str) -> dict[Path, Path]:

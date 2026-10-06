@@ -17,8 +17,13 @@ import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
+sys.path.insert(0, str(ROOT))
 
 import consumption_tax_count_provenance as provenance  # noqa: E402
+import trend_count_provenance as shared  # noqa: E402
+import build_trend_section as trend  # noqa: E402
+from scripts import bukatsu_count_provenance as bukatsu_provenance  # noqa: E402
+from scripts.refresh_adapters import bukatsu as bukatsu_adapter  # noqa: E402
 from refresh_adapters import consumption_tax as adapter  # noqa: E402
 
 PAGE = ROOT / "docs/consumption-tax-cut-reaction-map.html"
@@ -247,7 +252,7 @@ class EventsAndReasonTamperTest(unittest.TestCase):
             (root / "configs").mkdir()
             (root / "configs/consumption-tax-background.json").write_text(json.dumps(config, ensure_ascii=False), encoding="utf-8")
             with self.assertRaises(ValueError):
-                provenance._config_events(root)
+                shared._config_events(root, "configs/consumption-tax-background.json")
 
 
 class PreviousSentenceProvenanceTest(unittest.TestCase):
@@ -316,3 +321,122 @@ class PreviousSentenceProvenanceTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+BUKATSU_PAGE = ROOT / "docs/bukatsu-chiiki-reaction-map.html"
+BUKATSU_CANON = ROOT / "social-samples/bukatsu-chiiki_hermes_classified.json"
+
+
+class BukatsuTrendProvenanceTest(unittest.TestCase):
+    """部活動の地域移行の「意見の推移」も、正典の数え直しと1行ずつ照合する（並べ始める日を適用したうえで）。"""
+
+    def setUp(self) -> None:
+        self.source = BUKATSU_PAGE.read_text(encoding="utf-8")
+
+    def check(self, source: str) -> dict:
+        return bukatsu_provenance.private_verified_selectors(source, ROOT)
+
+    def test_published_page_matches_recount(self) -> None:
+        result = self.check(self.source)
+        stance_rows = [key for key in result if "-panel-stance-row-" in key]
+        issue_rows = [key for key in result if "-panel-issue-row-" in key]
+        # 立場は賛否の判定基準を見直した2026-09-15以降、論点は検索語を増やした2026-07-23以降の回だけ。
+        self.assertTrue(stance_rows and all(key.rsplit("-row-", 1)[1] >= "2026-09-15" for key in stance_rows))
+        self.assertTrue(issue_rows and all(key.rsplit("-row-", 1)[1] >= "2026-07-23" for key in issue_rows))
+        self.assertIn("#bukatsu-chiiki-trend-panel-stance-n-range", result)
+        self.assertIn("#bukatsu-chiiki-trend-panel-issue-n-range", result)
+
+    def test_page_has_no_tide_card_and_no_reason_tab(self) -> None:
+        self.assertNotIn("tide-widget", self.source)
+        self.assertNotIn("TIDE_CARD", self.source)
+        self.assertNotIn("bukatsu-chiiki-trend-panel-reason", self.source)
+        self.assertEqual(self.source.count("<!-- TREND_CARD_START -->"), 1)
+
+    def test_tampered_table_count_is_rejected(self) -> None:
+        match = re.search(r'(id="bukatsu-chiiki-trend-panel-stance-row-2026-10-01".*?<td[^>]*>)(\d+)(件)', self.source, re.S)
+        broken = self.source[:match.start(2)] + str(int(match.group(2)) + 1) + self.source[match.end(2):]
+        with self.assertRaises(ValueError):
+            self.check(broken)
+
+    def test_tampered_embedded_data_is_rejected(self) -> None:
+        broken = self.source.replace('"d":"2026-10-01","n":93,', '"d":"2026-10-01","n":94,', 1)
+        self.assertNotEqual(broken, self.source)
+        with self.assertRaises(ValueError):
+            self.check(broken)
+
+    def test_frame_without_trend_is_rejected(self) -> None:
+        gone = re.sub(r"<!-- TREND_CARD_START -->.*?<!-- TREND_CARD_END -->", "", self.source, count=1, flags=re.S)
+        self.assertNotEqual(gone, self.source)
+        with self.assertRaises(ValueError):
+            self.check(gone)
+
+    def test_a_returned_tide_card_is_rejected(self) -> None:
+        returned = self.source.replace('<section class="update-dashboard">', '<section class="update-dashboard"><section class="tide-card" id="bukatsu-tide-widget"></section>', 1)
+        self.assertNotEqual(returned, self.source)
+        with self.assertRaises(ValueError) as caught:
+            self.check(returned)
+        self.assertIn("潮目カードが戻っています", str(caught.exception))
+
+    def test_a_page_that_lines_up_the_earlier_rounds_is_rejected(self) -> None:
+        """並べ始める日を外して作ったページ（古い回まで並ぶ）は、設定どおりの数え直しと食い違うので止まる。"""
+        saved = trend.TREND_THEMES["bukatsu-chiiki"]["series_from"]
+        trend.TREND_THEMES["bukatsu-chiiki"]["series_from"] = {}
+        try:
+            wide = trend.render_for("bukatsu-chiiki", self.source, BUKATSU_CANON)
+        finally:
+            trend.TREND_THEMES["bukatsu-chiiki"]["series_from"] = saved
+        self.assertIn("-row-2026-06-27", wide)
+        with self.assertRaises(ValueError):
+            self.check(wide)
+
+    def test_rounds_before_the_start_are_not_in_the_recount(self) -> None:
+        stance = shared._trend_rounds("bukatsu-chiiki", ROOT, "stance", shared._labels("bukatsu-chiiki")["stance"], "stance")
+        issue = shared._trend_rounds("bukatsu-chiiki", ROOT, "main_issue", shared._labels("bukatsu-chiiki")["issue"], "issue")
+        self.assertEqual(min(stance), "2026-09-15")
+        self.assertEqual(min(issue), "2026-07-23")
+
+
+class BukatsuBuildTest(unittest.TestCase):
+    """更新処理（adapter）が、潮目なしの推移の枠を、同じ入力なら同じ結果で作ること。"""
+
+    def test_build_is_idempotent_and_passes_recount(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            stage = Path(tmp)
+            shutil.copy(BUKATSU_CANON, stage / "cumulative-candidate.json")
+            first, second = stage / "first.html", stage / "second.html"
+            bukatsu_adapter._build_once(ROOT, stage, "2026-10-01", BUKATSU_PAGE, first)
+            bukatsu_adapter._build_once(ROOT, stage, "2026-10-01", first, second)
+            html = first.read_text(encoding="utf-8")
+            self.assertEqual(html, second.read_text(encoding="utf-8"))
+        self.assertEqual(html.count("<!-- TREND_CARD_START -->"), 1)
+        self.assertEqual(html.count('<section class="update-dashboard">'), 1)
+        self.assertNotIn("tide-card", html)
+        self.assertNotIn("bukatsu-tide-widget", html)
+        self.assertEqual(html.count("/* HERMES_CARD_START */"), 1)
+        self.assertNotIn("TIDE_CARD", html)
+        self.assertTrue(bukatsu_provenance.private_verified_selectors(html, ROOT))
+
+    def test_old_page_with_a_tide_card_is_turned_into_the_trend_frame(self) -> None:
+        """潮目カード入りの古いページでも、同じ入口（update_bukatsu_tide.py）が推移の枠へ直す。"""
+        old = BUKATSU_PAGE.read_text(encoding="utf-8")
+        start = old.index('<section class="update-dashboard">')
+        end = old.index("<!-- TREND_CARD_END --></section>") + len("<!-- TREND_CARD_END --></section>")
+        tide_form = (
+            old[:start]
+            + '<section class="update-dashboard" aria-label="世論の潮目"><!-- TIDE_CARD_START -->'
+            + '<section class="tide-card" id="bukatsu-tide-widget">x</section><!-- TIDE_CARD_END --></section>'
+            + old[end:]
+        ).replace("/* HERMES_CARD_START */", "/* TIDE_CARD_START */").replace("/* HERMES_CARD_END */", "/* TIDE_CARD_END */")
+        self.assertIn("bukatsu-tide-widget", tide_form)
+        with tempfile.TemporaryDirectory() as tmp:
+            stage = Path(tmp)
+            shutil.copy(BUKATSU_CANON, stage / "cumulative-candidate.json")
+            template, out = stage / "old.html", stage / "out.html"
+            template.write_text(tide_form, encoding="utf-8")
+            bukatsu_adapter._build_once(ROOT, stage, "2026-10-01", template, out)
+            html = out.read_text(encoding="utf-8")
+        self.assertNotIn("bukatsu-tide-widget", html)
+        self.assertNotIn("TIDE_CARD", html)
+        self.assertEqual(html.count("<!-- TREND_CARD_START -->"), 1)
+        self.assertEqual(html.count("/* HERMES_CARD_START */"), 1)
+        self.assertTrue(bukatsu_provenance.private_verified_selectors(html, ROOT))

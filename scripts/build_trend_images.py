@@ -528,7 +528,7 @@ def render_for(slug: str, source: Path, outdir: Path) -> dict[tuple[str, str], P
     for kind in ("stance", "issue"):
         if not base.get(trend.KINDS[kind]["labels_key"]):
             continue
-        series = trend.load_rounds(source, base, kind)
+        series = trend.rounds_for(slug, source, kind)
         for variant in trend.IMAGE_VARIANTS:
             image = render_image(slug, kind, series, variant)
             path = outdir / trend.image_filename(slug, kind, variant)

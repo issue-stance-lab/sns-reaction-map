@@ -166,6 +166,9 @@ JevはHermesの代替分類器ではなく、収集回を別の目で点検す�
 （公開後は「立場の変化」「論点の変化」タブが一度も更新されない状態だった）。
 `update_bukatsu_tide.py`のPLANET_SECTION判定分岐に、潮目カードだけを
 PLANET_SECTIONの外（`<!-- PLANET_SECTION_END -->`直後）へ差し込む経路を追加して解消した。
+**2026-10-06に、この潮目カードは外した。** 同じ場所（`<section class="update-dashboard">`）には「意見の推移」だけを置く
+（下の「3. テーマページ」の部活動の項目）。`tide_card()` はもう無く、`update_bukatsu_tide.py` は枠だけを残す
+（ファイル名の tide は名残）。
 
 **「論点ごとのX投稿」（`x_posts_panel()`）も同じ理由で2026-09-20まで表示されていなかった。**
 代表投稿の選定ロジック自体（`REPRESENTATIVE_POSTS`優先・confidence順フォールバック）は
@@ -593,6 +596,21 @@ collect_at を迎えたテーマにデータを追加した後、以下を順番
   - 収集日は `fetched_at`（UTC）を日本時間に直した日付。同じ日本時間の日に2回収集すると1回分にまとまる
   - 論点・立場のラベルや並びを変えるとき（`taxonomy-migration`）は、`inject_tide_widget.py` の同じ定義が元になるので、
     `scripts/build_trend_section.py` の `TREND_THEMES.short_labels`（スマホの表の短い見出し）も合わせて直す
+
+- [ ] 部活動の地域移行だけ: **潮目カードは出さない**（2026-10-06に外した。`bukatsu-tide-widget` が戻ると数字検査が止める）。
+  外枠（`<section class="update-dashboard">`）の中の「意見の推移」（`#bukatsu-chiiki-trend`、立場・論点の2タブ。理由タブと年表の縦線は無い）と、
+  単体で配る画像（`docs/images/trend/bukatsu-chiiki-{stance,issue}-trend-{summary,detail}.png`）は、上の消費税減税の項目と同じ仕組みで、
+  `adapter.build` が累積候補から貼り直す（枠は `update_bukatsu_tide.py` が `<!-- TREND_CARD_START -->` を目印に残す）。
+  数字検査は `scripts/trend_count_provenance.py`（消費税減税と共通）が、表の各行・埋め込みデータ・前回比の1行を正典から数え直して照合する。違いは次の3つ。
+  - **並べ始める日**（`TREND_THEMES["bukatsu-chiiki"]["series_from"]`）。集計のしかたが変わる前の回は並べない。
+    立場は **2026-09-15**（2026-09-12に賛否の判定基準を見直し、見直し前の回は数え直していない。「中立・情報」が約3%から約3割へ跳ねるが世論の変化ではない）。
+    論点は **2026-07-23**（この回から収集の検索語を7本から10本に増やした）。理由は、グラフの注意書きにも出る（`series_notes`）。
+    古い回まで並べたいときは、該当の回を新しい基準で分類し直す（データの更新作業）うえで `series_from` を外す。外すと数字検査が設定と食い違って止めるので、両方そろえて直す
+  - **分類に使うAIが変わったら止まる**（`trend_support.check_model_break`）。`adapter.build` が前回と今回の `report.json`（`provenance.model.name`）を比べ、
+    変わっていて `TREND_THEMES["bukatsu-chiiki"]["model_breaks"]` に今回の収集日が無いと止まる。日付を足すと、グラフの注意書きに
+    「この回からAIを切り替えました。それ以前の回との差には、AIの違いも含まれます」が出る（2026-10-01の回は記録ずみ）
+  - 論点の「その他」は割合から外す。立場・論点の並びは `scripts/bukatsu_taxonomy.py`（`inject_tide_widget.THEMES` には無いテーマ）。
+    ラベルを変えるときは `TREND_THEMES.short_labels` も合わせて直す
 
 ### 4. テーマページ（insight-stats カード 4枚）
 

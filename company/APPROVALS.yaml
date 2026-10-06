@@ -1,5 +1,5 @@
 version: 1
-updated_at: "2026-10-05"
+updated_at: "2026-10-06"
 
 rules:
   required_for:
@@ -1663,3 +1663,20 @@ items:
       - "https://sns-reaction-map.jp/consumption-tax-cut-reaction-map.html"
       - "https://sns-reaction-map.jp/images/trend/consumption-tax-cut-stance-trend-summary.png"
       - "https://sns-reaction-map.jp/images/trend/consumption-tax-cut-issue-trend-summary.png"
+
+  - id: approval-20261006-001
+    department: engineering-data
+    action: important_policy_change
+    summary: "部活動の地域移行の推移グラフも画像（ひと目版・詳細版）で配り、図表の利用条件（approval-20261005-002と同じ文言）を適用する"
+    reason: "オーナーが2026-10-06に「これを他のテーマにも展開したい。次は地域部活」と指示した。消費税減税で承認済みの利用条件は、他テーマを含まない承認だったため、部活動の分は改めて確認する"
+    risks:
+      - "利用条件は「出典（SNS反応まっぷ）とリンクを明記すれば、記事・ブログ・授業・SNSで自由に使えます。画像の切り取りや、数字・注意書きの書き換えはしないでください。」。消費税減税と同じ文言で、一度出すとあとで変えても既に使われた画像は残る"
+      - "部活動は、立場の割合が2026-09-15を境に分類基準の変更で跳ねている。画像は基準変更後の3回だけを並べ、期間（○月○日〜○月○日の○回）を画像に明記する。それでも画像だけが切り出されると、賛否の推移と誤読される恐れがある"
+      - "画像は日本語フォントのある環境でだけ作れる。毎週の更新でgitの履歴が約400KBずつ増える"
+    recommendation: approve
+    evidence:
+      - quality/reviews/2026-10-06-task77-bukatsu-trend.md
+      - scripts/build_trend_images.py
+      - scripts/verify_trend_images.py
+    status: pending
+    requested_at: "2026-10-06"
