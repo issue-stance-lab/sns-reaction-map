@@ -1,5 +1,5 @@
 version: 1
-updated_at: "2026-10-05"
+updated_at: "2026-10-06"
 
 rules:
   required_for:
@@ -1663,3 +1663,25 @@ items:
       - "https://sns-reaction-map.jp/consumption-tax-cut-reaction-map.html"
       - "https://sns-reaction-map.jp/images/trend/consumption-tax-cut-stance-trend-summary.png"
       - "https://sns-reaction-map.jp/images/trend/consumption-tax-cut-issue-trend-summary.png"
+
+  - id: approval-20261006-001
+    department: engineering-data
+    action: website_publication
+    summary: "生成AIと著作権テーマの2026-10-06定期更新を公開する（収集4,734→5,175件、意見3,146→3,416件）"
+    reason: "新規441件の分類・拒否1件の人手判定・語られていない争点4件の再検索・数値整合を終え、manifest 8c14879e3963c0298c82ac8607ab7cf9cdc7c131ac2b4c197100fd74968de6db の独立品質監査がready_with_notes（修正必須なし）となったため"
+    risks:
+      - "Yahoo!リアルタイム検索のSNS投稿サンプルであり、社会全体の世論比率ではない"
+      - "提供元AIが高リスクとして拒否した1件（ニュース共有）は、本文確認のうえ人手で判定した。意見数は変わらない"
+      - "「世論の潮目」は更新しない。山なみ形式では通常更新で潮目が動かない既知の不具合（課題90）のため、8月31日→9月5日の比較のまま"
+      - "監査担当は読み取り専用のため検査スクリプト・ブラウザー表示は未実行。適用後に標準検査・全テスト・公開用検査・PC/375px表示・GitHub Actionsを確認する"
+    recommendation: approve
+    evidence:
+      - ".staging/refresh/ai-copyright/20261006_212508/promotion-manifest.json（sha256 8c14879e…）"
+      - "quality/reviews/2026-10-06-ai-copyright-refresh.md"
+      - "data/verification/updates/ai-copyright/2026-10-06/"
+    status: approved
+    requested_at: "2026-10-06"
+    decided_at: "2026-10-06"
+    decision_note: >-
+      本対話で更新内容（新規441件・意見3,416件、立場の比率はほぼ不変、潮目は更新しない）と
+      監査結果を提示し、オーナーが選択肢「公開する（推奨）」を選んで承認。
