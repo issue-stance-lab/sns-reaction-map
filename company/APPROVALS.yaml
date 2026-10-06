@@ -1678,8 +1678,13 @@ items:
       - quality/reviews/2026-10-06-task77-bukatsu-trend.md
       - scripts/build_trend_images.py
       - scripts/verify_trend_images.py
-    status: pending
+    status: approved
     requested_at: "2026-10-06"
+    decided_at: "2026-10-06"
+    decision_note: >-
+      オーナーに利用条件の文言と、選択肢（A: 部活動にも同じ文言を適用する / B: 部活動の画像は出さない / C: 文言を変える）を示した。
+      オーナーが本対話で「Aで承認、公開して」と回答した（2026-10-06）。対象は部活動の地域移行の推移画像の分で、
+      文言はapproval-20261005-002と同じ。引用パックページ・iframe埋め込み・他のテーマへの展開は含まない。
 
   - id: approval-20261006-002
     department: engineering-data
@@ -1697,5 +1702,11 @@ items:
       - quality/reviews/2026-10-06-task77-bukatsu-trend.md
       - data/verification/rejudge/bukatsu-chiiki-stance-20261006.json
       - scripts/rejudge_bukatsu_stance.py
-    status: pending
+    status: approved
     requested_at: "2026-10-06"
+    decided_at: "2026-10-06"
+    decision_note: >-
+      ページの内容変更（賛否の数え直しによる全体の集計の変化、編集部の横断整理2本の書き直し、意見の推移の追加、世論の潮目の撤去）を
+      数字つきでオーナーに報告し、確認事項として承認を求めた。オーナーが本対話で「Aで承認、公開して」と回答し、公開を指示した（2026-10-06）。
+      この返答は、利用条件（approval-20261006-001）への承認と、公開の指示である。横断整理2本の書き直しはAIが行った分で、
+      報告で「公開前に確認をお願いします」と伝えたうえでの公開指示。
