@@ -440,3 +440,51 @@ class BukatsuBuildTest(unittest.TestCase):
         self.assertEqual(html.count("<!-- TREND_CARD_START -->"), 1)
         self.assertEqual(html.count("/* HERMES_CARD_START */"), 1)
         self.assertTrue(bukatsu_provenance.private_verified_selectors(html, ROOT))
+
+
+class BukatsuNextRoundTest(unittest.TestCase):
+    """次の収集（2026-10-08）が入ったとき、推移が1回ぶん伸びて、数字検査も通ること。"""
+
+    NEW_DAY = "2026-10-08"
+
+    def setUp(self) -> None:
+        self.temp = tempfile.TemporaryDirectory()
+        self.stage = Path(self.temp.name)
+        self.addCleanup(self.temp.cleanup)
+        rows = json.loads(BUKATSU_CANON.read_text(encoding="utf-8"))
+        latest = [r for r in rows if r["fetched_at"].startswith("2026-10-01")]
+        fresh = []
+        for index, source in enumerate(latest):
+            row = copy.deepcopy(source)
+            row["tweet_id"] = f"9{index:018d}"
+            row["fetched_at"] = f"{self.NEW_DAY}T03:00:00.000Z"
+            fresh.append(row)
+        self.candidate = self.stage / "cumulative-candidate.json"
+        self.candidate.write_text(json.dumps(rows + fresh, ensure_ascii=False), encoding="utf-8")
+        self.page = self.stage / "page.html"
+        bukatsu_adapter._build_once(ROOT, self.stage, self.NEW_DAY, BUKATSU_PAGE, self.page)
+        self.html = self.page.read_text(encoding="utf-8")
+
+    def test_both_tabs_get_one_more_round_and_the_date_moves(self) -> None:
+        stance = re.findall(r'id="bukatsu-chiiki-trend-panel-stance-row-([\d-]+)"', self.html)
+        issue = re.findall(r'id="bukatsu-chiiki-trend-panel-issue-row-([\d-]+)"', self.html)
+        self.assertEqual(stance, ["2026-09-15", "2026-09-22", "2026-10-01", self.NEW_DAY])
+        self.assertEqual(len(issue), 11)
+        self.assertEqual(issue[-1], self.NEW_DAY)
+        self.assertEqual(self.html.count('<span class="trend-h2-date">（2026年10月8日時点）</span>'), 2)
+        self.assertNotIn("（2026年10月1日時点）", self.html)
+        self.assertIn("前回（10月1日）から今回（10月8日）にかけて", self.html)
+
+    def test_extended_page_passes_the_recount(self) -> None:
+        result = bukatsu_provenance.private_verified_selectors(self.html, ROOT, sample_file=self.candidate)
+        self.assertIn(f"#bukatsu-chiiki-trend-panel-stance-row-{self.NEW_DAY}", result)
+        self.assertIn(f"#bukatsu-chiiki-trend-panel-issue-row-{self.NEW_DAY}", result)
+
+    def test_the_old_page_is_rejected_once_the_data_has_advanced(self) -> None:
+        with self.assertRaises(ValueError):
+            bukatsu_provenance.private_verified_selectors(BUKATSU_PAGE.read_text(encoding="utf-8"), ROOT, sample_file=self.candidate)
+
+    def test_a_second_run_changes_nothing(self) -> None:
+        again = self.stage / "again.html"
+        bukatsu_adapter._build_once(ROOT, self.stage, self.NEW_DAY, self.page, again)
+        self.assertEqual(again.read_text(encoding="utf-8"), self.html)
