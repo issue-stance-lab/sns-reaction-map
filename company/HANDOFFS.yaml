@@ -1,5 +1,5 @@
 version: 1
-updated_at: "2026-09-01"
+updated_at: "2026-10-07"
 
 # 進行中業務の単一の引き継ぎ台帳。詳細な数値は各正典にだけ記録する。
 required_fields:
@@ -17,9 +17,9 @@ items:
   - id: custom-domain-migration
     department: engineering-data
     status: in_progress
-    current_state: "正式URL https://sns-reaction-map.jp/ で本番公開済み。DNS・HTTPS・旧URLからの301転送・投票CORSを確認済み。2026-08-31にSearch Consoleへ新ドメインを追加し、DNS TXTレコードで所有確認、サイトマップ送信の成功（検出16ページ）を確認した。AdSenseのサイト追加・再審査はCEO指示により行わない。"
-    next_action: "4週間、週1回Search Consoleのインデックス状況を確認する。並行して新ドメインで実際の投票とGA4リアルタイム計測を目視確認する。旧ルートの案内ページ置き換え（別リポジトリ）は別途着手する。"
-    due_at: "2026-09-28"
+    current_state: "正式URL https://sns-reaction-map.jp/ で本番公開済み。DNS・HTTPS・旧URLからの301転送・投票CORSを確認済み。2026-08-31にSearch Consoleへ新ドメインを追加し、DNS TXTレコードで所有確認、サイトマップ送信の成功（検出16ページ）を確認した。AdSenseのサイト追加・再審査はCEO指示により行わない。2026-10-07の4週目確認で、サイトマップ16ページすべてがGoogleに登録済みと確認した（9/21は18件中5件。詳細は課題55）。"
+    next_action: "旧ルートの案内ページ置き換え（別リポジトリ、CEO決定A）。4週間のSearch Consoleインデックス確認は2026-10-07に完了し、期日のある作業は残っていない。"
+    due_at: null
     schedule:
       - date: "2026-09-07"
         title: "Search Consoleのインデックス確認（課題55・1回目）"
