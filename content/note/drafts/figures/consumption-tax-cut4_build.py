@@ -364,7 +364,7 @@ def show(s: dict) -> None:
     print(f"\n[現金給付への言及] 「支援金」という語を含む意見 {s['support_mentions']}件（うち大綱のあとの3回に{s['support_mentions_post']}件。残りは8/3の別の話題）、「給付付き」「税額控除」に触れる意見 {s['benefit_mentions']}件（意見{s['n_opinion']:,}件中）")
     print("\n[件数の動きは割合の言い直し（記事では件数を根拠に使わない）] 1回の収集で新しく見つかった意見の数（平均）前6回 → あと3回")
     for label, d in s["counts_by_group"].items():
-        print(f"  {label}: " + " / ".join(f"{st[:4]} {a:.0f}→{b:.0f}({(b / a - 1) * 100:+.0f}%)" for st, (a, b) in d.items()))
+        print(f"  {label}: " + " / ".join(f"{st[:4]} {a:.1f}→{b:.1f}({(b / a - 1) * 100:+.0f}%)" for st, (a, b) in d.items()))
     print("  生データ（取得した1ページ全体）の件数と、1検索語あたりの最大件数: " + "、".join(f"{d} {n}件・最大{m}" for d, n, m in s["raw_cap"]))
     nb, ka, na, kb, nb2 = s["both_users_share"]
     print(f"\n[決定の前後の両方に書いた{nb}人だけで見た賛成の割合] {pct(ka, na):.1f}%（{na}投稿）→ {pct(kb, nb2):.1f}%（{nb2}投稿）")
@@ -395,7 +395,7 @@ def figs(s: dict) -> None:
                "世論調査ではありません")
     small = [(i, s["topics"][i]) for i in SMALL]
     note1 = "賛成＝減税推進（条件付き賛成は含みません）。話題は、AIが付けた投稿の主な論点です"
-    note2 = "省略: " + "、".join(f"{i}（{pct(*t['pre']):.0f}%→{pct(*t['post']):.0f}%）" for i, t in small) + "は件数が少なく、ぶれが大きいため。どちらも下がる向きです"
+    note2 = "省略: " + "、".join(f"{i}（{pct(*t['pre']):.1f}→{pct(*t['post']):.1f}%）" for i, t in small) + "。件数が少なく、ぶれが大きいため"
 
     rows = [("全体", s["pre"][PRO], s["post"][PRO])] + [(lab, s["topics"][i]["pre"], s["topics"][i]["post"]) for lab, i in
                                                        (("公約と政治不信", "公約と政治不信"), ("減税の効果", "減税の効果"), ("財源と社会保障", "財源と社会保障"), ("対象範囲", "減税の対象範囲"))]
@@ -411,22 +411,22 @@ def figs(s: dict) -> None:
         ax.scatter([a_], [y], s=140, color=pale, edgecolor=teal, linewidth=1.8, zorder=3)
         ax.scatter([b_], [y], s=140, color=teal, edgecolor=teal, linewidth=1.8, zorder=3)
         lf = a_ < b_
-        ax.text(a_ + (-3.0 if lf else 3.0), y, f"{a_:.0f}%", ha="right" if lf else "left", va="center", fontproperties=reg, fontsize=fs(11), color="#555555", zorder=4)
-        ax.text(b_ + (3.0 if lf else -3.0), y, f"{b_:.0f}%", ha="left" if lf else "right", va="center", fontproperties=bold, fontsize=fs(11.5), color=teal, zorder=4)
+        ax.text(a_ + (-3.0 if lf else 3.0), y, f"{a_:.1f}%", ha="right" if lf else "left", va="center", fontproperties=reg, fontsize=fs(11), color="#555555", zorder=4)
+        ax.text(b_ + (3.0 if lf else -3.0), y, f"{b_:.1f}%", ha="left" if lf else "right", va="center", fontproperties=bold, fontsize=fs(11.5), color=teal, zorder=4)
         diff = b_ - a_
-        ax.text(110, y + 0.03, f"{diff:+.0f}ポイント".replace("-", "−"), ha="right", va="center", fontproperties=bold, fontsize=fs(11.5), color="#7a3b1a" if diff < -4 else "#444444")
+        ax.text(110, y + 0.03, f"{diff:+.1f}ポイント".replace("-", "−"), ha="right", va="center", fontproperties=bold, fontsize=fs(11.5), color="#7a3b1a" if diff < -4 else "#444444")
         ax.text(-4.0, y + 0.07, label, ha="right", va="center", fontproperties=bold if label in ("全体", "対象範囲") else reg, fontsize=fs(12.5))
-        ax.text(-4.0, y - 0.25, f"{na:,}→{nb:,}件", ha="right", va="center", fontproperties=reg, fontsize=fs(8.8), color="#666666")
+        ax.text(-4.0, y - 0.25, f"意見の数 前{na:,}／後{nb:,}", ha="right", va="center", fontproperties=reg, fontsize=fs(8.0), color="#666666")
     ax.set_xlim(0, 112)
     ax.set_ylim(-0.7, len(rows) - 0.3)
     ax.axis("off")
     fig.text(0.5, 0.955, "話題ごとに見た、「賛成」の割合の変化", ha="center", va="center", fontproperties=bold, fontsize=fs(17))
-    fig.text(0.5, 0.905, "各話題の意見の投稿に占める、減税推進の割合", ha="center", va="center", fontproperties=reg, fontsize=fs(10.5), color="#666666")
+    fig.text(0.5, 0.905, "各話題の意見の投稿に占める、減税推進の割合（差は端数を含めて計算）", ha="center", va="center", fontproperties=reg, fontsize=fs(10.5), color="#666666")
     fig.text(0.5, 0.862, "薄い点＝大綱の前（7/28〜9/1の6回）　濃い点＝大綱のあと（9/17〜10/3の3回）", ha="center", va="center", fontproperties=reg, fontsize=fs(9.6), color="#444444")
     fig.text(0.015, 0.118, note1, ha="left", va="bottom", fontproperties=reg, fontsize=fs(8.2), color="#666666")
     fig.text(0.015, 0.072, note2, ha="left", va="bottom", fontproperties=reg, fontsize=fs(8.2), color="#666666")
     fig.text(0.015, 0.022, caption, ha="left", va="bottom", fontproperties=reg, fontsize=fs(8.0), color="#666666")
-    fig.subplots_adjust(left=0.215, right=0.985, top=0.78, bottom=0.255)
+    fig.subplots_adjust(left=0.265, right=0.985, top=0.78, bottom=0.255)
     out = OUT_DIR / "consumption-tax-cut4_fig2-topic-support.png"
     fig.savefig(out)
     plt.close(fig)
