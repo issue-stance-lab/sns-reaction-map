@@ -11,6 +11,7 @@
   merge   … 結果を1つにまとめ、件数・エラー・モデル設定が途中で変わっていないことを確かめる
   report  … 旧と新の賛否を回ごとに比べた表を出す（本文は出さない）
   apply   … 正典の賛否（stance）だけを、新しい判定に書き換える。他の項目（関連・意見か・論点）は変えない
+  record  … 公開してよい記録（件数と指紋だけ。本文・投稿IDなし）を data/verification/rejudge/ に書く
 
 賛否だけを採る理由: 変わったのは賛否の基準だけで、論点や「意見か」の基準は変えていない。
 他の項目まで取り込むと、ページの意見の件数・論点の件数・投票・再読記録の対象が全部動く。
@@ -60,9 +61,13 @@ def is_opinion(row: dict) -> bool:
     return bool(classification.get("is_relevant")) and bool(classification.get("is_opinion"))
 
 
-def select_rows(rows: list[dict], cutoff: str) -> list[dict]:
-    """数え直す対象: 見直し前の回の、関連あり・意見ありの投稿。意見でない投稿の賛否は「中立・情報」で固定なので対象外。"""
-    chosen = [row for row in rows if is_opinion(row) and collected_day(row) < cutoff]
+def select_rows(rows: list[dict], cutoff: str, since: str | None = None) -> list[dict]:
+    """数え直す対象: cutoff より前の回（since があれば since 以降）の、関連あり・意見ありの投稿。
+
+    意見でない投稿の賛否は「中立・情報」で固定なので対象外。
+    """
+    chosen = [row for row in rows if is_opinion(row) and collected_day(row) < cutoff
+              and (since is None or collected_day(row) >= since)]
     return sorted(chosen, key=lambda row: (row["fetched_at"], str(row.get("tweet_id"))))
 
 
@@ -72,10 +77,10 @@ def model_settings() -> dict:
     return classifier_model()
 
 
-def prepare(directory: Path, cutoff: str, shards: int) -> dict:
+def prepare(directory: Path, cutoff: str, shards: int, since: str | None = None) -> dict:
     source = canonical_path()
     rows = json.loads(source.read_text(encoding="utf-8"))
-    chosen = select_rows(rows, cutoff)
+    chosen = select_rows(rows, cutoff, since)
     if not chosen:
         raise ValueError("数え直す投稿がありません")
     if len({str(row.get("tweet_id")) for row in chosen}) != len(chosen):
@@ -94,6 +99,7 @@ def prepare(directory: Path, cutoff: str, shards: int) -> dict:
     plan = {
         "created_at": dt.datetime.now(JST).isoformat(timespec="seconds"),
         "cutoff": cutoff,
+        "since": since,
         "rows": len(chosen),
         "per_round": dict(sorted(collections.Counter(collected_day(row) for row in chosen).items())),
         "canonical_sha256": sha256(source),
@@ -199,7 +205,8 @@ def apply(directory: Path) -> dict:
         key = str(row.get("tweet_id"))
         if key not in rejudged:
             continue
-        if not is_opinion(row) or collected_day(row) >= plan["cutoff"]:
+        if (not is_opinion(row) or collected_day(row) >= plan["cutoff"]
+                or (plan.get("since") and collected_day(row) < plan["since"])):
             raise ValueError(f"対象外の投稿が混ざっています: {key}")
         if row["classification"]["stance"] != rejudged[key]["stance"]:
             changes.append((row, rejudged[key]["stance"]))
@@ -210,15 +217,54 @@ def apply(directory: Path) -> dict:
     return {"rows": len(rejudged), "changed": len(changes)}
 
 
+PUBLIC_RECORD = ROOT / "data" / "verification" / "rejudge" / "bukatsu-chiiki-stance-20261006.json"
+
+
+def public_record(directories: list[Path]) -> dict:
+    """数え直しの公開記録。件数・回ごとの旧新の割合・指紋だけで、本文・URL・投稿IDは含めない。"""
+    runs = []
+    for directory in directories:
+        plan = json.loads((directory / "plan.json").read_text(encoding="utf-8"))
+        before = json.loads((directory / "canonical-before.json").read_text(encoding="utf-8"))
+        rejudged = json.loads((directory / "rejudged.json").read_text(encoding="utf-8"))
+        result = compare(before, rejudged)
+        runs.append({
+            "name": directory.name,
+            "created_at": plan["created_at"],
+            "since": plan.get("since"),
+            "cutoff": plan["cutoff"],
+            "rows": plan["rows"],
+            "same_stance": result["same"],
+            "labels": result["labels"],
+            "per_round": result["per_round"],
+            "changes": result["changes"],
+            "model": plan["model"],
+            "classifier": plan["classifier"],
+            "canonical_sha256_before": sha256(directory / "canonical-before.json"),
+            "inputs_sha256": [item["sha256"] for item in plan["inputs"]],
+        })
+    return {
+        "schema_version": 1,
+        "topic": "bukatsu-chiiki",
+        "purpose": "2026-09-12の賛否の判定基準の見直しより前の回の賛否を、現在の指示文・モデルで判定し直した記録。"
+                   "正典で書き換えたのは賛否（stance）だけ。関連・意見か・論点は変えていない。",
+        "runs": runs,
+        "canonical_sha256_after": sha256(canonical_path()),
+    }
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("command", choices=["prepare", "run", "merge", "report", "apply"])
-    parser.add_argument("--dir", type=Path, default=DEFAULT_DIR)
+    parser.add_argument("command", choices=["prepare", "run", "merge", "report", "apply", "record"])
+    parser.add_argument("--dir", type=Path, action="append", help="作業用フォルダ（record では複数指定できる）")
     parser.add_argument("--cutoff", default=DEFAULT_CUTOFF)
+    parser.add_argument("--since", help="この日以降の回だけを対象にする（2回目の追加判定用）")
     parser.add_argument("--shards", type=int, default=4)
     args = parser.parse_args()
+    dirs = args.dir or [DEFAULT_DIR]
+    args.dir = dirs[0]
     if args.command == "prepare":
-        plan = prepare(args.dir, args.cutoff, args.shards)
+        plan = prepare(args.dir, args.cutoff, args.shards, args.since)
         print(json.dumps({key: plan[key] for key in ("rows", "per_round", "model", "inputs")}, ensure_ascii=False, indent=2))
     elif args.command == "run":
         run(args.dir)
@@ -230,6 +276,10 @@ def main() -> int:
         rows = json.loads(canonical_path().read_text(encoding="utf-8"))
         merged = json.loads((args.dir / "rejudged.json").read_text(encoding="utf-8"))
         print(json.dumps(compare(rows, merged), ensure_ascii=False, indent=2))
+    elif args.command == "record":
+        PUBLIC_RECORD.parent.mkdir(parents=True, exist_ok=True)
+        PUBLIC_RECORD.write_text(json.dumps(public_record(dirs), ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+        print(f"書きました: {PUBLIC_RECORD}")
     else:
         print(json.dumps(apply(args.dir), ensure_ascii=False))
     return 0

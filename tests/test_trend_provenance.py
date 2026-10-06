@@ -340,8 +340,9 @@ class BukatsuTrendProvenanceTest(unittest.TestCase):
         result = self.check(self.source)
         stance_rows = [key for key in result if "-panel-stance-row-" in key]
         issue_rows = [key for key in result if "-panel-issue-row-" in key]
-        # 立場は賛否の判定基準を見直した2026-09-15以降、論点は検索語を増やした2026-07-23以降の回だけ。
-        self.assertTrue(stance_rows and all(key.rsplit("-row-", 1)[1] >= "2026-09-15" for key in stance_rows))
+        # 立場は全回（見直し前の回も判定し直しずみ）、論点は検索語を増やした2026-07-23以降の回だけ。
+        self.assertEqual(len(stance_rows), 12)
+        self.assertEqual(min(key.rsplit("-row-", 1)[1] for key in stance_rows), "2026-06-27")
         self.assertTrue(issue_rows and all(key.rsplit("-row-", 1)[1] >= "2026-07-23" for key in issue_rows))
         self.assertIn("#bukatsu-chiiki-trend-panel-stance-n-range", result)
         self.assertIn("#bukatsu-chiiki-trend-panel-issue-n-range", result)
@@ -378,21 +379,21 @@ class BukatsuTrendProvenanceTest(unittest.TestCase):
         self.assertIn("潮目カードが戻っています", str(caught.exception))
 
     def test_a_page_that_lines_up_the_earlier_rounds_is_rejected(self) -> None:
-        """並べ始める日を外して作ったページ（古い回まで並ぶ）は、設定どおりの数え直しと食い違うので止まる。"""
+        """論点の並べ始める日を外して作ったページ（古い回まで並ぶ）は、設定どおりの数え直しと食い違うので止まる。"""
         saved = trend.TREND_THEMES["bukatsu-chiiki"]["series_from"]
         trend.TREND_THEMES["bukatsu-chiiki"]["series_from"] = {}
         try:
             wide = trend.render_for("bukatsu-chiiki", self.source, BUKATSU_CANON)
         finally:
             trend.TREND_THEMES["bukatsu-chiiki"]["series_from"] = saved
-        self.assertIn("-row-2026-06-27", wide)
+        self.assertIn('id="bukatsu-chiiki-trend-panel-issue-row-2026-06-27"', wide)
         with self.assertRaises(ValueError):
             self.check(wide)
 
     def test_rounds_before_the_start_are_not_in_the_recount(self) -> None:
         stance = shared._trend_rounds("bukatsu-chiiki", ROOT, "stance", shared._labels("bukatsu-chiiki")["stance"], "stance")
         issue = shared._trend_rounds("bukatsu-chiiki", ROOT, "main_issue", shared._labels("bukatsu-chiiki")["issue"], "issue")
-        self.assertEqual(min(stance), "2026-09-15")
+        self.assertEqual(min(stance), "2026-06-27")  # 立場は全回
         self.assertEqual(min(issue), "2026-07-23")
 
 
@@ -468,7 +469,9 @@ class BukatsuNextRoundTest(unittest.TestCase):
     def test_both_tabs_get_one_more_round_and_the_date_moves(self) -> None:
         stance = re.findall(r'id="bukatsu-chiiki-trend-panel-stance-row-([\d-]+)"', self.html)
         issue = re.findall(r'id="bukatsu-chiiki-trend-panel-issue-row-([\d-]+)"', self.html)
-        self.assertEqual(stance, ["2026-09-15", "2026-09-22", "2026-10-01", self.NEW_DAY])
+        self.assertEqual(len(stance), 13)  # 全12回 + 新しい回
+        self.assertEqual(stance[0], "2026-06-27")
+        self.assertEqual(stance[-1], self.NEW_DAY)
         self.assertEqual(len(issue), 11)
         self.assertEqual(issue[-1], self.NEW_DAY)
         self.assertEqual(self.html.count('<span class="trend-h2-date">（2026年10月8日時点）</span>'), 2)

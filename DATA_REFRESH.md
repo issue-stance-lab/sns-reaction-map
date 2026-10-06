@@ -603,12 +603,18 @@ collect_at を迎えたテーマにデータを追加した後、以下を順番
   `adapter.build` が累積候補から貼り直す（枠は `update_bukatsu_tide.py` が `<!-- TREND_CARD_START -->` を目印に残す）。
   数字検査は `scripts/trend_count_provenance.py`（消費税減税と共通）が、表の各行・埋め込みデータ・前回比の1行を正典から数え直して照合する。違いは次の3つ。
   - **並べ始める日**（`TREND_THEMES["bukatsu-chiiki"]["series_from"]`）。集計のしかたが変わる前の回は並べない。
-    立場は **2026-09-15**（2026-09-12に賛否の判定基準を見直し、見直し前の回は数え直していない。「中立・情報」が約3%から約3割へ跳ねるが世論の変化ではない）。
-    論点は **2026-07-23**（この回から収集の検索語を7本から10本に増やした）。理由は、グラフの注意書きにも出る（`series_notes`）。
-    古い回まで並べたいときは、該当の回を新しい基準で分類し直す（データの更新作業）うえで `series_from` を外す。外すと数字検査が設定と食い違って止めるので、両方そろえて直す
+    論点は **2026-07-23**（この回から収集の検索語を7本から10本に増やした。検索語の違いは数え直せない）。理由は、グラフの注意書きにも出る（`series_notes`）。
+    立場は並べ始める日が無く、全回を並べる。2026-09-12に賛否の判定基準を見直した（コミット`e81f86b5`）が、見直し前の回の賛否は
+    **2026-10-06に新しい基準で判定し直した**（`scripts/rejudge_bukatsu_stance.py`。判定し直す前は「中立・情報」が約3%から約3割へ跳ねる見かけの動きが出ていた）。
+    **判定し直したのは賛否（stance）だけ**で、関連・意見か・論点は変えていない。記録は `data/verification/rejudge/bukatsu-chiiki-stance-20261006.json`（件数と指紋だけ）
+  - **分類の指示文（`classify_bukatsu_arena_hermes.py` の `prompt_for`）の判定基準を変えたら、既存の回も同じ指示文で判定し直す。**
+    判定し直さないと、正典の中で回ごとに物差しが違い、推移のグラフに存在しない動きが出る。手順は `rejudge_bukatsu_stance.py` の冒頭（prepare → run → merge → report → apply → record）。
+    1,000件規模で約1時間（4並列）。分類中は共有設定（`~/.hermes/config.yaml` のモデル）を変えない。賛否が動くと、ページ全体の立場の集計・
+    編集部の横断整理（`data/verification/bukatsu-chiiki-editorial.json`。数字が動いて成り立たなくなった文は書き直す）・保存回台帳（`build_adoption_registry.py`）も作り直す
   - **分類に使うAIが変わったら止まる**（`trend_support.check_model_break`）。`adapter.build` が前回と今回の `report.json`（`provenance.model.name`）を比べ、
-    変わっていて `TREND_THEMES["bukatsu-chiiki"]["model_breaks"]` に今回の収集日が無いと止まる。日付を足すと、グラフの注意書きに
-    「この回からAIを切り替えました。それ以前の回との差には、AIの違いも含まれます」が出る（2026-10-01の回は記録ずみ）
+    変わっていて `TREND_THEMES["bukatsu-chiiki"]["model_breaks"]` の**立場・論点の両方**に今回の収集日が無いと止まる。日付を足すと、グラフの注意書きに
+    「この回からAIを切り替えました。それ以前の回との差には、AIの違いも含まれます」が出る。2026-10-01の切替は、論点だけに記録してある
+    （立場は、それより前の回を同じAIで判定し直したため、切替の影響を受けない）
   - 論点の「その他」は割合から外す。立場・論点の並びは `scripts/bukatsu_taxonomy.py`（`inject_tide_widget.THEMES` には無いテーマ）。
     ラベルを変えるときは `TREND_THEMES.short_labels` も合わせて直す
 

@@ -39,12 +39,14 @@ def check_model_break(root: Path, topic: str, current_date: str, previous_model:
     if not previous_model or not current_model or previous_model == current_model:
         return
     trend = _import_trend(root)
-    if current_date not in trend.TREND_THEMES[topic].get("model_breaks", []):
+    breaks = trend.TREND_THEMES[topic].get("model_breaks", {})
+    missing = [kind for kind in ("stance", "issue") if current_date not in breaks.get(kind, [])]
+    if missing:
         raise ValueError(
             f"分類に使うAIが変わりました（{previous_model} → {current_model}）。推移のグラフの注意書きに、"
             f"この回（{current_date}）からAIを切り替えたことを出す必要があります。"
-            f"scripts/build_trend_section.py の TREND_THEMES[\"{topic}\"][\"model_breaks\"] に \"{current_date}\" を足して、"
-            "もう一度実行してください。"
+            f"scripts/build_trend_section.py の TREND_THEMES[\"{topic}\"][\"model_breaks\"] の"
+            f"{'・'.join(missing)}に \"{current_date}\" を足して、もう一度実行してください。"
         )
 
 

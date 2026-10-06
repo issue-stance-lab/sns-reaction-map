@@ -1120,6 +1120,29 @@ STANCE_GLANCE_CSS = """<style>
 </style>"""
 
 
+def check_stance_claims(stances: list[dict], opinions: int) -> None:
+    """見出し・本文が言い切っている3つの主張が、いまの数字で成り立つか確かめる。成り立たなければ止める。
+
+    見出し「支持は最多でも過半数ではない」と本文「全体の4割には届きません」「慎重・反対と条件付きを
+    合わせると、支持の件数を上回ります」は固定の文で、数字だけが差し替わる。数字が動いて主張が
+    崩れても、文は黙って残ってしまう（2026-10-06に賛否を数え直したときに気づいた）。
+    """
+    counts = {str(s["key"]): int(s["count"]) for s in stances}
+    support = counts.get("移行支持", 0)
+    caution = counts.get("慎重・反対", 0) + counts.get("条件付き・改善要求", 0)
+    claims = {
+        "移行支持が最も多い": support == max(counts.values()),
+        "移行支持は全体の4割に届かない": opinions > 0 and support / opinions < 0.4,
+        "慎重・反対と条件付きの合計が、支持を上回る": caution > support,
+    }
+    failed = [claim for claim, holds in claims.items() if not holds]
+    if failed:
+        raise IssueCountError(
+            "立場の内訳セクションの見出し・本文の主張が、いまの数字と合いません: " + "、".join(failed)
+            + "。scripts/build_bukatsu_arena.py の stance_glance の文を、数字に合わせて書き直してください"
+        )
+
+
 def stance_glance(stances: list[dict], opinions: int) -> str:
     """ヒーロー直後、立場の内訳＋「まず、あなたは？」を組み立てる。
 
@@ -1128,6 +1151,7 @@ def stance_glance(stances: list[dict], opinions: int) -> str:
     ここで新たに集計しない。投票データへの書き込みは行わない。
     """
     support_count = next((int(s["count"]) for s in stances if s["key"] == "移行支持"), 0)
+    check_stance_claims(stances, opinions)
     segs, legend, buttons, js_rows = [], [], [], []
     for i, s in enumerate(stances):
         meta = STANCE_GLANCE_META[s["key"]]

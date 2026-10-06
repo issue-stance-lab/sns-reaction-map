@@ -4,8 +4,9 @@
 実データでの照合は tests/test_trend_provenance.py（非公開正典を読むので公開CIでは回さない）にある。
 
 見たいことは3つ。
-- 集計のしかたが変わる前の回を、並べない（立場は賛否の判定基準を見直した2026-09-15から、論点は検索語を増やした2026-07-23から）。
-- 分類に使うAIを切り替えた回は、注意書きに出る（記録が無いまま公開しない）。
+- 論点は、検索語を増やした2026-07-23より前の回を並べない。立場は全回を並べる（賛否の判定基準を見直した
+  2026-09-12より前の回は、2026-10-06に新しい基準で判定し直したため）。
+- 分類に使うAIを切り替えた回は、その軸の注意書きに出る（記録が無いまま公開しない）。
 - 理由タブ・年表の縦線は、このテーマには出ない。
 """
 
@@ -15,6 +16,7 @@ import sys
 import tempfile
 import unittest
 from pathlib import Path
+from unittest import mock
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
@@ -77,8 +79,9 @@ class BaseDefinitionTest(unittest.TestCase):
 
 
 class SeriesStartTest(unittest.TestCase):
-    def test_each_axis_starts_at_its_own_date(self) -> None:
-        self.assertEqual(trend.series_start(SLUG, "stance"), "2026-09-15")
+    def test_only_the_issue_axis_has_a_start_date(self) -> None:
+        # 立場は、見直し前の回を新しい基準で判定し直したので、全回を並べる。論点は検索語の違いが数え直せない。
+        self.assertIsNone(trend.series_start(SLUG, "stance"))
         self.assertEqual(trend.series_start(SLUG, "issue"), "2026-07-23")
 
     def test_rounds_before_the_start_are_not_lined_up(self) -> None:
@@ -86,21 +89,21 @@ class SeriesStartTest(unittest.TestCase):
             path = write(rounds(DAYS), Path(tmp))
             stance = [item["date"] for item in trend.rounds_for(SLUG, path, "stance")]
             issue = [item["date"] for item in trend.rounds_for(SLUG, path, "issue")]
-        self.assertEqual(stance, ["2026-09-15", "2026-09-22", "2026-10-01"])
+        self.assertEqual(stance, DAYS)
         self.assertEqual(issue, ["2026-07-23", "2026-09-02", "2026-09-15", "2026-09-22", "2026-10-01"])
 
     def test_the_start_date_itself_is_included(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
-            path = write(rounds(["2026-09-14", "2026-09-15", "2026-09-22"]), Path(tmp))
+            path = write(rounds(["2026-07-22", "2026-07-23", "2026-09-02"]), Path(tmp))
             self.assertEqual(
-                [item["date"] for item in trend.rounds_for(SLUG, path, "stance")],
-                ["2026-09-15", "2026-09-22"],
+                [item["date"] for item in trend.rounds_for(SLUG, path, "issue")],
+                ["2026-07-23", "2026-09-02"],
             )
 
     def test_load_rounds_without_since_keeps_every_round(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             path = write(rounds(DAYS), Path(tmp))
-            self.assertEqual(len(trend.load_rounds(path, BASE, "stance")), len(DAYS))
+            self.assertEqual(len(trend.load_rounds(path, BASE, "issue")), len(DAYS))
 
     def test_other_theme_has_no_start_and_keeps_every_round(self) -> None:
         self.assertIsNone(trend.series_start("consumption-tax-cut", "stance"))
@@ -109,20 +112,23 @@ class SeriesStartTest(unittest.TestCase):
 class ModelBreakNotesTest(unittest.TestCase):
     series = [{"date": "2026-09-22"}, {"date": "2026-10-01"}]
 
-    def test_break_inside_the_series_is_noted(self) -> None:
-        notes = trend.model_break_notes(SLUG, self.series)
+    def test_issue_break_inside_the_series_is_noted(self) -> None:
+        notes = trend.model_break_notes(SLUG, self.series, "issue")
         self.assertEqual(len(notes), 1)
         self.assertIn("2026年10月1日の回から、分類に使うAIを切り替えました", notes[0])
 
+    def test_stance_has_no_break_because_every_round_was_rejudged_with_the_same_ai(self) -> None:
+        self.assertEqual(trend.model_break_notes(SLUG, self.series, "stance"), [])
+
     def test_break_on_the_first_round_is_not_noted(self) -> None:
         # 最初の回より前との比較は無いので、注意書きは要らない
-        self.assertEqual(trend.model_break_notes(SLUG, [{"date": "2026-10-01"}, {"date": "2026-10-08"}]), [])
+        self.assertEqual(trend.model_break_notes(SLUG, [{"date": "2026-10-01"}, {"date": "2026-10-08"}], "issue"), [])
 
     def test_break_after_the_latest_round_is_not_noted(self) -> None:
-        self.assertEqual(trend.model_break_notes(SLUG, [{"date": "2026-09-15"}, {"date": "2026-09-22"}]), [])
+        self.assertEqual(trend.model_break_notes(SLUG, [{"date": "2026-09-15"}, {"date": "2026-09-22"}], "issue"), [])
 
     def test_theme_without_breaks_gets_no_note(self) -> None:
-        self.assertEqual(trend.model_break_notes("consumption-tax-cut", self.series), [])
+        self.assertEqual(trend.model_break_notes("consumption-tax-cut", self.series, "issue"), [])
 
 
 class RenderTest(unittest.TestCase):
@@ -137,23 +143,26 @@ class RenderTest(unittest.TestCase):
         self.assertNotIn("反対・慎重の理由", html)
         self.assertEqual(html.count('data-trend-panel="'), 2)
 
-    def test_tables_list_only_the_rounds_after_each_start(self) -> None:
+    def test_issue_table_lists_only_the_rounds_after_its_start(self) -> None:
         html = self.render(rounds(DAYS))
         stance = re.findall(r'id="bukatsu-chiiki-trend-panel-stance-row-([\d-]+)"', html)
         issue = re.findall(r'id="bukatsu-chiiki-trend-panel-issue-row-([\d-]+)"', html)
-        self.assertEqual(stance, ["2026-09-15", "2026-09-22", "2026-10-01"])
+        self.assertEqual(stance, DAYS)
         self.assertEqual(issue, ["2026-07-23", "2026-09-02", "2026-09-15", "2026-09-22", "2026-10-01"])
 
-    def test_notes_explain_why_earlier_rounds_are_left_out(self) -> None:
+    def test_notes_explain_the_rejudgment_and_why_earlier_issue_rounds_are_left_out(self) -> None:
         html = self.render(rounds(DAYS))
         stance_panel = html.split('id="bukatsu-chiiki-trend-panel-issue"')[0]
         issue_panel = html.split('id="bukatsu-chiiki-trend-panel-issue"')[1]
         self.assertIn("賛否を判定する基準を見直しました", stance_panel)
-        self.assertIn("最初の回（2026年9月15日）から並べています", stance_panel)
+        self.assertIn("2026年10月6日に新しい基準で判定し直しました", stance_panel)
+        self.assertIn("すべての回を同じ基準・同じAIで判定しています", stance_panel)
+        self.assertNotIn("から並べています", stance_panel)  # 立場は全回を並べるので、並べ始める日の説明は出ない
+        self.assertNotIn("分類に使うAIを切り替えました", stance_panel)
         self.assertIn("収集に使う検索語を増やしました", issue_panel)
+        self.assertIn("この図は2026年7月23日の回から並べています", issue_panel)
+        self.assertIn("2026年10月1日の回から、分類に使うAIを切り替えました", issue_panel)
         self.assertNotIn("賛否を判定する基準", issue_panel)
-        for panel in (stance_panel, issue_panel):
-            self.assertIn("2026年10月1日の回から、分類に使うAIを切り替えました", panel)
 
     def test_headings_and_theme_name(self) -> None:
         html = self.render(rounds(DAYS))
@@ -175,22 +184,36 @@ class RenderTest(unittest.TestCase):
             self.assertEqual(trend.render_for(SLUG, first, path), first)
 
     def test_needs_two_rounds_on_each_axis(self) -> None:
-        # 立場は2026-09-15以降が1回しか無い → 並べられないので止める（黙って別の期間を出さない）
+        # 論点は2026-07-23以降が1回しか無い → 並べられないので止める（黙って別の期間を出さない）
         with tempfile.TemporaryDirectory() as tmp:
-            path = write(rounds(["2026-07-23", "2026-09-02", "2026-10-01"]), Path(tmp))
+            path = write(rounds(["2026-06-27", "2026-07-12", "2026-07-23"]), Path(tmp))
             with self.assertRaises(ValueError):
                 trend.render_for(SLUG, FRAME, path)
 
 
 class ModelBreakGuardTest(unittest.TestCase):
+    """AIが変わった回は、両方の軸の注意書きに記録が要る（賛否も論点も、新しい回は新しいAIで判定されるため）。"""
+
+    def with_breaks(self, breaks: dict):
+        return mock.patch.dict(trend.TREND_THEMES[SLUG], {"model_breaks": breaks})
+
     def test_changed_model_without_a_record_stops(self) -> None:
         with self.assertRaises(ValueError) as caught:
             trend_support.check_model_break(ROOT, SLUG, "2026-10-08", "kimi-k2.7-code", "next-model")
         self.assertIn("model_breaks", str(caught.exception))
         self.assertIn("2026-10-08", str(caught.exception))
+        self.assertIn("stance・issue", str(caught.exception))
 
-    def test_changed_model_with_a_record_passes(self) -> None:
-        trend_support.check_model_break(ROOT, SLUG, "2026-10-01", "kimi-k2.6", "kimi-k2.7-code")
+    def test_a_record_for_only_one_axis_still_stops(self) -> None:
+        with self.with_breaks({"stance": [], "issue": ["2026-10-08"]}):
+            with self.assertRaises(ValueError) as caught:
+                trend_support.check_model_break(ROOT, SLUG, "2026-10-08", "a", "b")
+        self.assertIn("stance", str(caught.exception))
+        self.assertNotIn("stance・issue", str(caught.exception))
+
+    def test_changed_model_with_both_records_passes(self) -> None:
+        with self.with_breaks({"stance": ["2026-10-08"], "issue": ["2026-10-08"]}):
+            trend_support.check_model_break(ROOT, SLUG, "2026-10-08", "a", "b")
 
     def test_same_model_passes(self) -> None:
         trend_support.check_model_break(ROOT, SLUG, "2026-10-08", "kimi-k2.7-code", "kimi-k2.7-code")

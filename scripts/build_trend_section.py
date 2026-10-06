@@ -110,24 +110,27 @@ TREND_THEMES = {
         # 収集期間（2026年6月〜）に入るものが無いので出さない。
         "share_images": True,
         # 集計のしかたが変わる前の回は、同じ尺度で数えていないので並べない（軸ごとの、並べ始める収集日）。
-        #  立場: 2026-09-12に、AIが賛否を判定する基準を見直した（コミット e81f86b5）。見直し前の回は数え直していない。
-        #        見直し後の最初の収集は2026-09-15。ここを境に「中立・情報」が約3%から約3割へ跳ねるが、世論の変化ではない。
-        #  論点: 2026-07-23の回から、収集に使う検索語を7本から10本に増やした（それ以前の2回は7本）。
-        "series_from": {"stance": "2026-09-15", "issue": "2026-07-23"},
+        #  論点: 2026-07-23の回から、収集に使う検索語を7本から10本に増やした（それ以前の2回は7本）。検索語の違いは数え直せない。
+        #  立場: 並べ始める日は無い。2026-09-12に賛否の判定基準を見直したが（コミット e81f86b5）、見直し前の回の賛否は
+        #        2026-10-06に新しい基準で判定し直した（scripts/rejudge_bukatsu_stance.py。判定し直す前は、
+        #        「中立・情報」が約3%から約3割へ跳ねる見かけの動きが出ていた）。
+        "series_from": {"issue": "2026-07-23"},
         # 上の事情を、グラフの注意書きに出す（日付つきの固定の文なので、更新で嘘にならない）。
         "series_notes": {
             "stance": [
-                "2026年9月12日に、AIが賛否を判定する基準を見直しました。見直し前の回は同じ基準で数え直していないため、"
-                "この図は、基準を変えたあとの最初の回（2026年9月15日）から並べています。",
+                "2026年9月12日に、AIが賛否を判定する基準を見直しました。見直し前の回（2026年9月2日まで）は、"
+                "2026年10月6日に新しい基準で判定し直しました。賛否は、すべての回を同じ基準・同じAIで判定しています。",
             ],
             "issue": [
                 "2026年7月23日の回から、収集に使う検索語を増やしました。それ以前の回は検索語が少なく、拾う投稿の偏りが違うため、"
                 "この図は2026年7月23日の回から並べています。",
             ],
         },
-        # 分類に使うAIを切り替えた最初の収集日。回の間の差にAIの違いが混じるので、注意書きに出す。
-        # 新しい回でAIが変わると、adapter が止まる（ここに日付を足してから進める）。
-        "model_breaks": ["2026-10-01"],
+        # 分類に使うAIを切り替えた最初の収集日（軸ごと）。回の間の差にAIの違いが混じるので、注意書きに出す。
+        # 新しい回でAIが変わると、adapter が止まる（両方の軸に日付を足してから進める）。
+        #  立場は、2026-10-01より前の回も同じAIで判定し直したので、この切替の影響を受けない。
+        #  論点は、判定し直していないので、2026-10-01の切替の影響が残る。
+        "model_breaks": {"stance": [], "issue": ["2026-10-01"]},
         "short_labels": {
             "stance": ["移行\n支持", "条件付き・\n改善要求", "慎重・\n反対", "中立・\n情報"],
             "issue": ["費用・\n家庭負担", "受け皿・\n指導者", "教員の\n働き方", "教育的\n意義・機会", "地域\n格差", "制度・\n移行"],
@@ -480,12 +483,12 @@ def previous_sentence(series: list[dict], labels: list[str], kind: str = "stance
     )
 
 
-def model_break_notes(slug: str, series: list[dict]) -> list[str]:
-    """分類に使うAIを切り替えた回が、グラフの中（最初の回より後）にあれば、その注意書き。"""
+def model_break_notes(slug: str, series: list[dict], kind: str) -> list[str]:
+    """分類に使うAIを切り替えた回が、その軸のグラフの中（最初の回より後）にあれば、その注意書き。"""
     first, last = series[0]["date"], series[-1]["date"]
     return [
         f"{jp_date(day, year=True)}の回から、分類に使うAIを切り替えました。それ以前の回との差には、AIの違いも含まれます。"
-        for day in TREND_THEMES[slug].get("model_breaks", [])
+        for day in TREND_THEMES[slug].get("model_breaks", {}).get(kind, [])
         if first < day <= last
     ]
 
@@ -1332,7 +1335,7 @@ def _panel(slug: str, kind: str, series: list[dict], *, hidden: bool, events: li
         f"<li>{html.escape(text).replace(span, wrapped)}</li>"
         for text in note_lines(
             series, labels, theme["name"], kind,
-            theme.get("series_notes", {}).get(kind, []) + model_break_notes(slug, series),
+            theme.get("series_notes", {}).get(kind, []) + model_break_notes(slug, series, kind),
         )
     )
     hidden_attr = " hidden" if hidden else ""
