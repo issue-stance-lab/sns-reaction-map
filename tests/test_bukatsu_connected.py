@@ -40,7 +40,7 @@ class BukatsuConnectedTests(unittest.TestCase):
         self.assertEqual(self.page.count(connected.BRIDGE_END), 1)
         self.assertEqual(self.page.count('bukatsu-connected.css?v=4'), 1)
         self.assertEqual(self.page.count('bukatsu-connected.js?v=2'), 1)
-        self.assertEqual(self.page.count('bukatsu-connected-page.js?v=1'), 1)
+        self.assertEqual(self.page.count('bukatsu-connected-page.js?v=2'), 1)
         self.assertEqual(connected.validate(self.page), [])
 
     def test_reapplying_to_an_already_enabled_page_replaces_the_block_in_place(self):
@@ -253,16 +253,10 @@ class BukatsuConnectedTests(unittest.TestCase):
         self.assertNotIn("AIが自動分類しました", source)
 
     def test_metrics_placeholders_exist_for_runtime_fill_including_the_zero_state(self):
-        # 件数・割合は実行時にJS（fillMetrics）が埋める。0件（立場を絞ると0になる論点が
-        # 実データに存在する。例: kakusaは「移行支持」で0件）でも不正な割合を出さないための
+        # 件数・割合は実行時にJS（fillMetrics）が埋める。立場を絞ると0件になる論点がある場合（2026-10-06に賛否を
+        # 数え直すまでは、kakusaの「移行支持」が0件だった）でも不正な割合を出さないための
         # data-bkt-zero placeholderが、静的な読書面テンプレート側に用意されていることを確認する。
-        data = connected.planet_data(self.page)
-        has_zero_case = any(
-            s["counts"].get(i["id"]) == 0
-            for s in data["modes"] if s["id"] != "all"
-            for i in data["issues"]
-        )
-        self.assertTrue(has_zero_case, "この検査は0件になる組合せが実データに存在する前提です")
+        # 0件の組合せが実データにあるかどうかは、数え直しで変わるので前提にしない（placeholderは常に要る）。
         soup = BeautifulSoup(self.page, "html.parser")
         tpl = soup.select_one("#bukatsu-reading-bukatsu-chiiki-kakusa")
         reading = BeautifulSoup(tpl.decode_contents(), "html.parser")

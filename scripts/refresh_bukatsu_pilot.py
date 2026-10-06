@@ -340,14 +340,10 @@ def main() -> int:
     write_verification_file(
         stage / "classified-wave.json", stage / "classified-wave-verification.json"
     )
-    previous_date, previous = previous_wave(current, args.date)
-    write_json(stage / "previous-wave.json", previous)
     run([
         sys.executable, str(ROOT / "scripts" / "update_bukatsu_tide.py"),
         "--classified", str(stage / "cumulative-candidate.json"),
-        "--previous-batch", str(stage / "previous-wave.json"),
-        "--current-batch", str(stage / "classified-wave.json"),
-        "--previous-date", previous_date, "--current-date", args.date,
+        "--current-date", args.date,
         "--html", str(PAGE), "--output-html", str(stage / "page-candidate.html"),
     ], label="build page candidate")
     page = sync_candidate_issue_counts((stage / "page-candidate.html").read_text(encoding="utf-8"), candidate)

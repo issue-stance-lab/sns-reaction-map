@@ -1,9 +1,9 @@
 {
  "theme_id": "bukatsu-chiiki",
- "curated_at": "2026-09-04",
- "curated_by": "editorial_review",
+ "curated_at": "2026-10-06",
+ "curated_by": "ai_assisted",
  "method": "収集済みの意見を論点ごと・立場ごとに読み、論点をまたいで言えることだけを書いた。数字は本文に書かず、差し込み（{issue:<論点id>.count} など）で正典から入れる。設計書4章の5「共通する前提／本当の対立／まだ分からないこと」に対応する。",
- "note": "本文に数字を直接書くと、データが増えたときに直し忘れる。設計書の例文は「地域格差は9件」と書かれていたが、実データは12件になっていた。差し込みだけを書くこと。使える差し込みは {issue:<id>.label|count|share|top_stance|top_share}、{issue:<id>.stance:<立場id>.count|share}、{totals.opinions}。",
+ "note": "本文に数字を直接書くと、データが増えたときに直し忘れる。設計書の例文は「地域格差は9件」と書かれていたが、実データは12件になっていた。差し込みだけを書くこと。使える差し込みは {issue:<id>.label|count|share|top_stance|top_share}、{issue:<id>.stance:<立場id>.count|share}、{totals.opinions}。 2026-10-06に、賛否を新しい判定基準で数え直したため、数字が動いて成り立たなくなった2本（ed-2・ed-3）を、数字（差し込み）から言える範囲に書き直した。書き直しはAIが行い、投稿の本文は読み直していない。ed-1・ed-4・ed-5は2026-09-04の編集確認のまま。",
  "findings": [
   {
    "id": "bukatsu-chiiki-ed-1",
@@ -13,12 +13,12 @@
   {
    "id": "bukatsu-chiiki-ed-2",
    "kind": "real_conflict",
-   "text": "論点が変わると賛否が入れ替わる。「{issue:bukatsu-chiiki-kyoin.label}」では{issue:bukatsu-chiiki-kyoin.top_stance}が最も多い（{issue:bukatsu-chiiki-kyoin.top_share}）のに対し、「{issue:bukatsu-chiiki-kyoiku.label}」では{issue:bukatsu-chiiki-kyoiku.top_stance}が最も多い（{issue:bukatsu-chiiki-kyoiku.top_share}）。同じ人が立場を変えているのか、別々の人が別々の論点で発言しているのかは、この収集からは分からない。"
+   "text": "論点が変わると、立場の割合が大きく変わる。「{issue:bukatsu-chiiki-kyoin.label}」では慎重・反対が{issue:bukatsu-chiiki-kyoin.stance:bukatsu-chiiki-cautious.share}にとどまるのに対し、「{issue:bukatsu-chiiki-kyoiku.label}」では{issue:bukatsu-chiiki-kyoiku.stance:bukatsu-chiiki-cautious.share}を占める。同じ人が立場を変えているのか、別々の人が別々の論点で発言しているのかは、この収集からは分からない。"
   },
   {
    "id": "bukatsu-chiiki-ed-3",
    "kind": "real_conflict",
-   "text": "お金の話になると、賛成側も条件を付ける。「{issue:bukatsu-chiiki-hiyo.label}」で無条件の移行支持は{issue:bukatsu-chiiki-hiyo.stance:bukatsu-chiiki-transition-support.count}にとどまり、慎重・反対（{issue:bukatsu-chiiki-hiyo.stance:bukatsu-chiiki-cautious.count}）と条件付き・改善要求（{issue:bukatsu-chiiki-hiyo.stance:bukatsu-chiiki-conditional.count}）が大半を占める。"
+   "text": "お金の話になると、賛成側も条件を付ける。「{issue:bukatsu-chiiki-hiyo.label}」で無条件の移行支持は{issue:bukatsu-chiiki-hiyo.stance:bukatsu-chiiki-transition-support.count}にとどまり、条件付き・改善要求（{issue:bukatsu-chiiki-hiyo.stance:bukatsu-chiiki-conditional.count}）がそれを上回る。"
   },
   {
    "id": "bukatsu-chiiki-ed-4",

@@ -404,7 +404,40 @@ class PublishedImagesTest(unittest.TestCase):
     """公開中のページと、docs/images/trend/ の画像が合っていること（公開CIでも回る）。"""
 
     def test_published_images_match_the_published_page(self) -> None:
-        self.assertEqual(verify.check_theme(SLUG, ROOT), [])
+        # 画像を配るテーマすべて（消費税減税・部活動の地域移行）。1つでも古ければ止まる。
+        for slug, theme in trend.TREND_THEMES.items():
+            if theme.get("share_images"):
+                self.assertEqual(verify.check_theme(slug, ROOT), [], slug)
+
+
+@NEEDS_FONT
+class HeadlineFitsEveryLabelPairTest(unittest.TestCase):
+    """ひと目版の見出しは、項目名の組み合わせがどれでも画像の幅に収まること。
+
+    収まらないと更新のとき LayoutError で止まる。ラベルの長いテーマ（部活動の地域移行）を足すときの確認。
+    """
+
+    def test_every_pair_and_direction_fits_at_the_minimum_size(self) -> None:
+        import itertools
+
+        regular, bold = images.find_fonts()
+        canvas = images.Canvas(regular, bold)
+        width = images.WIDTH - 56 * 2
+        for slug, theme in trend.TREND_THEMES.items():
+            if not theme.get("share_images"):
+                continue
+            base = trend._theme_base(slug)
+            for kind in ("stance", "issue"):
+                labels = base[trend.KINDS[kind]["labels_key"]]
+                cases = [((a, b), signs) for a, b in itertools.permutations(labels, 2)
+                         for signs in ((1, 1), (-1, -1), (1, -1), (-1, 1))]
+                cases += [((a,), (sign,)) for a in labels for sign in (1, -1)]
+                for names, signs in cases:
+                    items = [{"label": name, "delta": sign * 9, "beyond": True} for name, sign in zip(names, signs)]
+                    lines = trend.glance_lines(kind, items)
+                    size = min(images._fit_size(canvas, line, 54, width, images.HEADLINE_MIN_SIZE, True) for line in lines)
+                    for line in lines:
+                        self.assertLessEqual(canvas.text_width(line, size, True), width, f"{slug}/{kind}: {line}")
 
 
 if __name__ == "__main__":

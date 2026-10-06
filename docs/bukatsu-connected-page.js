@@ -78,15 +78,6 @@
     if (jump) jump.textContent = '選んだ論点に戻る ↑';
   }
 
-  var tide = document.getElementById('bukatsu-tide-widget');
-  if (tide && !tide.querySelector('.bkt-comparison-note')) {
-    var heading = document.createElement('h2'); heading.textContent = '収集した投稿の変化';
-    tide.prepend(heading);
-    var note = document.createElement('p'); note.className = 'bkt-comparison-note';
-    note.textContent = '制度の経緯と、投稿サンプルの比較は別の情報です。この差だけで、制度決定の影響や同じ人の意見の変化は判断できません。';
-    tide.appendChild(note);
-  }
-
   function fold(element, label) {
     if (!element || element.closest('.bkt-fold')) return;
     var details = document.createElement('details'); details.className = 'bkt-fold';

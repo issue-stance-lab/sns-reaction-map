@@ -7,13 +7,12 @@ from scripts.refresh_adapters import bukatsu
 
 
 class BukatsuAdapterTideTests(unittest.TestCase):
-    def test_preserves_only_existing_tide_block(self):
-        old = "before<!-- TIDE_CARD_START -->old<!-- TIDE_CARD_END -->after"
-        new = "new-before<!-- TIDE_CARD_START -->new<!-- TIDE_CARD_END -->new-after"
-        self.assertEqual(
-            "new-before<!-- TIDE_CARD_START -->old<!-- TIDE_CARD_END -->new-after",
-            bukatsu._preserve_tide_block(old, new),
-        )
+    """分類モデルの読み取りと、検索結果用の件数の同期。
+
+    2026-10-06まで、ここには「モデルが変わったら潮目カードを前回表示のまま残す」テストがあった。
+    潮目カードを外したので、モデルが変わったときは、推移の注意書きに記録が無ければ止まる
+    （tests/test_trend_bukatsu.py の ModelBreakGuardTest）。
+    """
 
     def test_reads_model_from_saved_reports(self):
         with tempfile.TemporaryDirectory() as tmp:

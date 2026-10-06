@@ -166,6 +166,9 @@ JevはHermesの代替分類器ではなく、収集回を別の目で点検す�
 （公開後は「立場の変化」「論点の変化」タブが一度も更新されない状態だった）。
 `update_bukatsu_tide.py`のPLANET_SECTION判定分岐に、潮目カードだけを
 PLANET_SECTIONの外（`<!-- PLANET_SECTION_END -->`直後）へ差し込む経路を追加して解消した。
+**2026-10-06に、この潮目カードは外した。** 同じ場所（`<section class="update-dashboard">`）には「意見の推移」だけを置く
+（下の「3. テーマページ」の部活動の項目）。`tide_card()` はもう無く、`update_bukatsu_tide.py` は枠だけを残す
+（ファイル名の tide は名残）。
 
 **「論点ごとのX投稿」（`x_posts_panel()`）も同じ理由で2026-09-20まで表示されていなかった。**
 代表投稿の選定ロジック自体（`REPRESENTATIVE_POSTS`優先・confidence順フォールバック）は
@@ -593,6 +596,27 @@ collect_at を迎えたテーマにデータを追加した後、以下を順番
   - 収集日は `fetched_at`（UTC）を日本時間に直した日付。同じ日本時間の日に2回収集すると1回分にまとまる
   - 論点・立場のラベルや並びを変えるとき（`taxonomy-migration`）は、`inject_tide_widget.py` の同じ定義が元になるので、
     `scripts/build_trend_section.py` の `TREND_THEMES.short_labels`（スマホの表の短い見出し）も合わせて直す
+
+- [ ] 部活動の地域移行だけ: **潮目カードは出さない**（2026-10-06に外した。`bukatsu-tide-widget` が戻ると数字検査が止める）。
+  外枠（`<section class="update-dashboard">`）の中の「意見の推移」（`#bukatsu-chiiki-trend`、立場・論点の2タブ。理由タブと年表の縦線は無い）と、
+  単体で配る画像（`docs/images/trend/bukatsu-chiiki-{stance,issue}-trend-{summary,detail}.png`）は、上の消費税減税の項目と同じ仕組みで、
+  `adapter.build` が累積候補から貼り直す（枠は `update_bukatsu_tide.py` が `<!-- TREND_CARD_START -->` を目印に残す）。
+  数字検査は `scripts/trend_count_provenance.py`（消費税減税と共通）が、表の各行・埋め込みデータ・前回比の1行を正典から数え直して照合する。違いは次の3つ。
+  - **並べ始める日**（`TREND_THEMES["bukatsu-chiiki"]["series_from"]`）。集計のしかたが変わる前の回は並べない。
+    論点は **2026-07-23**（この回から収集の検索語を7本から10本に増やした。検索語の違いは数え直せない）。理由は、グラフの注意書きにも出る（`series_notes`）。
+    立場は並べ始める日が無く、全回を並べる。2026-09-12に賛否の判定基準を見直した（コミット`e81f86b5`）が、見直し前の回の賛否は
+    **2026-10-06に新しい基準で判定し直した**（`scripts/rejudge_bukatsu_stance.py`。判定し直す前は「中立・情報」が約3%から約3割へ跳ねる見かけの動きが出ていた）。
+    **判定し直したのは賛否（stance）だけ**で、関連・意見か・論点は変えていない。記録は `data/verification/rejudge/bukatsu-chiiki-stance-20261006.json`（件数と指紋だけ）
+  - **分類の指示文（`classify_bukatsu_arena_hermes.py` の `prompt_for`）の判定基準を変えたら、既存の回も同じ指示文で判定し直す。**
+    判定し直さないと、正典の中で回ごとに物差しが違い、推移のグラフに存在しない動きが出る。手順は `rejudge_bukatsu_stance.py` の冒頭（prepare → run → merge → report → apply → record）。
+    1,000件規模で約1時間（4並列）。分類中は共有設定（`~/.hermes/config.yaml` のモデル）を変えない。賛否が動くと、ページ全体の立場の集計・
+    編集部の横断整理（`data/verification/bukatsu-chiiki-editorial.json`。数字が動いて成り立たなくなった文は書き直す）・保存回台帳（`build_adoption_registry.py`）も作り直す
+  - **分類に使うAIが変わったら止まる**（`trend_support.check_model_break`）。`adapter.build` が前回と今回の `report.json`（`provenance.model.name`）を比べ、
+    変わっていて `TREND_THEMES["bukatsu-chiiki"]["model_breaks"]` の**立場・論点の両方**に今回の収集日が無いと止まる。日付を足すと、グラフの注意書きに
+    「この回からAIを切り替えました。それ以前の回との差には、AIの違いも含まれます」が出る。2026-10-01の切替は、論点だけに記録してある
+    （立場は、それより前の回を同じAIで判定し直したため、切替の影響を受けない）
+  - 論点の「その他」は割合から外す。立場・論点の並びは `scripts/bukatsu_taxonomy.py`（`inject_tide_widget.THEMES` には無いテーマ）。
+    ラベルを変えるときは `TREND_THEMES.short_labels` も合わせて直す
 
 ### 4. テーマページ（insight-stats カード 4枚）
 

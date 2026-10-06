@@ -14,6 +14,12 @@ import yaml
 from scripts.bukatsu_connected import START as BUKATSU_CONNECTED_START
 
 
+def private_verified_selectors(source: str, root: Path, *, sample_file: Path | None = None) -> dict[str, str]:
+    """推移の節の表の行と「N〜M件」を、非公開正典の数え直しと照合する（本体は trend_count_provenance）。"""
+    from scripts import trend_count_provenance
+    return trend_count_provenance.private_verified_selectors('bukatsu-chiiki', source, root, sample_file=sample_file)
+
+
 def verified_selectors(source: str, root: Path) -> dict[str, str]:
     if BUKATSU_CONNECTED_START not in source:
         return {}

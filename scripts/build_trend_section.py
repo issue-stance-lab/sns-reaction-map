@@ -98,6 +98,44 @@ TREND_THEMES = {
             "issue": ["対象\n範囲", "財源・\n社保", "減税の\n効果", "給付等\n比較", "事業者\n負担", "公約・\n不信"],
         },
     },
+    "bukatsu-chiiki": {
+        "name": "部活動の地域移行",
+        # 立場・論点の並びは scripts/bukatsu_taxonomy.py（inject_tide_widget.THEMES には無いテーマ）。
+        "taxonomy": "bukatsu",
+        "headings": {
+            "stance": "部活動の地域移行への賛否の割合は変わった？",
+            "issue": "部活動の地域移行で語られる論点は変わった？",
+        },
+        # 「反対・慎重の理由」タブは出さない（ページに、理由の立場別内訳が別にある）。年表の出来事も、
+        # 収集期間（2026年6月〜）に入るものが無いので出さない。
+        "share_images": True,
+        # 集計のしかたが変わる前の回は、同じ尺度で数えていないので並べない（軸ごとの、並べ始める収集日）。
+        #  論点: 2026-07-23の回から、収集に使う検索語を7本から10本に増やした（それ以前の2回は7本）。検索語の違いは数え直せない。
+        #  立場: 並べ始める日は無い。2026-09-12に賛否の判定基準を見直したが（コミット e81f86b5）、見直し前の回の賛否は
+        #        2026-10-06に新しい基準で判定し直した（scripts/rejudge_bukatsu_stance.py。判定し直す前は、
+        #        「中立・情報」が約3%から約3割へ跳ねる見かけの動きが出ていた）。
+        "series_from": {"issue": "2026-07-23"},
+        # 上の事情を、グラフの注意書きに出す（日付つきの固定の文なので、更新で嘘にならない）。
+        "series_notes": {
+            "stance": [
+                "2026年9月12日に、AIが賛否を判定する基準を見直しました。見直し前の回（2026年9月2日まで）は、"
+                "2026年10月6日に新しい基準で判定し直しました。賛否は、すべての回を同じ基準・同じAIで判定しています。",
+            ],
+            "issue": [
+                "2026年7月23日の回から、収集に使う検索語を増やしました。それ以前の回は検索語が少なく、拾う投稿の偏りが違うため、"
+                "この図は2026年7月23日の回から並べています。",
+            ],
+        },
+        # 分類に使うAIを切り替えた最初の収集日（軸ごと）。回の間の差にAIの違いが混じるので、注意書きに出す。
+        # 新しい回でAIが変わると、adapter が止まる（両方の軸に日付を足してから進める）。
+        #  立場は、2026-10-01より前の回も同じAIで判定し直したので、この切替の影響を受けない。
+        #  論点は、判定し直していないので、2026-10-01の切替の影響が残る。
+        "model_breaks": {"stance": [], "issue": ["2026-10-01"]},
+        "short_labels": {
+            "stance": ["移行\n支持", "条件付き・\n改善要求", "慎重・\n反対", "中立・\n情報"],
+            "issue": ["費用・\n家庭負担", "受け皿・\n指導者", "教員の\n働き方", "教育的\n意義・機会", "地域\n格差", "制度・\n移行"],
+        },
+    },
 }
 
 REASON_TAB = "反対・慎重の理由"
@@ -147,9 +185,29 @@ def page_url(slug: str) -> str:
 
 
 def _theme_base(slug: str) -> dict:
+    if TREND_THEMES.get(slug, {}).get("taxonomy") == "bukatsu":
+        return _bukatsu_base(slug)
     from inject_tide_widget import THEMES  # type: ignore[import-not-found]
 
     return next(item for item in THEMES if item["slug"] == slug)
+
+
+def _bukatsu_base(slug: str) -> dict:
+    """部活動の地域移行は潮目の定義（inject_tide_widget.THEMES）を持たないので、論点体系から作る。
+
+    論点の「その他」は、ページの論点カードにも投票にも出さないので、他のテーマと同じく割合から外す。
+    """
+    import yaml
+    from bukatsu_taxonomy import ISSUES, STANCES  # type: ignore[import-not-found]
+
+    themes = yaml.safe_load((ROOT / "THEMES.yaml").read_text(encoding="utf-8"))["themes"]
+    return {
+        "slug": slug,
+        "html": themes[slug]["html"],
+        "use_relevance_filter": True,
+        "stance_labels": list(STANCES),
+        "issue_labels": [label for label in ISSUES if label != "その他"],
+    }
 
 
 def _keep(classification: dict, base: dict) -> bool:
@@ -172,11 +230,11 @@ def posted_at(tweet_id: str) -> dt.datetime | None:
     return dt.datetime.fromtimestamp(millis / 1000, JST)
 
 
-def load_rounds(path: Path, base: dict, kind: str = "stance") -> list[dict]:
+def load_rounds(path: Path, base: dict, kind: str = "stance", since: str | None = None) -> list[dict]:
     """収集日（日本時間）ごとの件数と、収集の7日前までの投稿の割合を返す。
 
     kind は "stance"（立場）か "issue"（論点）。割合の分母は、その軸のラベルに入る意見だけ
-    （論点の「その他」は潮目と同じく外す）。
+    （論点の「その他」は潮目と同じく外す）。since（ISO日付）を渡すと、その日以降の回だけを返す。
     """
     spec = KINDS[kind]
     rows = json.loads(path.read_text(encoding="utf-8"))
@@ -192,6 +250,8 @@ def load_rounds(path: Path, base: dict, kind: str = "stance") -> list[dict]:
         if value not in labels:
             continue
         day = collected_date(fetched)
+        if since is not None and day < since:
+            continue
         counts[day][value] += 1
         posted = posted_at(row.get("tweet_id", ""))
         if posted is not None:
@@ -211,6 +271,16 @@ def load_rounds(path: Path, base: dict, kind: str = "stance") -> list[dict]:
             "recent_share": (within / known) if known else None,
         })
     return series
+
+
+def series_start(slug: str, kind: str) -> str | None:
+    """その軸で、並べ始める収集日（集計のしかたが変わる前の回は並べない）。無ければ全回を並べる。"""
+    return TREND_THEMES[slug].get("series_from", {}).get(kind)
+
+
+def rounds_for(slug: str, source: Path, kind: str) -> list[dict]:
+    """ページ・画像・数字検査が共通で使う、そのテーマの推移の回（並べ始める日を適用ずみ）。"""
+    return load_rounds(source, _theme_base(slug), kind, series_start(slug, kind))
 
 
 def margin(p_percent: float, n: int) -> float:
@@ -413,7 +483,18 @@ def previous_sentence(series: list[dict], labels: list[str], kind: str = "stance
     )
 
 
-def note_lines(series: list[dict], labels: list[str], name: str, kind: str = "stance") -> list[str]:
+def model_break_notes(slug: str, series: list[dict], kind: str) -> list[str]:
+    """分類に使うAIを切り替えた回が、その軸のグラフの中（最初の回より後）にあれば、その注意書き。"""
+    first, last = series[0]["date"], series[-1]["date"]
+    return [
+        f"{jp_date(day, year=True)}の回から、分類に使うAIを切り替えました。それ以前の回との差には、AIの違いも含まれます。"
+        for day in TREND_THEMES[slug].get("model_breaks", {}).get(kind, [])
+        if first < day <= last
+    ]
+
+
+def note_lines(series: list[dict], labels: list[str], name: str, kind: str = "stance", extra: list[str] | None = None) -> list[str]:
+    """グラフの下の注意書き。extra は、そのテーマ・軸だけの事情（集計のしかたの変更など）で、先頭の2文のあとに入れる。"""
     info = summary(series, labels)
     if kind == "stance":
         target = (
@@ -430,6 +511,7 @@ def note_lines(series: list[dict], labels: list[str], name: str, kind: str = "st
         target,
         "Xの投稿サンプルの構成比であり、世論調査ではありません。"
         "同じ人の意見が動いたことも、世論全体の変化も示しません。",
+        *(extra or []),
         f"各回の意見は{range_text(info)}です。投稿の拾い方に偏りがない場合でも、"
         f"割合には±{info['median_margin']}ポイント前後のぶれが出ます。「ぶれの範囲」はこの目安で判定しています。",
         f"収集日は日本時間です。収集の間隔は{info['gap_min']}〜{info['gap_max']}日で、一定ではありません。",
@@ -1251,7 +1333,10 @@ def _panel(slug: str, kind: str, series: list[dict], *, hidden: bool, events: li
     wrapped = f'<span id="{panel_id}-n-range">{span}</span>'
     notes = "".join(
         f"<li>{html.escape(text).replace(span, wrapped)}</li>"
-        for text in note_lines(series, labels, theme["name"], kind)
+        for text in note_lines(
+            series, labels, theme["name"], kind,
+            theme.get("series_notes", {}).get(kind, []) + model_break_notes(slug, series, kind),
+        )
     )
     hidden_attr = " hidden" if hidden else ""
     markup = f"""  <div class="trend-panel" id="{panel_id}" data-trend-panel="{kind}"{hidden_attr}>
@@ -1396,8 +1481,8 @@ def keep_existing(old_html: str, new_html: str) -> str:
 def render_for(slug: str, page_html: str, source: Path) -> str:
     base = _theme_base(slug)
     theme = TREND_THEMES[slug]
-    stance = load_rounds(source, base, "stance")
-    issue = load_rounds(source, base, "issue") if base.get("issue_labels") else None
+    stance = rounds_for(slug, source, "stance")
+    issue = rounds_for(slug, source, "issue") if base.get("issue_labels") else None
     focus = theme.get("focus_stance")
     if focus is not None and focus not in base["stance_labels"]:
         raise ValueError(f"{slug}: focus_stance「{focus}」が stance_labels にありません")
@@ -1424,7 +1509,7 @@ def main() -> int:
     for kind in ("stance", "issue"):
         labels = base[KINDS[kind]["labels_key"]]
         print(f"[{kind}]")
-        for item in load_rounds(source, base, kind):
+        for item in rounds_for(args.topic, source, kind):
             print(item["date"], item["n"], *(f"{item['shares'][label]:5.1f}" for label in labels))
     if args.apply:
         html = page.read_text(encoding="utf-8")

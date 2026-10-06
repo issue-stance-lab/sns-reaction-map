@@ -145,7 +145,7 @@ def apply(source: str, *, activate: bool = False, topic: str = TOPIC) -> str:
         START + '\n<link rel="stylesheet" href="bukatsu-connected.css?v=4">\n'
         '<script id="bukatsu-connected-data" type="application/json">' + payload + '</script>\n'
         '<script src="bukatsu-connected.js?v=2" defer></script>\n'
-        '<script src="bukatsu-connected-page.js?v=1" defer></script>\n' + END
+        '<script src="bukatsu-connected-page.js?v=2" defer></script>\n' + END
     )
     if START in source:
         pattern = re.escape(START) + r".*?" + re.escape(END)
@@ -186,7 +186,7 @@ def validate(source: str) -> list[str]:
         problems.append("連動表示のCSSが1つではありません")
     for selector, label in (
         ('script[src="bukatsu-connected.js?v=2"][defer]', "ページ配置のJS"),
-        ('script[src="bukatsu-connected-page.js?v=1"][defer]', "資料タブ・年表のJS"),
+        ('script[src="bukatsu-connected-page.js?v=2"][defer]', "資料タブ・年表のJS"),
     ):
         if len(soup.select(selector)) != 1:
             problems.append(f"{label}が1つではありません")
