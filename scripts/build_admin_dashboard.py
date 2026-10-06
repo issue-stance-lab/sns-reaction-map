@@ -27,6 +27,9 @@ DEFAULT_OUTPUT = ROOT / "company" / "dashboard" / "dashboard.html"
 
 
 def build(*, fetch: bool, today: dt.date, interactive: bool = False, token: str = "") -> str:
+    # 取得元の状態（health）はキャッシュの「最後に取れた日」を読む。実測の取得でそのキャッシュが
+    # 更新されるので、取得を先に済ませる。後だと --fetch の回だけ取得前の古い状態が画面に出る
+    live = collect.fetch_live_metrics() if fetch else None
     data = {
         "today": today,
         "built_at": dt.datetime.now(),
@@ -40,7 +43,7 @@ def build(*, fetch: bool, today: dt.date, interactive: bool = False, token: str 
         "tasks": collect.collect_tasks(),
         "health": collect.collect_source_health(today),
         "x_measurement": collect.collect_x_measurement(dt.datetime.now(dt.timezone(dt.timedelta(hours=9)))),
-        "live": collect.fetch_live_metrics() if fetch else None,
+        "live": live,
         "sample_files": collect.collect_sample_files(),
         "primary_research": collect.collect_primary_research(today),
         "live_cache": collect.read_live_cache(),

@@ -959,6 +959,58 @@ class LiveCacheTests(unittest.TestCase):
             collect.LIVE_CACHE = original
 
 
+class FetchThenHealthOrderTests(unittest.TestCase):
+    """--fetch の回に、取得後の状態が画面に出ること。
+
+    取得元の状態はキャッシュの「最後に取れた日」から判定する。判定を取得より先に行うと、
+    取得に成功しても --fetch の回だけ「40日前・使えない」と出て、もう一度作り直すまで直らない
+    （2026-10-06 に実際に発生）。
+    """
+
+    TODAY = dt.date(2026, 10, 6)
+    OLD = "2026-08-27T09:00:00"
+    FRESH = "2026-10-06T22:00:00"
+
+    def _cache(self, when: str) -> dict:
+        return {
+            key: {"last_attempt_at": when, "last_success_at": when, "last_error": "", "consecutive_failures": 0, "value": {}}
+            for key, _ in collect.LIVE_SOURCES
+        }
+
+    def _build_health(self, *, fetch: bool) -> dict:
+        """build() を呼び、render に渡る直前の health を {取得元名: ok} で返す。"""
+        import json
+        import tempfile
+        from unittest import mock
+
+        sys.path.insert(0, str(ROOT / "scripts"))
+        import build_admin_dashboard
+
+        with tempfile.TemporaryDirectory() as tmp:
+            cache_path = Path(tmp) / "live-metrics.json"
+            cache_path.write_text(json.dumps(self._cache(self.OLD)), encoding="utf-8")
+
+            def fake_fetch(*_args, **_kwargs):
+                # 本物と同じく、取得に成功したらキャッシュを新しい日付で書き換える
+                cache_path.write_text(json.dumps(self._cache(self.FRESH)), encoding="utf-8")
+                return {"fetched_at": dt.datetime(2026, 10, 6, 22, 0)}
+
+            with mock.patch.object(collect, "LIVE_CACHE", cache_path), \
+                    mock.patch.object(collect, "fetch_live_metrics", fake_fetch), \
+                    mock.patch.object(build_admin_dashboard.render, "render", lambda data: data):
+                data = build_admin_dashboard.build(fetch=fetch, today=self.TODAY)
+        return {c["name"]: c["ok"] for c in data["health"] if c["name"] in {label for _, label in collect.LIVE_SOURCES}}
+
+    def test_fetch_run_shows_the_state_after_fetching(self):
+        health = self._build_health(fetch=True)
+        self.assertEqual(set(health.values()), {True}, f"取得に成功したのに古い状態が出ている: {health}")
+
+    def test_run_without_fetch_still_reports_the_stale_cache(self):
+        # 取得しない回は、キャッシュのとおり「使えない」と出る（取得しないのに良く見せない）
+        health = self._build_health(fetch=False)
+        self.assertEqual(set(health.values()), {False}, f"取得していないのに状態が変わった: {health}")
+
+
 class OutputLocationTests(unittest.TestCase):
     def test_output_is_outside_docs(self):
         sys.path.insert(0, str(ROOT / "scripts"))
