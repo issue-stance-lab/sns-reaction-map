@@ -191,5 +191,18 @@ CEO承認（段階3-1）→ AIがマージ・push・本番確認（段階3-2〜3
    公開から3週間というドメインの若さを踏まえると異常な遅れではなく、4週間観測の範囲内と判断。
    次回4週目（目安1週間後）に登録済み件数が5件から増えているかを見る。早めたい場合はオーナーが
    Search Console画面から該当ページを開き「インデックス登録をリクエスト」を押す方法があるが、必須ではない
+   **2026-10-07、4週目の確認。サイトマップの16ページすべてが「登録済み」になっていた（9/21は18件中5件）。**
+   方法は9/21と同じURL検査API（`urlInspection.index:inspect`、`fetch_gsc_metrics.py` の認証を流用、
+   サイトは `sc-domain:sns-reaction-map.jp`）。対象はサイトマップ16件＋`/index.html`＋`https://www.sns-reaction-map.jp/`の18件。
+   専用スクリプトは無く、使い捨ての読み取り専用呼び出しで実行した（再現するなら同じ18件を同じAPIで検査する）。
+   結果: 16件すべてが判定PASS「送信して登録されました」・取得状態SUCCESSFUL・Googleが選んだ正規URLは自分自身（ずれなし）。
+   テーマ10件・トップ・運営者情報（about）も全部ここに含まれる。残る2件は想定どおりで修正不要:
+   `/index.html` は「代替ページ（適切なcanonicalタグあり）」（正規URLは `/`）、`www.` は「ページにリダイレクトがあります」（正規URLは `/`）。
+   前回のクロール日: 8テーマ（ai-copyright・bukatsu-chiiki・consumption-tax-cut・elderly-license-revocation・fukushuto・
+   henoko-student-accident・koshitsu-tenpakai・school-nickname-ban）は9/24、bike-blue-ticketは9/23、constitutional-amendmentは9/15、
+   about・privacy・usageは10/1、`/` は10/6、disclaimer 9/1、image-policy 9/16。9/24にオーナーがインデックス登録をリクエストした9件は、
+   同日以降に読まれて登録された。
+   注意: 管理画面の「ページのインデックス登録」レポートは更新が遅れる（9/21時点のまま9/24に見えていた）ため、画面の件数はこれより少なく出る可能性がある。
+   4週間の観測はこれで完了。残る作業は旧ルートの案内ページへの置き換え（CEO決定A）のみで、急ぎではない
 2. 旧ルート（別リポジトリ `issue-stance-lab/issue-stance-lab.github.io`）を案内ページへ置き換え（CEO決定A、未着手）
 3. ~~新ドメインでGA4のリアルタイムに実アクセスが出ることをブラウザで目視確認する~~ **2026-09-15、課題54段階11の監査で`fetch_ga4_metrics.py`を実行し解消**。直近7日: activeUsers 28 / screenPageViews 126 / sessions 55 / eventCount 321（ホストは既定で新ドメイン）。ブラウザでの目視ではないが実データ取得により計測機能を確認できたため完了扱いとする
