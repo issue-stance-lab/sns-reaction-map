@@ -6,8 +6,8 @@
     python3 content/note/drafts/figures/consumption-tax-cut4_build.py figs
 
 numbers: 記事の本文・図・注記に使う数字をすべて表示する（品質監査はここを突き合わせる）。
-figs   : 図2（1回の収集で新しく見つかった意見の数。立場別と、賛成の投稿の話題別）を content/note/drafts/images/ に書き出す（1800x1040）。
-         図1は、サイトの推移グラフの画像（docs/images/trend/consumption-tax-cut-stance-trend-summary.png）を
+figs   : 図2（話題ごとの賛成の割合。決定の前と後）を content/note/drafts/images/ に書き出す（1800x1040）。
+         図1は、サイトの推移グラフの画像（docs/images/trend/consumption-tax-cut-stance-trend-summary.png。ひと目版）を
          書き換えずにそのまま使う（利用条件: 出典とリンクを明記する。切り取りや書き換えはしない）。
 
 集計の対象は classification.is_relevant かつ classification.is_opinion の投稿（意見）。
@@ -129,6 +129,9 @@ def stats(op: list[dict]) -> dict:
     # 同じAI（kimi-k2.6）で判定した回だけ。10/3の回は kimi-k2.7-code に替わった
     post_same_ai = [x for x in op if x["_day"] in ("2026-09-17", "2026-09-24")]
     s["post_same_ai"] = pooled(post_same_ai)
+    s["post_same_ai_topics"] = {
+        i: (sum(1 for x in post_same_ai if x["_is"] == i and x["_st"] == PRO), sum(1 for x in post_same_ai if x["_is"] == i)) for i in ISSUES
+    }
 
     # 話題ごとの賛成の割合（決定の前・後）
     topics = {}
@@ -255,11 +258,53 @@ def stats(op: list[dict]) -> dict:
     heavy = sorted(((len(v), u) for u, v in by_user.items()), reverse=True)
     s["heavy"] = {"ge10_users": sum(1 for c, _ in heavy if c >= 10), "ge10_posts": sum(c for c, _ in heavy if c >= 10), "top": heavy[0][0]}
 
+    # 件数の動きは割合の言い直しか（検索1回で拾える数に上限があるため）。記事では件数を根拠に使わない
+    stable_set = set(stable)
+    s["counts_by_group"] = {}
+    for label, qs in (("毎回20件以上拾えた検索語12本", stable_set), ("残りの8本", {q for q in qn if q not in stable_set}), ("全20本", set(qn))):
+        s["counts_by_group"][label] = {
+            st: (per_round_mean([x for x in op if x["query"] in qs and x["_st"] == st], pre_days),
+                 per_round_mean([x for x in op if x["query"] in qs and x["_st"] == st], post_days))
+            for st in STANCES
+        }
+    raw_max = []
+    for f in sorted((ROOT / "social-samples" / "updates" / "consumption-tax-cut").glob("*/raw.json")):
+        rows = json.loads(f.read_text(encoding="utf-8"))
+        c = collections.Counter(r.get("query") for r in rows)
+        raw_max.append((f.parent.name, len(rows), max(c.values())))
+    s["raw_cap"] = raw_max  # 取得した1ページ全体の件数と、1検索語あたりの最大件数
+    # 決定の前後の両方に書いた人（179人）だけで見た、賛成の割合
+    both_users = {u for u, v in by_user.items() if any(x["_day"] in pre_days for x in v) and any(x["_day"] in post_days for x in v)}
+    pa = [x for x in pre if x["user_id"] in both_users]
+    pb = [x for x in post if x["user_id"] in both_users]
+    s["both_users_share"] = (len(both_users), sum(1 for x in pa if x["_st"] == PRO), len(pa), sum(1 for x in pb if x["_st"] == PRO), len(pb))
+    # 本文が同じ投稿を除く／書いた日で分ける
+    def norm(x: dict) -> str:
+        t = re.sub(r"https?://\S+", "", x["text"].replace("\tSTART\t", "").replace("\tEND\t", ""))
+        return re.sub(r"[\s　]+", "", re.sub(r"@\w+", "", t))
+
+    seen_text: set = set()
+    dedup = []
+    for x in sorted(op, key=lambda r: (r["_day"], r["tweet_id"])):
+        k = norm(x)
+        if k not in seen_text:
+            seen_text.add(k)
+            dedup.append(x)
+    s["dup_text"] = (len(op) - len(dedup),) + pro_pre_post(dedup, "本文が同じ投稿を除く")[1:]
+    cut = datetime.date.fromisoformat(OUTLINE_DAY)
+    pb_dates = [(x, posted_day(x)) for x in op]
+    pre_p = [x for x, d in pb_dates if d < cut]
+    post_p = [x for x, d in pb_dates if d >= cut]
+    s["by_posted_day"] = (pct(sum(1 for x in pre_p if x["_st"] == PRO), len(pre_p)), len(pre_p), pct(sum(1 for x in post_p if x["_st"] == PRO), len(post_p)), len(post_p))
+    r17 = [x for x in op if x["_day"] == "2026-09-17"]
+    s["r17_old"] = (sum(1 for x in r17 if posted_day(x) < cut), len(r17))
+
     # 大綱で設けた現金給付（就業者負担軽減支援金）は、SNSでどれだけ語られたか
     def text_of(x: dict) -> str:
         return x["text"].replace("\tSTART\t", "").replace("\tEND\t", "") + " " + x["classification"].get("summary", "")
 
     s["support_mentions"] = sum(1 for x in op if re.search(SUPPORT_RX, text_of(x)))
+    s["support_mentions_post"] = sum(1 for x in post if re.search(SUPPORT_RX, text_of(x)))  # 大綱（9/15）のあとの3回
     s["benefit_mentions"] = sum(1 for x in op if re.search(BENEFIT_RX, text_of(x)))
     return s
 
@@ -280,6 +325,7 @@ def show(s: dict) -> None:
         print(f"  {st}: {pct(ka, na):.1f}%（±{margin(ka, na):.1f}, n={na}）→ {pct(kb, nb):.1f}%（±{margin(kb, nb):.1f}, n={nb}）  差 {pct(kb, nb) - pct(ka, na):+.1f}  {flag}")
     kb, nb = s["post_same_ai"][PRO]
     print(f"  同じAIで判定した決定後2回（9/17・9/24）だけ: 減税推進 {pct(kb, nb):.1f}%（±{margin(kb, nb):.1f}, n={nb}）")
+    print("  同じAIで判定した決定後2回だけの、話題ごとの賛成の割合: " + "、".join(f"{i} {pct(*v):.1f}%（n={v[1]}）" for i, v in s["post_same_ai_topics"].items() if i in SHOWN))
     print(f"  何らかの減税を望む側（推進＋条件付き）: {pct(s['pre'][PRO][0] + s['pre'][COND][0], s['pre_n']):.1f}% → {pct(s['post'][PRO][0] + s['post'][COND][0], s['post_n']):.1f}%")
     print("\n[話題ごとの賛成（減税推進）の割合 決定の前 → 後]")
     for i in ISSUES:
@@ -315,7 +361,17 @@ def show(s: dict) -> None:
           f"前に反対・慎重が多数だった{p['con_before']}人は、後も反対・慎重 {p['con_stay']}人・賛成へ {p['con_to_pro']}人")
     h = s["heavy"]
     print(f"  意見を10件以上書いた投稿者 {h['ge10_users']}人で {h['ge10_posts']}件（全体の{pct(h['ge10_posts'], s['n_opinion']):.1f}%）。最多は1人で{h['top']}件")
-    print(f"\n[現金給付への言及] 「支援金」「就業者負担」に触れる意見 {s['support_mentions']}件、「給付付き」「税額控除」に触れる意見 {s['benefit_mentions']}件（意見{s['n_opinion']:,}件中）")
+    print(f"\n[現金給付への言及] 「支援金」という語を含む意見 {s['support_mentions']}件（うち大綱のあとの3回に{s['support_mentions_post']}件。残りは8/3の別の話題）、「給付付き」「税額控除」に触れる意見 {s['benefit_mentions']}件（意見{s['n_opinion']:,}件中）")
+    print("\n[件数の動きは割合の言い直し（記事では件数を根拠に使わない）] 1回の収集で新しく見つかった意見の数（平均）前6回 → あと3回")
+    for label, d in s["counts_by_group"].items():
+        print(f"  {label}: " + " / ".join(f"{st[:4]} {a:.0f}→{b:.0f}({(b / a - 1) * 100:+.0f}%)" for st, (a, b) in d.items()))
+    print("  生データ（取得した1ページ全体）の件数と、1検索語あたりの最大件数: " + "、".join(f"{d} {n}件・最大{m}" for d, n, m in s["raw_cap"]))
+    nb, ka, na, kb, nb2 = s["both_users_share"]
+    print(f"\n[決定の前後の両方に書いた{nb}人だけで見た賛成の割合] {pct(ka, na):.1f}%（{na}投稿）→ {pct(kb, nb2):.1f}%（{nb2}投稿）")
+    d = s["dup_text"]
+    print(f"[本文が同じ投稿{d[0]}件を除く] 賛成 {d[1]:.1f}%（n={d[2]}）→ {d[3]:.1f}%（n={d[4]}）")
+    bp = s["by_posted_day"]
+    print(f"[書いた日（日本時間）で分ける] 9/14まで {bp[0]:.1f}%（n={bp[1]}）→ 9/15以降 {bp[2]:.1f}%（n={bp[3]}）。9月17日の回のうち9/14以前に書かれた投稿 {s['r17_old'][0]}/{s['r17_old'][1]}件")
 
 
 # ---- 図 -------------------------------------------------------------------
@@ -329,8 +385,7 @@ def figs(s: dict) -> None:
 
     reg = fm.FontProperties(fname="/System/Library/Fonts/ヒラギノ角ゴシック W3.ttc")
     bold = fm.FontProperties(fname="/System/Library/Fonts/ヒラギノ角ゴシック W7.ttc")
-    teal, pale, terra, pale_terra = "#3f7f6f", "#a9c9c0", "#c8805a", "#e6c3ae"
-    gold = "#b8862b"
+    teal, pale, grey, gold = "#3f7f6f", "#a9c9c0", "#8a9199", "#b8862b"
     FONT_SCALE = 1.2
     fs = lambda size: round(size * FONT_SCALE, 1)
     OUT_DIR.mkdir(parents=True, exist_ok=True)
@@ -338,52 +393,41 @@ def figs(s: dict) -> None:
     d0, d1 = s["rounds"][0][5:].replace("-", "/"), s["rounds"][-1][5:].replace("-", "/")
     caption = (f"データ: SNS反応まっぷ「消費税減税」公開投稿サンプル（収集日2026/{d0}〜{d1}・日本時間、意見{s['n_opinion']:,}件中）。"
                "世論調査ではありません")
-    gi, jb = s["per_round_topic"]["給付など他策との比較"][PRO], s["per_round_topic"]["事業者の実務負担"][PRO]
-    note = "決定の前6回・あと3回の、1回あたりの平均。検索で新しく見つかった意見の数で、Xの投稿量そのものではありません"
-    note2 = f"賛成の投稿のうち、給付など他策との比較（{gi[0]:.0f}→{gi[1]:.0f}）と事業者の実務負担（{jb[0]:.0f}→{jb[1]:.0f}）は件数が少ないため省略"
+    small = [(i, s["topics"][i]) for i in SMALL]
+    note1 = "賛成＝減税推進（条件付き賛成は含みません）。話題は、AIが付けた投稿の主な論点です"
+    note2 = "省略: " + "、".join(f"{i}（{pct(*t['pre']):.0f}%→{pct(*t['post']):.0f}%）" for i, t in small) + "は件数が少なく、ぶれが大きいため。どちらも下がる向きです"
 
-    fig, (axl, axr) = plt.subplots(1, 2, figsize=(9, 5.2), dpi=200, gridspec_kw={"width_ratios": [1, 2.05], "wspace": 0.12})
+    rows = [("全体", s["pre"][PRO], s["post"][PRO])] + [(lab, s["topics"][i]["pre"], s["topics"][i]["post"]) for lab, i in
+                                                       (("公約と政治不信", "公約と政治不信"), ("減税の効果", "減税の効果"), ("財源と社会保障", "財源と社会保障"), ("対象範囲", "減税の対象範囲"))]
+    fig, ax = plt.subplots(figsize=(9, 5.2), dpi=200)
     fig.patch.set_facecolor("white")
-
-    def bars(ax, groups, colors_pre, colors_post, ymax, label_fs, highlight=None):
-        w = 0.36
-        for gi, (label, a, b) in enumerate(groups):
-            ax.bar(gi - w / 2, a, w, color=colors_pre[gi], edgecolor="white", zorder=2)
-            ax.bar(gi + w / 2, b, w, color=colors_post[gi], edgecolor="white", zorder=2)
-            ax.text(gi - w / 2, a + ymax * 0.02, f"{a:.0f}", ha="center", va="bottom", fontproperties=reg, fontsize=fs(label_fs), color="#555555")
-            ax.text(gi + w / 2, b + ymax * 0.02, f"{b:.0f}", ha="center", va="bottom", fontproperties=bold, fontsize=fs(label_fs + 0.4), color="#222222")
-            diff = (b / a - 1) * 100
-            ax.text(gi, ymax * 1.20, f"{diff:+.0f}%".replace("-", "−"), ha="center", va="center", fontproperties=bold, fontsize=fs(label_fs + 1.2),
-                    color="#7a3b1a" if diff < -10 else "#444444")
-            if highlight is not None and label == highlight:
-                ax.add_patch(plt.Rectangle((gi - 0.52, -ymax * 0.05), 1.04, ymax * 1.34, fill=False, ec=gold, lw=2.0, zorder=0))
-        ax.set_xlim(-0.65, len(groups) - 0.35)
-        ax.set_ylim(0, ymax * 1.32)
-        ax.set_xticks(range(len(groups)))
-        ax.set_xticklabels([g[0] for g in groups], fontproperties=reg, fontsize=fs(10))
-        for sp in ("top", "right", "left"):
-            ax.spines[sp].set_visible(False)
-        ax.spines["bottom"].set_color("#bbbbbb")
-        ax.tick_params(axis="y", left=False, labelleft=False)
-        ax.tick_params(axis="x", length=0)
-
-    pr, cr = s["per_round"][PRO], s["per_round"][CON]
-    bars(axl, [("賛成", pr[0], pr[1]), ("反対・慎重", cr[0], cr[1])], [pale, pale_terra], [teal, terra], 300, 10)
-    axl.set_title("立場ごと", fontproperties=bold, fontsize=fs(12), pad=4)
-    topics = [("公約と\n政治不信", "公約と政治不信"), ("効果", "減税の効果"), ("財源と\n社会保障", "財源と社会保障"), ("対象範囲", "減税の対象範囲")]
-    groups = [(lab, s["per_round_topic"][i][PRO][0], s["per_round_topic"][i][PRO][1]) for lab, i in topics]
-    bars(axr, groups, [pale] * 4, [teal] * 4, 130, 10, highlight="対象範囲")
-    axr.set_title("賛成の投稿を、主な話題ごとに", fontproperties=bold, fontsize=fs(12), pad=4)
-
-    # 凡例（薄い棒＝決定の前、濃い棒＝決定のあと）
-    fig.text(0.5, 0.862, "薄い棒＝決定の前（7/28〜9/1の6回）　濃い棒＝決定のあと（9/17〜10/3の3回）", ha="center", va="center", fontproperties=reg, fontsize=fs(9.6), color="#444444")
-    fig.text(0.5, 0.955, "賛成の投稿が減り、反対・慎重の投稿は変わらなかった", ha="center", va="center", fontproperties=bold, fontsize=fs(16))
-    fig.text(0.5, 0.905, "1回の収集で新しく見つかった意見の数（平均）", ha="center", va="center", fontproperties=reg, fontsize=fs(10.5), color="#666666")
-    fig.text(0.015, 0.118, note, ha="left", va="bottom", fontproperties=reg, fontsize=fs(8.2), color="#666666")
+    ys = list(range(len(rows)))[::-1]
+    for y, (label, (ka, na), (kb, nb)) in zip(ys, rows):
+        a_, b_ = pct(ka, na), pct(kb, nb)
+        flat = label == "対象範囲"
+        if flat:
+            ax.add_patch(plt.Rectangle((-0.5, y - 0.46), 112.0, 0.92, fill=False, ec=gold, lw=2.2, zorder=0))
+        ax.annotate("", xy=(b_, y), xytext=(a_, y), arrowprops=dict(arrowstyle="-|>", color=grey, lw=2.2, shrinkA=8, shrinkB=8), zorder=1)
+        ax.scatter([a_], [y], s=140, color=pale, edgecolor=teal, linewidth=1.8, zorder=3)
+        ax.scatter([b_], [y], s=140, color=teal, edgecolor=teal, linewidth=1.8, zorder=3)
+        lf = a_ < b_
+        ax.text(a_ + (-3.0 if lf else 3.0), y, f"{a_:.0f}%", ha="right" if lf else "left", va="center", fontproperties=reg, fontsize=fs(11), color="#555555", zorder=4)
+        ax.text(b_ + (3.0 if lf else -3.0), y, f"{b_:.0f}%", ha="left" if lf else "right", va="center", fontproperties=bold, fontsize=fs(11.5), color=teal, zorder=4)
+        diff = b_ - a_
+        ax.text(110, y + 0.03, f"{diff:+.0f}ポイント".replace("-", "−"), ha="right", va="center", fontproperties=bold, fontsize=fs(11.5), color="#7a3b1a" if diff < -4 else "#444444")
+        ax.text(-4.0, y + 0.07, label, ha="right", va="center", fontproperties=bold if label in ("全体", "対象範囲") else reg, fontsize=fs(12.5))
+        ax.text(-4.0, y - 0.25, f"{na:,}→{nb:,}件", ha="right", va="center", fontproperties=reg, fontsize=fs(8.8), color="#666666")
+    ax.set_xlim(0, 112)
+    ax.set_ylim(-0.7, len(rows) - 0.3)
+    ax.axis("off")
+    fig.text(0.5, 0.955, "話題ごとに見た、「賛成」の割合の変化", ha="center", va="center", fontproperties=bold, fontsize=fs(17))
+    fig.text(0.5, 0.905, "各話題の意見の投稿に占める、減税推進の割合", ha="center", va="center", fontproperties=reg, fontsize=fs(10.5), color="#666666")
+    fig.text(0.5, 0.862, "薄い点＝大綱の前（7/28〜9/1の6回）　濃い点＝大綱のあと（9/17〜10/3の3回）", ha="center", va="center", fontproperties=reg, fontsize=fs(9.6), color="#444444")
+    fig.text(0.015, 0.118, note1, ha="left", va="bottom", fontproperties=reg, fontsize=fs(8.2), color="#666666")
     fig.text(0.015, 0.072, note2, ha="left", va="bottom", fontproperties=reg, fontsize=fs(8.2), color="#666666")
     fig.text(0.015, 0.022, caption, ha="left", va="bottom", fontproperties=reg, fontsize=fs(8.0), color="#666666")
-    fig.subplots_adjust(left=0.04, right=0.985, top=0.775, bottom=0.255)
-    out = OUT_DIR / "consumption-tax-cut4_fig2-posts-by-round.png"
+    fig.subplots_adjust(left=0.215, right=0.985, top=0.78, bottom=0.255)
+    out = OUT_DIR / "consumption-tax-cut4_fig2-topic-support.png"
     fig.savefig(out)
     plt.close(fig)
     print("書き出し:", out)
