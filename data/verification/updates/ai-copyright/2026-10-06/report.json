@@ -12,7 +12,7 @@
   "opinions": 270,
   "opinion_flag_available": true,
   "candidate": 5175,
-  "classification_errors": 1,
+  "classification_errors": 0,
   "status": "validated",
   "topic": "ai-copyright",
   "date": "2026-10-06",
@@ -49,8 +49,16 @@
       "config_source": "config.yaml:model.default"
     },
     "output": {
-      "classified_sha256": "43c855ebda1e275beaa241ff9b9e49a09e3f6dafbeab3eb9722f1c8ca2a9ae79"
+      "classified_sha256": "cd0fcdc7ae1c38018077c54398a8983b63a838d7a303c6ac996593997fa8c9c3"
     }
   },
-  "next_collect_at": "2026-10-16"
+  "next_collect_at": "2026-10-16",
+  "manual_labels": [
+    {
+      "count": 1,
+      "reason": "upstream_refused（提供元AIが高リスクとして拒否）を本文確認のうえ人手で判定。対象の投稿IDは非公開側の記録に保存",
+      "labeled_by": "editor",
+      "labeled_at": "2026-10-06"
+    }
+  ]
 }
