@@ -89,7 +89,10 @@ class AiCopyrightAdapterTests(unittest.TestCase):
         self.assertEqual(planet_data(second), before, "公開JSONの数値・再読状態を変更した")
         self.assertNotIn("AIが6つの論点に整理しました", second)
         self.assertNotIn("AI分類。代表投稿は編集部が選定", second)
-        self.assertIn("（取得期間: 2026-06-22〜2026-09-29）<br>", second)
+        # 取得期間の終わりは収集のたびに進む。日付を直書きせず登録簿から読む。
+        import yaml
+        period = yaml.safe_load((ROOT / "THEMES.yaml").read_text(encoding="utf-8"))["themes"]["ai-copyright"]["sample_period"]
+        self.assertIn(f"（取得期間: {period}）<br>", second)
 
     def _canonical(self):
         import yaml
