@@ -45,3 +45,13 @@ ai-copyright用には`_sync_ai_copyright_method_text()`が既に登録されて�
 ## 関連テーマ
 
 ai-copyright（発見元）。他9テーマは未調査。
+
+## 解決（2026-10-08）
+
+**状態: 完了。** 潮目ウィジェットを直す代わりに、**外して「意見の推移」に一本化した**（オーナーの方針。消費税減税が2026-10-05、部活動が2026-10-06に同じ形）。
+ai-copyrightの意見の推移（8/3〜10/6の9回、立場3つ・論点6つ）は、更新のたびに `scripts/refresh_adapters/ai_copyright.py` の `adapter.build` が累積候補から貼り直し、
+数字検査（`scripts/trend_count_provenance.py`）が正典から数え直して照合する。潮目の要素（`ai-copyright-tide-widget`）が戻ると数字検査が止まる。
+`inject_tide_widget.py` からも、このテーマを注入の対象外にした（課題38）。経緯: `themes/ai-copyright.md` の2026-10-07〜08、`DATA_REFRESH.md`、
+`quality/reviews/2026-10-08-ai-copyright-trend-review.md`。承認は `approval-20261007-002`。
+
+他の山なみ9テーマで同型の潮目の取り残しが無いかは、本課題では調べていない（意見の推移を導入していないテーマは、引き続き潮目カードを使う）。

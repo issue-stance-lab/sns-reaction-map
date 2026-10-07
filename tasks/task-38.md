@@ -19,3 +19,12 @@
 **2026-09-22**: takaichiのテーマ廃止（[archive/tasks/task-88.md](../archive/tasks/task-88.md)）にともない、`THEMES`辞書からtakaichiの項目ごと削除した。対象HTML自体が存在しなくなったため、このテーマについては②相当の解消。
 
 **暫定の回避策**: 実行後に必ず `git status --porcelain` を見て、対象外の `docs/*.html` が出ていたら `git restore` する。この手順は `.claude/skills/taxonomy-migration/SKILL.md` の「落とし穴」に記載済み。
+
+**2026-10-08 ai-copyright**: 「意見の推移」に一本化して潮目を外したのに合わせ、`THEMES` の `ai-copyright` の `prev_file`・`cur_file` を空にした
+（`tests/test_trend_ai_copyright.py` が固定）。このテーマの巻き戻りは解消。
+
+**2026-10-08 残りは3テーマ**: `elderly-license-revocation`・`fukushuto`・`koshitsu-tenpakai` は、まだ固定の比較ファイル
+（`*_hermes_prev_*.json` など）を持つ。**2026-10-07に、確認のため `scripts/inject_tide_widget.py` を引数なしで実行したところ、この3テーマのページが書き換わった**
+（すぐ `git restore` で戻した。公開物には出ていない）。この3テーマは更新処理（adapter）が更新のたびに潮目を作るので、固定ファイルは不要のはず。
+`prev_file`・`cur_file` を空にして、単体実行では動かさない形に揃える。あわせて、③「実行前に、`THEMES` の更新回がページの現状より古くないかを検査して止める」を入れると、
+次に誰かが引数なしで実行しても、黙って巻き戻らない。
