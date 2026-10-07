@@ -748,39 +748,119 @@
 .ar-s { color: #4b9cf4; }
 
   
-/* TIDE_CARD_START */
+
+/* TREND_CARD_START */
 .update-dashboard{padding:18px min(4vw,40px) 34px;background:var(--bg)}
-.tide-card{max-width:1180px;margin:0 auto;padding:26px 28px;border:1px solid #d9e2ef;border-radius:20px;background:#fff;box-shadow:0 16px 40px rgba(18,35,64,.09);color:var(--ink)}
-.tide-widget-controls{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:18px}
-.tide-widget-tabs{display:flex;gap:6px;padding:4px;border-radius:12px;background:#eef3f9}
-.tide-widget-btn{min-height:38px;padding:8px 14px;border:0;border-radius:9px;background:transparent;color:#53647c;font:inherit;font-size:13px;font-weight:900;cursor:pointer}
-.tide-widget-btn[aria-pressed="true"]{background:#13223d;color:#fff;box-shadow:0 4px 12px rgba(18,35,64,.15)}
-.tide-replay{display:inline-flex;align-items:center;gap:6px;border:1px solid #d9e2ef;background:#fff;color:#20314d}
-.tide-replay:hover{background:#f3f6fb}.tide-replay-icon{font-size:11px}
-.tide-widget-summary{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:12px}
-.tide-widget-period{display:inline-flex;padding:6px 11px;border-radius:999px;background:#eaf1ff;color:#315bd8;font-size:13px;font-weight:900}
-.tide-widget-summary strong{font-size:18px;font-weight:900}
-.tide-slope-wrap{margin-top:12px}.tide-slope-svg{display:block;width:100%;height:auto;overflow:visible}
-.tide-slope-axis{stroke:#d7e0eb;stroke-width:2}.tide-slope-date{fill:#34445e;font-size:16px;font-weight:900}
-.tide-slope-label{fill:#0b1d3a;font-size:15px;font-weight:900}.tide-slope-value{fill:#66758b;font-size:13px;font-weight:800}
-.tide-slope-line{fill:none;stroke-width:5;stroke-linecap:round}.tide-slope-point{stroke:#fff;stroke-width:3}
-.tide-slope-line.series-0{stroke:#10b981}.tide-slope-line.series-1{stroke:#f59e0b}.tide-slope-line.series-2{stroke:#ef476f}.tide-slope-line.series-3{stroke:#64748b}
-.tide-slope-point.series-0{fill:#10b981}.tide-slope-point.series-1{fill:#f59e0b}.tide-slope-point.series-2{fill:#ef476f}.tide-slope-point.series-3{fill:#64748b}
-.tide-slope-line.series-4{stroke:#3b82f6}.tide-slope-line.series-5{stroke:#8b5cf6}
-.tide-slope-point.series-4{fill:#3b82f6}.tide-slope-point.series-5{fill:#8b5cf6}
-.tide-mobile-rows{display:none}.tide-widget-note{margin:4px 0 0;padding-top:14px;border-top:1px solid #e4e9f1;color:#66758b;font-size:12px;line-height:1.7}
-.tide-mobile-row{padding:14px 0;border-bottom:1px solid #e4e9f1}.tide-mobile-row:last-child{border-bottom:0}.tide-mobile-head{display:flex;justify-content:space-between;gap:10px;font-size:14px;font-weight:900}
-.tide-mobile-values{margin-top:5px;color:#465873;font-size:13px;font-weight:800}.tide-mobile-bars{display:grid;gap:5px;margin-top:9px}.tide-mobile-bar{height:8px;border-radius:999px;background:#e5eaf1;overflow:hidden}.tide-mobile-bar span{display:block;height:100%;border-radius:inherit}.tide-mobile-bar.previous span{background:#a8b4c5}.tide-mobile-bar.current span{background:#315bd8}
-@media(max-width:720px){
-  .update-dashboard{padding:10px 10px 24px}
-  .tide-card{padding:20px 16px;border-radius:16px}
-}
-@media(max-width:430px){
-  .tide-widget-controls{align-items:stretch}.tide-widget-tabs{width:100%}.tide-widget-tabs .tide-widget-btn{flex:1}.tide-replay{justify-content:center;width:100%}
-  .tide-widget-summary{align-items:flex-start;flex-direction:column}.tide-widget-summary strong{font-size:17px}
-  .tide-slope-wrap{display:none}.tide-mobile-rows{display:block;margin-top:12px}
-}
-/* TIDE_CARD_END */
+.trend-card{max-width:1180px;margin:18px auto 0;padding:26px 28px;border:1px solid #d9e2ef;border-radius:20px;background:#fff;box-shadow:0 16px 40px rgba(18,35,64,.09);color:var(--ink)}
+.trend-head{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:12px}
+.trend-kicker{display:inline-flex;margin:0;padding:5px 10px;border-radius:999px;background:#eaf1ff;color:#315bd8;font-size:13px;font-weight:900}
+.trend-asof{display:inline-flex;padding:8px 12px;border-radius:12px;background:#f3f6fb;color:#26364f;font-size:14px;font-weight:900;white-space:nowrap}
+.trend-tabs{display:flex;gap:6px;width:max-content;max-width:100%;margin:0 0 16px;padding:4px;border-radius:12px;background:#eef3f9}
+.trend-tab{min-height:38px;padding:8px 14px;border:0;border-radius:9px;background:transparent;color:#53647c;font:inherit;font-size:13px;font-weight:900;cursor:pointer}
+.trend-tab[aria-pressed="true"]{background:#13223d;color:#fff;box-shadow:0 4px 12px rgba(18,35,64,.15)}
+.trend-panel[hidden]{display:none}
+.trend-card h2{margin:0 0 10px;font-size:26px;letter-spacing:-.02em;line-height:1.4}
+.trend-h2-date{display:inline-block;margin-left:.5em;color:#66758b;font-size:.56em;font-weight:800;letter-spacing:0;white-space:nowrap}
+.trend-lead{margin:0 0 8px;color:#26364f;font-size:16px;line-height:1.85}
+.trend-legend-row{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 16px;margin:16px 0 4px}
+.trend-legend{display:flex;flex-wrap:wrap;gap:6px 18px;margin:0;padding:0;list-style:none;color:#26364f;font-size:13px;font-weight:800}
+.trend-play{flex:none;min-height:34px;padding:6px 12px;border:1px solid #d9e2ef;border-radius:999px;background:#fff;color:#315bd8;font:inherit;font-size:13px;font-weight:900;cursor:pointer}
+.trend-play:hover{background:#eaf1ff}
+.trend-play[hidden]{display:none}
+.trend-prev{display:flex;gap:10px;align-items:flex-start;margin:4px 0 0;padding:10px 12px;border-radius:12px;background:#f1f5ff;color:#13223d;font-size:15px;font-weight:800;line-height:1.75}
+.trend-prev-key{flex:none;width:14px;height:14px;margin-top:6px;border-radius:3px;background:#b8c9f5}
+.trend-band{fill:#315bd8;fill-opacity:.1;pointer-events:none}
+.trend-band-label{fill:#315bd8;font-size:10.5px;font-weight:900;paint-order:stroke;stroke:#fff;stroke-width:3px;pointer-events:none}
+.trend-ends{transition:opacity .4s}
+.trend-ends.is-hidden{opacity:0}
+.trend-legend li{display:inline-flex;align-items:center;gap:7px}
+.trend-stage{position:relative;margin-top:6px;outline:none;touch-action:pan-y}
+.trend-stage:focus-visible{box-shadow:0 0 0 3px #bcd0ff;border-radius:10px}
+.trend-svg{display:block;max-width:100%;overflow:visible}
+.trend-grid{stroke:#e4e9f1;stroke-width:1}
+.trend-cross{stroke:#9aa8bd;stroke-width:1;opacity:0;pointer-events:none}
+.trend-tick{fill:#66758b;font-size:12px;font-weight:700}
+.trend-end{fill:#0b1d3a;font-size:13px;font-weight:900}
+.trend-end-n{fill:#66758b;font-size:11px;font-weight:700}
+.trend-tip{position:absolute;top:6px;z-index:2;min-width:190px;padding:10px 12px;border:1px solid #d9e2ef;border-radius:12px;background:#fff;box-shadow:0 10px 28px rgba(18,35,64,.16);pointer-events:none;font-size:12px;line-height:1.5}
+.trend-tip[hidden]{display:none}
+.trend-tip.is-compact{min-width:0;padding:6px 10px;white-space:nowrap}
+.trend-tip.is-compact .trend-tip-head{margin:0!important}
+.trend-tip p{margin:0}.trend-tip-head{margin-bottom:5px!important;color:#66758b;font-weight:800}
+.trend-tip-row{display:flex;align-items:center;gap:8px;padding:1px 0}
+.trend-tip-row i{width:14px;height:2px;border-radius:2px;flex:none}
+.trend-tip-row b{min-width:46px;color:#0b1d3a;font-size:14px;font-weight:900}
+.trend-tip-row span{color:#4b5c74;font-weight:700}
+.trend-tip-row .trend-tip-n{margin-left:auto;padding-left:8px;color:#66758b;white-space:nowrap}
+.trend-tip-event{margin-top:5px!important;padding-top:5px;border-top:1px solid #e4e9f1;color:#26364f;font-weight:800;line-height:1.5}
+.trend-event-line{stroke:#7b8aa3;stroke-width:1;pointer-events:none}
+.trend-event-dot{fill:#fff;stroke:#53647c;stroke-width:1.5}
+.trend-event-no{fill:#26364f;font-size:11px;font-weight:900;pointer-events:none}
+.trend-events{margin-top:20px}
+.trend-events h3{margin:0 0 6px;font-size:17px;letter-spacing:-.01em}
+.trend-events-note{margin:0 0 10px;color:#66758b;font-size:13px;line-height:1.7}
+.trend-event-list{display:grid;gap:10px;margin:0;padding:0;list-style:none}
+.trend-event{display:grid;grid-template-columns:24px 1fr;gap:10px;padding:12px 14px;border:1px solid #e1e7f0;border-radius:12px;background:#f9fbfe}
+.trend-event-badge{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border:1.5px solid #53647c;border-radius:50%;background:#fff;color:#26364f;font-size:12px;font-weight:900}
+.trend-event p{margin:0}
+.trend-event-head{color:#0b1d3a;font-size:15px;font-weight:700;line-height:1.6}
+.trend-event-src{margin-top:2px!important;color:#66758b;font-size:12px;line-height:1.6}
+.trend-event-src a{color:#315bd8;word-break:break-all}
+.trend-event-moves{margin-top:6px!important;color:#26364f;font-size:14px;line-height:1.75}
+.trend-table--reason td.trend-bar-cell{min-width:150px;text-align:left}
+.trend-table--reason thead th:first-child,.trend-table--reason thead th:nth-child(3){text-align:left}
+.trend-bar{display:block;height:8px;min-width:2px;margin-bottom:3px;border-radius:0 4px 4px 0;background:#2a78d6}
+.trend-bar-cell b{color:#0b1d3a;font-size:14px;font-weight:900}
+.trend-share{margin-top:18px;border:1px solid #e1e7f0;border-radius:12px;background:#f9fbfe}
+.trend-share summary{padding:12px 16px;color:#26364f;font-size:14px;font-weight:900;cursor:pointer}
+.trend-share-body{padding:4px 16px 16px}
+.trend-share-lead{margin:0 0 12px;color:#26364f;font-size:13px;font-weight:700;line-height:1.7}
+.trend-share-x{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin:0 0 14px}
+.trend-share-xbtn{gap:7px;border-color:#000;background:#000;color:#fff}
+.trend-share-xbtn:hover{background:#26364f;border-color:#26364f}
+.trend-share-xnote{flex:1 1 260px;color:#4b5c74;font-size:12.5px;line-height:1.7}
+.trend-share-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.trend-share-item{min-width:0;padding:12px;border:1px solid #e1e7f0;border-radius:10px;background:#fff}
+.trend-share-name{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 10px;margin:0;font-size:16px;line-height:1.5}
+.trend-share-name span{color:#53647c;font-size:12px;font-weight:800}
+.trend-share-hint{margin:4px 0 10px;color:#4b5c74;font-size:12.5px;line-height:1.7}
+.trend-share-fig{margin:0}
+.trend-share-fig img{display:block;width:100%;height:auto;border:1px solid #e1e7f0;border-radius:8px;background:#fff}
+.trend-share-fig figcaption{margin-top:6px;color:#66758b;font-size:12px;line-height:1.7}
+.trend-share-terms{margin:14px 0 0;color:#26364f;font-size:13px;font-weight:700;line-height:1.7}
+.trend-share-actions{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin-top:10px}
+.trend-share-btn{display:inline-flex;align-items:center;min-height:38px;padding:8px 14px;border:1px solid #d9e2ef;border-radius:9px;background:#fff;color:#20314d;font:inherit;font-size:13px;font-weight:900;text-decoration:none;cursor:pointer}
+.trend-share-btn:hover{background:#f3f6fb}
+.trend-share-status{color:#047857;font-size:13px;font-weight:800}
+.trend-share-code{display:block;width:100%;margin-top:10px;padding:10px 12px;border:1px solid #d9e2ef;border-radius:8px;background:#f9fbfe;color:#26364f;font:12px/1.6 ui-monospace,SFMono-Regular,Menlo,monospace;resize:vertical}
+@media(max-width:760px){.trend-share-grid{grid-template-columns:minmax(0,1fr)}}
+.trend-table-wrap{margin-top:18px;overflow-x:auto;border-radius:12px;outline:none}
+.trend-table-wrap:focus-visible{box-shadow:0 0 0 3px #bcd0ff}
+.trend-table{width:100%;min-width:560px;border-collapse:collapse;font-size:14px}
+.trend-table caption{padding:0 0 8px;color:#66758b;font-size:13px;font-weight:800;text-align:left}
+.trend-table th,.trend-table td{padding:8px 10px;border-top:1px solid #e4e9f1;text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.trend-table thead th{border-top:0;border-bottom:1px solid #cdd7e5;color:#4b5c74;font-size:12px;font-weight:900;white-space:normal;vertical-align:bottom}
+.trend-table tbody th{text-align:left;color:#26364f;font-weight:900}
+.trend-table .is-latest th,.trend-table .is-latest td{background:#f3f6fb;color:#0b1d3a;font-weight:900}
+.trend-c{display:block;margin-top:1px;color:#66758b;font-size:11px;font-weight:700;line-height:1.3}
+.trend-table .is-latest .trend-c{color:#53647c}
+.trend-note{margin:16px 0 0;padding:14px 0 0;border-top:1px solid #e4e9f1;color:#66758b;font-size:12px;line-height:1.75;list-style:none}
+.trend-note li+li{margin-top:3px}
+.trend-short{display:none}
+@media(max-width:720px){.update-dashboard{padding:10px 10px 24px}}
+@media(max-width:640px){.trend-card{padding:20px 16px;border-radius:16px}.trend-card h2{font-size:21px}.trend-h2-date{display:block;margin-left:0;margin-top:2px;font-size:.62em}.trend-lead{font-size:15px}.trend-asof{white-space:normal}
+.trend-full{display:none}.trend-short{display:inline}
+.trend-table-wrap{overflow-x:visible}.trend-table{min-width:0;table-layout:fixed;font-size:12.5px}
+.trend-table th,.trend-table td{padding:7px 3px}
+.trend-table thead th{padding:7px 2px;font-size:11px;line-height:1.35}.trend-c{font-size:10.5px}
+.trend-table tbody th{width:17%}.trend-table td.col-n{width:15%}
+.trend-table--reason{font-size:12.5px}.trend-table--reason thead th{font-size:11px}.trend-table--reason td.trend-bar-cell{min-width:0}
+.trend-table--reason tbody th{width:34%;white-space:normal;line-height:1.4}.trend-table--reason td:nth-of-type(1){width:15%}.trend-table--reason td:nth-of-type(3){width:17%}
+.trend-event{padding:11px 12px}.trend-event-head{font-size:14px}.trend-event-moves{font-size:13px}
+.trend-table--wide{font-size:11.5px}.trend-table--wide .trend-c{font-size:9px;letter-spacing:-.04em}.trend-table--wide td{padding-left:1px;padding-right:1px}.trend-table--wide .col-n{display:none}.trend-table--wide tbody th{width:16%}.trend-table--wide thead th{font-size:10.5px}}
+@media print{.trend-tip{display:none!important}.trend-play{display:none!important}}
+@media (prefers-reduced-motion:reduce){.trend-ends{transition:none}}
+/* TREND_CARD_END */
 </style>
   <link rel="stylesheet" href="topic-modern.css?v=32">
   <script src="topic-modern.js?v=13" defer></script>
@@ -2530,143 +2610,353 @@ try {
 })();
 </script>
 <!-- PLANET_SECTION_END -->
-<section class="update-dashboard" aria-label="世論の潮目"><!-- TIDE_CARD_START -->
-<section class="tide-card" id="ai-copyright-tide-widget" aria-label="世論の潮目 前回収集と今回収集の比較">
-  <div class="tide-widget-controls" aria-label="潮目の表示切り替え">
-    <div class="tide-widget-tabs">
-      <button type="button" class="tide-widget-btn" data-tide-mode="stance" aria-pressed="true">立場の変化</button>
-      <button type="button" class="tide-widget-btn" data-tide-mode="issue" aria-pressed="false">論点の変化</button>
+<section class="update-dashboard"><!-- TREND_CARD_START -->
+<section class="trend-card" id="ai-copyright-trend" aria-label="SNS上の意見の推移">
+  <div class="trend-head">
+    <p class="trend-kicker">SNS上の意見の推移</p>
+    <span class="trend-asof">2026年10月6日時点</span>
+  </div>
+  <div class="trend-tabs" role="group" aria-label="推移の見方を切り替え"><button type="button" class="trend-tab" data-trend-tab="stance" aria-controls="ai-copyright-trend-panel-stance" aria-pressed="true">立場の変化</button><button type="button" class="trend-tab" data-trend-tab="issue" aria-controls="ai-copyright-trend-panel-issue" aria-pressed="false">論点の変化</button></div>
+  <div class="trend-panel" id="ai-copyright-trend-panel-stance" data-trend-panel="stance">
+    <h2 id="ai-copyright-trend-panel-stance-title">生成AIと著作権への賛否の割合は変わった？<span class="trend-h2-date">（2026年10月6日時点）</span></h2>
+    <p class="trend-lead">2026年10月6日の収集分では、生成AIと著作権に関する意見の投稿のうち、規制・制限強化支持が55.2%でした。推進・活用支持は24.8%、中立・情報は20.0%です。</p><p class="trend-lead">8月3日から10月6日までの9回の収集を、日付順に並べました。「中立・情報」は8月3日の16.6%から20.0%へ、3.4ポイント上がりました。「規制・制限強化支持」は8月3日の58.1%から55.2%へ、2.9ポイント下がりました。どちらも、ぶれの範囲に収まる差です。途中には、9月5日から9月20日にかけて「中立・情報」が14.1ポイント下がった回もあり、一直線の変化ではありません。</p>
+    <p class="trend-prev" id="ai-copyright-trend-panel-stance-prev"><span class="trend-prev-key" aria-hidden="true"></span>前回（9月29日）から今回（10月6日）にかけて、「中立・情報」は29.9%から20.0%へ、9.9ポイント下がりました。ぶれの範囲を超える差です。</p>
+    <div class="trend-legend-row">
+      <ul class="trend-legend" aria-label="凡例"><li><svg width="26" height="12" viewBox="0 0 26 12" aria-hidden="true"><line x1="0" y1="6" x2="26" y2="6" stroke="#ef476f" stroke-width="2" stroke-linecap="round"/><g transform="translate(13 6)" fill="#ef476f"><path d="M0-1.35L1.35 0L0 1.35L-1.35 0Z" transform="scale(4.5)"/></g></svg><span>規制・制限強化支持</span></li><li><svg width="26" height="12" viewBox="0 0 26 12" aria-hidden="true"><line x1="0" y1="6" x2="26" y2="6" stroke="#10b981" stroke-width="2" stroke-linecap="round"/><g transform="translate(13 6)" fill="#10b981"><circle r="4.5"/></g></svg><span>推進・活用支持</span></li><li><svg width="26" height="12" viewBox="0 0 26 12" aria-hidden="true"><line x1="0" y1="6" x2="26" y2="6" stroke="#64748b" stroke-width="2" stroke-linecap="round"/><g transform="translate(13 6)" fill="#64748b"><path d="M0-1.3L1.3 1.05L-1.3 1.05Z" transform="scale(4.5)"/></g></svg><span>中立・情報</span></li></ul>
+      <button type="button" class="trend-play" data-trend-play hidden>▶ 変化を再生</button>
     </div>
-    <button type="button" class="tide-widget-btn tide-replay" data-tide-replay><span class="tide-replay-icon" aria-hidden="true">▶</span>変化を再生</button>
+    <div class="trend-stage" data-trend-stage tabindex="0" role="group" aria-label="推移グラフ。左右の矢印キーで収集回を切り替えると、その回の数字が出ます。">
+      <div class="trend-tip" data-trend-tip hidden></div>
+    </div>
+    
+    <div class="trend-table-wrap" tabindex="0" role="region" aria-label="収集回ごとの立場別の割合の表"><table class="trend-table"><caption>収集回ごとの立場別の割合（意見の投稿に占める割合）。割合の下のかっこ内は、その立場の投稿の数</caption><thead><tr><th scope="col">収集日</th><th scope="col" class="col-n">意見数</th><th scope="col"><span class="trend-full">規制・制限強化支持</span><span class="trend-short">規制<br>支持</span></th><th scope="col"><span class="trend-full">推進・活用支持</span><span class="trend-short">推進<br>支持</span></th><th scope="col"><span class="trend-full">中立・情報</span><span class="trend-short">中立・<br>情報</span></th></tr></thead><tbody><tr id="ai-copyright-trend-panel-stance-row-2026-08-03"><th scope="row">8月3日</th><td class="col-n">277件</td><td>58.1%<span class="trend-c">（161件）</span></td><td>25.3%<span class="trend-c">（70件）</span></td><td>16.6%<span class="trend-c">（46件）</span></td></tr><tr id="ai-copyright-trend-panel-stance-row-2026-08-09"><th scope="row">8月9日</th><td class="col-n">265件</td><td>61.9%<span class="trend-c">（164件）</span></td><td>19.2%<span class="trend-c">（51件）</span></td><td>18.9%<span class="trend-c">（50件）</span></td></tr><tr id="ai-copyright-trend-panel-stance-row-2026-08-16"><th scope="row">8月16日</th><td class="col-n">300件</td><td>52.0%<span class="trend-c">（156件）</span></td><td>22.3%<span class="trend-c">（67件）</span></td><td>25.7%<span class="trend-c">（77件）</span></td></tr><tr id="ai-copyright-trend-panel-stance-row-2026-08-23"><th scope="row">8月23日</th><td class="col-n">277件</td><td>54.9%<span class="trend-c">（152件）</span></td><td>24.5%<span class="trend-c">（68件）</span></td><td>20.6%<span class="trend-c">（57件）</span></td></tr><tr id="ai-copyright-trend-panel-stance-row-2026-08-31"><th scope="row">8月31日</th><td class="col-n">310件</td><td>51.6%<span class="trend-c">（160件）</span></td><td>24.5%<span class="trend-c">（76件）</span></td><td>23.9%<span class="trend-c">（74件）</span></td></tr><tr id="ai-copyright-trend-panel-stance-row-2026-09-05"><th scope="row">9月5日</th><td class="col-n">359件</td><td>45.4%<span class="trend-c">（163件）</span></td><td>19.5%<span class="trend-c">（70件）</span></td><td>35.1%<span class="trend-c">（126件）</span></td></tr><tr id="ai-copyright-trend-panel-stance-row-2026-09-20"><th scope="row">9月20日</th><td class="col-n">272件</td><td>59.6%<span class="trend-c">（162件）</span></td><td>19.5%<span class="trend-c">（53件）</span></td><td>21.0%<span class="trend-c">（57件）</span></td></tr><tr id="ai-copyright-trend-panel-stance-row-2026-09-29"><th scope="row">9月29日</th><td class="col-n">281件</td><td>53.0%<span class="trend-c">（149件）</span></td><td>17.1%<span class="trend-c">（48件）</span></td><td>29.9%<span class="trend-c">（84件）</span></td></tr><tr id="ai-copyright-trend-panel-stance-row-2026-10-06" class="is-latest"><th scope="row">10月6日</th><td class="col-n">270件</td><td>55.2%<span class="trend-c">（149件）</span></td><td>24.8%<span class="trend-c">（67件）</span></td><td>20.0%<span class="trend-c">（54件）</span></td></tr></tbody></table></div>
+    
+    <ul class="trend-note"><li>集計の対象は、各回で初めて見つかった投稿のうち、生成AIと著作権について意見を述べた投稿です。同じ検索語のセットで集め、AIで立場を分類しています。同じ投稿は重ねて数えません。</li><li>Xの投稿サンプルの構成比であり、世論調査ではありません。同じ人の意見が動いたことも、世論全体の変化も示しません。</li><li>2026年7月26日までの回は、分類のしかたが今と違うため、この図には並べていません。2026年9月5日の回は、分類結果の出力の傾向（要約の長さなど）が他の回と違うことを確認しています。この回の割合は、前後の回と同じ尺度で比べられない可能性があります。</li><li>2026年9月29日の回から、分類に使うAIを切り替えました。それ以前の回との差には、AIの違いも含まれます。</li><li>各回の意見は<span id="ai-copyright-trend-panel-stance-n-range">265〜359件</span>です。投稿の拾い方に偏りがない場合でも、割合には±6ポイント前後のぶれが出ます。「ぶれの範囲」はこの目安で判定しています。</li><li>収集日は日本時間です。収集の間隔は5〜15日で、一定ではありません。</li><li>各回とも、投稿の95%以上は、収集日の前の7日間に書かれたものです。</li></ul>
   </div>
-  <div class="tide-widget-summary" aria-live="polite">
-    <span class="tide-widget-period">8月31日 → 9月5日</span>
-    <strong data-tide-headline>「規制・制限強化支持」が2.2ポイント増加</strong>
+  <div class="trend-panel" id="ai-copyright-trend-panel-issue" data-trend-panel="issue" hidden>
+    <h2 id="ai-copyright-trend-panel-issue-title">生成AIと著作権で語られる論点は変わった？<span class="trend-h2-date">（2026年10月6日時点）</span></h2>
+    <p class="trend-lead">2026年10月6日の収集分では、生成AIと著作権に関する意見の投稿のうち、主な論点が最も多いのは「学習データ・無断利用」の26.1%でした。続いて「利用者モラル・倫理」が26.1%、「法制度・規制整備」が24.5%です。</p><p class="trend-lead">8月3日から10月6日までの9回の収集を、日付順に並べました。主な論点が「学習データ・無断利用」の投稿は、8月3日の32.8%から26.1%へ、6.7ポイント下がりました。ぶれの範囲に収まる差です。主な論点が「クリエイター保護・権利」の投稿は、8月3日の16.8%から10.7%へ、6.1ポイント下がりました。ぶれの範囲を超える差です。途中には、8月31日から9月5日にかけて主な論点が「学習データ・無断利用」の投稿が11.8ポイント上がった回もあり、一直線の変化ではありません。</p>
+    <p class="trend-prev" id="ai-copyright-trend-panel-issue-prev"><span class="trend-prev-key" aria-hidden="true"></span>前回（9月29日）から今回（10月6日）にかけて、主な論点が「学習データ・無断利用」の投稿は、29.8%から26.1%へ、3.7ポイント下がりました。ぶれの範囲に収まる差です。</p>
+    <div class="trend-legend-row">
+      <ul class="trend-legend" aria-label="凡例"><li><svg width="26" height="12" viewBox="0 0 26 12" aria-hidden="true"><line x1="0" y1="6" x2="26" y2="6" stroke="#2a78d6" stroke-width="2" stroke-linecap="round"/><g transform="translate(13 6)" fill="#2a78d6"><circle r="4.5"/></g></svg><span>学習データ・無断利用</span></li><li><svg width="26" height="12" viewBox="0 0 26 12" aria-hidden="true"><line x1="0" y1="6" x2="26" y2="6" stroke="#eb6834" stroke-width="2" stroke-linecap="round"/><g transform="translate(13 6)" fill="#eb6834"><path d="M-1-1H1V1H-1Z" transform="scale(4.5)"/></g></svg><span>クリエイター保護・権利</span></li><li><svg width="26" height="12" viewBox="0 0 26 12" aria-hidden="true"><line x1="0" y1="6" x2="26" y2="6" stroke="#1baf7a" stroke-width="2" stroke-linecap="round"/><g transform="translate(13 6)" fill="#1baf7a"><path d="M0-1.35L1.35 0L0 1.35L-1.35 0Z" transform="scale(4.5)"/></g></svg><span>法制度・規制整備</span></li><li><svg width="26" height="12" viewBox="0 0 26 12" aria-hidden="true"><line x1="0" y1="6" x2="26" y2="6" stroke="#eda100" stroke-width="2" stroke-linecap="round"/><g transform="translate(13 6)" fill="#eda100"><path d="M0-1.3L1.3 1.05L-1.3 1.05Z" transform="scale(4.5)"/></g></svg><span>技術競争・推進</span></li><li><svg width="26" height="12" viewBox="0 0 26 12" aria-hidden="true"><line x1="0" y1="6" x2="26" y2="6" stroke="#e87ba4" stroke-width="2" stroke-linecap="round"/><g transform="translate(13 6)" fill="#e87ba4"><path d="M0 1.3L1.3-1.05L-1.3-1.05Z" transform="scale(4.5)"/></g></svg><span>利用者モラル・倫理</span></li><li><svg width="26" height="12" viewBox="0 0 26 12" aria-hidden="true"><line x1="0" y1="6" x2="26" y2="6" stroke="#4a3aa7" stroke-width="2" stroke-linecap="round"/><g transform="translate(13 6)" fill="#4a3aa7"><path d="M-.5-1.5H.5V-.5H1.5V.5H.5V1.5H-.5V.5H-1.5V-.5H-.5Z" transform="scale(4.5)"/></g></svg><span>AI生成物の権利・創作性</span></li></ul>
+      <button type="button" class="trend-play" data-trend-play hidden>▶ 変化を再生</button>
+    </div>
+    <div class="trend-stage" data-trend-stage tabindex="0" role="group" aria-label="推移グラフ。左右の矢印キーで収集回を切り替えると、その回の数字が出ます。">
+      <div class="trend-tip" data-trend-tip hidden></div>
+    </div>
+    
+    <div class="trend-table-wrap" tabindex="0" role="region" aria-label="収集回ごとの論点別の割合の表"><table class="trend-table trend-table--wide"><caption>収集回ごとの論点別の割合（「その他」を除く意見の投稿に占める割合）。割合の下のかっこ内は、その論点の投稿の数</caption><thead><tr><th scope="col">収集日</th><th scope="col" class="col-n">意見数</th><th scope="col"><span class="trend-full">学習データ・無断利用</span><span class="trend-short">学習<br>データ</span></th><th scope="col"><span class="trend-full">クリエイター保護・権利</span><span class="trend-short">クリエ<br>イター</span></th><th scope="col"><span class="trend-full">法制度・規制整備</span><span class="trend-short">法制度・<br>規制</span></th><th scope="col"><span class="trend-full">技術競争・推進</span><span class="trend-short">技術<br>競争</span></th><th scope="col"><span class="trend-full">利用者モラル・倫理</span><span class="trend-short">モラル・<br>倫理</span></th><th scope="col"><span class="trend-full">AI生成物の権利・創作性</span><span class="trend-short">AI生成物<br>の権利</span></th></tr></thead><tbody><tr id="ai-copyright-trend-panel-issue-row-2026-08-03"><th scope="row">8月3日</th><td class="col-n">256件</td><td>32.8%<span class="trend-c">（84件）</span></td><td>16.8%<span class="trend-c">（43件）</span></td><td>23.4%<span class="trend-c">（60件）</span></td><td>2.7%<span class="trend-c">（7件）</span></td><td>20.3%<span class="trend-c">（52件）</span></td><td>3.9%<span class="trend-c">（10件）</span></td></tr><tr id="ai-copyright-trend-panel-issue-row-2026-08-09"><th scope="row">8月9日</th><td class="col-n">245件</td><td>24.1%<span class="trend-c">（59件）</span></td><td>15.9%<span class="trend-c">（39件）</span></td><td>16.3%<span class="trend-c">（40件）</span></td><td>5.7%<span class="trend-c">（14件）</span></td><td>30.6%<span class="trend-c">（75件）</span></td><td>7.3%<span class="trend-c">（18件）</span></td></tr><tr id="ai-copyright-trend-panel-issue-row-2026-08-16"><th scope="row">8月16日</th><td class="col-n">260件</td><td>30.4%<span class="trend-c">（79件）</span></td><td>10.4%<span class="trend-c">（27件）</span></td><td>18.5%<span class="trend-c">（48件）</span></td><td>5.0%<span class="trend-c">（13件）</span></td><td>27.7%<span class="trend-c">（72件）</span></td><td>8.1%<span class="trend-c">（21件）</span></td></tr><tr id="ai-copyright-trend-panel-issue-row-2026-08-23"><th scope="row">8月23日</th><td class="col-n">247件</td><td>25.9%<span class="trend-c">（64件）</span></td><td>8.5%<span class="trend-c">（21件）</span></td><td>20.6%<span class="trend-c">（51件）</span></td><td>6.1%<span class="trend-c">（15件）</span></td><td>30.4%<span class="trend-c">（75件）</span></td><td>8.5%<span class="trend-c">（21件）</span></td></tr><tr id="ai-copyright-trend-panel-issue-row-2026-08-31"><th scope="row">8月31日</th><td class="col-n">282件</td><td>21.6%<span class="trend-c">（61件）</span></td><td>15.2%<span class="trend-c">（43件）</span></td><td>20.2%<span class="trend-c">（57件）</span></td><td>5.0%<span class="trend-c">（14件）</span></td><td>27.3%<span class="trend-c">（77件）</span></td><td>10.6%<span class="trend-c">（30件）</span></td></tr><tr id="ai-copyright-trend-panel-issue-row-2026-09-05"><th scope="row">9月5日</th><td class="col-n">338件</td><td>33.4%<span class="trend-c">（113件）</span></td><td>6.5%<span class="trend-c">（22件）</span></td><td>13.3%<span class="trend-c">（45件）</span></td><td>6.2%<span class="trend-c">（21件）</span></td><td>37.3%<span class="trend-c">（126件）</span></td><td>3.3%<span class="trend-c">（11件）</span></td></tr><tr id="ai-copyright-trend-panel-issue-row-2026-09-20"><th scope="row">9月20日</th><td class="col-n">257件</td><td>28.4%<span class="trend-c">（73件）</span></td><td>12.1%<span class="trend-c">（31件）</span></td><td>19.8%<span class="trend-c">（51件）</span></td><td>5.8%<span class="trend-c">（15件）</span></td><td>25.7%<span class="trend-c">（66件）</span></td><td>8.2%<span class="trend-c">（21件）</span></td></tr><tr id="ai-copyright-trend-panel-issue-row-2026-09-29"><th scope="row">9月29日</th><td class="col-n">262件</td><td>29.8%<span class="trend-c">（78件）</span></td><td>13.7%<span class="trend-c">（36件）</span></td><td>21.0%<span class="trend-c">（55件）</span></td><td>1.9%<span class="trend-c">（5件）</span></td><td>25.6%<span class="trend-c">（67件）</span></td><td>8.0%<span class="trend-c">（21件）</span></td></tr><tr id="ai-copyright-trend-panel-issue-row-2026-10-06" class="is-latest"><th scope="row">10月6日</th><td class="col-n">261件</td><td>26.1%<span class="trend-c">（68件）</span></td><td>10.7%<span class="trend-c">（28件）</span></td><td>24.5%<span class="trend-c">（64件）</span></td><td>4.6%<span class="trend-c">（12件）</span></td><td>26.1%<span class="trend-c">（68件）</span></td><td>8.0%<span class="trend-c">（21件）</span></td></tr></tbody></table></div>
+    
+    <ul class="trend-note"><li>集計の対象は、各回で初めて見つかった投稿のうち、生成AIと著作権について意見を述べた投稿です。AIが主な論点を1つに分類しています。複数の話題に触れる投稿も、1つにだけ数えます。「その他」は除いて割合を出しています。同じ投稿は重ねて数えません。</li><li>Xの投稿サンプルの構成比であり、世論調査ではありません。同じ人の意見が動いたことも、世論全体の変化も示しません。</li><li>2026年7月26日までの回は、分類のしかたが今と違うため、この図には並べていません。2026年9月5日の回は、分類結果の出力の傾向（要約の長さなど）が他の回と違うことを確認しています。この回の割合は、前後の回と同じ尺度で比べられない可能性があります。</li><li>2026年9月29日の回から、分類に使うAIを切り替えました。それ以前の回との差には、AIの違いも含まれます。</li><li>各回の意見は<span id="ai-copyright-trend-panel-issue-n-range">245〜338件</span>です。投稿の拾い方に偏りがない場合でも、割合には±6ポイント前後のぶれが出ます。「ぶれの範囲」はこの目安で判定しています。</li><li>収集日は日本時間です。収集の間隔は5〜15日で、一定ではありません。</li><li>各回とも、投稿の96%以上は、収集日の前の7日間に書かれたものです。</li></ul>
   </div>
-  <div class="tide-slope-wrap">
-    <svg class="tide-slope-svg" viewBox="0 0 720 340" role="img" aria-labelledby="ai-copyright-tide-widget-slope-title ai-copyright-tide-widget-slope-desc">
-      <title id="ai-copyright-tide-widget-slope-title">前回と今回の構成比を結ぶグラフ</title>
-      <desc id="ai-copyright-tide-widget-slope-desc">前回収集分236件と今回収集分233件の構成比を比較します。</desc>
-      <text class="tide-slope-date" x="160" y="28" text-anchor="middle">前回 8月31日</text>
-      <text class="tide-slope-date" x="560" y="28" text-anchor="middle">今回 9月5日</text>
-      <line class="tide-slope-axis" x1="160" y1="48" x2="160" y2="320"></line>
-      <line class="tide-slope-axis" x1="560" y1="48" x2="560" y2="320"></line>
-      <g data-tide-series></g>
-    </svg>
-  </div>
-  <div class="tide-mobile-rows" data-tide-mobile aria-label="前回と今回の構成比"></div>
-  <p class="tide-widget-note">比較対象：8月31日収集分のうち意見投稿／9月5日収集分のうち意見投稿。同じ検索語セットで取得した投稿をAIで分類しています。サンプルの構成比の変化であり、同じ人の意見が移動したことや世論全体の変化を示すものではありません。</p>
-</section>
-<script>
+  <script>
 (() => {
-  const root = document.getElementById("ai-copyright-tide-widget");
+  const root = document.getElementById("ai-copyright-trend");
   if (!root) return;
-  const datasets = {"stance": {"max": 80, "headline": "「規制・制限強化支持」が2.2ポイント増加", "rows": [{"label": "規制・制限強化支持", "previous": 67.8, "current": 70.0}, {"label": "推進・活用支持", "previous": 32.2, "current": 30.0}]}, "issue": {"max": 40, "headline": "「学習データ・無断利用」が11.8ポイント増加", "rows": [{"label": "学習データ・無断利用", "previous": 21.6, "current": 33.4}, {"label": "クリエイター保護・権利", "previous": 15.2, "current": 6.5}, {"label": "法制度・規制整備", "previous": 20.2, "current": 13.3}, {"label": "技術競争・推進", "previous": 5.0, "current": 6.2}, {"label": "利用者モラル・倫理", "previous": 27.3, "current": 37.3}, {"label": "AI生成物の権利・創作性", "previous": 10.6, "current": 3.3}]}};
-  const svgGroup = root.querySelector("[data-tide-series]");
-  const mobileRows = root.querySelector("[data-tide-mobile]");
-  const headline = root.querySelector("[data-tide-headline]");
-  const modeButtons = [...root.querySelectorAll("[data-tide-mode]")];
-  const replayButton = root.querySelector("[data-tide-replay]");
-  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  let mode = "stance";
-  let animationFrame = 0;
-  let hasAutoPlayed = false;
-
-  const yFor = (value, max) => 310 - (value / max) * 235;
-  const signed = value => `${value >= 0 ? "+" : "−"}${Math.abs(value).toFixed(1)}ポイント`;
-  const svgElement = (name, attrs, text) => {
-    const el = document.createElementNS("http://www.w3.org/2000/svg", name);
-    Object.entries(attrs).forEach(([key, value]) => el.setAttribute(key, String(value)));
-    if (text !== undefined) el.textContent = text;
-    return el;
+  const panels = {"stance":{"labels":["規制・制限強化支持","推進・活用支持","中立・情報"],"events":[],"colors":["#ef476f","#10b981","#64748b"],"shapes":["diamond","circle","triangle"],"emph":[],"rounds":[{"d":"2026-08-03","n":277,"v":[58.1,25.3,16.6],"c":[161,70,46]},{"d":"2026-08-09","n":265,"v":[61.9,19.2,18.9],"c":[164,51,50]},{"d":"2026-08-16","n":300,"v":[52.0,22.3,25.7],"c":[156,67,77]},{"d":"2026-08-23","n":277,"v":[54.9,24.5,20.6],"c":[152,68,57]},{"d":"2026-08-31","n":310,"v":[51.6,24.5,23.9],"c":[160,76,74]},{"d":"2026-09-05","n":359,"v":[45.4,19.5,35.1],"c":[163,70,126]},{"d":"2026-09-20","n":272,"v":[59.6,19.5,21.0],"c":[162,53,57]},{"d":"2026-09-29","n":281,"v":[53.0,17.1,29.9],"c":[149,48,84]},{"d":"2026-10-06","n":270,"v":[55.2,24.8,20.0],"c":[149,67,54]}],"aria":"8月3日から10月6日までの9回の収集について、立場ごとの割合の推移を示す折れ線グラフです。同じ数字は下の表にあります。"},"issue":{"labels":["学習データ・無断利用","クリエイター保護・権利","法制度・規制整備","技術競争・推進","利用者モラル・倫理","AI生成物の権利・創作性"],"events":[],"colors":["#2a78d6","#eb6834","#1baf7a","#eda100","#e87ba4","#4a3aa7"],"shapes":["circle","square","diamond","triangle","triangle-down","plus"],"emph":[1],"rounds":[{"d":"2026-08-03","n":256,"v":[32.8,16.8,23.4,2.7,20.3,3.9],"c":[84,43,60,7,52,10]},{"d":"2026-08-09","n":245,"v":[24.1,15.9,16.3,5.7,30.6,7.3],"c":[59,39,40,14,75,18]},{"d":"2026-08-16","n":260,"v":[30.4,10.4,18.5,5.0,27.7,8.1],"c":[79,27,48,13,72,21]},{"d":"2026-08-23","n":247,"v":[25.9,8.5,20.6,6.1,30.4,8.5],"c":[64,21,51,15,75,21]},{"d":"2026-08-31","n":282,"v":[21.6,15.2,20.2,5.0,27.3,10.6],"c":[61,43,57,14,77,30]},{"d":"2026-09-05","n":338,"v":[33.4,6.5,13.3,6.2,37.3,3.3],"c":[113,22,45,21,126,11]},{"d":"2026-09-20","n":257,"v":[28.4,12.1,19.8,5.8,25.7,8.2],"c":[73,31,51,15,66,21]},{"d":"2026-09-29","n":262,"v":[29.8,13.7,21.0,1.9,25.6,8.0],"c":[78,36,55,5,67,21]},{"d":"2026-10-06","n":261,"v":[26.1,10.7,24.5,4.6,26.1,8.0],"c":[68,28,64,12,68,21]}],"aria":"8月3日から10月6日までの9回の収集について、論点ごとの割合の推移を示す折れ線グラフです。同じ数字は下の表にあります。"}};
+  const NS = "http://www.w3.org/2000/svg";
+  const SHAPES = {"circle":null,"square":"M-1-1H1V1H-1Z","diamond":"M0-1.35L1.35 0L0 1.35L-1.35 0Z","triangle":"M0-1.3L1.3 1.05L-1.3 1.05Z","triangle-down":"M0 1.3L1.3-1.05L-1.3-1.05Z","plus":"M-.5-1.5H.5V-.5H1.5V.5H.5V1.5H-.5V.5H-1.5V-.5H-.5Z"};
+  const el = (name, attrs, text) => {
+    const node = document.createElementNS(NS, name);
+    Object.keys(attrs || {}).forEach(k => node.setAttribute(k, attrs[k]));
+    if (text != null) node.textContent = text;
+    return node;
   };
+  const mark = (shape, cx, cy, r, color) => {
+    const path = SHAPES[shape];
+    if (!path) return el("circle", {cx, cy, r, fill: color});
+    return el("path", {d: path, transform: `translate(${cx} ${cy}) scale(${r})`, fill: color});
+  };
+  const jp = d => { const [, m, dd] = d.split("-"); return Number(m) + "月" + Number(dd) + "日"; };
+  const sh = d => { const [, m, dd] = d.split("-"); return Number(m) + "/" + Number(dd); };
 
-  function draw(progress = 1) {
-    const data = datasets[mode];
-    svgGroup.replaceChildren();
-    mobileRows.replaceChildren();
-    const resolveLabelYs = rawYs => {
-      const minGap = 34;
-      const order = rawYs.map((_, i) => i).sort((a, b) => rawYs[a] - rawYs[b]);
-      const resolved = rawYs.slice();
-      for (let k = 1; k < order.length; k++) {
-        const gap = resolved[order[k]] - resolved[order[k - 1]];
-        if (gap < minGap) resolved[order[k]] = resolved[order[k - 1]] + minGap;
+  function chart(panel, data) {
+    const stage = panel.querySelector("[data-trend-stage]");
+    const tip = panel.querySelector("[data-trend-tip]");
+    if (!stage || !tip) return {draw() {}};
+    const days = data.rounds.map(r => Date.parse(r.d + "T00:00:00Z") / 86400000);
+    const lastIndex = data.rounds.length - 1;
+    let active = lastIndex;
+    let geom = null;
+    // 再生（時間経過の動き）。動きを減らす設定の端末・古いブラウザでは使わず、最初から完成した状態で出す。
+    const kind = panel.getAttribute("data-trend-panel");
+    const playBtn = panel.querySelector("[data-trend-play]");
+    const reduced = !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+    const canAnimate = !reduced && lastIndex >= 1 && "IntersectionObserver" in window && typeof requestAnimationFrame === "function";
+    let pending = canAnimate;   // 画面に入ったら1回だけ自動で再生する。それまでは、線を描く前の状態で待つ
+    let playing = false, frame = 0, shownIndex = -1;
+    if (playBtn) playBtn.hidden = !canAnimate;
+    const setPlayLabel = on => { if (playBtn) playBtn.textContent = on ? "■ 最後まで表示" : "▶ 変化を再生"; };
+
+    function draw() {
+      if (panel.hidden) return;
+      stopPlay();
+      const W = Math.max(280, Math.floor(stage.clientWidth));
+      const small = W < 520;
+      const H = small ? 300 : 340;
+      const hasCounts = data.rounds.every(r => r.c);
+      const m = {t: data.events.length ? 26 : 14, r: (small ? 52 : 60) + (hasCounts ? (small ? 38 : 56) : 0), b: 34, l: small ? 38 : 44};
+      const pw = W - m.l - m.r, ph = H - m.t - m.b;
+      const top = Math.max(10, Math.ceil(Math.max(...data.rounds.flatMap(r => r.v)) / 10) * 10);
+      const x0 = days[0], x1 = days[lastIndex];
+      const XD = day => m.l + (x1 === x0 ? pw / 2 : (day - x0) / (x1 - x0) * pw);
+      const X = i => XD(days[i]);
+      const Y = v => m.t + ph - v / top * ph;
+      stage.querySelector("svg")?.remove();
+      const svg = el("svg", {viewBox: `0 0 ${W} ${H}`, width: W, height: H, role: "img", "aria-label": data.aria});
+      svg.setAttribute("class", "trend-svg");
+      // 線・点・帯は、この「窓」の中だけに見える。再生では窓を左から右へ広げる（完成した絵を隠しておいて見せていく）。
+      const clipId = panel.id + "-clip";
+      const clipRect = el("rect", {x: 0, y: 0, width: W, height: H});
+      const defs = el("defs");
+      const clip = el("clipPath", {id: clipId});
+      clip.appendChild(clipRect);
+      defs.appendChild(clip);
+      svg.appendChild(defs);
+      for (let v = 0; v <= top; v += 10) {
+        svg.appendChild(el("line", {x1: m.l, x2: m.l + pw, y1: Y(v), y2: Y(v), class: "trend-grid"}));
+        svg.appendChild(el("text", {x: m.l - 8, y: Y(v) + 4, "text-anchor": "end", class: "trend-tick"}, v + "%"));
       }
-      return resolved;
-    };
-    const y1s = data.rows.map(row => yFor(row.previous, data.max));
-    const y2s = data.rows.map((row, index) => y1s[index] + (yFor(row.current, data.max) - y1s[index]) * progress);
-    const y1Labels = resolveLabelYs(y1s);
-    const y2Labels = resolveLabelYs(y2s);
-    data.rows.forEach((row, index) => {
-      const y1 = y1s[index];
-      const y2 = y2s[index];
-      const y1Label = y1Labels[index];
-      const y2Label = y2Labels[index];
-      const shown = row.previous + (row.current - row.previous) * progress;
-      const shownDelta = shown - row.previous;
-      const seriesClass = `series-${index}`;
-      svgGroup.appendChild(svgElement("line", {x1:160, y1, x2:560, y2, class:`tide-slope-line ${seriesClass}`}));
-      svgGroup.appendChild(svgElement("circle", {cx:160, cy:y1, r:7, class:`tide-slope-point ${seriesClass}`}));
-      svgGroup.appendChild(svgElement("circle", {cx:560, cy:y2, r:7, class:`tide-slope-point ${seriesClass}`}));
-      svgGroup.appendChild(svgElement("text", {x:145, y:y1Label-5, "text-anchor":"end", class:"tide-slope-label"}, row.label));
-      svgGroup.appendChild(svgElement("text", {x:145, y:y1Label+17, "text-anchor":"end", class:"tide-slope-value"}, `${row.previous.toFixed(1)}%`));
-      svgGroup.appendChild(svgElement("text", {x:575, y:y2Label-5, class:"tide-slope-label"}, `${shown.toFixed(1)}%`));
-      svgGroup.appendChild(svgElement("text", {x:575, y:y2Label+17, class:"tide-slope-value"}, signed(shownDelta)));
-      const mobile = document.createElement("article");
-      mobile.className = "tide-mobile-row";
-      mobile.innerHTML =
-        `<div class="tide-mobile-head"><span>${row.label}</span><strong>${signed(shownDelta)}</strong></div>` +
-        `<div class="tide-mobile-values">前回 ${row.previous.toFixed(1)}% → 今回 ${shown.toFixed(1)}%</div>` +
-        `<div class="tide-mobile-bars" aria-hidden="true">` +
-          `<div class="tide-mobile-bar previous"><span style="width:${row.previous / data.max * 100}%"></span></div>` +
-          `<div class="tide-mobile-bar current"><span style="width:${shown / data.max * 100}%"></span></div>` +
-        `</div>`;
-      mobileRows.appendChild(mobile);
-    });
-  }
-
-  function animate() {
-    cancelAnimationFrame(animationFrame);
-    if (reducedMotion) { draw(1); return; }
-    const startedAt = performance.now();
-    const duration = 900;
-    const step = now => {
-      const raw = Math.min(1, (now - startedAt) / duration);
-      draw(1 - Math.pow(1 - raw, 3));
-      if (raw < 1) animationFrame = requestAnimationFrame(step);
-    };
-    animationFrame = requestAnimationFrame(step);
-  }
-
-  function setMode(nextMode) {
-    mode = nextMode;
-    modeButtons.forEach(button => {
-      const selected = button.dataset.tideMode === mode;
-      button.setAttribute("aria-pressed", String(selected));
-    });
-    headline.textContent = datasets[mode].headline;
-    animate();
-  }
-
-  modeButtons.forEach(button => button.addEventListener("click", () => setMode(button.dataset.tideMode)));
-  replayButton.addEventListener("click", animate);
-  draw(1);
-
-  if ("IntersectionObserver" in window && !reducedMotion) {
-    const observer = new IntersectionObserver(entries => {
-      if (!hasAutoPlayed && entries.some(entry => entry.isIntersecting)) {
-        hasAutoPlayed = true;
-        animate();
-        observer.disconnect();
+      const shown = [];
+      data.rounds.forEach((r, i) => {
+        if (shown.length && X(i) - X(shown[shown.length - 1]) < 46) return;
+        shown.push(i);
+      });
+      if (shown[shown.length - 1] !== lastIndex) {
+        while (shown.length > 1 && X(lastIndex) - X(shown[shown.length - 1]) < 46) shown.pop();
+        shown.push(lastIndex);
       }
-    }, {threshold: 0.35});
-    observer.observe(root);
+      shown.forEach(i => svg.appendChild(el("text", {x: X(i), y: H - 10, "text-anchor": i === 0 ? "start" : (i === lastIndex ? "end" : "middle"), class: "trend-tick"}, sh(data.rounds[i].d))));
+      // 出来事の縦線と番号（下の「同じ期間にあった出来事」の番号と対応）。原因を示すものではない。
+      data.events.forEach(e => {
+        const ex = XD(Date.parse(e.d + "T00:00:00Z") / 86400000);
+        svg.appendChild(el("line", {x1: ex, x2: ex, y1: 14, y2: m.t + ph, class: "trend-event-line"}));
+        svg.appendChild(el("circle", {cx: ex, cy: 10, r: 8, class: "trend-event-dot"}));
+        svg.appendChild(el("text", {x: ex, y: 13.5, "text-anchor": "middle", class: "trend-event-no"}, String(e.n)));
+      });
+      const cross = el("line", {y1: m.t, y2: m.t + ph, class: "trend-cross"});
+      svg.appendChild(cross);
+      const body = el("g", {"clip-path": `url(#${clipId})`});
+      // 直前の回から最新の回までの帯（潮目が見せていた「前回→今回」）。収集が3回以上のときだけ。
+      if (lastIndex >= 2) {
+        const bx = X(lastIndex - 1), bw = X(lastIndex) - bx;
+        body.appendChild(el("rect", {x: bx, y: m.t, width: bw, height: ph, class: "trend-band"}));
+        body.appendChild(el("text", {x: bx + bw, y: m.t + 11, "text-anchor": "end", class: "trend-band-label"}, "前回→今回"));
+      }
+      const dim = s => data.emph.length > 0 && data.emph.indexOf(s) < 0;
+      data.labels.forEach((label, s) => {
+        const points = data.rounds.map((r, i) => `${X(i).toFixed(1)},${Y(r.v[s]).toFixed(1)}`).join(" ");
+        body.appendChild(el("polyline", {points, fill: "none", stroke: data.colors[s], "stroke-width": dim(s) ? 2 : (data.emph.length ? 3 : 2), "stroke-opacity": dim(s) ? 0.5 : 1, "stroke-linejoin": "round", "stroke-linecap": "round"}));
+      });
+      data.labels.forEach((label, s) => {
+        data.rounds.forEach((r, i) => {
+          const g = el("g", {opacity: dim(s) ? 0.6 : 1});
+          g.appendChild(mark(data.shapes[s], X(i), Y(r.v[s]), 5.5, "#fff"));
+          g.appendChild(mark(data.shapes[s], X(i), Y(r.v[s]), 3.5, data.colors[s]));
+          body.appendChild(g);
+        });
+      });
+      svg.appendChild(body);
+      const endsGroup = el("g", {class: "trend-ends"});
+      const ends = data.labels.map((l, s) => ({s, y: Y(data.rounds[lastIndex].v[s])})).sort((a, b) => a.y - b.y);
+      for (let k = 1; k < ends.length; k++) if (ends[k].y - ends[k - 1].y < 14) ends[k].y = ends[k - 1].y + 14;
+      ends.forEach(e => {
+        const label = el("text", {x: X(lastIndex) + 12, y: e.y + 4, class: "trend-end"}, data.rounds[lastIndex].v[e.s].toFixed(1) + "%");
+        if (hasCounts) label.appendChild(el("tspan", {dx: 5, class: "trend-end-n"}, data.rounds[lastIndex].c[e.s] + "件"));
+        endsGroup.appendChild(label);
+      });
+      svg.appendChild(endsGroup);
+      stage.appendChild(svg);
+      geom = {X, XD, W, cross, clipRect, endsGroup};
+      select(active, false);
+      if (pending) {   // 自動再生を待つ間は、線を描く前の状態
+        clipRect.setAttribute("width", 0);
+        endsGroup.classList.add("is-hidden");
+      }
+    }
+
+    // 再生: 窓を左（最初の回）から右（最新の回）へ広げる。各回に届くたびに、その回の数字を吹き出しで見せる。
+    // 点と点の間の数字は出さない（直線でつないでいるだけで、その間の割合は測っていないため）。
+    function play() {
+      if (!geom || !canAnimate || panel.hidden) return;
+      stopPlay();
+      pending = false;
+      playing = true;
+      shownIndex = -1;
+      setPlayLabel(true);
+      geom.endsGroup.classList.add("is-hidden");
+      const start = performance.now(), sweep = 3200, hold = 900;
+      const step = now => {
+        const elapsed = now - start;
+        const t = Math.min(1, elapsed / sweep);
+        const head = days[0] + (days[lastIndex] - days[0]) * (0.5 - Math.cos(Math.PI * t) / 2);
+        geom.clipRect.setAttribute("width", geom.XD(head) + 6);
+        let passed = 0;
+        days.forEach((d, i) => { if (d <= head + 1e-9) passed = i; });
+        if (passed !== shownIndex) { shownIndex = passed; select(passed, true, geom.W < 520); }
+        if (elapsed < sweep + hold) frame = requestAnimationFrame(step); else finish();
+      };
+      frame = requestAnimationFrame(step);
+    }
+
+    function stopPlay() {
+      if (frame) cancelAnimationFrame(frame);
+      frame = 0;
+      if (playing) { playing = false; setPlayLabel(false); }
+    }
+
+    // 最後まで表示する（再生の終わり・「最後まで表示」・キー操作・印刷の前）。
+    function finish() {
+      pending = false;
+      stopPlay();
+      if (!geom) return;
+      geom.clipRect.setAttribute("width", geom.W);
+      geom.endsGroup.classList.remove("is-hidden");
+      select(lastIndex, false);
+    }
+
+    if (canAnimate) {
+      new IntersectionObserver(entries => {
+        if (pending && !panel.hidden && entries.some(entry => entry.isIntersecting)) play();
+      }, {threshold: 0.35}).observe(stage);
+    }
+    if (playBtn) {
+      playBtn.addEventListener("click", () => {
+        if (playing) { finish(); return; }
+        play();
+        track("trend_play", kind);
+      });
+    }
+
+    function select(i, show, compact) {
+      active = i;
+      if (!geom) return;
+      const r = data.rounds[i];
+      geom.cross.setAttribute("x1", geom.X(i));
+      geom.cross.setAttribute("x2", geom.X(i));
+      geom.cross.style.opacity = show ? 1 : 0;
+      tip.hidden = !show;
+      if (!show) return;
+      tip.textContent = "";
+      tip.classList.toggle("is-compact", !!compact);   // 狭い画面の再生中は、日付と意見数だけの小さな表示（グラフを覆わない）
+      const head = document.createElement("p");
+      head.className = "trend-tip-head";
+      head.textContent = jp(r.d) + "の収集分（意見" + r.n + "件）";
+      tip.appendChild(head);
+      if (compact) {
+        const wide = tip.offsetWidth || 150;
+        tip.style.left = Math.min(Math.max(geom.X(i) - wide / 2, 0), geom.W - wide) + "px";
+        return;
+      }
+      data.labels.forEach((label, s) => {
+        const row = document.createElement("p");
+        row.className = "trend-tip-row";
+        const key = document.createElement("i");
+        key.style.background = data.colors[s];
+        const value = document.createElement("b");
+        value.textContent = r.v[s].toFixed(1) + "%";
+        const name = document.createElement("span");
+        name.textContent = label;
+        row.append(key, value, name);
+        if (r.c) {
+          const count = document.createElement("span");
+          count.className = "trend-tip-n";
+          count.textContent = "（" + r.c[s] + "件）";
+          row.appendChild(count);
+        }
+        tip.appendChild(row);
+      });
+      // 直前の回のあとから、この回までにあった出来事（日付がこの回と同じ日なら、この回に数える）。
+      const before = i > 0 ? days[i - 1] : -Infinity;
+      data.events.forEach(e => {
+        const day = Date.parse(e.d + "T00:00:00Z") / 86400000;
+        if (day > before && day <= days[i]) {
+          const note = document.createElement("p");
+          note.className = "trend-tip-event";
+          note.textContent = "出来事" + e.n + "：" + jp(e.d) + " " + e.t;
+          tip.appendChild(note);
+        }
+      });
+      // 縦線の脇に出す。右半分の回は左側、左半分の回は右側へ寄せ、その回の点に重ねない。
+      const x = geom.X(i);
+      const wide = tip.offsetWidth || 190;
+      const left = x > geom.W / 2 ? x - wide - 14 : x + 14;
+      tip.style.left = Math.min(Math.max(left, 0), geom.W - wide) + "px";
+    }
+
+    function nearest(clientX) {
+      const box = stage.getBoundingClientRect();
+      const x = clientX - box.left;
+      let best = 0, gap = Infinity;
+      data.rounds.forEach((r, i) => { const d = Math.abs(geom.X(i) - x); if (d < gap) { gap = d; best = i; } });
+      return best;
+    }
+    stage.addEventListener("pointermove", e => geom && !playing && select(nearest(e.clientX), true));
+    stage.addEventListener("pointerleave", () => { if (!playing) select(active, false); });
+    stage.addEventListener("focus", () => { if (!playing) select(active, true); });
+    stage.addEventListener("blur", () => { if (!playing) select(active, false); });
+    stage.addEventListener("keydown", e => {
+      if (playing) finish();   // キーを押したら、再生を止めて最後まで表示する
+      if (e.key === "ArrowLeft" || e.key === "ArrowRight") {
+        e.preventDefault();
+        select(Math.min(Math.max(active + (e.key === "ArrowRight" ? 1 : -1), 0), lastIndex), true);
+      } else if (e.key === "Home" || e.key === "End") {
+        e.preventDefault();
+        select(e.key === "Home" ? 0 : lastIndex, true);
+      }
+    });
+    return {draw, finish, replay() { if (!pending) play(); }};
   }
+
+  const charts = {};
+  const nodes = {};
+  root.querySelectorAll("[data-trend-panel]").forEach(panel => {
+    const kind = panel.getAttribute("data-trend-panel");
+    nodes[kind] = panel;
+    if (panels[kind]) charts[kind] = chart(panel, panels[kind]);
+  });
+  // 画像のダウンロード・埋め込みコードのコピー（計測つき）。計測が無くても動く。
+  const track = (name, kind, variant) => { if (typeof gtag === "function") gtag("event", name, {theme: "ai-copyright", panel: kind, variant: variant}); };
+  root.querySelectorAll("[data-trend-copy]").forEach(button => button.addEventListener("click", async () => {
+    const item = button.closest(".trend-share-item");
+    const area = item.querySelector("textarea");
+    const status = item.querySelector(".trend-share-status");
+    let ok = false;
+    try { await navigator.clipboard.writeText(area.value); ok = true; }
+    catch (error) { area.focus(); area.select(); try { ok = document.execCommand("copy"); } catch (inner) { ok = false; } }
+    status.textContent = ok ? "コピーしました" : "選択しました。コピーしてください";
+    track("trend_image_copy", button.getAttribute("data-trend-copy"), button.getAttribute("data-variant"));
+  }));
+  // 「Xで投稿する」。共有URLのUTMとクリック計測は、サイト共通の window.buildShareUrl / trackShareClick（topic-modern.js）を通す。
+  root.querySelectorAll("[data-trend-x]").forEach(button => button.addEventListener("click", () => {
+    const base = button.getAttribute("data-share-url");
+    const build = typeof window.buildShareUrl === "function" ? window.buildShareUrl : (u, c) => u + (u.indexOf("?") === -1 ? "?" : "&") + "utm_source=share_button&utm_medium=social&utm_campaign=" + c;
+    const url = build(base, "trend_share") + "#" + button.getAttribute("data-share-panel");
+    window.open("https://x.com/intent/tweet?text=" + encodeURIComponent(button.getAttribute("data-share-text")) + "&url=" + encodeURIComponent(url), "_blank", "noopener");
+    if (typeof window.trackShareClick === "function") window.trackShareClick("trend_share");
+    track("trend_x_post", button.getAttribute("data-trend-x"));
+  }));
+  root.querySelectorAll("[data-trend-download]").forEach(link => link.addEventListener("click", () => track("trend_image_download", link.getAttribute("data-trend-download"), link.getAttribute("data-variant"))));
+  const tabs = root.querySelectorAll("[data-trend-tab]");
+  function show(kind) {
+    if (!nodes[kind]) return;
+    Object.keys(nodes).forEach(k => { nodes[k].hidden = k !== kind; });
+    tabs.forEach(t => t.setAttribute("aria-pressed", t.getAttribute("data-trend-tab") === kind ? "true" : "false"));
+    if (charts[kind]) { charts[kind].draw(); charts[kind].replay(); }   // タブを切り替えるたびに、もう一度再生する（初回は画面に入ったときに自動で）
+  }
+  tabs.forEach(t => t.addEventListener("click", () => show(t.getAttribute("data-trend-tab"))));
+  const fromHash = Object.keys(nodes).find(k => location.hash === "#" + nodes[k].id);
+  show(fromHash || Object.keys(nodes)[0]);
+  window.addEventListener("beforeprint", () => Object.keys(charts).forEach(k => charts[k].finish()));
+  let timer = 0;
+  window.addEventListener("resize", () => {
+    clearTimeout(timer);
+    timer = setTimeout(() => Object.keys(nodes).forEach(k => { if (!nodes[k].hidden && charts[k]) charts[k].draw(); }), 120);
+  });
 })();
 </script>
-<!-- TIDE_CARD_END --></section>
+</section>
+<!-- TREND_CARD_END --></section>
 <!-- AI_COPYRIGHT_AUDIT_START -->
 <section class="panel claim-audit" id="ai-copyright-audit">
 <style>
