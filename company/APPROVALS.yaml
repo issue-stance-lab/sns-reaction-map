@@ -1760,13 +1760,23 @@ items:
       - quality/reviews/2026-10-08-ai-copyright-trend-review.md
       - scripts/build_trend_images.py
       - scripts/verify_trend_images.py
-    status: approved
+    status: completed
     requested_at: "2026-10-07"
     decided_at: "2026-10-07"
     decision_note: >-
       オーナーに利用条件の文言と、選択肢（A: 同じ文言で画像も公開する / B: 画像は出さず、グラフだけ公開する）を示した。
       オーナーが本対話で「A: 同じ文言で画像も公開する（推奨）」を選んだ（2026-10-07）。対象は生成AIと著作権の推移画像の分で、
       文言はapproval-20261005-002と同じ。引用パックページ・iframe埋め込み・他のテーマへの展開は含まない。
+    completed_at: "2026-10-08"
+    result_note: >-
+      main 9896bfa4で公開（作業用ブランチをマージして push）。
+      GitHub Actionsの公開ファイル検査とPages配信が成功。
+      本番で推移画像4枚（立場・論点 × ひと目版・詳細版）がHTTP 200・PNGで配信され、ページの「このグラフを画像で使う」と利用条件の文言（approval-20261005-002と同じ）が表示されることを確認した。
+    result_evidence:
+      - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/37643478023"
+      - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/37643478026"
+      - "https://sns-reaction-map.jp/ai-copyright-reaction-map.html"
+      - "https://sns-reaction-map.jp/images/trend/ai-copyright-stance-trend-summary.png"
 
   - id: approval-20261007-002
     department: engineering-data
@@ -1786,7 +1796,7 @@ items:
       - quality/reviews/2026-10-08-ai-copyright-trend-review.md
       - data/verification/rejudge/ai-copyright-wave-20260905-rejudge-20261007.json
       - scripts/rejudge_ai_copyright_wave.py
-    status: approved
+    status: completed
     requested_at: "2026-10-07"
     decided_at: "2026-10-07"
     decision_note: >-
@@ -1794,3 +1804,16 @@ items:
       9/5だけを判定し直す理由と、残るリスク（未読割合の警告ライン超え、9/5以外は判定し直していないこと）を提示した。
       オーナーが「独立監査して公開に進んで」と回答し、公開を指示した（2026-10-07）。画像と利用条件は別に、選択肢A/Bで確認し、
       Aで承認を得た（approval-20261007-001）。独立監査の指摘（代表投稿6件のずれ、「実際の投稿を読む」の取りこぼし）は、公開前に直した。
+    completed_at: "2026-10-08"
+    result_note: >-
+      main 9896bfa4で公開（作業用ブランチをマージして push）。
+      全テスト・公開用検査・全テーマ検査・数字の出所検査はNG 0件（トップページ検査は、辺野古の収集予定日（10/7）の超過だけを知らせる既存の表示で、本件とは無関係）。
+      GitHub Actionsの公開ファイル検査とPages配信が成功。
+      本番ページで意見3,353件・収集5,175件・取得期間2026-06-22〜2026-10-06、トップページで全体の意見17,218件、旧い数字と古い代表投稿が0件、潮目が無いことを確認した。
+      PC幅1280pxとスマホ幅375pxの実ブラウザーで、横スクロールなし・コンソールエラー0件、推移のタブ切り替えが動くことを確認した。
+      独立監査の軽微な指摘（共通テンプレートの文言、最終更新日の扱いなど）は、記録（quality/reviews/2026-10-08-ai-copyright-trend-review.md）のとおり未対応。
+    result_evidence:
+      - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/37643478023"
+      - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/37643478026"
+      - "https://sns-reaction-map.jp/ai-copyright-reaction-map.html"
+      - "https://sns-reaction-map.jp/"
