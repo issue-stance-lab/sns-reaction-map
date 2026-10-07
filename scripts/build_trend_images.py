@@ -247,7 +247,7 @@ def render_detail_image(slug: str, kind: str, series: list[dict]) -> Image.Image
     spec = trend.KINDS[kind]
     texts = image_texts(slug, kind, series)
     labels = texts["labels"]
-    colors, shapes = spec["colors"][: len(labels)], spec["shapes"][: len(labels)]
+    colors, shapes = trend.palette_for(slug, kind, len(labels))
     emph = trend.emphasized(series, labels)
     c = Canvas(regular, bold)
 
@@ -411,7 +411,7 @@ def render_summary_image(slug: str, kind: str, series: list[dict]) -> Image.Imag
     left, right = 150, 804
     px_first, px_last = 232, 770
     top, bottom = 296, 536
-    colors, shapes = spec["colors"], spec["shapes"]
+    colors, shapes = trend.palette_for(slug, kind, len(labels))
     ceiling, step = summary_ceiling(max(max(item["start"], item["end"], *(r["shares"][item["label"]] for r in series)) for item in items))
     first_day, last_day = _day(first["date"]), _day(last["date"])
 

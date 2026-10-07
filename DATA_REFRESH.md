@@ -618,6 +618,34 @@ collect_at を迎えたテーマにデータを追加した後、以下を順番
   - 論点の「その他」は割合から外す。立場・論点の並びは `scripts/bukatsu_taxonomy.py`（`inject_tide_widget.THEMES` には無いテーマ）。
     ラベルを変えるときは `TREND_THEMES.short_labels` も合わせて直す
 
+- [ ] 生成AIと著作権だけ: **潮目カードは出さない**（2026-10-08に外した。`ai-copyright-tide-widget` が戻ると数字検査が止める）。
+  外枠（`<section class="update-dashboard">`）の中の「意見の推移」（立場・論点の2タブ。理由タブと年表の縦線は無い）と、
+  単体で配る画像（`docs/images/trend/ai-copyright-{stance,issue}-trend-{summary,detail}.png`）は、消費税減税・部活動と同じ仕組みで、
+  `scripts/refresh_adapters/ai_copyright.py` の `adapter.build` が累積候補から貼り直す。`inject_tide_widget.py` は、このテーマを注入の対象外にしてある
+  （`prev_file`・`cur_file` を空にした。課題38）。数字検査は `scripts/trend_count_provenance.py`（共通）。違いは次のとおり。
+  - **立場は3つ**（規制・制限強化支持／推進・活用支持／中立・情報）、論点は「その他」を除く6つ。並びは `scripts/ai_copyright_taxonomy.py`（ページ・投票と同じ単一ソース）。
+    潮目の定義（`inject_tide_widget.THEMES`）は立場が2つだけでページの内訳と合わないので使わない。
+    色は `TREND_THEMES["ai-copyright"]["palette"]`（規制＝赤、推進＝緑、中立＝灰）。論点名が長いので、ひと目版の見出しの文だけ `headline_labels` で短くする
+    （2項目が並ぶ文が画像の幅に収まらなくなるのを、`tests/test_trend_images.py` が検出する）
+  - **並べ始める日は2026-08-03**（`series_from`。7/26までの回は分類のしかたが今と違う）。
+  - **2026-09-05の回だけ、2026-10-07に現行のAI（`kimi-k2.7-code`）で判定し直した。** この回だけ分類の傾向が他の回と違った
+    （関連あり92.8%・中立・情報35.1%・要約が約2倍の長さ。指示文は変わっていないので、分類したAIが違った疑い）。
+    手順は `scripts/rejudge_ai_copyright_wave.py`（検証 → 退避 → 置き換え → 再読の記録から、意見でなくなった／論点が変わった投稿を外す → 記録）。
+    置き換えたのは**関連・意見か・論点・立場のすべて**（部活動の数え直しは賛否だけだった。この回のずれの正体は「意見とみなす幅」で、賛否だけでは直らない）。
+    再読の記録は読み直さず、外すだけにした（外した分は未読として数える）。ほかの回は判定し直していない。
+    置き換えると、ページ全体の件数・論点別・立場別・山なみ・「語られていない争点」の母数・保存回台帳が動く。**通常の更新と同じ作り直しの順序**
+    （検証データ → 公開JSON → `adapter.build` → `adapter.finalize` → 付随する公開物）で行い、正典を先に直したときは**公開JSONを先に作る**
+    （ページ生成は、正典と公開JSONの件数が一致していることを前提にする）
+  - **分類に使うAIが変わったら止まる**（`trend_support.check_model_break`）。`TREND_THEMES["ai-copyright"]["model_breaks"]` の立場・論点の両方に今回の収集日が必要。
+    2026-09-29の切替（`kimi-k2.6` → `kimi-k2.7-code`）は記録済み
+  - **代表投稿の注意（2026-10-08に発覚）**: ページに固定で載せる代表投稿（`scripts/ai_copyright_issue_media.py` の `MEDIA`、14件）は、
+    **判定を直す作業をすると、別の論点・意見でない投稿になることがある**（9/5の判定し直しで6件がずれた。数字の検査では検出されない）。
+    差し替えたら `python3 scripts/ai_copyright_issue_media.py --write-html` でページの「論点ごとのX投稿」を書き直し、**連動表示（各論点の詳細パネルの
+    「実際の投稿を読む」。これは前者を組み立て時に写す）も `adapter.build` で作り直す**。`tests/test_ai_copyright_issue_media.py` が、
+    載せた投稿がいまの正典でも載せている論点の意見であること、詳細パネルとの一致を検査する（非公開の正典が要る分は、無い環境では飛ばす）
+  - **未読割合（編集再読）の上限に注意。** 生成AIと著作権は、AI生成物の権利・創作性が32.9%（警告30%超）で、約2回の収集で上限40%に達する見込み
+    （2026-10-07時点）。このルール自体の見直しは `configs/prompts/claude-code/20261007_review-unread-rule.md`（別セッションへの依頼文）
+
 ### 4. テーマページ（insight-stats カード 4枚）
 
 - [ ] 「分析対象の意見」件数（`insight-value`）

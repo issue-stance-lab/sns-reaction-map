@@ -136,6 +136,56 @@ TREND_THEMES = {
             "issue": ["費用・\n家庭負担", "受け皿・\n指導者", "教員の\n働き方", "教育的\n意義・機会", "地域\n格差", "制度・\n移行"],
         },
     },
+    "ai-copyright": {
+        "name": "生成AIと著作権",
+        # 立場・論点の並びは scripts/ai_copyright_taxonomy.py。潮目の定義（inject_tide_widget.THEMES）は
+        # 立場が2つ（規制・推進）だけで、ページの内訳（中立・情報を含む3つ）と合わないので使わない。
+        "taxonomy": "ai-copyright",
+        "headings": {
+            "stance": "生成AIと著作権への賛否の割合は変わった？",
+            "issue": "生成AIと著作権で語られる論点は変わった？",
+        },
+        # 立場・論点のグラフを、単体の画像（PNG）としても配る（scripts/build_trend_images.py）。
+        "share_images": True,
+        # 立場の3ラベル（規制・推進・中立）に、意味の合う色を選ぶ（KINDS["stance"] の位置）。
+        #  規制＝赤（ひし形）、推進＝緑（丸）、中立＝灰（三角）。
+        "palette": {"stance": [2, 0, 3]},
+        # 2026-07-26までの回は、分類のしかたが今と違う。2026-07-12は2D分類（minimax-m2.7）、2026-07-26は
+        # 1D分類へ切り替えた回で（themes/ai-copyright.md）、論点・立場の割合が他の回と同じ尺度で並ばない。
+        # 2026-08-07に論点定義を単一ソース化した後の最初の回、2026-08-03から並べる。
+        "series_from": {"stance": "2026-08-03", "issue": "2026-08-03"},
+        "series_notes": {
+            "stance": [
+                "2026年7月26日までの回は、分類のしかたが今と違うため、この図には並べていません。"
+                "2026年9月5日の回は、分類の傾向が他の回と違っていたため、2026年10月7日に現在と同じAIで判定し直しました。"
+                "判定し直したのは9月5日の回だけで、ほかの回は判定し直していません。",
+            ],
+            "issue": [
+                "2026年7月26日までの回は、分類のしかたが今と違うため、この図には並べていません。"
+                "2026年9月5日の回は、分類の傾向が他の回と違っていたため、2026年10月7日に現在と同じAIで判定し直しました。"
+                "判定し直したのは9月5日の回だけで、ほかの回は判定し直していません。",
+            ],
+        },
+        # 2026-09-05の回だけ、分類の傾向が他の回と違った（関連あり92.8%・中立・情報35.1%・要約が約2倍の長さ）ため、
+        # 2026-10-07に現在のAI（kimi-k2.7-code）で判定し直して正典を置き換えた（scripts/rejudge_ai_copyright_wave.py、
+        # 記録は data/verification/rejudge/）。ほかの回は判定し直していない。
+        # 分類に使うAIを切り替えた最初の収集日。2026-09-20は kimi-k2.6、2026-09-29から kimi-k2.7-code。
+        # 2026-09-05以外は判定し直していないので、両方の軸に切替の影響が残る。
+        "model_breaks": {"stance": ["2026-09-29"], "issue": ["2026-09-29"]},
+        "short_labels": {
+            "stance": ["規制\n支持", "推進\n支持", "中立・\n情報"],
+            "issue": ["学習\nデータ", "クリエ\nイター", "法制度・\n規制", "技術\n競争", "モラル・\n倫理", "AI生成物\nの権利"],
+        },
+        # ひと目版の見出し（2項目が並ぶ文）は、論点名が長いと画像の幅に収まらない。文の中だけ短い呼び名にする。
+        "headline_labels": {
+            "issue": {
+                "学習データ・無断利用": "学習データ",
+                "クリエイター保護・権利": "クリエイター保護",
+                "AI生成物の権利・創作性": "AI生成物の権利",
+                "利用者モラル・倫理": "モラル・倫理",
+            },
+        },
+    },
 }
 
 REASON_TAB = "反対・慎重の理由"
@@ -185,11 +235,49 @@ def page_url(slug: str) -> str:
 
 
 def _theme_base(slug: str) -> dict:
-    if TREND_THEMES.get(slug, {}).get("taxonomy") == "bukatsu":
+    taxonomy = TREND_THEMES.get(slug, {}).get("taxonomy")
+    if taxonomy == "bukatsu":
         return _bukatsu_base(slug)
+    if taxonomy == "ai-copyright":
+        return _ai_copyright_base(slug)
     from inject_tide_widget import THEMES  # type: ignore[import-not-found]
 
     return next(item for item in THEMES if item["slug"] == slug)
+
+
+def _ai_copyright_base(slug: str) -> dict:
+    """生成AIと著作権は、ページと同じ3立場・論点体系（ai_copyright_taxonomy）から作る。
+
+    立場は「中立・情報」を最後に置く（他のテーマと同じ並び）。論点の「その他」は、ほかのテーマと同じく
+    割合から外す。並びは単一ソース（ai_copyright_taxonomy）から導き、ここに別の定義を持たない。
+    """
+    import yaml
+    from ai_copyright_taxonomy import ISSUE_ORDER, OTHER, STANCE_ORDER  # type: ignore[import-not-found]
+
+    themes = yaml.safe_load((ROOT / "THEMES.yaml").read_text(encoding="utf-8"))["themes"]
+    neutral = "中立・情報"
+    return {
+        "slug": slug,
+        "html": themes[slug]["html"],
+        "use_relevance_filter": True,
+        "stance_labels": [label for label in STANCE_ORDER if label != neutral] + [neutral],
+        "issue_labels": [label for label in ISSUE_ORDER if label != OTHER],
+    }
+
+
+def palette_for(slug: str, kind: str, count: int) -> tuple[list[str], list[str]]:
+    """そのテーマ・軸の、線の色と端の印。TREND_THEMES の palette があれば、その位置の色を使う。
+
+    立場のラベルが少ないテーマ（生成AIと著作権は3つ）で、意味の合う色を選ぶためのもの。
+    指定が無いテーマは、従来どおり先頭から count 個。
+    """
+    spec = KINDS[kind]
+    picks = TREND_THEMES[slug].get("palette", {}).get(kind)
+    if picks is None:
+        return spec["colors"][:count], spec["shapes"][:count]
+    if len(picks) != count or any(not 0 <= i < len(spec["colors"]) for i in picks):
+        raise ValueError(f"{slug} の{kind}: palette {picks} がラベル数{count}と合いません")
+    return [spec["colors"][i] for i in picks], [spec["shapes"][i] for i in picks]
 
 
 def _bukatsu_base(slug: str) -> dict:
@@ -378,6 +466,15 @@ def glance_lines(kind: str, items: list[dict]) -> list[str]:
     return [f"{prefix}「{a['label']}」の割合が{word(a, True)}、", f"「{b['label']}」が{word(b)}"]
 
 
+def headline_name(slug: str, kind: str, label: str) -> str:
+    """ひと目版の見出しの文に入れる項目名。
+
+    項目名が長いテーマは、TREND_THEMES の headline_labels で、見出しの文の中だけ短くできる
+    （2項目が並ぶ文が画像の幅に収まらなくなるのを防ぐ）。グラフの凡例・表・数字の下の名前は正式名のまま。
+    """
+    return TREND_THEMES[slug].get("headline_labels", {}).get(kind, {}).get(label, label)
+
+
 def glance(slug: str, kind: str, series: list[dict], labels: list[str]) -> dict:
     """ひと目版の画像に出す内容。最初と最新の差が大きい2項目（本文が取り上げるのと同じ2項目）と、見出しの文。"""
     info = summary(series, labels)
@@ -395,7 +492,7 @@ def glance(slug: str, kind: str, series: list[dict], labels: list[str]) -> dict:
         }
         for label in info["movers"]
     ]
-    lines = glance_lines(kind, items)
+    lines = glance_lines(kind, [{**item, "label": headline_name(slug, kind, item["label"])} for item in items])
     return {"items": items, "lines": lines, "headline": "".join(lines), "info": info}
 
 
@@ -1289,7 +1386,7 @@ def _panel(slug: str, kind: str, series: list[dict], *, hidden: bool, events: li
     theme = TREND_THEMES[slug]
     spec = KINDS[kind]
     labels = base[spec["labels_key"]]
-    colors, shapes = spec["colors"][: len(labels)], spec["shapes"][: len(labels)]
+    colors, shapes = palette_for(slug, kind, len(labels))
     # ラベルを増減したのに色・形・短い見出しが追いつかないと、列や線が黙って欠ける。作る前に止める。
     if len(labels) > len(spec["colors"]) or len(theme["short_labels"][kind]) != len(labels):
         raise ValueError(

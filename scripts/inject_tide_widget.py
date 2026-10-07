@@ -85,10 +85,12 @@ THEMES = [
         "slug": "ai-copyright",
         "html": "docs/ai-copyright-reaction-map.html",
         "widget_id": "ai-copyright-tide-widget",
-        "prev_file": "ai-copyright_hermes_prev_20260712.json",
-        "cur_file": "ai-copyright_hermes_cur_20260726.json",
-        "prev_label": "7月12日",
-        "cur_label": "7月26日",
+        # 2026-10-08: 潮目カードを外し、「意見の推移」（scripts/build_trend_section.py）に一本化した。
+        # prev_file / cur_file を空にして、単体実行で公開ページへ潮目を戻さない（課題38・課題90）。
+        "prev_file": None,
+        "cur_file": None,
+        "prev_label": "",
+        "cur_label": "",
         "use_relevance_filter": True,
         "stance_labels": ["規制・制限強化支持", "推進・活用支持"],
         # 論点は scripts/ai_copyright_taxonomy.py の定義（公開ページと同じ7論点から「その他」を除く）
