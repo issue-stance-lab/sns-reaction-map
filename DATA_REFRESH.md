@@ -809,7 +809,10 @@ mainへ取り込む前に、**「合格した」という報告を鵜呑みに�
     **この値は`THEMES.yaml`の`updated_at`から自動では追随しない**（`collection`
     欄の件数はテンプレートに埋め込むため毎回最新化されるが、`dateModified`は
     config内の静的な値。verify_theme_page.py等の機械検査もここは見ていない
-    ため、機械検査が全部OKでも古いまま残る）
+    ため、機械検査が全部OKでも古いまま残る）。**同じ`theme-seo.json`の
+    `observations`（「収集・分類で分かったこと」）に論点ごとの件数を書くときは、
+    数字を打たず`{issue_count:論点名}`と書く**（公開データJSONから差し込まれる。
+    べた書きの数字は更新のたびにページを古い値へ戻す。高齢者テーマで2回再発した）
 14. **後処理をまとめて実行する**（`python3 -m unittest discover -s tests`で
     まとめて検出できる）: `build_data_sheet.py` / `sync_portal_stats.py` /
     `verify_sample_periods.py --generate` / `build_adoption_registry.py`。
