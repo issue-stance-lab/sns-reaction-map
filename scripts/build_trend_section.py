@@ -145,8 +145,8 @@ TREND_THEMES = {
             "stance": "生成AIと著作権への賛否の割合は変わった？",
             "issue": "生成AIと著作権で語られる論点は変わった？",
         },
-        # 画像は、組み込み（更新処理・数字検査）まで済んでから出す。今は節（グラフ）だけ。
-        "share_images": False,
+        # 立場・論点のグラフを、単体の画像（PNG）としても配る（scripts/build_trend_images.py）。
+        "share_images": True,
         # 立場の3ラベル（規制・推進・中立）に、意味の合う色を選ぶ（KINDS["stance"] の位置）。
         #  規制＝赤（ひし形）、推進＝緑（丸）、中立＝灰（三角）。
         "palette": {"stance": [2, 0, 3]},
@@ -172,6 +172,15 @@ TREND_THEMES = {
         "short_labels": {
             "stance": ["規制\n支持", "推進\n支持", "中立・\n情報"],
             "issue": ["学習\nデータ", "クリエ\nイター", "法制度・\n規制", "技術\n競争", "モラル・\n倫理", "AI生成物\nの権利"],
+        },
+        # ひと目版の見出し（2項目が並ぶ文）は、論点名が長いと画像の幅に収まらない。文の中だけ短い呼び名にする。
+        "headline_labels": {
+            "issue": {
+                "学習データ・無断利用": "学習データ",
+                "クリエイター保護・権利": "クリエイター保護",
+                "AI生成物の権利・創作性": "AI生成物の権利",
+                "利用者モラル・倫理": "モラル・倫理",
+            },
         },
     },
 }
@@ -454,6 +463,15 @@ def glance_lines(kind: str, items: list[dict]) -> list[str]:
     return [f"{prefix}「{a['label']}」の割合が{word(a, True)}、", f"「{b['label']}」が{word(b)}"]
 
 
+def headline_name(slug: str, kind: str, label: str) -> str:
+    """ひと目版の見出しの文に入れる項目名。
+
+    項目名が長いテーマは、TREND_THEMES の headline_labels で、見出しの文の中だけ短くできる
+    （2項目が並ぶ文が画像の幅に収まらなくなるのを防ぐ）。グラフの凡例・表・数字の下の名前は正式名のまま。
+    """
+    return TREND_THEMES[slug].get("headline_labels", {}).get(kind, {}).get(label, label)
+
+
 def glance(slug: str, kind: str, series: list[dict], labels: list[str]) -> dict:
     """ひと目版の画像に出す内容。最初と最新の差が大きい2項目（本文が取り上げるのと同じ2項目）と、見出しの文。"""
     info = summary(series, labels)
@@ -471,7 +489,7 @@ def glance(slug: str, kind: str, series: list[dict], labels: list[str]) -> dict:
         }
         for label in info["movers"]
     ]
-    lines = glance_lines(kind, items)
+    lines = glance_lines(kind, [{**item, "label": headline_name(slug, kind, item["label"])} for item in items])
     return {"items": items, "lines": lines, "headline": "".join(lines), "info": info}
 
 

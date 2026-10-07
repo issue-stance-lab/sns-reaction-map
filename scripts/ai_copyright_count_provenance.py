@@ -12,6 +12,12 @@ from bs4 import BeautifulSoup
 import yaml
 
 
+def private_verified_selectors(source: str, root: Path, *, sample_file: Path | None = None) -> dict[str, str]:
+    """推移の節の表の行と「N〜M件」を、非公開正典の数え直しと照合する（本体は trend_count_provenance）。"""
+    import trend_count_provenance
+    return trend_count_provenance.private_verified_selectors('ai-copyright', source, root, sample_file=sample_file)
+
+
 def verified_selectors(source: str, root: Path) -> dict[str, str]:
     if '<!-- AI_COPYRIGHT_CONNECTED_START -->' not in source:
         return {}

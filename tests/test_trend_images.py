@@ -433,7 +433,7 @@ class HeadlineFitsEveryLabelPairTest(unittest.TestCase):
                          for signs in ((1, 1), (-1, -1), (1, -1), (-1, 1))]
                 cases += [((a,), (sign,)) for a in labels for sign in (1, -1)]
                 for names, signs in cases:
-                    items = [{"label": name, "delta": sign * 9, "beyond": True} for name, sign in zip(names, signs)]
+                    items = [{"label": trend.headline_name(slug, kind, name), "delta": sign * 9, "beyond": True} for name, sign in zip(names, signs)]
                     lines = trend.glance_lines(kind, items)
                     size = min(images._fit_size(canvas, line, 54, width, images.HEADLINE_MIN_SIZE, True) for line in lines)
                     for line in lines:

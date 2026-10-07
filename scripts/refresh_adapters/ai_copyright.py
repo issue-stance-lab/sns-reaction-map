@@ -3,10 +3,13 @@
 from __future__ import annotations
 
 import hashlib
+import json
 import re
 import subprocess
 import sys
 from pathlib import Path
+
+from scripts.refresh_adapters import trend_support
 
 TOPIC = "ai-copyright"
 PAGE = Path("docs/ai-copyright-reaction-map.html")
@@ -47,6 +50,8 @@ def _run_builder(root: Path, candidate: Path, template: Path, page: Path, data: 
     )
     from scripts.ai_copyright_connected import TOPIC as CONNECTED_TOPIC, apply as connect_page
     text = connect_page(page.read_text(encoding="utf-8"), topic=CONNECTED_TOPIC)
+    # 「意見の推移」は、ページに残してある枠の中へ、累積候補から数え直して貼り直す。
+    text = trend_support.render_trend(root, TOPIC, text, candidate)
     page.write_text(text, encoding="utf-8")
 
 
@@ -90,6 +95,26 @@ def finalize(root: Path, current_date: str) -> None:
     )
 
 
+def _previous_wave_model(root: Path, current_date: str) -> str | None:
+    """前回の更新回（収集日が今回より前で一番新しい保存回）の分類モデル。記録が無い古い回は None。"""
+    updates = root / "social-samples" / "updates" / TOPIC
+    dates = sorted(path.name for path in updates.iterdir() if path.is_dir() and path.name < current_date) if updates.is_dir() else []
+    for date in reversed(dates):
+        report = updates / date / "report.json"
+        if report.exists():
+            data = json.loads(report.read_text(encoding="utf-8"))
+            return ((data.get("provenance") or {}).get("model") or {}).get("name")
+    return None
+
+
+def _current_wave_model(stage: Path) -> str | None:
+    report = stage / "report.json"
+    if not report.exists():
+        return None
+    data = json.loads(report.read_text(encoding="utf-8"))
+    return ((data.get("provenance") or {}).get("model") or {}).get("name")
+
+
 def build(root: Path, stage: Path, current_date: str) -> dict[Path, Path]:
     """候補を2回生成し、2回目に差分がない場合だけ公開対象を返す。"""
     candidate = stage / "cumulative-candidate.json"
@@ -99,6 +124,11 @@ def build(root: Path, stage: Path, current_date: str) -> dict[Path, Path]:
     second_page = stage / "idempotence" / "page-candidate.html"
     second_data = stage / "idempotence" / "arena-data-candidate.js"
     second_page.parent.mkdir(parents=True, exist_ok=True)
+
+    # 分類に使うAIが前回から変わった回は、推移の注意書きに記録が要る（無ければここで止まる）。
+    trend_support.check_model_break(
+        root, TOPIC, current_date, _previous_wave_model(root, current_date), _current_wave_model(stage)
+    )
 
     before_vote = vote_fingerprint(current_page.read_text(encoding="utf-8"))
     _run_builder(root, candidate, current_page, first_page, first_data)
@@ -118,4 +148,9 @@ def build(root: Path, stage: Path, current_date: str) -> dict[Path, Path]:
     if changed:
         raise ValueError("保護タグの個数が変わりました: " + ", ".join(changed))
 
-    return {PAGE: first_page, ARENA_DATA: first_data}
+    # ページと同じ累積候補から、推移の画像も作って一緒に公開する（ページの <img> がこの画像を指す）。
+    return {
+        PAGE: first_page,
+        ARENA_DATA: first_data,
+        **trend_support.build_images(root, TOPIC, stage, candidate),
+    }

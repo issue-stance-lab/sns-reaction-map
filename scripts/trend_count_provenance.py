@@ -48,6 +48,12 @@ SPECS = {
         'returned_tide_id': 'bukatsu-tide-widget',
         'returned_tide_message': '潮目カードが戻っています。部活動の地域移行は、潮目を外して「意見の推移」に一本化しています',
     },
+    'ai-copyright': {
+        'events_file': None,
+        'focus_stance': None,
+        'returned_tide_id': 'ai-copyright-tide-widget',
+        'returned_tide_message': '潮目カードが戻っています。生成AIと著作権は、潮目を外して「意見の推移」に一本化しています',
+    },
 }
 
 
@@ -56,6 +62,11 @@ def _labels(slug: str) -> dict[str, list[str]]:
     if slug == 'bukatsu-chiiki':
         from bukatsu_taxonomy import ISSUES, STANCES
         return {'stance': list(STANCES), 'issue': [label for label in ISSUES if label != 'その他']}
+    if slug == 'ai-copyright':
+        # 並び順は生成器と同じ定義（ai_copyright_taxonomy）から導く。割合の計算はここでは使わない。
+        from build_trend_section import _theme_base
+        base = _theme_base(slug)
+        return {'stance': list(base['stance_labels']), 'issue': list(base['issue_labels'])}
     from inject_tide_widget import THEMES
     base = next(item for item in THEMES if item['slug'] == slug)
     return {'stance': base['stance_labels'], 'issue': base['issue_labels']}
