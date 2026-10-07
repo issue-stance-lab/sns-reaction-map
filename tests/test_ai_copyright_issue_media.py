@@ -47,6 +47,24 @@ class PageSyncTest(unittest.TestCase):
         section = media.build_section(PUBLIC)
         self.assertEqual(media.inject(text, section), text, "ページの代表投稿が MEDIA と違います（--write-html で書き直す）")
 
+    def test_the_reading_panels_show_the_same_posts_and_labels_as_the_media_list(self) -> None:
+        # 各論点の詳細パネルの「実際の投稿を読む」は、「論点ごとのX投稿」を組み立て時に写した表示。
+        # 片方だけ直して、もう片方に古い投稿が残る取りこぼしがあった（2026-10-08の再点検で発覚）。
+        from bs4 import BeautifulSoup
+
+        soup = BeautifulSoup(PAGE.read_text(encoding="utf-8"), "html.parser")
+        shown = {}
+        for post in soup.select(".aic-post[data-aic-post-url]"):
+            paragraph = post.find("p")
+            # <template> の中の文字も読む（既定では読み飛ばされる）
+            shown.setdefault(post["data-aic-post-url"], []).append(paragraph.get_text(types=None) if paragraph else "")
+        expected = {f"https://x.com/{user}/status/{tweet_id}": label
+                    for posts in media.MEDIA.values() for user, tweet_id, label in posts}
+        self.assertEqual(sorted(shown), sorted(expected), "「実際の投稿を読む」の投稿が MEDIA と違います（連動表示を作り直す）")
+        for url, labels in shown.items():
+            for label in labels:
+                self.assertEqual(label, expected[url], f"説明が違います: {url}")
+
     def test_every_listed_post_is_embedded_in_the_page(self) -> None:
         text = PAGE.read_text(encoding="utf-8")
         for posts in media.MEDIA.values():
