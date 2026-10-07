@@ -11,11 +11,13 @@ import subprocess
 import sys
 import unittest
 from pathlib import Path
+from unittest import mock
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "scripts"))
 
 from sync_portal_stats import THEMES_YAML, parse_themes_yaml  # noqa: E402
+import verify_number_provenance  # noqa: E402
 from verify_number_provenance import (  # noqa: E402
     Derived,
     extract_numbers,
@@ -84,6 +86,21 @@ class NumberProvenanceTest(unittest.TestCase):
         far = "禁止支持6件、中立・体験10件"
         self.assertIsNone(nearest_label(far, far.index("10"), labels))
 
+    def test_nearest_label_reads_through_the_set_phrase_ronten_to_suru_toko(self) -> None:
+        """「『論点名』を論点とする投稿は29件」の29は、その論点の件数を名乗っている。
+
+        ラベルと数字のあいだが9文字あるためラベル無しの扱いになり、無関係な集計
+        （検索語別の件数など）と偶然一致した 29 が「説明できた」ことになっていた
+        （高齢者テーマ、2026-10-07。39件のはずが29件でも検査が通る）。
+        """
+        labels = {"地方の足・移動権", "義務化・事故防止"}
+        text = "「地方の足・移動権」を論点とする投稿は29件で、義務化・事故防止（221件）に比べると"
+        self.assertEqual(nearest_label(text, text.index("29"), labels), "地方の足・移動権")
+        self.assertEqual(nearest_label(text, text.index("221"), labels), "義務化・事故防止")
+        # 決まり文句以外が挟まれば、これまでどおり別の数字の説明として扱う
+        far = "「地方の足・移動権」について、投稿は29件"
+        self.assertIsNone(nearest_label(far, far.index("29"), labels))
+
     @staticmethod
     def _fixture() -> Derived:
         # main_issue: A=5 / B=4、stance: X=5 / Y=4、クロス: A×X=4 A×Y=1 B×X=1 B×Y=3
@@ -108,6 +125,64 @@ class NumberProvenanceTest(unittest.TestCase):
         derived = self._fixture()
         self.assertIsNotNone(derived.lookup(5, ["base"], "A"))
         self.assertIsNone(derived.lookup(5, ["base"], "B"))
+
+
+class ElderlyObservationProvenanceTest(unittest.TestCase):
+    """高齢者ページの「収集・分類で分かったこと」の論点別件数も、検査が見ていること。
+
+    `article-trust-observations` が exclude_selectors に入っていたため、この箇条書きの
+    数字は検査されず、設定にべた書きされた古い 29／221 が 2026-09-30 と 2026-10-07 の
+    2回、公開ページへ出かけた（どちらも検査は通っていた）。除外を外し、論点名に添えられた
+    数字が**その論点の件数**でなければ落ちるようにした。
+    """
+
+    THEME = "elderly-license-revocation"
+
+    def setUp(self) -> None:
+        if self.THEME in missing_sources():
+            self.skipTest("非公開の正典が無い環境では数字を導けない")
+        self.theme_data = parse_themes_yaml(THEMES_YAML)[self.THEME]
+        self.html_path = ROOT / str(self.theme_data["html"])
+        public = json.loads((ROOT / f"data/public/themes/{self.THEME}.json").read_text(encoding="utf-8"))
+        counts = {issue["label"]: issue["count"] for issue in public["issues"]}
+        self.local = counts["地方の足・移動権"]
+        self.duty = counts["義務化・事故防止"]
+        self.page = self.html_path.read_text(encoding="utf-8")
+        self.sentence = f"投稿は{self.local:,}件で、義務化・事故防止（{self.duty:,}件）"
+        self.assertIn(self.sentence, self.page, "公開ページに論点比較の文が無い（テストの前提が崩れた）")
+
+    def _problems(self, sentence: str) -> list[str]:
+        text = self.page.replace(self.sentence, sentence, 1)
+        documents = [(str(self.html_path.relative_to(ROOT)), text)]
+        with mock.patch.object(verify_number_provenance, "_documents", return_value=documents):
+            _, problems = verify_number_provenance.check_theme(self.THEME, self.theme_data)
+        return problems
+
+    def test_observations_are_not_excluded_from_the_check(self) -> None:
+        config = json.loads((ROOT / f"configs/{self.THEME}-reaction-map.json").read_text(encoding="utf-8"))
+        excludes = config["number_provenance"]["exclude_selectors"]
+        self.assertNotIn("article-trust-observations", excludes)
+
+    def test_the_published_numbers_pass(self) -> None:
+        self.assertEqual(self._problems(self.sentence), [])
+
+    def test_both_numbers_stale_is_caught(self) -> None:
+        """2026-10-07 の事故そのもの（9/4時点の 29／221）。"""
+        self.assertTrue(self._problems("投稿は29件で、義務化・事故防止（221件）"))
+
+    def test_only_the_mobility_count_wrong_is_caught(self) -> None:
+        """ラベルから離れた「投稿は29件」の側だけ誤っていても落ちる。
+
+        29 は別の集計（検索語「免許返納 年齢制限」の意見件数）と偶然一致する値で、
+        論点名との結びつきを見ないと「説明できた」ことになる。2026-10-07 に実際に
+        見逃した数字そのもの（論点名のあとの決まり文句を読み飛ばす nearest_label の修正が要る）。
+        """
+        wrong = next(value for value in (29, 28, 30) if value != self.local)
+        self.assertTrue(self._problems(f"投稿は{wrong:,}件で、義務化・事故防止（{self.duty:,}件）"))
+
+    def test_only_the_duty_count_wrong_is_caught(self) -> None:
+        wrong = self.duty + 1000
+        self.assertTrue(self._problems(f"投稿は{self.local:,}件で、義務化・事故防止（{wrong:,}件）"))
 
 
 if __name__ == "__main__":

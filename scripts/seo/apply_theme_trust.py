@@ -17,6 +17,7 @@ from urllib.parse import urljoin
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(PROJECT_ROOT / "scripts"))
 from consumption_tax_connected import apply as connect_consumption_tax_page
+from issue_card_counts import IssueCountError, count_by_issue_from_public_json
 from koshitsu_connected import apply as connect_koshitsu_page
 SEO_START = "<!-- SEO_META_START -->"
 SEO_END = "<!-- SEO_META_END -->"
@@ -95,13 +96,49 @@ def main_issue(row: dict) -> str:
     return str(row.get("main_issue") or "")
 
 
+# 論点別の意見数の差し込み。{issue_count:地方の足・移動権} のように論点名を書く。
+ISSUE_COUNT_PLACEHOLDER = re.compile(r"\{issue_count:([^{}]+)\}")
+
+
+def resolve_issue_counts(text: str, theme_id: str) -> str:
+    """{issue_count:論点名} を、公開データJSONの論点別の意見数へ置き換える。
+
+    出所は data/public/themes/<theme>.json（論点カードの件数と同じ）。正典を数え直さないので
+    正典が無い環境でも動く。非公開の正典が手元にあれば、公開データJSONが現在の正典と
+    食い違っていないか（source_sha256）を読み込み側が確かめ、古ければ止まる。
+
+    論点名が公開データJSONに無いときも止まる。数字を空欄や古い値のまま出すより、
+    更新作業が止まって気づくほうがよい。
+    """
+    labels = ISSUE_COUNT_PLACEHOLDER.findall(text)
+    if not labels:
+        return text
+    try:
+        counts = count_by_issue_from_public_json(theme_id)
+    except IssueCountError as exc:
+        raise ValueError(f"{theme_id}: 論点別の件数を公開データJSONから読めません: {exc}") from exc
+    missing = sorted({label for label in labels if label not in counts})
+    if missing:
+        raise ValueError(
+            f"{theme_id}: 公開データJSONに無い論点名が {{issue_count:…}} に書かれています: "
+            f"{', '.join(missing)}（あるのは {', '.join(sorted(counts))}）"
+        )
+    return ISSUE_COUNT_PLACEHOLDER.sub(lambda match: f"{counts[match.group(1)]:,}", text)
+
+
 def resolve_counts(text: str, theme_id: str) -> str:
     """収集方法の文中の {total} / {opinions} を分類結果の実数へ置き換える。
 
     以前はここが件数のべた書きで、更新しても誰も直さないまま公開ページに古い数字が
     残っていた（部活動は累計467件・意見389件のまま実際は732件・599件だった）。
     昇格処理がこのスクリプトを呼ぶので、差し込みにしておけば毎回ずれない。
+
+    論点別の件数は {issue_count:論点名}（resolve_issue_counts）。分析メモ（observations）に
+    「この論点は○件」と書くときは数字を打たず、必ずこちらを使う。高齢者テーマで
+    設定へべた書きした 29／221 が 2026-09-04 時点のまま残り、作り直すたびに
+    正しい 39／283 を打ち消した。
     """
+    text = resolve_issue_counts(text, theme_id)
     placeholders = ("{total}", "{opinions}", "{issue_opinions}")
     if not any(name in text for name in placeholders):
         return text
