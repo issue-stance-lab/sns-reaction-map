@@ -213,6 +213,9 @@ class RenderTest(unittest.TestCase):
         for panel in (stance_panel, issue_panel):
             self.assertIn("2026年7月26日までの回は、分類のしかたが今と違うため、この図には並べていません", panel)
             self.assertIn("2026年9月29日の回から、分類に使うAIを切り替えました", panel)
+            # 9/5の回だけ判定し直したこと、ほかの回は判定し直していないことを、日付つきで正直に書く
+            self.assertIn("2026年9月5日の回は、分類の傾向が他の回と違っていたため、2026年10月7日に現在と同じAIで判定し直しました", panel)
+            self.assertIn("判定し直したのは9月5日の回だけで、ほかの回は判定し直していません", panel)
 
     def test_headings_and_theme_name(self) -> None:
         html = self.render(rounds(DAYS))
