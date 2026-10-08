@@ -64,7 +64,7 @@
   旧件数（1,494件）の表示残りなし。「意見の推移」に10/8の点が入り、推移画像4枚も配置済み
 - 公開反映後に、`run_public_checks.py` と実際の公開ページを確認する
 
-promotion manifest SHA-256: `ad0ede9ee34f1be03b5c52e8886d7677b958890bea144df810cf61f567b832ac`
+promotion manifest SHA-256: `f862391b2d4c83b0c38bfdaaac5273c949b92afe6fa41aef8ef5285653b1f1c9`
 
 ## 注意
 

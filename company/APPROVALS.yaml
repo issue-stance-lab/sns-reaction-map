@@ -1887,3 +1887,29 @@ items:
       - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/37786039740"
       - "https://sns-reaction-map.jp/henoko-student-accident-reaction-map.html"
       - "https://sns-reaction-map.jp/"
+
+  - id: approval-20261009-001
+    department: data
+    action: website_publish
+    summary: "部活動の地域展開テーマの2026-10-08定期更新を公開する（収集1,865→1,986件、意見1,494→1,582件）"
+    reason: "新規121件の本文確認、資料争点の再照合、教員の働き方115件の追い読み（独立確認83%一致）、数値・表示の検査まで完了したため"
+    risks:
+      - "Yahoo!リアルタイム検索のSNS投稿サンプルであり、社会全体の世論比率ではない"
+      - "追い読み115件の区分は、24件の独立確認で一致83%。境界事例が残り、全件の完全な正解は保証しない"
+      - "本文の中心が別論点に見える5件などは、原本の判定変更にあたるため行わず、理由を非公開の証拠に残した"
+      - "全テーマ横断の海洋層検査は他テーマの既存未整備項目でNGだが、部活テーマに新規指摘はない"
+    recommendation: approve
+    evidence:
+      - ".staging/refresh/bukatsu-chiiki/20261008_233902/promotion-manifest.json（sha256 f862391b…）"
+      - "quality/reviews/2026-10-08-bukatsu-refresh-review.md"
+      - "quality/reviews/2026-10-08-bukatsu-teacher-catchup.json"
+      - "data/verification/updates/bukatsu-chiiki/2026-10-08/"
+    status: approved
+    requested_at: "2026-10-09"
+    decided_at: "2026-10-09"
+    decision_note: >-
+      本対話で新規121件・意見88件、本文確認、立場・論点の変化幅（最大0.4pt）、PC・スマホの確認結果を提示し、
+      公開の選択肢として「A: 今すぐ公開」「B: 教員の働き方を先に追い読みしてから公開」を示した。
+      オーナーが「B」（追い読み）を選んだため、追い読みを済ませたうえで公開する。
+      追い読み後の候補は、件数は同じで、教員の働き方の内訳区分が増える内容。
+      追い読みの後で最新のmainを取り込み、候補を作り直した（manifestは上記の値）。
