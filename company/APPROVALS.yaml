@@ -1817,3 +1817,35 @@ items:
       - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/37643478026"
       - "https://sns-reaction-map.jp/ai-copyright-reaction-map.html"
       - "https://sns-reaction-map.jp/"
+
+  - id: approval-20261008-002
+    title: X投稿記録と日次運用ルールの本番反映
+    scope: website
+    kind: release
+    requester: AI（X日次セッション）
+    evidence:
+      - content/x/posts.md
+      - .claude/skills/x-daily/SKILL.md
+      - GROWTH.yaml
+      - content/x/weekly-reviews.md
+    status: completed
+    requested_at: "2026-10-08"
+    decided_at: "2026-10-08"
+    decision_note: >-
+      10-07・10-08のX投稿記録（リプライ5本と計測）、リプライ本数の目安の訂正、
+      および2026-10-08のオーナー指示（「本日は見送り」を提示の結論にしない／論点ポストの凍結／
+      検索語を作る前に当日のニュースを確認する）の手順反映を提示し、オーナーが「反映して」と指示した。
+      公開ファイルの変更は docs/index.html の投稿日と件数の同期のみ。
+    completed_at: "2026-10-08"
+    result_note: >-
+      main dd5bf347で公開（task/x-20261007 をマージして push）。
+      全テスト1,650件・公開用検査・全テーマ検査・数字の出所検査はNG 0件
+      （トップページ検査は、辺野古の収集予定日（10/7）の超過だけを知らせる既存の表示で、本件とは無関係。
+      共有ツリーでも同じ表示が出ている）。GitHub Actionsの公開ファイル検査とPages配信が成功。
+      本番トップで各テーマの投稿日（自転車・部活動・高齢者免許が10-08反映で10-07、消費税減税が10-08）と
+      全体の意見17,218件を確認した。反映前に、共有ツリーに未コミットで残っていた別セッションのX記録2本を
+      先にコミットして保全し、posts.mdの衝突は両方を時刻順に残して解消した。
+    result_evidence:
+      - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/37772952803"
+      - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/37772952758"
+      - "https://sns-reaction-map.jp/"
