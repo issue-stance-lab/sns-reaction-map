@@ -23,6 +23,7 @@ issue_counts.sync）。同じ場所を2つのスクリプトが書かないこ�
 from __future__ import annotations
 
 import argparse
+import copy
 import html
 import json
 import re
@@ -134,6 +135,14 @@ def load_records(input_path: Path | None) -> tuple[list[dict[str, Any]], list[di
     if not isinstance(records, list) or not records:
         raise IssueCountError(f"{THEME}: 正典が空、またはJSON配列ではありません")
 
+    opinions = opinions_of(records)
+    if not opinions:
+        raise IssueCountError("意見と判定されたレコードがありません")
+    return records, opinions
+
+
+def opinions_of(records: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """全レコードから、ページが数える意見投稿（意見で、論点がページ定義にあるもの）を取り出す。"""
     opinions: list[dict[str, Any]] = []
     for number, record in enumerate(records, start=1):
         value = classification(record)
@@ -141,9 +150,25 @@ def load_records(input_path: Path | None) -> tuple[list[dict[str, Any]], list[di
             raise IssueCountError(f"{number}件目の classification.is_opinion がboolではありません")
         if value["is_opinion"] and value.get("main_issue") in ISSUE_INDEX:
             opinions.append(record)
-    if not opinions:
-        raise IssueCountError("意見と判定されたレコードがありません")
-    return records, opinions
+    return opinions
+
+
+def candidate_public_theme(records: list[dict[str, Any]]) -> dict[str, Any]:
+    """累積候補から公開JSONを作る（正典も登録済みの公開JSONも書き換えない）。
+
+    定期更新の `--prepare-promotion` では、この時点で正典はまだ古い。候補を入力にした
+    山なみ生成は、ディスク上の登録済み公開JSONではなく、候補から公開JSONの生成器そのもので
+    作ったものを使う。台帳（語られていない争点など）は作業ツリーの現物を読むので、
+    母数が候補の意見数に追いついていなければ独自性検査が止める。
+    """
+    if __package__:
+        from .public_registry_common import RegistryError, build_theme_json
+    else:
+        from public_registry_common import RegistryError, build_theme_json
+    try:
+        return build_theme_json(THEME, records)
+    except RegistryError as exc:
+        raise IssueCountError(f"入力候補から公開JSONを作れません: {exc}") from exc
 
 
 def stance_value(record: dict[str, Any]) -> int:
@@ -661,9 +686,13 @@ def apply_henoko_stance_glance(page: str, stances: list[dict], opinions: int) ->
 
 def refresh_verified_planet(
     page: str, records: list[dict[str, Any]], opinions: list[dict[str, Any]],
-    public_theme: Path | None = None,
+    public_theme: Path | dict[str, Any] | None = None,
 ) -> str:
-    """候補・原本・再読証拠・公開集計が同じ版のときだけ図全体を作る。"""
+    """候補・再読証拠・公開集計が同じ版のときだけ、候補を入力に図全体を作る。
+
+    records が今の正典と同じとは限らない（定期更新では正典に今回の追加分を足した候補）。
+    検査は henoko_planet_guard.verify_inputs、山なみの生成は同じ候補と公開JSONを使う。
+    """
     if __package__:
         from .build_planet_page_preview import (
             bpd, build_section, render_planet, split_prototype, fix_henoko_vote_scroll, clean_henoko_layout,
@@ -677,21 +706,25 @@ def refresh_verified_planet(
         from .henoko_planet_guard import verify_inputs
     else:
         from henoko_planet_guard import verify_inputs
-    verify_inputs(records, opinions, public_theme)
-    data = bpd.build(THEME)
+    public = verify_inputs(records, opinions, public_theme)
+    data = bpd.build(THEME, canonical=records, public=copy.deepcopy(public))
     cfg = bpd.yaml.safe_load((ROOT / "configs/planet" / f"{THEME}.yaml").read_text())
     failures = bpd.independence_gate(data, cfg)
     if failures:
         raise IssueCountError("山なみの再読・独自性検査に不合格: " + " / ".join(failures))
     block = build_section(split_prototype(render_planet(bpd.stabilize(data))))
     if __package__:
-        from .refresh_planet_section import _inject_henoko_landing_images
+        from .refresh_planet_section import _inject_henoko_landing_images, _sync_henoko_method_text
     else:
-        from refresh_planet_section import _inject_henoko_landing_images
+        from refresh_planet_section import _inject_henoko_landing_images, _sync_henoko_method_text
     block = _inject_henoko_landing_images(block, data)
     page = replace_block(page, r"<!-- PLANET_SECTION_START -->.*?<!-- PLANET_SECTION_END -->",
                          block, "山なみ全体")
     page = clean_henoko_layout(fix_henoko_vote_scroll(page))
+    # 山なみ区画の外にあり、山なみの数字に連動する2か所（「議論の中心」の件数と、収集方法の
+    # 段落の累計・意見数）。手作業の経路では refresh_planet_section.py が書いていたが、標準の
+    # --prepare-promotion の経路には無く、古い件数のまま候補に残った（2026-10-08に発覚）。
+    page = _sync_henoko_method_text(page, data)
     return apply_henoko_stance_glance(page, data["stances"], int(data["totals"]["opinions"]))
 
 
@@ -895,14 +928,16 @@ def build_page(
     page: str,
     records: list[dict[str, Any]],
     opinions: list[dict[str, Any]],
+    public: dict[str, Any] | None = None,
 ) -> str:
+    """public は records に対応する公開JSON。省くと登録済みの公開JSON（正典と同じ版のとき）。"""
     rows = arena_rows(opinions)
     stats = {str(issue["main_issue"]): IssueStats(opinions, issue) for issue in ISSUE_DEFS}
     total = len(opinions)
     page = apply_search_entry_counts(page, total, {name: values.total for name, values in stats.items()})
 
     if "<!-- PLANET_SECTION_START -->" in page:
-        page = refresh_verified_planet(page, records, opinions)
+        page = refresh_verified_planet(page, records, opinions, public)
         page = replace_block(page, r"<!-- DETAIL_TABLES_START -->.*?<!-- DETAIL_TABLES_END -->", detail_tables(rows), "詳細データ表")
         page = replace_block(page, r"<!-- RESEARCH_CONDITIONS_START -->.*?<!-- RESEARCH_CONDITIONS_END -->", "<!-- RESEARCH_CONDITIONS_START --><!-- RESEARCH_CONDITIONS_END -->", "調査条件（山なみ内に表示）")
         page = replace_number(page, r"公開投稿(\d+)件のうち、意見と判定した(\d+)件をAIが", [len(records), total], "リード文")
@@ -981,8 +1016,12 @@ def main() -> int:
     output_data = args.output_data or ROOT / ARENA_DATA
 
     records, opinions = load_records(args.input)
+    # --input は正典に今回の追加分を足した累積候補。登録済みの公開JSONは古い版なので、
+    # 候補から作った公開JSONを使う（正典そのものを読むときは登録済みを使う）。
     page = template.read_text(encoding="utf-8")
-    updated = build_page(page, records, opinions)
+    planet = "<!-- PLANET_SECTION_START -->" in page
+    public = candidate_public_theme(records) if args.input and planet else None
+    updated = build_page(page, records, opinions, public)
     data = arena_data_js(arena_rows(opinions))
 
     current_data = output_data.read_text(encoding="utf-8") if output_data.exists() else ""

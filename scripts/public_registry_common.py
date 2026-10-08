@@ -438,7 +438,13 @@ def parse_collection_period(sample_period: Any) -> dict[str, Any]:
     return {"start": None, "end": None, "status": "unknown"}
 
 
-def build_theme_json(theme_id: str) -> dict[str, Any]:
+def build_theme_json(theme_id: str, records: list[dict[str, Any]] | None = None) -> dict[str, Any]:
+    """テーマの公開JSONを作る。
+
+    `records` を渡すと、正典ファイルの代わりにそのレコードから集計する
+    （正典へ反映する前の累積候補を、公開JSONの生成器そのもので検査するため）。
+    台帳（海面下・一次資料の照合など）と THEMES.yaml は、いつもどおりディスクから読む。
+    """
     themes_yaml = load_themes_yaml()
     if theme_id not in themes_yaml:
         raise RegistryError(f"THEMES.yaml に無いテーマID: {theme_id}")
@@ -462,12 +468,13 @@ def build_theme_json(theme_id: str) -> dict[str, Any]:
             f"{theme_id}: 公開データ用の「問い」が未設定（scripts/public_registry_common.py の QUESTIONS）"
         )
 
-    sample_file = ROOT / theme_meta["sample_file"]
-    if not sample_file.exists():
-        raise RegistryError(f"{theme_id}: 非公開正典が見つかりません: {sample_file}")
-    records = json.loads(sample_file.read_text(encoding="utf-8"))
-    if not isinstance(records, list):
-        raise RegistryError(f"{theme_id}: sample_file の形式が不正です: {sample_file}")
+    if records is None:
+        sample_file = ROOT / theme_meta["sample_file"]
+        if not sample_file.exists():
+            raise RegistryError(f"{theme_id}: 非公開正典が見つかりません: {sample_file}")
+        records = json.loads(sample_file.read_text(encoding="utf-8"))
+        if not isinstance(records, list):
+            raise RegistryError(f"{theme_id}: sample_file の形式が不正です: {sample_file}")
 
     collected_count = len(records)
     opinions = [classification_of(r) for r in records if is_opinion_record(r)]
