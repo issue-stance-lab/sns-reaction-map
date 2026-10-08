@@ -283,7 +283,12 @@ def load_ocean_layer(topic: str) -> dict:
     台帳が無いテーマは `status: not_started` で空のまま返る（推測で埋めない。
     工程表「台帳に無い論点の海面下が空で出る」）。
     """
-    return load_public_theme(topic).get(
+    return ocean_layer_of(load_public_theme(topic))
+
+
+def ocean_layer_of(public: dict) -> dict:
+    """公開JSON（のdict）から海面下の記録を取り出す。無ければ空の `not_started`。"""
+    return public.get(
         "ocean_layer",
         {"status": "not_started", "checked_on": None, "reviewer_type": None,
          "sunk_continents": [], "veins": []},
@@ -353,13 +358,28 @@ def resolve_reread_keys(records: list[dict], posts: list[dict], issue: str) -> l
     return resolved
 
 
-def build(topic: str) -> dict:
+def build(topic: str, *, canonical: list[dict] | None = None,
+          public: dict | None = None) -> dict:
+    """山なみの表示データを作る。
+
+    既定では、正典（THEMES.yaml の sample_file）と登録済みの公開JSONをディスクから読む。
+    `canonical` と `public` を渡すと、正典を書き換える前の「累積候補」とそれに対応する
+    公開JSONを入力にできる（定期更新の `--prepare-promotion`）。この2つは必ずセットで、
+    互いが一致していることは呼び出し側が先に検査する（辺野古は `henoko_planet_guard`）。
+    再読記録・一次資料の記録など、人が確定したファイルは常にディスクから読む。
+    """
+    if (canonical is None) != (public is None):
+        raise ValueError("canonical と public は、両方渡すか両方省く必要があります"
+                         "（片方だけ候補にすると、山なみが別々の版の入力で作られます）")
     cfg = yaml.safe_load((ROOT / "configs" / "planet" / f"{topic}.yaml").read_text())
     themes = yaml.safe_load((ROOT / "THEMES.yaml").read_text())
     t = themes["themes"][topic] if "themes" in themes else themes[topic]
 
-    public = load_public_theme(topic)
-    ocean = load_ocean_layer(topic)
+    if public is None:
+        public = load_public_theme(topic)
+        ocean = load_ocean_layer(topic)
+    else:
+        ocean = ocean_layer_of(public)
     claim_verification = public["claim_verification"]
 
     n_op = public["opinion_count"]
@@ -514,14 +534,22 @@ def build(topic: str) -> dict:
                 records = [r for r in records if r.get(sc["item_issue_field"]) == k]
             if canonical_posts is None:
                 canonical_path = ROOT / t["sample_file"]
-                canonical_posts = json.loads(canonical_path.read_text())
+                canonical_posts = (json.loads(canonical_path.read_text())
+                                   if canonical is None else canonical)
                 reread_registry = load_reread_registry(
                     topic, canonical_posts, required=bool(cfg.get("reread_registry")))
                 # 取得日時が欠ける投稿のための復元候補（課題63 段階A）。
                 # 正典と同じ版でだけ結び付く。無ければ空で、未読は「不明」のまま止まる。
-                fetch_recovery = load_fetch_history_recovery(
-                    ROOT / "data" / "verification" / f"{topic}-fetch-history-recovery.json",
-                    canonical_path)
+                recovery_path = (ROOT / "data" / "verification"
+                                 / f"{topic}-fetch-history-recovery.json")
+                if canonical is not None and recovery_path.is_file():
+                    # 復元候補は正典ファイルのバイト列の指紋で結び付く。候補はまだファイルに
+                    # なっていないので、照合できないまま黙って通すより止める。
+                    raise SystemExit(
+                        f"「{topic}」は取得履歴の検証サマリを持つため、候補を入力にした"
+                        "山なみ生成は使えません。正典へ反映してから生成してください。")
+                fetch_recovery = ({} if canonical is not None else load_fetch_history_recovery(
+                    recovery_path, canonical_path))
             records = resolve_reread_keys(records, canonical_posts, k)
             validate_registry_membership(reread_registry, records, k)
             read_ids = validate_reread_records(records, raw, canonical_posts, k, counts[k])

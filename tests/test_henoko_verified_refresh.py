@@ -1,5 +1,6 @@
 """Regressions for the failed independent audit: result visibility and stale inputs."""
 import copy
+from collections import Counter
 import json
 from pathlib import Path
 import shutil
@@ -68,6 +69,9 @@ class VerifiedRefreshTests(unittest.TestCase):
         self.assertEqual(builder.apply_public_counts(refreshed, self.public), refreshed)
 
     def test_candidate_addition_body_and_classification_changes_are_rejected(self):
+        # 登録済みの公開JSON（正典と同じ版）のまま、候補だけが違う場面。追加は公開件数、
+        # 既存投稿の本文・分類の書き換えは「正典の既存投稿を含まない」で止まる。
+        # 公開JSONを候補から作り直した場合に通る追加は、下の test_new_wave_candidate_* にある。
         for kind in ['add', 'body', 'stance']:
             with self.subTest(kind=kind):
                 rows = copy.deepcopy(self.records)
@@ -88,16 +92,14 @@ class VerifiedRefreshTests(unittest.TestCase):
             builder.build_page(self.page, self.records, self.opinions[:-1])
 
     def test_changed_canonical_cannot_bypass_evidence_with_public_counts(self):
-        # 本文変更と賛否変更は別の検査が捉える（2026-09-16、henoko_planet_guardの
-        # canonical_sha256完全一致チェックを撤去。設計書
-        # quality/designs/2026-09-06-stage-c-reread-registry.md のとおり、その欄は
-        # 初回スナップショット時点の指紋であり常時一致を求める欄ではなかった）。
-        # 本文変更: 再読台帳のtext_sha256照合（build_planet_data.load_reread_registry）がSystemExitで止める。
-        # 賛否変更: 公開JSONの論点別賛否件数との不一致をverify_inputs自身がIssueCountErrorで止める。
+        # 正典を書き換えたのに公開JSONを作り直していない場面は、公開JSONの元データ指紋
+        # （source_sha256）が止める。本文だけの変更も、件数が同じ分類の変更も、ここで止まる
+        # （2026-10-08以前は、本文の変更は再読台帳の照合まで進んで初めて止まっていた）。
+        # 賛否の変更は、指紋より前に、論点別の賛否件数の不一致が止める。
         rows = copy.deepcopy(self.records)
         rows[0]['text'] += ' changed'
         self.canonical.write_text(json.dumps(rows, ensure_ascii=False))
-        with self.assertRaisesRegex(SystemExit, '本文'):
+        with self.assertRaisesRegex(builder.IssueCountError, '元データ指紋'):
             builder.apply_public_counts(self.page, self.public)
 
         rows = copy.deepcopy(self.records)
@@ -105,6 +107,83 @@ class VerifiedRefreshTests(unittest.TestCase):
         self.canonical.write_text(json.dumps(rows, ensure_ascii=False))
         with self.assertRaisesRegex(builder.IssueCountError, '公開分類'):
             builder.apply_public_counts(self.page, self.public)
+
+    def test_reread_evidence_still_stops_a_changed_post_when_the_public_json_is_rebuilt(self):
+        # 公開JSONも作り直して指紋を合わせても、再読済みの投稿の本文が変わっていれば、
+        # 再読台帳の本文指紋（build_planet_data.load_reread_registry）が止める。
+        rows = copy.deepcopy(self.records)
+        rows[0]['text'] += ' changed'
+        self.canonical.write_text(json.dumps(rows, ensure_ascii=False))
+        self.public.write_text(json.dumps(builder.candidate_public_theme(rows), ensure_ascii=False))
+        with self.assertRaisesRegex(SystemExit, '本文'):
+            builder.apply_public_counts(self.page, self.public)
+
+    def wave_candidate(self, opinions: int = 2, others: int = 1):
+        """正典に、新しい回の合成投稿を足した候補。意見は最大の論点から複製する。"""
+        top = Counter(builder.classification(r)['main_issue'] for r in self.opinions).most_common(1)[0][0]
+        template = next(r for r in self.opinions if builder.classification(r)['main_issue'] == top)
+        rows = copy.deepcopy(self.records)
+        for n in range(opinions + others):
+            clone = copy.deepcopy(template)
+            key = f'synthetic-wave-{n}'
+            clone.update(tweet_id=key, url=f'https://x.com/example/status/{key}',
+                         text=template['text'] + f' (合成の新しい回 {n})',
+                         fetched_at='2026-10-08T00:00:00+00:00')
+            if n >= opinions:
+                clone['classification'].update(is_opinion=False, main_issue='その他')
+            rows.append(clone)
+        return rows, builder.opinions_of(rows)
+
+    def candidate_public_with_current_ledger(self, rows):
+        """候補から作った公開JSON。台帳の母数は、人が候補の意見数に更新した後の状態にする。"""
+        public = builder.candidate_public_theme(rows)
+        for item in public['ocean_layer']['sunk_continents']:
+            item['sns_base'] = public['opinion_count']
+        return public
+
+    @staticmethod
+    def planet_totals(page: str) -> dict:
+        marker = 'window.PLANET_DATA='
+        data, _ = json.JSONDecoder().raw_decode(page[page.index(marker) + len(marker):])
+        return data['totals']
+
+    def test_new_wave_candidate_builds_the_planet_from_the_candidate(self):
+        # 2026-10-08まで、ここが必ず止まっていた（候補が今の正典と違う、の一点で）。
+        # 正典も登録済みの公開JSONも書き換えず、候補を入力に山なみ全体を作る。
+        rows, opinions = self.wave_candidate(opinions=2, others=1)
+        self.assertGreater(len(opinions), len(self.opinions))
+        public = self.candidate_public_with_current_ledger(rows)
+        canonical_before = self.canonical.read_bytes()
+        registered_before = self.public.read_bytes()
+
+        refreshed = builder.build_page(self.page, rows, opinions, public)
+
+        self.assertEqual(self.planet_totals(refreshed),
+                         {'collected': len(rows), 'opinions': len(opinions)})
+        self.assertNotEqual(refreshed, self.page)
+        self.assertEqual(builder.build_page(refreshed, rows, opinions, public), refreshed)
+        self.assertEqual(self.canonical.read_bytes(), canonical_before)
+        self.assertEqual(self.public.read_bytes(), registered_before)
+
+    def test_new_wave_candidate_stops_while_the_sunk_continent_ledger_is_stale(self):
+        # 候補を入力にしても、人が更新する台帳（語られていない争点の母数）が追いついていなければ止まる。
+        rows, opinions = self.wave_candidate(opinions=2, others=0)
+        public = builder.candidate_public_theme(rows)
+        with self.assertRaisesRegex(builder.IssueCountError, '母数'):
+            builder.build_page(self.page, rows, opinions, public)
+
+    def test_new_wave_candidate_is_rejected_with_the_registered_public_json(self):
+        rows, opinions = self.wave_candidate(opinions=2, others=1)
+        with self.assertRaisesRegex(builder.IssueCountError, '公開件数'):
+            builder.build_page(self.page, rows, opinions)
+
+    def test_new_wave_candidate_that_rewrites_a_reviewed_post_is_rejected(self):
+        rows, _ = self.wave_candidate(opinions=2, others=1)
+        rows[0]['text'] += ' changed'
+        opinions = builder.opinions_of(rows)
+        public = self.candidate_public_with_current_ledger(rows)
+        with self.assertRaisesRegex(builder.IssueCountError, '入力候補'):
+            builder.build_page(self.page, rows, opinions, public)
 
     def test_public_cli_rejects_changed_canonical_before_writing(self):
         rows = copy.deepcopy(self.records)
@@ -119,11 +198,10 @@ class VerifiedRefreshTests(unittest.TestCase):
         self.assertEqual(output.read_text(), self.page)
 
     def test_initial_conversion_rejects_stale_inputs_in_preview_and_public_modes(self):
-        # kind別に検査の掛かりどころが違う（2026-09-16、上のテストと同じ理由でcanonical_sha256
-        # チェックを撤去した影響）。stance/addはverify_inputs自身の公開件数・公開分類の
-        # 突き合わせがbpd.build()の前に止めるため、従来どおりbuildは呼ばれない。
-        # bodyは件数・分類のどちらも変わらないため、verify_inputsだけでは検出できず、
-        # 実際のbpd.build()（load_reread_registryのtext_sha256照合）まで届いて初めて止まる。
+        # stance/addはverify_inputs自身の公開件数・公開分類の突き合わせが、bodyは公開JSONの
+        # 元データ指紋（source_sha256）が、いずれもbpd.build()の前に止めるので、buildは呼ばれない。
+        # （2026-10-08以前は、bodyだけは件数・分類が変わらないため検出できず、bpd.build()の
+        # 再読台帳の照合まで届いて初めて止まっていた。）
         # このコードパス自体、docs/のページに山なみが入った後は
         # 「入力ページに山なみが既に入っています」で必ず先に止まる一度きりの変換専用のため、
         # 辺野古では変換済みの今、実運用では再現しない組み合わせ。
@@ -160,6 +238,21 @@ class VerifiedRefreshTests(unittest.TestCase):
         self.canonical.write_text(json.dumps(rows, ensure_ascii=False))
         for for_docs in [False, True]:
             with self.subTest(kind='body', for_docs=for_docs):
+                output.write_text('HTML sentinel')
+                argv = ['build_planet_page_preview.py', '--topic', TOPIC,
+                        '--page', str(legacy), '--out', str(output)]
+                if for_docs:
+                    argv.append('--for-docs')
+                with patch.object(sys, 'argv', argv), patch.object(preview.bpd, 'build') as build:
+                    with self.assertRaisesRegex(builder.IssueCountError, '元データ指紋'):
+                        preview.main()
+                    build.assert_not_called()
+                self.assertEqual(output.read_text(), 'HTML sentinel')
+
+        # 公開JSONも作り直して指紋を合わせた場合は、再読台帳の本文指紋が止める。
+        self.public.write_text(json.dumps(builder.candidate_public_theme(rows), ensure_ascii=False))
+        for for_docs in [False, True]:
+            with self.subTest(kind='body-with-rebuilt-public-json', for_docs=for_docs):
                 output.write_text('HTML sentinel')
                 argv = ['build_planet_page_preview.py', '--topic', TOPIC,
                         '--page', str(legacy), '--out', str(output)]
@@ -225,6 +318,35 @@ class CliAtomicityTests(unittest.TestCase):
                         self.assertIn('入力候補', result.stderr)
                         self.assertEqual(output.read_text(), 'HTML sentinel')
                         self.assertEqual(asset.read_text(), 'JS sentinel')
+
+    def test_script_and_module_build_from_a_candidate_that_adds_a_wave(self):
+        # --prepare-promotion が呼ぶ形（--input に累積候補）。候補は正典と違っていても、
+        # 候補から山なみを作って書き出し、正典も登録済みの公開JSONも書き換えない。
+        # 意見でない投稿を足した候補にしておく（意見を足すと、人が更新する台帳の母数が
+        # 追いつくまで独自性検査が止めるのが正しい動きで、その検査は上のクラスにある）。
+        canonical = ROOT / builder.parse_themes_yaml(builder.THEMES_YAML)[TOPIC]['sample_file']
+        before = (canonical.read_bytes(), builder.PUBLIC_THEME.read_bytes())
+        records, _ = builder.load_records(None)
+        extra = copy.deepcopy(records[0])
+        extra.update(tweet_id='synthetic-wave-cli', url='https://x.com/example/status/synthetic-wave-cli')
+        extra['classification'].update(is_opinion=False, main_issue='その他')
+        records.append(extra)
+        with tempfile.TemporaryDirectory() as tmp:
+            folder = Path(tmp)
+            candidate = folder / 'candidate.json'
+            candidate.write_text(json.dumps(records, ensure_ascii=False))
+            for entry in [['scripts/build_henoko_arena.py'], ['-m', 'scripts.build_henoko_arena']]:
+                with self.subTest(entry=entry):
+                    output, asset = folder / 'page.html', folder / 'arena.js'
+                    result = subprocess.run(
+                        [sys.executable, '-B', *entry, '--input', str(candidate),
+                         '--output-html', str(output), '--output-data', str(asset)],
+                        cwd=ROOT, capture_output=True, text=True)
+                    self.assertEqual(result.returncode, 0, result.stderr)
+                    totals = VerifiedRefreshTests.planet_totals(output.read_text())
+                    self.assertEqual(totals['collected'], len(records))
+                    self.assertTrue(asset.read_text())
+        self.assertEqual((canonical.read_bytes(), builder.PUBLIC_THEME.read_bytes()), before)
 
 
 if __name__ == '__main__':
