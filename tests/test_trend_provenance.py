@@ -341,7 +341,7 @@ class BukatsuTrendProvenanceTest(unittest.TestCase):
         stance_rows = [key for key in result if "-panel-stance-row-" in key]
         issue_rows = [key for key in result if "-panel-issue-row-" in key]
         # 立場は全回（見直し前の回も判定し直しずみ）、論点は検索語を増やした2026-07-23以降の回だけ。
-        self.assertEqual(len(stance_rows), 12)
+        self.assertEqual(len(stance_rows), 13)  # 2026-10-08の回が入って13回
         self.assertEqual(min(key.rsplit("-row-", 1)[1] for key in stance_rows), "2026-06-27")
         self.assertTrue(issue_rows and all(key.rsplit("-row-", 1)[1] >= "2026-07-23" for key in issue_rows))
         self.assertIn("#bukatsu-chiiki-trend-panel-stance-n-range", result)
