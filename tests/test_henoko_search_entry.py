@@ -72,6 +72,37 @@ class HenokoSearchEntryTest(unittest.TestCase):
         self.assertIn("<!-- HENOKO_SEARCH_OPINIONS -->1,234<!-- HENOKO_SEARCH_OPINIONS_END -->", block)
         self.assertEqual(apply_search_entry_counts(updated, 1234), updated)
 
+    def test_issue_buttons_match_public_counts(self) -> None:
+        """論点ボタンと最初の件数表示は、公開集計と同じ数字（更新のたびに古くなっていた）。"""
+        public = json.loads((ROOT / "data" / "public" / "themes" / "henoko-student-accident.json").read_text(encoding="utf-8"))
+        counts = {item["label"]: int(item["count"]) for item in public["issues"]}
+        shown = {tab.select_one("b").get_text(): int(tab.select_one("small").get_text().rstrip("件"))
+                 for tab in self.soup.select('#henoko-entry [role="tab"][data-entry-issue]')}
+        self.assertEqual(shown, {label: counts[label] for label in shown})
+        selected = self.soup.select_one('#henoko-entry [role="tab"][aria-selected="true"] b').get_text()
+        self.assertEqual(int(self.soup.select_one("[data-entry-issue-count]").get_text()), counts[selected])
+        total = int(public["opinion_count"])
+        self.assertEqual(
+            self.soup.select_one("[data-entry-issue-share]").get_text(),
+            f"全意見の{100 * counts[selected] / total:.1f}%",
+        )
+
+    def test_issue_buttons_follow_refresh_and_are_idempotent(self) -> None:
+        counts = {"安全管理・事故原因": 10, "政治利用・基地問題": 20, "報道・行政対応": 30,
+                  "追悼・被害者の尊厳": 40, "政治的中立性": 50, "平和教育の萎縮": 60}
+        updated = apply_search_entry_counts(self.source, 210, counts)
+        soup = BeautifulSoup(updated, "html.parser")
+        shown = {tab.select_one("b").get_text(): tab.select_one("small").get_text()
+                 for tab in soup.select('#henoko-entry [role="tab"][data-entry-issue]')}
+        self.assertEqual(shown, {label: f"{value}件" for label, value in counts.items()})
+        self.assertEqual(soup.select_one("[data-entry-issue-count]").get_text(), "10")
+        self.assertEqual(soup.select_one("[data-entry-issue-share]").get_text(), "全意見の4.8%")
+        self.assertEqual(apply_search_entry_counts(updated, 210, counts), updated)
+
+    def test_issue_buttons_stop_on_unknown_label(self) -> None:
+        with self.assertRaises(Exception):
+            apply_search_entry_counts(self.source, 210, {"安全管理・事故原因": 10})
+
 
 if __name__ == "__main__":
     unittest.main()

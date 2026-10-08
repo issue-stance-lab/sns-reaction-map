@@ -703,7 +703,7 @@ def apply_public_counts(page: str, public_theme: Path = PUBLIC_THEME) -> str:
     collected, total, stats, by_stance, by_intensity, by_cross = _public_counts(
         json.loads(public_theme.read_text(encoding="utf-8"))
     )
-    page = apply_search_entry_counts(page, total)
+    page = apply_search_entry_counts(page, total, {name: values.total for name, values in stats.items()})
     by_issue = Counter({ISSUE_INDEX[name]: values.total for name, values in stats.items()})
     page = replace_block(page, r"<!-- DETAIL_TABLES_START -->.*?<!-- DETAIL_TABLES_END -->", detail_tables_from_counts(by_issue, by_stance, by_intensity, by_cross, total), "詳細データ表")
     if "<!-- PLANET_SECTION_START -->" in page:
@@ -728,8 +728,53 @@ def replace_block(page: str, pattern: str, replacement: str, label: str) -> str:
     return updated
 
 
-def apply_search_entry_counts(page: str, opinions: int) -> str:
-    """検索入口のSNS件数を正典と同期し、入口ブロックの欠落も検知する。"""
+SEARCH_TAB_PATTERN = re.compile(
+    r'(data-entry-issue="[^"]+"><span aria-hidden="true">[^<]*</span><b>)([^<]+)(</b><small>)(\d+)(件</small>)'
+)
+SEARCH_SELECTED_PATTERN = re.compile(
+    r'aria-selected="true"[^>]*><span aria-hidden="true">[^<]*</span><b>([^<]+)</b>'
+)
+SEARCH_VOICES_PATTERN = re.compile(
+    r'(<b data-entry-issue-count>)\d+(</b>件 <span data-entry-issue-share>全意見の)[\d.]+(%</span>)'
+)
+
+
+def apply_search_entry_issue_counts(block: str, opinions: int, issue_counts: dict[str, int]) -> str:
+    """検索入口の論点ボタンの件数と、最初に選ばれている論点の件数・割合を正典へそろえる。
+
+    実行時はJSが公開集計から入れ直すが、JSなしの表示と数字の出所検査は、ここの静的な文字を見る。
+    ボタンが6つ・選択中が1つ・件数表示が1組でなければ、黙って古い数字を残さず止める。
+    """
+    seen: list[str] = []
+
+    def tab(found: re.Match[str]) -> str:
+        label = found.group(2)
+        if label not in issue_counts:
+            raise IssueCountError(f"検索入口の論点「{label}」が公開集計にありません")
+        seen.append(label)
+        return f"{found.group(1)}{label}{found.group(3)}{issue_counts[label]}{found.group(5)}"
+
+    block = SEARCH_TAB_PATTERN.sub(tab, block)
+    if len(seen) != 6 or len(set(seen)) != 6:
+        raise IssueCountError(f"検索入口の論点ボタンが6つでない: {len(seen)}個")
+    selected = SEARCH_SELECTED_PATTERN.findall(block)
+    if len(selected) != 1 or selected[0] not in issue_counts:
+        raise IssueCountError("検索入口の選択中の論点が1つに決まりません")
+    count = issue_counts[selected[0]]
+    share = f"{100 * count / opinions:.1f}"
+    block, replaced = SEARCH_VOICES_PATTERN.subn(
+        lambda found: f"{found.group(1)}{count}{found.group(2)}{share}{found.group(3)}", block
+    )
+    if replaced != 1:
+        raise IssueCountError(f"検索入口の論点別件数の表示が1組でない: {replaced}組")
+    return block
+
+
+def apply_search_entry_counts(page: str, opinions: int, issue_counts: dict[str, int] | None = None) -> str:
+    """検索入口のSNS件数を正典と同期し、入口ブロックの欠落も検知する。
+
+    issue_counts（論点名→意見件数）を渡すと、論点ボタンの件数も同じ数字へそろえる。
+    """
     has_start = SEARCH_ENTRY_START in page
     has_end = SEARCH_ENTRY_END in page
     if not has_start and not has_end:
@@ -744,6 +789,8 @@ def apply_search_entry_counts(page: str, opinions: int) -> str:
     updated, count = re.subn(pattern, replacement, block)
     if count != 1:
         raise IssueCountError(f"検索入口の意見件数が1か所でない: {count}か所")
+    if issue_counts is not None:
+        updated = apply_search_entry_issue_counts(updated, opinions, issue_counts)
     return page[:start] + updated + page[end:]
 
 
@@ -852,7 +899,7 @@ def build_page(
     rows = arena_rows(opinions)
     stats = {str(issue["main_issue"]): IssueStats(opinions, issue) for issue in ISSUE_DEFS}
     total = len(opinions)
-    page = apply_search_entry_counts(page, total)
+    page = apply_search_entry_counts(page, total, {name: values.total for name, values in stats.items()})
 
     if "<!-- PLANET_SECTION_START -->" in page:
         page = refresh_verified_planet(page, records, opinions)

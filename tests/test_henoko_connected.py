@@ -105,8 +105,16 @@ class HenokoConnectedTest(unittest.TestCase):
 
     def test_counts_reread_state_and_sources_remain(self):
         self.assertIn("まだ読み直していない分", self.candidate)
-        self.assertIn("未読分12件は別枠で表示しています", self.candidate)
-        self.assertIn("収集した594件のうち意見と判定した461件", self.candidate)
+        # 件数は更新のたびに変わる。固定の数字ではなく、公開集計と台帳から導く。
+        unread_counts = {issue["sub"]["unread_count"] for issue in self.data["issues"]}
+        self.assertTrue(
+            any(f"未読分{count}件は別枠で表示しています" in self.candidate for count in unread_counts),
+            unread_counts,
+        )
+        public = json.loads((ROOT / "data/public/themes/henoko-student-accident.json").read_text(encoding="utf-8"))
+        self.assertIn(
+            f"収集した{public['collected_count']}件のうち意見と判定した{public['opinion_count']}件", self.candidate
+        )
         self.assertGreaterEqual(len(self.soup.select("[data-henoko-claim]")), 1)
         self.assertGreaterEqual(len(self.soup.select(".henoko-sources a")), 1)
 
