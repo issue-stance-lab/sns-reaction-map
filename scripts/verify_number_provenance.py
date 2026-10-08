@@ -257,6 +257,11 @@ def in_regions(offset: int, regions: list[tuple[int, int]]) -> bool:
 #   禁止支持8件、中立・体験10件    → 10 の手前に6文字   → 添えられていない（別の数字）
 LABEL_GAP_WORDS = 1
 WORDISH = re.compile(r"[0-9A-Za-z぀-ヿ㐀-鿿０-９]")
+# ラベルと数字のあいだに入っても、そのラベルの件数だと読める決まり文句。
+#   「地方の足・移動権」を論点とする投稿は29件  → 29 はこの論点の件数
+# 数えないと 9文字の間があるためラベル無しの数字になり、無関係な集計と偶然一致した
+# 古い数字（29件）が「説明できた」ことになる（高齢者テーマ、2026-10-07）。
+LABEL_FILLER = re.compile(r"を論点とする投稿[はが]")
 
 
 def nearest_label(text: str, offset: int, labels: set[str]) -> str | None:
@@ -271,7 +276,7 @@ def nearest_label(text: str, offset: int, labels: set[str]) -> str | None:
         position = window.rfind(label)
         if position < 0:
             continue
-        between = window[position + len(label) :]
+        between = LABEL_FILLER.sub("", window[position + len(label) :])
         distance = len(WORDISH.findall(between))
         if distance > LABEL_GAP_WORDS:
             continue

@@ -1817,3 +1817,57 @@ items:
       - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/37643478026"
       - "https://sns-reaction-map.jp/ai-copyright-reaction-map.html"
       - "https://sns-reaction-map.jp/"
+
+  - id: approval-20261008-002
+    title: X投稿記録と日次運用ルールの本番反映
+    scope: website
+    kind: release
+    requester: AI（X日次セッション）
+    evidence:
+      - content/x/posts.md
+      - .claude/skills/x-daily/SKILL.md
+      - GROWTH.yaml
+      - content/x/weekly-reviews.md
+    status: completed
+    requested_at: "2026-10-08"
+    decided_at: "2026-10-08"
+    decision_note: >-
+      10-07・10-08のX投稿記録（リプライ5本と計測）、リプライ本数の目安の訂正、
+      および2026-10-08のオーナー指示（「本日は見送り」を提示の結論にしない／論点ポストの凍結／
+      検索語を作る前に当日のニュースを確認する）の手順反映を提示し、オーナーが「反映して」と指示した。
+      公開ファイルの変更は docs/index.html の投稿日と件数の同期のみ。
+    completed_at: "2026-10-08"
+    result_note: >-
+      main dd5bf347で公開（task/x-20261007 をマージして push）。
+      全テスト1,650件・公開用検査・全テーマ検査・数字の出所検査はNG 0件
+      （トップページ検査は、辺野古の収集予定日（10/7）の超過だけを知らせる既存の表示で、本件とは無関係。
+      共有ツリーでも同じ表示が出ている）。GitHub Actionsの公開ファイル検査とPages配信が成功。
+      本番トップで各テーマの投稿日（自転車・部活動・高齢者免許が10-08反映で10-07、消費税減税が10-08）と
+      全体の意見17,218件を確認した。反映前に、共有ツリーに未コミットで残っていた別セッションのX記録2本を
+      先にコミットして保全し、posts.mdの衝突は両方を時刻順に残して解消した。
+    result_evidence:
+      - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/37772952803"
+      - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/37772952758"
+      - "https://sns-reaction-map.jp/"
+
+  - id: approval-20261008-003
+    title: 辺野古高校生死亡事故の定期更新（2026-10-08収集分）の本番反映
+    scope: website
+    kind: release
+    requester: AI（辺野古定期更新セッション）
+    evidence:
+      - themes/henoko-student-accident.md（2026-10-08節）
+      - data/verification/henoko-student-accident-sunk-continents.json（母数461→495、新規の一致なしを確認）
+      - docs/henoko-student-accident-reaction-map.html
+      - scripts/build_henoko_arena.py（検索入口の論点別件数の同期を追加）
+    status: approved
+    requested_at: "2026-10-08"
+    decided_at: "2026-10-08"
+    decision_note: >-
+      新規42件（意見34件）を反映して累積636件・意見495件にする更新、世論の潮目を9/23→10/8へ更新（比較は6件と7件の少数サンプルで注意書き付き）、
+      検索入口の論点別件数の同期漏れの修正、トップページの数字と「今週の注目テーマ」の自動入れ替えを提示した。
+      未確認は、公開前のブラウザ目視（公開後に本番で確認する）、読みやすさ検査の既存の警告25件（変更前から同数）、
+      論点の割り当てに疑問のある4件（再読の記録には入れず未読として数える）。
+      オーナーは「別で色々動いているので、競合しないように公開して」と指示した。
+      競合を避けるため、公開前に最新のoriginのmainを作業ブランチへ取り込み、
+      衝突した2ファイル（トップページと保全記録）は生成スクリプトで作り直して解消し、検査をやり直したうえで反映する。
