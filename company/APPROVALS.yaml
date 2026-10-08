@@ -1860,7 +1860,7 @@ items:
       - data/verification/henoko-student-accident-sunk-continents.json（母数461→495、新規の一致なしを確認）
       - docs/henoko-student-accident-reaction-map.html
       - scripts/build_henoko_arena.py（検索入口の論点別件数の同期を追加）
-    status: approved
+    status: completed
     requested_at: "2026-10-08"
     decided_at: "2026-10-08"
     decision_note: >-
@@ -1871,3 +1871,19 @@ items:
       オーナーは「別で色々動いているので、競合しないように公開して」と指示した。
       競合を避けるため、公開前に最新のoriginのmainを作業ブランチへ取り込み、
       衝突した2ファイル（トップページと保全記録）は生成スクリプトで作り直して解消し、検査をやり直したうえで反映する。
+    completed_at: "2026-10-08"
+    result_note: >-
+      main d0795c33で公開（task/henoko-refresh-1008 をマージして push。共有ツリーに別セッションが検査中にコミットした
+      X投稿記録1件〈d0795c33〉が同時に載った。変更は投稿日の同期のみで、関連の検査をやり直して通過を確認した）。
+      マージ後の共有mainで、全テスト1,653件（skipped 4）・公開用検査・全テーマ検査・数字の出所検査はNG 0件。
+      GitHub Actionsの公開ファイルの検査とPages配信が成功。
+      本番で、辺野古ページの収集636件・意見495件、論点別ボタン6つの件数と、クリック後の件数・割合の一致、
+      世論の潮目「9月23日 → 10月8日」、旧い数字（461件・594件）0件、コンソールエラー0件、
+      スマホ幅375pxで横はみ出しなしを確認。トップは辺野古の更新日・件数・「今週の注目テーマ」と、
+      全体の収集22,236件（公開データの合計と一致）を確認した。
+      公開前のブラウザ目視はできず、本番での確認に回した。読みやすさ検査の既存の警告25件は未対応。
+    result_evidence:
+      - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/37786039678"
+      - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/37786039740"
+      - "https://sns-reaction-map.jp/henoko-student-accident-reaction-map.html"
+      - "https://sns-reaction-map.jp/"
