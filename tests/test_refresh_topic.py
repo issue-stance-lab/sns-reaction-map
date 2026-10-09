@@ -34,6 +34,7 @@ from scripts.refresh_topic import (
     write_json,
 )
 from scripts.sync_portal_stats import parse_themes_yaml
+from tests.test_refresh_completion import fixture_receipt
 
 
 def classified(tweet_id: str, issue: str = "中傷動画・説明責任") -> dict:
@@ -127,6 +128,7 @@ class RefreshTopicTests(unittest.TestCase):
                 encoding="utf-8",
             )
 
+            fixture_receipt(root, "topic", stage)
             manifest = prepare_promotion_manifest(
                 root,
                 "topic",
@@ -160,6 +162,7 @@ class RefreshTopicTests(unittest.TestCase):
                 encoding="utf-8",
             )
 
+            fixture_receipt(root, "topic", stage)
             manifest = prepare_promotion_manifest(
                 root,
                 "topic",
@@ -447,6 +450,7 @@ class RefreshTopicTests(unittest.TestCase):
             write_json(stage / "cumulative-candidate.json", candidate)
             (stage / "page.html").write_text("new page", encoding="utf-8")
             original_registry = (root / "THEMES.yaml").read_text(encoding="utf-8")
+            fixture_receipt(root, "topic", stage)
 
             with patch("scripts.refresh_topic.run"), patch(
                 "scripts.refresh_topic.backup_private", side_effect=RuntimeError("backup failed")
@@ -526,7 +530,8 @@ class MultiTopicPromotionTests(unittest.TestCase):
 
     def _stage_for(self, root: Path, topic: str, new_id: str) -> Path:
         stage = root / ".staging" / "refresh" / topic / "run-1"
-        write_json(stage / "cumulative-candidate.json", [classified(f"{topic}-old"), classified(new_id)])
+        write_json(stage / "cumulative-candidate.json", json.loads((root / f"social-samples/{topic}.json").read_text()) + [classified(new_id)])
+        fixture_receipt(root, topic, stage)
         (stage / "page.html").write_text(f"<html>{topic}</html>", encoding="utf-8")
         return stage
 
@@ -568,11 +573,11 @@ class MultiTopicPromotionTests(unittest.TestCase):
             # テーマ固有ファイル(正典・ページ)もそれぞれ束ねられている。
             self.assertEqual(
                 json.loads(targets[Path("social-samples/topic-a.json")].read_text(encoding="utf-8")),
-                [classified("topic-a-old"), classified("a-new")],
+                [classified("a-old"), classified("a-new")],
             )
             self.assertEqual(
                 json.loads(targets[Path("social-samples/topic-b.json")].read_text(encoding="utf-8")),
-                [classified("topic-b-old"), classified("b-new")],
+                [classified("b-old"), classified("b-new")],
             )
             self.assertEqual(targets[Path("docs/topic-a.html")].read_text(encoding="utf-8"), "<html>topic-a</html>")
             self.assertEqual(targets[Path("docs/topic-b.html")].read_text(encoding="utf-8"), "<html>topic-b</html>")
@@ -605,11 +610,11 @@ class MultiTopicPromotionTests(unittest.TestCase):
 
             self.assertEqual(
                 json.loads((root / "social-samples/topic-a.json").read_text(encoding="utf-8")),
-                [classified("topic-a-old"), classified("a-new")],
+                [classified("a-old"), classified("a-new")],
             )
             self.assertEqual(
                 json.loads((root / "social-samples/topic-b.json").read_text(encoding="utf-8")),
-                [classified("topic-b-old"), classified("b-new")],
+                [classified("b-old"), classified("b-new")],
             )
             self.assertEqual((root / "docs/topic-a.html").read_text(encoding="utf-8"), "<html>topic-a</html>")
             # 適用後の検査6本は単独テーマ版と共通（apply_manifest_targets自体は変更していない）。

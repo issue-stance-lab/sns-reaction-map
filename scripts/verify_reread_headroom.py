@@ -1,21 +1,8 @@
 #!/usr/bin/env python3
-"""編集再読の「未読合計（読み飛ばし＋読了後に増えた分）」が上限（4割）に
-近づいていないかを、事故る前に見る。
+"""過去から残る理由分類・記録への未反映を監視する（本文未確認数とは異なる）。
 
-independence_gate() は読み飛ばし＋読了後に増えた分の合計が4割を超えた時点で
-初めて NG にする（2026-09-13、オーナー判断で読み飛ばしと増分を同じ枠に統合。
-それまでは grown_count だけを見ていた）。定期収集のたびに投稿は増え続けるので、
-それまでは何の予兆もなく、ある日の収集がたまたまその論点に数件当たった瞬間に
-突然落ちる。2026-09-13、副首都の展開作業中に「これは編集再読の対象外だから
-読み直しが要らない」という誤った判断をした際、bukatsu-chiikiの
-「受け皿・指導者」「費用・家庭負担」の2論点が実測39%・38%と判明した
-（限度まで1〜2ポイント）。この検査はその値を定期的に可視化し、
-限度に達してから慌てて全部読み直す、という誤りを防ぐための早期警告。
-
-このスクリプト単体はNGにしない（exit 0固定）。independence_gate自体の代わりではなく、
-「まだ間に合ううちに気づく」ための別の目。`build_admin_dashboard.py` の異常検知
-（scripts/admin_dashboard/actions.py）からも `headroom_findings()` として呼ばれる。
-対象はTHEMES.yamlの全テーマのうち、configs/planet/{topic}.yamlにsub_issuesがあるもの。
+今回の追加・変更分は refresh_completion.py が未完了0件を要求する。
+この早期警告は過去の残件の4割上限を監視するだけで、持ち越しを許可しない。
 """
 from pathlib import Path
 import sys
@@ -26,7 +13,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "scripts"))
 import build_planet_data as bpd  # noqa: E402
 
-WARN_AT = 0.30  # この割合を超えたら「そろそろ次の読み直しを計画する」目安
+WARN_AT = 0.30  # 過去の理由記録の不足を確認する目安
 LIMIT = 0.40    # independence_gate（build_planet_data.py）が落とす境界と同じ値。
                 # 向こうを変えたらこちらも合わせる（一元化はしていない）
 
@@ -54,24 +41,22 @@ def topic_findings(topic: str) -> list[dict]:
             continue
         unread = sub["skipped_count"] + sub["grown_count"]
         ratio = unread / issue["count"]
-        if ratio >= LIMIT:
+        if ratio > LIMIT:
             findings.append({
                 "tone": "danger",
-                "title": f"{topic}: 「{issue['label']}」の編集再読が上限を超えています",
-                "detail": (f"未読合計（読み飛ばし{sub['skipped_count']}件＋増分{sub['grown_count']}件）"
+                "title": f"{topic}: 「{issue['label']}」の理由分類・記録の未完了が上限を超えています",
+                "detail": (f"理由記録に未接続（既存分{sub['skipped_count']}件＋増分{sub['grown_count']}件）"
                            f"が{ratio:.0%}（上限{LIMIT:.0%}）。"
                            "次にこのテーマを生成するとindependence_gateでNGになります。"
-                           "編集再読の追い読みが必要です。"),
+                           "本文確認済みかを確かめ、必要な理由分類と記録への反映を完了してください。"),
             })
         elif ratio >= WARN_AT:
-            remain = (LIMIT - ratio) * issue["count"]
             findings.append({
                 "tone": "warn",
-                "title": f"{topic}: 「{issue['label']}」の編集再読がそろそろ上限です",
-                "detail": (f"未読合計（読み飛ばし{sub['skipped_count']}件＋増分{sub['grown_count']}件）"
+                "title": f"{topic}: 「{issue['label']}」の理由分類・記録の未完了が上限に近づいています",
+                "detail": (f"理由記録に未接続（既存分{sub['skipped_count']}件＋増分{sub['grown_count']}件）"
                            f"が{ratio:.0%}（上限{LIMIT:.0%}）。"
-                           f"あと{remain:.0f}件相当の新規投稿がこの論点に入ると次の生成でNGになります。"
-                           "次の定期収集の前に追い読みを計画してください。"),
+                           "本文未確認数とは異なります。今回の追加・変更分は割合に関係なく完了が必要です。"),
             })
     return findings
 

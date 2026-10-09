@@ -26,9 +26,11 @@ from urllib.parse import urlsplit, urlunsplit
 import yaml
 
 try:
+    from .refresh_completion import prepare_targets as completion_targets, validate_application
     from .sync_portal_stats import parse_themes_yaml
     from .verification_data import write_verification_file
 except ImportError:
+    from refresh_completion import prepare_targets as completion_targets, validate_application
     from sync_portal_stats import parse_themes_yaml  # type: ignore[no-redef]
     from verification_data import write_verification_file  # type: ignore[no-redef]
 
@@ -816,6 +818,7 @@ def promote(
     backup_destination: Path,
     adapter: Any = None,
 ) -> None:
+    adapter_targets = completion_targets(root, topic, stage, adapter_targets)
     themes = parse_themes_yaml(root / "THEMES.yaml")
     theme = themes[topic]
     canonical = root / str(theme["sample_file"])
@@ -951,6 +954,7 @@ def prepare_public_candidate_bundle(
 
     ここで作ったバイト列だけをmanifestへ入れ、承認後は再生成しない。
     """
+    adapter_targets = completion_targets(root, topic, stage, adapter_targets)
     candidate_root = _copy_candidate_tree(root, stage)
     themes = parse_themes_yaml(root / "THEMES.yaml")
     theme = themes[topic]
@@ -1029,6 +1033,7 @@ def prepare_promotion_manifest(
     adapter_targets: dict[Path, Path],
 ) -> dict[str, Any]:
     """Bind an approval candidate to exact staged bytes without mutating public files."""
+    adapter_targets = completion_targets(root, topic, stage, adapter_targets)
     write_verification_file(stage / "cumulative-candidate.json", stage / "verification-candidate.json")
     files_by_target = {
         str(parse_themes_yaml(root / "THEMES.yaml")[topic]["sample_file"]): {
@@ -1102,6 +1107,7 @@ def load_promotion_manifest(root: Path, stage: Path, topic: str, current_date: s
 
 def apply_manifest_targets(root: Path, stage: Path, targets: dict[Path, Path], backup_destination: Path) -> None:
     """manifestで固定した候補をそのまま適用し、途中失敗なら戻す。"""
+    validate_application(root, targets)
     rollback = stage / "promotion-backup"
     existing = {target for target in targets if (root / target).exists()}
     for target in targets:
@@ -1159,6 +1165,8 @@ def prepare_public_candidate_bundle_multi(
     """
     if not entries:
         raise ValueError("entries が空です。1件以上のテーマを指定してください")
+    entries = [{**entry, "adapter_targets": completion_targets(
+        root, entry["topic"], entry["stage"], entry["adapter_targets"])} for entry in entries]
     candidate_root = _copy_candidate_tree(root, combined_stage)
     themes = parse_themes_yaml(root / "THEMES.yaml")
     per_topic_targets: dict[Path, Path] = {}
@@ -1253,6 +1261,7 @@ def prepare_multi_promotion_manifest(
     こちらは topics を配列で持つ。適用時にこの配列と完全一致しない適用要求は拒否する
     （個別候補の混在適用を防ぐ。課題59やること3）。
     """
+    validate_application(root, targets)
     files = []
     for target, source in sorted(targets.items(), key=lambda item: str(item[0])):
         if not source.is_file():
