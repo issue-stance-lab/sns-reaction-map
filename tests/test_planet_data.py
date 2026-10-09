@@ -267,17 +267,21 @@ class PlanetDataTest(unittest.TestCase):
         2026-10-08、新規121件・意見88件を追加し、教員の働き方だけ未読115件を追い読み
         （本文を1件ずつ読んで専用ファイル323件→438件）。未読は教員28/466・制度89/346・
         教育71/286で、いずれも4割上限内。
+
+        2026-10-09、採否確認で制度・教育から各2件を意見集計から除外。
+        詳細区分の登録件数は不変で、未接続分は制度87/344・教育69/284となる。
+        126件の本文読了と、詳細区分への接続は別に数える。
         """
         data = bpd.build(TOPIC)
         cfg = bpd.yaml.safe_load((ROOT / "configs" / "planet" / f"{TOPIC}.yaml").read_text())
         by_label = {i["label"]: i["sub"] for i in data["issues"]}
-        for label, count, unread in [("教員の働き方", 438, 28), ("制度・移行プロセス", 257, 89),
-                                     ("教育的意義・機会", 215, 71)]:
+        for label, count, unread in [("教員の働き方", 438, 28), ("制度・移行プロセス", 257, 87),
+                                     ("教育的意義・機会", 215, 69)]:
             self.assertEqual(by_label[label]["reread_count"], count)
             self.assertEqual(by_label[label]["unread_count"], unread)
         self.assertEqual(data["reread_summary"]["connected_editorial_count"], 1238)
-        self.assertEqual(data["reread_summary"]["not_connected_opinion_count"], 344)
-        self.assertEqual(data["reread_summary"]["connected_issue_population"], 1500)
+        self.assertEqual(data["reread_summary"]["not_connected_opinion_count"], 340)
+        self.assertEqual(data["reread_summary"]["connected_issue_population"], 1496)
         self.assertEqual(by_label["費用・家庭負担"]["skipped_count"], 4)
         self.assertEqual(by_label["受け皿・指導者"]["skipped_count"], 6)
         self.assertEqual(bpd.independence_gate(data, cfg), [])
