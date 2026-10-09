@@ -1930,3 +1930,33 @@ items:
       - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/37862600618"
       - "https://sns-reaction-map.jp/bukatsu-chiiki-reaction-map.html"
       - "https://sns-reaction-map.jp/"
+
+  - id: approval-20261009-001
+    title: 2026-10-09のX投稿記録の本番反映
+    scope: website
+    kind: release
+    requester: AI（X日次セッション）
+    evidence:
+      - content/x/posts.md
+      - THEMES.yaml
+    status: completed
+    requested_at: "2026-10-09"
+    decided_at: "2026-10-09"
+    decision_note: >-
+      10-09のURLなしリプライ4本（@kindanpolitics／@suura3333／@JHS_Teacher／@dorayarou292941）の記録と、
+      10-07夜の3本の計測結果、計測待ちに複数本が出てこない不具合の修正を提示し、オーナーが「反映」と指示した。
+      公開ファイルの変更は docs/index.html の投稿日と件数の同期のみ。
+    completed_at: "2026-10-09"
+    result_note: >-
+      main ae87a2f0で公開（task/x-20261009 をマージして push）。
+      全テスト1,673件・公開用検査・全テーマ検査・数字の出所検査・トップページ検査はいずれもNG 0件
+      （前日まで出ていた辺野古の収集予定日超過は、別セッションの収集で解消していた）。
+      GitHub Actionsの公開ファイルの検査とPages配信が成功。本番トップで部活動テーマの投稿日2026-10-09と
+      更新日2026-10-08・追加121件を確認した。
+      THEMES.yamlとdocs/index.htmlが衝突したため、別セッションのデータ更新（updated_at 2026-10-08・collect_delta 121）を
+      採り、こちらのx_posted_atだけを2026-10-09にしてから docs/index.html を作り直して解消した。
+      非公開正典は共有ツリーの方が新しかったため、共有ツリー→作業ツリーの向きで同期した（逆向きに上書きしていない）。
+    result_evidence:
+      - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/37914758775"
+      - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/37914758769"
+      - "https://sns-reaction-map.jp/"
