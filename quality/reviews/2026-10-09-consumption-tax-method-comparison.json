@@ -1,0 +1,174 @@
+{
+  "date": "2026-10-09",
+  "topic": "consumption-tax-cut",
+  "status": "completed",
+  "decision": "Recommend GPT-6.1 Sol high as the single-pass candidate; no superiority of Kimi-plus-reread or Astra established. Production method unchanged; fix boundary rules and historical comparability before switching.",
+  "population": 562,
+  "sample": 120,
+  "random_seed": 20261009,
+  "wave": "2026-10-03",
+  "input_sha256": "e077cda85531425bb172c2ccde59256b1161086ba9ba3540e46c6e8b3f91f4e2",
+  "reference_sha256": "c8a254146e9eae2d7a08603942d598584febfc3d3dd0b152634106d479e58c8e",
+  "arms": {
+    "A": {
+      "model": "kimi-k2.7-code then gpt-6.1-sol high",
+      "completed": 120,
+      "opinions": 108,
+      "excluded": 12,
+      "unprocessed": 0,
+      "uncertainty_annotations": 52,
+      "agent_elapsed_seconds": 471.041,
+      "stance": {
+        "中立・情報": 41,
+        "減税推進": 28,
+        "条件付き賛成・政府案に不満": 15,
+        "減税反対・慎重": 24
+      },
+      "main_issue": {
+        "公約と政治不信": 44,
+        "減税の対象範囲": 11,
+        "事業者の実務負担": 5,
+        "減税の効果": 23,
+        "その他": 9,
+        "財源と社会保障": 5,
+        "給付など他策との比較": 11
+      },
+      "frozen_reference_mismatches_not_error_count": 4
+    },
+    "B": {
+      "model": "gpt-6.1-sol high",
+      "completed": 120,
+      "opinions": 99,
+      "excluded": 21,
+      "unprocessed": 0,
+      "uncertainty_annotations": 53,
+      "agent_elapsed_seconds": 405.298,
+      "stance": {
+        "中立・情報": 35,
+        "減税推進": 29,
+        "条件付き賛成・政府案に不満": 7,
+        "減税反対・慎重": 28
+      },
+      "main_issue": {
+        "公約と政治不信": 40,
+        "減税の対象範囲": 7,
+        "事業者の実務負担": 5,
+        "減税の効果": 23,
+        "その他": 6,
+        "財源と社会保障": 5,
+        "給付など他策との比較": 13
+      },
+      "frozen_reference_mismatches_not_error_count": 1
+    },
+    "C": {
+      "model": "gpt-6-astra high",
+      "completed": 120,
+      "opinions": 98,
+      "excluded": 22,
+      "unprocessed": 0,
+      "uncertainty_annotations": 72,
+      "agent_elapsed_seconds": 454.544,
+      "stance": {
+        "中立・情報": 31,
+        "減税推進": 30,
+        "条件付き賛成・政府案に不満": 8,
+        "減税反対・慎重": 29
+      },
+      "main_issue": {
+        "公約と政治不信": 50,
+        "減税の対象範囲": 5,
+        "事業者の実務負担": 3,
+        "減税の効果": 19,
+        "財源と社会保障": 7,
+        "給付など他策との比較": 12,
+        "その他": 2
+      },
+      "frozen_reference_mismatches_not_error_count": 3
+    }
+  },
+  "comparisons": {
+    "Kimi_initial__A_current": {
+      "any_label_different": 55,
+      "effective_different": 52,
+      "adoption_different": 4,
+      "common_opinions": 105,
+      "issue_different_common": 29,
+      "stance_different_common": 26
+    },
+    "Kimi_initial__B_sol": {
+      "any_label_different": 65,
+      "effective_different": 62,
+      "adoption_different": 13,
+      "common_opinions": 96,
+      "issue_different_common": 33,
+      "stance_different_common": 22
+    },
+    "Kimi_initial__C_astra": {
+      "any_label_different": 64,
+      "effective_different": 61,
+      "adoption_different": 14,
+      "common_opinions": 95,
+      "issue_different_common": 31,
+      "stance_different_common": 20
+    },
+    "A_current__B_sol": {
+      "any_label_different": 39,
+      "effective_different": 37,
+      "adoption_different": 9,
+      "common_opinions": 99,
+      "issue_different_common": 21,
+      "stance_different_common": 9
+    },
+    "A_current__C_astra": {
+      "any_label_different": 43,
+      "effective_different": 41,
+      "adoption_different": 10,
+      "common_opinions": 98,
+      "issue_different_common": 21,
+      "stance_different_common": 11
+    },
+    "B_sol__C_astra": {
+      "any_label_different": 24,
+      "effective_different": 24,
+      "adoption_different": 1,
+      "common_opinions": 98,
+      "issue_different_common": 18,
+      "stance_different_common": 5
+    }
+  },
+  "independent_audit": {
+    "posts": 58,
+    "unique_candidates": 112,
+    "agreement_controls": 10,
+    "boundary_posts": 30,
+    "counts": {
+      "acceptable": 69,
+      "boundary": 43
+    },
+    "by_arm": {
+      "A": {
+        "acceptable": 42,
+        "boundary": 16
+      },
+      "B": {
+        "acceptable": 42,
+        "boundary": 16
+      },
+      "C": {
+        "acceptable": 33,
+        "boundary": 25
+      }
+    },
+    "human_ground_truth": false
+  },
+  "production_changed": false,
+  "next_collection_date": "2026-10-10",
+  "limitations": [
+    "One sample and one run per arm; no repeatability measurement",
+    "Saved Kimi inference reused; initial Kimi latency not measured",
+    "AI reference and AI audit, not human ground truth",
+    "Does not replace reason grouping, source verification or publication gates",
+    "Uncertainty annotations are not pending or unread records",
+    "URLs-stripped text includes a 2-post and 5-post exact-duplicate cluster"
+  ]
+}
