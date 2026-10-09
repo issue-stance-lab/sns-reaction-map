@@ -1970,10 +1970,23 @@ items:
       - quality/reviews/2026-10-09-bukatsu-opinion126-review.md
       - quality/reviews/2026-10-09-bukatsu-opinion4-application.json
       - quality/reviews/2026-10-09-bukatsu-opinion4-application.md
-    status: approved
+    status: completed
     requested_at: "2026-10-09"
     decided_at: "2026-10-09"
     decision_note: >-
       本対話で126件を読み、採用122件・除外4件・保留0件、反映後は意見1,578件、
       収集1,986件は保持し、過去の推移と整合させて反映することを提示した。
       オーナーが「反映して」と指示したため、4件の除外を正式データと過去のグラフに反映して公開する。
+    completed_at: "2026-10-09"
+    result_note: >-
+      main 85a978fcで4件の除外と過去の推移を公開した。収集1,986件・意見1,578件。
+      共有mainの全1,673テストと公開用1,447テストはいずれも成功（各4件スキップ）。
+      全10テーマのページ整合・再生成・数字の出所とトップページ検査もNG0件。
+      Pages配信成功後、本番のテーマページ、トップ、公開JSON2ファイル、推移画像4枚が手元と完全一致。
+      ブラウザでも意見1,578件、9/15の177件、9/22の80件、10/8の88件とコンソールエラー0件を確認。
+      変更前の原本を保持し、新しい正典は391ファイルの非公開バックアップで復元検査済み。
+      既存の文章表現の警告は変更前後で同一であり、今回の件数訂正では書き換えていない。
+    result_evidence:
+      - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/37933499861"
+      - "https://sns-reaction-map.jp/bukatsu-chiiki-reaction-map.html"
+      - "quality/reviews/2026-10-09-bukatsu-opinion4-application.md"

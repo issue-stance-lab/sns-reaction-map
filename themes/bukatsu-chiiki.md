@@ -226,6 +226,6 @@ ai-copyright・fukushutoの2テーマは`show_unreviewed_note`が既定のtrue�
 ## 2026-10-09 読了証拠が見つからなかった126件の採否確認
 
 126件を全件再読し、意見として採用122件、除外4件、保留0件と判断した。共通台帳に読了を登録。
-[詳細と除外対象](../quality/reviews/2026-10-09-bukatsu-opinion126-review.md)。オーナーの反映指示で4件の除外を正式データへ適用し、
+[詳細と除外対象](../quality/reviews/2026-10-09-bukatsu-opinion126-review.md)。オーナーの反映指示で4件の除外を正式データへ適用して公開し、
 意見は1,578件となった（収集1,986件は全件保持）。9/15・9/22のグラフも各2件を除いて揃えた。
 [適用・公開記録](../quality/reviews/2026-10-09-bukatsu-opinion4-application.md)。今回の読了は詳細理由のグループ登録とは別。
