@@ -1990,3 +1990,29 @@ items:
       - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/37933499861"
       - "https://sns-reaction-map.jp/bukatsu-chiiki-reaction-map.html"
       - "quality/reviews/2026-10-09-bukatsu-opinion4-application.md"
+
+  - id: approval-20261010-001
+    title: 2026-10-09夜枠と文化部の会話フォローの記録の本番反映
+    scope: website
+    kind: release
+    requester: AI（X日次セッション）
+    evidence:
+      - content/x/posts.md
+    status: completed
+    requested_at: "2026-10-10"
+    decided_at: "2026-10-10"
+    decision_note: >-
+      10-09夜枠（@higakubo宛・この日5本目）の記録と、別セッションの10-08投稿から伸びた
+      文化部の受け皿の会話への返信（10-10 00:11・@QuenQuinaQuina宛）の記録を提示し、
+      オーナーが「反映して」と指示した。
+      **この反映では公開ファイル（docs/ 配下）は1行も変わっていない。**変更は content/x/posts.md のみで、
+      公開サイトの表示は変わらない。
+    completed_at: "2026-10-10"
+    result_note: >-
+      main 20734c15で反映（task/x-20261009b をマージして push）。
+      全テスト1,690件・公開用検査・全テーマ検査・数字の出所検査・トップページ検査はいずれもNG 0件。
+      GitHub Actionsの公開ファイルの検査とPages配信が成功。
+      **公開ファイルに変更がないため、公開サイトでの表示確認は行っていない**（git diff で docs/ 配下に差分なしを確認）。
+      非公開正典の差分は時刻だけで内容の違いはなく、移動は不要だった。
+    result_evidence:
+      - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/37951059225"
