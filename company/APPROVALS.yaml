@@ -1904,7 +1904,7 @@ items:
       - "quality/reviews/2026-10-08-bukatsu-refresh-review.md"
       - "quality/reviews/2026-10-08-bukatsu-teacher-catchup.json"
       - "data/verification/updates/bukatsu-chiiki/2026-10-08/"
-    status: approved
+    status: completed
     requested_at: "2026-10-09"
     decided_at: "2026-10-09"
     decision_note: >-
@@ -1913,3 +1913,20 @@ items:
       オーナーが「B」（追い読み）を選んだため、追い読みを済ませたうえで公開する。
       追い読み後の候補は、件数は同じで、教員の働き方の内訳区分が増える内容。
       追い読みの後で最新のmainを取り込み、候補を作り直した（manifestは上記の値）。
+    completed_at: "2026-10-09"
+    result_note: >-
+      main 5be08b45 で公開（task/bukatsu-refresh-1008 をマージして push。取り込んだのは自分の11コミットのみで、
+      push 前に origin/main と照合して先行する他の公開が無いことを確認した）。
+      マージ後の共有mainで、全テスト1,673件（skipped 4）・公開用検査・全テーマ検査・数字の出所検査・採用台帳・保全台帳はNG 0件。
+      GitHub Actionsの公開ファイルの検査とPages配信が成功。
+      本番で、部活動ページの意見1,582件・収集1,986件、「2026年10月8日時点」の意見の推移、旧い件数（1,494件）0件、
+      コンソールエラー0件、ページ全体の横スクロールなしを確認。
+      公開された5ファイル（部活動ページ・トップ・カタログ・部活動の公開データ・sitemap）は手元と完全に一致した。
+      スマホ幅375pxは、公開前の作業ツリーで確認した（本番では未確認）。
+      追い読み後の未読率は、教員の働き方6.0%、制度・移行プロセス25.7%、教育的意義・機会24.8%。
+      制度・移行プロセスと教育的意義・機会が25%前後で、次回の収集で30%に近づく場合は追い読みを計画する。
+    result_evidence:
+      - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/37862600733"
+      - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/37862600618"
+      - "https://sns-reaction-map.jp/bukatsu-chiiki-reaction-map.html"
+      - "https://sns-reaction-map.jp/"
