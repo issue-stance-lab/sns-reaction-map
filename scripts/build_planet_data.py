@@ -23,11 +23,11 @@ from pathlib import Path
 import numpy as np
 import yaml
 
-from public_registry_common import is_opinion_record
-
 try:
+    from .public_registry_common import is_opinion_record
     from .verification_data import record_id_hash
 except ImportError:
+    from public_registry_common import is_opinion_record
     from verification_data import record_id_hash  # type: ignore[no-redef]
 
 ROOT = Path(__file__).resolve().parents[1]

@@ -85,9 +85,9 @@ python3 scripts/build_admin_dashboard.py
   （課題83。それまでは `x-posting` 以外の4項目が収集されるだけで警告が出ず、
   `x-profile` の `last_run` が74日間止まっていても気づけなかった）
 - 数字の取得元（GA4 / Search Console / Supabase）が壊れていないか
-- 編集再読の「読了後に増えた分」が上限（4割）に近づいているテーマ・論点
-  （`scripts/verify_reread_headroom.py`。定期収集のたびに増え続けるため、
-  超えてから気づくと手遅れになる。2026-09-13、bukatsu-chiikiの2論点で39%・38%を検出）
+- 過去の理由分類・記録への反映が未完了で、上限（4割）に近づいているテーマ・論点
+  （`scripts/verify_reread_headroom.py`。本文未確認数とは区別する。今回の追加・変更分は
+  Kimi＋再読で採否・必要な理由分類・記録まで終え、未完了0件を別途検査する）
 - 「クレーム監査（主張の事実確認）」の照合確認日が、公開データの期間末より30日以上
   遅れているテーマ（`scripts/verify_claim_verdicts.py`の`coverage_findings()`。課題99、
   2026-09-28オーナー決定。30日未満は定期収集のたびに必ず出るため経過観察とし、
@@ -144,7 +144,7 @@ python3 scripts/build_admin_dashboard.py
 
 | 作業 | 頻度 | 期日の決まり方 | 正典 |
 |---|---|---|---|
-| **データ更新**（収集→自動分類→本文確認→正典反映→公開を**1セッションで**） | テーマごと（`collect_at`超過順）・1日1テーマまで。公開直前にオーナー承認。遅れの確認だけ毎日22時に自動報告 | `THEMES.yaml` の `collect_at`（=`refresh_at`）と `pending_wave` / `GROWTH.yaml` の `recurring.update-work-queue` | `DATA_REFRESH.md`「収集と公開は同じセッションで」 / 課題86 |
+| **データ更新**（収集→Kimi分類→再読・採否・必要な理由分類・記録→正典反映→公開を**1セッションで**） | テーマごと（`collect_at`超過順）・1日1テーマまで。公開直前にオーナー承認。遅れの確認だけ毎日22時に自動報告 | `THEMES.yaml` の `collect_at`（=`refresh_at`）と `pending_wave` / `GROWTH.yaml` の `recurring.update-work-queue` | `DATA_REFRESH.md`「収集と公開は同じセッションで」 / 課題86 |
 | **X日次運用** | 毎日（候補0件なら見送り可） | 毎日 | `.claude/skills/x-daily/SKILL.md` |
 | **X投稿の計測**（表示・反応） | 毎日20:05頃 | 定期タスク `x-daily-measure` が自動実行 | `.claude/skills/x-daily/references/measurement.md` |
 | **X週次レビュー** | 日曜20:32頃 | 定期タスク `x-weekly-review` が自動実行 | `.claude/skills/x-daily/SKILL.md` §週次レビュー |
