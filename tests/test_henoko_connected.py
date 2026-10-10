@@ -104,13 +104,17 @@ class HenokoConnectedTest(unittest.TestCase):
             self.assertNotIn(phrase, reconnected)
 
     def test_counts_reread_state_and_sources_remain(self):
-        self.assertIn("まだ読み直していない分", self.candidate)
         # 件数は更新のたびに変わる。固定の数字ではなく、公開集計と台帳から導く。
+        # 未読が0件のとき（2026-10-10の追い読み後）は、未読の別枠そのものが出ない。
         unread_counts = {issue["sub"]["unread_count"] for issue in self.data["issues"]}
-        self.assertTrue(
-            any(f"未読分{count}件は別枠で表示しています" in self.candidate for count in unread_counts),
-            unread_counts,
-        )
+        if unread_counts - {0}:
+            self.assertIn("まだ読み直していない分", self.candidate)
+            self.assertTrue(
+                any(f"未読分{count}件は別枠で表示しています" in self.candidate for count in unread_counts),
+                unread_counts,
+            )
+        else:
+            self.assertNotIn("未読分", self.candidate)
         public = json.loads((ROOT / "data/public/themes/henoko-student-accident.json").read_text(encoding="utf-8"))
         self.assertIn(
             f"収集した{public['collected_count']}件のうち意見と判定した{public['opinion_count']}件", self.candidate

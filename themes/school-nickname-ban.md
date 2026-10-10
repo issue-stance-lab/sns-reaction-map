@@ -108,3 +108,5 @@ collect_at（9/15）を5日超過していた定期収集を実施。Yahooリア
 **新規発見バグ（修正済み）**: ヒーロー「議論の中心」の件数バッジ（`conclusion-count`、見出し「一律に禁止して、本当に効果があるのか」）が山なみ移行後どの経路からも更新されておらず、「28件」に固定されたまま公開されていた（`sync_issue_counts.py`は山なみ形式を早期returnで対象外にし、`build_nickname_arena.py`のplanet系経路にも同期処理が無かった）。`verify_number_provenance.py`が今回の件数変化で「説明できない数字」として検出。`build_nickname_arena.py`に`CONCLUSION_ISSUE`定数と`apply_conclusion_count()`を追加し、`apply_planet_counts()`から呼ぶことで「一律禁止の実効性」件数（36件）へ自動追従するようにした。最大論点が入れ替わったら（見出し文の書き直しが必要なため）例外で止まる安全策も実装（`sync_issue_counts.apply_conclusion`と同型）。
 
 分析メモ（`configs/theme-seo.json`のobservations）に2026-09-20回の1文を追加。標準検査（verify_theme_page/verify_number_provenance/verify_page_originality/verify_top_page/validate_theme_seo/unittest 986件）・採用台帳・データ資産台帳、いずれもNG無し。承認は`approval-20260920-003`（オーナーがAskUserQuestionで承認）。次回収集予定2026-10-18（新規意見20件未満が2回連続のため周期28日）。
+
+2026-10-10、オーナー指示で過去の未反映分を8テーマ一括で追い読み。本テーマの未読13件を本文確認して理由区分へ接続し、全論点の未反映を0件にした。新規収集・正典の変更なし。公開ページ・公開JSONは作業ツリーで再生成、本番反映はオーナー承認待ち。[記録](../quality/reviews/2026-10-10-unread-backlog-catchup.md)・[証拠](../quality/reviews/2026-10-10-school-nickname-ban-catchup.json)。

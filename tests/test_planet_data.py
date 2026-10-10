@@ -271,19 +271,23 @@ class PlanetDataTest(unittest.TestCase):
         2026-10-09、採否確認で制度・教育から各2件を意見集計から除外。
         詳細区分の登録件数は不変で、未接続分は制度87/344・教育69/284となる。
         126件の本文読了と、詳細区分への接続は別に数える。
+
+        2026-10-10、オーナー指示で全テーマの過去の未反映分を追い読み（部活動258件）。
+        5論点の未読は0件、費用・受け皿の読み飛ばし10件も今回の区分付き読了で解消。
+        quality/reviews/2026-10-10-bukatsu-chiiki-catchup.json を参照。
         """
         data = bpd.build(TOPIC)
         cfg = bpd.yaml.safe_load((ROOT / "configs" / "planet" / f"{TOPIC}.yaml").read_text())
         by_label = {i["label"]: i["sub"] for i in data["issues"]}
-        for label, count, unread in [("教員の働き方", 438, 28), ("制度・移行プロセス", 257, 87),
-                                     ("教育的意義・機会", 215, 69)]:
+        for label, count, unread in [("教員の働き方", 466, 0), ("制度・移行プロセス", 344, 0),
+                                     ("教育的意義・機会", 284, 0)]:
             self.assertEqual(by_label[label]["reread_count"], count)
             self.assertEqual(by_label[label]["unread_count"], unread)
-        self.assertEqual(data["reread_summary"]["connected_editorial_count"], 1238)
-        self.assertEqual(data["reread_summary"]["not_connected_opinion_count"], 340)
+        self.assertEqual(data["reread_summary"]["connected_editorial_count"], 1496)
+        self.assertEqual(data["reread_summary"]["not_connected_opinion_count"], 82)
         self.assertEqual(data["reread_summary"]["connected_issue_population"], 1496)
-        self.assertEqual(by_label["費用・家庭負担"]["skipped_count"], 4)
-        self.assertEqual(by_label["受け皿・指導者"]["skipped_count"], 6)
+        self.assertEqual(by_label["費用・家庭負担"]["skipped_count"], 0)
+        self.assertEqual(by_label["受け皿・指導者"]["skipped_count"], 0)
         self.assertEqual(bpd.independence_gate(data, cfg), [])
 
 

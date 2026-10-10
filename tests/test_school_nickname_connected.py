@@ -126,7 +126,9 @@ class SchoolNicknameConnectedTests(unittest.TestCase):
         self.assertEqual(len(soup.select("[data-school-nickname-reason-post-url]")), 26)
         self.assertEqual(len(after["issues"]), 6)
         self.assertEqual(sum(issue["count"] for issue in after["issues"]), after["totals"]["opinions"])
-        self.assertIn("まだ読み直していない分", self.page)
+        # 未読が残るときだけ「まだ読み直していない分」の説明が出る（2026-10-10の追い読みで0件）
+        if any(issue["sub"].get("unread_count") for issue in after["issues"]):
+            self.assertIn("まだ読み直していない分", self.page)
         self.assertIn("SNS投稿の収集方法", self.page)
         self.assertIn("データの読み方:", self.page)
         self.assertIn('localStorage.getItem("isa-seen-"+D.theme_id)', self.page)

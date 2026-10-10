@@ -75,7 +75,8 @@ class ConstitutionalConnectedTests(unittest.TestCase):
 
     def test_provenance_checks_reason_concern_and_source_numbers(self):
         result = verified_selectors(self.page, ROOT)
-        self.assertGreaterEqual(len(result), 72)
+        # 2026-10-10の追い読みで未読0件になり、未読の別枠（7論点分）が照合対象から外れた
+        self.assertGreaterEqual(len(result), 65)
 
     def test_vote_contract_is_unchanged(self):
         before = vote_fingerprint(self.original)

@@ -119,13 +119,16 @@ class ConnectedThemeRegressionTest(unittest.TestCase):
         reread_count（既存の編集再読件数）は据え置きで、unread_count（今回の収集で
         増えた「まだ読み直していない分」）だけが増える。独自性検査の上限は4割で、
         義務化・事故防止は62/283=21.9%、地方の足・移動権は10/39=25.6%と余裕がある。
+
+        2026-10-10、過去の未読72件を追い読みし両論点とも未読0件になった
+        （quality/reviews/2026-10-10-elderly-license-revocation-catchup.json）。
         """
         data = bpd.build("elderly-license-revocation")
-        self.assertEqual(data["reread_summary"]["connected_editorial_count"], 250)
+        self.assertEqual(data["reread_summary"]["connected_editorial_count"], 322)
         reviewed = [i for i in data["issues"] if i["sub"]["status"] == "reread"]
-        self.assertEqual(sorted(i["sub"]["reread_count"] for i in reviewed), [29, 221])
+        self.assertEqual(sorted(i["sub"]["reread_count"] for i in reviewed), [39, 283])
         unread_by_count = {i["count"]: i["sub"]["unread_count"] for i in reviewed}
-        self.assertEqual(unread_by_count, {283: 62, 39: 10})
+        self.assertEqual(unread_by_count, {283: 0, 39: 0})
         self.assertTrue(all(i["sub"]["skipped_count"] == 0 for i in reviewed))
 
 

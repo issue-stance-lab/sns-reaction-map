@@ -82,12 +82,13 @@ class KoshitsuPublicCopyTests(unittest.TestCase):
             },
         )
         self.assertTrue(all(item["sub"]["status"] == "reread" for item in self.data["issues"]))
+        # 2026-10-10の追い読みで全6論点の未読が0件になり、「__unread__」の行は出ない
         self.assertEqual(
             [
-                next(reason["count"] for reason in item["sub"]["items"] if reason["id"] == "__unread__")
+                next((reason["count"] for reason in item["sub"]["items"] if reason["id"] == "__unread__"), 0)
                 for item in self.data["issues"]
             ],
-            [215, 120, 86, 80, 92, 74],
+            [0, 0, 0, 0, 0, 0],
         )
         soup = BeautifulSoup(self.html, "html.parser")
         self.assertEqual(len(soup.select('template[id^="koshitsu-tenpakai-reading-"]')), 6)
