@@ -13,6 +13,7 @@ from typing import Any
 from urllib.parse import urljoin, urlparse
 
 import yaml
+from bs4 import BeautifulSoup
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
@@ -53,32 +54,18 @@ def validate_article(
 ) -> list[str]:
     errors: list[str] = []
     expected_title = f'{theme["headline"]}｜SNS反応まっぷ'
+    soup=BeautifulSoup(source,'html.parser')
+    def meta(key):
+        node=soup.find('meta',attrs={('property' if key.startswith('og:') else 'name'):key})
+        return node.get('content') if node else None
     checks = {
-        "title": (content(source, r"<title>(.*?)</title>"), expected_title),
-        "description": (
-            content(source, r'<meta\s+name="description"\s+content="(.*?)">'),
-            theme["description"],
-        ),
-        "og:title": (
-            content(source, r'<meta\s+property="og:title"\s+content="(.*?)">'),
-            theme["headline"],
-        ),
-        "og:description": (
-            content(source, r'<meta\s+property="og:description"\s+content="(.*?)">'),
-            theme["description"],
-        ),
-        "twitter:title": (
-            content(source, r'<meta\s+name="twitter:title"\s+content="(.*?)">'),
-            theme["headline"],
-        ),
-        "twitter:description": (
-            content(source, r'<meta\s+name="twitter:description"\s+content="(.*?)">'),
-            theme["description"],
-        ),
-        "H1": (
-            content(source, r"<h1[^>]*>(.*?)</h1>"),
-            theme["headline"],
-        ),
+        "title": (soup.title.get_text() if soup.title else None,expected_title),
+        "description": (meta('description'),theme['description']),
+        "og:title": (meta('og:title'),theme['headline']),
+        "og:description": (meta('og:description'),theme['description']),
+        "twitter:title": (meta('twitter:title'),theme['headline']),
+        "twitter:description": (meta('twitter:description'),theme['description']),
+        "H1": (soup.h1.get_text() if soup.h1 else None,theme.get('display_headline',theme['headline'])),
     }
     for label, (actual, expected) in checks.items():
         if actual != expected:
@@ -86,14 +73,14 @@ def validate_article(
 
     canonical = urljoin(config["site_url"], theme["url"])
     image_url = urljoin(config["site_url"], theme["image"])
-    for label, pattern, expected in (
-        ("canonical", r'<link\s+rel="canonical"\s+href="(.*?)">', canonical),
-        ("og:url", r'<meta\s+property="og:url"\s+content="(.*?)">', canonical),
-        ("og:image", r'<meta\s+property="og:image"\s+content="(.*?)">', image_url),
-        ("twitter:image", r'<meta\s+name="twitter:image"\s+content="(.*?)">', image_url),
+    node=soup.select_one('link[rel="canonical"]')
+    for label,actual,expected in (
+        ('canonical',node.get('href') if node else None,canonical),
+        ('og:url',meta('og:url'),canonical),
+        ('og:image',meta('og:image'),image_url),
+        ('twitter:image',meta('twitter:image'),image_url),
     ):
-        if content(source, pattern) != expected:
-            errors.append(f"{path.name}: {label} mismatch")
+        if actual!=expected:errors.append(f"{path.name}: {label} mismatch")
 
     payloads: list[dict[str, Any]] = []
     for raw in re.findall(
@@ -154,7 +141,10 @@ def validate_article(
     if source.count("<strong>データの集め方:</strong>"):
         errors.append(f"{path.name}: duplicate legacy collection-method block remains")
 
-    for token in REQUIRED_PAGE_TOKENS:
+    tokens=REQUIRED_PAGE_TOKENS
+    if soup.select_one('meta[name="bukatsu-layout"]'):
+        tokens=tuple(t for t in tokens if t!="topic-modern.css?v=")+(".site-chrome", ".issue-panel")
+    for token in tokens:
         if token not in source:
             errors.append(f"{path.name}: protected token missing: {token}")
     if not re.search(r'id="vote-section"|id="vote-buttons"', source):

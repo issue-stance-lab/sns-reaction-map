@@ -1,0 +1,50 @@
+
+#faq-guide{border-bottom:1px solid var(--line);padding:16px 0;margin-bottom:28px}
+#faq-guide>summary{font-weight:700;cursor:pointer;color:var(--blue,#0865ff)}
+.parity-faq{padding:20px 0}.parity-faq>details{padding:16px 0;border-bottom:1px solid #dce6ee}
+.parity-faq summary{font-weight:700;cursor:pointer}.parity-faq p{font-size:15px;line-height:1.9}
+#bukatsu-check .panel-title span{display:none}#bukatsu-check h2{font-size:25px}
+.local-question-list{margin:30px 0}.local-question-list dl>div{display:grid;grid-template-columns:150px minmax(0,1fr);gap:20px;padding:18px 0;border-bottom:1px solid #dce6ee}
+.local-question-list dt{font-weight:800;color:#008b92}.local-question-list dd{margin:0;line-height:1.9}
+#bukatsu-check .ck{border-top:1px solid #dce6ee;padding:20px 0}
+#bukatsu-check .ck p{line-height:1.9}.ck-note{color:#52637b}
+[data-copy-questions],.classroom-print-btn{font:inherit;padding:12px 18px;background:#0865ff;color:white;border:0;cursor:pointer;margin-top:18px}
+[data-copy-status]{display:block;min-height:1.5em;font-size:13px;color:#008b92;margin:6px 0}
+.issue-illustration{margin:18px 0}.issue-illustration img{width:100%;height:auto}.issue-illustration figcaption{font-size:12px;color:#52637b}
+.source-reading>details{margin-top:24px}.source-reading>details>summary{font-weight:700;color:var(--topic);cursor:pointer}
+.trend-share{margin-top:28px!important}.trend-share-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}.trend-share-item{min-width:0}.trend-share-item figure{margin:12px 0}
+.trend-share-item img{max-width:100%;height:auto}.trend-share-code{width:100%;box-sizing:border-box;font-size:11px}.trend-share-name{font-size:20px}.trend-share-name span{display:block;font-size:12px;font-weight:400}
+.trend-share-btn{display:inline-flex;align-items:center;gap:6px;padding:10px 13px;border:1px solid #b8cbe5;background:white;color:#0865ff;font:inherit;font-size:13px;cursor:pointer}.trend-share-actions{display:flex;gap:8px;flex-wrap:wrap}.trend-share p,.trend-share figcaption{font-size:13px;line-height:1.8}
+.parity-vote{margin:50px 0;padding:28px 0;border-top:6px solid #ffdc36;border-bottom:1px solid #dce6ee}
+.parity-vote .panel-title span{display:block;font-size:13px;color:#52637b}
+.parity-vote button{font:inherit;cursor:pointer}.vote-issue-btn{border:1px solid #aebfd3;background:#fff;padding:16px;text-align:left;color:#0b2349}
+.vote-issue-btn:hover{border-color:#0865ff;background:#eef5ff}.vote-stance-btn{display:flex;flex-direction:column;align-items:flex-start;gap:8px;padding:18px;background:var(--stance-bg);border:2px solid var(--stance-color);color:#0b2349;flex:1 1 160px}.vs-title{font-weight:800}.vs-desc{font-size:12px}
+.article-trust-meta{display:flex;flex-wrap:wrap;gap:18px 32px;border-block:1px solid #dce6ee;padding:20px 0}.article-trust-meta dt{font-size:12px;color:#52637b}.article-trust-meta dd{margin:5px 0 0}.article-trust{margin-bottom:32px}.article-trust h3{margin-top:26px}
+#related-topics{padding:30px 0 45px;border-top:1px solid #dce6ee}
+#related-topics .panel-title span{font-size:13px;color:#52637b}
+#related-topics img{width:100%;height:auto;max-height:190px;object-fit:cover}
+#related-topics>div:not(.panel-title){display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:22px}
+#related-topics a{display:block;min-width:0}#related-topics a strong{display:block}
+.parity-footer{background:#0b2349;color:#fff;padding:32px 24px;text-align:center;line-height:2.2;font-size:13px}.parity-footer a{color:white;display:inline-block;margin:4px 12px}
+.parity-footer>div:last-child{margin-top:18px}
+@media(max-width:650px){.local-question-list dl>div{grid-template-columns:1fr;gap:6px}.trend-share-grid{grid-template-columns:1fr}#related-topics>div:not(.panel-title){grid-template-columns:1fr!important}.parity-vote{padding:24px 0}#faq-guide{margin-bottom:18px}}
+@media print{
+ .site-chrome,.mobile-dock,.prototype-banner,.contents,.parity-footer,#vote-section,.trend-share,.issue-next,button{display:none!important}
+ .issue-panel[hidden],.reason-detail[hidden],[data-trend-panel][hidden]{display:block!important}
+ body{background:white!important;color:black!important}.wrap{max-width:none!important;padding:0!important}
+ details>*{display:block!important}.issue-panel,.reason-detail{break-before:auto}.reason-layout{display:block!important}.reason-index{display:none!important}
+ .issue-glance,.issue-illustration{break-inside:avoid}.trend-table-scroll{overflow:visible!important}
+ body.print-classroom main>*:not(.deep-read){display:none!important}body.print-classroom .deep-read>*:not(#classroom){display:none!important}
+ body.print-classroom #classroom{border:0!important}body.print-classroom #classroom>summary{display:none!important}
+}
+
+
+#bukatsu-check .ck .k b{display:block;font-size:13px;color:#008b92;margin-bottom:7px}#bukatsu-check .ck .k span{display:block;font-weight:800;font-size:19px;margin-bottom:12px}#bukatsu-check .ck .src{display:block;margin-top:10px;font-size:12px}
+/* Wide data tables scroll inside their own region, never the page. */
+.trend-table-wrap{max-width:100%;overflow-x:auto;overscroll-behavior-x:contain}
+@media print{.trend-table-wrap{overflow:visible}.trend-table{min-width:0!important;width:100%!important}}
+
+#map .caution{color:var(--muted);font-size:12px;line-height:1.8;margin:12px 0}.overview>.fine{display:none}
+/* Two-column source tables must also fit when the method section is open. */
+#method table{min-width:0!important;width:100%}
+@media print{.mobile-bottom{display:none!important}}

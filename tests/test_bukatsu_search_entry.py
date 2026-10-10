@@ -3,6 +3,7 @@
 import json
 import unittest
 from pathlib import Path
+from scripts.bukatsu_layout import source_for_refresh
 
 from bs4 import BeautifulSoup
 
@@ -16,7 +17,7 @@ ROOT = Path(__file__).resolve().parents[1]
 class BukatsuSearchEntryTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.original = (ROOT / "docs/bukatsu-chiiki-reaction-map.html").read_text(encoding="utf-8")
+        cls.original = source_for_refresh(ROOT).read_text(encoding="utf-8")
         cls.page = arena.apply_bukatsu_search_entry(cls.original)
 
     def test_entry_is_first_main_section_and_idempotent(self):

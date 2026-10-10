@@ -1,3 +1,4 @@
+from bs4 import BeautifulSoup
 import json
 import re
 import unittest
@@ -32,14 +33,9 @@ class DomainMigrationTests(unittest.TestCase):
             html = page.read_text(encoding="utf-8")
             expected = NEW_ORIGIN + "/" if relative == "index.html" else url  # トップはsitemapも / で載せる
             with self.subTest(page=relative):
-                self.assertRegex(
-                    html,
-                    rf'<link rel="canonical" href="{re.escape(expected)}">',
-                )
-                self.assertRegex(
-                    html,
-                    rf'<meta property="og:url" content="{re.escape(expected)}">',
-                )
+                soup=BeautifulSoup(html,'html.parser')
+                self.assertEqual(soup.select_one('link[rel="canonical"]')['href'],expected)
+                self.assertEqual(soup.select_one('meta[property="og:url"]')['content'],expected)
 
     def test_robots_points_to_new_sitemap(self):
         robots = (DOCS / "robots.txt").read_text(encoding="utf-8")

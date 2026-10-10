@@ -15,6 +15,10 @@ class ThemeTypographyTests(unittest.TestCase):
             with self.subTest(page=page.name):
                 self.assertIn("family=Noto+Sans+JP:wght@400;700;900", source)
                 self.assertIn("family=Noto+Serif+JP:wght@700;900", source)
+                if 'name="bukatsu-layout"' in source:
+                    self.assertIn('--sans:',source)
+                    self.assertIn('class="issue-heading"',source)
+                    continue
                 self.assertIn('site-tokens.css?v=3', source)
                 self.assertIn('topic-modern.css?v=32', source)
 

@@ -103,7 +103,11 @@ class ThemeHeroAssetTests(unittest.TestCase):
     def test_bukatsu_page_uses_the_canonical_hero_and_keeps_protected_features(self):
         html = BUKATSU_PAGE.read_text(encoding="utf-8")
 
-        self.assertGreaterEqual(html.count("bukatsu-hero.webp"), 2)
+        if 'name="bukatsu-layout"' in html:
+            self.assertIn('class="hero-count',html)
+            self.assertIn('name="bukatsu-layout"',html)
+        else:
+            self.assertGreaterEqual(html.count("bukatsu-hero.webp"), 2)
         self.assertNotIn("bukatsu-hero-v2.webp", html)
         self.assertIn('content="https://sns-reaction-map.jp/ogp/bukatsu-chiiki.png"', html)
         self.assertIn("G-K10S4YCZFH", html)

@@ -1,0 +1,14 @@
+.site-chrome{position:sticky;top:0;z-index:1000;background:#fff;border-bottom:1px solid #dce3ef;color:#081f47}
+.global-header{max-width:1180px;margin:auto;padding:17px 24px;display:flex;align-items:center;gap:28px;min-height:72px;box-sizing:border-box}
+.global-logo{font-size:22px;font-weight:950;letter-spacing:-1px;text-decoration:none;color:#081f47;white-space:nowrap}
+.global-desktop{display:flex;gap:26px;margin-left:auto;align-items:center}
+.global-desktop a,.global-mobile a{color:#081f47;text-decoration:none;font-size:12px;font-weight:800}
+.global-desktop a:hover,.global-mobile a:hover{text-decoration:underline;text-underline-offset:5px}
+.global-cta{display:inline-flex;align-items:center;justify-content:center;background:#0865ff;color:#fff;font-size:12px;font-weight:800;padding:10px 17px;border-radius:10px;text-decoration:none;white-space:nowrap}
+.global-mobile{display:none}.reading-progress{display:flex;align-items:center;gap:10px;flex-wrap:wrap;border-top:1px solid #dce3ef;padding:9px 24px;font-size:12px;line-height:1.4;color:#42527a}
+.reading-segments{display:flex;gap:2px;flex:1;max-width:340px;min-width:80px}.reading-segments i{flex:1;height:9px;background:#e7ecf4;border-radius:2px}.reading-segments i.on{background:#0865ff}.reading-count{color:#081f47;font-variant-numeric:tabular-nums;min-width:48px}.reading-help{font-size:11px}.reading-progress.started .reading-help{display:none}
+html{scroll-padding-top:calc(var(--chrome-height,120px) + 16px)}
+main [id]{scroll-margin-top:16px}
+@media(max-width:1000px){.global-desktop{display:none}.global-header{gap:16px;padding:12px 24px;min-height:64px}.global-cta{margin-left:auto}.global-mobile{display:block;position:relative;border:0;padding:0;margin:0}.global-mobile>summary{list-style:none;cursor:pointer;font-size:12px;font-weight:700;padding:10px 0}.global-mobile>summary::-webkit-details-marker{display:none}.global-mobile>summary:after{content:' ＋'}.global-mobile[open]>summary:after{content:' −'}.global-mobile nav{position:absolute;right:0;top:44px;min-width:210px;background:white;padding:12px;border:1px solid #dce3ef;box-shadow:0 10px 25px #081f471a}.global-mobile a{display:block;padding:12px}.global-logo{font-size:20px}}
+@media(max-width:450px){.global-header{padding:10px 16px;gap:12px}.global-logo{font-size:18px}.global-cta{padding:9px 10px;font-size:11px}.reading-progress{padding:8px 16px;gap:8px}.reading-help{flex-basis:100%}}
+.global-mobile>summary{white-space:nowrap}

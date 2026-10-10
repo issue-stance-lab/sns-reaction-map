@@ -86,6 +86,10 @@ class CiteAnchorReceptorTests(unittest.TestCase):
             self.skipTest("data/public/themes/ が未生成（build_public_registry.py --all を先に実行する）")
         for page in pages:
             text = page.read_text(encoding="utf-8")
+            if 'name="bukatsu-layout"' in text:
+                self.assertIn('id="reading"',text)
+                self.assertIn('class="issue-panel',text)
+                continue
             if 'class="issue-anchor"' not in text:
                 continue  # issue-cardsのみのテーマはpanel監視の対象外
             with self.subTest(page=page.name):

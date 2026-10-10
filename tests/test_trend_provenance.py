@@ -323,7 +323,8 @@ if __name__ == "__main__":
     unittest.main()
 
 
-BUKATSU_PAGE = ROOT / "docs/bukatsu-chiiki-reaction-map.html"
+from scripts.bukatsu_layout import source_for_refresh
+BUKATSU_PAGE = source_for_refresh(ROOT)
 BUKATSU_CANON = ROOT / "social-samples/bukatsu-chiiki_hermes_classified.json"
 
 

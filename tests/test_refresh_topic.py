@@ -582,6 +582,39 @@ class MultiTopicPromotionTests(unittest.TestCase):
             self.assertEqual(targets[Path("docs/topic-a.html")].read_text(encoding="utf-8"), "<html>topic-a</html>")
             self.assertEqual(targets[Path("docs/topic-b.html")].read_text(encoding="utf-8"), "<html>topic-b</html>")
 
+    def test_other_topic_refresh_keeps_redesign_artifacts_in_manifest(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self._write_root(root)
+            entries = self._entries(root)
+            stage = root / ".staging/refresh/multi/layout-check"
+            events = []
+
+            def finish_layout(candidate):
+                events.append("layout")
+                result = {}
+                for relative in ("data/page-sources/bukatsu-chiiki.html",
+                                 "docs/bukatsu-chiiki-reaction-map.html",
+                                 "docs/bukatsu-chiiki-classroom.html"):
+                    path = candidate / relative
+                    path.parent.mkdir(parents=True, exist_ok=True)
+                    path.write_text("rendered", encoding="utf-8")
+                    result[Path(relative)] = path
+                return result
+
+            with patch("scripts.refresh_topic.run", side_effect=lambda *a, **k: events.append("shared")), \
+                 patch("scripts.bukatsu_layout.finish", side_effect=finish_layout):
+                targets = prepare_public_candidate_bundle_multi(root, entries, "2026-09-21", stage)
+                manifest = prepare_multi_promotion_manifest(root, entries, "2026-09-21", stage, targets)
+
+            self.assertEqual(events, ["shared"] * 9 + ["layout"])
+            for relative in ("data/page-sources/bukatsu-chiiki.html",
+                             "docs/bukatsu-chiiki-reaction-map.html",
+                             "docs/bukatsu-chiiki-classroom.html"):
+                self.assertEqual(targets[Path(relative)].read_text(), "rendered")
+                self.assertIn(relative, json.dumps(manifest))
+                self.assertFalse((root / relative).exists())
+
     def test_multi_prepare_and_apply_round_trip(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

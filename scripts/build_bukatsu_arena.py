@@ -1377,8 +1377,20 @@ def transform(html: str) -> str:
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--check", action="store_true", help="書き換えず、差分があれば exit 1")
+    parser.add_argument("--redesign-output", type=Path, help="既存生成後、新デザインの公開前候補を別フォルダへ生成")
     args = parser.parse_args()
+    if args.check and args.redesign_output:
+        parser.error("--check と --redesign-output は併用できません")
     html = HTML_PATH.read_text()
+    if 'name="bukatsu-layout"' in html:
+        if str(ROOT) not in sys.path: sys.path.insert(0, str(ROOT))
+        from scripts.bukatsu_layout import rebuild, source_for_refresh
+        changed = rebuild(ROOT, check=args.check)
+        if args.redesign_output:
+            from scripts.build_bukatsu_redesign import build
+            build(source_for_refresh(ROOT), args.redesign_output)
+        print("UPDATE" if changed else "OK")
+        raise SystemExit(1 if args.check and changed else 0)
     new_html = transform(html)
     config = json.loads(CONFIG_PATH.read_text(encoding="utf-8"))
     sample_file = parse_themes_yaml()["bukatsu-chiiki"]["sample_file"]
@@ -1397,3 +1409,10 @@ if __name__ == "__main__":
     print(("UPDATE" if changed else "OK") + f". Lines: {len(html.splitlines())} → {len(new_html.splitlines())}")
     if args.check and changed:
         raise SystemExit(1)
+
+    if args.redesign_output:
+        try:
+            from .build_bukatsu_redesign import build as build_redesign
+        except ImportError:
+            from build_bukatsu_redesign import build as build_redesign
+        build_redesign(HTML_PATH, args.redesign_output)

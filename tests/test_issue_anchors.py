@@ -70,7 +70,11 @@ class IssueAnchorTests(unittest.TestCase):
         for theme_id in ISSUE_CARDS_OWNS_ANCHOR_ID & set(self.theme_jsons):
             with self.subTest(theme=theme_id):
                 html = self._page_for(theme_id).read_text(encoding="utf-8")
-                self.assertNotIn('class="issue-anchor"', html)
+                if 'name="bukatsu-layout"' in html:
+                    self.assertNotIn('<article class="ic" id="issue-',html)
+                    self.assertIn('class="issue-anchor"',html)
+                else:
+                    self.assertNotIn('class="issue-anchor"', html)
 
 
 if __name__ == "__main__":

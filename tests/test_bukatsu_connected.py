@@ -5,6 +5,7 @@ import re
 import unittest
 import unittest.mock
 from pathlib import Path
+from scripts.bukatsu_layout import source_for_refresh
 
 from bs4 import BeautifulSoup
 
@@ -18,7 +19,7 @@ ROOT = Path(__file__).resolve().parents[1]
 class BukatsuConnectedTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.original = (ROOT / "docs/bukatsu-chiiki-reaction-map.html").read_text(encoding="utf-8")
+        cls.original = source_for_refresh(ROOT).read_text(encoding="utf-8")
         cls.page = connected.apply(cls.original, activate=True)
 
     def test_activation_is_explicit_and_other_themes_are_unchanged(self):

@@ -305,6 +305,10 @@ def verify_planet_breakdowns(theme: str, page: str, data: dict[str, Any]) -> tup
     lines: list[str] = []
     failures = 0
     count_free = theme == "school-nickname-ban"
+    redesign = None
+    if 'id="public-data"' in page and theme == "bukatsu-chiiki":
+        from bs4 import BeautifulSoup
+        redesign = BeautifulSoup(page, "html.parser")
     for issue in data.get("issues", []):
         issue_id = issue.get("id")
         total = issue.get("count")
@@ -323,6 +327,16 @@ def verify_planet_breakdowns(theme: str, page: str, data: dict[str, Any]) -> tup
                 item["label"] for item in items
                 if f'{item["count"]}件</span>' not in page
             ] if not count_free else []
+            if redesign is not None:
+                panel = redesign.find(id=issue_id)
+                mismatched = []
+                for item in items:
+                    button = panel.select_one('[data-reason="' + item["id"] + '"]') if panel else None
+                    if button is None or button.b is None or button.b.get_text() != str(item["count"]) + "件":
+                        mismatched.append(item["label"])
+                heading = panel.select_one(".issue-heading .eyebrow") if panel else None
+                if heading is None or str(total) + "件" not in heading.get_text():
+                    mismatched.append("論点の件数")
             if mismatched:
                 lines.append(
                     f"NG  {issue_id}: 島の件数がJSONと表示で食い違う可能性: {', '.join(mismatched[:5])}"

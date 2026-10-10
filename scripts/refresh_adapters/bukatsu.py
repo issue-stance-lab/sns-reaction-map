@@ -128,7 +128,8 @@ def build(root: Path, stage: Path, current_date: str) -> dict[Path, Path]:
     first = stage / "page-candidate.html"
     second = stage / "idempotence" / "page-candidate.html"
     second.parent.mkdir(parents=True, exist_ok=True)
-    _build_once(root, stage, current_date, PAGE, first)
+    from scripts.bukatsu_layout import source_for_refresh
+    _build_once(root, stage, current_date, source_for_refresh(root), first)
     _build_once(root, stage, current_date, first, second)
     if _digest(first) != _digest(second):
         raise ValueError("部活動adapterは同じ候補の2回目実行で差分が出ました")

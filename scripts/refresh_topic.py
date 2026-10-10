@@ -818,6 +818,9 @@ def promote(
     backup_destination: Path,
     adapter: Any = None,
 ) -> None:
+    from scripts.bukatsu_layout import enabled
+    if enabled(root):
+        raise ValueError("新デザインの更新は公開候補manifestを使ってください。旧昇格経路は使用できません。")
     adapter_targets = completion_targets(root, topic, stage, adapter_targets)
     themes = parse_themes_yaml(root / "THEMES.yaml")
     theme = themes[topic]
@@ -938,6 +941,8 @@ def _copy_candidate_tree(root: Path, stage: Path) -> Path:
         candidate_root,
         ignore=shutil.ignore_patterns(".git", ".staging", "node_modules", "__pycache__"),
     )
+    from scripts.bukatsu_layout import materialize
+    materialize(candidate_root)
     return candidate_root
 
 
@@ -1001,6 +1006,11 @@ def prepare_public_candidate_bundle(
     for command in commands:
         run(command, label="prepare public candidate", root=candidate_root)
 
+    from scripts.bukatsu_layout import finish
+    layout_targets = finish(candidate_root)
+    from scripts.apply_theme_design import finish as finish_theme_design
+    layout_targets.update(finish_theme_design(candidate_root))
+
     # 公開候補として変わり得るものをすべて固定する。全テーマJSONはcatalogの入力でもあるため含める。
     # docs/data/ と docs/llms.txt は課題77 案1: data/public/ の写し・AI向け要約で、
     # ここに足し忘れると候補コピー内では生成されても本番へは反映されない。
@@ -1017,6 +1027,7 @@ def prepare_public_candidate_bundle(
         *[Path("data/public/themes") / path.name for path in sorted((candidate_root / "data/public/themes").glob("*.json"))],
         *[Path("docs/data/themes") / path.name for path in sorted((candidate_root / "docs/data/themes").glob("*.json"))],
         *adapter_targets.keys(),
+        *layout_targets.keys(),
     ]
     if theme.get("verification_file"):
         targets.append(Path(str(theme["verification_file"])))
@@ -1226,6 +1237,11 @@ def prepare_public_candidate_bundle_multi(
     ]
     for command in commands:
         run(command, label="prepare public candidate (multi)", root=candidate_root)
+
+    from scripts.bukatsu_layout import finish
+    per_topic_targets.update(finish(candidate_root))
+    from scripts.apply_theme_design import finish as finish_theme_design
+    per_topic_targets.update(finish_theme_design(candidate_root))
 
     # 課題77 案1のdocs/data・docs/llms.txtを含め、共有ファイルは全テーマ分を1回だけ固定する。
     shared_targets = [

@@ -1,5 +1,5 @@
 version: 1
-updated_at: "2026-10-08"
+updated_at: "2026-10-10"
 
 rules:
   required_for:
@@ -32,6 +32,18 @@ rules:
 #   decided_at: null
 #   decision_note: null
 items:
+  - id: approval-20261010-ten-theme-design
+    department: engineering-data
+    action: website_publication
+    summary: "部活動の新ページと残り9テーマの共通デザインを公開する"
+    reason: "オーナーが全ページの修正とアップロードを依頼"
+    risks: ["検索施策の計測期間中のデザイン変更として記録する"]
+    recommendation: approve
+    evidence: ["quality/designs/2026-10-10-ten-theme-design.md"]
+    status: approved
+    requested_at: "2026-10-10"
+    decided_at: "2026-10-10"
+    decision_note: "このページだけデザインが新しいので、できれば全部修正してアップロードしたい、との本人依頼"
   - id: approval-20261003-002
     department: engineering-data
     action: website_publication
