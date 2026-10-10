@@ -36,11 +36,22 @@ def _digest(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def review_records_path(root: Path, current_date: str) -> Path:
+    """収集回ごとの本文確認記録（data/verification/fukushuto-wave-review-YYYYMMDD.json）。"""
+    return root / "data" / "verification" / f"fukushuto-wave-review-{current_date.replace('-', '')}.json"
+
+
 def review_candidate(root: Path, stage: Path, current_date: str, report: dict) -> None:
-    """保存回は不変のまま、本文確認結果を公開候補だけへ適用する。"""
-    if current_date != "2026-10-03":
+    """保存回は不変のまま、本文確認結果を公開候補だけへ適用する。
+
+    2026-10-03は固定ファイル名だったが、2026-10-10から収集回ごとの記録を同じ形式で読む
+    （10/9の新ルール: 今回分は全件本文確認し、採否・論点・立場の補正をこの記録で候補へ適用する。
+    記録が無い回は補正なし。今回分の読了証拠そのものは refresh_completion.py が別に検査する）。
+    """
+    records_path = review_records_path(root, current_date)
+    if not records_path.is_file():
         return
-    review = json.loads((root / REVIEW_RECORDS).read_text(encoding="utf-8"))
+    review = json.loads(records_path.read_text(encoding="utf-8"))
     wave_path = stage / "classified-wave.json"
     if review["source_sha256"] != _digest(wave_path):
         raise ValueError("副首都の本文確認元と保存回が一致しません")
@@ -76,7 +87,7 @@ def review_candidate(root: Path, stage: Path, current_date: str, report: dict) -
     cumulative_path.write_text(json.dumps(cumulative, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     report["automated_opinions"] = report["opinions"]
     report["opinions"] = sum(row["classification"]["is_opinion"] is True for row in wave)
-    report["body_review"] = str(REVIEW_RECORDS)
+    report["body_review"] = str(records_path.relative_to(root))
     report["body_review_changes"] = len(changes)
 
 
