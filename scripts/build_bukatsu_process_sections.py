@@ -122,8 +122,8 @@ FACT_CHECKS = [
         "url_label": "熊本市教育委員会 熊本市立中学校における新しい学校部活動の在り方（素案）（PDF）",
         "extra_links": [
             (
-                "https://www.mhlw.go.jp/content/11200000/001571192.pdf",
-                "厚生労働省 令和7年度 地域別最低賃金 全国一覧（PDF）",
+                "https://www.mhlw.go.jp/content/11201250/001687973.pdf#page=4",
+                "厚生労働省 令和7年度地域別最低賃金の審議結果・最低賃金額一覧（PDF）",
             ),
             (
                 "https://www.city.kumamoto.jp/kiji00370419/index.html",

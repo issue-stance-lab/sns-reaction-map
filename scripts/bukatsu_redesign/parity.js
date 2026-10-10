@@ -14,6 +14,7 @@
  });
  document.addEventListener('click',e=>{
   const node=e.target.closest('a,button,[data-index]');if(!node)return;
+  if(node.matches('.full-reading-link'))record('full_reading_view');
   if(node.matches('[data-index]'))record('issue_view',{issue_index:node.dataset.index});
   if(node.matches('[data-select]'))record('topic_select',{issue:node.dataset.select});
   if(node.matches('[data-reason]'))record('reason_select',{reason:node.dataset.reason});

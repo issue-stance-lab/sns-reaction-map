@@ -93,6 +93,21 @@ class RedesignTests(unittest.TestCase):
         for selector,count in (("#faq>details",6),(".issue-illustration",7),("[data-trend-download]",4)):
             self.assertEqual(len(self.s.select(selector)),count)
 
+    def test_full_reading_without_javascript_preserves_all_reasons(self):
+        from scripts.bukatsu_redesign_readable import READ_PAGE
+        full=BeautifulSoup((self.out/READ_PAGE).read_text(),"html.parser")
+        self.assertFalse(full.select('script,iframe'))
+        self.assertFalse(full.select('.issue-panel[hidden],.reason-detail[hidden],details:not([open])'))
+        self.assertEqual(len(full.select('.issue-panel')),7)
+        self.assertEqual([n.get_text(" ",strip=True) for n in full.select('.reason-detail>h3')],
+                         [n.get_text(" ",strip=True) for n in self.s.select('.reason-detail>h3')])
+        self.assertEqual(len(full.select('.trend-table tbody tr')),len(self.s.select('.trend-table tbody tr')))
+        self.assertTrue(full.select('.trend-table tbody tr'))
+        self.assertIn(READ_PAGE,self.manifest['files'])
+        ids={n['id'] for n in full.select('[id]')}
+        for a in full.select('a[href^="#"]'):self.assertIn(a['href'][1:],ids)
+        self.assertIn(READ_PAGE,str(self.s.select_one('noscript')))
+
     def test_changed_editorial_stops_without_overwrite(self):
         before=(self.out/PAGE).read_bytes()
         with patch("scripts.build_bukatsu_redesign.fingerprint",return_value="changed"):

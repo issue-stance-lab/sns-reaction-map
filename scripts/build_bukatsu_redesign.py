@@ -104,6 +104,15 @@ def finalize(markup, source, mode):
             )
     for a in s.select('a[href="classroom-print.html"]'):
         a["href"] = PRINT_PAGE
+    full_link=s.new_tag('a',href='bukatsu-chiiki-full.html',attrs={'class':'full-reading-link'})
+    full_link.string='全文・印刷版'
+    s.select_one('.contents').append(full_link)
+    fallback=s.select_one('noscript')
+    if fallback:
+        fallback.clear()
+        note=s.new_tag('p');note.string='論点を切り替えられない場合は、全文・印刷版ですべての意見と資料を読めます。'
+        link=s.new_tag('a',href='bukatsu-chiiki-full.html');link.string='全文・印刷版を開く'
+        fallback.append(note);fallback.append(link)
     # Keep historical links working without restoring the removed UI flow.
     aliases = {"planet-block": "map", "stance-map-section": "map", "issue-cards": "reading",
                "classroom-title": "classroom", "detail-data": "method",
@@ -146,6 +155,8 @@ def build(source_page, output_dir, mode="preview", root=ROOT):
                         "--source-page", str(source_page)], check=True, env=env, cwd=root)
         page = finalize((stage / "index.html").read_text(), source, mode)
         (stage / PAGE).write_text(page)
+        from scripts.bukatsu_redesign_readable import READ_PAGE, readable
+        (stage / READ_PAGE).write_text(readable(page, PAGE))
         print_page = (stage / "classroom-print.html").read_text().replace("index.html#", PAGE + "#").replace(" — ", "：")
         (stage / PRINT_PAGE).write_text(print_page)
         for name in ("vote-store.js", "vote-config.js"):
@@ -153,7 +164,7 @@ def build(source_page, output_dir, mode="preview", root=ROOT):
         # Preview and release use the same body, graph data, voting identifiers and assets.
         manifest = {"mode": mode, "source_sha256": hashlib.sha256(source.encode()).hexdigest(),
                     "files": {}}
-        files = [stage / PAGE, stage / PRINT_PAGE, stage / "vote-store.js", stage / "vote-config.js",
+        files = [stage / PAGE, stage / PRINT_PAGE, stage / READ_PAGE, stage / "vote-store.js", stage / "vote-config.js",
                  *sorted((stage / "images").rglob("*")), *sorted((stage / "evidence").glob("*.json"))]
         output_dir.mkdir(parents=True, exist_ok=True)
         for path in files:

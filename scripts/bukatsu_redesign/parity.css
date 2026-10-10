@@ -45,3 +45,6 @@
 @media print{.trend-table-wrap{overflow:visible}.trend-table{min-width:0!important;width:100%!important}}
 
 #map .caution{color:var(--muted);font-size:12px;line-height:1.8;margin:12px 0}.overview>.fine{display:none}
+/* Two-column source tables must also fit when the method section is open. */
+#method table{min-width:0!important;width:100%}
+@media print{.mobile-bottom{display:none!important}}
