@@ -11,6 +11,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0,str(ROOT))
 BUILDERS: tuple[tuple[str, list[str]], ...] = (
     ("ai-copyright", [sys.executable, "scripts/build_ai_copyright_arena.py"]),
     ("bukatsu-chiiki", [sys.executable, "scripts/build_bukatsu_arena.py"]),
@@ -29,6 +30,9 @@ def _copy_fixture(target: Path) -> None:
     for directory in ("configs", "data", "docs", "quality", "scripts", "social-samples"):
         shutil.copytree(ROOT / directory, target / directory)
     shutil.copy2(ROOT / "THEMES.yaml", target / "THEMES.yaml")
+    # Reproduce the same legacy-input stage as the publication candidate pipeline.
+    from scripts.bukatsu_layout import materialize
+    materialize(target)
     # 山なみの直接生成にも、正規テンプレートが必要。
     template = Path("quality/prototypes/planet-prototype.template.html")
     (target / template.parent).mkdir(parents=True, exist_ok=True)

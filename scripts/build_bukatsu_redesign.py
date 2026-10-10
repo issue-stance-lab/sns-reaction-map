@@ -126,6 +126,30 @@ def finalize(markup, source, mode):
 function resolve(){const target=aliases[location.hash.slice(1)];if(target)location.replace('#'+target);}
 addEventListener('hashchange',resolve);resolve();})();"""
     s.body.append(alias_script)
+    # Keep site-wide contracts while using the new layout's own components.
+    for a in s.select('a[href]'):
+        if a['href'].startswith('https://sns-reaction-map.jp/'):
+            relative=a['href'].removeprefix('https://sns-reaction-map.jp/')
+            a['href']=('index.html'+relative) if relative.startswith('#') else relative or 'index.html'
+    for node in src.select('link[href*="fonts.googleapis.com"]'):
+        s.head.append(BeautifulSoup(str(node),'html.parser'))
+    helper=s.new_tag('script',src='topic-modern.js?v=15',defer=True);s.head.append(helper)
+    for section in s.select('.issue-panel'):
+        issue={'id':section['id']}
+        if section:
+            anchor=s.new_tag('span',id='issue-'+issue['id'],attrs={'class':'issue-anchor'})
+            section.insert(0,anchor)
+    classroom=s.select_one('#classroom')
+    if classroom:
+        classroom.insert_before(Comment(' CLASSROOM_START '));classroom.insert_after(Comment(' CLASSROOM_END '))
+        rich=classroom.select_one('.rich-content');rich['class']=['classroom-section']
+        for h in classroom.select('h3'):
+            if h.get_text()=='確かめる一次資料':h.parent['class']=['classroom-sources']
+            if h.get_text()=='問いの例':h.parent['class']=['classroom-questions']
+        for a in classroom.select('a[href^="#bukatsu-chiiki-"]'):a['href']='#issue-'+a['href'][1:]
+    trust=s.select_one('.article-trust')
+    if trust:
+        trust.insert_before(Comment(' ARTICLE_TRUST_START '));trust.insert_after(Comment(' ARTICLE_TRUST_END '))
     text = str(s).replace("この試作には掲載していません。", "このページには掲載していません。")
     text = text.replace("現行ページの論点図解。", "この論点の図解。")
     # Do not call this UI "current" once it is itself the published page.
@@ -158,6 +182,7 @@ def build(source_page, output_dir, mode="preview", root=ROOT):
         from scripts.bukatsu_redesign_readable import READ_PAGE, readable
         (stage / READ_PAGE).write_text(readable(page, PAGE))
         print_page = (stage / "classroom-print.html").read_text().replace("index.html#", PAGE + "#").replace(" — ", "：")
+        print_page=print_page.replace("</html>",'<footer><a href="image-policy.html">画像制作方針</a></footer></html>')
         (stage / PRINT_PAGE).write_text(print_page)
         for name in ("vote-store.js", "vote-config.js"):
             shutil.copy2(root / "docs" / name, stage / name)

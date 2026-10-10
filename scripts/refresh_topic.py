@@ -1008,6 +1008,8 @@ def prepare_public_candidate_bundle(
 
     from scripts.bukatsu_layout import finish
     layout_targets = finish(candidate_root)
+    from scripts.apply_theme_design import finish as finish_theme_design
+    layout_targets.update(finish_theme_design(candidate_root))
 
     # 公開候補として変わり得るものをすべて固定する。全テーマJSONはcatalogの入力でもあるため含める。
     # docs/data/ と docs/llms.txt は課題77 案1: data/public/ の写し・AI向け要約で、
@@ -1238,6 +1240,8 @@ def prepare_public_candidate_bundle_multi(
 
     from scripts.bukatsu_layout import finish
     per_topic_targets.update(finish(candidate_root))
+    from scripts.apply_theme_design import finish as finish_theme_design
+    per_topic_targets.update(finish_theme_design(candidate_root))
 
     # 課題77 案1のdocs/data・docs/llms.txtを含め、共有ファイルは全テーマ分を1回だけ固定する。
     shared_targets = [

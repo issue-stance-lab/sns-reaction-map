@@ -471,6 +471,9 @@
     normalizeVoteResult();
   }
 
+  // The redesigned page supplies its own navigation and reading controls.
+  if (document.querySelector('meta[name="bukatsu-layout"]')) return;
+
   var header = document.querySelector('.modern-site-header');
   if (!header) {
     document.body.insertAdjacentHTML('afterbegin',

@@ -13,6 +13,7 @@
 
 from __future__ import annotations
 
+from bs4 import BeautifulSoup
 import html
 import json
 import re
@@ -46,6 +47,7 @@ def check_theme(slug: str, root: Path = ROOT) -> list[str]:
     if not page_path.is_file():
         return [f"{slug}: ページがありません: {page_path}"]
     page_html = page_path.read_text(encoding="utf-8")
+    soup=BeautifulSoup(page_html,"html.parser")
     try:
         panels = page_panels(page_html)
     except ValueError as error:
@@ -56,7 +58,7 @@ def check_theme(slug: str, root: Path = ROOT) -> list[str]:
         panel = panels[kind]
         expected = images.series_digest(panel["labels"], panel["rounds"])
         last = panel["rounds"][-1]["d"]
-        codes = [html.unescape(item) for item in re.findall(r'<textarea class="trend-share-code"[^>]*>(.*?)</textarea>', page_html, re.S)]
+        codes = [n.get_text() for n in soup.select("textarea.trend-share-code")]
         for variant in trend.IMAGE_VARIANTS:
             name = trend.image_filename(slug, kind, variant)
             png = root / trend.IMAGE_DIR / name
@@ -83,8 +85,8 @@ def check_theme(slug: str, root: Path = ROOT) -> list[str]:
             if f'src="{relative}"' not in page_html:
                 problems.append(f"{label}: ページの <img> が{relative}を指していません")
             year_date = trend.jp_date(last, year=True)
-            alt = re.search(rf'<img src="{re.escape(relative)}"[^>]*alt="([^"]*)"', page_html)
-            if not alt or year_date + "時点" not in html.unescape(alt.group(1)):
+            image_node=soup.find('img',src=relative)
+            if not image_node or year_date + "時点" not in image_node.get('alt',''):
                 problems.append(f"{label}: 画像のaltに最新の時点（{year_date}時点）がありません")
             image_url = trend.SITE_URL + relative
             if not any(image_url in code for code in codes):
