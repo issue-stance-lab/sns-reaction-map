@@ -229,3 +229,5 @@ ai-copyright・fukushutoの2テーマは`show_unreviewed_note`が既定のtrue�
 [詳細と除外対象](../quality/reviews/2026-10-09-bukatsu-opinion126-review.md)。オーナーの反映指示で4件の除外を正式データへ適用して公開し、
 意見は1,578件となった（収集1,986件は全件保持）。9/15・9/22のグラフも各2件を除いて揃えた。
 [適用・公開記録](../quality/reviews/2026-10-09-bukatsu-opinion4-application.md)。今回の読了は詳細理由のグループ登録とは別。
+
+2026-10-10、オーナー指示で過去の未反映分を8テーマ一括で追い読み。本テーマの未読258件を本文確認して理由区分へ接続し、全論点の未反映を0件にした。費用・受け皿の読み飛ばし10件と、採否確認・独立確認で読了済みだが区分の無かった123件も今回の区分付き記録へ更新。新規収集・正典の変更なし。公開ページ・公開JSONは作業ツリーで再生成、本番反映はオーナー承認待ち。[記録](../quality/reviews/2026-10-10-unread-backlog-catchup.md)・[証拠](../quality/reviews/2026-10-10-bukatsu-chiiki-catchup.json)。

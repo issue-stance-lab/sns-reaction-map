@@ -198,8 +198,9 @@ class BukatsuConnectedTests(unittest.TestCase):
         soup = BeautifulSoup(self.page, "html.parser")
         by_id = {i["id"]: i for i in data["issues"]}
         expected_pilots = {
-            "bukatsu-chiiki-kyoin": {"reasons": 16, "posts": 2, "claims": 1, "veins": 1, "timeline": 2},
-            "bukatsu-chiiki-ukezara": {"reasons": 7, "posts": 2, "claims": 2, "veins": 2, "timeline": 1},
+            # 2026-10-10の追い読みで未読0件になり、「__unread__」の理由行が消えた（16→15、7→6）
+            "bukatsu-chiiki-kyoin": {"reasons": 15, "posts": 2, "claims": 1, "veins": 1, "timeline": 2},
+            "bukatsu-chiiki-ukezara": {"reasons": 6, "posts": 2, "claims": 2, "veins": 2, "timeline": 1},
             "bukatsu-chiiki-sonota": {"reasons": 0, "posts": 2, "claims": 0, "veins": 0, "timeline": 0},
         }
         for issue in data["issues"]:
