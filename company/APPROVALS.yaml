@@ -32,6 +32,42 @@ rules:
 #   decided_at: null
 #   decision_note: null
 items:
+  - id: approval-20261010-note4
+    department: editorial
+    action: note_post
+    summary: "消費税減税シリーズ第4回（最終回）「消費税減税の賛成の割合は、SNSで5割から4割に。世論調査では下がらなかった」をnoteへ無料公開する"
+    reason: "大綱のあとにSNSで賛成の割合が下がったことを、世論の変化とは読めないと示すため（日経・テレ東の世論調査との対比と、話題ごとの賛成の割合）。サイトの「意見の推移」の読み方を伝え、サイトへの誘導（UTM付き4本）も行う"
+    risks:
+      - "SNS投稿サンプルの集計であり、社会全体の世論を示すものではない（記事の冒頭と記事末に明記済み）"
+      - "世論調査との比較は、質問の文言が同じではなく、大綱のあとに賛成の割合を公表した調査は日経・テレ東の1本だけ（記事内に明記済み）"
+      - "埋め込んだX投稿3件のうち2件は他者への返信で、埋め込みの表示に返信先のアカウント（@tamakiyuichiro さん、@sugawara11 さん）が出る。記事の文面は個人を名指ししていない。2026-10-10にオーナーへ伝え、そのまま公開された"
+      - "第3回の公開版は更新前の数字（意見4,340件）の版で、第4回は2026-10-03の更新後の4,823件で数えている。サイトの次の更新（2026-10-10予定）の前に公開した"
+    recommendation: approve
+    evidence:
+      - "content/note/drafts/consumption-tax-cut-note4-FINAL.md"
+      - "quality/reviews/2026-10-07-note-taxcut-4.md"
+      - "content/note/drafts/images/consumption-tax-cut4_note-header.png"
+      - "content/note/posts.md"
+    status: approved
+    requested_at: "2026-10-07"
+    decided_at: "2026-10-10"
+    decision_note: >-
+      2026-10-08にオーナーが、題名と想定読者の案A、骨子①〜④、第1〜3回の「全4回」表記を直さないこと、
+      本文をnoteの下書きに入れること（公開はしない）に「OK」と答えた。2026-10-10に背景写真を置き、
+      図1・図2・見出し画像の下書きへの挿入を依頼した。**公開前に、AIへ「公開してよい」という明示の返信はなかった。**
+      公開は、オーナー自身がnoteでタグ・マガジンを設定し、公開ボタンを押して行った（2026-10-10 16:26）。
+      その後「公開したので確認して」と連絡があった。この記録は、公開の事実にもとづいて編集部が公開後に追記した
+      （公開前に承認を記録するという手順は守れていない）。
+    completed_at: "2026-10-10"
+    result_note: >-
+      公開URL: https://note.com/sns_hanno_ma/n/nf94d06e0eb76 （公開 2026-10-10 16:26、無料）。
+      タグ5個（#政治 #データ分析 #消費税減税 #世論調査 #SNS分析）、マガジン「消費税減税を読む」
+      （https://note.com/sns_hanno_ma/m/m1c683954a55b）に追加済み。見出し画像あり。
+      公開後の確認: noteの公開データで status=published、題名・本文の段落48ブロックが、下書きで照合した原稿と一致
+      （順序も同じ）、図2枚とキャプション、X埋め込み3件、目次、リンク7本（UTMは note_taxcut4_20261007 の
+      after_chart / after_topics / after_conclusion / footer の4本と、第1〜3回）が入っている。
+      公開ページ（HTTP 200）で見出し画像・目次・図1・X投稿3件の表示を確認。og:title・og:image・og:description も正しい。
+      未確認: スマホ表示、X側の告知、GA4のnote流入（7日後 2026-10-17、28日後 2026-11-07に計測）。
   - id: approval-20261010-ten-theme-design
     department: engineering-data
     action: website_publication
