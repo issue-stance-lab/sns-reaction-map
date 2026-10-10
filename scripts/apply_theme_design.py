@@ -20,6 +20,11 @@ def transform(text,slug):
         else:tag=tag[:-1]+' class="site-renewal">'
         return tag[:-1]+f' data-renew-theme="{slug}">'
     text=re.sub(r'<body\b[^>]*>',body,text,count=1)
+    # AI page already has static navigation; place it before reading progress like the other pages.
+    header=re.search(r'<header class="modern-site-header">.*?</header>',text,re.S)
+    if header:
+        markup=header[0];text=text[:header.start()]+text[header.end():]
+        text=re.sub(r'(<body\b[^>]*>)',lambda m:m[0]+markup,text,count=1)
     text=re.sub(r'<!-- THEME_COUNT_START -->.*?<!-- THEME_COUNT_END -->','',text,flags=re.S)
     if slug!='henoko-student-accident':
         match=re.search(r'window.PLANET_DATA\s*=\s*(\{.*?\});',text,re.S)
