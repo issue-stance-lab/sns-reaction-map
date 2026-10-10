@@ -284,3 +284,7 @@ python3 scripts/verify_ai_tone.py
    部活動シリーズと同様に7日後・28日後のGA4計測を仕込む
 4. 作業が終わったworktreeは `git worktree remove` で片付ける。その前に、そのツリーにしかない
    非公開ファイル（画像など）を共有ツリーへ複製し、バックアップを取り直す（`release` スキル）
+
+## 2026-10-10 追記: 全4回が公開された
+
+第4回（最終回）が2026-10-10 16:26に公開された（https://note.com/sns_hanno_ma/n/nf94d06e0eb76）。題材は、当初の「現金給付の設計」から「SNSの賛成の推移」に変わった（意見の推移のデータを使う回。支援金に触れた意見が大綱のあとで10件ほどで、声と照らして読む材料が足りなかったため）。`note-taxcut-series-planning` は completed にし、公開後の計測は `note-taxcut-series-measurement` で追う。
