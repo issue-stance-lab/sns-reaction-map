@@ -1757,7 +1757,9 @@ def build(
     from consumption_tax_connected import apply as connect_page, enabled as is_connected
     if connected_layout or is_connected(html):
         from refresh_planet_section import refresh
-        _, html, failures = refresh("consumption-tax-cut", source=html)
+        # 候補（--input）で作るときは候補を母数にする（正典はまだ古い）。
+        _, html, failures = refresh("consumption-tax-cut", source=html,
+                                    canonical=rows if classified is not None else None)
         if failures:
             raise ValueError("連動表示の再生成検査: " + "; ".join(failures))
     html = connect_page(html, activate=connected_layout)
