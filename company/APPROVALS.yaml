@@ -2064,3 +2064,39 @@ items:
       非公開正典の差分は時刻だけで内容の違いはなく、移動は不要だった。
     result_evidence:
       - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/37951059225"
+
+  - id: approval-20261011-001
+    title: 2026-10-10のX投稿4本の記録と計測の本番反映
+    scope: website
+    kind: release
+    requester: AI（X日次セッション）
+    evidence:
+      - content/x/posts.md
+      - THEMES.yaml
+      - docs/index.html
+    status: completed
+    requested_at: "2026-10-11"
+    decided_at: "2026-10-11"
+    decision_note: >-
+      10-10の朝枠（@makot0_ishin宛）・朝の論点ポスト（活動場所の遠さ）・昼枠（@ppy0044宛）・
+      夕方枠（@high_school_JTE宛・実際の投稿は10-11 00:02）の記録と、
+      10-09の5本の計測（117／1,565／107／573／40）、および選定基準の見直しを提示し、
+      オーナーが「反映して」と指示した。
+    completed_at: "2026-10-11"
+    result_note: >-
+      main 8b73793e（task/x-20261010 のマージ）と 586a86b5（x_posted_at の更新とトップ同期）で反映。
+      **マージ時に content/x/posts.md で衝突が1か所あった。**10-09夕方枠（@dorayarou292941宛）の
+      表示回数を別セッションが先に計測しており、別セッション側（573・20:46計測）を採用し、
+      本セッションの読み取り（572・20:50計測）を破棄した。表示回数は減らないため両立しない値で、
+      差は1。どちらが正しいかは確定していない。
+      全テスト1,711件OK、公開用検査OK、全テーマ検査NG 0件、数字の出所検査NG 0件。
+      **トップページ検査だけ NG 1件**だが、内容は「collect_at 期限超過: consumption-tax-cut（2026-10-10）」で、
+      日付が替わって収集期限を過ぎたことによるもの。**この反映の変更（content/x/posts.md と x_posted_at）とは無関係で、
+      反映前から出ていた。**解消にはそのテーマの収集が必要。
+      GitHub Actionsの公開ファイルの検査とPages配信はいずれも成功。
+      公開サイトのトップで xpost の値が2026-10-11へ更新されたことをcurlで確認した。
+      非公開正典の差分は時刻だけで内容の違いはなく、移動は不要だった。
+    result_evidence:
+      - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/38063632733"
+      - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/38064029420"
+      - "https://sns-reaction-map.jp/"
