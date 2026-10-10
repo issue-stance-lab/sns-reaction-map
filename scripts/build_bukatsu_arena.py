@@ -1382,6 +1382,15 @@ if __name__ == "__main__":
     if args.check and args.redesign_output:
         parser.error("--check と --redesign-output は併用できません")
     html = HTML_PATH.read_text()
+    if 'name="bukatsu-layout"' in html:
+        if str(ROOT) not in sys.path: sys.path.insert(0, str(ROOT))
+        from scripts.bukatsu_layout import rebuild, source_for_refresh
+        changed = rebuild(ROOT, check=args.check)
+        if args.redesign_output:
+            from scripts.build_bukatsu_redesign import build
+            build(source_for_refresh(ROOT), args.redesign_output)
+        print("UPDATE" if changed else "OK")
+        raise SystemExit(1 if args.check and changed else 0)
     new_html = transform(html)
     config = json.loads(CONFIG_PATH.read_text(encoding="utf-8"))
     sample_file = parse_themes_yaml()["bukatsu-chiiki"]["sample_file"]

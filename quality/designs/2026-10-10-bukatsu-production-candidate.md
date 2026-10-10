@@ -4,7 +4,7 @@
 ## 実装
 - 外部フォルダ14にあった試作の再生成元を scripts/bukatsu_redesign/ に移した。個人PCの絶対パスへの依存を除去。
 - scripts/build_bukatsu_redesign.py が既存の検証済み部活動HTMLを読み、別フォルダにページ、授業用ページ、画像、投票クライアント、指紋一覧を生成する。
-- scripts/build_bukatsu_arena.py --redesign-output <出力先> で既存生成の後に新デザインを生成できる。既存の標準生成経路は維持。
+- scripts/build_bukatsu_arena.py --redesign-output <出力先> で既存生成の後に新デザインを生成できる。新デザイン採用後は保存した入力HTMLから再生成し、標準の --check も利用できる。
 - preview は本番ホストに置いても投票を送らない。release は sns-reaction-map.jp でだけ既存Supabase設定を有効にする。GAとAdSenseはreleaseにだけ現行の保護タグを継承。
 - 投票のtopic_id・7論点の順番・3立場の順番・choice_idxの計算を保持。公開時には既存の投票済み保存キーを使う。
 - 本番の読書進捗はテーマ固有v2キーへ。旧isa-seen-bukatsu-chiikiのi:論点IDのみ引き継ぐ。旧クイズ等の別概念は水増ししない。確認画面は試作専用キー。
@@ -13,9 +13,14 @@
 - 説明等の参照本文・理由分類と集計データに変更があれば出力前に停止。既存候補を保持する。
 - スマホの詳細推移表を表内スクロールへ修正。HTMLのdescription重複解消、旧アンカーの接続、図解・授業リンクも維持。
 
+- configs/bukatsu-layout.jsonで新デザインを有効化。旧生成用HTMLはdata/page-sources/bukatsu-chiiki.htmlへ保存。
+- 単一・複数テーマの公開候補生成では、隔離したコピーで旧生成処理を実行後、新デザインを復元する。他テーマの更新でも部活動の見た目を維持し、授業用ページ・入力HTMLを公開対象一覧に含める。
+- 出所検査は公開データと再読ファイルから件数を独立照合し、簡易推移SVGも収集データから再計算して照合する。検査基準の緩和なし。
+
 ## 確認結果
-- Python 43テスト（新デザイン13、既存テーマ・投票18、数字検査12）、投票クライアント3テスト成功。
-- build_bukatsu_arena.py --redesign-output 経由で生成成功。元ページに差分なし。
+- 数字の出所は526件すべて説明済み、未説明0。
+- Python 108テスト（新デザイン、更新経路、既存部活動、投票、数字検査）、投票クライアント3テスト成功。
+- build_bukatsu_arena.py --redesign-output 経由で生成成功。作業ブランチのdocsに候補を配置し、通常の --check も成功。
 - 同一入力の再生成一致、本文変更時の停止、docsへの直接出力拒否、各スクリプトの構文検査。
 - 公開候補に対する verify_theme_page.py はNG0。既存の検査基準を飛ばさず、表示形式が変わった理由件数の照合のみ対応。
 - SupabaseのGETを本番Originで実行しHTTP200、CORS一致、既存countsを取得。POSTは送っていない。保存成功・失敗時の挙動はモックテスト。
@@ -42,8 +47,7 @@ python3 scripts/build_bukatsu_redesign.py --mode release --output-dir /tmp/bukat
 
 ## 公開前の残作業
 1. オーナーが今回の候補の表示・内容を確認する。
-2. 通常の更新・公開運用はまだ現行HTMLを入力にする。docsを新デザインへ置き換える際は、既存生成用HTMLの保存先とrefresh adapterの入出力を同時に切り替える必要がある。新HTMLだけをdocsへコピーして公開しない。
-3. 数字の出所の全検査、全体印刷・JavaScript無効時の実機確認、継承した長文の扱いを確認する。
-4. 公開時はrelease手順で承認・統合・公開確認。本番の投票POSTは実票を入れるため未実施。
+2. 全体印刷・JavaScript無効時の実機確認と、継承した長文の扱いを確認する。
+3. 公開時はrelease手順で承認・統合・公開確認。本番の投票POSTは実票を入れるため未実施。
 
-現段階は「再生成できる確認用・公開用候補の準備」であり、通常更新経路の本番切替完了ではない。
+作業ブランチでは候補配置と更新経路の対応まで完了。mainと公開サイトは未変更。

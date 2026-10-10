@@ -14,7 +14,8 @@ class RedesignTests(unittest.TestCase):
     def setUpClass(cls):
         cls.tmp = tempfile.TemporaryDirectory()
         cls.out = Path(cls.tmp.name)
-        cls.source_path = ROOT / "docs" / PAGE
+        from scripts.bukatsu_layout import source_for_refresh
+        cls.source_path = source_for_refresh(ROOT)
         cls.source = cls.source_path.read_text()
         cls.manifest = build(cls.source_path, cls.out)
         cls.page = (cls.out / PAGE).read_text()
@@ -118,6 +119,14 @@ class RedesignTests(unittest.TestCase):
         self.assertEqual(ui["modes"],contract["modes"])
         self.assertEqual(ui["stances"],contract["stances"])
         self.assertEqual(ui["issues"],[{k:i[k] for k in ("id","label","count","high_pct")} for i in contract["issues"]])
+
+    def test_independent_reason_count_provenance(self):
+        from scripts.bukatsu_redesign_provenance import verify_counts
+        self.assertTrue(verify_counts(self.page,ROOT))
+        bad=BeautifulSoup(self.page,"html.parser")
+        bad.select_one(".reason-choice b").string="999件"
+        with self.assertRaisesRegex(ValueError,"理由の件数"):
+            verify_counts(str(bad),ROOT)
 
     def test_generated_scripts_parse(self):
         import subprocess

@@ -10,6 +10,7 @@ bukatsu-chiikiの連動表示は「公開後の通常データ更新のどこか
 import sys
 import unittest
 from pathlib import Path
+from scripts.bukatsu_layout import source_for_refresh
 from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -23,7 +24,7 @@ from refresh_planet_section import refresh, _apply_connected_display
 class BukatsuConnectedRefreshTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.original = (ROOT / "docs/bukatsu-chiiki-reaction-map.html").read_text(encoding="utf-8")
+        cls.original = source_for_refresh(ROOT).read_text(encoding="utf-8")
         cls.enabled_page = connected.apply(cls.original, activate=True)
         cls.data = connected.planet_data(cls.enabled_page)
 

@@ -17,10 +17,17 @@ from scripts.bukatsu_connected import START as BUKATSU_CONNECTED_START
 def private_verified_selectors(source: str, root: Path, *, sample_file: Path | None = None) -> dict[str, str]:
     """推移の節の表の行と「N〜M件」を、非公開正典の数え直しと照合する（本体は trend_count_provenance）。"""
     from scripts import trend_count_provenance
-    return trend_count_provenance.private_verified_selectors('bukatsu-chiiki', source, root, sample_file=sample_file)
+    result = trend_count_provenance.private_verified_selectors('bukatsu-chiiki', source, root, sample_file=sample_file)
+    if 'name="bukatsu-layout"' in source:
+        from scripts.bukatsu_redesign_provenance import verify_glance
+        result.update(verify_glance(source, root, sample_file=sample_file))
+    return result
 
 
 def verified_selectors(source: str, root: Path) -> dict[str, str]:
+    if 'name="bukatsu-layout"' in source:
+        from scripts.bukatsu_redesign_provenance import verify_counts
+        return verify_counts(source, root)
     if BUKATSU_CONNECTED_START not in source:
         return {}
     soup = BeautifulSoup(source, 'html.parser')

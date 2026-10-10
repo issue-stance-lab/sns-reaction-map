@@ -46,6 +46,7 @@ def finalize(markup, source, mode):
         for node in nodes[:-1]:
             node.decompose()
     s.title.string = src.title.get_text()
+    s.head.append(s.new_tag("meta",attrs={"name":"bukatsu-layout","content":"redesign-v1"}))
     for node in s.select(".preview"):
         node.decompose()
     banner = s.new_tag("div", attrs={"class": "preview"})
@@ -61,6 +62,13 @@ def finalize(markup, source, mode):
             if not match:
                 raise ValueError("Missing protected integration: " + start)
             s.head.append(BeautifulSoup(match.group(), "html.parser"))
+    for node in s.select(".issue-heading .eyebrow"):
+        node["class"] = node.get("class", []) + ["redesign-issue-count"]
+    for node in s.select(".reason-detail>.eyebrow"):
+        node["class"] = node.get("class", []) + ["redesign-reason-count"]
+    for node in s.select(".reason-index>.fine,.reason-menu>.fine"):
+        if "再読済み" in node.get_text():
+            node["class"] = node.get("class", []) + ["redesign-coverage"]
     # Preserve the public data contract used by the existing publication validators.
     # It contains aggregate/verified public information only, copied from the public source.
     contract = src.select_one("#planet-data")
@@ -125,12 +133,13 @@ def build(source_page, output_dir, mode="preview", root=ROOT):
     if output_dir == (root / "docs").resolve() or (root / "docs").resolve() in output_dir.parents:
         raise ValueError("公開先docsへ直接出力できません。公開候補用の別フォルダを指定してください。")
     source = source_page.read_text()
-    review = json.loads((RESOURCES / "editorial-review.json").read_text())
+    resources = root / "scripts/bukatsu_redesign"
+    review = json.loads((resources / "editorial-review.json").read_text())
     if fingerprint(source, root) != review["editorial_sha256"]:
         raise ValueError("参照本文か理由分類が変わりました。説明・引用・資料を確認し、editorial-review.jsonを更新してください。出力は変更していません。")
     with tempfile.TemporaryDirectory(prefix="bukatsu-redesign-") as temp:
         stage = Path(temp)
-        shutil.copytree(RESOURCES, stage / ".build", ignore=shutil.ignore_patterns("__pycache__"))
+        shutil.copytree(resources, stage / ".build", ignore=shutil.ignore_patterns("__pycache__"))
         (stage / "evidence").mkdir()
         env = dict(os.environ, BUKATSU_BUILD_ROOT=str(stage), BUKATSU_REPO_ROOT=str(root))
         subprocess.run([sys.executable, str(stage / ".build/build.py"),
@@ -162,11 +171,13 @@ def build(source_page, output_dir, mode="preview", root=ROOT):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--source-page", type=Path, default=ROOT / "docs" / PAGE)
+    parser.add_argument("--source-page", type=Path, default=None)
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--mode", choices=("preview", "release"), default="preview")
     args = parser.parse_args()
-    result = build(args.source_page, args.output_dir, args.mode)
+    if str(ROOT) not in sys.path: sys.path.insert(0,str(ROOT))
+    from scripts.bukatsu_layout import source_for_refresh
+    result = build(args.source_page or source_for_refresh(ROOT), args.output_dir, args.mode)
     print(f"Built {len(result['files'])} files ({args.mode}); no deployment performed.")
 
 if __name__ == "__main__":
