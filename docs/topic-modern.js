@@ -221,6 +221,8 @@
   document.addEventListener('click', function (event) {
     var printBtn = event.target.closest && event.target.closest('.classroom-print-btn');
     if (printBtn) {
+      // Dedicated print-page links keep their normal navigation.
+      if (printBtn.matches('a[href]')) return;
       if (typeof window.gtag === 'function') {
         window.gtag('event', 'classroom_print', {});
       }
