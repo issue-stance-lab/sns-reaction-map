@@ -29,7 +29,7 @@ THEME = "fukushuto"
 START = "<!-- FACT_CHECK_START -->"
 END = "<!-- FACT_CHECK_END -->"
 
-CHECKED_AT = "2026年10月3日"
+CHECKED_AT = "2026年10月10日"
 
 # 一次資料に当たって確かめた結果。判定は fact / gap / miss の3種
 # （このリポジトリの内部区分。表示ラベルは他テーマと言い方を変えている）。
