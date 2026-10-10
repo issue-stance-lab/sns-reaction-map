@@ -845,7 +845,19 @@ def apply_fukushuto_stance_glance(page: str, stances: list[dict], opinions: int)
     return page
 
 
-def refresh_verified_planet(page: str) -> str:
+def candidate_public_theme(records: list[dict[str, Any]]) -> dict[str, Any]:
+    """累積候補から公開JSONを作る（正典も登録済みの公開JSONも書き換えない）。build_henoko_arena と同じ。"""
+    if __package__:
+        from .public_registry_common import RegistryError, build_theme_json
+    else:
+        from public_registry_common import RegistryError, build_theme_json
+    try:
+        return build_theme_json(THEME, records)
+    except RegistryError as exc:
+        raise IssueCountError(f"入力候補から公開JSONを作れません: {exc}") from exc
+
+
+def refresh_verified_planet(page: str, records: list[dict[str, Any]] | None = None) -> str:
     """山なみ形式に切り替わったあとは、正典から図全体を作り直すだけでよい。
 
     旧2D形式の各セクション（SM_RAW・ISSUES・6つの論点とXの声 等）はbuild_planet_page_preview.py
@@ -861,7 +873,14 @@ def refresh_verified_planet(page: str) -> str:
     else:
         from build_planet_page_preview import bpd, build_section, render_planet, split_prototype
 
-    data = bpd.build(THEME)
+    if records is None:
+        data = bpd.build(THEME)
+    else:
+        # 定期更新の --prepare-promotion では正典がまだ古い。henoko（2026-10-09）と同じく、
+        # 候補（正典＋今回の追加分）と、候補から作った公開JSONを入力に山なみを作る。
+        # 今回分の理由区分を専用ファイルへ先に足してあっても、候補を母数にすれば検査が通る
+        # （正典を母数にすると「現行の対象意見ではないID」で止まる。2026-10-10に発生）。
+        data = bpd.build(THEME, canonical=records, public=candidate_public_theme(records))
     cfg = bpd.yaml.safe_load((ROOT / "configs/planet" / f"{THEME}.yaml").read_text())
     failures = bpd.independence_gate(data, cfg)
     if failures:
@@ -914,7 +933,7 @@ def build(
     page = before
 
     if "<!-- PLANET_SECTION_START -->" in page:
-        page = refresh_verified_planet(page)
+        page = refresh_verified_planet(page, records if source is not None else None)
         page = apply_landing_images(page)
         if "<!-- FUKUSHUTO_CONNECTED_START -->" in page:
             if str(ROOT) not in sys.path:
