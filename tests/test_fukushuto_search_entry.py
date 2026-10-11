@@ -8,7 +8,9 @@ from scripts.fukushuto_search_entry import CANDIDATE_REGIONS, ENTRY_TOPICS, FAQS
 
 
 ROOT = Path(__file__).resolve().parent.parent
-PAGE = ROOT / "docs" / "fukushuto-reaction-map.html"
+PUBLISHED = ROOT / "docs" / "fukushuto-reaction-map.html"
+# 検索入口（FAQ 6問・問いタブ）は旧形式の元HTMLにだけある。新デザイン公開後は data/page-sources を検査する
+PAGE = ROOT / "data/page-sources/fukushuto.html" if 'name="fukushuto-layout"' in PUBLISHED.read_text(encoding="utf-8") else PUBLISHED
 
 
 class FukushutoSearchEntryTest(unittest.TestCase):

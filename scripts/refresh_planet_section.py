@@ -825,7 +825,8 @@ def refresh(topic: str, *, source: str | None = None,
     page = ROOT / "docs" / f"{topic}-reaction-map.html"
     html = source if source is not None else page.read_text(encoding="utf-8")
     if (topic == "bukatsu-chiiki" and 'name="bukatsu-layout"' in html) or (
-            topic == "koshitsu-tenpakai" and 'name="koshitsu-layout"' in html):
+            topic == "koshitsu-tenpakai" and 'name="koshitsu-layout"' in html) or (
+            topic == "fukushuto" and 'name="fukushuto-layout"' in html):
         raise SystemExit("新デザインにはrefresh_topicの公開候補生成を使ってください。旧形式で上書きしないため停止しました。")
     if START not in html or END not in html:
         raise SystemExit(
