@@ -37,6 +37,8 @@ def _copy_fixture(target: Path) -> None:
     materialize_koshitsu(target)
     from scripts.fukushuto_layout import materialize as materialize_fukushuto
     materialize_fukushuto(target)
+    from scripts.ai_copyright_layout import materialize as materialize_ai_copyright
+    materialize_ai_copyright(target)
     # 山なみの直接生成にも、正規テンプレートが必要。
     template = Path("quality/prototypes/planet-prototype.template.html")
     (target / template.parent).mkdir(parents=True, exist_ok=True)
