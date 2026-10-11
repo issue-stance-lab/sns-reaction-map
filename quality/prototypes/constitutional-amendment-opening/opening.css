@@ -1,0 +1,211 @@
+/* 憲法改正論議 冒頭の試作。色は「条文の用紙」と「朱の書き込み」から取る。
+   立場の色（--c）は configs/planet/constitutional-amendment.yaml の値をHTML側で渡す。 */
+:root {
+  --paper: #f5f2ea;
+  --paper-2: #ebe6d9;
+  --card: #fffdf8;
+  --ink: #1c2333;
+  --ink-2: #4a5263;
+  --muted: #6b7180;
+  --rule: #d9d2c1;
+  --indigo: #27496d;
+  --indigo-soft: #e3e9f0;
+  --vermilion: #b5452e;
+  --vermilion-soft: #f6e3dc;
+  --radius: 6px;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: "Hiragino Sans", "Noto Sans JP", "Yu Gothic", system-ui, sans-serif;
+  line-height: 1.75;
+  overflow-wrap: anywhere;
+}
+a { color: var(--indigo); }
+
+.ca-site {
+  display: flex; justify-content: space-between; align-items: center; gap: 12px;
+  padding: 14px clamp(16px, 4vw, 48px);
+  background: var(--card); border-bottom: 1px solid var(--rule);
+}
+.ca-site__logo { font-weight: 900; font-size: 18px; letter-spacing: .02em; }
+.ca-site__note { font-size: 12px; color: var(--muted); }
+
+.ca-open { max-width: 1200px; margin: 0 auto; padding: 32px clamp(16px, 4vw, 48px) 48px; }
+.ca-kicker {
+  display: inline-block; font-size: 12px; font-weight: 800; letter-spacing: .08em;
+  color: var(--vermilion); margin: 0 0 4px;
+}
+
+/* 上段: 題名・短答 ／ 流れ図 */
+.ca-open__hero {
+  display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr);
+  gap: clamp(24px, 4vw, 56px); align-items: start;
+}
+.ca-open__crumb { margin: 0 0 18px; font-size: 13px; color: var(--muted); }
+.ca-open__eyebrow {
+  display: inline-block; margin: 0 0 14px; padding: 2px 0;
+  font-size: 14px; font-weight: 800; color: var(--indigo);
+  border-bottom: 3px solid var(--vermilion);
+}
+.ca-open h1 {
+  margin: 0 0 24px; font-size: clamp(36px, 5.2vw, 60px); line-height: 1.22;
+  font-weight: 900; letter-spacing: .01em;
+}
+.ca-open h1 span { display: block; }
+.ca-open h1 .is-accent { color: var(--vermilion); }
+
+.ca-open__answer {
+  position: relative; padding: 18px 20px 14px 22px; margin: 0 0 16px;
+  background: var(--card); border: 1px solid var(--rule); border-left: 5px solid var(--indigo);
+  border-radius: 0 var(--radius) var(--radius) 0;
+}
+.ca-open__answer p { margin: 0 0 6px; font-size: 17px; font-weight: 700; line-height: 1.8; }
+.ca-open__answer .ca-open__answer-k { font-size: 12px; font-weight: 800; color: var(--indigo); letter-spacing: .08em; margin-bottom: 4px; }
+
+.ca-src { display: flex; flex-wrap: wrap; gap: 4px 14px; margin: 10px 0 0 !important; font-size: 12px !important; font-weight: 500 !important; line-height: 1.6 !important; color: var(--muted); }
+.ca-src span { font-weight: 700; }
+.ca-src a { color: var(--ink-2); text-underline-offset: 3px; }
+
+.ca-open__status {
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px;
+  margin: 0 0 20px; font-size: 14px; color: var(--ink-2);
+}
+.ca-open__status b {
+  padding: 1px 8px; border: 1.5px solid var(--vermilion); border-radius: 3px;
+  color: var(--vermilion); font-size: 12px; letter-spacing: .04em;
+}
+.ca-open__status time { font-size: 12px; color: var(--muted); }
+
+.ca-open__entrances { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.ca-open__entrances a {
+  display: grid; grid-template-columns: auto 1fr; column-gap: 12px; align-items: center;
+  padding: 12px 14px; background: var(--card); border: 1px solid var(--rule); border-radius: var(--radius);
+  color: var(--ink); text-decoration: none;
+}
+.ca-open__entrances a:hover, .ca-open__entrances a:focus-visible { border-color: var(--indigo); outline: none; box-shadow: 0 0 0 3px var(--indigo-soft); }
+.ca-open__entrances .num { grid-row: span 2; font-size: 26px; font-weight: 900; color: var(--vermilion); font-family: Georgia, "Times New Roman", serif; }
+.ca-open__entrances b { font-size: 16px; }
+.ca-open__entrances small { font-size: 12px; color: var(--muted); }
+
+/* 流れ図: 縦罫の用紙に4段階 */
+.ca-flow {
+  margin: 0; padding: 22px 22px 16px;
+  background:
+    repeating-linear-gradient(90deg, transparent 0 31px, rgba(39, 73, 109, .06) 31px 32px),
+    var(--card);
+  border: 1px solid var(--rule); border-top: 6px solid var(--indigo); border-radius: var(--radius);
+}
+.ca-flow figcaption { margin: 0 0 14px; }
+.ca-flow figcaption b { display: block; font-size: 20px; font-weight: 900; }
+.ca-flow__steps { list-style: none; margin: 0; padding: 0; }
+.ca-step { position: relative; display: grid; grid-template-columns: 64px 1fr; gap: 14px; padding: 0 0 16px; }
+.ca-step:not(:last-child)::before {
+  content: ""; position: absolute; left: 31px; top: 62px; bottom: 2px;
+  border-left: 2px dashed var(--indigo); opacity: .45;
+}
+.ca-step__mark {
+  position: relative; display: grid; place-items: center; width: 64px; height: 64px;
+  border-radius: 50%; background: var(--indigo-soft); color: var(--indigo);
+}
+.ca-step__icon { width: 40px; height: 40px; }
+.ca-step__n {
+  position: absolute; right: -4px; top: -4px; width: 22px; height: 22px; border-radius: 50%;
+  background: var(--indigo); color: #fff; font-size: 12px; font-weight: 800; display: grid; place-items: center;
+}
+.ca-step.is-current .ca-step__mark { background: var(--vermilion-soft); color: var(--vermilion); box-shadow: 0 0 0 3px var(--vermilion); }
+.ca-step.is-current .ca-step__n { background: var(--vermilion); }
+.ca-step__body p { margin: 0; }
+.ca-step__label { font-size: 17px; font-weight: 900; line-height: 1.5; padding-top: 4px; }
+.ca-step__now {
+  display: inline-block; margin-left: 8px; padding: 0 7px; vertical-align: 2px;
+  background: var(--vermilion); color: #fff; font-size: 11px; font-weight: 800; border-radius: 3px;
+}
+.ca-step__rule { font-size: 14.5px; font-weight: 700; color: var(--indigo); line-height: 1.6; }
+.ca-step__note { font-size: 13px; color: var(--muted); line-height: 1.6; }
+.ca-flow__foot { margin: 4px 0 0; padding: 10px 12px; background: var(--paper); border-radius: 4px; font-size: 13px; color: var(--ink-2); }
+
+/* 下段: 争点 ／ 件数 */
+.ca-open__band {
+  display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+  gap: clamp(20px, 3vw, 32px); margin-top: 40px; padding-top: 32px; border-top: 2px solid var(--ink);
+}
+.ca-issues header h2, .ca-faq h2 { margin: 0 0 14px; font-size: 22px; font-weight: 900; line-height: 1.4; }
+.ca-issues__grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.ca-issue { display: flex; flex-direction: column; padding: 16px 18px; background: var(--card); border: 1px solid var(--rule); border-radius: var(--radius); }
+.ca-issue__code {
+  align-self: flex-start; margin: 0 0 6px; padding: 0 8px; font-size: 12px; font-weight: 800;
+  color: var(--indigo); border: 1.5px solid var(--indigo); border-radius: 3px;
+}
+.ca-issue h3 { margin: 0 0 10px; font-size: 18px; font-weight: 900; line-height: 1.45; }
+.ca-issue__dl { margin: 0 0 12px; }
+.ca-issue__dl div { display: grid; grid-template-columns: 3em 1fr; gap: 8px; padding: 6px 0; border-top: 1px dotted var(--rule); }
+.ca-issue__dl dt { font-size: 12px; font-weight: 800; color: var(--muted); padding-top: 3px; }
+.ca-issue__dl dd { margin: 0; font-size: 14px; line-height: 1.7; }
+.ca-issue__count {
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 10px; margin: auto 0 0;
+  padding: 10px 12px; background: var(--paper); border-radius: 4px;
+}
+.ca-issue__count span { width: 100%; font-size: 12px; color: var(--muted); }
+.ca-issue__count strong { font-size: 28px; font-weight: 900; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.ca-issue__count small { font-size: 13px; margin-left: 2px; }
+.ca-issue__count em { font-style: normal; font-size: 13px; color: var(--ink-2); }
+
+.ca-count { padding: 18px 20px; background: var(--card); border: 1px solid var(--rule); border-radius: var(--radius); }
+.ca-count p { margin: 0; }
+.ca-count__num strong { font-size: clamp(44px, 5vw, 60px); font-weight: 900; line-height: 1.05; font-variant-numeric: tabular-nums; letter-spacing: -.01em; }
+.ca-count__num small { font-size: 18px; font-weight: 800; margin-left: 4px; }
+.ca-count__sub { font-size: 13px; color: var(--ink-2); margin-bottom: 16px !important; }
+.ca-count__bar-title { font-size: 15px; font-weight: 900; }
+.ca-count__caveat {
+  margin: 6px 0 10px !important; padding: 8px 10px; font-size: 13px; line-height: 1.65;
+  background: var(--vermilion-soft); border-left: 3px solid var(--vermilion); color: var(--ink);
+}
+.ca-bar { display: flex; height: 22px; border-radius: 3px; overflow: hidden; background: var(--paper-2); }
+.ca-bar__seg { display: block; height: 100%; }
+.pat-plain { background: var(--c); }
+.pat-diagonal { background: repeating-linear-gradient(135deg, var(--c) 0 6px, color-mix(in srgb, var(--c) 78%, #fff) 6px 9px); }
+.pat-dots { background: radial-gradient(circle, rgba(255, 255, 255, .55) 1.3px, transparent 1.6px) 0 0 / 6px 6px, var(--c); }
+.pat-mesh { background: repeating-linear-gradient(0deg, rgba(255, 255, 255, .35) 0 1px, transparent 1px 5px), repeating-linear-gradient(90deg, rgba(255, 255, 255, .35) 0 1px, transparent 1px 5px), var(--c); }
+.ca-legend { list-style: none; margin: 10px 0 8px; padding: 0; }
+.ca-legend li { display: grid; grid-template-columns: 14px 1fr auto 3.6em; gap: 8px; align-items: center; padding: 3px 0; font-size: 14px; border-bottom: 1px dotted var(--rule); }
+.ca-legend i { width: 14px; height: 14px; border-radius: 2px; }
+.ca-legend b { font-variant-numeric: tabular-nums; }
+.ca-legend em { font-style: normal; text-align: right; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.ca-count__extra, .ca-count__period { font-size: 12px; color: var(--muted); line-height: 1.6; }
+
+/* よく聞かれること・出典 */
+.ca-faq { margin-top: 36px; }
+.ca-faq__list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.ca-faq details { background: var(--card); border: 1px solid var(--rule); border-radius: var(--radius); }
+.ca-faq summary { padding: 12px 16px; font-weight: 800; font-size: 15px; cursor: pointer; }
+.ca-faq details p { margin: 0; padding: 0 16px 14px; font-size: 14px; color: var(--ink-2); }
+.ca-sources { margin-top: 18px; font-size: 13px; color: var(--muted); }
+.ca-sources summary { cursor: pointer; font-weight: 700; }
+.ca-sources ul { margin: 8px 0 0; padding-left: 1.2em; }
+.ca-sources li span { margin-left: 8px; }
+
+@media (max-width: 880px) {
+  .ca-open__hero, .ca-open__band { grid-template-columns: minmax(0, 1fr); }
+  .ca-faq__list { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 560px) {
+  .ca-open { padding-top: 20px; }
+  .ca-open__crumb { margin-bottom: 12px; }
+  .ca-open h1 { font-size: 36px; margin-bottom: 18px; }
+  .ca-open__answer { padding: 14px 14px 12px 16px; }
+  .ca-open__answer p { font-size: 16px; }
+  .ca-open__entrances { grid-template-columns: minmax(0, 1fr); gap: 8px; }
+  .ca-flow { padding: 18px 14px 12px; }
+  .ca-step { grid-template-columns: 52px 1fr; gap: 12px; }
+  .ca-step__mark { width: 52px; height: 52px; }
+  .ca-step__icon { width: 32px; height: 32px; }
+  .ca-step:not(:last-child)::before { left: 25px; top: 50px; }
+  .ca-step__label { font-size: 16px; }
+  .ca-issues__grid { grid-template-columns: minmax(0, 1fr); }
+  .ca-count { order: -1; }
+  .ca-site__note { font-size: 11px; }
+}
