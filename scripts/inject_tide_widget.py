@@ -396,7 +396,7 @@ def main() -> None:
 
         html_path = ROOT / theme["html"]
         if re.search(r'<meta name="[a-z-]+-layout"', html_path.read_text(encoding="utf-8")):
-            # 新デザインのページ（bukatsu/koshitsu/fukushuto_layout.py）は潮目を載せない。旧形式の差し込みで壊さない
+            # 新デザインのページ（bukatsu/koshitsu/fukushuto/ai_copyright_layout.py）は潮目を載せない。旧形式の差し込みで壊さない
             print("  SKIP: 新デザインのページ（潮目は載せない）")
             continue
         new_html = inject_into_html(html_path, tide_html, tide_css)

@@ -19,6 +19,10 @@ def private_verified_selectors(source: str, root: Path, *, sample_file: Path | N
 
 
 def verified_selectors(source: str, root: Path) -> dict[str, str]:
+    if 'name="ai-copyright-layout"' in source:
+        # 新デザイン（scripts/ai_copyright_layout.py）の件数は、論点の欄ごとに数え直す
+        from scripts.ai_copyright_redesign_provenance import verified_selectors as redesign
+        return redesign(source, root)
     if '<!-- AI_COPYRIGHT_CONNECTED_START -->' not in source:
         return {}
     soup = BeautifulSoup(source, 'html.parser')
