@@ -1,0 +1,78 @@
+{
+  "_comment": "生成AIと著作権ページの冒頭（題名・入口の2問・短答・出典）の設定。件数・論点別件数・集計日は公開JSONから読むので、ここには書かない。生成は scripts/ai_copyright_opening.py。",
+  "theme_id": "ai-copyright",
+  "public_json": "docs/data/themes/ai-copyright.json",
+  "reason_data": "data/ai-copyright_issues-reread.json",
+  "page_title": "生成AIと著作権、何が侵害になる？｜SNS反応まっぷ",
+  "breadcrumb": ["トップ", "テック・著作権"],
+  "eyebrow": "テック・著作権 ／ 資料で確かめてから意見を読む",
+  "headline": {
+    "lead": "生成AIと著作権、",
+    "emphasis": "何が侵害になる？"
+  },
+  "lead": "侵害かどうかを分ける2つの条件を先に確かめます。そのうえで、規制と活用をめぐるSNSの意見を論点ごとに読みます。",
+  "entry_questions": [
+    {
+      "id": "infringement",
+      "kind": "資料で確認",
+      "question": "どんな場合に侵害になる？",
+      "answer": "文化庁の考え方は、侵害になりうる条件を2つ挙げています。既存の作品に似ていること（類似性）と、その作品をもとにしたこと（依拠性）の両方が認められる場合です。",
+      "note": "AI生成物について判断した国内の確定判例は、確認できていません。",
+      "pictogram": "both",
+      "pictogram_label": "元の作品とAIの生成物が重なり、似ている部分と、もとにした矢印の両方がある図",
+      "sources": ["bunka-kangaekata"]
+    },
+    {
+      "id": "allowed",
+      "kind": "資料で確認",
+      "question": "どこまでならOK？",
+      "answer": "作風や画風が似ているだけなら、著作権侵害にはならないと整理されています。",
+      "note": "学習のための利用は著作権法30条の4で原則として許諾なしに行えます。ただし、権利者の利益を不当に害する場合は対象外です。",
+      "pictogram": "style-only",
+      "pictogram_label": "元の作品とAIの生成物が重ならず、作風だけが点線でつながっている図",
+      "sources": ["bunka-kangaekata", "copyright-act-30-4"]
+    }
+  ],
+  "figure_labels": {
+    "original": "元の作品",
+    "generated": "AIの生成物",
+    "similarity": "似ている",
+    "reliance": "もとにした",
+    "style": "作風だけ"
+  },
+  "sources": {
+    "bunka-kangaekata": {
+      "publisher": "文化庁",
+      "title": "AIと著作権に関する考え方について",
+      "issued": "2024年3月15日",
+      "locator": "5.（2）生成・利用段階、作風・画風の項",
+      "url": "https://www.bunka.go.jp/seisaku/bunkashingikai/chosakuken/pdf/94037901_01.pdf",
+      "checked_on": "2026-09-07",
+      "memo_ref": "quality/research/ai-copyright-primary-sources.md 資料B-2、確認できなかったこと3（2026-09-07に依拠性・作風の各節を照合）"
+    },
+    "copyright-act-30-4": {
+      "publisher": "e-Gov法令検索",
+      "title": "著作権法 第30条の4",
+      "issued": "",
+      "locator": "第30条の4 ただし書",
+      "url": "https://laws.e-gov.go.jp/law/345AC0000000048",
+      "checked_on": "2026-09-07",
+      "memo_ref": "quality/research/ai-copyright-primary-sources.md 資料J"
+    }
+  },
+  "after_answers": "画像・音楽・文章ごとの違いは、下の背景で扱います。",
+  "disclaimer": "法律相談ではなく、公開資料とSNS投稿の整理です。",
+  "count_block": {
+    "label": "SNSの意見",
+    "basis": "集めた{collected}件の投稿のうち、意見を含むもの",
+    "period": "{start}〜{end}の投稿",
+    "issues_title": "{n}つの論点の件数",
+    "reason_missing_mark": "＊",
+    "reason_missing_note": "＊印の論点は、理由別の内訳をまだ公開していません。",
+    "sample_note": "Yahooリアルタイム検索で集めた公開投稿の集計で、世論調査ではありません。"
+  },
+  "actions": [
+    {"label": "論点別の意見を読む", "href": "#map"},
+    {"label": "背景と経緯を読む", "href": "#background"}
+  ]
+}
