@@ -255,3 +255,47 @@ python3 scripts/build_fukushuto_redesign.py --mode preview --output-dir /tmp/fuk
 | `tests/test_fukushuto_connected.py`・`_public_counts.py`・`_search_entry.py`・`_taxonomy.py` | 読むページを「公開後は元HTML（data/page-sources）」に | 旧形式の連動表示・検索入口・潮目の検査。公開後も元HTMLに同じ構造で残る（皇室と同じ扱い） |
 | `tests/test_cite_button.py` | 副首都の新デザインも論点欄の `id="issue-…"` を受け皿とみなす | 受け皿の形が変わった |
 | `tests/test_theme_design.py` | 副首都の新デザインを飛ばす | 共通の見た目を掛けない設計 |
+
+## 10. 山なみを対話式に戻す（2026-10-11）
+
+ブランチ `task/planet-three-themes`。生成AIと著作権（`2026-10-11-ai-copyright-production-candidate.md` 10節）と同じ型で、
+「論点ごとに読む」の静的SVGの山なみ（`.fr-map-shell`）と論点名リスト（`nav.fr-chips`）を、元HTMLの対話式の山なみに置き換えた。
+冒頭・論点ごとの読書面・背景の開閉行・保護対象の継承は変えていない。
+
+### 10-1. 変えたファイル
+
+| ファイル | 変更 |
+|---|---|
+| `scripts/build_fukushuto_redesign.py` | `_planet()` を追加（生成AIと同じ写し方。部品12個が1つずつ無ければ止まる）。調査条件は山なみの中で `RESEARCH_CONDITIONS` に囲む（`div.fu-research`）。PLANET_DATA は山なみの直後の1つだけ（末尾の写しはやめた）。旧アンカー `planet-block` の読み替えを外し、隠した受け皿 `HIDDEN_RECEIVERS`（`progress`・`fallback`・`fallback-nav`・`quiz`）は「表示されていなければ読み替える」形にした |
+| `scripts/fukushuto_redesign/planet.js`（新規） | 生成AIの planet.js の写し。読書面の入口を `window.FukushutoReading`、見出しを `#fr-h-…` に |
+| `scripts/fukushuto_redesign/reading.js` | `window.FukushutoReading.select(id)` を公開。動きは変えていない |
+| `scripts/fukushuto_redesign/production.css` | 山なみの配色と並べ方（`.fu-planet`）。生成AIの写しで、色だけ副首都の藍（`#24407a`）・紙色（`#f5f2ea`）・線（`#d9d3c4`）に |
+| `tests/test_fukushuto_redesign.py` | `test_planet_is_copied_from_source`・`test_planet_follows_source_updates` を追加。旧アンカーの検査を受け皿に対応 |
+| `docs/fukushuto-reaction-map.html`・`quality/prototypes/fukushuto-release/`・`quality/prototypes/fukushuto-reading/reading.js` | 作り直し |
+
+### 10-2. 副首都だけの違い
+
+- 論点IDは PLANET_DATA・公開JSON・読書面（`data-issue-panel`）で同じ7つ（`scripts/fukushuto_taxonomy.py`）。変換表は要らない。
+- 立場モードは4つ（すべて＋3立場）、論点ボタンは7つ。どちらも4列（375pxでは2列、「すべて」は1行）。
+- 旧ページの連動表示（`fukushuto-connected.*`・`theme-design.*`）は読み込まない。選択パネルの中身は生成AIと同じ（論点タブ・図解画像・旧い理由区分の名前は CSS で出さない）。
+- 旧ページの別名表（ALIASES）は、もともと「ページにあるIDでも読み替える」作りだったので、生成AIと同じく「表示されている要素なら読み替えない」判定を足した。
+
+### 10-3. 検査結果
+
+| 検査（3テーマまとめて、作業ツリー） | 結果 |
+|---|---|
+| `verify_theme_page.py`（全テーマ） | 10テーマ NG 0 |
+| `verify_number_provenance.py` | 部活動 533/533・皇室 282/282・副首都 293/293 説明済み、全テーマで終了0 |
+| `verify_builder_rebuildability.py` | 10テーマ NG 0 |
+| `run_public_checks.py` | 終了0 |
+| `python3 -m unittest discover tests` | 1,839件 OK（skip 8） |
+| よみやす（docs の新ページ、`--strict`） | 皇室 info 11件・副首都 info 17件で PASS、部活動 warn 27件・info 3件（どれも変更前と同数。部活動の warn は資料名などの長い文で、前から「要修正」のまま） |
+| 10/19 の模擬（新規0件、使い捨てコピー） | 皇室・副首都を新規0件の回として `adapter.build` → `prepare_public_candidate_bundle_multi`（完了記録の検査だけ外した。保存回の report を代用）。公開対象67件。候補の3ページとも山なみ（`#planet-block`）・PLANET_DATA（1つ）・planet.js 入り、皇室・副首都は基準日 2026-10-19。候補の中で `verify_theme_page.py` 全テーマ NG 0、数字の出所 3テーマ NG 0、よみやすは上と同数、Playwright でもコンソールエラー0・山を押すと読書面へ |
+| 2回生成 | md5 一致（`f50216f1…`、`PYTHONHASHSEED=7` でも同じ、docs のページとも一致）。`build_fukushuto_arena.py` →「UPDATE」→ `--check`「OK: 差分なし」 |
+| Playwright（docs、1280/375px、x.com・platform.twitter.com・twimg.com 遮断） | コンソールエラー0、scrollWidth 一致。読み込み直後は画面が動かない（scrollY 0）。立場「法案賛成・推進」（504件・21.4%）で100マスと件数が変わる。山（候補地）を押すと読書面がその論点に切り替わり、欄の上端が画面上104px・見出し `#fr-h-fukushuto-location` にフォーカス・URL `#issue-fukushuto-location`。Enter でも同じ。論点ボタンは地図の中で切り替わり、読書面も合わせて切り替わる。`#issue-…` 付きの読み込みも読書面がその論点に。画像は `quality/prototypes/fukushuto-release/evidence/planet-restore/` |
+
+### 10-4. 確認していないこと
+
+- 実機（iPhone Safari など）とスクリーンリーダー。
+- 新規の意見がある回の定期更新（模擬は新規0件）。
+- `#issue-…` 付きで読み込んだとき、読書面は切り替わるが、画面の位置は山なみの選択パネル付近に止まる（生成AIと同じ。読書面の欄までは運ばない）。

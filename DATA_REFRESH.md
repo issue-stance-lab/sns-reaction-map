@@ -977,6 +977,9 @@ mainへ取り込む前に、**「合格した」という報告を鵜呑みに�
   公開候補を別フォルダに作って見るだけなら
   `python3 scripts/build_fukushuto_redesign.py --mode release --output-dir quality/prototypes/fukushuto-release`
   （成功の形: `Built 1 file (release, as_of …); no deployment performed.`。docs/ は変わらない）
+- **「論点ごとに読む」の山なみ（2026-10-11〜）**: 元HTMLの対話式の山なみ（`PLANET_SECTION` の `#planet-block`・PLANET_DATA・山なみのスクリプト）を
+  `build_fukushuto_redesign.py` が毎回そのまま写す（立場モード・100マス・論点の一覧・見かた）。手で直す所は無い。山を押すと読書面へ移る橋渡しは
+  `scripts/fukushuto_redesign/planet.js`（設計記録の10節）
 - **再読データ（理由区分）を追記したとき**: 5論点（候補地・防災・災害・優先順位・その他・費用・財源）の新しい意見は、
   これまでどおり本文を読んで理由区分を決め、`data/fukushuto_5issues-reread.json` の各論点の `items` に1件ずつ追記し、
   `buckets` の件数も合わせる。**論点ごとの `items` の件数が公開JSONの論点の件数と一致しないと新デザインの生成が止まる**
