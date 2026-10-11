@@ -1,0 +1,104 @@
+{
+  "_note": "高齢者免許返納ページ冒頭の文言設定。手で直す場所はここだけ。件数・論点別件数・立場・収集期間・更新日・主張の照合日は公開JSON（docs/data/themes/elderly-license-revocation.json）から、立場の色と理由データのある論点は configs/planet/elderly-license-revocation.yaml から、収集元と次回更新予定は THEMES.yaml から読むため、ここには書かない。制度の記述は現行ページの検索入口（SEARCH_ENTRY、手書き）と一次資料メモ quality/research/elderly-license-revocation-primary-sources.md から移したもので、新しい事実は足していない。",
+  "theme_id": "elderly-license-revocation",
+  "inputs": {
+    "public_json": "docs/data/themes/elderly-license-revocation.json",
+    "planet_config": "configs/planet/elderly-license-revocation.yaml",
+    "themes_registry": "THEMES.yaml"
+  },
+  "dates": {
+    "_note": "日付は2つだけ持つ。制度の記述は一次資料メモの確認日（memo_checked_from〜memo_checked_to）。主張の照合日は公開JSONの claim_verification.checked_on（2026-09-30）を読む。現行ページに残る「照合確認日 2026-08-18」は使わない。",
+    "memo_checked_from": "2026-08-30",
+    "memo_checked_to": "2026-09-07"
+  },
+  "crumb": ["交通ルール・日常論争", "高齢者の運転免許返納"],
+  "title": {
+    "phrases": ["免許返納は", "何歳から、", "どう切り出すか"],
+    "accent_index": 1,
+    "sub": ["年齢の節目と返納後の手続き、", "SNSで分かれる意見"]
+  },
+  "lead": "制度で決まっていることを先に確かめてから、SNSの意見を論点ごとに読みます。",
+  "ages": {
+    "label": "年齢と更新時の手続き",
+    "text": "返納する年齢は決まっていません。70歳と75歳で、免許更新のときに受ける講習や検査が変わります。",
+    "scale": {"from": 60, "to": 85},
+    "marks": [
+      {"key": "any", "age": null, "badge": "年齢を問わず", "title": "相談・自主返納", "note": "運転に不安がある本人や家族は、安全運転相談窓口（＃8080）に相談できます。"},
+      {"key": "70", "age": 70, "badge": "70歳以上", "title": "更新時に高齢者講習", "note": "更新期間が満了する日の年齢が70歳以上の人が対象です。"},
+      {"key": "75", "age": 75, "badge": "75歳以上", "title": "更新時に認知機能検査", "note": "一定の違反歴がある人は、運転技能検査も必要になります。"}
+    ],
+    "aria": "60歳から85歳までの年齢のものさし。70歳で高齢者講習、75歳で認知機能検査が始まります。自主返納と相談は年齢を問わずできます。"
+  },
+  "steps": {
+    "label": "返納したあとの流れ",
+    "items": [
+      {"key": "return", "title": "返納を申請する", "note": "運転免許センターや警察署で申請します。受付場所や必要書類は都道府県によって違うため、事前の確認が必要です。"},
+      {"key": "card", "title": "運転経歴証明書を受け取る", "note": "返納から5年以内に申請できます。2012年4月1日以降に交付されたものは本人確認書類になります。"},
+      {"key": "perk", "title": "割引や支援を確かめる", "note": "バスやタクシーの割引などは自治体や事業者ごとに違い、全国共通ではありません。"}
+    ],
+    "stat": {
+      "text": "{year}に自主返納は{returned}件、運転経歴証明書の交付は{cards}件でした。",
+      "year": "2025年（令和7年）",
+      "returned": 435067,
+      "cards": 297359,
+      "caveat": "交付件数には、マイナンバーカードに運転経歴を記録した件数を含みます。",
+      "source": {"label": "警察庁「運転免許統計 令和7年版」", "url": "https://www.npa.go.jp/publications/statistics/koutsuu/r07main.pdf"}
+    }
+  },
+  "answers": [
+    {
+      "key": "age",
+      "question": "何歳で返納する？",
+      "kind_label": "制度で決まっていること",
+      "short": "全国一律の返納年齢はありません。",
+      "body": "自主返納は、年齢を問わず本人が申請します。70歳と75歳は返納の期限ではなく、更新時の講習や検査が変わる節目です。",
+      "link": {"href": "#elo-ages", "text": "年齢ごとの手続きを見る"}
+    },
+    {
+      "key": "talk",
+      "question": "家族はどう切り出す？",
+      "kind_label": "話し合いの進め方",
+      "short": "年齢より先に、返納後の足を一緒に決めます。",
+      "body": "心配な運転の場面を具体的に伝え、通院や買い物の手段を先に組み立てます。家族だけで難しいときの相談先は＃8080です。",
+      "link": {"href": "#elo-faq", "text": "親が拒むときの答えを読む"}
+    },
+    {
+      "key": "after",
+      "question": "返納したらどうなる？",
+      "kind_label": "手続きと特典",
+      "short": "運転経歴証明書を申請できます。",
+      "body": "本人確認書類として使えます。タクシー割引などの特典は、住んでいる自治体の案内で確かめます。",
+      "link": {"href": "#elo-steps", "text": "返納後の流れを見る"}
+    }
+  ],
+  "faq": {
+    "title": "よく検索される疑問",
+    "items": [
+      {"q": "免許返納は何歳から義務ですか？", "a": "全国一律の返納義務年齢はありません。自主返納は年齢を問わず申請できます。70歳・75歳は、更新時の講習や検査が変わる節目です。"},
+      {"q": "70歳、75歳になると何が変わりますか？", "a": "70歳以上は更新時に高齢者講習、75歳以上は認知機能検査が必要です。75歳以上で一定の違反歴がある人は運転技能検査の対象になります。"},
+      {"q": "親が免許返納を拒むときは？", "a": "年齢だけで迫らず、心配な運転を具体的に共有し、通院や買い物など返納後の移動手段を先に組み立てます。家族だけで難しい場合の相談先は、安全運転相談窓口などです。"},
+      {"q": "免許返納はどこでできますか？", "a": "一般に運転免許センターや警察署などで申請します。受付場所・時間・必要書類・代理申請の条件は都道府県で異なります。居住地の都道府県警察の案内を確認してください。"},
+      {"q": "運転経歴証明書は身分証明書になりますか？", "a": "2012年4月1日以降に交付された運転経歴証明書は、公的な本人確認書類として利用できます。申請できる期間や必要書類は警察の案内で確認してください。"},
+      {"q": "タクシー割引や給付金は全国共通ですか？", "a": "全国共通ではありません。自治体や事業者によって内容、年齢条件、申請期限が異なります。「自治体名 免許返納 支援」で公式情報を確認してください。"}
+    ],
+    "medical_note": "認知症や視力など医療の判断が必要な場合は、このページだけで決めず、医師や警察へ相談してください。"
+  },
+  "count": {
+    "label": "SNSの意見",
+    "caption_template": "{source}で集めた公開投稿{collected}件のうち、意見と判定した投稿です（{start}〜{end}）。",
+    "stance_title": "立場の内訳",
+    "issues_title": "論点ごとの件数",
+    "issues_lead": "義務化の是非は、ここから論点ごとに読みます。",
+    "no_reason_tag": "理由は未公開",
+    "no_reason_note_template": "{labels}は、投稿を読み直して理由を分ける作業がまだです。件数だけを示しています。",
+    "not_poll": "世論調査ではありません。SNSの公開投稿をAIで分類した結果です。",
+    "updated_template": "最終更新 {updated}。次回の収集予定は{next}です。",
+    "checked_template": "制度の記述は一次資料で{memo_from}〜{memo_to}に確認しました。投稿の主張と資料の照合は{claims}に確認しています。"
+  },
+  "sources": [
+    {"label": "警察庁「運転免許証の自主返納」", "url": "https://www.npa.go.jp/policies/application/license_renewal/jishuhennou.html"},
+    {"label": "警察庁「認知機能検査」", "url": "https://www.npa.go.jp/policies/application/license_renewal/ninchi.html"},
+    {"label": "道路交通法（e-Gov法令検索）", "url": "https://elaws.e-gov.go.jp/document?lawid=335AC0000000105"},
+    {"label": "内閣府 令和7年版高齢社会白書（＃8080）", "url": "https://www8.cao.go.jp/kourei/whitepaper/w-2025/html/zenbun/s2_2_4.html"}
+  ]
+}
