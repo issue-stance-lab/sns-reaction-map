@@ -3,6 +3,8 @@
    NODE_PATH=<main>/node_modules AI_COPYRIGHT_REDESIGN_URL=http://127.0.0.1:8767/ai-copyright-reaction-map.html \
    AI_COPYRIGHT_EVIDENCE_DIR=quality/prototypes/ai-copyright-release/evidence node tests/test_ai_copyright_redesign_browser.cjs
    投票は押さない（本番Supabaseへ送らないため。localhost では投票設定自体が無効になる）。
+   2026-10-12 部活動型の圧縮に合わせた：論点名は読書面の論点タブ（.fr-tab）、山は対話式の山なみ（#section .hill）。
+   推移・作り方・詳細データ・投稿例は折りたたみの中にあるので、開いてから確かめる。
    x.com・platform.twitter.com への通信はすべて遮断する（X埋め込みは失敗時の表示を確かめる）。 */
 const { chromium } = require('playwright');
 const assert = require('node:assert/strict');
@@ -42,7 +44,7 @@ async function open(browser, options = {}) {
       await shot(page, `page-${name}.png`, true);
 
       // 論点を選んでも、ページの位置は動かない
-      const chips = page.locator('#ai-copyright-reading .fr-chip');
+      const chips = page.locator('#ai-copyright-reading .fr-tab');
       assert.equal(await chips.count(), ISSUES);
       for (let i = 0; i < ISSUES; i++) {
         const chip = chips.nth(i);
@@ -58,15 +60,38 @@ async function open(browser, options = {}) {
         const wide = await page.evaluate(() => document.documentElement.scrollWidth - innerWidth);
         assert.ok(wide <= 0, `${name}: 論点 ${id} の表示で横にはみ出しています`);
       }
-      // 山を押しても同じ
-      const hill = page.locator('#ai-copyright-reading .fr-hill').first();
+      // 山を押すと、その論点の読書面へ移る（設計記録 10-3）
+      const hill = page.locator('#section .hill').nth(5);
       await hill.scrollIntoViewIfNeeded();
-      const y0 = await page.evaluate(() => scrollY);
-      await hill.click();
-      assert.equal(await page.evaluate(() => scrollY), y0, `${name}: 山の選択で位置が動きました`);
+      const hillId = await page.evaluate(() => window.PLANET_DATA.issues[5].id);
+      await hill.click({ force: true });
+      await page.waitForFunction(id => location.hash === '#issue-' + id, hillId);
+      await page.waitForTimeout(1500);  // なめらかなスクロールが止まるまで待つ
+      assert.equal(await page.locator('[data-issue-panel][data-selected]').getAttribute('data-issue-panel'), hillId);
+      const top = await page.locator('[data-issue-panel][data-selected]').evaluate(e => e.getBoundingClientRect().top);
+      assert.ok(top >= 0 && top < 300, `${name}: 山を押しても読書面が画面に来ません（${top}px）`);
       await chips.first().click();
-      await page.locator('[data-issue-panel][data-selected]').scrollIntoViewIfNeeded();
-      await shot(page, `issue-selected-${name}.png`);
+      await page.locator('#ai-copyright-reading .fr-tabs').scrollIntoViewIfNeeded();
+      await shot(page, `reading-1-${name}.png`);
+      await page.evaluate(() => scrollBy(0, innerHeight - 60));
+      await shot(page, `reading-2-${name}.png`);
+      // 理由一覧の行を押すと、その理由の説明だけが出る。「この論点の別の理由」で次へ
+      const panel = page.locator('[data-issue-panel][data-selected]');
+      const rowsR = panel.locator('.fr-reasons li.fr-reason');
+      assert.equal(await panel.locator('.fr-reasons > .fr-reason-list li.fr-reason').count(), 4, `${name}: 理由一覧の上位が4件ではありません`);
+      await rowsR.nth(1).locator('a').click();
+      const shownR = await panel.locator('.fr-reason-detail').evaluateAll(as => as.filter(a => a.offsetHeight > 0).map(a => a.dataset.reason));
+      assert.deepEqual(shownR, [await rowsR.nth(1).getAttribute('data-reason')], `${name}: 選んだ理由の説明だけが出ていません`);
+      await panel.locator('.fr-reason-detail[data-on]').scrollIntoViewIfNeeded();
+      await shot(page, `reason-open-${name}.png`);
+      await panel.locator('.fr-reason-detail[data-on] .fr-next a').click();
+      const shownN = await panel.locator('.fr-reason-detail').evaluateAll(as => as.filter(a => a.offsetHeight > 0).map(a => a.dataset.reason));
+      assert.deepEqual(shownN, [await rowsR.nth(2).getAttribute('data-reason')], `${name}: 「この論点の別の理由」で次の理由へ移りません`);
+      // 読書面の折りたたみをすべて開いても横にはみ出さない
+      for (const d of await panel.locator('details').all()) await d.evaluate(e => { e.open = true; });
+      const wideFold = await page.evaluate(() => document.documentElement.scrollWidth - innerWidth);
+      assert.ok(wideFold <= 0, `${name}: 読書面の折りたたみを開くと横にはみ出します`);
+      for (const d of await panel.locator('details').all()) await d.evaluate(e => { e.open = false; });
 
       // 背景の開閉行
       const rows = page.locator('#ai-copyright-background details.fb-row');
@@ -85,7 +110,12 @@ async function open(browser, options = {}) {
         await rows.nth(i).locator('summary').click();
         assert.equal(await rows.nth(i).evaluate(d => d.open), false);
       }
-      // 意見の推移（引き継いだ部品）：タブを切り替えても横にはみ出さない
+      // 意見の推移（引き継いだ部品）：折りたたみを開くとグラフが描かれ、タブを切り替えても横にはみ出さない
+      await page.locator('#acp-trend-more > summary').scrollIntoViewIfNeeded();
+      await page.locator('#acp-trend-more > summary').click();
+      await page.waitForTimeout(600);
+      const stageW = await page.locator('#ai-copyright-trend-panel-stance [data-trend-stage] svg').evaluate(e => e.getBoundingClientRect().width);
+      assert.ok(stageW > 280 || width < 500, `${name}: 開いた推移のグラフの幅が足りません（${stageW}px）`);
       const trendTab = page.locator('.trend-card [data-trend-tab="issue"]');
       await trendTab.scrollIntoViewIfNeeded();
       await trendTab.click();
@@ -93,14 +123,16 @@ async function open(browser, options = {}) {
       assert.equal(await page.locator('.trend-card img[src^="images/trend/ai-copyright-"]').count(), 4);
       const wideTrend = await page.evaluate(() => document.documentElement.scrollWidth - innerWidth);
       assert.ok(wideTrend <= 0, `${name}: 推移の表示で横にはみ出します`);
-      await page.locator('#ai-copyright-trend').scrollIntoViewIfNeeded();
-      await shot(page, `trend-${name}.png`);
+      await page.locator('#acp-trend').scrollIntoViewIfNeeded();
+      await shot(page, `trend-open-${name}.png`);
       // 詳細データの折りたたみも、開いて横にはみ出さない
+      await page.locator('#acp-method > summary').click();
+      assert.equal(await page.locator('#acp-method').evaluate(d => d.open), true);
       for (const d of await page.locator('#detail-data details').all()) await d.evaluate(e => { e.open = true; });
       const wideDetail = await page.evaluate(() => document.documentElement.scrollWidth - innerWidth);
       assert.ok(wideDetail <= 0, `${name}: 詳細データを開くと横にはみ出します`);
       assert.deepEqual(errors, [], `${name}: コンソールエラー`);
-      summary.push(`${name}: はみ出し0・論点${ISSUES}つと山で scrollY 不変・背景${n}行の開閉・推移のタブ・詳細データ・エラー0`);
+      summary.push(`${name}: はみ出し0・論点タブ${ISSUES}つで scrollY 不変・山で読書面へ・理由の切替と「別の理由」・読書面の折りたたみ全開・背景${n}行の開閉・推移を開いて描画とタブ・作り方と詳細データ・エラー0`);
       await context.close();
     }
 
@@ -111,7 +143,7 @@ async function open(browser, options = {}) {
       await page.goto(previous, { waitUntil: 'domcontentloaded' });
       await page.goto(url, { waitUntil: 'networkidle' });
       const length = await page.evaluate(() => history.length);
-      for (const chip of await page.locator('#ai-copyright-reading .fr-chip').all()) await chip.click();
+      for (const chip of await page.locator('#ai-copyright-reading .fr-tab').all()) await chip.click();
       assert.equal(await page.evaluate(() => history.length), length, '論点の切替で履歴が増えました');
       assert.match(page.url(), /#issue-/);
       await page.goBack({ waitUntil: 'domcontentloaded' });
@@ -125,10 +157,10 @@ async function open(browser, options = {}) {
       const { context, page } = await open(browser);
       const selected = () => page.locator('[data-issue-panel][data-selected]').getAttribute('data-issue-panel');
       await page.goto(url + '#fb-ai-copyright-creator-rights', { waitUntil: 'networkidle' });
-      await page.waitForFunction(() => location.hash === '#issue-ai-copyright-creator-rights');
+      await page.waitForFunction(() => ['#issue-ai-copyright-creator-rights', '#ai-copyright-creator-rights'].includes(location.hash));
       assert.equal(await selected(), 'ai-copyright-creator-rights');
       await page.goto(url + '#ai-copyright-reading-ai-copyright-tech-promotion', { waitUntil: 'networkidle' });
-      await page.waitForFunction(() => location.hash === '#issue-ai-copyright-tech-promotion');
+      await page.waitForFunction(() => ['#issue-ai-copyright-tech-promotion', '#ai-copyright-tech-promotion'].includes(location.hash));
       assert.equal(await selected(), 'ai-copyright-tech-promotion');
       await page.goto(url + '#copyright-entry', { waitUntil: 'networkidle' });
       await page.waitForFunction(() => location.hash === '#bg-kangaekata');
@@ -148,6 +180,10 @@ async function open(browser, options = {}) {
       await page.goto('about:blank');
       await page.goto(url + '#ai-copyright-trend-panel-issue', { waitUntil: 'networkidle' });
       assert.equal(await page.locator('#ai-copyright-trend-panel-issue').isVisible(), true, '推移の埋め込み先 #ai-copyright-trend-panel-issue が開きません');
+      // 折りたたみの中の旧アンカー（作り方・詳細データ）も、開いて見せる
+      await page.goto('about:blank');
+      await page.goto(url + '#detail-data', { waitUntil: 'networkidle' });
+      assert.equal(await page.locator('#detail-data').isVisible(), true, '#detail-data で詳細データが開きません');
       for (const kept of ['vote-section', 'detail-data', 'related-topics', 'article-trust-title', 'caution', 'ai-copyright-trend-panel-stance']) {
         assert.equal(await page.locator('#' + kept).count(), 1, `#${kept} がありません`);
       }
@@ -159,9 +195,9 @@ async function open(browser, options = {}) {
     {
       const { context, page, errors } = await open(browser);
       await page.goto(url, { waitUntil: 'networkidle' });
-      const target = page.locator('#ai-copyright-reading .fr-chip').nth(2);
+      const target = page.locator('#ai-copyright-reading .fr-tab').nth(2);
       const id = await target.getAttribute('data-issue-id');
-      await page.locator('#ai-copyright-reading .fr-chip').nth(1).focus();
+      await page.locator('#ai-copyright-reading .fr-tab').nth(1).focus();
       await page.keyboard.press('Tab');
       assert.equal(await page.evaluate(() => document.activeElement.dataset.issueId), id, 'Tab で次の論点名へ移れません');
       const before = await page.evaluate(() => scrollY);
@@ -188,6 +224,7 @@ async function open(browser, options = {}) {
     {
       const { context, page, errors } = await open(browser);
       await page.goto(url, { waitUntil: 'networkidle' });
+      await page.locator('[data-issue-panel][data-selected] details.fr-posts > summary').click();
       const posts = page.locator('[data-issue-panel][data-selected] details.original-posts');
       await posts.locator('summary').click();
       const status = posts.locator('.x-embed-status').first();
@@ -207,6 +244,9 @@ async function open(browser, options = {}) {
       await page.goto(url, { waitUntil: 'domcontentloaded' });
       const visible = await page.locator('[data-issue-panel]').evaluateAll(ps => ps.filter(p => p.offsetHeight > 0).length);
       assert.equal(visible, ISSUES, `JSなしで${ISSUES}論点が表示されません`);
+      // 折りたたみは JavaScript なしでも開く（推移・作り方と詳細データ）
+      await page.locator('#acp-trend-more > summary').click();
+      await page.locator('#acp-method > summary').click();
       const text = await page.locator('main').innerText();
       for (const word of ['生成AIと著作権', 'どんな理由で語られている', 'よくある質問', '世論調査ではありません', 'このページの作り方', '詳細データ', 'SNS上の意見の推移']) {
         assert.ok(text.includes(word), `JSなしで「${word}」が読めません`);

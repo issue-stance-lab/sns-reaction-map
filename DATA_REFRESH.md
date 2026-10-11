@@ -1047,6 +1047,10 @@ mainへ取り込む前に、**「合格した」という報告を鵜呑みに�
 - **「意見の全体像」の山なみ（2026-10-11〜）**: 元HTMLの対話式の山なみ（`PLANET_SECTION` の `#planet-block`・PLANET_DATA・山なみのスクリプト）を
   `build_ai_copyright_redesign.py` が毎回そのまま写す（立場モード・100マス・論点の一覧・見かた）。元HTMLの山なみが更新されれば新ページにも載り、手で直す所は無い。
   山を押すと読書面へ移る橋渡しは `scripts/ai_copyright_redesign/planet.js`（設計記録の10節）
+- **折りたたみ（2026-10-12〜、部活動型の圧縮）**: 読書面の理由一覧（上位4件＋「ほかの理由を読む」）・選んだ理由だけの説明・立場別集計・投稿例・
+  根拠の照合・論点の説明の2段落目（「くわしく」）、意見の推移（「詳しいグラフと表を開く」）、作り方と詳細データ（「調査方法と、集計の全データ」）の
+  `<details>` は、`ai_copyright_reading.py`・`build_ai_copyright_redesign.py` が毎回作る。手で開閉や中身を直す所は無い（見出しの文言は
+  `configs/ai-copyright-reading.json` の `compact`。設計記録の11節）
 - **単独で作り直すとき**（データは変えずに見た目や文言だけ直したとき）:
   `python3 scripts/build_ai_copyright_arena.py`（新デザイン公開中は、元HTMLに公開JSONの集計と旧形式の生成を掛けてから
   公開ページを作り直す。アリーナデータも同じ）。成功の形: もう一度 `python3 scripts/build_ai_copyright_arena.py --check` を
