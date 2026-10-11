@@ -88,7 +88,7 @@ python3 scripts/build_fukushuto_redesign.py --mode preview --output-dir /tmp/fuk
 - **次回 10/19 の模擬**：切替後のスクラッチ複製で、新規0件の 10/19 回として `refresh_adapters/fukushuto.build` →
   `refresh_topic.prepare_public_candidate_bundle` を実行した（完了記録の検査だけ外した。保存回は 10/10 の分を代用）。
   公開対象65件が作られ、候補の docs/ は新デザイン（基準日 2026-10-19・意見募集は「締め切り済み」・施行は「予定」）、
-  元HTMLには潮目が入ったまま。候補の中で `verify_theme_page.py fukushuto` NG 0、`verify_number_provenance.py fukushuto` 302/302、
+  元HTMLには潮目が入ったまま。候補の中で `verify_theme_page.py fukushuto` NG 0、`verify_number_provenance.py fukushuto` 297/297（切替後の最終版で再実行）、
   よみやす「完成を止める指摘 0件」、皇室の公開ページは変わらず。
 
 ### データ更新時にどの生成元を直すか（データ対応表・最終版）
@@ -134,7 +134,7 @@ python3 scripts/build_fukushuto_redesign.py --mode preview --output-dir /tmp/fuk
 |---|---|
 | 生成器の内蔵照合（件数・理由区分・区分ごとの立場・資料・日付） | 合格 |
 | `verify_theme_page.py`（候補は `--html`） | 候補 NG 0、全10テーマ NG 0 |
-| `verify_number_provenance.py` | 10テーマ NG 0（現行ページ 241/241。切替後の新ページ 302/302） |
+| `verify_number_provenance.py` | 10テーマ NG 0（現行ページ 241/241。新ページは切替後 297/297） |
 | `verify_top_page.py` | 終了0 |
 | `build_fukushuto_arena.py --check` | OK（直す前は main でも NG。5節） |
 | `verify_builder_rebuildability.py` | 10テーマ NG 0 |
@@ -209,13 +209,49 @@ python3 scripts/build_fukushuto_redesign.py --mode preview --output-dir /tmp/fuk
 | `data/page-sources/fukushuto.html`（新規） | 旧形式の元HTML（6節の文の直しを反映した版） |
 | `docs/fukushuto-reaction-map.html` | 新デザイン（`fukushuto_layout.finish`。`--mode release --output-dir` の公開候補とバイト一致） |
 | `DATA_REFRESH.md` | 「副首都の定期更新（新デザインを維持する、2026-10-11〜）」の節 |
-| `company/APPROVALS.yaml` | 副首都ページの新デザイン公開の承認記録 |
+| `company/APPROVALS.yaml` | 副首都ページの新デザイン公開の承認記録（`approval-20261011-003`、承認待ち） |
+| `data/verification/fukushuto-sunk-continents.json`・`fukushuto-background.json`・`scripts/build_fukushuto_process_sections.py` | 6節のよみやすの直し（15文） |
+| `docs/data/themes/fukushuto.json`・`docs/data/catalog.json`・`data/public/` の同名・`data/verification/adoption/registry.json` | 上の文の変更の反映と公開JSONの指紋 |
+| `configs/fukushuto-reading.json`・`fukushuto-opening.json`・`fukushuto-background.json` | 9-2 の使い回しの書き直し（14文） |
+| `DATA_SHEET.md` | 9-2 |
+| `quality/prototypes/fukushuto-release/` | 公開候補と確認画面を最終版で作り直し |
 | 共有テスト | 9-4 |
 
-### 9-2. 検査結果（切替後）
+### 9-2. 切替で初めて見つかったことと対応
 
-9-3 に記録する。
+- **ページ間の言い回しの使い回し**（`verify_page_originality.py`、全テストの `test_page_originality`）：新デザインの共通の文
+  （読書面の説明・注記など）が皇室の新デザインと同じ文だった（同一文12件・書き出しの類似4件）。副首都の設定
+  （`configs/fukushuto-reading.json` 12文・`fukushuto-opening.json` の lead・`fukushuto-background.json` の lead）を、意味を変えずに
+  副首都向けの言い方へ書き直した（例：「山の幅には下限を設けています」→「山の幅は一定より細くしていません」）。
+  書き直しの途中で「1つの山が1つの論点」が論点数の検査（1と6の2通り）に掛かったため、数を書かない文にした。
+  よみやす「完成を止める指摘 0件」、`verify_page_originality.py`「10ページに、使い回された見出し・文はありません」。
+- **DATA_SHEET.md**：副首都の「マップの点」が旧ページの点の数（1452）から「—」に変わった（皇室と同じ。新デザインに点の図が無いため）。
+  `build_data_sheet.py` で作り直した。
+- 承認台帳は `approval-20261011-003` を **`status: pending`（承認待ち）** で足した。オーナーの公開承認は受けていない。
 
-### 9-3. 切替後の検査
+### 9-3. 切替後の検査（作業ツリー）
 
-（公開切替のコミットで追記）
+| 検査 | 結果 |
+|---|---|
+| `python3 -m unittest discover -s tests` | 1,777件 OK（skip 4、失敗0・エラー0） |
+| `verify_theme_page.py fukushuto` / 全テーマ | NG 0 / 10テーマ NG 0 |
+| `verify_number_provenance.py fukushuto` / 全テーマ | 297/297 説明済み・終了0 / 10テーマ NG 0 |
+| `verify_top_page.py` | 終了0 |
+| `run_public_checks.py` | 終了0（「公開ファイルだけで確かめられる範囲はすべて通りました」） |
+| `build_fukushuto_arena.py --check` | OK: 差分なし（公開後の経路＝元HTMLと新ページの両方を作り直して比較） |
+| `verify_builder_rebuildability.py` | 10テーマ NG 0 |
+| `seo/validate_theme_seo.py` | OK（themes=10、sitemap URLs=16） |
+| `verify_ai_tone.py` | 問題なし（公開ページ10本） |
+| `verify_page_originality.py` | OK |
+| よみやす（docs の新ページ） | 完成を止める指摘 0件・PASS |
+| 2回生成 | md5 一致（`2f6333bf…`、docs のページとも一致） |
+| Playwright（docs/ を 127.0.0.1 で配信） | 6節と同じ項目すべて合格。画像は `evidence/`（8枚、切替後に撮り直し） |
+| 10/19 の模擬（4節） | 最終版で再実行して合格（候補の新ページは基準日 2026-10-19・意見募集「締め切り済み」） |
+
+### 9-4. 切替に合わせて直した共有テスト
+
+| テスト | 変更 | 理由 |
+|---|---|---|
+| `tests/test_fukushuto_connected.py`・`_public_counts.py`・`_search_entry.py`・`_taxonomy.py` | 読むページを「公開後は元HTML（data/page-sources）」に | 旧形式の連動表示・検索入口・潮目の検査。公開後も元HTMLに同じ構造で残る（皇室と同じ扱い） |
+| `tests/test_cite_button.py` | 副首都の新デザインも論点欄の `id="issue-…"` を受け皿とみなす | 受け皿の形が変わった |
+| `tests/test_theme_design.py` | 副首都の新デザインを飛ばす | 共通の見た目を掛けない設計 |
