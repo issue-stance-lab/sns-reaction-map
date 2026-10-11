@@ -12,7 +12,7 @@
 - configs/koshitsu-tenpakai-background.json ほか : 背景の開閉行（scripts/koshitsu_background.py が描く）
 
 出力: quality/prototypes/koshitsu-tenpakai-reading/index.html
-（同じフォルダーの reading.css・reading.js と、冒頭の試作の opening.css を読む）
+（同じフォルダーの reading.css・reading.js と、冒頭の試作の opening.css を読む。正本は scripts/koshitsu_redesign/ で、生成時に写す）
 
 冒頭は scripts/koshitsu_opening.py の render_fragment() をそのまま呼ぶ（冒頭の生成器は変えない）。
 X投稿の遅延読み込みは部活動の新デザインと同じ scripts/bukatsu_redesign/x_embeds.py を使う。
@@ -26,6 +26,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import shutil
 import sys
 from collections import Counter
 from datetime import date
@@ -499,6 +500,11 @@ def main() -> None:
     args.out_dir.mkdir(parents=True, exist_ok=True)
     out = args.out_dir / "index.html"
     out.write_text(render_page(d, as_of), encoding="utf-8")
+    for name in ("reading.css", "reading.js"):
+        shutil.copyfile(opening.ASSETS / name, args.out_dir / name)
+    opening_dir = args.out_dir.parent / "koshitsu-tenpakai-opening"
+    if opening_dir.is_dir():
+        shutil.copyfile(opening.ASSETS / "opening.css", opening_dir / "opening.css")
     print(f"wrote {out}")
 
 

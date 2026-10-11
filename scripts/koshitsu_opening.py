@@ -21,12 +21,15 @@ from __future__ import annotations
 import argparse
 import html
 import json
+import shutil
 from datetime import date
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 CONFIG = ROOT / "configs" / "koshitsu-tenpakai-opening.json"
 OUT_DIR = ROOT / "quality" / "prototypes" / "koshitsu-tenpakai-opening"
+# 見た目の正本は scripts/koshitsu_redesign/（公開候補の生成器と共有）。試作フォルダーへは写しを置く。
+ASSETS = ROOT / "scripts" / "koshitsu_redesign"
 
 FRAGMENT_START = "<!-- KOSHITSU_OPENING_START -->"
 FRAGMENT_END = "<!-- KOSHITSU_OPENING_END -->"
@@ -369,6 +372,7 @@ def main() -> None:
     args.out_dir.mkdir(parents=True, exist_ok=True)
     (args.out_dir / "opening-fragment.html").write_text(fragment, encoding="utf-8")
     (args.out_dir / "index.html").write_text(render_page(fragment, config, as_of), encoding="utf-8")
+    shutil.copyfile(ASSETS / "opening.css", args.out_dir / "opening.css")
     print(f"wrote {args.out_dir / 'index.html'} (phase={phase_of(config, as_of)[0]})")
 
 

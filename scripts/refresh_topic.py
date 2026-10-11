@@ -819,7 +819,8 @@ def promote(
     adapter: Any = None,
 ) -> None:
     from scripts.bukatsu_layout import enabled
-    if enabled(root):
+    from scripts.koshitsu_layout import enabled as koshitsu_layout_enabled
+    if enabled(root) or koshitsu_layout_enabled(root):
         raise ValueError("新デザインの更新は公開候補manifestを使ってください。旧昇格経路は使用できません。")
     adapter_targets = completion_targets(root, topic, stage, adapter_targets)
     themes = parse_themes_yaml(root / "THEMES.yaml")
@@ -943,6 +944,8 @@ def _copy_candidate_tree(root: Path, stage: Path) -> Path:
     )
     from scripts.bukatsu_layout import materialize
     materialize(candidate_root)
+    from scripts.koshitsu_layout import materialize as materialize_koshitsu
+    materialize_koshitsu(candidate_root)
     return candidate_root
 
 
@@ -1010,6 +1013,9 @@ def prepare_public_candidate_bundle(
     layout_targets = finish(candidate_root)
     from scripts.apply_theme_design import finish as finish_theme_design
     layout_targets.update(finish_theme_design(candidate_root))
+    # 皇室典範の新デザインは、旧形式のページへの全処理（テーマ共通の見た目を含む）の後に適用する
+    from scripts.koshitsu_layout import finish as finish_koshitsu_layout
+    layout_targets.update(finish_koshitsu_layout(candidate_root))
 
     # 公開候補として変わり得るものをすべて固定する。全テーマJSONはcatalogの入力でもあるため含める。
     # docs/data/ と docs/llms.txt は課題77 案1: data/public/ の写し・AI向け要約で、
@@ -1242,6 +1248,8 @@ def prepare_public_candidate_bundle_multi(
     per_topic_targets.update(finish(candidate_root))
     from scripts.apply_theme_design import finish as finish_theme_design
     per_topic_targets.update(finish_theme_design(candidate_root))
+    from scripts.koshitsu_layout import finish as finish_koshitsu_layout
+    per_topic_targets.update(finish_koshitsu_layout(candidate_root))
 
     # 課題77 案1のdocs/data・docs/llms.txtを含め、共有ファイルは全テーマ分を1回だけ固定する。
     shared_targets = [

@@ -817,7 +817,8 @@ def _apply_connected_display(topic: str, html: str) -> str:
 def refresh(topic: str, *, source: str | None = None) -> tuple[str, str, list[str]]:
     page = ROOT / "docs" / f"{topic}-reaction-map.html"
     html = source if source is not None else page.read_text(encoding="utf-8")
-    if topic == "bukatsu-chiiki" and 'name="bukatsu-layout"' in html:
+    if (topic == "bukatsu-chiiki" and 'name="bukatsu-layout"' in html) or (
+            topic == "koshitsu-tenpakai" and 'name="koshitsu-layout"' in html):
         raise SystemExit("新デザインにはrefresh_topicの公開候補生成を使ってください。旧形式で上書きしないため停止しました。")
     if START not in html or END not in html:
         raise SystemExit(
