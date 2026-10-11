@@ -2,6 +2,7 @@
 
 2026-10-11。ブランチ `task/renew-koshitsu-tenpakai`。手順書23の「7. 更新と公開を検査する」。
 **docs/ は変更していない。main への統合・push・投票の送信（POST）はしていない。** `configs/koshitsu-layout.json` は `enabled: false` のまま。
+（2026-10-11 の公開準備で `enabled: true` にして docs/ に適用した。末尾の「9. 2026-10-11 公開準備」を参照。）
 
 公開候補: `quality/prototypes/koshitsu-tenpakai-release/koshitsu-tenpakai-reaction-map.html`（基準日＝公開JSONの更新日 2026-10-05）
 確認画面: `quality/prototypes/koshitsu-tenpakai-release/evidence/`（PC・375px・論点選択・背景を開いた画面・X遮断時・JSなし）
@@ -151,3 +152,76 @@ python3 scripts/build_koshitsu_redesign.py --mode preview --output-dir /tmp/kosh
 - 印刷ボタンの実際の印刷結果（OS の印刷ダイアログ・改ページ）。
 - 次に読むテーマの画像は全画面撮影で空白に写った（遅延読み込みの撮影上の問題とみられるが、目視で確かめていない）。
 - 全テストは pytest が無いため unittest で実行した。消費税減税の16件は main の取り込み後に通るかを確かめていない。
+
+## 9. 2026-10-11 公開準備
+
+オーナー指示「残作業を片付けて公開」（2026-10-11）。作業ツリー `isa-wt-renew-koshitsu-tenpakai`。**main への統合・push はしていない（司令塔が行う）。**
+
+### 9-1. main の取り込み
+
+- `git merge main -m "Merge main into task/renew-koshitsu-tenpakai"` → マージコミット `2f5dfab7`（main `3ff165d5` を取り込み、19コミット。消費税減税 10/11 更新回 `84451388`、自転車青切符 10/11 更新回 `d9e428f1` など）。**衝突は0件。**
+- 非公開データ（Git で運ばれない `social-samples/`）: 内容の比較（`rsync -anc`）で共有ツリーと違ったのは自転車青切符の4ファイル（`bike-blue-ticket_2d_classified.json`、`updates/bike-blue-ticket/2026-10-11/` の3件）。共有ツリー→作業ツリーへコピーし、差分0件を確かめた。消費税減税の 10/11 データは前回の復元で作業ツリーに入っており、差は無かった。逆方向のコピーはしていない。
+
+### 9-2. 文体の警告8件（`data/verification/koshitsu-tenpakai-sunk-continents.json`）
+
+よみやす検査（`review_with_yomiyasu.py --medium website --strict`）で完成を止めていた8件を直した。意味・件数・日付・候補語は変えていない。
+
+| 場所 | 指摘 | 直し方 |
+|---|---|---|
+| 養子の年齢 `sns_note`（9/18） | 87字 | 「再検索。候補語は〜等。」の2文に |
+| 男子出生の重圧 `sns_note`（9/18） | 89字 | 同上 |
+| 男子出生の重圧 `sns_note`（9/27） | 99字・読点4 | 「3件が候補に挙がった。内容は〜という批判。いずれも〜不一致。」の3文に |
+| 三十年ごとの見直し `sns_note` | 97字 | 「一致は1件あった。」で区切る |
+| 修正案 `life_impact` | 85字 | 「修正案の内容がそのまま」→「修正案どおりに」、「制度自体が」→「制度が」 |
+| 修正案 `sns_note` | 157字・読点4（2件） | 3文に分け、「〜という事実」→「〜事実」 |
+
+そのあと `build_public_registry.py --topic koshitsu-tenpakai`（公開JSON・catalog）、`build_koshitsu_arena.py`（旧形式の元HTMLに同じ文を反映）、`build_adoption_registry.py`（公開JSONの指紋）を実行。よみやす検査は「完成を止める指摘 0件、判定 PASS（78/100）」。
+
+### 9-3. 施行日（10月24日）以降の時制の設計変更
+
+- 変更前: `koshitsu_background.check` が基準日≧施行日で SystemExit。`finish` 経由で ValueError になり、有効時は**全テーマの公開候補生成が止まる**設計だった。
+- 変更後: 生成は止めない。時制は冒頭と同じ `koshitsu_opening.phase_of` の3段階（`before`／`after_unconfirmed`／`after_confirmed`）。
+  - 年表: `configs/koshitsu-tenpakai-background.json` の `phase_events`（公布・施行の2行）。施行後・未確認は「この日に施行される予定でした。…施行後の条文は、まだ編集部で確かめていません。」
+  - FAQ: 施行に触れる問いに `phase`（q と a）。構造化データ（FAQPage）も画面から作るので同じ時制になる。
+  - 未確認事項: 「施行後に e-Gov の条文が切り替わったか」は `hide_in: ["after_confirmed"]`。
+  - `law.enforcement_confirmed_on` を入れると「施行されました。施行後の条文は○月○日に確かめています。」に切り替わる。施行日より前の日付、または基準日が施行日より前なのに確認日がある場合は止まる。
+  - 施行後の文が設定に欠けていると、**施行日より前でも**止まる（10/24 当日の更新で初めて止まらないように）。
+- テスト（`tests/test_koshitsu_redesign.py` に5件追加、計20件）: 施行日当日・翌年で生成でき未確認表示になる／確認日で施行後の文に切り替わる／確認日が施行日より前なら止まる／施行後の文の欠落は施行日前でも止まる／`refresh_topic.py` と同じく as_of を渡さない `finish` が、皇室の公開JSONの更新日が施行日を過ぎていても止まらない（他テーマの公開候補生成を止めない）。
+- 既知の限界: 背景の時制は公開JSONの更新日で決まる。10/24 から次の更新までの間、背景は施行前の書き方のまま（冒頭の札と状況文だけは JS が読む日で「施行日を過ぎました（条文は未確認）」に切り替わる）。
+
+### 9-4. 公開切替で変わったファイル
+
+| ファイル | 変更 |
+|---|---|
+| `configs/koshitsu-layout.json` | `enabled: true`、説明文を施行後の設計に合わせた |
+| `configs/theme-seo.json` | koshitsu-tenpakai に `display_headline`「皇室典範改正、何が変わる？愛子さまは？　何が問題？」 |
+| `data/page-sources/koshitsu-tenpakai.html`（新規） | 旧形式の元HTML（9-2 の文を反映した版） |
+| `docs/koshitsu-tenpakai-reaction-map.html` | 新デザイン（`koshitsu_layout.finish` ＝ `build_koshitsu_redesign` の release。`--mode release --output-dir` の公開候補とバイト一致） |
+| `docs/data/themes/koshitsu-tenpakai.json`・`docs/data/catalog.json`・`data/public/` の同名 | 9-2 の文の変更 |
+| `data/verification/adoption/registry.json` | 公開JSONの指紋 |
+| `quality/prototypes/koshitsu-tenpakai-release/` | 公開候補と指紋を作り直し、`evidence/docs-*.png` を追加 |
+| `DATA_REFRESH.md` | 「皇室典範改正の定期更新（新デザインを維持する）」の節 |
+| `company/APPROVALS.yaml` | `approval-20261011-002` |
+
+- `docs/index.html`: `sync_portal_stats.py` は「変更なし（すでに同期済み）」。件数（収集2,565・意見2,016）は変わらない。
+- sitemap・JSON-LD・可視の最終更新日: `validate_theme_seo.py` OK。`THEMES.yaml` の `updated_at` は変えていない（データ更新ではないため）。
+
+### 9-5. 検査結果（作業ツリー、切替後）
+
+| 検査 | 結果 |
+|---|---|
+| `verify_theme_page.py` | 全テーマ10件 NG 0件（再生成可能性も10テーマ NG 0件） |
+| `verify_number_provenance.py` | 終了0。10テーマ NG 0件（皇室 284/284 説明済み） |
+| `verify_top_page.py` | 終了0、NG 0件 |
+| `python3 -m unittest discover -s tests` | 1,731件 OK（失敗0・エラー0、skip 4）。前回の消費税減税16件は main 取り込みで解消 |
+| `run_public_checks.py` | 終了0（「公開ファイルだけで確かめられる範囲はすべて通りました」）。初回は採用台帳の指紋（公開JSONを直したため）で NG 1件 → `build_adoption_registry.py` で解消。途中の「復元確認に失敗」行はバックアップの失敗系テストの出力 |
+| `verify_ai_tone.py` | 問題なし（公開ページ10本） |
+| `seo/validate_theme_seo.py` | OK（themes=10、sitemap URLs=16） |
+| `build_koshitsu_arena.py --check` | OK |
+| よみやす（新デザインのページ） | 完成を止める指摘 0件 |
+| Playwright（docs/ を 127.0.0.1 で配信、`tests/test_koshitsu_redesign_browser.cjs`） | 1280px・375px とも横はみ出し0・コンソールエラー0、論点6つと山で scrollY 不変、背景10行の開閉、戻る・旧アンカー・キーボード・X遮断・JSなしも合格。画像は `evidence/docs-*.png`（8枚） |
+
+### 9-6. 未確認
+
+- 本番ホストでの GA4・AdSense の発火、投票 POST、X埋め込みの実表示（公開後に確認）。
+- 承認台帳の番号 `approval-20261011-002` は、並行する他ブランチが同じ番号を使うと統合時に重なる（現時点で他ブランチに 002 は無い）。

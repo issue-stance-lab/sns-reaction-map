@@ -910,6 +910,50 @@ mainへ取り込む前に、**「合格した」という報告を鵜呑みに�
   辺野古以外の差分は戻す（標準の経路では隔離コピーの中だけで、公開物には入らない）
 - 経緯と検証の記録: [quality/reviews/2026-10-09-task69-henoko-standard-route-details.md](quality/reviews/2026-10-09-task69-henoko-standard-route-details.md)
 
+### 皇室典範改正の定期更新（新デザインを維持する、2026-10-11〜）
+
+皇室典範改正のページは2026-10-11から新デザイン（冒頭・論点ごとの読書面・背景の開閉行）で公開している。
+部活動の新デザイン（`scripts/bukatsu_layout.py`・`configs/bukatsu-layout.json`）と同じ型で、
+**旧形式の生成器はこれまでどおり「元HTML」に掛け、全生成の最後に新デザインを組み直す。**
+設計と検査の記録: [quality/designs/2026-10-11-koshitsu-tenpakai-production-candidate.md](quality/designs/2026-10-11-koshitsu-tenpakai-production-candidate.md)
+
+- **`configs/koshitsu-layout.json` の `enabled`**: `true` の間、`refresh_topic.py` の公開候補生成（単一・複数テーマ）は
+  隔離コピーで元HTMLを `docs/` に戻し（`koshitsu_layout.materialize`）、旧形式の全処理のあとに
+  `koshitsu_layout.finish` で元HTMLを保存し直してから新デザインのページを `docs/` に書く。
+  **他テーマの更新でも毎回この処理が走る**（皇室の照合が合わないと、その回の公開候補生成全体が止まる）。
+  `false` に戻すと、公開ページが新デザインのまま「更新設定が無効」で止まる。戻すときは旧形式のページを先に戻すこと
+- **元HTMLの場所**: `data/page-sources/koshitsu-tenpakai.html`（Git管理）。`refresh_adapters/koshitsu.py`・
+  `build_koshitsu_arena.py`（引数なし）はこれを入力にする。手で編集しない。`docs/koshitsu-tenpakai-reaction-map.html` を
+  旧形式の生成器に直接渡すと拒否される（新デザインの再入力防止）
+- **単独で作り直すとき**（データは変えずに見た目や文言だけ直したとき）:
+  `python3 scripts/build_koshitsu_arena.py`（新デザイン公開中は元HTMLと公開ページの両方を作り直す）。
+  成功の形: もう一度 `python3 scripts/build_koshitsu_arena.py --check` を実行して `OK` と出ること
+- **再読データ（理由区分）を追記したとき**: 新しい収集回の意見は、本文を読んで理由区分を決め、
+  `data/koshitsu-tenpakai_issues-reread.json` の `items` に1件ずつ追記し、`buckets` の件数も合わせる。
+  **`items` の件数が公開JSONの意見数と一致しないと新デザインの生成が止まる**（公開JSONを先に更新して再読を
+  後回しにすると、全テーマの公開候補生成が止まる）。追記後は次の順で反映する。
+  1. 共通台帳の指紋を合わせる（上の「定期更新1回分の実務手順」8の `manage_reread_registry.py resync-source`）
+  2. `data/verification/koshitsu-tenpakai-issues-reread.json`（専用ファイル items の写し。数字の出所検査の根拠）を作り直す:
+     `python3 -c "import json;d=json.load(open('data/koshitsu-tenpakai_issues-reread.json',encoding='utf-8'));open('data/verification/koshitsu-tenpakai-issues-reread.json','w',encoding='utf-8').write(json.dumps(d['items'],ensure_ascii=False,indent=2)+chr(10))"`
+     （書式は既存ファイルに合わせる。`git diff --stat` で追記した件数ぶんだけ増えていれば成功）
+  3. `python3 scripts/build_public_registry.py --topic koshitsu-tenpakai`
+  4. 公開候補生成（`--prepare-promotion`）を流す。単独なら `python3 scripts/build_koshitsu_arena.py`
+  5. `python3 scripts/verify_number_provenance.py koshitsu-tenpakai`（新デザインの理由区分の件数を明細から数え直す）
+  投稿の説明文や代表投稿2件は `configs/koshitsu-tenpakai-reading.json`。区分が増えたときだけ直す
+- **語られていない争点の再検索の記録**（`data/verification/koshitsu-tenpakai-sunk-continents.json` の `sns_note`）は
+  画面に出る公開文章。追記したらよみやす検査（`review_with_yomiyasu.py --medium website --strict`）を新デザインの
+  ページに掛ける
+- **施行日（2026-10-24）以降の時制**: 生成は止まらない。冒頭と背景（年表・よくある質問・未確認事項）は
+  公開JSONの更新日（`--as-of` を渡したときはその日）で時制を決める。施行日を過ぎ、施行後の条文をまだ確かめて
+  いない間は「施行される予定でした。施行後の条文は、まだ編集部で確かめていません」と出る（施行後・未確認）。
+  **e-Gov の現行の条文が改正後の内容に切り替わったことを確かめたら**、`configs/koshitsu-tenpakai-opening.json` の
+  `law.enforcement_confirmed_on` に確かめた日（`YYYY-MM-DD`）を入れ、一次資料メモの「確認できなかったこと 7」を
+  解消済みにしてから作り直す。冒頭・年表・FAQ が「施行されました」に切り替わり、未確認事項からその1行が消える。
+  施行日より前の日付を入れると止まる。施行後の文言は `configs/koshitsu-tenpakai-background.json` の
+  `phase_events`（年表）・`phase`（FAQ）・`hide_in`（未確認事項）にあり、欠けていると施行日より前でも生成が止まる
+- 新デザインのページには、テーマ共通の見た目（`apply_theme_design.py`）・授業節の単独適用・信頼情報の単独適用を
+  掛けない（各スクリプトが skipped と出す）。更新経路では元HTMLに掛かる
+
 ### 読み込み確認のやり方（質と速さの両立）
 
 消費税減税での失敗（機械的なチェックは通ったのに、実際には本文を読まずに使い回した

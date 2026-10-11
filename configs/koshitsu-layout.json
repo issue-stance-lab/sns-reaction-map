@@ -1,4 +1,4 @@
 {
-  "enabled": false,
-  "note": "皇室典範改正の新デザイン。公開切替時に true にする（同じコミットで configs/theme-seo.json に display_headline を足す）。true の間は元HTMLを data/page-sources/koshitsu-tenpakai.html に保存し、更新候補の全生成処理の最後に新デザインを適用する。施行日（2026-10-24）以降は背景の時制を見直すまで生成が止まる。"
+  "enabled": true,
+  "note": "皇室典範改正の新デザイン（2026-10-11 公開）。true の間は元HTMLを data/page-sources/koshitsu-tenpakai.html に保存し、更新候補の全生成処理の最後に新デザインを適用する。施行日（2026-10-24）を過ぎても生成は止まらず、背景・冒頭は施行後の未確認表示になる。施行後の条文を確かめたら configs/koshitsu-tenpakai-opening.json の law.enforcement_confirmed_on に日付を入れる（DATA_REFRESH.md）。false に戻すと旧形式の公開ページの更新設定が無効のため更新が止まる。"
 }

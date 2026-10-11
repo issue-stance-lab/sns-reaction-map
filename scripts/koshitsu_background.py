@@ -14,6 +14,13 @@ scripts/koshitsu_reading.py から呼ぶ（単独では実行しない）。
 
 行はすべて <details> で、JavaScriptなしでも開ける。日付・件数を手で書かず、
 台帳・メモ・登録簿と食い違ったら止まる。
+
+時制は冒頭と同じ3段階（koshitsu_opening.phase_of）で切り替える。施行日を過ぎても生成は止めない。
+- before            : 施行日より前。背景台帳・設定の文をそのまま使う。
+- after_unconfirmed : 施行日を過ぎたが、施行後の条文を編集部で確かめていない（law.enforcement_confirmed_on が null）。
+- after_confirmed   : law.enforcement_confirmed_on を入れたあと。
+施行後の文は設定の phase_events（年表）・phase（FAQ）・hide_in（未確認事項）に書く。
+施行後の文が設定に無いときだけ止める（未来形のまま公開しないため）。
 """
 
 from __future__ import annotations
@@ -105,10 +112,46 @@ def load(public: dict, ocfg: dict, config_path: Path = CONFIG) -> dict:
     }
 
 
+PHASES = ("before", "after_unconfirmed", "after_confirmed")
+
+
+def phase(b: dict, as_of: str) -> str:
+    """冒頭と同じ基準で時制を決める（施行前／施行後・条文未確認／施行後・条文確認済み）。"""
+    return opening.phase_of(b["ocfg"], as_of)[0]
+
+
+def check_phase_texts(cfg: dict, ledger: dict) -> None:
+    """未来形で書いた年表とFAQに、施行後の2段階の文がそろっているか。施行日より前から確かめておく。"""
+    timeline_ids = {t["id"] for t in ledger["timeline"]}
+    for g in cfg["groups"]:
+        for row in g["rows"]:
+            if row["kind"] == "timeline":
+                events = row.get("phase_events", {})
+                for eid in row.get("phase_required", []):
+                    if eid not in timeline_ids:
+                        raise SystemExit(f"年表の施行後の文の対象 {eid} が背景台帳にありません")
+                    for ph in PHASES[1:]:
+                        e = events.get(eid, {}).get(ph, {})
+                        if not e.get("era") or not e.get("text"):
+                            raise SystemExit(f"年表 {eid} に施行後（{ph}）の era と text がありません")
+            if row["kind"] == "faq":
+                for item in row["items"]:
+                    if "{enforcement}" in item["a"] or "施行" in item["q"]:
+                        for ph in PHASES[1:]:
+                            alt = item.get("phase", {}).get(ph, {})
+                            if not alt.get("q") or not alt.get("a"):
+                                raise SystemExit(f"よくある質問「{item['q']}」に施行後（{ph}）の q と a がありません")
+
+
 def check(b: dict, as_of: str) -> None:
     cfg, public, ledger, memo, theme, law = b["cfg"], b["public"], b["ledger"], b["memo"], b["theme"], b["ocfg"]["law"]
-    if date.fromisoformat(as_of) >= date.fromisoformat(law["enforcement_on"]):
-        raise SystemExit("施行日を過ぎました。背景の年表とよくある質問の時制を見直してから生成してください")
+    date.fromisoformat(as_of)
+    if law.get("enforcement_confirmed_on"):
+        if date.fromisoformat(law["enforcement_confirmed_on"]) < date.fromisoformat(law["enforcement_on"]):
+            raise SystemExit("law.enforcement_confirmed_on が施行日より前です（施行後の条文を確かめた日を入れてください）")
+        if date.fromisoformat(as_of) < date.fromisoformat(law["enforcement_on"]):
+            raise SystemExit("law.enforcement_confirmed_on が入っていますが、基準日が施行日より前です")
+    check_phase_texts(cfg, ledger)
     if str(theme["updated_at"]) != public["updated_on"]:
         raise SystemExit(f"THEMES.yaml の updated_at {theme['updated_at']} と公開JSONの updated_on {public['updated_on']} が違います")
     period = f'{public["collection_period"]["start"]}〜{public["collection_period"]["end"]}'
@@ -164,7 +207,8 @@ def detail_section(index: int, with_title: bool) -> str:
 def law_dates(ocfg: dict) -> dict:
     law = ocfg["law"]
     return {"enacted": ja_date(law["enacted_on"]), "promulgated": ja_date(law["promulgated_on"]),
-            "enforcement": ja_date(law["enforcement_on"])}
+            "enforcement": ja_date(law["enforcement_on"]),
+            "confirmed": ja_date(law["enforcement_confirmed_on"]) if law.get("enforcement_confirmed_on") else ""}
 
 
 def issue_links(row: dict, labels: dict) -> str:
@@ -186,9 +230,13 @@ def body_detail(b: dict, row: dict) -> str:
 
 
 def body_timeline(b: dict, row: dict) -> str:
-    law, memo = b["ocfg"]["law"], b["memo"]
+    law, memo, ph = b["ocfg"]["law"], b["memo"], b["phase"]
+    dates = law_dates(b["ocfg"])
     events = []
     for t in b["ledger"]["timeline"]:
+        alt = row.get("phase_events", {}).get(t["id"], {}).get(ph) if ph != "before" else None
+        if alt:
+            t = {**t, "era": alt["era"], "text": alt["text"].format(**dates)}
         events.append(t)
         for ins in row.get("insert", []):
             if ins["after"] == t["id"]:
@@ -211,6 +259,8 @@ def body_faq(b: dict, row: dict) -> str:
     dates = law_dates(b["ocfg"])
     out = ['<dl class="kb-faq">']
     for item in row["items"]:
+        if b["phase"] != "before" and b["phase"] in item.get("phase", {}):
+            item = item["phase"][b["phase"]]
         out.append(f'<div><dt>{esc(item["q"])}</dt><dd>{esc(item["a"].format(**dates))}</dd></div>')
     out.append("</dl>")
     return "".join(out)
@@ -289,7 +339,8 @@ def body_method(b: dict, row: dict) -> str:
 
 
 def body_unverified(b: dict, row: dict) -> str:
-    items = [b["ledger"]["checklist"][k] for k in row["from_ledger"]] + [i["text"] for i in row["items"]]
+    items = [b["ledger"]["checklist"][k] for k in row["from_ledger"]]
+    items += [i["text"] for i in row["items"] if b["phase"] not in i.get("hide_in", [])]
     return '<ul class="kb-unverified">' + "".join(f"<li>{esc(t)}</li>" for t in items) + "</ul>"
 
 
@@ -298,6 +349,7 @@ def body_unverified(b: dict, row: dict) -> str:
 
 def render(b: dict, as_of: str, order: list[dict], labels: dict) -> str:
     check(b, as_of)
+    b = {**b, "phase": phase(b, as_of)}
     cfg, public, memo = b["cfg"], b["public"], b["memo"]
     sec = cfg["section"]
     out = ['<section class="kb" id="koshitsu-background" aria-labelledby="kb-title">',

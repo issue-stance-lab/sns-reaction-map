@@ -208,6 +208,90 @@ class LayoutTests(unittest.TestCase):
             self.assertEqual(before, (root / layout.PAGE).read_bytes())
             self.assertFalse((root / layout.SOURCE).exists())
 
+    # ---- 施行日（2026-10-24）以降の時制。施行日を過ぎても生成を止めない（止まると全テーマの公開候補生成が止まる）
+
+    def _set_json(self, path: Path, edit) -> None:
+        data = json.loads(path.read_text(encoding="utf-8"))
+        edit(data)
+        path.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
+
+    def _background(self, page: bytes) -> BeautifulSoup:
+        return BeautifulSoup(page.decode("utf-8"), "html.parser").select_one("#koshitsu-background")
+
+    def test_after_enforcement_generates_unconfirmed_text(self):
+        for as_of in ("2026-10-24", "2027-01-10"):
+            with self.subTest(as_of=as_of), tempfile.TemporaryDirectory() as temp:
+                root = self._root(temp)
+                (root / layout.CONFIG).write_text('{"enabled": true}')
+                layout.finish(root, as_of=as_of)
+                page = (root / layout.PAGE).read_bytes()
+                s = BeautifulSoup(page.decode("utf-8"), "html.parser")
+                self.assertEqual(s.select_one("#koshitsu-opening")["data-phase"], "after_unconfirmed")
+                bg = self._background(page).get_text()
+                self.assertNotIn("施行されます", bg)
+                self.assertNotIn("施行予定", bg)
+                self.assertIn("施行される予定でした", bg)
+                self.assertIn("まだ編集部で確かめていません", bg)
+                self.assertIn("施行日はいつですか", bg)
+                # 構造化データのFAQも画面と同じ時制
+                self.assertNotIn("施行されます", re.search(r'"FAQPage".*?</script>', page.decode("utf-8"), re.S).group())
+
+    def test_confirmed_date_switches_to_after_text(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = self._root(temp)
+            (root / layout.CONFIG).write_text('{"enabled": true}')
+            self._set_json(root / "configs/koshitsu-tenpakai-opening.json",
+                           lambda d: d["law"].update(enforcement_confirmed_on="2026-10-26"))
+            layout.finish(root, as_of="2026-10-30")
+            page = (root / layout.PAGE).read_bytes()
+            s = BeautifulSoup(page.decode("utf-8"), "html.parser")
+            self.assertEqual(s.select_one("#koshitsu-opening")["data-phase"], "after_confirmed")
+            bg = self._background(page).get_text()
+            self.assertIn("施行されました", bg)
+            self.assertIn("2026年10月26日に確かめています", bg)
+            self.assertNotIn("まだ編集部で確かめていません", bg)
+            self.assertNotIn("切り替わったかどうかは、まだ確かめていません", bg)
+
+    def test_confirmed_date_before_enforcement_stops(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = self._root(temp)
+            (root / layout.CONFIG).write_text('{"enabled": true}')
+            self._set_json(root / "configs/koshitsu-tenpakai-opening.json",
+                           lambda d: d["law"].update(enforcement_confirmed_on="2026-10-20"))
+            with self.assertRaisesRegex(ValueError, "enforcement_confirmed_on"):
+                layout.finish(root, as_of="2026-10-30")
+
+    def test_missing_after_text_stops_before_enforcement_date(self):
+        """施行後の文が欠けていたら、施行日より前の更新で止める（施行日当日の更新で初めて止まらないように）。"""
+        def drop(d):
+            for g in d["groups"]:
+                for row in g["rows"]:
+                    if row["kind"] == "faq":
+                        row["items"][0].pop("phase")
+        with tempfile.TemporaryDirectory() as temp:
+            root = self._root(temp)
+            (root / layout.CONFIG).write_text('{"enabled": true}')
+            self._set_json(root / "configs/koshitsu-tenpakai-background.json", drop)
+            with self.assertRaisesRegex(ValueError, "施行後"):
+                layout.finish(root, as_of=AS_OF)
+
+    def test_other_theme_candidate_run_is_not_stopped_after_enforcement(self):
+        """refresh_topic の公開候補生成（単一・複数テーマ）は as_of を渡さずに finish を呼ぶ。
+        皇室の公開JSONの更新日が施行日を過ぎていても、他テーマの候補生成を止めない。"""
+        with tempfile.TemporaryDirectory() as temp:
+            root = self._root(temp)
+            (root / layout.CONFIG).write_text('{"enabled": true}')
+            self._set_json(root / "docs/data/themes/koshitsu-tenpakai.json", lambda d: d.update(updated_on="2026-10-25"))
+            themes = (root / "THEMES.yaml").read_text(encoding="utf-8")
+            block = re.search(r"\n  koshitsu-tenpakai:\n(?:    .*\n)+", themes).group()
+            fixed = re.sub(r"(\n    updated_at: )['\"]?[0-9-]+['\"]?", r"\g<1>2026-10-25", block, count=1)
+            (root / "THEMES.yaml").write_text(themes.replace(block, fixed), encoding="utf-8")
+            targets = layout.finish(root)
+            self.assertEqual(set(targets), {layout.SOURCE, layout.PAGE})
+            self.assertIn("施行される予定でした", self._background((root / layout.PAGE).read_bytes()).get_text())
+        refresh = (ROOT / "scripts/refresh_topic.py").read_text(encoding="utf-8")
+        self.assertEqual(refresh.count("finish_koshitsu_layout(candidate_root)"), 2)
+
 
 if __name__ == "__main__":
     unittest.main()
