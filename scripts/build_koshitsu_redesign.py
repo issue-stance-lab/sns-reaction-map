@@ -10,6 +10,9 @@
   - google-adsense-account・Webフォント
   - 投票（topic_id・論点6つと立場4つの順番・choice_idx の計算・保存キーを変えない）
   - 調査条件（#caution）と PLANET_DATA（既存の公開検査が読む公開データの契約）
+  - 対話式の山なみ（PLANET_SECTION の #planet-block・PLANET_DATA・山なみのスクリプト。2026-10-11 に静的SVGから戻した）。
+    立場モード・100マス・論点の一覧・見かたをそのまま写し、新デザインで使わない部分（予想2問・一次資料クイズ・
+    資料にしかない話・編集部の横断整理・JSなし用の論点別本文）だけを外す。山を押すと読書面へ移る（planet.js）
   - 次に読むテーマ・フッター（運営者情報・訂正窓口・プライバシーポリシーへのリンク）
   - 旧アンカー（#planet-block など）は、新しい置き場所へ読み替える
 
@@ -46,7 +49,6 @@ ALIASES = {
     "koshitsu-quick-guide": "koshitsu-opening",
     "kq-result": "koshitsu-opening",
     "stance-glance": "koshitsu-opening",
-    "planet-block": "koshitsu-reading",
     "stance-map-section": "koshitsu-reading",
     "fallback": "koshitsu-reading",
     "issue-cards": "koshitsu-reading",
@@ -61,6 +63,10 @@ ALIASES = {
     "classroom-title": "bg-classroom",
     "article-trust-title": "bg-method",
 }
+# 山なみのスクリプトが要素を探すので残すが、新ページでは隠れている受け皿。旧アンカーで来たら上の読み替え先へ送る。
+HIDDEN_RECEIVERS = ("fallback", "quiz")
+# 山なみから外す部分（新デザインの読書面・冒頭が同じ役目を持つか、採用しないと決めたもの。生成AIと同じ）
+PLANET_DROP = ("section.landing-panel", "#ocean", "#editorial")
 
 
 def _block(source: str, name: str) -> str:
@@ -213,9 +219,61 @@ def _ja(iso: str) -> str:
     return f"{d.year}年{d.month}月{d.day}日"
 
 
+def _planet(source: str) -> tuple[str, str]:
+    """元HTMLの山なみ（PLANET_SECTION）を写す。返り値は（#planet-block を含む節＋PLANET_DATA＋山なみのスクリプト, PLANET_DATA）。
+
+    生成AIと著作権（build_ai_copyright_redesign.py の _planet）と同じ写し方。山なみの見た目・数字・動きは
+    元HTMLの生成器（refresh_planet_section.py 系）が作ったものをそのまま使う。ここで変えるのは、
+    新デザインで出さない部分を外すことと、調査条件を RESEARCH_CONDITIONS で囲むことだけ。
+    """
+    match = re.search(r"<!-- PLANET_SECTION_START -->(.*?)<!-- PLANET_SECTION_END -->", source, re.S)
+    if not match:
+        raise ValueError("現行ページに山なみ（PLANET_SECTION）がありません。出力は変更していません。")
+    soup = BeautifulSoup(match.group(1), "html.parser")
+    sections = soup.select("section.planet-panel")
+    contracts = soup.select("script#planet-data")
+    if len(sections) != 1 or len(contracts) != 1:
+        raise ValueError("山なみの節（section.planet-panel）か PLANET_DATA が1つではありません。")
+    section, contract = sections[0], contracts[0]
+    scripts = [s for s in soup.find_all("script", recursive=False) if s is not contract]
+    if len(scripts) != 1 or "window.PLANET_DATA" not in (scripts[0].string or ""):
+        raise ValueError("山なみのスクリプトが見つからないか、想定と違います。")
+    block = section.select_one("#planet-block")
+    for selector in ("#modes", "#section", "#panel", "#dotbox", "#waffle", "#fallback-nav", "#list", "#meta",
+                     "#caution", "#guesses", "#quiz", "#dive"):
+        if block is None or len(block.select(selector)) != 1:
+            raise ValueError(f"山なみの部品 {selector} が1つではありません。")
+    for selector in PLANET_DROP:
+        for node in block.select(selector):
+            node.decompose()
+    # 予想2問と一次資料クイズは新デザインで出さない（冒頭・論点ごとの読書面が同じ役目）。
+    # 山なみのスクリプトが中身を作るので、受け皿だけ隠して残す。
+    block.select_one("#guesses")["hidden"] = ""
+    quiz = block.select_one("#quiz")
+    quiz["hidden"] = ""
+    heading = quiz.find_previous_sibling("h3")
+    if heading is not None and "sec-live" in (heading.get("class") or []):
+        heading.decompose()
+    # JSなしの論点一覧は、新デザインの読書面（#issue-{論点ID}）へ直接つなぐ
+    for a in block.select("#fallback-nav a[href^='#fb-']"):
+        a["href"] = "#issue-" + a["href"][len("#fb-"):]
+    caution = block.select_one("#caution")
+    wrap = soup.new_tag("div", attrs={"class": "ko-research", "id": "research-conditions"})
+    caution.wrap(wrap)
+    wrap.insert_before(Comment(" RESEARCH_CONDITIONS_START "))
+    wrap.insert_after(Comment(" RESEARCH_CONDITIONS_END "))
+    section["class"] = list(section.get("class") or []) + ["ko-planet"]
+    # 山なみのスクリプトは「探ったところ」の進捗表示（#progress）にも書き込む。新デザインでは出さないので、
+    # 書き込み先だけを隠して置く（無いとスクリプトが途中で止まり、図が静的表示に戻る）。
+    progress = '<div id="progress" class="ko-planet-progress" hidden aria-hidden="true"><i id="pbar"></i><b id="pnum"></b></div>'
+    html = str(section) + "\n" + progress + "\n" + str(contract) + "\n" + str(scripts[0])
+    return html, str(contract)
+
+
 def _alias_script() -> str:
     return ("<script>(()=>{const aliases=" + json.dumps(ALIASES) + ";"
             "function resolve(){let id=decodeURIComponent(location.hash.slice(1));"
+            "if(!id)return;const cur=document.getElementById(id);if(cur&&cur.getClientRects().length)return;"
             "if(id.startsWith('fb-'))id='issue-'+id.slice(3);else if(aliases[id])id=aliases[id];else return;"
             "location.replace('#'+id);const t=document.getElementById(id);if(t&&t.tagName==='DETAILS')t.open=true;}"
             "function openRow(){const t=document.getElementById(decodeURIComponent(location.hash.slice(1)));"
@@ -233,12 +291,13 @@ def compose(source: str, root: Path, mode: str, as_of: str) -> str:
     css = "\n".join((assets / name).read_text(encoding="utf-8")
                     for name in ("opening.css", "reading.css", "production.css"))
     reading_js = (assets / "reading.js").read_text(encoding="utf-8")
+    planet_js = (assets / "planet.js").read_text(encoding="utf-8")
 
     title = _one(src, "head > title", "title").get_text()
     fonts = "\n".join(str(n) for n in src.select('link[rel="preconnect"], link[href*="fonts.googleapis.com/css2"]'))
     adsense_meta = str(_one(src, 'meta[name="google-adsense-account"]', "AdSenseアカウントのmeta"))
-    caution = _one(src, "#caution", "調査条件")
-    contract = _one(src, "#planet-data", "PLANET_DATA")
+    planet, contract_html = _planet(source)
+    contract = BeautifulSoup(contract_html, "html.parser").script
     if f'"opinions":{int(d["public"]["opinion_count"])}' not in contract.get_text().replace(" ", ""):
         raise ValueError("PLANET_DATA の意見数が公開JSONと一致しません。元HTMLの更新を先に済ませてください。")
 
@@ -263,12 +322,15 @@ def compose(source: str, root: Path, mode: str, as_of: str) -> str:
         head += [_block(source, name) for name in INTEGRATIONS]
     head.append("</head>")
 
-    research = ('<!-- RESEARCH_CONDITIONS_START --><div class="ko-research" id="research-conditions">'
-                + str(caution) + "</div><!-- RESEARCH_CONDITIONS_END -->")
     body_soup = BeautifulSoup(body, "html.parser")
-    # 調査条件は山なみの注記のすぐ下（件数の図の母数を示す位置）に置く
+    # 静的SVGの山なみと論点名リストの代わりに、元HTMLの対話式の山なみを置く（調査条件は山なみの中、図の母数の位置）
     map_box = body_soup.select_one("#koshitsu-reading .kr-map")
-    map_box.select("p.kr-fine")[0].insert_after(BeautifulSoup(research, "html.parser"))
+    for selector in (".kr-map-shell", "nav.kr-chips"):
+        node = map_box.select_one(selector)
+        if node is None:
+            raise ValueError(f"読書面の全体像に {selector} がありません")
+        node.decompose()
+    map_box.select("p.kr-fine")[0].insert_after(BeautifulSoup(planet, "html.parser"))
     # 背景の「公開日・最終更新日」を機械可読な日付にする（検索エンジン向け。表示は変えない）
     for row in body_soup.select("#bg-method .kb-facts > div"):
         key = row.dt.get_text()
@@ -311,8 +373,8 @@ def compose(source: str, root: Path, mode: str, as_of: str) -> str:
     page += body_html[:background_at] + _vote_section(src, source) + "\n" + body_html[background_at:]
     page += _related(src) + "\n</main>\n"
     page += str(_one(src, "body > footer", "フッター")) + "\n"
-    page += str(contract) + "\n"
     page += "<script>" + reading_js + "</script>\n"
+    page += "<script>" + planet_js + "</script>\n"
     page += x_script + "\n" + _phase_script(ocfg) + "\n" + _alias_script() + "\n"
     page += '<script src="share-x-btn.js"></script>\n</body>\n</html>\n'
     return page

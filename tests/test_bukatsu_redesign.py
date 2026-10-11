@@ -108,6 +108,78 @@ class RedesignTests(unittest.TestCase):
         for a in full.select('a[href^="#"]'):self.assertIn(a['href'][1:],ids)
         self.assertIn(READ_PAGE,str(self.s.select_one('noscript')))
 
+    def test_planet_is_copied_from_source(self):
+        """「意見の全体像」は、元HTMLの対話式の山なみ（PLANET_SECTION）をそのまま写す（2026-10-11 に app.js の図から戻した）。"""
+        page=str(self.release)
+        src=BeautifulSoup(re.search(r"<!-- PLANET_SECTION_START -->(.*?)<!-- PLANET_SECTION_END -->",self.source,re.S).group(1),"html.parser")
+        # 山なみのスクリプト・見た目・PLANET_DATA は1文字も変えない
+        src_script=[x for x in src.find_all("script",recursive=False) if x.get("id")!="planet-data"][0].string
+        for text in (self.page,(self.out/"release"/PAGE).read_text()):
+            self.assertEqual(text.count(src_script),1)
+            self.assertEqual(text.count(src.select_one("section.planet-panel > style").string),1)
+            self.assertEqual(text.count("window.PLANET_DATA="),1)
+        # 山なみは #map の中。app.js が描いていた図・論点ボタン・立場の切り替え・読み方は無い
+        planet=self.release.select_one("#map section.planet-panel #planet-block")
+        self.assertIsNotNone(planet)
+        self.assertEqual(self.release.select("#mountains,#mobile-issues,#map-filters,#map-explain,#global-stances,.map-shell,.overview"),[])
+        for sel in ("#modes",".stage","#dotbox","#list","#meta",".floor-note",".hint"):
+            self.assertEqual(str(planet.select_one(sel)),str(src.select_one("#planet-block "+sel)),sel)
+        # JSなしの論点一覧は読書面の各論点（#issue-{論点ID}）へ
+        data=json.loads(self.release.select_one("#public-data").get_text())
+        hrefs=[a["href"] for a in planet.select("#fallback-nav a")]
+        self.assertEqual(sorted(hrefs),sorted("#issue-"+i["id"] for i in data["issues"]))
+        for href in hrefs:
+            self.assertIsNotNone(self.release.find(id=href[1:]),href)
+        # 新デザインで出さない部分は外し、予想・クイズ・進捗は受け皿だけ
+        self.assertEqual(planet.select("section.landing-panel, #ocean, #editorial"),[])
+        for receiver in ("#guesses","#quiz"):
+            node=planet.select_one(receiver)
+            self.assertTrue(node.has_attr("hidden") and not node.get_text(strip=True),receiver)
+        self.assertTrue(self.release.select_one("#progress").has_attr("hidden"))
+        # 調査条件は山なみの中で RESEARCH_CONDITIONS に囲まれている
+        self.assertEqual(len(self.release.select("#caution")),1)
+        self.assertIsNotNone(planet.select_one("#research-conditions > #caution"))
+        block=page[page.index("<!-- RESEARCH_CONDITIONS_START -->"):page.index("<!-- RESEARCH_CONDITIONS_END -->")]
+        self.assertIn('id="caution"',block)
+        # 論点IDは PLANET_DATA・公開データ・読書面で同じ。読み込み時のURLを山なみより先に控え、橋渡しは app.js の後
+        contract=json.loads(re.search(r"window\.PLANET_DATA=(\{.*?\});?</script>",page,re.S).group(1))
+        self.assertEqual([i["id"] for i in contract["issues"]],[i["id"] for i in data["issues"]])
+        for issue in data["issues"]:
+            self.assertIsNotNone(self.release.select_one(f'section.issue-panel#{issue["id"]}'),issue["id"])
+        self.assertLess(page.index("window.BUKATSU_LOAD_HASH"),page.index(src_script))
+        self.assertLess(page.index("window.BukatsuReading"),page.index("function goReading"))
+        self.assertIsNotNone(self.release.select_one("style#bukatsu-planet-style"))
+        for name in ("bukatsu-connected.js","bukatsu-connected-page.js","bukatsu-connected.css"):
+            self.assertNotIn(f'="{name}',page)
+        self.assertNotIn('"planet-block"',page[page.rindex("const aliases="):])
+        # 全文・印刷版では山なみ（スクリプトが要る）を外し、調査条件だけ残す
+        from scripts.bukatsu_redesign_readable import READ_PAGE
+        full=BeautifulSoup((self.out/READ_PAGE).read_text(),"html.parser")
+        self.assertFalse(full.select("section.planet-panel,#planet-block,#progress"))
+        self.assertEqual(len(full.select("#research-conditions #caution")),1)
+
+    def test_planet_follows_source_updates(self):
+        """定期更新で元HTMLの山なみが変われば、新ページにもそのまま載る。部品が欠けたら止まる。"""
+        changed=self.source.replace("このページの見かた","このページの見かた（更新確認）",1)
+        self.assertNotEqual(changed,self.source)
+        page=finalize(self._markup(),changed,"release")
+        self.assertIn("このページの見かた（更新確認）",page)
+        broken=re.sub(r'<div class="dotbox" id="dotbox".*?<div class="waffle" id="waffle"></div>',"",self.source,count=1,flags=re.S)
+        self.assertNotEqual(broken,self.source)
+        with self.assertRaisesRegex(ValueError,"山なみの部品"):
+            finalize(self._markup(),broken,"release")
+
+    def _markup(self):
+        import os,shutil,subprocess,sys
+        if not hasattr(type(self),"_raw"):
+            with tempfile.TemporaryDirectory() as temp:
+                stage=Path(temp);shutil.copytree(RESOURCES,stage/".build",ignore=shutil.ignore_patterns("__pycache__"))
+                (stage/"evidence").mkdir()
+                env=dict(os.environ,BUKATSU_BUILD_ROOT=str(stage),BUKATSU_REPO_ROOT=str(ROOT))
+                subprocess.run([sys.executable,str(stage/".build/build.py"),"--source-page",str(self.source_path)],check=True,env=env,cwd=ROOT,capture_output=True)
+                type(self)._raw=(stage/"index.html").read_text()
+        return self._raw
+
     def test_changed_editorial_stops_without_overwrite(self):
         before=(self.out/PAGE).read_bytes()
         with patch("scripts.build_bukatsu_redesign.fingerprint",return_value="changed"):

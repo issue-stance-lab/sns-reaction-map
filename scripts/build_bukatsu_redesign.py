@@ -30,6 +30,64 @@ EDITORIAL_SELECTORS = (
     ".classroom-section", "#bukatsu-background", "#detail-data",
     ".sources-pane", ".post-link",
 )
+# 「意見の全体像」の山なみは、元HTMLの対話式の山なみ（PLANET_SECTION）をそのまま写す（2026-10-11 に静的SVGから戻した。
+# 生成AIと著作権 build_ai_copyright_redesign.py の _planet と同じ写し方）。外す部分も同じ。
+PLANET_DROP = ("section.landing-panel", "#ocean", "#editorial")
+# 新デザインの #map にあった山なみ（app.js が描く図・論点ボタン・立場の切り替え・読み方）。対話式の山なみに置き換える。
+MAP_REPLACED = (".overview", ".map-top", ".map-shell", ".map-caption", "#mobile-issues", "#map-explain", "details.map-tools")
+
+
+def planet_section(source):
+    """元HTMLの山なみ（PLANET_SECTION）を写す。返り値は（#planet-block を含む節＋PLANET_DATA＋山なみのスクリプト）。
+
+    山なみの見た目・数字・動きは元HTMLの生成器（refresh_planet_section.py 系）が作ったものをそのまま使う。
+    ここで変えるのは、新デザインで出さない部分を外すことと、調査条件を RESEARCH_CONDITIONS で囲むことだけ。
+    """
+    match = re.search(r"<!-- PLANET_SECTION_START -->(.*?)<!-- PLANET_SECTION_END -->", source, re.S)
+    if not match:
+        raise ValueError("現行ページに山なみ（PLANET_SECTION）がありません。出力は変更していません。")
+    soup = BeautifulSoup(match.group(1), "html.parser")
+    sections = soup.select("section.planet-panel")
+    contracts = soup.select("script#planet-data")
+    if len(sections) != 1 or len(contracts) != 1:
+        raise ValueError("山なみの節（section.planet-panel）か PLANET_DATA が1つではありません。")
+    section, contract = sections[0], contracts[0]
+    scripts = [s for s in soup.find_all("script", recursive=False) if s is not contract]
+    if len(scripts) != 1 or "window.PLANET_DATA" not in (scripts[0].string or ""):
+        raise ValueError("山なみのスクリプトが見つからないか、想定と違います。")
+    block = section.select_one("#planet-block")
+    for selector in ("#modes", "#section", "#panel", "#dotbox", "#waffle", "#fallback-nav", "#list", "#meta",
+                     "#caution", "#guesses", "#quiz", "#dive"):
+        if block is None or len(block.select(selector)) != 1:
+            raise ValueError(f"山なみの部品 {selector} が1つではありません。")
+    for selector in PLANET_DROP:
+        for node in block.select(selector):
+            node.decompose()
+    # 予想2問と一次資料クイズは新デザインで出さない。山なみのスクリプトが中身を作るので、受け皿だけ隠して残す。
+    block.select_one("#guesses")["hidden"] = ""
+    quiz = block.select_one("#quiz")
+    quiz["hidden"] = ""
+    heading = quiz.find_previous_sibling("h3")
+    if heading is not None and "sec-live" in (heading.get("class") or []):
+        heading.decompose()
+    # JSなしの論点一覧は、新デザインの読書面（#issue-{論点ID}）へ直接つなぐ
+    for a in block.select("#fallback-nav a[href^='#fb-']"):
+        a["href"] = "#issue-" + a["href"][len("#fb-"):]
+    caution = block.select_one("#caution")
+    wrap = soup.new_tag("div", attrs={"class": "bk-research", "id": "research-conditions"})
+    caution.wrap(wrap)
+    wrap.insert_before(Comment(" RESEARCH_CONDITIONS_START "))
+    wrap.insert_after(Comment(" RESEARCH_CONDITIONS_END "))
+    section["class"] = list(section.get("class") or []) + ["bk-planet"]
+    # 山なみのスクリプトは「探ったところ」の進捗表示（#progress）にも書き込む。新デザインでは出さないので、
+    # 書き込み先だけを隠して置く（無いとスクリプトが途中で止まり、図が静的表示に戻る）。
+    progress = '<div id="progress" class="bk-planet-progress" hidden aria-hidden="true"><i id="pbar"></i><b id="pnum"></b></div>'
+    # 山なみは URL が空だと件数1位の論点を自動で選び、URL を素の論点IDにする。部活動では読書面の欄が同じIDなので、
+    # ブラウザが読み込み直後にその欄へ飛んでしまう。読み込み時の URL を控え、空なら仮に #map を置いて自動の選択を止め、
+    # planet.js が画面を動かさずに同じ選択をやり直す。
+    load_hash = ("<script>window.BUKATSU_LOAD_HASH=location.hash;"
+                 "if(!location.hash)history.replaceState(null,'',location.pathname+location.search+'#map');</script>")
+    return load_hash + "\n" + str(section) + "\n" + progress + "\n" + str(contract) + "\n" + str(scripts[0])
 
 def fingerprint(source, root=ROOT):
     soup = BeautifulSoup(source, "html.parser")
@@ -37,7 +95,7 @@ def fingerprint(source, root=ROOT):
     parts += [(root / path).read_text() for path in REVIEW_INPUTS]
     return hashlib.sha256("\n".join(parts).encode()).hexdigest()
 
-def finalize(markup, source, mode):
+def finalize(markup, source, mode, resources=RESOURCES):
     s = BeautifulSoup(markup, "html.parser")
     src = BeautifulSoup(source, "html.parser")
     # The prototype had two descriptions; retain the canonical source metadata only.
@@ -71,21 +129,20 @@ def finalize(markup, source, mode):
             node["class"] = node.get("class", []) + ["redesign-coverage"]
     # Preserve the public data contract used by the existing publication validators.
     # It contains aggregate/verified public information only, copied from the public source.
-    contract = src.select_one("#planet-data")
-    if contract is None:
-        raise ValueError("Missing verified PLANET_DATA")
-    s.body.append(BeautifulSoup(str(contract), "html.parser"))
-    caution = src.select_one("#caution")
-    if caution is None:
-        raise ValueError("Missing research conditions")
+    # The interactive planet (with PLANET_DATA and the research conditions) replaces the static map.
+    planet = planet_section(source)
     map_section = s.select_one("#map")
     map_section.insert_before(Comment(" PLANET_SECTION_START "))
-    overview = map_section.select_one(".overview")
-    conditions = BeautifulSoup(str(caution), "html.parser")
-    overview.insert_before(Comment(" RESEARCH_CONDITIONS_START "))
-    overview.insert_before(conditions)
-    overview.insert_before(Comment(" RESEARCH_CONDITIONS_END "))
+    for selector in MAP_REPLACED:
+        nodes = map_section.select(selector)
+        if len(nodes) != 1:
+            raise ValueError(f"全体像の {selector} が1つではありません。")
+        nodes[0].decompose()
+    map_section.select_one(".map-intro").insert_after(BeautifulSoup(planet, "html.parser"))
     s.select_one("#reading").insert_after(Comment(" PLANET_SECTION_END "))
+    style = s.new_tag("style", id="bukatsu-planet-style")
+    style.string = (Path(resources) / "planet.css").read_text()
+    s.head.append(style)
     # Same public config and client as the existing site; activate only at its canonical host.
     store = s.select_one('script[src="assets/vote-store.js"]')
     store["src"] = "vote-store.js"
@@ -114,7 +171,7 @@ def finalize(markup, source, mode):
         link=s.new_tag('a',href='bukatsu-chiiki-full.html');link.string='全文・印刷版を開く'
         fallback.append(note);fallback.append(link)
     # Keep historical links working without restoring the removed UI flow.
-    aliases = {"planet-block": "map", "stance-map-section": "map", "issue-cards": "reading",
+    aliases = {"stance-map-section": "map", "issue-cards": "reading",
                "classroom-title": "classroom", "detail-data": "method",
                "bukatsu-background": "background", "editorial": "editorial-notes",
                "ocean": "source-only", "bukatsu-chiiki-audit": "reading"}
@@ -126,6 +183,10 @@ def finalize(markup, source, mode):
 function resolve(){const target=aliases[location.hash.slice(1)];if(target)location.replace('#'+target);}
 addEventListener('hashchange',resolve);resolve();})();"""
     s.body.append(alias_script)
+    # 山を押すと読書面へ移る橋渡し（app.js の window.BukatsuReading を使うので、その後に置く）
+    planet_js = s.new_tag("script")
+    planet_js.string = (Path(resources) / "planet.js").read_text()
+    s.body.append(planet_js)
     # Keep site-wide contracts while using the new layout's own components.
     for a in s.select('a[href]'):
         if a['href'].startswith('https://sns-reaction-map.jp/'):
@@ -177,7 +238,7 @@ def build(source_page, output_dir, mode="preview", root=ROOT):
         env = dict(os.environ, BUKATSU_BUILD_ROOT=str(stage), BUKATSU_REPO_ROOT=str(root))
         subprocess.run([sys.executable, str(stage / ".build/build.py"),
                         "--source-page", str(source_page)], check=True, env=env, cwd=root)
-        page = finalize((stage / "index.html").read_text(), source, mode)
+        page = finalize((stage / "index.html").read_text(), source, mode, resources)
         (stage / PAGE).write_text(page)
         from scripts.bukatsu_redesign_readable import READ_PAGE, readable
         (stage / READ_PAGE).write_text(readable(page, PAGE))
