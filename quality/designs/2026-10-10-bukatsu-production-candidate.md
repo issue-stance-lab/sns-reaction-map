@@ -60,3 +60,55 @@ python3 scripts/build_bukatsu_redesign.py --mode release --output-dir /tmp/bukat
 - 代替出典: https://www.mhlw.go.jp/content/11201250/001687973.pdf#page=4
 - X個別投稿の公開状態やログイン制限は一括検査の対象外。元投稿リンクは保持し、通常版は最大2件の埋め込みを維持。
 - 今回追加した案内文のよみやす検査は98/100、warn0。通常生成の再実行は差分なし。公開サイトには未反映。
+
+## 山なみを対話式に戻す（2026-10-11）
+
+ブランチ `task/planet-three-themes`。生成AIと著作権（`2026-10-11-ai-copyright-production-candidate.md` 10節）と同じ型で、
+「意見の全体像」（`#map`）の app.js が描く山なみ・論点ボタン・立場の切り替え・読み方を、元HTMLの対話式の山なみに置き換えた。
+冒頭・論点ごとの読書面・背景の開閉行・保護対象の継承は変えていない。
+
+### 変えたファイル
+
+| ファイル | 変更 |
+|---|---|
+| `scripts/build_bukatsu_redesign.py` | `planet_section()` を追加（生成AIと同じ写し方。部品12個が1つずつ無ければ止まる）。`#map` の `.overview`・`.map-top`・`.map-shell`・`.map-caption`・`#mobile-issues`・`#map-explain`・`details.map-tools`（`MAP_REPLACED`、1つずつ無ければ止まる）を外し、見出し（`.map-intro`）の下に山なみを置く。調査条件は山なみの中で `RESEARCH_CONDITIONS` に囲む（`div.bk-research`）。PLANET_DATA は山なみの直後の1つだけ（末尾の写しはやめた）。旧アンカー `planet-block` の読み替えを外した。`planet.css` を `<style id="bukatsu-planet-style">`、`planet.js` を本文の最後に入れる |
+| `scripts/bukatsu_redesign/planet.js`（新規） | 生成AIの planet.js の写しに、部活動だけの事情（下）への対処を足したもの |
+| `scripts/bukatsu_redesign/planet.css`（新規） | 山なみの配色と並べ方（`.bk-planet`）。生成AIの写しで、色はこのページの基調色（`--deep` は共通ヘッダーに合わせた青 `#0758d9`、`--pale` `#edf5ff`）。立場モード5つは PC で5列 |
+| `scripts/bukatsu_redesign/app.js` | 図の部品が無ければ描かない（`#mountains` などを探して止まらないように）。`window.BukatsuReading.select(id, scroll)` を公開。読み込み時の URL が空なら読書面へ飛ばない。同じ URL の2回目の通知と、山なみが静かに書いた URL（`BUKATSU_PLANET_QUIET`）では画面を動かさない |
+| `scripts/bukatsu_redesign_readable.py` | 全文・印刷版では山なみ（スクリプトが要る）と山なみの CSS を外し、調査条件だけ同じ位置に残す |
+| `tests/test_bukatsu_redesign.py` | `test_planet_is_copied_from_source`・`test_planet_follows_source_updates` を追加 |
+| `docs/bukatsu-chiiki-reaction-map.html`・`docs/bukatsu-chiiki-full.html` | 作り直し |
+
+### 部活動だけの違いと対処
+
+- **読書面の欄が素の論点ID（`#bukatsu-chiiki-…`）を持つ**。山なみは論点を選ぶと URL を素の論点IDにするので、そのままだとブラウザがその欄へ飛ぶ
+  （読み込み直後に読書面まで落ちる・論点ボタンを押しただけで読書面へ飛ぶ）。planet.js は山なみが URL を書く間だけ欄の ID を外し、
+  app.js には画面を動かさないよう伝える。読み込み時に URL が空なら、山なみより前の小さなスクリプトが仮に `#map` を置いて山なみ自身の自動の選択を止め、
+  planet.js が画面を動かさずに件数1位の論点（教員の働き方）を選び直す（URL は生成AIと同じく論点IDになる）。
+- **読書面にも論点の切り替え（論点タブ・「次の論点」・比較表の「理由を読む」）がある**。押したら山なみもその論点に合わせる。そのとき山なみが選択パネルの見出しへ
+  フォーカスを移すので、押した人のフォーカスと読書面の見えている位置は戻す。
+- **山を押したときの移動先**は読書面の先頭（論点タブの上、`#reading`）で、見出し `#heading-{番号}` にフォーカス（app.js の「理由を読む」と同じ）。URL は部活動の読書面の形（素の論点ID）。
+- **選択パネルの小パネル**：部活動の山なみだけに「この論点の中身（編集部が本文を読んで分けたもの）」の見出しと島の一覧がある。島の一覧は生成AIと同じく隠し（旧い理由区分の名前）、空の見出しも CSS で隠した。
+- 立場モード5つ（すべて＋4立場）、論点ボタン7つ。論点IDは PLANET_DATA・公開データ（`#public-data`）・読書面（`section.issue-panel`）で同じ7つ（`scripts/bukatsu_taxonomy.py`）。変換表は要らない。
+- 旧ページの連動表示（`bukatsu-connected.*`）は読み込まない。
+- 外した `.overview`（総件数と立場の割合）は、山なみの立場モード（件数と割合）と調査条件が同じ数字を出す。
+
+### 検査結果
+
+| 検査（3テーマまとめて、作業ツリー） | 結果 |
+|---|---|
+| `verify_theme_page.py`（全テーマ） | 10テーマ NG 0 |
+| `verify_number_provenance.py` | 部活動 533/533・皇室 282/282・副首都 293/293 説明済み、全テーマで終了0 |
+| `verify_builder_rebuildability.py` | 10テーマ NG 0 |
+| `run_public_checks.py` | 終了0 |
+| `python3 -m unittest discover tests` | 1,839件 OK（skip 8） |
+| よみやす（docs の新ページ、`--strict`） | 皇室 info 11件・副首都 info 17件で PASS、部活動 warn 27件・info 3件（どれも変更前と同数。部活動の warn は資料名などの長い文で、前から「要修正」のまま） |
+| 10/19 の模擬（新規0件、使い捨てコピー） | 皇室・副首都を新規0件の回として `adapter.build` → `prepare_public_candidate_bundle_multi`（完了記録の検査だけ外した。保存回の report を代用）。公開対象67件。候補の3ページとも山なみ（`#planet-block`）・PLANET_DATA（1つ）・planet.js 入り、皇室・副首都は基準日 2026-10-19。候補の中で `verify_theme_page.py` 全テーマ NG 0、数字の出所 3テーマ NG 0、よみやすは上と同数、Playwright でもコンソールエラー0・山を押すと読書面へ |
+| 2回生成 | md5 一致（公開ページ `e8bd450c…`、全文・印刷版 `e2be8479…`、`PYTHONHASHSEED=7` でも同じ、docs とも一致）。`build_bukatsu_arena.py` →「UPDATE」→ `--check`「OK」 |
+| Playwright（docs、1280/375px、x.com・platform.twitter.com・twimg.com 遮断） | コンソールエラー0、scrollWidth 一致。読み込み直後は画面が動かない（scrollY 0）。立場「移行支持」（530件・33.6%）で100マスと件数が変わる。山（制度・移行）を押すと読書面がその論点に切り替わり、見出し `#heading-1` にフォーカス・URL `#bukatsu-chiiki-seido`。Enter でも同じ。論点ボタンは地図の中で切り替わり（読書面へ飛ばない）、読書面も合わせて切り替わる。読書面の論点タブ・比較表の「理由を読む」・冒頭の「費用の資料と意見を読む」・戻る操作で、山なみも同じ論点に。`#…` 付きの読み込みは読書面のその論点（欄の上端が画面上131〜155px）。画像は `quality/prototypes/bukatsu-chiiki-release/evidence/planet-restore/` |
+
+### 確認していないこと
+
+- 実機（iPhone Safari など）とスクリーンリーダー。
+- 部活動を「新規0件の回」として更新した場合の模擬は、変更前から `refresh_inputs.py` の「集計と推移の最終日が一致しません」で止まる（変更前のコードでも同じ止まり方を確認。今回の変更とは無関係）。模擬では部活動は更新しない側として、候補の中で作り直したページに山なみが残ることだけを確かめた。
+- 新規の意見がある回の定期更新。

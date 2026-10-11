@@ -621,6 +621,9 @@ collect_at を迎えたテーマにデータを追加した後、以下を順番
     （立場は、それより前の回を同じAIで判定し直したため、切替の影響を受けない）
   - 論点の「その他」は割合から外す。立場・論点の並びは `scripts/bukatsu_taxonomy.py`（`inject_tide_widget.THEMES` には無いテーマ）。
     ラベルを変えるときは `TREND_THEMES.short_labels` も合わせて直す
+  - **新デザインの「意見の全体像」（2026-10-11〜）**: 元HTMLの対話式の山なみ（`PLANET_SECTION`）を `build_bukatsu_redesign.py` が毎回そのまま写す
+    （app.js が描いていた図の代わり）。手で直す所は無い。山を押すと読書面へ移る橋渡しは `scripts/bukatsu_redesign/planet.js`、見た目は同じ場所の `planet.css`
+    （設計記録 `quality/designs/2026-10-10-bukatsu-production-candidate.md` の「山なみを対話式に戻す」）
 
 - [ ] 生成AIと著作権だけ: **潮目カードは出さない**（2026-10-08に外した。`ai-copyright-tide-widget` が戻ると数字検査が止める）。
   外枠（`<section class="update-dashboard">`）の中の「意見の推移」（立場・論点の2タブ。理由タブと年表の縦線は無い）と、
