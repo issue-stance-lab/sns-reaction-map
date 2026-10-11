@@ -74,3 +74,7 @@
 - 理由データの＊判定は旧形式ファイルのキー名に依存。新形式 `data/verification/reread/ai-copyright.json` へ移れば読み方を変える必要がある。
 - 実際の公開ページ（共通ヘッダー・AdSense・GA4込み）に部品を入れた見え方、キーボード操作、OGP・題名タグ（`configs/theme-seo.json`）との整合は未確認。
 - 部活動・消費税の参照試作のフォント（Noto Serif JP）は読み込んでおらず、端末のフォントで撮影した。
+
+## 2026-10-11 一次資料との照合（Haiku 8本＋司令塔の再確認）
+
+照合表: [quality/reviews/2026-10-11-ai-copyright-opening-source-check.md](../reviews/2026-10-11-ai-copyright-opening-source-check.md)。不一致なし。文化庁PDFの該当ページは冒頭作成時にOpusが当日確認済み。30条の4の条文は未確認のまま。
