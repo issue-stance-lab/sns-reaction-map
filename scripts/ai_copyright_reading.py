@@ -3,9 +3,10 @@
 
 副首都（scripts/fukushuto_reading.py）・皇室典範改正と同じ型。テーマごとに違うのは設定JSONと次の点。
 - 立場は「規制・制限強化支持／中立・情報／推進・活用支持」の3つを帯で出す。
-- 理由区分ごとの立場の内訳と代表投稿の立場は、非公開の正典（canonical_json）から tweet_id で引く。
-  再読データの明細の stance は読み直した時点の値で、2026-10-07 の判定し直しの後は公開JSONと11件ずれるため。
-  正典の立場を数えた結果が公開JSONの立場と一致しなければ止まる。投稿本文は使わない。
+- 理由区分ごとの立場の内訳と代表投稿の立場は、再読データの明細の stance から数える（副首都と同じ）。
+  2026-10-07 の判定し直しで11件が公開JSONとずれていたため、2026-10-11 に正典の立場へ一度だけ合わせた
+  （再読データの stance_resync_2026_10_11）。明細の立場を数えた結果が公開JSONの立場と一致しなければ止まる。
+  非公開の正典は読まない。GitHub の自動検査でも同じ生成・検査が動く。
 - 立場が違っても共通する心配（公開JSON ocean_layer.veins）を一次資料との照合の欄に出す。
 - 手書きの文言に「違法」「合法」を使わない（冒頭と同じ検査）。
 
@@ -15,7 +16,6 @@
 - docs/data/themes/ai-copyright.json       : 件数・論点・立場・強い表現・主張の照合・資料にしかない話・共通する心配（公開JSON）
 - configs/planet/ai-copyright.yaml         : 立場の色と順序、理由区分のある論点（sub_issues）と再読データのキー
 - data/ai-copyright_issues-reread.json     : 理由区分（5論点。明細の bucket を数え直す）
-- social-samples/ai-copyright_hermes_classified.json : 正典（非公開。main_issue・stance・選定基準の検査だけ）
 - data/verification/ai-copyright-claims.json : 主張ごとの該当投稿（件数の照合だけに使う）
 - data/verification/ai-copyright-background.json : 制度の確認4項目
 - quality/research/ai-copyright-primary-sources.md : 一次資料メモ（資料の確認日）
@@ -81,7 +81,7 @@ def read_json(rel: str):
 
 
 def norm_text(t: str) -> str:
-    """同じ文面かどうかを見るための正規化（収集時の強調の目印と空白を除く）。"""
+    """同じ文面かどうかを見るための正規化（収集時の強調の目印と空白を除く。投稿の選び直しのときの検査用）。"""
     return re.sub(r"\s+", "", t.replace("\tSTART\t", "").replace("\tEND\t", "").replace("START", "").replace("END", ""))
 
 
@@ -127,23 +127,6 @@ class Memo:
 # ---------------------------------------------------------------- データと照合
 
 
-def load_canon(rel: str) -> dict:
-    path = ROOT / rel
-    if not path.is_file():
-        raise SystemExit(f"非公開の正典 {rel} がありません（理由区分ごとの立場と代表投稿の検査に使うため、正典のある作業ツリーで生成してください）")
-    rows = json.loads(path.read_text(encoding="utf-8"))
-    texts = Counter(norm_text(r["text"]) for r in rows)
-    canon = {}
-    for r in rows:
-        c = r["classification"]
-        canon[r["tweet_id"]] = {
-            "url": r["url"], "is_opinion": bool(c.get("is_opinion")), "main_issue": c.get("main_issue"),
-            "stance": c.get("stance"), "article_usable": c.get("article_usable"), "risk": c.get("risk"),
-            "same_text": texts[norm_text(r["text"])],
-        }
-    return canon
-
-
 def load(config_path: Path = CONFIG) -> dict:
     cfg = json.loads(config_path.read_text(encoding="utf-8"))
     data = opening.load_inputs(ROOT / cfg["opening_config"])
@@ -170,7 +153,6 @@ def load(config_path: Path = CONFIG) -> dict:
         "public": public,
         "planet": planet,
         "reread": reread,
-        "canon": load_canon(cfg["canonical_json"]),
         "claim_posts": read_json(cfg["claim_posts_json"]),
         "background": read_json(cfg["background_json"]),
         "memo": Memo(ROOT / cfg["primary_memo"]),
@@ -187,15 +169,21 @@ def stance_order(d: dict) -> list[dict]:
     return list(d["planet"]["stances"])
 
 
-def item_stance(d: dict, tweet_id: str) -> str:
-    """理由区分の明細の立場は、正典の今の分類から引く（planet 設定の id で返す）。"""
-    key = d["canon"][tweet_id]["stance"]
+def stance_id(d: dict, key: str) -> str:
+    """再読データの明細の立場（分類名）を planet 設定の id に直す。"""
     return {s["key"]: s["id"] for s in stance_order(d)}.get(key, key)
+
+
+def post_stance(d: dict, issue: dict, post: dict) -> str | None:
+    """代表投稿の立場。再読データのある論点は明細の立場、無い論点は設定の stance_id。"""
+    rr = d["reread"].get(issue["label"])
+    rec = post_record(rr, post["id"]) if rr else None
+    return stance_id(d, rec["stance"]) if rec else post.get("stance_id")
 
 
 def check_all(d: dict) -> None:
     """表示する数が公開JSONとずれていたら止める。"""
-    public, cfg, canon = d["public"], d["cfg"], d["canon"]
+    public, cfg = d["public"], d["cfg"]
     opinion = int(public["opinion_count"])
     issues = public["issues"]
     ids = {i["id"] for i in issues}
@@ -210,8 +198,6 @@ def check_all(d: dict) -> None:
         raise SystemExit("公開JSONに推移データが入りました。読書面の推移表示を作ってから生成してください")
     if set(d["reread"]) - labels:
         raise SystemExit(f"理由区分のある論点に、公開JSONに無い論点があります: {set(d['reread']) - labels}")
-    if sum(1 for c in canon.values() if c["is_opinion"]) != opinion:
-        raise SystemExit("正典の意見数が公開JSONの意見数と一致しません（正典と公開JSONの更新がずれています）")
     for issue in issues:
         n = int(issue["count"])
         if sorted(s["id"] for s in issue["stances"]) != sorted(stance_ids):
@@ -237,12 +223,14 @@ def check_all(d: dict) -> None:
         if set(tally) - set(buckets):
             raise SystemExit(f"{issue['id']}: 明細に区分の定義が無い bucket があります")
         for i in items:
-            c = canon.get(i["tweet_id"])
-            if c is None or not c["is_opinion"] or c["main_issue"] != issue["label"]:
-                raise SystemExit(f"{issue['id']}: 再読データの投稿 {i['tweet_id']} が、正典ではこの論点の意見になっていません")
-        st = Counter(item_stance(d, i["tweet_id"]) for i in items)
+            if i.get("main_issue") != issue["label"]:
+                raise SystemExit(f"{issue['id']}: 再読データの投稿 {i['tweet_id']} の論点が {i.get('main_issue')} になっています")
+        st = Counter(stance_id(d, i["stance"]) for i in items)
+        if set(st) - set(stance_ids):
+            raise SystemExit(f"{issue['id']}: 再読データの明細に planet 設定に無い立場があります: {set(st) - set(stance_ids)}")
         if {s["id"]: int(s["count"]) for s in issue["stances"]} != {sid: st.get(sid, 0) for sid in stance_ids}:
-            raise SystemExit(f"{issue['id']}: 理由区分の明細を正典の立場で数えた内訳が、公開JSONの立場と一致しません")
+            raise SystemExit(f"{issue['id']}: 再読データの明細の立場の内訳が公開JSONと一致しません"
+                             "（判定し直しの後は明細の stance を正典に合わせてください。DATA_REFRESH.md）")
     cv = public["claim_verification"]
     per_claim = Counter(p["claim"] for p in d["claim_posts"])
     for c in cv["claims"]:
@@ -267,7 +255,6 @@ def check_all(d: dict) -> None:
         raise SystemExit(f"設定の論点と公開JSONの論点が一致しません: {set(cfg['issues']) ^ ids}")
     memo = d["memo"]
     checklist = d["background"]["checklist"]["items"]
-    labels_by_id = {i["id"]: i["label"] for i in issues}
     for iid, icfg in cfg["issues"].items():
         issue = next(i for i in issues if i["id"] == iid)
         rr = d["reread"].get(issue["label"])
@@ -301,23 +288,14 @@ def check_all(d: dict) -> None:
             m = POST_URL.match(p["url"])
             if not m or m.group(1) != p["id"]:
                 raise SystemExit(f"{iid}: 投稿IDとURLが一致しません: {p['id']}")
-            c = canon.get(p["id"])
-            if c is None:
-                raise SystemExit(f"{iid}: 投稿 {p['id']} が正典にありません")
-            if c["url"] != p["url"]:
-                raise SystemExit(f"{iid}: 投稿 {p['id']} のURLが正典と違います")
-            if not c["is_opinion"] or c["main_issue"] != labels_by_id[iid]:
-                raise SystemExit(f"{iid}: 投稿 {p['id']} は正典でこの論点の意見になっていません")
-            if c["article_usable"] is not True or c["risk"] != "low":
-                raise SystemExit(f"{iid}: 投稿 {p['id']} は正典で article_usable=true・risk=low ではありません")
-            if c["same_text"] != 1:
-                raise SystemExit(f"{iid}: 投稿 {p['id']} と同じ文面が正典に {c['same_text']} 件あります")
             if rr is not None and post_record(rr, p["id"]) is None:
                 raise SystemExit(f"{iid}: 投稿 {p['id']} は再読データでこの論点に入っていません")
             if rr is None and not p.get("stance_id"):
                 raise SystemExit(f"{iid}: 再読データの無い論点の投稿 {p['id']} には stance_id（正典の立場）が要ります")
-            if p.get("stance_id") and p["stance_id"] != item_stance(d, p["id"]):
-                raise SystemExit(f"{iid}: 投稿 {p['id']} の stance_id が正典の立場と違います")
+            if p.get("stance_id") and p["stance_id"] not in stance_ids:
+                raise SystemExit(f"{iid}: 投稿 {p['id']} の stance_id が planet 設定にありません")
+            if rr is not None and p.get("stance_id") and p["stance_id"] != post_stance(d, issue, {"id": p["id"]}):
+                raise SystemExit(f"{iid}: 投稿 {p['id']} の stance_id が再読データの立場と違います")
     # 他の論点の投稿を使い回していないか（論点をまたいで同じ投稿を出さない）
     all_posts = [p["id"] for c in cfg["issues"].values() for p in c.get("posts", {}).get("items", [])]
     if len(all_posts) != len(set(all_posts)):
@@ -450,7 +428,7 @@ def render_reasons(d: dict, issue: dict, icfg: dict) -> str:
     else:
         items.sort(key=lambda kv: (-int(kv[1]["count"]), kv[0]))
     stances = stance_order(d)
-    per = {bid: Counter(item_stance(d, i["tweet_id"]) for i in rr["items"] if i["bucket"] == bid) for bid in buckets}
+    per = {bid: Counter(stance_id(d, i["stance"]) for i in rr["items"] if i["bucket"] == bid) for bid in buckets}
     top = max(int(b["count"]) for _, b in items)
     out.append(f'<p class="fr-lead">{esc(rc["lead"].format(count=fmt(n)))}</p><ol class="fr-reason-list">')
     for bid, b in items:
@@ -490,7 +468,7 @@ def render_posts(d: dict, issue: dict, icfg: dict) -> str:
         if rec:
             label = icfg.get("reasons", {}).get(rec["bucket"], {}).get("label_override", rr["buckets"][rec["bucket"]]["label"])
             meta.append(f'{pc["bucket_label"]}：{label}')
-        st = stances.get(item_stance(d, p["id"]))
+        st = stances.get(post_stance(d, issue, p))
         if st:
             meta.append(f'{pc["stance_label"]}：{st["label"]}')
         out.append(f'<li class="fr-post"><p class="fr-post-label">{esc(p["label"])}</p><p>{esc(p["summary"])}</p>'

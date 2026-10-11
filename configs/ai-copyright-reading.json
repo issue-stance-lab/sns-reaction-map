@@ -1,12 +1,10 @@
 {
   "theme_id": "ai-copyright",
-  "_about": "生成AIと著作権ページの「山なみ＋7論点の読書面」の手書き文言。scripts/ai_copyright_reading.py が読む。件数・割合・日付・判定はここに書かず、公開JSON・再読データ・正典・照合データ・一次資料メモから読む。副首都（configs/fukushuto-reading.json）・皇室典範改正と同じキー構成。生成AIだけのキーは canonical_json・veins_common・check_overrides・_forbidden_words。",
+  "_about": "生成AIと著作権ページの「山なみ＋7論点の読書面」の手書き文言。scripts/ai_copyright_reading.py が読む。件数・割合・日付・判定はここに書かず、公開JSON・再読データ・照合データ・一次資料メモから読む（非公開の正典は読まない）。副首都（configs/fukushuto-reading.json）・皇室典範改正と同じキー構成。生成AIだけのキーは veins_common・check_overrides・_forbidden_words。",
   "opening_config": "configs/ai-copyright-opening.json",
   "public_json": "docs/data/themes/ai-copyright.json",
   "reread_json": "data/ai-copyright_issues-reread.json",
-  "_reread_json": "論点ごとのキー（learning_data など）は configs/planet/ai-copyright.yaml の sub_issues.path から引く。理由区分の件数は明細 items[].bucket から数え直す。population・scope・method の文は古いので表示に使わない。明細の stance は読み直した時点の値で、その後の判定し直し（2026-10-07）で11件が公開JSONと違うため、立場は正典から引く（canonical_json）。",
-  "canonical_json": "social-samples/ai-copyright_hermes_classified.json",
-  "_canonical_json": "非公開の正典。読書面では投稿本文を使わず、tweet_id ごとの main_issue・stance（理由区分ごとの立場の内訳と、代表投稿の立場）と、代表投稿の選定基準（is_opinion・article_usable・risk・同じ文面の有無）の検査にだけ使う。正典が無い環境では生成を止める（テストはスキップする）。",
+  "_reread_json": "論点ごとのキー（learning_data など）は configs/planet/ai-copyright.yaml の sub_issues.path から引く。理由区分の件数は明細 items[].bucket、区分ごとの立場は明細 items[].stance から数え直す（副首都と同じ）。2026-10-07 の判定し直しで11件の立場が公開JSONとずれていたため、2026-10-11 に正典の立場へ合わせた（再読データの stance_resync_2026_10_11）。population・scope・method の文は古いので表示に使わない。",
   "claim_posts_json": "data/verification/ai-copyright-claims.json",
   "background_json": "data/verification/ai-copyright-background.json",
   "primary_memo": "quality/research/ai-copyright-primary-sources.md",
@@ -80,7 +78,7 @@
     "summary": "元の投稿を表示する（{n}件）",
     "bucket_label": "理由の区分",
     "stance_label": "立場",
-    "_selection_rule": "正典 social-samples/ai-copyright_hermes_classified.json の意見（is_opinion）から選ぶ（副首都・皇室と同じ方法）。基準: ①その論点の意見で、再読データがある論点は理由区分を代表する（最大の区分と、反対側の立場で目立つ区分から1件ずつを基本） ②2件で立場が偏らない（規制・制限強化支持と推進・活用支持を1件ずつを基本） ③URLが残っている（tweet_id と URL が一致し、cdn.syndication.twimg.com/tweet-result で本文が返る。TweetTombstone は削除済みとして除く） ④個人・集団への攻撃や差別表現、罵倒、特定の人を名指しした批判を含まない ⑤正典の分類で article_usable が true、risk が low ⑥正典に同じ文面が2件以上ない。生成器は②以外の正典側の条件（論点・意見・article_usable・risk・同じ文面）を検査して止める。現行の scripts/ai_copyright_issue_media.py の14件は使い回さず、すべて正典から選び直す。再読データの無い論点（法制度・規制整備、利用者モラル・倫理）は、正典の立場を stance_id に書く。"
+    "_selection_rule": "正典 social-samples/ai-copyright_hermes_classified.json の意見（is_opinion）から選ぶ（副首都・皇室と同じ方法）。基準: ①その論点の意見で、再読データがある論点は理由区分を代表する（最大の区分と、反対側の立場で目立つ区分から1件ずつを基本） ②2件で立場が偏らない（規制・制限強化支持と推進・活用支持を1件ずつを基本） ③URLが残っている（tweet_id と URL が一致し、cdn.syndication.twimg.com/tweet-result で本文が返る。TweetTombstone は削除済みとして除く） ④個人・集団への攻撃や差別表現、罵倒、特定の人を名指しした批判を含まない ⑤正典の分類で article_usable が true、risk が low ⑥正典に同じ文面が2件以上ない。選んだときに正典で①③〜⑥を確かめた（手順5・6）。生成器は非公開の正典を読まないので、公開できる入力で確かめられる条件（再読データでその論点に入っていること・URLとIDの一致・立場の違い・論点をまたいだ重複）だけを検査して止める。現行の scripts/ai_copyright_issue_media.py の14件は使い回さず、すべて正典から選び直す。再読データの無い論点（法制度・規制整備、利用者モラル・倫理）は、正典の立場を stance_id に書く。"
   },
   "see_also_common": {
     "title": "あわせて確かめる"

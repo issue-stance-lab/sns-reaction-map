@@ -1,7 +1,8 @@
 """生成AIと著作権・新デザインの試作（冒頭、山なみと論点の読書面）。docs/ は書き換えない。
 
 副首都（tests/test_fukushuto_redesign.py）・皇室典範改正の手順5・6に当たる検査。
-読書面の生成は非公開の正典（理由区分ごとの立場と代表投稿の検査）を読むので、正典が無い環境では読書面の検査をスキップする。
+読書面の生成は公開できる入力（公開JSON・再読データ・設定）だけを読む。非公開の正典が要るのは、
+代表投稿の選定基準を確かめる1件（正典が無い環境ではスキップ）だけ。
 """
 from __future__ import annotations
 
@@ -63,7 +64,6 @@ class OpeningTests(unittest.TestCase):
                          != (opening.ASSETS / "opening.css").read_text(encoding="utf-8"))
 
 
-@unittest.skipUnless(CANON.is_file(), "非公開の正典が無い環境では読書面を生成できない")
 class ReadingPageTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -119,21 +119,28 @@ class ReadingPageTests(unittest.TestCase):
                 n = sum(1 for it in rr["items"] if it["bucket"] == bid)
                 self.assertEqual(node.get_text(), f"{n:,}", (label, bid))
 
-    def test_reason_stances_come_from_canonical_and_sum_to_public(self):
-        """再読データの明細の立場は古い（11件ずれ）。正典の立場で数えた内訳が公開JSONと一致する。"""
+    def test_reason_stances_come_from_reread_details_and_sum_to_public(self):
+        """区分ごとの立場は再読データの明細から数える（2026-10-11 に正典の立場へ11件合わせた）。"""
         for label, rr in self.d["reread"].items():
             issue = next(i for i in PUBLIC["issues"] if i["label"] == label)
             total = {s["id"]: 0 for s in self.d["planet"]["stances"]}
             for it in rr["items"]:
-                total[self.reading.item_stance(self.d, it["tweet_id"])] += 1
+                total[self.reading.stance_id(self.d, it["stance"])] += 1
             self.assertEqual(total, {s["id"]: int(s["count"]) for s in issue["stances"]}, label)
+        resync = json.loads((ROOT / "data/ai-copyright_issues-reread.json").read_text(encoding="utf-8"))["stance_resync_2026_10_11"]
+        self.assertEqual(resync["count"], len(resync["items"]))
+
+    def test_does_not_read_private_canonical(self):
+        self.assertNotIn("canonical_json", self.d["cfg"])
+        self.assertNotIn("canon", self.d)
+        self.assertNotIn("social-samples", (ROOT / "scripts/ai_copyright_reading.py").read_text(encoding="utf-8"))
 
     def test_stale_reread_stance_would_stop(self):
         d = copy.deepcopy(self.d)
         label = next(iter(d["reread"]))
-        tid = d["reread"][label]["items"][0]["tweet_id"]
+        item = d["reread"][label]["items"][0]
         keys = [s["key"] for s in d["planet"]["stances"]]
-        d["canon"][tid]["stance"] = next(k for k in keys if k != d["canon"][tid]["stance"])
+        item["stance"] = next(k for k in keys if k != item["stance"])
         with self.assertRaises(SystemExit):
             self.reading.check_all(d)
 
@@ -150,8 +157,7 @@ class ReadingPageTests(unittest.TestCase):
     def test_unpublished_note_disappears_when_reread_is_added(self):
         d = copy.deepcopy(self.d)
         issue = next(i for i in PUBLIC["issues"] if i["label"] not in d["reread"])
-        ids = [t for t, c in d["canon"].items() if c["main_issue"] == issue["label"] and c["is_opinion"]]
-        items = [{"tweet_id": t, "bucket": "A"} for t in ids]
+        items = [{"tweet_id": str(n), "bucket": "A", "stance": "中立・情報"} for n in range(int(issue["count"]))]
         d["reread"][issue["label"]] = {"buckets": {"A": {"label": "仮の区分", "count": len(items)}}, "items": items}
         html = self.reading.render_reasons(d, issue, {})
         self.assertNotIn("data-unpublished", html)
@@ -186,6 +192,7 @@ class ReadingPageTests(unittest.TestCase):
                 self.assertRegex(e.select_one("a.x-original-link")["href"], r"^https://x\.com/[^/]+/status/\d+$")
             self.assertEqual(len(panel.select(".fr-post")), len(embeds))
 
+    @unittest.skipUnless(CANON.is_file(), "非公開の正典が無い環境では代表投稿の選定基準を確かめられない")
     def test_selected_posts_meet_canonical_criteria(self):
         canon = json.loads(CANON.read_text(encoding="utf-8"))
         texts = [self.reading.norm_text(x["text"]) for x in canon]
@@ -235,13 +242,13 @@ class ReadingPageTests(unittest.TestCase):
         with self.assertRaises(SystemExit):
             self.reading.check_all(d)
         d = copy.deepcopy(self.d)
-        pid = d["cfg"]["issues"]["ai-copyright-learning-data"]["posts"]["items"][0]["id"]
-        d["canon"][pid]["risk"] = "medium"
+        posts = d["cfg"]["issues"]["ai-copyright-learning-data"]["posts"]["items"]
+        posts[0]["id"] = "1"  # 再読データに無い投稿
+        posts[0]["url"] = posts[0]["url"].rsplit("/", 1)[0] + "/1"
         with self.assertRaises(SystemExit):
             self.reading.check_all(d)
 
 
-@unittest.skipUnless(CANON.is_file(), "非公開の正典が無い環境では読書面を生成できない")
 class BackgroundTests(unittest.TestCase):
     """手順6：残り6論点と背景の開閉行。"""
 
@@ -355,11 +362,9 @@ class BackgroundTests(unittest.TestCase):
         for r in cr["reasons_pro"] + cr["reasons_con"]:
             self.assertIn(r["text"], text)
 
-    def test_no_forbidden_words_outside_shared_classroom(self):
-        """違法・合法が出てよいのは、共有の授業設定（読むだけ）由来の文だけ。"""
+    def test_no_forbidden_words_in_background_rows(self):
+        """背景の行（共有の授業設定から読む行も含む）に違法・合法を使わない（2026-10-11 に授業の設定も言い換えた）。"""
         for row in self.bg.select("details.fb-row"):
-            if row["id"] == "bg-classroom":
-                continue
             for w in FORBIDDEN:
                 self.assertNotIn(w, row.get_text(), row["id"])
 
