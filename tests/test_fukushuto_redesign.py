@@ -218,5 +218,104 @@ class OpeningPhaseTests(unittest.TestCase):
         self.assertIn(f'data-as-of="{self.data["public"]["updated_on"]}"', opening.render_fragment(self.data))
 
 
+class BackgroundTests(unittest.TestCase):
+    """手順6：残り6論点と背景の開閉行。"""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.tmp = tempfile.TemporaryDirectory()
+        cls.d = reading.load()
+        cls.html = reading.build(Path(cls.tmp.name) / "a").read_text(encoding="utf-8")
+        cls.s = soup_of(cls.html)
+        cls.bg = cls.s.select_one("#fukushuto-background")
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.tmp.cleanup()
+
+    def render_bg(self, as_of, edit=None):
+        d = copy.deepcopy(self.d)
+        if edit:
+            edit(d)
+        import fukushuto_background as bgmod
+        return soup_of(bgmod.render(d, as_of, reading.ordered_issues(d))).select_one("#fukushuto-background")
+
+    def test_all_issues_complete_with_posts(self):
+        for iid, icfg in self.d["cfg"]["issues"].items():
+            panel = self.s.find(id="issue-" + iid)
+            self.assertIn("is-complete", panel["class"], iid)
+            self.assertTrue(panel.select(".fr-desc"), iid)
+            self.assertIn(len(panel.select(".fr-post")), (1, 2), iid)
+            for post in panel.select(".fr-post"):
+                self.assertIn("立場：", post.get_text(), iid)
+
+    def test_rows_are_details_and_named_for_this_theme(self):
+        rows = self.bg.select("details.fb-row")
+        ids = [r["id"] for r in rows]
+        self.assertEqual(ids, ["bg-definition", "bg-why", "bg-selection", "bg-candidates",
+                               "bg-timeline", "bg-faq", "bg-classroom", "bg-unverified"])
+        for r in rows:
+            self.assertIsNone(r.get("open"))
+        # 作り方・詳細データ・次に読むは手順7で継承する（背景には入れない）
+        for absent in ("bg-method", "bg-table", "bg-related"):
+            self.assertIsNone(self.bg.find(id=absent))
+
+    def test_candidates_come_from_opening_config(self):
+        cands = self.d["ocfg"]["candidates"]
+        rows = self.bg.select("#bg-candidates tbody tr")
+        self.assertEqual(len(rows), len(cands))
+        self.assertEqual({r.th.get_text() for r in rows}, {c["name"] for c in cands})
+        self.assertIn(f"{len(cands)}地域", self.bg.select_one("#bg-candidates .fb-title").get_text())
+        hrefs = {a["href"] for a in self.bg.select("#bg-candidates tbody a")}
+        self.assertEqual(hrefs, {c["url"] for c in cands})
+
+    def test_faq_four_questions_without_opening_duplicates(self):
+        qs = [dt.get_text() for dt in self.bg.select("#bg-faq dt")]
+        self.assertEqual(len(qs), 4)
+        for dup in ("副首都は大阪に決まったのですか？", "副首都は、いつ決まりますか？"):
+            self.assertNotIn(dup, qs)
+
+    def test_classroom_is_read_from_shared_config(self):
+        cr = json.loads((ROOT / "configs/classroom/fukushuto.json").read_text(encoding="utf-8"))
+        text = self.bg.select_one("#bg-classroom").get_text()
+        for r in cr["reasons_pro"] + cr["reasons_con"]:
+            self.assertIn(r["text"], text)
+        for q in cr["questions"]:
+            self.assertIn(q, text)
+
+    def test_timeline_order_and_phase(self):
+        events = [li["data-event"] for li in self.bg.select("#bg-timeline li")]
+        self.assertEqual(events, ["referendum-2020", "enactment-2026", "draft", "comment-close", "enforce"])
+        self.assertIn("（予定）", self.bg.select_one('#bg-timeline li[data-event="enforce"]').get_text())
+        after = self.render_bg("2026-10-31")
+        self.assertEqual(after["data-law-phase"], "after_unconfirmed")
+        self.assertIn("施行予定でした。施行後の条文は編集部で確かめていません", after.get_text())
+        self.assertIn("締め切られました", after.select_one("#bg-selection").get_text())
+
+    def test_confirmed_phase_switches_and_hides_unverified(self):
+        def edit(d):
+            d["ocfg"]["law"]["enforcement_confirmed_on"] = "2026-11-01"
+            d["ocfg"]["comment"]["result_published_on"] = "2026-10-30"
+        bg = self.render_bg("2026-11-02", edit)
+        self.assertIn("施行されました（2026年11月1日に条文を確認）", bg.get_text())
+        self.assertIn("副首都法は、いつ施行されましたか？", bg.select_one("#bg-faq").get_text())
+        unv = bg.select_one("#bg-unverified").get_text()
+        self.assertNotIn("施行日を定める政令", unv)
+        self.assertNotIn("意見募集の結果と", unv)
+
+    def test_missing_phase_text_stops(self):
+        def edit(d):
+            row = next(r for g in d["bg"]["cfg"]["groups"] for r in g["rows"] if r["id"] == "definition")
+            del row["phase_now"]["after_unconfirmed"]
+        with self.assertRaises(SystemExit):
+            self.render_bg("2026-10-10", edit)
+
+    def test_themes_yaml_mismatch_stops(self):
+        def edit(d):
+            d["bg"]["theme"]["updated_at"] = "2026-01-01"
+        with self.assertRaises(SystemExit):
+            self.render_bg("2026-10-10", edit)
+
+
 if __name__ == "__main__":
     unittest.main()

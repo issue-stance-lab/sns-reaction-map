@@ -1,4 +1,4 @@
-/* 副首都・山なみと論点の読書面の試作（正本。scripts/fukushuto_reading.py が試作フォルダーへ写す）。
+/* 副首都・山なみと論点の読書面、背景の開閉行の試作（正本。scripts/fukushuto_reading.py が試作フォルダーへ写す）。
    型は皇室典範改正の reading.css と同じ。色と変数は冒頭の opening.css（紙色の地・藍・朱・黄土）を引き継ぐ。 */
 .fr{width:min(1180px,calc(100% - 32px));margin:0 auto;padding:8px 0 56px}
 .fr-map{padding:28px 28px 20px;background:var(--card);border:1px solid var(--line);border-radius:18px;
@@ -144,3 +144,72 @@
 .fr-checks .fr-check:first-of-type{margin-top:4px;padding-top:0;border-top:0}
 @media (max-width:650px){.fr-site{padding:10px 16px}}
 
+
+/* 背景の開閉行（手順6。JavaScriptなしでも <details> で開ける。型は皇室と同じ） */
+.fb{width:min(1180px,calc(100% - 32px));margin:0 auto;padding:8px 0 64px}
+.fb h2{margin:4px 0 6px;font-size:clamp(22px,2.8vw,30px);line-height:1.3}
+.fb-group{margin-top:18px}
+.fb-group-label{margin:0 0 8px;font-size:13px;font-weight:800;color:var(--muted);letter-spacing:.06em}
+.fb-row{background:var(--card);border:1px solid var(--line);border-radius:14px;margin:0 0 10px;min-width:0}
+.fb-row>summary{cursor:pointer;list-style:none;padding:14px 48px 14px 18px;position:relative;display:flex;flex-direction:column;gap:2px;min-height:44px}
+.fb-row>summary::-webkit-details-marker{display:none}
+.fb-row>summary::after{content:"＋";position:absolute;right:18px;top:50%;transform:translateY(-50%);font-weight:800;color:var(--ai);font-size:18px}
+.fb-row[open]>summary::after{content:"－"}
+.fb-row>summary:focus-visible{outline:3px solid var(--odo);outline-offset:2px;border-radius:14px}
+.fb-title{font-weight:800;font-size:16.5px;color:var(--ink)}
+.fb-sum{font-size:13px;color:var(--muted)}
+.fb-body{padding:4px 18px 18px;border-top:1px solid var(--line);min-width:0}
+.fb-body h4{margin:16px 0 6px;font-size:16px}
+.fb-body p,.fb-body li,.fb-body dd{font-size:15px;line-height:1.85}
+.fb-body p{margin:8px 0}
+.fb-body a{color:var(--ai);overflow-wrap:anywhere}
+.fb-cite{font-size:12.5px!important;color:var(--muted)}
+.fb-issues{font-size:13.5px!important}
+.fb-timeline{list-style:none;margin:12px 0 0;padding:0 0 0 14px;border-left:3px solid var(--ai-soft)}
+.fb-timeline li{margin:0 0 14px;position:relative}
+.fb-timeline li::before{content:"";position:absolute;left:-21px;top:9px;width:11px;height:11px;border-radius:50%;background:var(--ai)}
+.fb-when{margin:0!important;display:flex;flex-wrap:wrap;gap:2px 10px;align-items:baseline}
+.fb-when b{font-size:15px}
+.fb-faq{margin:10px 0 0}
+.fb-faq>div{padding:10px 0;border-bottom:1px solid var(--line)}
+.fb-faq dt{font-weight:800;font-size:15px}
+.fb-faq dd{margin:4px 0 0}
+.fb-sides{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:8px}
+.fb-sides section{background:var(--paper);border-radius:10px;padding:4px 14px 10px;min-width:0}
+.fb-sides ol{padding-left:20px;margin:6px 0}
+.fb-sides li{margin:0 0 8px}
+.fb-to-issue{font-size:13px;font-weight:700;white-space:nowrap}
+.fb-src-label{font-weight:800;margin-top:14px!important}
+.fb-src{padding-left:20px;margin:4px 0}
+.fb-src li span{display:block;font-size:13px;color:var(--muted)}
+.fb-questions{padding-left:22px;margin:4px 0}
+.fb-table-wrap{overflow-x:auto;margin-top:10px;max-width:100%}
+.fb-table{border-collapse:collapse;font-size:13.5px;min-width:620px;width:100%;font-variant-numeric:tabular-nums}
+.fb-table-cap{font-weight:800;font-size:14px!important;margin:12px 0 0!important}
+.fb-table th,.fb-table td{padding:7px 8px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+.fb-table th[scope="row"],.fb-table thead th:first-child{text-align:left}
+.fb-table thead th{font-size:12px;color:var(--muted);white-space:normal;vertical-align:bottom}
+.fb-total th,.fb-total td{border-top:2px solid var(--muted)}
+.fb-notes{padding-left:20px;margin:8px 0 0}
+.fb-notes li{font-size:13px!important}
+.fb-facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px 16px;margin:12px 0}
+.fb-facts dt{font-size:12px;color:var(--muted);font-weight:700}
+.fb-facts dd{margin:0;font-weight:800;font-size:14.5px}
+.fb-strong{font-weight:700}
+.fb-editorial>div{padding:8px 0;border-bottom:1px solid var(--line)}
+.fb-editorial dt{font-weight:800;font-size:14px;color:var(--ai)}
+.fb-editorial dd{margin:2px 0 0}
+.fb-unverified{padding-left:20px;margin:10px 0 0}
+.fb-unverified li{margin:0 0 6px}
+@media (max-width:650px){
+  .fb-sides{grid-template-columns:1fr}
+  .fb-facts{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .fb-row>summary{padding:12px 42px 12px 14px}
+  .fb-body{padding:4px 14px 16px}
+}
+/* 副首都だけの部品 */
+.fb-checked{font-size:12.5px;color:var(--muted)}
+.fb-cand{min-width:560px}
+.fb-cand th,.fb-cand td{text-align:left;white-space:normal}
+.fb-cand td:first-of-type{white-space:nowrap}
+.fb-cand .fop-key{margin-right:6px;vertical-align:-1px}
