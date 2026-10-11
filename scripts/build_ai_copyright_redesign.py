@@ -36,6 +36,7 @@ import json
 import re
 import sys
 from datetime import date
+from html import escape
 from pathlib import Path
 
 from bs4 import BeautifulSoup, Comment
@@ -219,6 +220,86 @@ def _trend(source: str) -> tuple[str, str]:
     return match.group(), css.group()
 
 
+def _trend_rounds(trend: str) -> dict:
+    """「意見の推移」のスクリプトが持つ回ごとの割合（立場・論点）を読む。小さな折れ線はこの数字だけで描く。"""
+    match = re.search(r"const panels = (\{.*?\});\n", trend, re.S)
+    if not match:
+        raise ValueError("「意見の推移」のスクリプトに回ごとの割合（panels）がありません。")
+    panels = json.loads(match.group(1))
+    for key in ("stance", "issue"):
+        panel = panels.get(key) or {}
+        rounds = panel.get("rounds") or []
+        if len(rounds) < 2 or any(len(r["v"]) != len(panel["labels"]) for r in rounds):
+            raise ValueError(f"「意見の推移」の {key} の回ごとの割合が読めません。")
+    return panels
+
+
+def _jp_md(iso: str) -> str:
+    d = date.fromisoformat(iso)
+    return f"{d.month}月{d.day}日"
+
+
+def _spark(rounds: list[dict], series: list[tuple[int, str]], label: str, width: int = 320, height: int = 72) -> str:
+    """小さな折れ線（軸の目盛りなし）。series は（列の番号, 色）。割合だけを使い、件数は描かない。"""
+    left, right, top, bottom = 6, width - 6, 8, height - 8
+    values = [r["v"][j] for r in rounds for j, _ in series]
+    lo, hi = min(values), max(values)
+    pad = max(2.0, (hi - lo) * 0.15)
+    lo, hi = max(0.0, lo - pad), min(100.0, hi + pad)
+    xs = [left + (right - left) * i / (len(rounds) - 1) for i in range(len(rounds))]
+    out = [f'<svg viewBox="0 0 {width} {height}" role="img" aria-label="{escape(label)}">',
+           f'<line x1="{left}" x2="{right}" y1="{bottom}" y2="{bottom}" stroke="#d9d6cb"/>']
+    for j, color in series:
+        ys = [bottom - (bottom - top) * (r["v"][j] - lo) / (hi - lo) for r in rounds]
+        pts = " ".join(f"{x:.1f},{y:.1f}" for x, y in zip(xs, ys))
+        out.append(f'<polyline fill="none" stroke="{color}" stroke-width="2.5" stroke-linejoin="round" points="{pts}"/>')
+        for x, y in ((xs[0], ys[0]), (xs[-1], ys[-1])):
+            out.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="3.5" fill="{color}" stroke="#fff" stroke-width="1.5"/>')
+    out.append("</svg>")
+    return "".join(out)
+
+
+def _issue_glances(body_soup: BeautifulSoup, panels: dict, compact: dict) -> None:
+    """読書面の「ひと目で見る、この論点の推移」に、推移の論点の回ごとの割合から小さな折れ線と数字2つを入れる。
+    「その他」は推移の論点に無いので、注記と詳しいグラフへの案内だけになる。"""
+    issue = panels["issue"]
+    rounds = issue["rounds"]
+    for box in body_soup.select(".fr-glance[data-glance]"):
+        label = box["data-glance"]
+        if label not in issue["labels"]:
+            continue
+        j = issue["labels"].index(label)
+        cap = compact["glance_caption"].format(first_date=_jp_md(rounds[0]["d"]), first=f'{rounds[0]["v"][j]:.1f}',
+                                               last_date=_jp_md(rounds[-1]["d"]), last=f'{rounds[-1]["v"][j]:.1f}',
+                                               rounds=len(rounds))
+        chart = box.select_one(".fr-glance-chart")
+        chart.append(BeautifulSoup(_spark(rounds, [(j, "currentColor")], label + "。" + cap)
+                                   + f'<p class="fr-glance-cap">{escape(cap)}</p>', "html.parser"))
+
+
+def _trend_band(trend: str, panels: dict, compact: dict) -> str:
+    """意見の推移：ひと目で見る要約（見出し・小さな折れ線・最新回の1文）と、元の推移カードを丸ごと入れた折りたたみ。
+    推移カード（TREND_CARD）は1文字も変えずに折りたたみの中へ入れる。"""
+    card = BeautifulSoup(trend, "html.parser")
+    heading = card.select_one("#ai-copyright-trend-panel-stance-title")
+    lead = card.select_one("#ai-copyright-trend-panel-stance .trend-lead")
+    if heading is None or lead is None:
+        raise ValueError("「意見の推移」の見出しか最初の説明文が見つかりません。")
+    stance = panels["stance"]
+    series = list(enumerate(stance["colors"]))
+    legend = "".join(f'<li><i style="background:{escape(c)}"></i>{escape(lab)}</li>' for lab, c in zip(stance["labels"], stance["colors"]))
+    rounds = stance["rounds"]
+    aria = (f'{_jp_md(rounds[0]["d"])}から{_jp_md(rounds[-1]["d"])}までの{len(rounds)}回の収集の、立場ごとの割合の推移')
+    return ('<div class="acp-trend" id="acp-trend"><section class="acp-trend-glance" aria-labelledby="acp-trend-title">'
+            f'<p class="fr-eyebrow">{escape(compact["trend_eyebrow"])}</p>'
+            f'<h2 id="acp-trend-title">{escape(heading.get_text())}</h2>'
+            f'<div class="acp-trend-spark">{_spark(rounds, series, aria, 480, 96)}</div>'
+            f'<ul class="acp-trend-legend">{legend}</ul>'
+            f'<p class="acp-trend-lead">{escape(lead.get_text())}</p>'
+            f'<details class="fr-fold acp-trend-more" id="acp-trend-more"><summary>{escape(compact["trend_more"])}</summary>'
+            + trend + "</details></section></div>")
+
+
 def _header(src: BeautifulSoup) -> str:
     # 共通ヘッダー（ロゴ画像 images/brand/mark.svg・ナビ）は現行ページの静的な部品を文字どおり引き継ぐ。
     # JavaScriptなしでもトップへ戻れる。
@@ -283,8 +364,14 @@ def _alias_script() -> str:
             "if(pre&&document.getElementById('issue-'+id.slice(pre.length)))id='issue-'+id.slice(pre.length);"
             "else if(aliases[id])id=aliases[id];else return;"
             "location.replace('#'+id);const t=document.getElementById(id);if(t&&t.tagName==='DETAILS')t.open=true;}"
+            # 折りたたみの中の場所（推移のタブ・作り方・詳細データなど）へ来たら、外側の折りたたみを開いて見せる
             "function openRow(){const t=document.getElementById(decodeURIComponent(location.hash.slice(1)));"
-            "if(t&&t.tagName==='DETAILS')t.open=true;}"
+            "if(!t)return;let d=t.tagName==='DETAILS'?t:t.closest('details'),moved=false;"
+            "while(d){if(!d.open){d.open=true;moved=true;}d=d.parentElement&&d.parentElement.closest('details');}"
+            "const tab=document.querySelector('[aria-controls=\"'+t.id+'\"]');if(tab&&tab.getAttribute('aria-pressed')!=='true'){tab.click();moved=true;}"
+            "if(moved)requestAnimationFrame(()=>t.scrollIntoView({block:'start'}));}"
+            # 推移のグラフは閉じた折りたたみの中では幅0で描かれるので、開いたときに描き直させる（推移のスクリプトは resize で描き直す）
+            "document.querySelectorAll('#acp-trend-more').forEach(d=>d.addEventListener('toggle',()=>{if(d.open)dispatchEvent(new Event('resize'));}));"
             "addEventListener('hashchange',()=>{resolve();openRow();});resolve();openRow();})();</script>")
 
 
@@ -352,6 +439,9 @@ def compose(source: str, root: Path, mode: str, as_of: str | None = None) -> str
             raise ValueError(f"読書面の全体像に {selector} がありません")
         node.decompose()
     map_box.select("p.fr-fine")[0].insert_after(BeautifulSoup(planet, "html.parser"))
+    compact = d["cfg"]["compact"]
+    panels = _trend_rounds(trend)
+    _issue_glances(body_soup, panels, compact)
     _classroom(body_soup)
     faq = _faq_json_ld(body_soup)
     head.insert(head.index("</head>"), faq)
@@ -378,10 +468,12 @@ def compose(source: str, root: Path, mode: str, as_of: str | None = None) -> str
     if mode == "preview":
         page += '<p class="acp-preview">公開前の確認用ページ（投票は送信されません）</p>\n'
     page += _header(src) + "\n<main>\n"
-    page += (body_html[:background_at] + '<div class="acp-trend">' + trend + "</div>\n"
+    page += (body_html[:background_at] + _trend_band(trend, panels, compact) + "\n"
              + _vote_section(src) + "\n" + body_html[background_at:])
-    page += '<div class="acp-band acp-trust">' + trust + "</div>\n"
-    page += _band(src, "#detail-data", "詳細データ", "acp-detail") + "\n"
+    # 作り方と詳細データは、部活動と同じく1つの折りたたみ「調査方法と、集計の全データ」に入れる（中身は元HTMLのまま）
+    page += (f'<details class="acp-band acp-fold acp-method" id="acp-method"><summary>{escape(compact["method_fold"])}</summary>'
+             '<div class="acp-trust">' + trust + "</div>\n"
+             + _band(src, "#detail-data", "詳細データ", "acp-detail") + "</details>\n")
     page += _band(src, "#related-topics", "次に読むテーマ", "acp-related") + "\n</main>\n"
     page += str(_one(src, "body > footer", "フッター")) + "\n"
     page += "<script>" + reading_js + "</script>\n"

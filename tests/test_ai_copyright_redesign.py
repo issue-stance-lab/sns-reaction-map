@@ -640,6 +640,140 @@ class RedesignCandidateTests(unittest.TestCase):
         self.assertIn("まだ確かめていません", s.select_one('[data-event="filing"]').get_text())
 
 
+class CompactReadingTests(unittest.TestCase):
+    """2026-10-12 部活動型の圧縮：見せる量だけを減らし、文・件数・出典は折りたたみの中にそのまま残す。"""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.tmp = tempfile.TemporaryDirectory()
+        cls.source_path = layout.source_for_refresh(ROOT)
+        cls.source = cls.source_path.read_text(encoding="utf-8")
+        redesign.build(cls.source_path, Path(cls.tmp.name), "release", as_of=AS_OF)
+        cls.release = (Path(cls.tmp.name) / redesign.PAGE).read_text(encoding="utf-8")
+        cls.s = soup_of(cls.release)
+        cls.cfg = json.loads((ROOT / "configs/ai-copyright-reading.json").read_text(encoding="utf-8"))
+        cls.top = int(cls.cfg["compact"]["top_reasons"])
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.tmp.cleanup()
+
+    def test_reading_folds_start_closed(self):
+        """読書面と背景の折りたたみは、初期表示ですべて閉じている（JavaScriptなしでも <details> で開ける）。"""
+        for sel in ("#ai-copyright-reading", "#ai-copyright-background"):
+            opened = [d.get("class") for d in self.s.select(sel + " details[open]")]
+            self.assertEqual(opened, [], sel)
+        for sel in ("#acp-trend-more", "#acp-method"):
+            self.assertEqual(self.s.select_one(sel).name, "details")
+            self.assertFalse(self.s.select_one(sel).has_attr("open"), sel)
+
+    def test_tabs_cover_all_issues(self):
+        tabs = self.s.select("#ai-copyright-reading nav.fr-tabs a.fr-tab")
+        self.assertEqual(sorted(a["data-issue-id"] for a in tabs), sorted(i["id"] for i in PUBLIC["issues"]))
+        self.assertEqual([a["href"] for a in tabs], ["#issue-" + a["data-issue-id"] for a in tabs])
+        self.assertEqual(len([a for a in tabs if a.get("aria-current") == "true"]), 1)
+
+    def test_description_first_paragraph_then_kuwashiku(self):
+        for iid, icfg in self.cfg["issues"].items():
+            panel = self.s.find(id="issue-" + iid)
+            head = panel.select_one(".fr-panel-head")
+            shown = [p.get_text() for p in head.select("p.fr-desc") if not p.find_parent("details")]
+            folded = [p.get_text() for p in head.select("details.fr-desc-more p.fr-desc")]
+            self.assertEqual(shown, icfg["description"][:1], iid)
+            self.assertEqual(folded, icfg["description"][1:], iid)
+            self.assertIsNotNone(head.select_one('.fr-back a[href="#ai-copyright-reading"]'), iid)
+
+    def test_reason_index_top_rows_and_one_open_detail(self):
+        for label, sub in self.d_reread().items():
+            iid = next(i["id"] for i in PUBLIC["issues"] if i["label"] == label)
+            panel = self.s.find(id="issue-" + iid)
+            rows = panel.select(".fr-reasons li.fr-reason")
+            visible = [li for li in rows if not li.find_parent("details")]
+            self.assertEqual(len(rows), len(sub["buckets"]), iid)
+            self.assertEqual(len(visible), min(self.top, len(rows)), iid)
+            counts = [int(li.select_one(".fr-reason-n b").get_text().replace(",", "")) for li in rows]
+            self.assertEqual(counts, sorted(counts, reverse=True), iid)
+            more = panel.select_one(".fr-reasons details.fr-reason-more")
+            if len(rows) > self.top:
+                self.assertIn(f"残り{len(rows) - self.top}分類", more.summary.get_text(), iid)
+            details = panel.select("article.fr-reason-detail")
+            self.assertEqual([a["data-reason"] for a in details], [li["data-reason"] for li in rows], iid)
+            self.assertEqual([a["data-reason"] for a in details if a.has_attr("data-on")], [rows[0]["data-reason"]], iid)
+            for li in rows:
+                self.assertEqual(li.a["href"], f'#fr-r-{iid}-{li["data-reason"]}')
+                self.assertIsNotNone(panel.find(id=f'fr-r-{iid}-{li["data-reason"]}'))
+            # 説明の中身（どんな声か・立場の内訳）は前と同じく区分ごとにある
+            self.assertEqual(len(panel.select("article.fr-reason-detail .fr-voice")), len(sub["buckets"]), iid)
+            self.assertEqual(len(panel.select("article.fr-reason-detail .fr-mini")), len(sub["buckets"]), iid)
+
+    def d_reread(self) -> dict:
+        import yaml
+        planet = yaml.safe_load((ROOT / "configs/planet/ai-copyright.yaml").read_text(encoding="utf-8"))
+        raw = json.loads((ROOT / "data/ai-copyright_issues-reread.json").read_text(encoding="utf-8"))
+        return {label: raw[sub["path"][0]] for label, sub in (planet.get("sub_issues") or {}).items()}
+
+    def test_evidence_items_are_folds(self):
+        for panel in self.s.select(".fr-panel.is-complete"):
+            for node in panel.select("[data-claim], [data-memo-check], [data-sunk], [data-vein], [data-check]"):
+                self.assertEqual(node.name, "details", (panel["id"], node.attrs))
+                self.assertFalse(node.has_attr("open"))
+            for sel in (".fr-stance", ".fr-posts"):
+                self.assertEqual(panel.select_one(sel).name, "details", (panel["id"], sel))
+            self.assertIsNotNone(panel.select_one(".fr-evidence .fr-evidence-about .fr-lead"), panel["id"])
+
+    def test_issue_glance_from_trend_rounds(self):
+        script = re.search(r"const panels = (\{.*?\});\n", self.release, re.S)
+        rounds = json.loads(script.group(1))["issue"]
+        labels = rounds["labels"]
+        for issue in PUBLIC["issues"]:
+            box = self.s.find(id="issue-" + issue["id"]).select_one(".fr-glance")
+            self.assertEqual(box.select_one(".fr-glance-link")["href"], "#ai-copyright-trend-panel-issue")
+            cap = box.select_one(".fr-glance-cap")
+            if issue["label"] not in labels:
+                self.assertIsNone(cap, issue["id"])  # 「その他」は推移の論点に無い
+                continue
+            j = labels.index(issue["label"])
+            self.assertIn(f'{rounds["rounds"][0]["v"][j]:.1f}%', cap.get_text())
+            self.assertIn(f'{rounds["rounds"][-1]["v"][j]:.1f}%', cap.get_text())
+            self.assertIn(f'{len(rounds["rounds"])}回の収集', cap.get_text())
+            self.assertNotIn("件", box.select_one(".fr-glance-chart").get_text())  # 件数は描かない（出所検査の対象外の数を足さない）
+
+    def test_trend_card_inside_fold_with_glance(self):
+        fold = self.s.select_one("#acp-trend-more")
+        self.assertIsNotNone(fold.select_one("#ai-copyright-trend"))
+        glance = self.s.select_one("#acp-trend .acp-trend-glance")
+        card_h2 = self.s.select_one("#ai-copyright-trend-panel-stance-title").get_text()
+        self.assertEqual(glance.select_one("h2").get_text(), card_h2)
+        self.assertEqual(glance.select_one(".acp-trend-lead").get_text(),
+                         self.s.select_one("#ai-copyright-trend-panel-stance .trend-lead").get_text())
+        self.assertIsNotNone(glance.select_one(".acp-trend-spark svg polyline"))
+
+    def test_method_fold_holds_trust_and_detail_data(self):
+        method = self.s.select_one("#acp-method")
+        self.assertIsNotNone(method.select_one("#article-trust-title"))
+        self.assertIsNotNone(method.select_one("#detail-data"))
+        trust = protected(self.source, "ARTICLE_TRUST")
+        self.assertEqual(self.release.count(trust), 1)  # 元HTMLの作り方を1文字も変えずに折りたたみの中へ
+        self.assertLess(self.release.index('id="acp-method"'), self.release.index(trust))
+        self.assertLess(self.release.index(trust), self.release.index('id="related-topics"'))
+        self.assertEqual(method.select_one("#detail-data").get_text(), soup_of(self.source).select_one("#detail-data").get_text())
+
+    def test_hash_into_closed_fold_opens_it(self):
+        """旧アンカーや推移のタブ（#ai-copyright-trend-panel-issue）・#detail-data へ来たら、外側の折りたたみを開く。"""
+        self.assertIn("t.closest('details')", self.release)
+        self.assertIn("aria-controls=", self.release)
+        self.assertIn("dispatchEvent(new Event('resize'))", self.release)
+
+    def test_provenance_reads_reason_details(self):
+        from scripts.ai_copyright_redesign_provenance import verified_selectors
+        node = self.s.select_one('#issue-ai-copyright-learning-data article.fr-reason-detail .fr-mini')
+        label = node["aria-label"]
+        n = re.search(r"規制・制限強化支持 (\d[\d,]*)件", label).group(1)
+        broken = self.release.replace(label, label.replace(f"規制・制限強化支持 {n}件", f"規制・制限強化支持 {int(n.replace(',', '')) + 1}件"), 1)
+        with self.assertRaisesRegex(ValueError, "一致しません"):
+            verified_selectors(broken, ROOT)
+
+
 class LayoutTests(unittest.TestCase):
     def _root(self, temp: str) -> Path:
         root = Path(temp)
