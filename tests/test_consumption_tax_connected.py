@@ -248,8 +248,8 @@ class ConnectedContentTests(unittest.TestCase):
         self.assertEqual(verified_selectors(inactive, ROOT), {})
 
     def test_wrong_reason_count_fails_even_when_another_bucket_has_that_number(self):
-        broken = self.page.replace('tax-reason-count-consumption-tax-cut-scope-A">569',
-                                   'tax-reason-count-consumption-tax-cut-scope-A">156')
+        broken = self.page.replace('tax-reason-count-consumption-tax-cut-scope-A">619',
+                                   'tax-reason-count-consumption-tax-cut-scope-A">171')
         with self.assertRaisesRegex(ValueError, '数字が元記録'):
             verified_selectors(broken, ROOT)
 
