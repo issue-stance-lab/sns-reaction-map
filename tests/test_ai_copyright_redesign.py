@@ -491,7 +491,9 @@ class RedesignCandidateTests(unittest.TestCase):
         self.assertEqual(sum(1 for p in payloads if p.get("@type") == "Article"), 1)
         # 旧ページの検索入口の問いは使わない
         self.assertNotIn("aic-search-entry", str(self.s.main))
-        self.assertNotIn("ai-copyright-connected-page.js", self.release)
+        for name in ("ai-copyright-connected-page.js", "ai-copyright-connected.js", "ai-copyright-connected.css",
+                     "theme-design.js", "theme-design.css"):
+            self.assertNotIn(f'="{name}', self.release)  # 旧ページ用の部品は読み込まない（山なみの説明文には名前が出る）
 
     def test_inherited_sections_and_links(self):
         self.assertEqual(len(self.s.select("#planet-data")), 1)
@@ -535,7 +537,16 @@ class RedesignCandidateTests(unittest.TestCase):
         for target in set(redesign.ALIASES.values()):
             self.assertIsNotNone(self.s.find(id=target), target)
         for alias in redesign.ALIASES:
-            self.assertIsNone(self.s.find(id=alias), alias)  # 読み替えるのは、新ページに無いIDだけ
+            # 読み替えるのは、新ページに無いIDか、山なみのスクリプトのために隠して残した受け皿だけ
+            if alias in redesign.HIDDEN_RECEIVERS:
+                continue
+            self.assertIsNone(self.s.find(id=alias), alias)
+        for receiver in redesign.HIDDEN_RECEIVERS:
+            self.assertIn(receiver, redesign.ALIASES)
+        # 受け皿は表示されていない（JSがあるとき）ので、旧アンカーは表示中の要素へ送る
+        self.assertIn("cur.getClientRects().length", self.release)
+        self.assertIsNotNone(self.s.find(id="planet-block"))
+        self.assertNotIn("planet-block", redesign.ALIASES)
         for issue in PUBLIC["issues"]:
             # #issue-{論点ID} は旧ページ（論点ごとのX投稿）でも新ページ（投稿を含む読書面）でも、その論点の欄
             self.assertIsNotNone(self.src.find(id="issue-" + issue["id"]))
@@ -544,6 +555,61 @@ class RedesignCandidateTests(unittest.TestCase):
         for kept in ("vote-section", "detail-data", "related-topics", "article-trust-title", "caution", "planet-data",
                      "ai-copyright-trend"):
             self.assertIsNotNone(self.s.find(id=kept), kept)
+
+    def test_planet_is_copied_from_source(self):
+        """全体像の山なみは、元HTMLの対話式の山なみ（PLANET_SECTION）をそのまま写す（2026-10-11 に静的SVGから戻した）。"""
+        src_section = re.search(r"<!-- PLANET_SECTION_START -->(.*?)<!-- PLANET_SECTION_END -->", self.source, re.S).group(1)
+        src = soup_of(src_section)
+        # 山なみのスクリプト・見た目・PLANET_DATA は1文字も変えない
+        src_script = [x for x in src.find_all("script", recursive=False) if x.get("id") != "planet-data"][0].string
+        self.assertEqual(self.release.count(src_script), 1)
+        self.assertEqual(self.release.count(src.select_one("section.planet-panel > style").string), 1)
+        self.assertEqual(self.release.count("window.PLANET_DATA="), 1)
+        # 山なみは読書面の全体像の中。静的SVGと論点名リストは無い
+        planet = self.s.select_one("#ai-copyright-reading .fr-map section.planet-panel #planet-block")
+        self.assertIsNotNone(planet)
+        self.assertEqual(self.s.select(".fr-mountains, .fr-chip, .fr-map-shell"), [])
+        # 立場モード・100マス・論点の一覧・見かた・図が使えないときの一覧は、元HTMLと同じ
+        for sel in ("#modes", ".stage", "#dotbox", "#list", "#meta", ".floor-note", ".hint"):
+            self.assertEqual(str(planet.select_one(sel)), str(src.select_one("#planet-block " + sel)), sel)
+        self.assertEqual(planet.select_one("#fallback-nav").get_text(), src.select_one("#fallback-nav").get_text())
+        # JSなしの論点一覧は新しい読書面へ直接つながる
+        hrefs = [a["href"] for a in planet.select("#fallback-nav a")]
+        self.assertEqual(sorted(hrefs), sorted("#issue-" + i["id"] for i in PUBLIC["issues"]))
+        for href in hrefs:
+            self.assertIsNotNone(self.s.find(id=href[1:]), href)
+        # 新デザインで出さない部分（JSなし用の論点別本文・資料にしかない話・編集部整理）は外し、予想・クイズ・進捗は受け皿だけ
+        self.assertEqual(planet.select("section.landing-panel, #ocean, #editorial"), [])
+        for receiver in ("#guesses", "#quiz"):
+            node = planet.select_one(receiver)
+            self.assertTrue(node.has_attr("hidden") and not node.get_text(strip=True), receiver)
+        self.assertTrue(self.s.select_one("#progress").has_attr("hidden"))
+        # 調査条件は山なみの中（図の母数の位置）で、RESEARCH_CONDITIONS に囲まれている
+        self.assertEqual(len(self.s.select("#caution")), 1)
+        self.assertIsNotNone(planet.select_one("#research-conditions > #caution"))
+        block = self.release[self.release.index("<!-- RESEARCH_CONDITIONS_START -->"):self.release.index("<!-- RESEARCH_CONDITIONS_END -->")]
+        self.assertIn('id="caution"', block)
+        # 山なみのスクリプトより後で、橋渡し（planet.js）と読書面（reading.js）が動く
+        self.assertLess(self.release.index(src_script), self.release.index("window.AiCopyrightReading"))
+        self.assertLess(self.release.index("window.AiCopyrightReading"), self.release.index("function goReading"))
+
+    def test_planet_follows_source_updates(self):
+        """定期更新で元HTMLの山なみが変われば、新ページにもそのまま載る（手入力なし）。"""
+        changed = self.source.replace("このページの見かた", "このページの見かた（更新確認）", 1)
+        self.assertNotEqual(changed, self.source)
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / "source.html"
+            path.write_text(changed, encoding="utf-8")
+            redesign.build(path, Path(temp) / "out", "release", as_of=AS_OF)
+            page = (Path(temp) / "out" / redesign.PAGE).read_text(encoding="utf-8")
+        self.assertIn("このページの見かた（更新確認）", page)
+        broken = re.sub(r'<div class="dotbox" id="dotbox".*?<div class="waffle" id="waffle"></div>', "", self.source, count=1,
+                        flags=re.S)
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / "source.html"
+            path.write_text(broken, encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "山なみの部品"):
+                redesign.build(path, Path(temp) / "out", "release", as_of=AS_OF)
 
     def test_no_legacy_widgets(self):
         for marker in ("TIDE_CARD_START", "AI_COPYRIGHT_SEARCH_ENTRY_START", "THEME_DESIGN_START",

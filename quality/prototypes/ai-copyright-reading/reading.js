@@ -1,5 +1,6 @@
 /* 生成AIと著作権・山なみと論点の読書面の試作（副首都・皇室典範改正の reading.js と同じ動き）。
-   山か論点名を押すと、下の読書面だけを切り替える。ページは動かさない（scrollY を変えない）。
+   山か論点名を押すと、下の読書面だけを切り替える（公開ページの山なみは元HTMLの対話式の図で、planet.js が
+   window.AiCopyrightReading.select を呼ぶ）。ページは動かさない（scrollY を変えない）。
    JavaScriptが無いときは、全論点の読書面が縦に並び、リンクはその論点へ移動する。 */
 (() => {
   'use strict';
@@ -49,4 +50,9 @@
   });
 
   addEventListener('hashchange', () => { const id = fromHash(); if (id) select(id, true); });
+
+  // 山なみ（元HTMLから写した対話式の図、planet.js）から論点を選ぶための入口。
+  window.AiCopyrightReading = Object.freeze({
+    select(id) { if (!ids.includes(id)) return false; select(id, true); return true; }
+  });
 })();

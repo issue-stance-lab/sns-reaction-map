@@ -263,3 +263,85 @@ python3 scripts/build_ai_copyright_redesign.py --mode preview --output-dir /tmp/
 | `tests/test_ai_copyright_adapter.py`・`_connected.py`・`_connected_refresh.py`・`_issue_media.py`・`tests/test_theme_hero_assets.py`（生成AIのページ） | 読むページを「公開後は元HTML（data/page-sources）」に | 旧形式の連動表示・論点ごとのX投稿・図解画像・ヒーロー画像の検査。公開後も元HTMLに同じ構造で残る（副首都と同じ扱い） |
 | `tests/test_cite_button.py` | 生成AIの新デザインも論点欄の `id="issue-…"` を受け皿とみなす | 受け皿の形が変わった |
 | `tests/test_theme_design.py` | 生成AIの新デザインを飛ばす | 共通の見た目を掛けない設計 |
+
+## 10. 山なみを対話式に戻す（2026-10-11）
+
+ブランチ `task/planet-ai-copyright`。オーナーの依頼で、「意見の全体像」の山なみだけを、新デザインの静的SVG（`ai_copyright_reading.mountains_svg`
+と論点名リスト `.fr-chip`）から、旧ページの対話式の山なみに戻した。冒頭・論点ごとの読書面・背景の開閉行・保護対象の継承は変えていない。
+content-map 9番（「立場フィルタと100マス図は移さない」）の判断を、生成AIについてだけ取り消したことになる。
+
+### 10-1. 変えたファイル
+
+| ファイル | 変更 |
+|---|---|
+| `scripts/build_ai_copyright_redesign.py` | `_planet()` を追加。元HTMLの `<!-- PLANET_SECTION_START/END -->` から `section.planet-panel`（中の `<style>`・`planet-live` 判定・`#planet-block`）・`#planet-data`・山なみのスクリプトを写し、読書面の `.fr-map` の静的SVG（`.fr-map-shell`）と `nav.fr-chips` の位置に置く。PLANET_DATA は山なみの直後の1つだけ（末尾の写しはやめた）。部品（`#modes`・`#section`・`#panel`・`#dotbox`・`#waffle`・`#fallback-nav`・`#list`・`#meta`・`#caution`・`#guesses`・`#quiz`・`#dive`）が1つずつ無ければ止まる。旧アンカー `planet-block` の読み替えを外し、隠した受け皿（`fallback`・`fallback-nav`・`quiz`・`progress`）は「表示されていなければ読み替える」形にした |
+| `scripts/ai_copyright_redesign/planet.js`（新規） | 山なみの橋渡し（10-3） |
+| `scripts/ai_copyright_redesign/reading.js` | `window.AiCopyrightReading.select(id)` を公開（planet.js から論点を選ぶ入口）。動きは変えていない |
+| `scripts/ai_copyright_redesign/production.css` | 山なみの配色と並べ方（10-2） |
+| `tests/test_ai_copyright_redesign.py` | `test_planet_is_copied_from_source`・`test_planet_follows_source_updates` を追加。旧アンカーの検査を受け皿に対応、旧ページ用スクリプトの検査を「読み込み（`="…`）が無い」に（山なみのスクリプトの説明文にファイル名が出るため） |
+| `docs/ai-copyright-reaction-map.html`・`quality/prototypes/ai-copyright-release/`・`quality/prototypes/ai-copyright-reading/reading.js` | 作り直し |
+| `DATA_REFRESH.md` | 生成AIの節に、山なみは元HTMLから写す旨を1行 |
+
+元HTML（`data/page-sources/ai-copyright.html`）は変えていない。
+
+### 10-2. 写したもの・外したもの・載せた CSS/JS
+
+- **そのまま写した**：山なみ本体（`#section`、山の幅＝意見の数・高さ＝強い表現の割合、細い山の最小幅と注記）・立場モード4つ（すべて／規制／中立／推進）・
+  100マス（`#dotbox`、件数と割合の前後、「なぜ動くのか」の文）・選択パネル（`#panel`、件数・立場の内訳の棒・「論点の一覧へ戻る（Esc）」）・
+  論点ボタンの一覧（`#list`、順位・件数・割合）・図が使えないときの一覧（`#fallback-nav`）・見かた（`#meta`）・調査条件（`#caution`）・PLANET_DATA・山なみのスクリプト
+  （立場切替の480msの変化・山の選択色・初期表示の自動着地・`hashchange` の処理・GA4 の `issue_view`・`localStorage` の `isa-seen-ai-copyright`）。スクリプトは1文字も変えない。
+- **外した**（新デザインに同じ役目があるか、採用しないと決めたもの）：JSなし用の論点別本文 `section.landing-panel`（読書面がJSなしでも全論点並ぶ。中に一次資料と突き合わせていない図解画像がある＝content-map 11）・
+  「資料にあるのに、SNSにないこと」`#ocean`（論点ごとの読書面にある。旧ページでも連動表示の CSS で隠していた）・編集部の横断整理 `#editorial`（％が手入力で古い＝content-map 17）。
+- **受け皿だけ残して隠した**（スクリプトが書き込むため）：予想2問 `#guesses`・一次資料クイズ `#quiz`（見出しは削除）・進捗表示 `#progress`（`hidden`＋CSS）。
+- **JSなしの論点一覧** `#fallback-nav` のリンクは `#fb-…`（外した本文）から `#issue-…`（読書面）へ書き換えた。
+- **CSS**：旧ページでは `theme-design.css`（明るい配色）と `ai-copyright-connected.css`（立場カード・論点ボタンの格子・海面下の演出を隠す）が山なみの見た目を作っていた。
+  両方とも `body.site-renewal`／`.ai-copyright-connected` 付きで、印刷・背景・検索入口など新ページに無い部品の規則も多いため**読み込まず**、山なみの分だけを
+  `production.css` に `.acp-planet #planet-block …` として写し、紙色・藍に合わせた。選択パネルの論点タブ（上の論点ボタンと重なる）・図解画像・旧い理由区分の名前（読書面で言い換えた）は CSS で出さない。
+  100マスの横に件数と割合を並べた（旧ページは右側に山なみを薄く敷いていたが、新ページでは山なみを上に残すため）。
+- **JS**：`topic-modern.js`（v=13）と `topic-modern.css`（v=32）は前から読み込んでいる。`ai-copyright-connected.js`・`ai-copyright-connected-page.js` は
+  読書面のテンプレート・検索入口・連動パネルが前提で、新ページでは何もしない（先頭で止まる）か壊れるため**読み込まない**。代わりに必要な分を `planet.js` で行う。
+
+### 10-3. 山を押したときの飛び先（planet.js）
+
+| 操作 | 動き |
+|---|---|
+| 山を押す（クリック・Enter・Space） | 山なみのスクリプトの処理（選択パネルへのスクロール）を止め、①URLを素の論点ID（`#ai-copyright-…`）にして山なみ自身の `hashchange` で画面を動かさずに着地（山の選択色・100マス・選択パネル・論点ボタンが合う）、②読書面のその論点を選ぶ、③URLを `#issue-{論点ID}` に書き換え、④読書面の欄へスクロールし見出し（`#fr-h-…`）にフォーカス |
+| 立場モードのボタン | 前のとおり（山の幅と高さが変わり、選んだ論点の100マス・件数・割合が変わる）。375px では選択パネルへ運ぶ（前のとおり） |
+| 論点ボタン（`#list`）・選択パネルの「戻る」・Esc | 前のとおり（地図の中で切り替え）。URLが素の論点IDになり、読書面もその論点に切り替わる（読書面は素のIDも受ける） |
+| 冒頭・背景の `#issue-…` リンク、`#issue-…` 付きで来た人 | 読書面へ（今までどおり）。`topic-modern.js` が `#btn-…` を押させて地図へ戻そうとするので、スクリプトが押したクリック（`isTrusted=false`）だけ止めた。URLは山なみの処理で素の論点IDに書き換わる |
+| 初めて開いたとき | 山なみが件数1位の論点（学習データ・無断利用）に自動で着地し、100マスが出る（前のとおり）。URLに `#ai-copyright-learning-data` が付く（前のとおり） |
+
+論点IDの対応は PLANET_DATA の `issues[].id` ＝ 公開JSONの論点ID ＝ 読書面の `data-issue-panel`（`scripts/ai_copyright_taxonomy.py` の7つ）で、変換表は要らない。
+
+### 10-4. 検査結果（作業ツリー、2026-10-11）
+
+| 検査 | 結果 |
+|---|---|
+| `build_ai_copyright_arena.py` → `--check` | 「UPDATE: HTMLを更新しました」→「OK: 差分なし」。元HTMLは変わらない |
+| 2回生成 | md5 一致（`8a031c87…`、`PYTHONHASHSEED=7` でも同じ、docs のページとも一致） |
+| `verify_theme_page.py ai-copyright` | NG 0（OK 33） |
+| `verify_number_provenance.py ai-copyright` | 605/605 説明済み・終了0 |
+| `verify_builder_rebuildability.py` | 10テーマ NG 0 |
+| `run_public_checks.py` | 終了0 |
+| `python3 -m unittest discover tests` | 1,833件 OK（skip 8） |
+| よみやす（docs の新ページ、`--strict`） | 完成を止める指摘 0件・PASS（info 17件は変更前と同数） |
+| 10/16 の模擬（新規0件、4節と同じ手順をスクラッチ複製で） | 公開対象71件。候補の新ページは基準日 2026-10-16 で山なみ・PLANET_DATA（1つ）・planet.js 入り。候補の中で `verify_theme_page.py` 全テーマ NG 0、`verify_number_provenance.py ai-copyright` NG 0、よみやす 0件、皇室・副首都の公開ページは変わらず |
+| Playwright（docs と模擬候補、1280/375px、x.com・platform.twitter.com・twimg.com 遮断） | コンソールエラー0、scrollWidth 一致。立場「規制」で100マス34個・件数635件。山（AI生成物）を押すと読書面がその論点に切り替わり、欄の上端が画面上104px・見出しにフォーカス・URL `#issue-ai-copyright-generated-work-rights`・地図側もその論点。背景の論点リンク・`#issue-…` 付きの読み込みも読書面へ。画像は `quality/prototypes/ai-copyright-release/evidence/planet-restore/` |
+
+### 10-5. 他テーマ（部活動・皇室・副首都）に広げるとき
+
+1. 元HTML（`data/page-sources/{テーマ}.html`）に `PLANET_SECTION` と同じ部品があるか確かめる（`#modes`・`#dotbox`・`#list` など。旧ページの連動表示の有無で中身が違う）。
+2. そのテーマの `build_*_redesign.py` に `_planet()` と同じ写し方を入れ、静的SVGと論点名リストの位置に置く。外す部分（本文・資料にしかない話・編集部整理・予想・クイズ・進捗）は同じ。
+3. `planet.js` を共通化するか写す（読書面の入口 `window.…Reading.select`、読書面の欄のID）。`topic-modern.js` の `#btn-…` の問題はどのテーマでも同じ。
+4. 明るい配色は `production.css` の `.acp-planet` の節をテーマの色に合わせて写す。
+5. テスト2件を写し、旧アンカーの読み替え（`planet-block` を外す・受け皿は表示されていなければ読み替え）を同じにする。
+
+テーマごとの違い（未確認）：部活動は旧ページで `bukatsu-connected.js`、副首都・皇室は別の連動表示を持っていた。山なみのスクリプトにテーマ固有の橋渡し
+（生成AIの `AI_COPYRIGHT_CONNECTED_BRIDGE`、読書面テンプレートが無いと旧描画に戻る作り）が入っているかで、選択パネルの中身が変わる。
+
+### 10-6. 確認していないこと
+
+- 実機（iPhone Safari など）。Playwright の Chromium だけ。
+- スクリーンリーダーでの読み上げ（初期表示で山なみが選択パネルの見出しへフォーカスを移すのは旧ページと同じ）。
+- 新規の意見がある回の定期更新（模擬は新規0件）。
+- 予想2問・一次資料クイズ・資料にしかない話（潜る操作）・編集部の横断整理を山なみに戻すかどうか（今回は戻していない。戻すなら content-map 14・15・17 の判断を見直す）。
