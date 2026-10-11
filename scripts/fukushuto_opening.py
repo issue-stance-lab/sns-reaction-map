@@ -9,6 +9,12 @@
 出力（既定は quality/prototypes/fukushuto-opening/）:
   opening-fragment.html  冒頭の部品（マーカー付き）
   index.html             確認用の単独ページ（opening.css を読む）
+  opening.css            正本 scripts/fukushuto_redesign/opening.css の写し
+
+時制（段階）は「今日」ではなく基準日で決める。基準日の既定は公開JSONの updated_on で、--as-of で上書きできる。
+- 意見募集: 募集中 open ／ 締め切り済み・結果未確認 closed ／ 結果公表 published（comment.result_published_on を入れたとき）
+- 法律: 施行前 before ／ 施行日を過ぎた・条文未確認 after_unconfirmed ／ 施行後・条文確認済み after_confirmed（law.enforcement_confirmed_on を入れたとき）
+施行日・締切を過ぎても生成は止めない。確認日が施行日・締切より前など、ありえない組み合わせだけ止める。
 
 時刻や乱数は使わないので、同じ入力なら何度実行しても同じ出力になる。
 """
@@ -19,6 +25,7 @@ import argparse
 import datetime as dt
 import html
 import json
+import shutil
 from pathlib import Path
 
 import yaml
@@ -26,6 +33,7 @@ import yaml
 ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_CONFIG = ROOT / "configs" / "fukushuto-opening.json"
 DEFAULT_OUT = ROOT / "quality" / "prototypes" / "fukushuto-opening"
+ASSETS = ROOT / "scripts" / "fukushuto_redesign"
 START = "<!-- FUKUSHUTO_OPENING_START -->"
 END = "<!-- FUKUSHUTO_OPENING_END -->"
 
@@ -78,18 +86,83 @@ def load_inputs(config_path: Path) -> dict:
     return {"config": config, "public": public, "planet": planet, "next_collect": next_collect, "source": source}
 
 
-def step_states(steps: list[dict], checked_on: str) -> list[str]:
-    """確認日を基準に、各段階を済み・現在・予定・未定に分ける。"""
+def lookup(config: dict, dotted: str | None):
+    """"law.enacted_on" のような参照を設定から引く。"""
+    if not dotted:
+        return None
+    node = config
+    for part in dotted.split("."):
+        node = node[part]
+    return node
+
+
+def check_dates(config: dict, as_of: str) -> None:
+    law, comment = config["law"], config["comment"]
+    dt.date.fromisoformat(as_of)
+    for key in ("enacted_on", "promulgated_on", "enforcement_on"):
+        dt.date.fromisoformat(law[key])
+    if law.get("enforcement_confirmed_on"):
+        if law["enforcement_confirmed_on"] < law["enforcement_on"]:
+            raise SystemExit("law.enforcement_confirmed_on が施行日より前です（施行後の条文を確かめた日を入れてください）")
+        if as_of < law["enforcement_on"]:
+            raise SystemExit("law.enforcement_confirmed_on が入っていますが、基準日が施行日より前です")
+    if comment["closes_on"] < comment["opens_on"]:
+        raise SystemExit("意見募集の締切が開始日より前です")
+    if comment.get("result_published_on"):
+        if comment["result_published_on"] < comment["closes_on"]:
+            raise SystemExit("comment.result_published_on が意見募集の締切より前です")
+        if as_of < comment["closes_on"]:
+            raise SystemExit("comment.result_published_on が入っていますが、基準日が締切より前です")
+
+
+def phase_of(config: dict, as_of: str) -> tuple[str, str]:
+    """(法律の段階, 意見募集の段階) を基準日から決める。皇室の koshitsu_opening.phase_of と同じ3段階。"""
+    check_dates(config, as_of)
+    law, comment = config["law"], config["comment"]
+    if as_of < law["enforcement_on"]:
+        law_phase = "before"
+    elif law.get("enforcement_confirmed_on"):
+        law_phase = "after_confirmed"
+    else:
+        law_phase = "after_unconfirmed"
+    if as_of <= comment["closes_on"]:
+        comment_phase = "open"
+    elif comment.get("result_published_on"):
+        comment_phase = "published"
+    else:
+        comment_phase = "closed"
+    return law_phase, comment_phase
+
+
+def phase_values(config: dict) -> dict:
+    law, comment = config["law"], config["comment"]
+    return {
+        "promulgated": jp_date(law["promulgated_on"], with_year=False),
+        "closes": jp_date(comment["closes_on"], with_year=False),
+        "published": jp_date(comment["result_published_on"]) if comment.get("result_published_on") else "",
+        "confirmed": jp_date(law["enforcement_confirmed_on"]) if law.get("enforcement_confirmed_on") else "",
+        "draft_date": jp_date(comment["opens_on"]),
+        "draft_end": jp_date(comment["closes_on"], with_year=False),
+        "enforce_date": jp_date(law["enforcement_on"]),
+    }
+
+
+def step_states(config: dict, as_of: str) -> list[str]:
+    """基準日で、各段階を済み・現在・予定・未定（施行は「日を過ぎたが条文未確認」も）に分ける。"""
+    law_phase, _ = phase_of(config, as_of)
     states = []
-    for step in steps:
-        if not step.get("date"):
+    for step in config["steps"]:
+        date = lookup(config, step.get("date_from"))
+        if not date:
             states.append("undecided")
-        elif step["date"] <= checked_on:
+        elif step["key"] == "enforce" and law_phase == "after_unconfirmed":
+            states.append("unconfirmed")
+        elif date <= as_of:
             states.append("done")
         else:
             states.append("planned")
     done = [i for i, s in enumerate(states) if s == "done"]
-    if done:
+    if done and "unconfirmed" not in states:
         states[done[-1]] = "current"
     return states
 
@@ -104,18 +177,23 @@ def render_title(config: dict) -> str:
     return f'<h1 class="fop-title">{phrases}<span class="fop-sub">{sub}</span></h1>'
 
 
-def render_route(config: dict) -> str:
+def render_route(config: dict, as_of: str) -> str:
     steps = config["steps"]
-    states = step_states(steps, config["checked_on"])
-    state_label = {"done": "済み", "current": "確認日の時点", "planned": "予定", "undecided": "未定"}
+    states = step_states(config, as_of)
+    law_phase, comment_phase = phase_of(config, as_of)
+    phases = {"comment": comment_phase, "enforce": law_phase}
+    pt = config["phase_text"]
+    state_label = pt["state_labels"]
+    values = phase_values(config)
     items = []
     for step, state in zip(steps, states):
-        if step.get("date"):
-            when = jp_date(step["date"], with_year=False)
+        date = lookup(config, step.get("date_from"))
+        when = jp_date(date, with_year=False) if date else "時期は未定"
+        if step.get("note_phase"):
+            note = pt[step["note_phase"]][phases[step["note_phase"]]].format(**values)
         else:
-            when = "時期は未定"
-        note = step.get("note") or step["note_template"].format(date_end=jp_date(step["date_end"], with_year=False))
-        src = step.get("source")
+            note = step.get("note") or step["note_template"].format(**values)
+        src = lookup(config, step.get("source_from"))
         link = (
             f'<a href="{esc(src["url"])}" target="_blank" rel="noopener noreferrer">{esc(src["label"])}</a>' if src else ""
         )
@@ -126,14 +204,14 @@ def render_route(config: dict) -> str:
             f"<strong>{esc(step['title'])}</strong><p>{esc(note)}{link}</p></li>"
         )
     decision = config["decision"]
-    reached = max((i for i, s in enumerate(states) if s in ("done", "current")), default=0)
+    reached = max((i for i, s in enumerate(states) if s in ("done", "current", "unconfirmed")), default=0)
     progress = reached / max(len(steps) - 1, 1) * 100
     return (
         f'<section class="fop-route" id="fuk-op-route" aria-labelledby="fop-route-title">'
         f'<h2 id="fop-route-title" class="fop-route__label">{esc(decision["label"])}</h2>'
         f'<p class="fop-route__text">{esc(decision["text"])}</p>'
         f'<ol class="fop-route__line" style="--p:{progress:.0f}%">{"".join(items)}</ol>'
-        f'<p class="fop-route__checked">{esc(jp_date(config["checked_on"]))}に一次資料で確認</p>'
+        f'<p class="fop-route__checked">{esc(pt["checked_line"].format(checked=jp_date(config["checked_on"]), as_of=jp_date(as_of)))}</p>'
         f"</section>"
     )
 
@@ -185,17 +263,17 @@ def render_map(config: dict) -> str:
     )
 
 
-def render_answers(config: dict, public: dict) -> str:
-    steps = {s["key"]: s for s in config["steps"]}
+def render_answers(config: dict, public: dict, as_of: str) -> str:
+    law_phase, comment_phase = phase_of(config, as_of)
+    pv = phase_values(config)
     counts = {s["key"]: sum(c["stage"] == s["key"] for c in config["candidates"]) for s in config["stages"]}
     top = sorted((i for i in public["issues"] if i.get("kind") != "other"), key=lambda i: -i["count"])[:3]
     values = {
         "regions": len(config["candidates"]),
         "aiming": counts["aiming"],
         "considering": counts["considering"],
-        "draft_date": jp_date(steps["draft"]["date"]),
-        "draft_end": jp_date(steps["draft"]["date_end"], with_year=False),
-        "enforce_date": jp_date(steps["enforce"]["date"]),
+        "comment_sentence": config["phase_text"]["answer_comment"][comment_phase].format(**pv),
+        "enforce_sentence": config["phase_text"]["answer_enforce"][law_phase].format(**pv),
         "top_issues": "、".join(f"{i['label']}（{i['count']:,}件）" for i in top),
     }
     cards = []
@@ -287,8 +365,15 @@ def render_count(config: dict, public: dict, planet: dict, source: str, next_col
     )
 
 
-def render_fragment(data: dict) -> str:
+def default_as_of(data: dict) -> str:
+    """基準日の既定は公開JSONの更新日（今日の日付は使わない）。"""
+    return data["public"]["updated_on"]
+
+
+def render_fragment(data: dict, as_of: str | None = None) -> str:
     config, public = data["config"], data["public"]
+    as_of = as_of or default_as_of(data)
+    law_phase, comment_phase = phase_of(config, as_of)
     crumb = " ／ ".join(esc(c) for c in config["crumb"])
     sources = "".join(
         f'<a href="{esc(s["url"])}" target="_blank" rel="noopener noreferrer">{esc(s["label"])}</a>' for s in config["sources"]
@@ -296,13 +381,13 @@ def render_fragment(data: dict) -> str:
     return "\n".join(
         [
             START,
-            '<section class="fop" aria-label="副首都の冒頭">',
+            f'<section class="fop" aria-label="副首都の冒頭" data-as-of="{esc(as_of)}" data-law-phase="{law_phase}" data-comment-phase="{comment_phase}">',
             '<div class="fop-hero">',
             f'<div class="fop-hero__copy"><p class="fop-crumb">{crumb}</p>{render_title(config)}',
-            f'<p class="fop-lead">{esc(config["lead"])}</p>{render_route(config)}</div>',
+            f'<p class="fop-lead">{esc(config["lead"])}</p>{render_route(config, as_of)}</div>',
             render_map(config),
             "</div>",
-            render_answers(config, public),
+            render_answers(config, public, as_of),
             render_count(config, public, data["planet"], data["source"], data["next_collect"]),
             f'<p class="fop-sources">{sources}</p>',
             "</section>",
@@ -334,12 +419,14 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--config", type=Path, default=DEFAULT_CONFIG)
     parser.add_argument("--out-dir", type=Path, default=DEFAULT_OUT)
+    parser.add_argument("--as-of", help="基準日 YYYY-MM-DD（既定は公開JSONの updated_on）")
     args = parser.parse_args()
     data = load_inputs(args.config)
-    fragment = render_fragment(data)
+    fragment = render_fragment(data, args.as_of)
     args.out_dir.mkdir(parents=True, exist_ok=True)
     (args.out_dir / "opening-fragment.html").write_text(fragment, encoding="utf-8")
     (args.out_dir / "index.html").write_text(render_page(fragment), encoding="utf-8")
+    shutil.copyfile(ASSETS / "opening.css", args.out_dir / "opening.css")
     print(f"wrote {args.out_dir / 'opening-fragment.html'}")
     print(f"wrote {args.out_dir / 'index.html'}")
 

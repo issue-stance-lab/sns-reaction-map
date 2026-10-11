@@ -1,4 +1,4 @@
-/* 副首都 冒頭試作。色は「藍（制度）」「朱（指定・印）」「黄土（検討）」の3つ。立場の色は configs/planet/fukushuto.yaml から行内で受け取る。 */
+/* 副首都 冒頭試作（正本。scripts/fukushuto_opening.py と scripts/fukushuto_reading.py が試作フォルダーへ写す）。色は「藍（制度）」「朱（指定・印）」「黄土（検討）」の3つ。立場の色は configs/planet/fukushuto.yaml から行内で受け取る。 */
 :root {
   --paper: #f5f2ea;
   --card: #fffdf8;
@@ -40,6 +40,9 @@ a { color: var(--ai); }
 .fop-stop--current .fop-stop__dot { background: var(--shu); border-color: var(--shu); box-shadow: 0 0 0 4px rgba(196, 67, 43, .2); }
 .fop-stop--planned .fop-stop__dot { border-color: var(--ai); }
 .fop-stop--undecided .fop-stop__dot { border-style: dashed; border-color: var(--gray); }
+/* 施行日を過ぎたが、施行後の条文を編集部で確かめていない段階（半分だけ塗る） */
+.fop-stop--unconfirmed .fop-stop__dot { border-color: var(--ai); background: linear-gradient(90deg, var(--ai) 0 50%, var(--card) 50%); }
+.fop-stop--unconfirmed small { color: var(--ai); }
 .fop-stop small { display: block; font-size: 12px; font-weight: 700; color: var(--muted); }
 .fop-stop--current small { color: var(--shu); }
 .fop-stop strong { display: block; font-size: 14px; line-height: 1.4; }

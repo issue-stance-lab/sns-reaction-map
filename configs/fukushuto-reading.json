@@ -1,0 +1,168 @@
+{
+  "theme_id": "fukushuto",
+  "_about": "副首都ページの「山なみ＋7論点の読書面」の手書き文言。scripts/fukushuto_reading.py が読む。件数・割合・日付・判定はここに書かず、公開JSON・再読データ・照合データ・一次資料メモから読む。皇室典範改正（configs/koshitsu-tenpakai-reading.json）と同じキー構成。",
+  "opening_config": "configs/fukushuto-opening.json",
+  "public_json": "docs/data/themes/fukushuto.json",
+  "reread_json": "data/fukushuto_5issues-reread.json",
+  "_reread_json": "論点ごとのキー（candidate_site など）は configs/planet/fukushuto.yaml の sub_issues.path から引く。population と method の文は古いので表示に使わない。",
+  "claim_posts_json": "data/verification/fukushuto-claims.json",
+  "background_json": "data/verification/fukushuto-background.json",
+  "primary_memo": "quality/research/fukushuto-primary-sources.md",
+  "other_issue_id": "fukushuto-other",
+  "section": {
+    "eyebrow": "論点ごとに読む",
+    "title": "どの論点で、何が語られている？",
+    "lead": "山の幅は意見の件数、高さは強い言い方を含む投稿の割合です。山か論点名を選ぶと、下の説明と理由が切り替わります。",
+    "axis_note": "高さは、論点の重要さや主張の正しさを表すものではありません。",
+    "chips_label": "論点を選ぶ",
+    "min_width_note": "件数の少ない論点も選びやすいよう、山の幅には下限を設けています。"
+  },
+  "trend": {
+    "public_json_key": "trends",
+    "_public_json_key": "公開JSONにこのキーが現れたら、生成器は止まる（推移の表示はまだ作っていないため、黙って無視しない）。",
+    "title": "収集ごとの割合と件数",
+    "row_label": "{period_start}〜{period_end}（累計）",
+    "note": "収集回ごとの推移は、公開データにまだ入っていません。ここでは最新の集計だけを示します。"
+  },
+  "stance_common": {
+    "title": "副首都法案への立場",
+    "lead": "この論点の{count}件を、副首都法案への立場で分けました。",
+    "note": "立場は法案そのものへの賛否で、論点の中での好みとは別に数えています。"
+  },
+  "reasons_common": {
+    "title": "どんな理由で語られている？",
+    "lead": "この論点の{count}件を、投稿本文を読み直して理由ごとに分けました。1件は1つの区分にだけ数えています。",
+    "note": "同じ文面の投稿も、別の投稿として1件ずつ数えています。割合はこの論点の{count}件に対する値です。",
+    "unpublished": "この論点は、理由別に読み直したデータをまだ公開していません。件数と立場だけを示しています。",
+    "voice_label": "どんな声か",
+    "stance_label": "立場の内訳"
+  },
+  "sources_common": {
+    "title": "投稿の主張を、一次資料で確かめる",
+    "lead": "収集した投稿にある主張や前提を、条文や公的な資料と照らし合わせました。下の投稿例そのものへの判定ではありません。",
+    "check_eyebrow": "制度の確認",
+    "claim_eyebrow": "主張の照合",
+    "matched": "この主張に当たる投稿 {n}件",
+    "checked": "照合日 {checked_on}",
+    "sources_label": "出典をひらく",
+    "empty": "この論点に対応する資料照合は、まだ登録されていません。",
+    "memo_eyebrow": "資料の確認",
+    "_memo_eyebrow": "一次資料メモにだけある確認（背景台帳・主張照合に無いもの）。確認日はメモの該当節の「確認日」から読む。",
+    "memo_checked": "確認日 {checked_on}"
+  },
+  "verdict_labels": {
+    "fact": "資料どおり",
+    "gap": "少しずれる",
+    "miss": "裏が取れない",
+    "_about": "現行ページの判定ラベルと同じ。公開JSON claim_verification.claims[].verdict を言い換える。知らない判定が来たら生成を止める。"
+  },
+  "sunk_common": {
+    "title": "資料にはあるが、投稿ではほとんど語られていないこと",
+    "count": "意見{base}件のうち、この内容に触れた投稿は{n}件でした。確認日は{checked_on}です。",
+    "note_label": "調べた範囲を見る",
+    "_about": "公開JSON ocean_layer.sunk_continents を nearest_issue_id で論点に振り分ける。sns_base が意見数と違えば生成を止める。"
+  },
+  "posts_common": {
+    "title": "元の投稿を読む",
+    "lead_two": "考え方の違いが分かる投稿として、編集部が選んだ2件です。要約も編集部によるもので、この論点全体の賛否の割合を表すものではありません。",
+    "lead_one": "考え方の違いが分かる投稿を2件選ぶ方針ですが、この論点では1件にしました。理由は下に書いています。要約は編集部によるものです。",
+    "none": "この論点は、元の投稿の例をまだ選んでいません。理由の区分と件数は、上の欄で読めます。",
+    "summary": "元の投稿を表示する（{n}件）",
+    "bucket_label": "理由の区分",
+    "stance_label": "立場",
+    "_selection_rule": "正典 social-samples/fukushuto_hermes_classified.json の意見（is_opinion）から選ぶ（皇室で採った方法(a)と同じ）。基準: ①その論点の意見で、再読データがある論点は理由区分を代表する ②2件で立場が偏らない（法案賛成・推進と法案反対を1件ずつを基本） ③URLが残っている（tweet_id と URL が一致し、cdn.syndication.twimg.com で本文が返る） ④個人・集団への攻撃や差別表現、罵倒を含まない ⑤正典の分類で article_usable が true、risk が low ⑥正典に同じ文面が2件以上ない。現行の scripts/fukushuto_issue_media.py の MEDIA と重なってもよいが、そこから使い回さず、すべて正典から選び直す。"
+  },
+  "see_also_common": {
+    "title": "あわせて確かめる"
+  },
+  "pending_note": "この論点の説明・資料との照合・投稿例は、次の工程で加えます。",
+  "footer": "SNSの集計：{updated_on}まで。制度の確認日は各項目に記しています。",
+  "issues": {
+    "fukushuto-location": {
+      "status": "complete",
+      "name": "候補地",
+      "description": [
+        "副首都をどこに置くか、どの地域がふさわしいかをめぐる意見です。法律は特定の地名を挙げていません。第18条は、政令で定める要件を満たす地域を含む道府県を、議会の議決を経た道府県の申出に基づいて、内閣総理大臣が指定すると定めています。",
+        "投稿では、別の具体的な候補地を挙げる声と、南海トラフ地震で東京と同時に被災するおそれを理由に大阪は向かないとする声が多く、大阪・関西を推す声が続きます。"
+      ],
+      "_description": "第18条は一次資料メモ 資料K（2026-10-11 に e-Gov API v2 で第1項・第2項を再取得）。投稿の傾向は再読データの理由区分（F 具体的代替候補提案・A 大阪は南海トラフで不適が上位、D 大阪・関西推しが続く）に基づく。件数は書かない（区分の欄に自動で出る）。",
+      "reason_sort": "count_desc",
+      "reasons": {
+        "F": {
+          "label_override": "別の具体的な候補地を挙げる",
+          "voice": "自分が適すると考える地域を、理由とともに挙げる投稿です。岡山・広島・札幌・福岡・群馬・長野など地域はさまざまで、地盤や津波、交通の便、開発の余地といった理由が挙がります。"
+        },
+        "A": {
+          "label_override": "南海トラフを理由に大阪は向かない",
+          "voice": "南海トラフ地震で大阪が東京と同じ時期に被災すれば、代わりの役目を果たせないとする声が中心です。同じ理由で愛知・名古屋も向かないとする投稿や、大阪のインフラや治安を挙げる投稿もあります。"
+        },
+        "G": {
+          "label_override": "その他（報道の共有・短い感想など）",
+          "voice": "候補地をめぐる報道の共有や、短い感想が中心です。候補地を公にすると狙われるという心配や、ほかの論点と重なる投稿も含まれます。"
+        },
+        "D": {
+          "label_override": "大阪・関西を推す",
+          "voice": "経済の規模や交通網、すでにある都市の力を挙げて大阪を推す声です。南海トラフを理由に大阪を外すなら東京も同じだと反論する投稿や、大阪を筆頭に福岡などを次に挙げる投稿もあります。"
+        },
+        "B": {
+          "label_override": "日本海側や遠い地域に置くべき",
+          "voice": "東京と同時に被災しにくい日本海側、北海道、九州などに置くべきだとする意見です。雪や交通を理由に北海道を疑問視する投稿や、人口の少ない県に置いて地方を元気にする案もあります。"
+        },
+        "C": {
+          "label_override": "首都の意味や候補の資格を問う",
+          "voice": "首都や副首都の意味を問い直す投稿と、手を挙げた自治体の議会や知事への不信から、候補としての資格を疑う投稿が混じります。法案そのものを大阪のための仕組みと見る声もあります。"
+        },
+        "E": {
+          "label_override": "複数の地域に分けて置く",
+          "voice": "災害の種類によって危ない地域が違うとして、副首都を複数の都市に置くことを求める意見です。大阪と北海道の知事の連携を評価する投稿もあります。"
+        }
+      },
+      "_reasons": "label_override は再読データの区分名（例「大阪は南海トラフで不適（反対）」）から立場の括弧を外した言い換え。区分ごとの立場の内訳は再読データの明細から数えて別に表示するため。voice は 2026-10-11 に再読データ data/fukushuto_5issues-reread.json の明細（投稿本文の抜粋）を区分ごとに最大10件（区分内で等間隔に抜き出し）読んで書いた。計70件。",
+      "check_notes": {
+        "selection": "第18条の申出と議会の議決の規定は、2026年10月11日にもe-Govで確かめました。"
+      },
+      "_check_notes": "一次資料メモ 資料K の【2026-10-11追記】（API v2 で第18条第1項・第2項を再取得）。",
+      "memo_checks": [
+        {
+          "id": "requirements-draft",
+          "memo_section": "資料L：",
+          "label": "指定の要件案",
+          "ask": "どんな地域なら指定される案になっている？",
+          "found": "案は4つの要件を挙げています。1つ目は、首都直下地震の緊急対策区域と富士山の火山災害警戒地域のどちらにも当たらないことです。2つ目として、国の地方支分部局が14以上ある市町村を含むことを求めます。3つ目は、指定都市の人口が国内総人口の1.2%以上で、道府県内総生産が国内総生産の2.1%以上あることです。4つ目には、特別区の設置か連携協約の締結を挙げています。いずれも案の段階の内容で、確定した要件ではありません。",
+          "sources": [
+            {"name": "e-Gov パブリック・コメント「副首都の整備に係る施策の推進に関する法律施行令等（案）」（案件番号060261003）", "url": "https://public-comment.e-gov.go.jp/pcm/detail?CLASSNAME=PCMMSTDETAIL&Mode=0&id=060261003"},
+            {"name": "命令などの案（PDF・別紙1）", "url": "https://public-comment.e-gov.go.jp/pcm/download?seqNo=0000321928", "location": "1〜2ページ「2. 副首都指定の要件」"}
+          ]
+        }
+      ],
+      "_memo_checks": "要件の数字は一次資料メモ 資料L（2026-10-03 PDF原本照合、2026-10-11 再取得で内容に変更なし）。",
+      "see_also": [
+        {"href": "#fuk-op-map", "text_template": "自治体が動きを公表した{regions}地域を、冒頭の地図で見る"}
+      ],
+      "_see_also": "候補地の自治体の動きは冒頭の設定 candidates が正本。ここには地域名も件数も書かず、地域数は冒頭の設定から数える。",
+      "posts": {
+        "selection_basis": "理由区分のうち、大阪を外す側で件数の多い「南海トラフを理由に大阪は向かない」（A）と、大阪を推す側の「大阪・関西を推す」（D）から1件ずつ選んだ。立場は法案反対1件・法案賛成・推進1件。最も件数の多い「別の具体的な候補地を挙げる」（F）は、投稿ごとに挙げる地域が違い、1件ではこの区分を代表できないため選ばなかった。2件とも正典で article_usable=true・risk=low、正典に同じ文面は無く（各1件）、個人や集団への攻撃を含まない。2026-10-11 に cdn.syndication.twimg.com で2件とも本文が返ることを確かめた（最初に選んだ A の 2077008909936754744 は削除済み（TweetTombstone）だったため差し替えた）。",
+        "items": [
+          {
+            "id": "2081236283163328772",
+            "url": "https://x.com/HiFuMi_HT/status/2081236283163328772",
+            "label": "目的から考え、東京と同時に被災しない地域を推す",
+            "summary": "副首都の目的が一極集中の是正と災害時の備えなら、東京と同時に被災しないことが大事だと書いています。そのうえで、東海道沿いから離れた北海道・福岡・宮城などを挙げています。"
+          },
+          {
+            "id": "2094185660190228634",
+            "url": "https://x.com/aeg024/status/2094185660190228634",
+            "label": "南海トラフは大阪を外す理由にならないと反論",
+            "summary": "南海トラフ地震では東京の被害は小さいと見込まれるので、大阪を外す理由にはならないと書いています。ある程度の都会でないと、インフラ整備のために増税が必要になるとも述べています。"
+          }
+        ]
+      }
+    },
+    "fukushuto-osaka-restoration": {"status": "pending", "name": "都構想・維新"},
+    "fukushuto-disaster-preparedness": {"status": "pending", "name": "防災・災害"},
+    "fukushuto-definition": {"status": "pending", "name": "定義・中身"},
+    "fukushuto-priority": {"status": "pending", "name": "優先順位"},
+    "fukushuto-finance": {"status": "pending", "name": "費用・財源"},
+    "fukushuto-other": {"status": "pending", "name": "その他"}
+  }
+}

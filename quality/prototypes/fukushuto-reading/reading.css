@@ -1,0 +1,146 @@
+/* 副首都・山なみと論点の読書面の試作（正本。scripts/fukushuto_reading.py が試作フォルダーへ写す）。
+   型は皇室典範改正の reading.css と同じ。色と変数は冒頭の opening.css（紙色の地・藍・朱・黄土）を引き継ぐ。 */
+.fr{width:min(1180px,calc(100% - 32px));margin:0 auto;padding:8px 0 56px}
+.fr-map{padding:28px 28px 20px;background:var(--card);border:1px solid var(--line);border-radius:18px;
+  box-shadow:0 10px 26px rgba(27,38,54,.06)}
+.fr-eyebrow{margin:0;font-size:12.5px;font-weight:800;color:var(--shu);letter-spacing:.06em;
+  display:flex;flex-wrap:wrap;gap:4px 12px;align-items:baseline}
+.fr-eyebrow span{font-weight:600;color:var(--muted);letter-spacing:0}
+.fr h2{margin:4px 0 6px;font-size:clamp(24px,3vw,32px);line-height:1.3}
+.fr-lead{margin:0 0 10px;font-size:15px;color:var(--muted)}
+.fr-fine{margin:8px 0 0;font-size:12.5px;color:var(--muted);line-height:1.7}
+.fr-map-shell{margin:14px 0 2px}
+.fr-mountains{display:block;width:100%;height:auto;overflow:visible}
+.fr-axis{font-size:11px;fill:#7a8291}
+.fr-hill{cursor:pointer;outline:none}
+.fr-silhouette{fill:url(#fr-hill);stroke:var(--ai);stroke-width:1.2;transition:fill .2s}
+.fr-hill:hover .fr-silhouette{fill:#b9c5df}
+.fr-hill.is-on .fr-silhouette{fill:url(#fr-hill-on);stroke:var(--ink);stroke-width:2}
+.fr-hill-n{font-size:19px;font-weight:800;fill:var(--muted)}
+.fr-hill-n tspan{font-size:11px}
+.fr-hill.is-on .fr-hill-n{fill:var(--ai)}
+
+.fr-chips ul{list-style:none;margin:16px 0 0;padding:0;display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px}
+.fr-chip{display:flex;flex-direction:column;gap:2px;height:100%;padding:10px 12px;border:1px solid var(--line);
+  border-radius:12px;background:var(--paper);color:var(--ink);text-decoration:none;min-height:44px}
+.fr-chip:hover{border-color:var(--ai)}
+.fr-chip:focus-visible{outline:3px solid var(--odo);outline-offset:2px}
+.fr-chip[aria-current="true"]{background:var(--ai);border-color:var(--ai);color:#fff}
+.fr-chip.is-other:not([aria-current="true"]){background:#ece7da;color:var(--muted)}
+.fr-chip-name{font-weight:800;font-size:14px;line-height:1.4}
+.fr-chip-n{font-size:15px;font-weight:800;font-variant-numeric:tabular-nums}
+.fr-chip-n small{font-size:11.5px;font-weight:600;margin-left:2px}
+.fr-live{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* 読書面 */
+.fr-panels{margin-top:22px;display:grid;gap:22px}
+.fr-panel{padding:26px 28px 28px;background:var(--card);border:1px solid var(--line);border-top:5px solid var(--ai);
+  border-radius:18px;scroll-margin-top:16px}
+.fr-panel.is-pending{border-top-color:#b9bfcc}
+.fr-panel-head{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px 28px;align-items:start}
+.fr-panel h3{margin:4px 0 8px;font-size:clamp(24px,3.2vw,34px);line-height:1.25;color:var(--ai)}
+.fr-panel h3:focus{outline:none}
+.fr-desc{margin:0 0 8px;font-size:16px;max-width:42em}
+.fr-count{margin:0;text-align:right;min-width:11em}
+.fr-count b{font-size:46px;line-height:1;font-variant-numeric:tabular-nums;color:var(--ink)}
+.fr-count span{font-size:16px;font-weight:700;margin-left:2px}
+.fr-count small{display:block;margin-top:6px;font-size:12.5px;color:var(--muted);max-width:15em;margin-left:auto}
+.fr-pending{margin:12px 0 0;padding:10px 14px;background:var(--paper);border-left:4px solid #b9bfcc;font-size:14px}
+.fr-grid{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:22px;margin-top:18px}
+.fr-main,.fr-side{display:grid;gap:18px;align-content:start;min-width:0}
+.fr-block{padding:18px 20px;border:1px solid var(--line);border-radius:14px;background:#fff;min-width:0}
+.fr-block h4{margin:0 0 6px;font-size:18px}
+.fr-block h5{margin:4px 0 6px;font-size:15px;line-height:1.55}
+.fr-block p{margin:0 0 6px;font-size:14.5px}
+.fr-empty{color:var(--muted)}
+
+/* 理由（主役） */
+.fr-reasons{border-color:var(--ai);border-width:1.5px}
+.fr-reason-list{list-style:none;margin:10px 0 0;padding:0;display:grid;gap:12px}
+.fr-reason{padding-bottom:12px;border-bottom:1px solid var(--line)}
+.fr-reason:last-child{border-bottom:0;padding-bottom:0}
+.fr-reason-head{display:flex;justify-content:space-between;gap:12px;align-items:baseline}
+.fr-reason-name{font-weight:800;font-size:15.5px}
+.fr-reason-n{white-space:nowrap;font-variant-numeric:tabular-nums;font-size:13px}
+.fr-reason-n b{font-size:20px;margin-right:1px}
+.fr-reason-n small{margin-left:8px;color:var(--muted);font-size:12.5px}
+.fr-reason-bar{display:block;height:8px;margin:6px 0 8px;background:var(--paper);border-radius:4px;overflow:hidden}
+.fr-reason-bar i{display:block;height:100%;background:var(--ai);border-radius:4px}
+.fr-voice{font-size:14px!important;color:var(--ink)}
+.fr-voice span{display:inline-block;margin-right:8px;padding:0 6px;border-radius:4px;background:var(--ai-soft);
+  color:var(--ai);font-size:11.5px;font-weight:800;vertical-align:1px}
+
+/* 立場（脇役） */
+.fr-stance{background:var(--paper)}
+
+/* 推移・照合・投稿 */
+.fr-trend table{width:100%;border-collapse:collapse;font-size:14px;margin:6px 0 2px}
+.fr-trend th,.fr-trend td{padding:8px 6px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+.fr-trend thead th{font-size:12px;color:var(--muted);font-weight:700}
+.fr-trend td{font-variant-numeric:tabular-nums;white-space:nowrap}
+.fr-trend td small{display:block;font-size:11.5px;color:var(--muted)}
+.fr-check,.fr-claim{margin-top:12px;padding-top:12px;border-top:1px solid var(--line)}
+.fr-verdict{display:inline-block;padding:2px 10px;border-radius:999px;font-size:12.5px!important;font-weight:800}
+.fr-verdict-fact .fr-verdict{background:#e3f1ee;color:#1f6b61}
+.fr-verdict-miss .fr-verdict{background:#fff3e0;color:#8a4b00}
+.fr-verdict-gap .fr-verdict{background:#fbe7e3;color:#9a3523}
+.fr-sources{margin-top:6px;font-size:13px}
+.fr-sources summary{cursor:pointer;color:var(--ai);font-weight:700;min-height:32px;display:flex;align-items:center}
+.fr-sources ul{margin:4px 0 0;padding-left:18px}
+.fr-sources li{margin:2px 0;overflow-wrap:anywhere}
+.fr-sources li span{display:block;font-size:12px;color:var(--muted)}
+.fr-post-list{list-style:none;margin:8px 0 0;padding:0;display:grid;gap:10px}
+.fr-post{padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--paper)}
+.fr-post-label{font-weight:800}
+.fr-posts .original-posts{margin-top:12px}
+.fr-posts .original-posts>summary{cursor:pointer;font-weight:800;color:var(--ai);min-height:44px;display:flex;align-items:center}
+.fr-posts .original-posts>a{display:block;font-size:13px}
+.fr-footer{margin:18px 0 0;font-size:12.5px;color:var(--muted)}
+
+/* JavaScriptが動くときだけ、選んでいない論点を隠す */
+.fr-js .fr-panel:not([data-selected]){display:none}
+
+@media (max-width:900px){
+  .fr-chips ul{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .fr-grid{grid-template-columns:1fr}
+}
+@media (max-width:650px){
+  .fr-map{padding:20px 16px 16px}
+  .fr-hill-n,.fr-axis{display:none}
+  .fr-chips ul{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .fr-panel{padding:20px 16px 22px}
+  .fr-panel-head{grid-template-columns:1fr}
+  .fr-count{text-align:left}
+  .fr-count small{margin-left:0;max-width:none}
+  .fr-block{padding:14px 14px}
+  .fr-reason-head{flex-wrap:wrap}
+}
+
+
+.fr-sunk{background:var(--paper)}
+.fr-sunk-item{margin-top:12px;padding-top:12px;border-top:1px solid var(--line)}
+.fr-sunk-item:first-of-type{margin-top:6px;padding-top:0;border-top:0}
+
+/* 副首都だけの部品：サイトの簡易ヘッダー、立場の帯、理由区分ごとの立場の内訳、あわせて確かめる */
+.fr-site{display:flex;flex-wrap:wrap;gap:4px 16px;align-items:baseline;padding:10px 24px;background:var(--ink);color:#fff;font-size:13px}
+.fr-logo{color:#fff;font-weight:800;text-decoration:none}
+.fr-panel-head+.fr-stance{margin-top:16px}
+.fr-band{display:flex;height:16px;border-radius:8px;overflow:hidden;background:var(--none);margin:8px 0 6px}
+.fr-band i,.fr-mini i{display:block;height:100%}
+.fr-stance-list{list-style:none;margin:6px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:4px 18px;font-size:13.5px}
+.fr-stance-list li{display:flex;align-items:baseline;gap:5px}
+.fr-stance-list b{font-size:17px;font-variant-numeric:tabular-nums}
+.fr-stance-list small{color:var(--muted)}
+.fr-sw{display:inline-block;width:12px;height:12px;border-radius:3px;align-self:center}
+.fr-reason-stance{display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px;font-size:12.5px!important;color:var(--muted);margin:2px 0 0!important}
+.fr-mini{display:inline-flex;width:72px;height:8px;border-radius:4px;overflow:hidden;background:var(--none);flex:none}
+.fr-see ul{margin:6px 0 0;padding-left:18px}
+.fr-see a{font-weight:700;min-height:32px;display:inline-flex;align-items:center}
+.fr-sunk{margin-top:14px;padding:12px 14px;background:var(--paper);border-radius:10px}
+.fr-sunk-item{margin-top:10px;padding-top:10px;border-top:1px solid var(--line)}
+.fr-sunk-item:first-of-type{margin-top:6px;padding-top:0;border-top:0}
+.fr-memo-check .fr-eyebrow{color:var(--ai)}
+.fr-checks .fr-eyebrow{color:var(--ai)}
+.fr-checks .fr-check:first-of-type{margin-top:4px;padding-top:0;border-top:0}
+@media (max-width:650px){.fr-site{padding:10px 16px}}
+
