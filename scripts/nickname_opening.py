@@ -163,7 +163,6 @@ def render_answer(config: dict, public: dict, answer: dict, index: int) -> str:
         f'<div class="nop-split__ok"><h3>{esc(answer["confirmed_label"])}</h3><ul>{ok}</ul></div>'
         f'<div class="nop-split__ng"><h3>{esc(answer["unconfirmed_label"])}</h3><ul>{ng}</ul></div>'
         f"</div>"
-        f'{render_voices(config["voices_label"], answer["voices"])}'
         f"</article>"
     )
 
@@ -189,7 +188,6 @@ def render_scope(config: dict) -> str:
         f'<div class="nop-scope__wrap"><table class="nop-scope__table">'
         f'<thead><tr><td></td>{head}</tr></thead><tbody>{"".join(rows)}</tbody></table></div>'
         f'<p class="nop-scope__note">{esc(s["note"])}</p>'
-        f'{render_voices(config["voices_label"], s["voices"])}'
         f"</section>"
     )
 
