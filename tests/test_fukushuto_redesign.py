@@ -317,5 +317,276 @@ class BackgroundTests(unittest.TestCase):
             self.render_bg("2026-10-10", edit)
 
 
+
+# ---------------------------------------------------------------- 手順7：公開候補と更新経路（docs/ は書き換えない）
+
+import shutil  # noqa: E402
+
+from scripts import fukushuto_layout as layout  # noqa: E402
+from scripts import build_fukushuto_redesign as redesign  # noqa: E402
+
+AS_OF = "2026-10-11"
+INPUTS = (
+    "THEMES.yaml",
+    "docs/data/themes/fukushuto.json",
+    "data/public/themes/fukushuto.json",
+    "data/fukushuto_5issues-reread.json",
+    "data/verification/fukushuto-claims.json",
+    "data/verification/fukushuto-background.json",
+    "quality/research/fukushuto-primary-sources.md",
+)
+
+
+def vote_block(text: str, name: str) -> str:
+    return re.search(r"var " + name + r"=\[(.*?)\];", text, re.S).group(1)
+
+
+def protected(text: str, name: str) -> str:
+    return re.search(f"<!-- {name}_START -->.*?<!-- {name}_END -->", text, re.S).group()
+
+
+class RedesignCandidateTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.tmp = tempfile.TemporaryDirectory()
+        out = Path(cls.tmp.name)
+        cls.source_path = layout.source_for_refresh(ROOT)
+        cls.source = cls.source_path.read_text(encoding="utf-8")
+        redesign.build(cls.source_path, out / "release", "release", as_of=AS_OF)
+        redesign.build(cls.source_path, out / "preview", "preview", as_of=AS_OF)
+        cls.release = (out / "release" / redesign.PAGE).read_text(encoding="utf-8")
+        cls.preview = (out / "preview" / redesign.PAGE).read_text(encoding="utf-8")
+        cls.s = soup_of(cls.release)
+        cls.src = soup_of(cls.source)
+        cls.out = out
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.tmp.cleanup()
+
+    def test_same_input_same_output(self):
+        redesign.build(self.source_path, self.out / "again", "release", as_of=AS_OF)
+        self.assertEqual(self.release, (self.out / "again" / redesign.PAGE).read_text(encoding="utf-8"))
+
+    def test_refuses_docs_and_new_page_input(self):
+        with self.assertRaisesRegex(ValueError, "docs"):
+            redesign.build(self.source_path, ROOT / "docs", "release", as_of=AS_OF)
+        with self.assertRaisesRegex(ValueError, "docs"):
+            redesign.build(self.source_path, ROOT / "docs" / "sub", "release", as_of=AS_OF)
+        with tempfile.TemporaryDirectory() as temp:
+            page = Path(temp) / "new.html"
+            page.write_text(self.release, encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "入力にできません"):
+                redesign.build(page, Path(temp) / "out", "release", as_of=AS_OF)
+
+    def test_title_seo_and_article_are_inherited_verbatim(self):
+        for name in ("SEO_META", "ARTICLE_JSON_LD", "ARTICLE_TRUST"):
+            self.assertEqual(self.release.count(protected(self.source, name)), 1, name)
+        self.assertEqual(self.s.head.title.get_text(), self.src.head.title.get_text())
+        self.assertEqual(self.s.select('link[rel="canonical"]')[0]["href"],
+                         "https://sns-reaction-map.jp/fukushuto-reaction-map.html")
+        self.assertEqual(len(self.s.select("h1")), 1)
+
+    def test_ga_and_adsense_only_in_release(self):
+        for name in ("GA_TAG", "ADSENSE_TAG"):
+            block = protected(self.source, name)
+            self.assertIn(block, self.release)
+            self.assertNotIn(block, self.preview)
+        self.assertIn("G-K10S4YCZFH", self.release)
+        self.assertIn('content="ca-pub-2542211932832864"', self.release)
+        self.assertIn('name="robots" content="noindex"', self.preview)
+        self.assertNotIn('name="robots"', self.release)
+
+    def test_vote_contract_is_unchanged(self):
+        for text in (self.release, self.preview):
+            self.assertIn(f'data-vote-topic="{redesign.VOTE_TOPIC}"', text)
+            self.assertIn("var TOPIC='fukushuto-issue-stance-v1'", text)
+            for name in ("VOTE_ISSUES", "V2I", "STANCES"):
+                if name == "V2I":
+                    self.assertEqual(re.search(r"var V2I=\[[^\]]*\];", self.source).group(),
+                                     re.search(r"var V2I=\[[^\]]*\];", text).group())
+                else:
+                    self.assertEqual(vote_block(self.source, name), vote_block(text, name), name)
+            self.assertIn("choiceIdx:issueIdx*STANCES.length+stanceIdx", text)
+            self.assertIn("(window.SNS_REDESIGN_PRODUCTION?'sns_vote_':'sns_vote_preview_')+TOPIC+'_my'", text)
+        # 論点7×立場3＝21通り
+        self.assertEqual(len(re.findall(r"\bk:'", vote_block(self.release, "VOTE_ISSUES"))), 7)
+        self.assertEqual(len(re.findall(r"\bk:'", vote_block(self.release, "STANCES"))), 3)
+        self.assertIn("window.SNS_REDESIGN_PRODUCTION=location.hostname==='sns-reaction-map.jp'", self.release)
+        self.assertIn("window.SNS_REDESIGN_PRODUCTION=false", self.preview)
+        scripts = self.s.select("script")
+        config = next(i for i, x in enumerate(scripts) if (x.get("src") or "").startswith("vote-config.js"))
+        client = next(i for i, x in enumerate(scripts) if (x.get("src") or "").startswith("vote-store.js"))
+        self.assertEqual(config + 2, client)
+
+    def test_adapter_vote_fingerprint_matches_source(self):
+        from scripts.refresh_adapters.fukushuto import vote_fingerprint
+        self.assertEqual(vote_fingerprint(self.source), vote_fingerprint(self.release))
+
+    def test_faq_json_ld_matches_visible_faq(self):
+        payloads = [json.loads(x.get_text()) for x in self.s.select('script[type="application/ld+json"]')]
+        faq = [p for p in payloads if p.get("@type") == "FAQPage"]
+        self.assertEqual(len(faq), 1)
+        visible = redesign.faq_items(self.s)
+        self.assertEqual(len(visible), 4)
+        self.assertEqual([(q["name"], q["acceptedAnswer"]["text"]) for q in faq[0]["mainEntity"]], visible)
+        self.assertEqual(sum(1 for p in payloads if p.get("@type") == "Article"), 1)
+        # 旧ページの6問（fukushuto_search_entry.py）は使わない
+        self.assertNotIn('id="fukushuto-faq-json-ld"', self.release)
+
+    def test_inherited_sections_and_links(self):
+        self.assertEqual(len(self.s.select("#planet-data")), 1)
+        self.assertEqual(self.s.select_one("#planet-data").string, self.src.select_one("#planet-data").string)
+        self.assertIn("社会全体の世論調査ではありません。", self.s.select_one("#caution").get_text())
+        for sel in ("#detail-data", "#related-topics", "body > footer"):
+            self.assertEqual(self.s.select_one(sel).get_text(), self.src.select_one(sel).get_text(), sel)
+        self.assertNotIn("../../../docs/", self.release)
+        hrefs = {a["href"] for a in self.s.select("footer a[href]")}
+        for href in ("about.html#operator", "about.html#method", "privacy.html", "disclaimer.html"):
+            self.assertIn(href, hrefs)
+        self.assertIn('href="about.html#corrections"', self.release)
+        self.assertIn('<time datetime="2026-07-15">', self.release)
+        self.assertIn(f'<time datetime="{PUBLIC["updated_on"]}">', self.release)
+
+    def test_classroom_section_contract(self):
+        section = self.release[self.release.index("<!-- CLASSROOM_START -->"):self.release.index("<!-- CLASSROOM_END -->")]
+        self.assertIn('class="classroom-print-btn"', section)
+        self.assertEqual(len(re.findall(r'href="#issue-([^"]+)"', section)), 6)
+        sources = section[section.index("classroom-sources"):section.index("classroom-questions")]
+        self.assertEqual(len(re.findall(r'href="(https?://[^"]+)"', sources)), 3)
+        self.assertLess(self.release.index("<!-- CLASSROOM_START -->"), self.release.index("<!-- ARTICLE_TRUST_START -->"))
+
+    def test_old_anchor_targets_exist(self):
+        for target in set(redesign.ALIASES.values()):
+            self.assertIsNotNone(self.s.find(id=target), target)
+        for issue in PUBLIC["issues"]:
+            self.assertIsNotNone(self.s.find(id="issue-" + issue["id"]))
+
+    def test_no_tide_or_legacy_widgets(self):
+        for marker in ("TIDE_CARD_START", "FUKUSHUTO_SEARCH_ENTRY_START", "THEME_DESIGN_START", "FUKUSHUTO_CONNECTED_START"):
+            self.assertNotIn(marker, self.release)
+        self.assertNotIn('<script async src="https://platform.twitter.com/widgets.js"', self.release)
+        for embed in self.s.select(".x-embed"):
+            self.assertRegex(embed.select_one("a.x-original-link")["href"], r"^https://x\.com/[^/]+/status/\d+$")
+
+    def test_provenance_counts_and_detects_mismatch(self):
+        from scripts.fukushuto_redesign_provenance import verified_selectors
+        result = verified_selectors(self.release, ROOT)
+        self.assertEqual(len(result), len(PUBLIC["issues"]) + 1)
+        node = self.s.select_one('#issue-fukushuto-location li.fr-reason .fr-reason-n b')
+        broken = self.release.replace(str(node), str(node).replace(node.get_text(), str(int(node.get_text().replace(",", "")) + 1)), 1)
+        with self.assertRaisesRegex(ValueError, "一致しません"):
+            verified_selectors(broken, ROOT)
+
+    def test_phase_switch_by_as_of(self):
+        """基準日で時制が切り替わり、締切・施行日を過ぎても生成は止まらない。"""
+        for as_of, law, comment in (("2026-10-17", "before", "closed"), ("2026-10-31", "after_unconfirmed", "closed")):
+            with self.subTest(as_of=as_of):
+                redesign.build(self.source_path, self.out / as_of, "release", as_of=as_of)
+                s = soup_of((self.out / as_of / redesign.PAGE).read_text(encoding="utf-8"))
+                self.assertEqual(s.select_one("#fukushuto-opening")["data-law-phase"], law)
+                self.assertEqual(s.select_one("#fukushuto-opening")["data-comment-phase"], comment)
+                self.assertEqual(s.select_one("#fukushuto-background")["data-law-phase"], law)
+
+
+class LayoutTests(unittest.TestCase):
+    def _root(self, temp: str) -> Path:
+        root = Path(temp)
+        shutil.copytree(ROOT / "configs", root / "configs")
+        shutil.copytree(ROOT / "scripts/fukushuto_redesign", root / "scripts/fukushuto_redesign")
+        for name in INPUTS:
+            (root / name).parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(ROOT / name, root / name)
+        shutil.copy2(layout.source_for_refresh(ROOT), root / layout.PAGE)
+        return root
+
+    def test_disabled_has_no_effect(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = self._root(temp)
+            (root / layout.CONFIG).write_text('{"enabled": false}')
+            before = (root / layout.PAGE).read_bytes()
+            self.assertEqual(layout.finish(root, as_of=AS_OF), {})
+            layout.materialize(root)
+            self.assertEqual(before, (root / layout.PAGE).read_bytes())
+            self.assertFalse((root / layout.SOURCE).exists())
+
+    def test_repository_layout_state_is_consistent(self):
+        published = layout.MARKER in (ROOT / layout.PAGE).read_text(encoding="utf-8")
+        if published:  # 公開後：設定が有効で、元HTMLがある
+            self.assertTrue(layout.enabled(ROOT))
+            self.assertTrue((ROOT / layout.SOURCE).is_file())
+        else:  # 公開前：docs/ は旧形式のまま
+            self.assertFalse(layout.enabled(ROOT))
+
+    def test_new_page_without_source_stops(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            (root / "docs").mkdir()
+            (root / "configs").mkdir()
+            (root / layout.PAGE).write_text('<meta name="fukushuto-layout">')
+            (root / layout.CONFIG).write_text('{"enabled": true}')
+            with self.assertRaisesRegex(ValueError, "更新元HTML"):
+                layout.source_for_refresh(root)
+            (root / layout.CONFIG).write_text('{"enabled": false}')
+            with self.assertRaisesRegex(ValueError, "更新設定が無効"):
+                layout.source_for_refresh(root)
+
+    def test_pipeline_finish_keeps_source_and_is_repeatable(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = self._root(temp)
+            legacy = (root / layout.PAGE).read_text(encoding="utf-8")
+            (root / layout.CONFIG).write_text('{"enabled": true}')
+            targets = layout.finish(root, as_of=AS_OF)
+            self.assertEqual(set(targets), {layout.SOURCE, layout.PAGE})
+            first = (root / layout.PAGE).read_bytes()
+            self.assertIn(b'name="fukushuto-layout"', first)
+            self.assertEqual(legacy, (root / layout.SOURCE).read_text(encoding="utf-8"))
+            self.assertEqual(layout.source_for_refresh(root), root / layout.SOURCE)
+            # 次の更新：隔離コピーで元HTMLを戻し、旧形式の処理の後に再適用すると同じページになる
+            layout.materialize(root)
+            self.assertEqual(legacy, (root / layout.PAGE).read_text(encoding="utf-8"))
+            layout.finish(root, as_of=AS_OF)
+            self.assertEqual(first, (root / layout.PAGE).read_bytes())
+            with self.assertRaisesRegex(ValueError, "再入力"):
+                layout.finish(root, as_of=AS_OF)
+
+    def test_count_mismatch_stops_before_writing(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = self._root(temp)
+            (root / layout.CONFIG).write_text('{"enabled": true}')
+            path = root / "data/fukushuto_5issues-reread.json"
+            raw = json.loads(path.read_text(encoding="utf-8"))
+            key = next(k for k, v in raw.items() if isinstance(v, dict) and v.get("items"))
+            raw[key]["items"].pop()
+            path.write_text(json.dumps(raw, ensure_ascii=False), encoding="utf-8")
+            before = (root / layout.PAGE).read_bytes()
+            with self.assertRaisesRegex(ValueError, "照合で停止"):
+                layout.finish(root, as_of=AS_OF)
+            self.assertEqual(before, (root / layout.PAGE).read_bytes())
+            self.assertFalse((root / layout.SOURCE).exists())
+
+    def test_finish_without_as_of_after_deadlines_does_not_stop(self):
+        """refresh_topic の公開候補生成は as_of を渡さずに finish を呼ぶ。
+        公開JSONの更新日が締切・施行日を過ぎていても、他テーマの候補生成を止めない。"""
+        with tempfile.TemporaryDirectory() as temp:
+            root = self._root(temp)
+            (root / layout.CONFIG).write_text('{"enabled": true}')
+            for rel in ("docs/data/themes/fukushuto.json", "data/public/themes/fukushuto.json"):
+                data = json.loads((root / rel).read_text(encoding="utf-8"))
+                data["updated_on"] = "2026-11-02"
+                (root / rel).write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
+            themes = (root / "THEMES.yaml").read_text(encoding="utf-8")
+            block = re.search(r"\n  fukushuto:\n(?:    .*\n)+", themes).group()
+            fixed = re.sub(r"(\n    updated_at: )['\"]?[0-9-]+['\"]?", r"\g<1>2026-11-02", block, count=1)
+            (root / "THEMES.yaml").write_text(themes.replace(block, fixed), encoding="utf-8")
+            self.assertEqual(set(layout.finish(root)), {layout.SOURCE, layout.PAGE})
+            s = soup_of((root / layout.PAGE).read_text(encoding="utf-8"))
+            self.assertEqual(s.select_one("#fukushuto-opening")["data-law-phase"], "after_unconfirmed")
+            self.assertEqual(s.select_one("#fukushuto-background")["data-comment-phase"], "closed")
+        refresh = (ROOT / "scripts/refresh_topic.py").read_text(encoding="utf-8")
+        self.assertEqual(refresh.count("finish_fukushuto_layout(candidate_root)"), 2)
+        self.assertEqual(refresh.count("materialize_fukushuto(candidate_root)"), 1)
+
+
 if __name__ == "__main__":
     unittest.main()

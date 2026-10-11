@@ -516,7 +516,7 @@ def render_panel(d: dict, issue: dict, selected: str, rank: int) -> str:
     name = issue_name(d, issue)
     complete = icfg.get("status") == "complete"
     k = len(public["issues"])
-    rank_text = f"{k}つの論点で最も多い件数です。" if rank == 1 else f"{k}つの論点のうち{rank}番目の件数です。"
+    rank_text = f"{k}つの分類で最も多い件数です。" if rank == 1 else f"{k}つの分類のうち{rank}番目の件数です。"
     out = [f'<section class="fr-panel issue-panel{" is-complete" if complete else " is-pending"}" id="issue-{esc(iid)}" '
            f'data-issue-panel="{esc(iid)}" aria-labelledby="fr-h-{esc(iid)}"{" data-selected" if iid == selected else ""}>',
            '<header class="fr-panel-head"><div>'

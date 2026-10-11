@@ -395,6 +395,10 @@ def main() -> None:
         tide_html = generate_tide_section(theme, prev_data, cur_data)
 
         html_path = ROOT / theme["html"]
+        if re.search(r'<meta name="[a-z-]+-layout"', html_path.read_text(encoding="utf-8")):
+            # 新デザインのページ（bukatsu/koshitsu/fukushuto_layout.py）は潮目を載せない。旧形式の差し込みで壊さない
+            print("  SKIP: 新デザインのページ（潮目は載せない）")
+            continue
         new_html = inject_into_html(html_path, tide_html, tide_css)
         html_path.write_text(new_html, encoding="utf-8")
         print(f"  → {theme['html']} 更新完了")

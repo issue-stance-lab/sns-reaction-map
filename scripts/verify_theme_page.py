@@ -309,6 +309,10 @@ def verify_planet_breakdowns(theme: str, page: str, data: dict[str, Any]) -> tup
     redesign = None
     # 新デザインは理由の件数を <b> に分けて描く。表示形式だけが違うので、各論点の欄の中で照合する。
     koshitsu_redesign = theme == "koshitsu-tenpakai" and 'name="koshitsu-layout"' in page
+    # 副首都の新デザインも同じ形（理由区分の件数は .fr-reason-n b、論点の件数は .fr-count b）
+    fukushuto_redesign = theme == "fukushuto" and 'name="fukushuto-layout"' in page
+    redesign_prefix = "fr" if fukushuto_redesign else "kr"
+    koshitsu_redesign = koshitsu_redesign or fukushuto_redesign
     if ('id="public-data"' in page and theme == "bukatsu-chiiki") or koshitsu_redesign:
         from bs4 import BeautifulSoup
         redesign = BeautifulSoup(page, "html.parser")
@@ -334,10 +338,12 @@ def verify_planet_breakdowns(theme: str, page: str, data: dict[str, Any]) -> tup
                 panel = redesign.find(id="issue-" + issue_id)
                 mismatched = []
                 for item in items:
-                    node = panel.select_one(f'li.kr-reason[data-reason="{item["id"]}"] .kr-reason-n b') if panel else None
+                    node = panel.select_one(
+                        f'li.{redesign_prefix}-reason[data-reason="{item["id"]}"] .{redesign_prefix}-reason-n b'
+                    ) if panel else None
                     if node is None or node.get_text() != f'{int(item["count"]):,}':
                         mismatched.append(item["label"])
-                heading = panel.select_one(".kr-count b") if panel else None
+                heading = panel.select_one(f".{redesign_prefix}-count b") if panel else None
                 if heading is None or heading.get_text() != f"{int(total):,}":
                     mismatched.append("論点の件数")
             elif redesign is not None:
