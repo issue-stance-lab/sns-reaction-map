@@ -74,6 +74,10 @@ a:focus-visible, summary:focus-visible { outline: 2px solid var(--fact); outline
 .hop-event__text { margin: 2px 0 0; font-size: 13.5px; color: var(--ink); }
 .hop-src { margin-left: 6px; font-size: 12.5px; white-space: nowrap; }
 
+.hop-more-events { margin: 0 0 10px; }
+.hop-more-events > summary { cursor: pointer; padding: 8px 0 8px 5.6em; font-size: 14px; font-weight: 600; color: var(--fact); }
+.hop-more-events[open] > summary { padding-bottom: 12px; }
+.hop-events--rest { padding-top: 4px; }
 .hop-pending { margin-top: 6px; padding: 14px 16px 6px; border: 1px dashed var(--pending); border-radius: 6px; }
 .hop-pending h3 { display: flex; align-items: center; gap: 6px; margin: 0 0 10px; font-size: 14.5px; color: var(--pending); }
 .hop-pending .hop-events::before { background: none; border-left: 1px dashed var(--pending); }
@@ -138,5 +142,6 @@ a:focus-visible, summary:focus-visible { outline: 2px solid var(--fact); outline
   .hop-event__head strong { font-size: 14.5px; }
   .hop-src { white-space: normal; }
   .hop-pending { padding: 12px 10px 4px; }
+  .hop-more-events > summary { padding-left: 5.5em; }
   .hop-count__num strong { font-size: 40px; }
 }

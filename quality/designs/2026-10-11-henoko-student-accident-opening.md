@@ -91,3 +91,9 @@ FAQ「ダンプカーと警備員の事故とは別？」は既存FAQの文言�
 ## 2026-10-11 一次資料との照合（Haiku 8本＋司令塔の再確認）
 
 照合表: [quality/reviews/2026-10-11-henoko-student-accident-opening-source-check.md](../reviews/2026-10-11-henoko-student-accident-opening-source-check.md)。不一致1件を反映: 5/22の国交省の告発は転覆した船のうち1隻の船長が対象（国交省の発表で司令塔が再確認）。7/14の答弁（移設工事を扱うこと自体を中立違反としたのではない）は国会会議録 総務委員会 #115 で司令塔が確認、設定どおり。
+
+## 2026-10-11 オーナー指示で年表を開閉式へ
+
+- 経緯の年表のうち最初の3件（3/16・4/7・4/15）は開いたまま見え、残り6件は `<details><summary>続きを見る（6件）</summary>` の中に入れた。JavaScript不要。PCも同じ扱い。「まだ公表されていないもの」は開閉の外に残した。文言は設定JSON（`open_count`、`more_label_template`）、部品は `scripts/henoko_opening.py` の `render_timeline`、見た目は `opening.css` の `.hop-more-events`。
+- 375pxでSNSの欄の開始位置: 3,122px → 2,351px（771px上がった）。全長 4,774px → 4,003px（閉じた状態）。
+- 横はみ出しなし（375px、1280pxとも scrollWidth が画面幅と同じ）。生成を2回実行して `index.html`・`opening-fragment.html` のmd5が一致。

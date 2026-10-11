@@ -173,6 +173,14 @@ def render_timeline(config: dict) -> str:
             f'<strong>{esc(e["title"])}</strong></p>'
             f'<p class="hop-event__text">{esc(e["text"])}{link(e.get("source"))}</p></div></li>'
         )
+    head_n = tl["open_count"]
+    events_html = f'<ol class="hop-events">{"".join(items[:head_n])}</ol>'
+    if len(items) > head_n:
+        label = tl["more_label_template"].format(n=len(items) - head_n)
+        events_html += (
+            f'<details class="hop-more-events"><summary>{esc(label)}</summary>'
+            f'<ol class="hop-events hop-events--rest">{"".join(items[head_n:])}</ol></details>'
+        )
     pending = "".join(
         f'<li class="hop-event hop-event--pending"><span class="hop-when-pending">未公表</span>'
         f'<div class="hop-event__body"><p class="hop-event__head"><span class="hop-actor">{esc(p["actor"])}</span>'
@@ -185,7 +193,7 @@ def render_timeline(config: dict) -> str:
         f'<section class="hop-timeline hop-zone--fact" id="hop-timeline" aria-labelledby="hop-timeline-title">'
         f'<header class="hop-panel__head"><p class="hop-kind">{icon("fact")}{esc(tl["kind_label"])}</p>'
         f'<h2 id="hop-timeline-title">{esc(tl["title"])}<small>{year}年</small></h2></header>'
-        f'<ol class="hop-events">{"".join(items)}</ol>'
+        f'{events_html}'
         f'<div class="hop-pending" id="hop-pending"><h3>{icon("pending")}{esc(tl["pending_title"])}</h3>'
         f'<ol class="hop-events">{pending}</ol><p class="hop-pending__note">{esc(pending_note)}</p></div>'
         f'<p class="hop-panel__note">{esc(tl["note"])}</p>'
