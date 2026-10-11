@@ -3,8 +3,19 @@
   "theme_id": "ai-copyright",
   "public_json": "docs/data/themes/ai-copyright.json",
   "reason_data": "data/ai-copyright_issues-reread.json",
+  "checked_on": "2026-10-11",
+  "_checked_on": "制度の記述（30条の4の条文、文化庁「考え方」の類似性・依拠性・作風の箇所、文化庁「AIと著作権」ページの資料一覧、プリンシプル・コードの届出開始日）を編集部が一次資料で確かめた日。ここ1か所だけに持ち、冒頭・読書面・背景の「◯月◯日時点」はここから作る。文化庁の考え方の改訂、新しい裁判、法改正の動きが出たら、資料を確かめ直してこの日付と該当の文を直す。sources[].checked_on を書いた出典だけは、その日付を優先する。",
+  "checked_line": "制度の説明は、{checked}時点で公開されている資料で確かめています。",
+  "principle_code": {
+    "filing_starts_on": "2026-10-26",
+    "filing_confirmed_on": null,
+    "_about": "内閣府のプリンシプル・コードに基づく届出の開始日（内閣官房「AI時代の知的財産権検討会」ページ、2026-10-11確認）。背景の年表・よくある質問・未確認事項が、基準日がこの日より前か後かで文を切り替える。開始を一次資料で確かめたら filing_confirmed_on に確認日を書く。"
+  },
   "page_title": "生成AIと著作権、何が侵害になる？｜SNS反応まっぷ",
-  "breadcrumb": ["トップ", "テック・著作権"],
+  "breadcrumb": [
+    "トップ",
+    "テック・著作権"
+  ],
   "eyebrow": "テック・著作権 ／ 資料で確かめてから意見を読む",
   "headline": {
     "lead": "生成AIと著作権、",
@@ -20,7 +31,9 @@
       "note": "AI生成物について判断した国内の確定判例は、確認できていません。",
       "pictogram": "both",
       "pictogram_label": "元の作品とAIの生成物が重なり、似ている部分と、もとにした矢印の両方がある図",
-      "sources": ["bunka-kangaekata"]
+      "sources": [
+        "bunka-kangaekata"
+      ]
     },
     {
       "id": "allowed",
@@ -30,7 +43,10 @@
       "note": "学習のための利用は著作権法30条の4で原則として許諾なしに行えます。ただし、権利者の利益を不当に害する場合は対象外です。",
       "pictogram": "style-only",
       "pictogram_label": "元の作品とAIの生成物が重ならず、作風だけが点線でつながっている図",
-      "sources": ["bunka-kangaekata", "copyright-act-30-4"]
+      "sources": [
+        "bunka-kangaekata",
+        "copyright-act-30-4"
+      ]
     }
   ],
   "figure_labels": {
@@ -47,8 +63,7 @@
       "issued": "2024年3月15日",
       "locator": "5.（2）生成・利用段階、作風・画風の項",
       "url": "https://www.bunka.go.jp/seisaku/bunkashingikai/chosakuken/pdf/94037901_01.pdf",
-      "checked_on": "2026-09-07",
-      "memo_ref": "quality/research/ai-copyright-primary-sources.md 資料B-2、確認できなかったこと3（2026-09-07に依拠性・作風の各節を照合）"
+      "memo_ref": "quality/research/ai-copyright-primary-sources.md 資料B-2（2026-10-11 にPDFを取り直し、印刷32ページの類似性・依拠性、23ページの作風を照合）"
     },
     "copyright-act-30-4": {
       "publisher": "e-Gov法令検索",
@@ -56,11 +71,10 @@
       "issued": "",
       "locator": "第30条の4 ただし書",
       "url": "https://laws.e-gov.go.jp/law/345AC0000000048",
-      "checked_on": "2026-09-07",
-      "memo_ref": "quality/research/ai-copyright-primary-sources.md 資料J"
+      "memo_ref": "quality/research/ai-copyright-primary-sources.md 資料J（2026-10-11 にe-Gov法令API v2で現行版と施行予定の3版の条文を照合）"
     }
   },
-  "after_answers": "画像・音楽・文章ごとの違いは、下の背景で扱います。",
+  "after_answers": "条文や文化庁の整理、これまでの経緯とまだ分からないことは、下の背景で扱います。",
   "disclaimer": "法律相談ではなく、公開資料とSNS投稿の整理です。",
   "count_block": {
     "label": "SNSの意見",
@@ -72,7 +86,13 @@
     "sample_note": "Yahooリアルタイム検索で集めた公開投稿の集計で、世論調査ではありません。"
   },
   "actions": [
-    {"label": "論点別の意見を読む", "href": "#map"},
-    {"label": "背景と経緯を読む", "href": "#background"}
+    {
+      "label": "論点別の意見を読む",
+      "href": "#ai-copyright-reading"
+    },
+    {
+      "label": "背景と経緯を読む",
+      "href": "#ai-copyright-background"
+    }
   ]
 }

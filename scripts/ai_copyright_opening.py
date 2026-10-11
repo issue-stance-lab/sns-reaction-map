@@ -9,6 +9,10 @@
 出力（--out-dir、既定は quality/prototypes/ai-copyright-opening）:
   - opening-fragment.html  冒頭の部品（<section> 1つ）。将来ページへ貼る単位
   - index.html             部品を包んだ確認用の単独ページ（opening.css を読む）
+  - opening.css            正本 scripts/ai_copyright_redesign/opening.css の写し
+
+制度の確認日は設定の checked_on（1か所）から作る。出典ごとの checked_on があればそれを優先する。
+読書面（scripts/ai_copyright_reading.py）からは load_inputs() と render_fragment(data, as_of) を使う。
 
 日時や乱数は使わないので、同じ入力なら何度実行しても同じ出力になる。
 --check を付けると書き込まず、出力が最新でなければ終了コード1で止まる。
@@ -19,7 +23,9 @@
 from __future__ import annotations
 
 import argparse
+import datetime as dt
 import json
+import shutil
 import sys
 from html import escape
 from pathlib import Path
@@ -27,6 +33,9 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_CONFIG = ROOT / "configs" / "ai-copyright-opening.json"
 DEFAULT_OUT = ROOT / "quality" / "prototypes" / "ai-copyright-opening"
+ASSETS = ROOT / "scripts" / "ai_copyright_redesign"
+# 「何が侵害になる？」は法的判断に近いので、手書きの文言に使わない語（冒頭設計記録の免責）。
+FORBIDDEN_WORDS = ("違法", "合法")
 
 
 def load_json(path: Path) -> dict:
@@ -91,7 +100,31 @@ def pictogram(kind: str, labels: dict, aria: str) -> str:
     )
 
 
-def render_sources(ids: list[str], sources: dict) -> str:
+def source_checked_on(cfg: dict, sid: str) -> str:
+    """出典の確認日。出典に書いていなければ設定の checked_on（1か所）を使う。"""
+    return cfg["sources"][sid].get("checked_on") or cfg["checked_on"]
+
+
+def strings_of(node) -> list[str]:
+    """設定JSONの文字列を集める（"_" で始まる注記キーは除く）。"""
+    if isinstance(node, str):
+        return [node]
+    if isinstance(node, dict):
+        return [t for k, v in node.items() if not str(k).startswith("_") for t in strings_of(v)]
+    if isinstance(node, list):
+        return [t for v in node for t in strings_of(v)]
+    return []
+
+
+def check_words(cfg: dict, where: str) -> None:
+    for text in strings_of(cfg):
+        for word in FORBIDDEN_WORDS:
+            if word in text:
+                raise SystemExit(f"{where} の文言に「{word}」があります（法的判断に近い語は使わない）: {text[:40]}")
+
+
+def render_sources(ids: list[str], cfg: dict) -> str:
+    sources = cfg["sources"]
     items = []
     for sid in ids:
         s = sources[sid]
@@ -99,7 +132,7 @@ def render_sources(ids: list[str], sources: dict) -> str:
         items.append(
             f'<li><a href="{escape(s["url"])}" target="_blank" rel="noopener noreferrer">'
             f'{escape(s["publisher"])}「{escape(s["title"])}」{issued} ↗</a>'
-            f'<span class="src-meta">{escape(s["locator"])}。資料の確認日 {jp_date(s["checked_on"])}</span></li>'
+            f'<span class="src-meta">{escape(s["locator"])}。資料の確認日 {jp_date(source_checked_on(cfg, sid))}</span></li>'
         )
     return '<ul class="answer-sources">' + "".join(items) + "</ul>"
 
@@ -146,7 +179,34 @@ def render_count(public: dict, cfg: dict, reasons: set[str]) -> str:
     )
 
 
-def render_fragment(cfg: dict, public: dict, reasons: set[str]) -> str:
+def load_inputs(config_path: Path = DEFAULT_CONFIG) -> dict:
+    cfg = load_json(config_path)
+    public = load_json(ROOT / cfg["public_json"])
+    if public.get("theme_id") != cfg["theme_id"]:
+        raise SystemExit(f"公開JSONのテーマ {public.get('theme_id')} が設定 {cfg['theme_id']} と違う")
+    reasons = issues_with_reasons(ROOT / cfg["reason_data"], cfg["theme_id"])
+    validate(public, reasons)
+    for q in cfg["entry_questions"]:
+        for sid in q["sources"]:
+            if sid not in cfg["sources"]:
+                raise SystemExit(f"出典 {sid} が sources に無い")
+    dt.date.fromisoformat(cfg["checked_on"])
+    pc = cfg["principle_code"]
+    dt.date.fromisoformat(pc["filing_starts_on"])
+    if pc.get("filing_confirmed_on") and pc["filing_confirmed_on"] < pc["filing_starts_on"]:
+        raise SystemExit("届出開始の確認日が開始日より前です")
+    check_words(cfg, str(config_path.name))
+    return {"config": cfg, "public": public, "reasons": reasons}
+
+
+def default_as_of(data: dict) -> str:
+    """基準日の既定は公開JSONの更新日（今日の日付は使わない）。"""
+    return data["public"]["updated_on"]
+
+
+def render_fragment(data: dict, as_of: str | None = None) -> str:
+    cfg, public, reasons = data["config"], data["public"], data["reasons"]
+    as_of = as_of or default_as_of(data)
     h = cfg["headline"]
     crumbs = " ／ ".join(escape(c) for c in cfg["breadcrumb"])
     cards = []
@@ -158,7 +218,7 @@ def render_fragment(cfg: dict, public: dict, reasons: set[str]) -> str:
             f'{pictogram(q["pictogram"], cfg["figure_labels"], q["pictogram_label"])}'
             f'<p class="answer-text">{escape(q["answer"])}</p>'
             f'<p class="answer-note">{escape(q["note"])}</p>'
-            f'{render_sources(q["sources"], cfg["sources"])}'
+            f'{render_sources(q["sources"], cfg)}'
             "</article>"
         )
     actions = "".join(
@@ -168,7 +228,7 @@ def render_fragment(cfg: dict, public: dict, reasons: set[str]) -> str:
     return (
         "<!-- AI_COPYRIGHT_OPENING_START: scripts/ai_copyright_opening.py で生成。直接編集しない -->\n"
         f'<section class="aic-opening" id="top" aria-labelledby="aic-title" data-theme-id="{escape(cfg["theme_id"])}" '
-        f'data-updated-on="{escape(public["updated_on"])}">\n'
+        f'data-updated-on="{escape(public["updated_on"])}" data-as-of="{escape(as_of)}" data-checked-on="{escape(cfg["checked_on"])}">\n'
         '<div class="aic-wrap">\n'
         f'<nav class="aic-crumbs" aria-label="パンくず">{crumbs}</nav>\n'
         '<div class="aic-hero">\n'
@@ -183,7 +243,7 @@ def render_fragment(cfg: dict, public: dict, reasons: set[str]) -> str:
         f"{render_count(public, cfg, reasons)}\n"
         "</div>\n"
         f'<p class="aic-after">{escape(cfg["after_answers"])}</p>\n'
-        f'<p class="aic-disclaimer">{escape(cfg["disclaimer"])}</p>\n'
+        f'<p class="aic-disclaimer">{escape(cfg["disclaimer"])}{escape(cfg["checked_line"].format(checked=jp_date(cfg["checked_on"])))}</p>\n'
         "</div>\n"
         "</section>\n"
         "<!-- AI_COPYRIGHT_OPENING_END -->\n"
@@ -213,21 +273,13 @@ def main() -> int:
     ap.add_argument("--check", action="store_true", help="書き込まずに、出力が最新かだけ確かめる")
     args = ap.parse_args()
 
-    cfg = load_json(args.config)
-    public = load_json(ROOT / cfg["public_json"])
-    if public.get("theme_id") != cfg["theme_id"]:
-        raise SystemExit(f"公開JSONのテーマ {public.get('theme_id')} が設定 {cfg['theme_id']} と違う")
-    reasons = issues_with_reasons(ROOT / cfg["reason_data"], cfg["theme_id"])
-    validate(public, reasons)
-    for q in cfg["entry_questions"]:
-        for sid in q["sources"]:
-            if sid not in cfg["sources"]:
-                raise SystemExit(f"出典 {sid} が sources に無い")
-
-    fragment = render_fragment(cfg, public, reasons)
+    data = load_inputs(args.config)
+    cfg = data["config"]
+    fragment = render_fragment(data)
     outputs = {
         args.out_dir / "opening-fragment.html": fragment,
         args.out_dir / "index.html": render_page(cfg, fragment),
+        args.out_dir / "opening.css": (ASSETS / "opening.css").read_text(encoding="utf-8"),
     }
     stale = []
     for path, text in outputs.items():
