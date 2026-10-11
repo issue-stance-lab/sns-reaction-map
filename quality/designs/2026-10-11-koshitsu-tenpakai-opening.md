@@ -71,3 +71,7 @@
 ## 2026-10-11 一次資料との照合（Haiku 8本＋司令塔の再確認）
 
 照合表: [quality/reviews/2026-10-11-koshitsu-tenpakai-opening-source-check.md](../reviews/2026-10-11-koshitsu-tenpakai-opening-source-check.md)。不一致なし。現行の皇室典範第一条「男系の男子」は司令塔が条文APIで確認。成立日7/17と有識者会議報告書の本文は未確認のまま。
+
+## 2026-10-11 設定JSONへ照合結果を反映
+
+成立日 2026-07-17 を表示（資料K）。制度の確認日を 2026-10-11 へ（e-Gov 再照合）。「女性天皇」の定義が一次資料に無い旨を設定の注記に記録。

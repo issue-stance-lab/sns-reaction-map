@@ -205,6 +205,7 @@ def render_fragment(config: dict, public: dict, as_of: str) -> str:
     by_id = {i["id"]: i for i in public["issues"]}
 
     values = {
+        "enacted": ja_date(law["enacted_on"]) if law.get("enacted_on") else "",
         "promulgated": ja_date(law["promulgated_on"]),
         "enforcement": ja_date(law["enforcement_on"]),
         "confirmed": ja_date(law["enforcement_confirmed_on"]) if law.get("enforcement_confirmed_on") else "",
