@@ -64,3 +64,7 @@
 - 実際のページへの差し込み（既存の検索入口・THEME_COUNT・読了カウンタとの置き換え）、GA4・AdSense・OGP・アンカー維持は未着手。
 - 立場の色はplanet設定と同じだが、色覚多様性の検証はしていない（模様を併用）。
 - 出典URLの生存確認はしていない。
+
+## 2026-10-11 一次資料との照合（Haiku 8本＋司令塔の再確認）
+
+照合表: [quality/reviews/2026-10-11-constitutional-amendment-opening-source-check.md](../reviews/2026-10-11-constitutional-amendment-opening-source-check.md)。不一致なし。憲法96条と国民投票法第2条（60日以後180日以内）は司令塔が条文APIで確認。PDF3本（自民党案・緊急事態イメージ案・審査会資料集）とFAQ「改正0回」は未確認のまま。
