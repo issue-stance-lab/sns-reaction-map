@@ -225,3 +225,48 @@ python3 scripts/build_koshitsu_redesign.py --mode preview --output-dir /tmp/kosh
 
 - 本番ホストでの GA4・AdSense の発火、投票 POST、X埋め込みの実表示（公開後に確認）。
 - 承認台帳の番号 `approval-20261011-002` は、並行する他ブランチが同じ番号を使うと統合時に重なる（現時点で他ブランチに 002 は無い）。
+
+## 10. 山なみを対話式に戻す（2026-10-11）
+
+ブランチ `task/planet-three-themes`。生成AIと著作権（`2026-10-11-ai-copyright-production-candidate.md` 10節）と同じ型で、
+「論点ごとに読む」の静的SVGの山なみ（`.kr-map-shell`）と論点名リスト（`nav.kr-chips`）を、元HTMLの対話式の山なみに置き換えた。
+冒頭・論点ごとの読書面・背景の開閉行・保護対象の継承は変えていない。
+
+### 10-1. 変えたファイル
+
+| ファイル | 変更 |
+|---|---|
+| `scripts/build_koshitsu_redesign.py` | `_planet()` を追加（生成AIと同じ写し方。部品12個が1つずつ無ければ止まる）。調査条件は山なみの中で `RESEARCH_CONDITIONS` に囲む（`div.ko-research`）。PLANET_DATA は山なみの直後の1つだけ（末尾の写しはやめた）。旧アンカー `planet-block` の読み替えを外し、隠した受け皿 `HIDDEN_RECEIVERS`（`fallback`・`quiz`）は「表示されていなければ読み替える」形にした |
+| `scripts/koshitsu_redesign/planet.js`（新規） | 生成AIの planet.js の写し。読書面の入口を `window.KoshitsuReading`、見出しを `#kr-h-…` に |
+| `scripts/koshitsu_redesign/reading.js` | `window.KoshitsuReading.select(id)` を公開。動きは変えていない |
+| `scripts/koshitsu_redesign/production.css` | 山なみの配色と並べ方（`.ko-planet`）。生成AIの写しで、色だけ皇室の紺（`--indigo` `#27346a`）・紙色（`#f6f2ea`）・線（`#e4dccd`）に |
+| `tests/test_koshitsu_redesign.py` | `test_planet_is_copied_from_source`・`test_planet_follows_source_updates` を追加。旧アンカーの検査を受け皿に対応 |
+| `docs/koshitsu-tenpakai-reaction-map.html`・`quality/prototypes/koshitsu-tenpakai-release/`・`quality/prototypes/koshitsu-tenpakai-reading/reading.js` | 作り直し |
+
+### 10-2. 皇室だけの違い
+
+- 立場モードが6つ（すべて＋「今回案全体」への評価5つ）。PCでは3列×2行、375pxでは「すべて」を1行にして残りを2列。論点ボタン6つも3列。
+- 山なみの中に元HTMLの注記「色は『今回案全体』への評価です…未表明は、中立や無関心の意味ではありません」があり、そのまま出る。
+- 論点IDは PLANET_DATA・公開JSON・読書面（`data-issue-panel`）で同じ6つ（`scripts/koshitsu_taxonomy.py`）。変換表は要らない。
+- 旧ページの連動表示（`koshitsu-connected.*`・`theme-design.*`）は読み込まない。選択パネルの中身は生成AIと同じ（論点タブ・図解画像・旧い理由区分の名前は CSS で出さない）。
+- 旧ページの別名表は「ページにあるIDでも読み替える」作りだったので、生成AIと同じく「表示されている要素なら読み替えない」判定を足した。
+
+### 10-3. 検査結果
+
+| 検査（3テーマまとめて、作業ツリー） | 結果 |
+|---|---|
+| `verify_theme_page.py`（全テーマ） | 10テーマ NG 0 |
+| `verify_number_provenance.py` | 部活動 533/533・皇室 282/282・副首都 293/293 説明済み、全テーマで終了0 |
+| `verify_builder_rebuildability.py` | 10テーマ NG 0 |
+| `run_public_checks.py` | 終了0 |
+| `python3 -m unittest discover tests` | 1,839件 OK（skip 8） |
+| よみやす（docs の新ページ、`--strict`） | 皇室 info 11件・副首都 info 17件で PASS、部活動 warn 27件・info 3件（どれも変更前と同数。部活動の warn は資料名などの長い文で、前から「要修正」のまま） |
+| 10/19 の模擬（新規0件、使い捨てコピー） | 皇室・副首都を新規0件の回として `adapter.build` → `prepare_public_candidate_bundle_multi`（完了記録の検査だけ外した。保存回の report を代用）。公開対象67件。候補の3ページとも山なみ（`#planet-block`）・PLANET_DATA（1つ）・planet.js 入り、皇室・副首都は基準日 2026-10-19。候補の中で `verify_theme_page.py` 全テーマ NG 0、数字の出所 3テーマ NG 0、よみやすは上と同数、Playwright でもコンソールエラー0・山を押すと読書面へ |
+| 2回生成 | md5 一致（`e7276042…`、`PYTHONHASHSEED=7` でも同じ、docs のページとも一致）。`build_koshitsu_arena.py` →「UPDATE」→ `--check`「OK」 |
+| Playwright（docs、1280/375px、x.com・platform.twitter.com・twimg.com 遮断） | コンソールエラー0、scrollWidth 一致。読み込み直後は画面が動かない（scrollY 0）。立場「今回案全体を支持」（46件・2.3%）で100マスと件数が変わる。山（旧宮家養子縁組）を押すと読書面がその論点に切り替わり、欄の上端が画面上104px・見出し `#kr-h-koshitsu-tenpakai-former-royal-adoption` にフォーカス・URL `#issue-…`。Enter でも同じ。論点ボタンは地図の中で切り替わり、読書面も合わせて切り替わる。`#issue-…` 付きの読み込みも読書面がその論点に。画像は `quality/prototypes/koshitsu-tenpakai-release/evidence/planet-restore/` |
+
+### 10-4. 確認していないこと
+
+- 実機（iPhone Safari など）とスクリーンリーダー。
+- 新規の意見がある回の定期更新（模擬は新規0件）。施行日（10/24）以降の表示と山なみの組み合わせ（山なみ側は日付で変わらない）。
+- `#issue-…` 付きで読み込んだとき、読書面は切り替わるが、画面の位置は山なみの選択パネル付近に止まる（生成AIと同じ）。

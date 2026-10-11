@@ -11,9 +11,14 @@ from pathlib import Path
 from bs4 import BeautifulSoup
 
 from scripts import koshitsu_layout as layout
+from scripts import build_koshitsu_redesign as redesign
 from scripts.build_koshitsu_redesign import ALIASES, PAGE, ROOT, VOTE_TOPIC, build
 
 AS_OF = "2026-10-11"
+def soup_of(html: str) -> BeautifulSoup:
+    return BeautifulSoup(html, "html.parser")
+
+
 PUBLIC = json.loads((ROOT / "docs/data/themes/koshitsu-tenpakai.json").read_text(encoding="utf-8"))
 REREAD = json.loads((ROOT / "data/koshitsu-tenpakai_issues-reread.json").read_text(encoding="utf-8"))
 INPUTS = (
@@ -123,9 +128,85 @@ class RedesignCandidateTests(unittest.TestCase):
         for iso in (str(PUBLIC["updated_on"]), "2026-07-18"):
             self.assertIn(f'<time datetime="{iso}">', self.release)
 
+    def test_planet_is_copied_from_source(self):
+        """全体像の山なみは、元HTMLの対話式の山なみ（PLANET_SECTION）をそのまま写す（2026-10-11 に静的SVGから戻した）。"""
+        src_section = re.search(r"<!-- PLANET_SECTION_START -->(.*?)<!-- PLANET_SECTION_END -->", self.source, re.S).group(1)
+        src = soup_of(src_section)
+        # 山なみのスクリプト・見た目・PLANET_DATA は1文字も変えない
+        src_script = [x for x in src.find_all("script", recursive=False) if x.get("id") != "planet-data"][0].string
+        self.assertEqual(self.release.count(src_script), 1)
+        self.assertEqual(self.release.count(src.select_one("section.planet-panel > style").string), 1)
+        self.assertEqual(self.release.count("window.PLANET_DATA="), 1)
+        # 山なみは読書面の全体像の中。静的SVGと論点名リストは無い
+        planet = self.s.select_one("#koshitsu-reading .kr-map section.planet-panel #planet-block")
+        self.assertIsNotNone(planet)
+        self.assertEqual(self.s.select(".kr-mountains, .kr-chip, .kr-map-shell"), [])
+        # 立場モード・100マス・論点の一覧・見かた・図が使えないときの一覧は、元HTMLと同じ
+        for sel in ("#modes", ".stage", "#dotbox", "#list", "#meta", ".floor-note", ".hint"):
+            self.assertEqual(str(planet.select_one(sel)), str(src.select_one("#planet-block " + sel)), sel)
+        self.assertEqual(planet.select_one("#fallback-nav").get_text(), src.select_one("#fallback-nav").get_text())
+        # JSなしの論点一覧は新しい読書面へ直接つながる
+        hrefs = [a["href"] for a in planet.select("#fallback-nav a")]
+        self.assertEqual(sorted(hrefs), sorted("#issue-" + i["id"] for i in PUBLIC["issues"]))
+        for href in hrefs:
+            self.assertIsNotNone(self.s.find(id=href[1:]), href)
+        # 新デザインで出さない部分（JSなし用の論点別本文・資料にしかない話・編集部整理）は外し、予想・クイズ・進捗は受け皿だけ
+        self.assertEqual(planet.select("section.landing-panel, #ocean, #editorial"), [])
+        for receiver in ("#guesses", "#quiz"):
+            node = planet.select_one(receiver)
+            self.assertTrue(node.has_attr("hidden") and not node.get_text(strip=True), receiver)
+        self.assertTrue(self.s.select_one("#progress").has_attr("hidden"))
+        # 調査条件は山なみの中（図の母数の位置）で、RESEARCH_CONDITIONS に囲まれている
+        self.assertEqual(len(self.s.select("#caution")), 1)
+        self.assertIsNotNone(planet.select_one("#research-conditions > #caution"))
+        block = self.release[self.release.index("<!-- RESEARCH_CONDITIONS_START -->"):self.release.index("<!-- RESEARCH_CONDITIONS_END -->")]
+        self.assertIn('id="caution"', block)
+        # 山なみのスクリプトより後で、読書面（reading.js）と橋渡し（planet.js）が動く
+        self.assertLess(self.release.index(src_script), self.release.index("window.KoshitsuReading"))
+        self.assertLess(self.release.index("window.KoshitsuReading"), self.release.index("function goReading"))
+        # 論点IDは PLANET_DATA・公開JSON・読書面で同じ（変換表は要らない）
+        data = json.loads(re.search(r"window\.PLANET_DATA=(\{.*?\});?</script>", self.release, re.S).group(1))
+        self.assertEqual(sorted(i["id"] for i in data["issues"]), sorted(i["id"] for i in PUBLIC["issues"]))
+        for issue in data["issues"]:
+            self.assertIsNotNone(self.s.select_one(f'[data-issue-panel="{issue["id"]}"]'), issue["id"])
+        # 旧ページ用の部品は読み込まない（山なみの説明文には名前が出ることがある）
+        for name in ('koshitsu-connected.js', 'koshitsu-connected-page.js', 'koshitsu-connected.css', 'theme-design.js', 'theme-design.css'):
+            self.assertNotIn(f'="{name}', self.release)
+
+    def test_planet_follows_source_updates(self):
+        """定期更新で元HTMLの山なみが変われば、新ページにもそのまま載る（手入力なし）。"""
+        changed = self.source.replace("このページの見かた", "このページの見かた（更新確認）", 1)
+        self.assertNotEqual(changed, self.source)
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / "source.html"
+            path.write_text(changed, encoding="utf-8")
+            redesign.build(path, Path(temp) / "out", "release", as_of=AS_OF)
+            page = (Path(temp) / "out" / redesign.PAGE).read_text(encoding="utf-8")
+        self.assertIn("このページの見かた（更新確認）", page)
+        broken = re.sub(r'<div class="dotbox" id="dotbox".*?<div class="waffle" id="waffle"></div>', "", self.source, count=1,
+                        flags=re.S)
+        self.assertNotEqual(broken, self.source)
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / "source.html"
+            path.write_text(broken, encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "山なみの部品"):
+                redesign.build(path, Path(temp) / "out", "release", as_of=AS_OF)
+
     def test_old_anchor_targets_exist(self):
-        for target in set(ALIASES.values()):
+        for target in set(redesign.ALIASES.values()):
             self.assertIsNotNone(self.s.find(id=target), target)
+        for alias in redesign.ALIASES:
+            # 読み替えるのは、新ページに無いIDか、山なみのスクリプトのために隠して残した受け皿だけ
+            if alias in redesign.HIDDEN_RECEIVERS:
+                continue
+            self.assertIsNone(self.s.find(id=alias), alias)
+        for receiver in redesign.HIDDEN_RECEIVERS:
+            self.assertIn(receiver, redesign.ALIASES)
+            self.assertIsNotNone(self.s.find(id=receiver), receiver)
+        # 受け皿は表示されていない（JSがあるとき）ので、旧アンカーは表示中の要素へ送る
+        self.assertIn("cur.getClientRects().length", self.release)
+        self.assertIsNotNone(self.s.find(id="planet-block"))
+        self.assertNotIn("planet-block", redesign.ALIASES)
 
     def test_no_eager_x_widget_and_original_links_remain(self):
         self.assertNotIn('<script async src="https://platform.twitter.com/widgets.js"', self.release)

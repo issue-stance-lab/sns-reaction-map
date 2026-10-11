@@ -928,6 +928,9 @@ mainへ取り込む前に、**「合格した」という報告を鵜呑みに�
 - **単独で作り直すとき**（データは変えずに見た目や文言だけ直したとき）:
   `python3 scripts/build_koshitsu_arena.py`（新デザイン公開中は元HTMLと公開ページの両方を作り直す）。
   成功の形: もう一度 `python3 scripts/build_koshitsu_arena.py --check` を実行して `OK` と出ること
+- **「論点ごとに読む」の山なみ（2026-10-11〜）**: 元HTMLの対話式の山なみ（`PLANET_SECTION` の `#planet-block`・PLANET_DATA・山なみのスクリプト）を
+  `build_koshitsu_redesign.py` が毎回そのまま写す（立場モード6つ・100マス・論点の一覧・見かた）。手で直す所は無い。山を押すと読書面へ移る橋渡しは
+  `scripts/koshitsu_redesign/planet.js`（設計記録の10節）
 - **再読データ（理由区分）を追記したとき**: 新しい収集回の意見は、本文を読んで理由区分を決め、
   `data/koshitsu-tenpakai_issues-reread.json` の `items` に1件ずつ追記し、`buckets` の件数も合わせる。
   **`items` の件数が公開JSONの意見数と一致しないと新デザインの生成が止まる**（公開JSONを先に更新して再読を
