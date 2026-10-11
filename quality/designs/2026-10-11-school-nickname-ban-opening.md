@@ -90,3 +90,7 @@
 ## 2026-10-11 オーナー指示で期待・懸念を背景へ移動
 
 2026-10-11 オーナー指示で期待・懸念を背景へ移動。375pxで件数欄の開始位置が2377pxから2027pxになった（全体の高さは4591pxから4241px、1280pxは2848pxから2645px）。設定JSONでは `voices_label` と各 `voices` を `background_candidates` に移し、文言は残した。横はみ出しなし（scrollWidth 375 / 1280）。
+
+## 2026-10-11 一次資料との照合（Haiku 8本＋司令塔の再確認）
+
+照合表: [quality/reviews/2026-10-11-school-nickname-ban-opening-source-check.md](../reviews/2026-10-11-school-nickname-ban-opening-source-check.md)。不一致なし。文科省PDF2本は暗号化で本文未確認。事務連絡は所在のみ確認。
