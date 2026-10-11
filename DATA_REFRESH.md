@@ -1035,6 +1035,9 @@ mainへ取り込む前に、**「合格した」という報告を鵜呑みに�
   （画像4枚 `docs/images/trend/ai-copyright-*.png` と説明。`trend_support` が元HTMLに貼り、画像は adapter が同じ累積候補から作る）**・
   「このページの作り方」・「詳細データ」・「次に読むテーマ」・フッター。数字が古いときは元HTML側（adapter・`apply_theme_trust.py`）で直る。
   アリーナデータ（`docs/ai-copyright-arena-data.js`）は新デザインでは読まないが、adapter が引き続き作って公開物に含める
+- **「意見の全体像」の山なみ（2026-10-11〜）**: 元HTMLの対話式の山なみ（`PLANET_SECTION` の `#planet-block`・PLANET_DATA・山なみのスクリプト）を
+  `build_ai_copyright_redesign.py` が毎回そのまま写す（立場モード・100マス・論点の一覧・見かた）。元HTMLの山なみが更新されれば新ページにも載り、手で直す所は無い。
+  山を押すと読書面へ移る橋渡しは `scripts/ai_copyright_redesign/planet.js`（設計記録の10節）
 - **単独で作り直すとき**（データは変えずに見た目や文言だけ直したとき）:
   `python3 scripts/build_ai_copyright_arena.py`（新デザイン公開中は、元HTMLに公開JSONの集計と旧形式の生成を掛けてから
   公開ページを作り直す。アリーナデータも同じ）。成功の形: もう一度 `python3 scripts/build_ai_copyright_arena.py --check` を
