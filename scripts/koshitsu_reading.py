@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""皇室典範改正ページの「山なみ＋論点の読書面」を、冒頭の試作の下につないで生成する試作。
+"""皇室典範改正ページの「山なみ＋6論点の読書面＋背景の開閉行」を、冒頭の試作の下につないで生成する試作。
 
 入力
 - configs/koshitsu-tenpakai-reading.json : 論点の説明・理由の言い換え・照合の注記・投稿の選定（手書き文言）
@@ -8,6 +8,8 @@
 - data/koshitsu-tenpakai_issues-reread.json : 理由区分（意見2,016件すべて）
 - data/verification/koshitsu-tenpakai-source-checks.json : 照合の判定ラベル
 - data/verification/koshitsu-tenpakai-background.json : 制度確認3項目
+- quality/research/koshitsu-tenpakai-primary-sources.md : 一次資料メモ（資料の確認日。照合日がメモにあるかも確かめる）
+- configs/koshitsu-tenpakai-background.json ほか : 背景の開閉行（scripts/koshitsu_background.py が描く）
 
 出力: quality/prototypes/koshitsu-tenpakai-reading/index.html
 （同じフォルダーの reading.css・reading.js と、冒頭の試作の opening.css を読む）
@@ -32,11 +34,14 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
+import koshitsu_background as background  # noqa: E402
 import koshitsu_opening as opening  # noqa: E402
 from bukatsu_redesign.x_embeds import add_x_embeds  # noqa: E402
 
 CONFIG = ROOT / "configs" / "koshitsu-tenpakai-reading.json"
 OUT_DIR = ROOT / "quality" / "prototypes" / "koshitsu-tenpakai-reading"
+IMG_DIR = ROOT / "docs" / "images" / "topics" / "koshitsu-tenpakai"
+IMG_HREF = "../../../docs/images/topics/koshitsu-tenpakai/"
 READING_START = "<!-- KOSHITSU_READING_START -->"
 READING_END = "<!-- KOSHITSU_READING_END -->"
 
@@ -70,6 +75,8 @@ def load(config_path: Path) -> dict:
         "reread": read_json(cfg["reread_json"]),
         "checks": read_json(cfg["source_checks_json"]),
         "background": read_json(cfg["background_json"]),
+        "memo": background.Memo(ROOT / cfg["primary_memo"]),
+        "bg": background.load(public, ocfg, ROOT / cfg["background_config"]),
     }
 
 
@@ -101,6 +108,18 @@ def check_all(d: dict) -> None:
             if tally[(issue["label"], bid)] != int(b["count"]):
                 raise SystemExit(f"{issue['id']}: 理由区分 {bid} の件数が明細と一致しません")
     ids = {i["id"] for i in public["issues"]}
+    memo = d["memo"]
+    for when, what in ((public["claim_verification"]["checked_on"], "主張照合の照合日"),
+                       (d["background"]["checked_on"], "背景台帳の確認日")):
+        if not memo.has_date(when):
+            raise SystemExit(f"{what} {when} が一次資料メモにありません")
+    for sc in public["ocean_layer"]["sunk_continents"]:
+        if sc["nearest_issue_id"] not in ids:
+            raise SystemExit(f"資料にしかない話 {sc['id']} の論点 {sc['nearest_issue_id']} が公開JSONにありません")
+        if int(sc["sns_base"]) != opinion:
+            raise SystemExit(f"資料にしかない話 {sc['id']} の母数 {sc['sns_base']} が意見数 {opinion} と違います（再検索の記録を更新してください）")
+    if set(cfg["issues"]) != ids:
+        raise SystemExit(f"設定の論点と公開JSONの論点が一致しません: {set(cfg['issues']) ^ ids}")
     for iid, icfg in cfg["issues"].items():
         if iid not in ids:
             raise SystemExit(f"設定の論点 {iid} が公開JSONにありません")
@@ -117,6 +136,11 @@ def check_all(d: dict) -> None:
         checks = {c["id"] for c in d["background"]["checklist"]["items"] if iid in (c.get("issue_ids") or [])}
         if set(icfg.get("check_notes", {})) - checks:
             raise SystemExit(f"{iid}: この論点に無い制度確認への注記があります")
+        for mc in icfg.get("memo_checks", []):
+            memo.checked_on(mc["memo_section"])
+        fig = icfg.get("figure")
+        if fig and not (IMG_DIR / fig["file"]).is_file():
+            raise SystemExit(f"{iid}: 図解の画像 {fig['file']} がありません")
         posts = icfg.get("posts", {}).get("items", [])
         if len(posts) > 2:
             raise SystemExit(f"{iid}: X投稿は最大2件です")
@@ -299,10 +323,18 @@ def render_sources(d: dict, issue: dict, icfg: dict) -> str:
                    f'<h5>{esc(c["label"])}：{esc(c["ask"])}</h5><p>{esc(c["found"])}</p>'
                    + (f'<p class="kr-fine">{esc(note)}</p>' if note else "")
                    + details_sources(c["sources"], s["sources_label"]) + "</article>")
+    law_dates = background.law_dates(d["ocfg"])
+    memo_checks = icfg.get("memo_checks", [])
+    for mc in memo_checks:
+        when = d["memo"].checked_on(mc["memo_section"])
+        out.append(f'<article class="kr-check kr-memo-check" data-memo-check="{esc(mc["id"])}"><p class="kr-eyebrow">{esc(s["memo_eyebrow"])}'
+                   f'<span>{esc(s["memo_checked"].format(checked_on=ja_date(when)))}</span></p>'
+                   f'<h5>{esc(mc["label"])}：{esc(mc["ask"])}</h5><p>{esc(mc["found"].format(**law_dates))}</p>'
+                   + details_sources(mc["sources"], s["sources_label"]) + "</article>")
     labels = {c["key"]: c for c in d["checks"]["checks"]}
     cv = d["public"]["claim_verification"]
     claims = [c for c in cv["claims"] if iid in c["issue_ids"]]
-    if not claims and not checks:
+    if not claims and not checks and not memo_checks:
         out.append(f'<p class="kr-empty">{esc(s["empty"])}</p>')
     for c in claims:
         lab = labels.get(c["id"], {}).get("verdict_label", c["verdict"])
@@ -321,9 +353,11 @@ def render_posts(d: dict, issue: dict, icfg: dict) -> str:
     pc = d["cfg"]["posts_common"]
     posts = icfg.get("posts", {}).get("items", [])
     if not posts:
-        return ""
+        return (f'<section class="kr-block kr-posts"><h4>{esc(pc["title"])}</h4>'
+                f'<p class="kr-empty">{esc(pc["none"])}</p></section>')
     buckets = d["reread"]["buckets"].get(issue["label"], {})
-    out = [f'<section class="kr-block kr-posts"><h4>{esc(pc["title"])}</h4><p class="kr-lead">{esc(pc["lead"])}</p><ul class="kr-post-list">']
+    lead = pc["lead_two"] if len(posts) == 2 else pc["lead_one"]
+    out = [f'<section class="kr-block kr-posts"><h4>{esc(pc["title"])}</h4><p class="kr-lead">{esc(lead)}</p><ul class="kr-post-list">']
     for p in posts:
         rec = post_record(d, p["id"])
         bucket = buckets.get(rec["bucket"], {}).get("label", "") if rec else ""
@@ -334,6 +368,32 @@ def render_posts(d: dict, issue: dict, icfg: dict) -> str:
     out.append(f'<details class="original-posts"><summary>{esc(pc["summary"].format(n=len(posts)))}</summary>{links}</details>')
     out.append("</section>")
     return "".join(out)
+
+
+def render_sunk(d: dict, issue: dict) -> str:
+    sc = d["cfg"]["sunk_common"]
+    items = [x for x in d["public"]["ocean_layer"]["sunk_continents"] if x["nearest_issue_id"] == issue["id"]]
+    if not items:
+        return ""
+    out = [f'<section class="kr-block kr-sunk"><h4>{esc(sc["title"])}</h4>']
+    for x in items:
+        srcs = [{"name": s["name"], "url": s["url"], "location": s.get("location")} for s in x["sources"]]
+        out.append(f'<article class="kr-sunk-item" data-sunk="{esc(x["id"])}"><h5>{esc(x["topic"])}</h5><p>{esc(x["life_impact"])}</p>'
+                   f'<p class="kr-fine">{esc(sc["count"].format(base=fmt(int(x["sns_base"])), n=fmt(int(x["sns_count"])), checked_on=ja_date(x["checked_on"])))}</p>'
+                   f'<details class="kr-sources"><summary>{esc(sc["note_label"])}</summary><p class="kr-fine">{esc(x["sns_note"])}</p></details>'
+                   + details_sources(srcs, d["cfg"]["sources_common"]["sources_label"]) + "</article>")
+    out.append("</section>")
+    return "".join(out)
+
+
+def render_figure(d: dict, icfg: dict) -> str:
+    fig = icfg.get("figure")
+    if not fig:
+        return ""
+    fc = d["cfg"]["figure_common"]
+    return (f'<p class="kr-figure"><a href="{esc(IMG_HREF + fig["file"])}" target="_blank" rel="noopener" '
+            f'aria-label="{esc(fc["label"] + "：" + fig["alt"])}">{esc(fc["label"])}</a>'
+            f'<span>{esc(fc["note"])}</span></p>')
 
 
 def render_panel(d: dict, issue: dict, selected: str, labels: dict, rank: int) -> str:
@@ -352,6 +412,7 @@ def render_panel(d: dict, issue: dict, selected: str, labels: dict, rank: int) -
            f'<h3 id="kr-h-{esc(iid)}" tabindex="-1">{esc(name)}</h3>']
     for para in icfg.get("description", []):
         out.append(f'<p class="kr-desc">{esc(para)}</p>')
+    out.append(render_figure(d, icfg))
     out.append(f'</div><p class="kr-count"><b>{fmt(n)}</b><span>件</span>'
                f'<small>SNSの意見{fmt(total)}件のうち{pct1(n, total)}%。{esc(rank_text)}</small></p></header>')
     if not complete:
@@ -365,6 +426,7 @@ def render_panel(d: dict, issue: dict, selected: str, labels: dict, rank: int) -
     out.append('</div><div class="kr-side">')
     out.append(render_trend(d, issue))
     out.append(render_sources(d, issue, icfg))
+    out.append(render_sunk(d, issue))
     out.append(render_posts(d, issue, icfg))
     out.append("</div></div></section>")
     return "".join(out)
@@ -408,7 +470,8 @@ def render_reading(d: dict) -> str:
 def render_page(d: dict, as_of: str) -> str:
     fragment = opening.render_fragment(d["ocfg"], d["public"], as_of)
     reading = render_reading(d)
-    title = "".join(d["ocfg"]["h1"]) + "｜論点の読書面の試作"
+    bg = background.render(d["bg"], as_of, ordered_issues(d), d["ocfg"]["issue_short_labels"])
+    title = "".join(d["ocfg"]["h1"]) + "｜論点の読書面と背景の試作"
     page = (
         "<!doctype html>\n<html lang=\"ja\">\n<head>\n<meta charset=\"utf-8\">\n"
         "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n"
@@ -417,8 +480,8 @@ def render_page(d: dict, as_of: str) -> str:
         "<link rel=\"stylesheet\" href=\"reading.css\">\n"
         "<script src=\"reading.js\" defer></script>\n</head>\n<body>\n"
         "<header class=\"ko-site\"><a href=\"#\" class=\"ko-logo\">SNS反応まっぷ</a>"
-        f"<span>皇室典範改正・論点の読書面の試作（基準日 {esc(as_of)}）</span></header>\n"
-        "<main>\n" + fragment + reading + "</main>\n</body>\n</html>\n"
+        f"<span>皇室典範改正・論点の読書面と背景の試作（基準日 {esc(as_of)}）</span></header>\n"
+        "<main>\n" + fragment + reading + bg + "</main>\n</body>\n</html>\n"
     )
     return add_x_embeds(page)
 
