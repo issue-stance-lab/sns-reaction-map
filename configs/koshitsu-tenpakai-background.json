@@ -1,0 +1,199 @@
+{
+  "theme_id": "koshitsu-tenpakai",
+  "_about": "皇室典範改正ページの「背景として開く内容」（開閉行）の文言。scripts/koshitsu_background.py が読む。日付・件数・確認日はここに書かず、公開JSON・背景台帳・一次資料メモ・THEMES.yaml・冒頭の設定から差し込む。制度の解説本文は scripts/koshitsu_background_detail.py の SECTIONS と data/verification/koshitsu-tenpakai-background.json を読む（二重に持たない）。行の名前と並びはこのテーマの内容に合わせて決めた。",
+  "inputs": {
+    "background_ledger": "data/verification/koshitsu-tenpakai-background.json",
+    "primary_memo": "quality/research/koshitsu-tenpakai-primary-sources.md",
+    "themes_yaml": "THEMES.yaml",
+    "theme_seo": "configs/theme-seo.json",
+    "_inputs": "THEMES.yaml からは published_at・updated_at・refresh_at・sample_source、theme-seo.json からは収集方法の文（collection）を読む。"
+  },
+  "section": {
+    "eyebrow": "背景をひらく",
+    "title": "制度の背景と、このページの資料",
+    "lead": "必要なところだけ開いて読めます。前半は制度の中身、後半は経緯と資料、集計の方法です。"
+  },
+  "groups": [
+    {
+      "id": "law",
+      "label": "制度の中身",
+      "rows": [
+        {
+          "id": "why-now",
+          "title": "なぜ今、皇族の人数が問題になったのか",
+          "summary": "2017年の国会決議から、報告書が挙げた皇族の役割まで",
+          "kind": "detail_section",
+          "section_index": 0,
+          "lead_from_ledger": "cause",
+          "_lead_from_ledger": "背景台帳の cause（2段落）を先に置き、SECTIONS[0]（人数が減ると、どの役割に影響するのか）を続ける。"
+        },
+        {
+          "id": "three-plans",
+          "title": "検討された3案と、今回選ばれた2つ",
+          "summary": "身分の保持・養子・法律で直接皇族にする案",
+          "kind": "detail_section",
+          "section_index": 1,
+          "issue_ids": ["koshitsu-tenpakai-patrilineal-matrilineal"]
+        },
+        {
+          "id": "family-status",
+          "title": "結婚後も残る女性皇族と、その家族の身分",
+          "summary": "配偶者と子は皇族にならない。当事者への配慮も課題",
+          "kind": "detail_section",
+          "section_index": 2,
+          "issue_ids": ["koshitsu-tenpakai-princess-aiko"]
+        },
+        {
+          "id": "adoption-rules",
+          "title": "養子になれる人の条件と、本人・子孫の扱い",
+          "summary": "第三十八条の条件と、継承資格の違い。期待と残る課題",
+          "kind": "detail_section",
+          "section_index": 3,
+          "also_section_index": 4,
+          "issue_ids": ["koshitsu-tenpakai-former-royal-adoption"],
+          "_also_section_index": "SECTIONS[4]（資料が挙げる期待と、なお残る課題）は養子案の評価なので同じ行に続ける。"
+        }
+      ]
+    },
+    {
+      "id": "materials",
+      "label": "経緯・資料・集計の方法",
+      "rows": [
+        {
+          "id": "timeline",
+          "title": "報告書から施行までの経緯",
+          "summary": "有識者会議の報告、成立、公布、施行",
+          "kind": "timeline",
+          "insert": [
+            {
+              "after": "report2021",
+              "id": "enacted2026",
+              "date_key": "enacted_on",
+              "era": "改正法の成立",
+              "text": "参議院で可決され、改正法が成立しました。衆議院での可決は、これより前です。",
+              "memo_section": "資料K",
+              "sources": [
+                {"name": "衆議院 議案情報「皇室典範等の一部を改正する法律案」の経過", "url": "https://www.shugiin.go.jp/internet/itdb_gian.nsf/html/gian/keika/1DE2B16.htm"}
+              ]
+            }
+          ],
+          "_insert": "成立日は背景台帳の年表に無いため、冒頭の設定 law.enacted_on（一次資料メモ 資料K で確認）から差し込む。",
+          "phase_required": ["promulgation2026", "enforcement2026"],
+          "phase_events": {
+            "promulgation2026": {
+              "after_unconfirmed": {"era": "改正法の公布", "text": "改正法が公布されました。施行日の前日までは、女性皇族が皇族以外の人と結婚すると皇族の身分を離れる規定が続いていました。"},
+              "after_confirmed": {"era": "改正法の公布", "text": "改正法が公布されました。施行日の前日までは、女性皇族が皇族以外の人と結婚すると皇族の身分を離れる規定が続いていました。"}
+            },
+            "enforcement2026": {
+              "after_unconfirmed": {"era": "主要部分の施行日", "text": "婚姻による女性皇族の身分離脱の規定を削り、条件を満たす男子を養子として迎える規定が、この日に施行される予定でした。養子本人には皇位継承順序の規定を適用せず、子孫には実方の系統で適用する仕組みです。施行後の条文は、まだ編集部で確かめていません。"},
+              "after_confirmed": {"era": "主要部分の施行", "text": "婚姻による女性皇族の身分離脱の規定が削除され、条件を満たす男子を養子として迎える規定が施行されました。養子本人には皇位継承順序の規定を適用せず、子孫には実方の系統で適用する仕組みです。施行後の条文は{confirmed}に確かめています。"}
+            }
+          },
+          "_phase_events": "施行日より前は背景台帳の era・text をそのまま使う。施行日を過ぎたら、冒頭と同じく law.enforcement_confirmed_on の有無で after_unconfirmed／after_confirmed の文に差し替える（生成は止めない）。phase_required の行に施行後の文が無いと生成器が止まる。"
+        },
+        {
+          "id": "faq",
+          "title": "よくある質問（6問）",
+          "summary": "成立と施行の時期、愛子さま、家族の身分、養子の資格",
+          "kind": "faq",
+          "items": [
+            {"q": "改正法はいつ成立し、いつ施行されますか？", "a": "{enacted}に成立し、{promulgated}に公布されました。女性皇族の結婚後の身分保持と養子制度など、主な規定は{enforcement}に施行されます。",
+             "phase": {
+               "after_unconfirmed": {"q": "改正法はいつ成立し、施行日はいつですか？", "a": "{enacted}に成立し、{promulgated}に公布されました。女性皇族の結婚後の身分保持と養子制度など、主な規定は{enforcement}に施行される予定でした。施行後の条文は、まだ編集部で確かめていません。"},
+               "after_confirmed": {"q": "改正法はいつ成立し、いつ施行されましたか？", "a": "{enacted}に成立し、{promulgated}に公布されました。女性皇族の結婚後の身分保持と養子制度など、主な規定は{enforcement}に施行されました。施行後の条文は{confirmed}に確かめています。"}
+             }},
+            {"q": "今回の改正で、何が二つ変わりますか？", "a": "女性皇族が結婚後も皇族の身分を保てることと、旧11宮家の男系男子を条件付きで養子に迎えられることです。"},
+            {"q": "愛子さまが天皇になることは決まりましたか？", "a": "決まっていません。皇位を継ぐ資格を「男系の男子」に限る第一条は変わっていません。特定の方の即位を決める改正でもありません。"},
+            {"q": "女性皇族の配偶者と子も皇族になりますか？", "a": "自動的には皇族になりません。結婚後も身分を保つのは、女性皇族本人です。"},
+            {"q": "養子になった本人に皇位継承資格はありますか？", "a": "ありません。養子本人には継承の順序を定めた第二条を適用しません。子孫には、養親ではなく実方の系統により第二条などが適用されます。"},
+            {"q": "具体的な養子の候補は決まっていますか？", "a": "このページで確かめた政府・国会の資料からは、具体的な候補者や本人の意向は分かりません。制度の条件と、実際に誰が応じるかは分けて考える必要があります。"}
+          ],
+          "_items": "現行ページの FAQ 6問（表示文）を移した。日付は冒頭の設定 law から差し込む。施行日を過ぎたら、施行に触れる問いは phase の文に差し替える（冒頭の時制と同じ3段階。生成は止めない）。"
+        },
+        {
+          "id": "classroom",
+          "title": "授業や話し合いで使う",
+          "summary": "賛成・反対の理由を3つずつ、確かめる資料、問いの例",
+          "kind": "classroom",
+          "intro": "賛成と反対の理由を3つずつ並べました。先に自分の考えを書き出してから読むと、違いを比べやすくなります。",
+          "sides": [
+            {
+              "label": "今回案全体を支持する側の理由",
+              "items": [
+                {"text": "新しい第三十八条の養子は、本人には皇位継承資格がなく、子孫だけが資格を持つ設計です。第一条の「男系の男子」を変えずに皇族の人数を増やせる、という説明が成り立ちます。", "issue_id": "koshitsu-tenpakai-former-royal-adoption"},
+                {"text": "女性皇族が結婚後も皇族の身分を保てるようにしたことは、公務を担う皇族がこれ以上減らないようにする具体策として支持されています。ただし配偶者と子は皇族にならず、身分が及ぶのは本人だけです。", "issue_id": "koshitsu-tenpakai-princess-aiko"},
+                {"text": "政府は国会で、衆参両院の正副議長がまとめた議論に沿って法案を立案したと説明しました。段階を踏んだ結果だと評価する声があり、施行後三十年ごとに見直す規定も置かれています。", "issue_id": "koshitsu-tenpakai-legislative-process"}
+              ]
+            },
+            {
+              "label": "今回案全体に反対する側の理由",
+              "items": [
+                {"text": "改正後も第一条は変わらず、皇位を継げるのは男系の男子のままです。皇族を増やす仕組みはできても、誰が継げるかという線引きは今回の議論の外に置かれています。", "issue_id": "koshitsu-tenpakai-patrilineal-matrilineal"},
+                {"text": "養子に迎えられるのは旧11宮家につながる男系の子孫で、昭和22年に皇籍を離れた方々と今の天皇との隔たりは、36〜38親等と国会で説明されました。血縁の遠さをどう受け止めるかは、慎重な意見が挙げる点です。", "issue_id": "koshitsu-tenpakai-former-royal-adoption"},
+                {"text": "参議院の特別委員会では、養子の規定を削り施行を1年遅らせる修正案が出されましたが、成立した法律には反映されませんでした。決め方に納得していない人もいます。", "issue_id": "koshitsu-tenpakai-legislative-process"}
+              ]
+            }
+          ],
+          "_sides": "現行ページの「授業・ディベートで使うとき」を短くして移した。36〜38親等と政府の説明は一次資料メモ 資料G、三十年ごとの見直しと修正案は公開JSON ocean_layer.sunk_continents（附則第六条・参院特別委員会第3号）。",
+          "sources_label": "確かめる一次資料",
+          "sources": [
+            {"name": "e-Gov法令検索 皇室典範", "url": "https://laws.e-gov.go.jp/law/322AC0000000003", "note": "第一条（男系の男子）や、改正後の第三十八条の養子の規定を読めます。"},
+            {"name": "内閣官房 有識者会議報告書（2021年12月22日）", "url": "https://www.cas.go.jp/jp/seisaku/taii_tokurei/pdf/houkoku_honbun_20211222.pdf", "note": "皇族の人数を確保する3つの案と、それぞれへの反対論が書かれています。"},
+            {"name": "国会会議録検索システム 参議院 特別委員会 第3号（2026年7月16日）", "url": "https://kokkai.ndl.go.jp/#/detail?minId=122115389X00320260716", "note": "同じ法案への賛成討論と反対討論を、同じ日の記録で読み比べられます。"}
+          ],
+          "questions_label": "問いの例",
+          "questions": [
+            "皇位を継ぐ資格を「男系の男子」に限る今の規定を、女性や女系にも広げるべきか。",
+            "旧11宮家につながる男系の子孫を、皇族の養子として迎える今回の制度は必要か。",
+            "皇室の制度を変えるとき、衆参両院の正副議長による取りまとめを経てから法案にする今回の決め方を続けるべきか。"
+          ],
+          "howto": "読む前に理由を書き出し、このページで確かめてから、自分の理由と比べてください。"
+        },
+        {
+          "id": "table",
+          "title": "論点ごと・立場ごとの件数表",
+          "summary": "論点（その他を含む）×今回案全体への評価5区分",
+          "kind": "table",
+          "caption": "論点ごとの件数と、今回案全体への評価（意見{opinion_count}件）",
+          "notes": [
+            "人数や世論の割合ではありません。",
+            "「今回案全体は未表明」は、中立の意味ではありません。",
+            "強い表現かどうかは、従来のAIによる分類を引き継いでおり、今回は判定し直していません。"
+          ]
+        },
+        {
+          "id": "method",
+          "title": "集め方と、この集計の限界",
+          "summary": "収集方法、公開日と更新日、編集部の整理",
+          "kind": "method",
+          "publisher": "SNS反応まっぷ編集部",
+          "observation": "「女性天皇」と「女系天皇」を同じ意味で使っている投稿が多く、分類で判断が割れました。女性天皇は天皇本人が女性であること、女系天皇は母方を通じて皇統につながる天皇のことで、別の考え方です。この混同は「女性天皇・女系天皇」の論点（{female_emperor_count}件）に多く見られます。",
+          "_observation": "現行ページの「収集・分類で分かったこと」2つ目を、件数を公開JSONから差し込む形に直した。1つ目（8月10日の回・325件）は古い収集回の記述なので移していない（内容対応表 41）。",
+          "not_poll": "このページは世論調査ではなく、検索語と収集した時点に基づく、SNS投稿のサンプルを分類した結果です。社会全体の意見の割合や、事実の認定を示すものではありません。",
+          "editorial_title": "編集部の横断整理",
+          "editorial_kinds": {
+            "shared_premise": "共通する前提",
+            "real_conflict": "本当の対立",
+            "still_unknown": "まだ分からないこと"
+          },
+          "contact": {"text": "内容の訂正、引用の削除、調査方法へのお問い合わせは、運営者情報の訂正窓口で受け付けています。", "label": "運営者情報・訂正窓口", "href": "about.html#corrections"}
+        },
+        {
+          "id": "unverified",
+          "title": "まだ確かめていないこと",
+          "summary": "養子の候補と意向、施行後の条文、衆議院側の審議",
+          "kind": "unverified",
+          "from_ledger": ["unknown", "caveat"],
+          "items": [
+            {"text": "施行後に、e-Govの現行の条文が改正後の内容へ切り替わったかどうかは、まだ確かめていません。", "memo_ref": "確認できなかったこと 7", "hide_in": ["after_confirmed"]},
+            {"text": "衆議院側の審議の発言は、本文を照合していません。国会での審議の確認は、参議院の記録に限られます。", "memo_ref": "確認できなかったこと 6"},
+            {"text": "2017年の国会決議（女性宮家の検討を求めたもの）の本文と、養子本人・子孫の継承資格を定める第三十八条の項の一字ずつの照合は、まだ済んでいません。", "memo_ref": "2026-10-11：冒頭試作の照合結果の反映"}
+          ],
+          "_items": "一次資料メモの「確認できなかったこと」と 2026-10-11 節にある未了の項目。memo_ref の見出し（または番号）がメモに無ければ生成を止める。"
+        }
+      ]
+    }
+  ],
+  "sources_label": "出典",
+  "dates_line": "制度の確認日：背景台帳 {ledger_checked_on}、一次資料メモの最新 {memo_latest}。SNSの集計：{updated_on}まで。"
+}

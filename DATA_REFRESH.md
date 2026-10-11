@@ -910,6 +910,107 @@ mainへ取り込む前に、**「合格した」という報告を鵜呑みに�
   辺野古以外の差分は戻す（標準の経路では隔離コピーの中だけで、公開物には入らない）
 - 経緯と検証の記録: [quality/reviews/2026-10-09-task69-henoko-standard-route-details.md](quality/reviews/2026-10-09-task69-henoko-standard-route-details.md)
 
+### 皇室典範改正の定期更新（新デザインを維持する、2026-10-11〜）
+
+皇室典範改正のページは2026-10-11から新デザイン（冒頭・論点ごとの読書面・背景の開閉行）で公開している。
+部活動の新デザイン（`scripts/bukatsu_layout.py`・`configs/bukatsu-layout.json`）と同じ型で、
+**旧形式の生成器はこれまでどおり「元HTML」に掛け、全生成の最後に新デザインを組み直す。**
+設計と検査の記録: [quality/designs/2026-10-11-koshitsu-tenpakai-production-candidate.md](quality/designs/2026-10-11-koshitsu-tenpakai-production-candidate.md)
+
+- **`configs/koshitsu-layout.json` の `enabled`**: `true` の間、`refresh_topic.py` の公開候補生成（単一・複数テーマ）は
+  隔離コピーで元HTMLを `docs/` に戻し（`koshitsu_layout.materialize`）、旧形式の全処理のあとに
+  `koshitsu_layout.finish` で元HTMLを保存し直してから新デザインのページを `docs/` に書く。
+  **他テーマの更新でも毎回この処理が走る**（皇室の照合が合わないと、その回の公開候補生成全体が止まる）。
+  `false` に戻すと、公開ページが新デザインのまま「更新設定が無効」で止まる。戻すときは旧形式のページを先に戻すこと
+- **元HTMLの場所**: `data/page-sources/koshitsu-tenpakai.html`（Git管理）。`refresh_adapters/koshitsu.py`・
+  `build_koshitsu_arena.py`（引数なし）はこれを入力にする。手で編集しない。`docs/koshitsu-tenpakai-reaction-map.html` を
+  旧形式の生成器に直接渡すと拒否される（新デザインの再入力防止）
+- **単独で作り直すとき**（データは変えずに見た目や文言だけ直したとき）:
+  `python3 scripts/build_koshitsu_arena.py`（新デザイン公開中は元HTMLと公開ページの両方を作り直す）。
+  成功の形: もう一度 `python3 scripts/build_koshitsu_arena.py --check` を実行して `OK` と出ること
+- **再読データ（理由区分）を追記したとき**: 新しい収集回の意見は、本文を読んで理由区分を決め、
+  `data/koshitsu-tenpakai_issues-reread.json` の `items` に1件ずつ追記し、`buckets` の件数も合わせる。
+  **`items` の件数が公開JSONの意見数と一致しないと新デザインの生成が止まる**（公開JSONを先に更新して再読を
+  後回しにすると、全テーマの公開候補生成が止まる）。追記後は次の順で反映する。
+  1. 共通台帳の指紋を合わせる（上の「定期更新1回分の実務手順」8の `manage_reread_registry.py resync-source`）
+  2. `data/verification/koshitsu-tenpakai-issues-reread.json`（専用ファイル items の写し。数字の出所検査の根拠）を作り直す:
+     `python3 -c "import json;d=json.load(open('data/koshitsu-tenpakai_issues-reread.json',encoding='utf-8'));open('data/verification/koshitsu-tenpakai-issues-reread.json','w',encoding='utf-8').write(json.dumps(d['items'],ensure_ascii=False,indent=2)+chr(10))"`
+     （書式は既存ファイルに合わせる。`git diff --stat` で追記した件数ぶんだけ増えていれば成功）
+  3. `python3 scripts/build_public_registry.py --topic koshitsu-tenpakai`
+  4. 公開候補生成（`--prepare-promotion`）を流す。単独なら `python3 scripts/build_koshitsu_arena.py`
+  5. `python3 scripts/verify_number_provenance.py koshitsu-tenpakai`（新デザインの理由区分の件数を明細から数え直す）
+  投稿の説明文や代表投稿2件は `configs/koshitsu-tenpakai-reading.json`。区分が増えたときだけ直す
+- **語られていない争点の再検索の記録**（`data/verification/koshitsu-tenpakai-sunk-continents.json` の `sns_note`）は
+  画面に出る公開文章。追記したらよみやす検査（`review_with_yomiyasu.py --medium website --strict`）を新デザインの
+  ページに掛ける
+- **施行日（2026-10-24）以降の時制**: 生成は止まらない。冒頭と背景（年表・よくある質問・未確認事項）は
+  公開JSONの更新日（`--as-of` を渡したときはその日）で時制を決める。施行日を過ぎ、施行後の条文をまだ確かめて
+  いない間は「施行される予定でした。施行後の条文は、まだ編集部で確かめていません」と出る（施行後・未確認）。
+  **e-Gov の現行の条文が改正後の内容に切り替わったことを確かめたら**、`configs/koshitsu-tenpakai-opening.json` の
+  `law.enforcement_confirmed_on` に確かめた日（`YYYY-MM-DD`）を入れ、一次資料メモの「確認できなかったこと 7」を
+  解消済みにしてから作り直す。冒頭・年表・FAQ が「施行されました」に切り替わり、未確認事項からその1行が消える。
+  施行日より前の日付を入れると止まる。施行後の文言は `configs/koshitsu-tenpakai-background.json` の
+  `phase_events`（年表）・`phase`（FAQ）・`hide_in`（未確認事項）にあり、欠けていると施行日より前でも生成が止まる
+- 新デザインのページには、テーマ共通の見た目（`apply_theme_design.py`）・授業節の単独適用・信頼情報の単独適用を
+  掛けない（各スクリプトが skipped と出す）。更新経路では元HTMLに掛かる
+
+### 副首都の定期更新（新デザインを維持する、2026-10-11〜）
+
+副首都のページは2026-10-11から新デザイン（冒頭の路線図と地図・論点ごとの読書面・背景の開閉行）で公開している。
+皇室典範改正の新デザイン（上の節）と同じ型で、**旧形式の生成器はこれまでどおり「元HTML」に掛け、全生成の最後に新デザインを組み直す。**
+設計と検査の記録: [quality/designs/2026-10-11-fukushuto-production-candidate.md](quality/designs/2026-10-11-fukushuto-production-candidate.md)
+
+- **`configs/fukushuto-layout.json` の `enabled`**: `true` の間、`refresh_topic.py` の公開候補生成（単一・複数テーマ）は
+  隔離コピーで元HTMLを `docs/` に戻し（`fukushuto_layout.materialize`）、旧形式の全処理（adapter・潮目・finalize・SEO・
+  信頼情報・授業節・テーマ共通の見た目・皇室の新デザイン）のあとに `fukushuto_layout.finish` で元HTMLを保存し直してから
+  新デザインのページを `docs/` に書く。**他テーマの更新でも毎回この処理が走る**（副首都の照合が合わないと、その回の
+  公開候補生成全体が止まる）。`false` に戻すと、公開ページが新デザインのまま「更新設定が無効」で止まる。
+  戻すときは旧形式のページ（`data/page-sources/fukushuto.html`）を先に `docs/` へ戻すこと
+- **元HTMLの場所**: `data/page-sources/fukushuto.html`（Git管理）。`refresh_adapters/fukushuto.py`（潮目の差し込みを含む）・
+  `build_fukushuto_arena.py`（引数なし）はこれを入力にする。手で編集しない。`docs/fukushuto-reaction-map.html` を
+  旧形式の生成器に直接渡すと拒否される（新デザインの再入力防止）。旧ページの検索入口（`fukushuto_search_entry.py`、
+  FAQ 6問）・連動表示・潮目は元HTMLの中でだけ更新され、新デザインには載せない。新デザインの FAQ の構造化データは、
+  背景の「よくある質問（4問）」から毎回作り直す
+- **単独で作り直すとき**（データは変えずに見た目や文言だけ直したとき）:
+  `python3 scripts/build_fukushuto_arena.py`（新デザイン公開中は元HTMLと公開ページの両方を作り直す）。
+  成功の形: もう一度 `python3 scripts/build_fukushuto_arena.py --check` を実行して `OK: 差分なし` と出ること。
+  公開候補を別フォルダに作って見るだけなら
+  `python3 scripts/build_fukushuto_redesign.py --mode release --output-dir quality/prototypes/fukushuto-release`
+  （成功の形: `Built 1 file (release, as_of …); no deployment performed.`。docs/ は変わらない）
+- **再読データ（理由区分）を追記したとき**: 5論点（候補地・防災・災害・優先順位・その他・費用・財源）の新しい意見は、
+  これまでどおり本文を読んで理由区分を決め、`data/fukushuto_5issues-reread.json` の各論点の `items` に1件ずつ追記し、
+  `buckets` の件数も合わせる。**論点ごとの `items` の件数が公開JSONの論点の件数と一致しないと新デザインの生成が止まる**
+  （公開JSONを先に更新して再読を後回しにすると、全テーマの公開候補生成が止まる）。区分ごとの立場の内訳も明細の
+  `stance` から数えるので、明細の立場が公開JSONと違っても止まる。追記後は
+  1. `python3 scripts/build_public_registry.py --topic fukushuto`
+  2. 公開候補生成（`--prepare-promotion`）を流す。単独なら `python3 scripts/build_fukushuto_arena.py`
+  3. `python3 scripts/verify_number_provenance.py fukushuto`（新デザインの理由区分・区分ごとの立場を明細から数え直す。
+     成功の形: `NG 0件`）
+  理由区分の言い換え・「どんな声か」・代表投稿2件は `configs/fukushuto-reading.json`。区分が増えたとき・投稿を
+  差し替えるときだけ直す（完成扱いの論点で言い換えの無い区分があると止まる）。都構想・維新と定義・中身は
+  再読データが無く「理由別に読み直したデータをまだ公開していません」と出る（データが入れば自動で消える）
+- **語られていない争点の再検索の記録**（`data/verification/fukushuto-sunk-continents.json` の `sns_note`・`life_impact`）は
+  画面に出る公開文章。母数 `sns_base` が意見数と違うと生成が止まる（再検索して記録を足す）。追記したらよみやす検査
+  （`python3 scripts/review_with_yomiyasu.py --medium website --strict docs/fukushuto-reaction-map.html`）を
+  新デザインのページに掛ける（成功の形: `完成を止める指摘: 0件`）
+- **時制（意見募集の締切 2026-10-16・施行予定日 2026-10-30）**: 生成は止まらない。冒頭（路線図・「いつ決まる？」）と
+  背景（定義・手続き・年表・よくある質問・未確認事項）は、公開JSONの更新日（`--as-of` を渡したときはその日）で
+  段階を決める。読む日が締切・施行日を過ぎたら、冒頭の路線図と「いつ決まる？」だけは JavaScript が次の段階の文に
+  切り替える（背景は次の更新で切り替わる）。
+  - 締切を過ぎ、結果を確かめていない間: 「締め切った。結果は編集部でまだ確かめていない」。
+    **e-Gov で意見募集の結果公示を確かめたら**、`configs/fukushuto-opening.json` の `comment.result_published_on` に
+    確かめた日を入れて作り直す（締切より前の日付、または基準日が締切より前なのに日付があると止まる）
+  - 施行予定日を過ぎ、施行後の条文を確かめていない間: 「施行予定でした。施行後の条文は編集部で確かめていません」。
+    **e-Gov で施行済みの表示と施行日を確かめたら**、`configs/fukushuto-opening.json` の `law.enforcement_confirmed_on` に
+    確かめた日を入れ、一次資料メモの未確認事項を解消済みにしてから作り直す（施行日より前の日付は止まる）
+  - 段階ごとの文は `configs/fukushuto-opening.json` の `phase_text` と `configs/fukushuto-background.json` の
+    `phase_now`・`phase_comment`・年表の `texts`・FAQ の `phase`・未確認事項の `hide_when`。欠けていると
+    締切・施行日より前でも生成が止まる
+- 新デザインのページには、テーマ共通の見た目（`apply_theme_design.py`）・授業節の単独適用・信頼情報の単独適用・
+  潮目の単独差し込み（`inject_tide_widget.py`）を掛けない（各スクリプトが skipped／SKIP と出す）。更新経路では元HTMLに掛かる
+- 「このページの作り方」（ARTICLE_TRUST）・「詳細データ」・「次に読むテーマ」・投票・SEOメタは元HTMLから文字どおり
+  引き継ぐ。数字が古いときは元HTML側（`build_fukushuto_arena.py`・`apply_theme_trust.py`）で直る
+
 ### 読み込み確認のやり方（質と速さの両立）
 
 消費税減税での失敗（機械的なチェックは通ったのに、実際には本文を読まずに使い回した

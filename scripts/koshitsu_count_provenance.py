@@ -9,6 +9,9 @@ import yaml
 
 
 def verified_selectors(source: str, root: Path) -> dict[str, str]:
+    if 'name="koshitsu-layout"' in source:
+        from scripts.koshitsu_redesign_provenance import verified_selectors as redesign
+        return redesign(source, root)
     if '<!-- KOSHITSU_CONNECTED_START -->' not in source:
         return {}
     soup = BeautifulSoup(source, "html.parser")

@@ -45,7 +45,10 @@ def finish(root):
     for slug in THEMES:
         p=root/'docs'/f'{slug}-reaction-map.html'
         if p.exists():
-            old=p.read_text(); new=transform(old,slug)
+            old=p.read_text()
+            if 'name="koshitsu-layout"' in old:continue  # 皇室典範の新デザインは独自の見た目（koshitsu_layout.py）
+            if 'name="fukushuto-layout"' in old:continue  # 副首都の新デザインも独自の見た目（fukushuto_layout.py）
+            new=transform(old,slug)
             if old!=new:p.write_text(new)
             targets[p.relative_to(root)]=p
     return targets

@@ -1,0 +1,44 @@
+/* 副首都・新デザインを公開ページに載せるときだけ足す見た目（皇室 koshitsu_redesign/production.css と同じ役目）。
+   冒頭（opening.css）と読書面・背景（reading.css）は変えず、
+   現行ページから引き継ぐ部品（共通ヘッダー・投票・作り方・詳細データ・次に読むテーマ・フッター）をこの配色（藍と朱）に合わせる。 */
+:root{--grad-1:#24407a;--grad-2:#1b2636;--accent:#24407a;--accent-soft:#e6ebf5;--panel:#fffdf8}
+body.fukushuto-layout{background:var(--paper);color:var(--ink);overflow-x:hidden}
+body.fukushuto-layout main{display:block}
+.fu-preview{margin:0;padding:8px 16px;background:#c4432b;color:#fff;font-size:13px;font-weight:800;text-align:center}
+.fu-research{margin:10px 0 0}
+.fu-research .caution{margin:0;font-size:13px;line-height:1.75;color:var(--muted)}
+.fu-band{width:min(1180px,calc(100% - 32px));margin:0 auto 40px;padding:28px;background:var(--card);border:1px solid var(--line);border-radius:18px;box-sizing:border-box}
+.fu-band .panel-title{display:flex;justify-content:space-between;gap:12px;align-items:end;flex-wrap:wrap;margin-bottom:14px}
+.fu-band .panel-title h2{margin:0;font-size:clamp(22px,2.6vw,28px);line-height:1.35}
+.fu-band .panel-title span{color:var(--muted);font-size:13px;font-weight:700}
+/* このページの作り方（ARTICLE_TRUST をそのまま。枠だけ合わせる） */
+.fu-trust .article-trust{margin:0;max-width:none;border:0;padding:0;background:transparent;box-shadow:none}
+/* 詳細データ（現行ページの規則をそのまま） */
+.fu-detail details{border:1px solid var(--line);border-radius:10px;background:#fff;margin:10px 0;padding:12px}
+.fu-detail summary{cursor:pointer;font-weight:800;color:var(--ai)}
+.fu-detail .table-wrap{overflow-x:auto}
+.fu-detail table{border-collapse:collapse;width:100%;font-size:14px}
+.fu-detail th,.fu-detail td{border-bottom:1px solid var(--line);padding:6px 8px;text-align:left}
+.fu-detail ul{margin:8px 0 0;padding-left:1.2em;font-size:14px}
+/* 投票（現行ページの規則をそのまま。色だけ藍に合わせる） */
+.vote-stance-btn{border:0;border-radius:10px;padding:16px 22px;cursor:pointer;font-size:15px;font-weight:900;font-family:inherit;color:#fff;box-shadow:0 4px 14px rgba(16,24,40,.22);transition:transform .15s,box-shadow .15s,filter .15s;width:100%}
+.vote-step-label{display:inline-flex;align-items:center;gap:8px;font-weight:900;font-size:16px;margin:0 0 14px;flex-wrap:wrap}
+.vote-step-label .step-num{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;background:var(--accent);color:#fff;font-size:13px;flex-shrink:0}
+.vote-issue-btn{display:flex;align-items:center;gap:10px;width:100%;min-height:48px;border:1.5px solid rgba(36,64,122,.2);border-radius:10px;padding:13px 16px;background:#fff;cursor:pointer;font-family:inherit;text-align:left;box-shadow:0 4px 14px rgba(16,24,40,.07);transition:transform .15s,box-shadow .15s,border-color .15s}
+.vote-issue-btn:hover,.vote-issue-btn:focus-visible{transform:translateY(-2px);border-color:var(--accent);box-shadow:0 10px 24px rgba(36,64,122,.14);outline:2px solid var(--accent);outline-offset:2px}
+.vote-issue-icon{font-size:22px;line-height:1;flex-shrink:0}
+.vote-issue-title{font-size:13px;font-weight:900;color:var(--ink);line-height:1.35}
+#vote-stance-btns{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px!important;max-width:900px}
+#vote-stance-btns .vote-stance-btn{border-top:6px solid var(--stance-color);background:linear-gradient(180deg,#fff,var(--stance-bg));color:var(--ink);text-align:left;box-shadow:0 8px 22px rgba(16,24,40,.1)}
+#vote-stance-btns .vote-stance-btn:hover,#vote-stance-btns .vote-stance-btn:focus-visible{border-color:var(--stance-color);filter:none;box-shadow:0 14px 30px rgba(16,24,40,.18);outline:2px solid var(--stance-color);outline-offset:2px}
+.vote-stance-btn .vs-icon{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;background:var(--stance-color);color:#fff;font-size:18px;font-weight:900;margin-bottom:8px}
+.vote-stance-btn .vs-title{display:block;font-size:16px;font-weight:900;line-height:1.35;color:var(--stance-color)}
+.vote-stance-btn .vs-desc{display:block;margin-top:6px;font-size:12px;font-weight:700;line-height:1.6;color:var(--muted)}
+/* 次に読むテーマ */
+.related-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.related-card{display:block;text-decoration:none;padding:0;overflow:hidden;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--ink)}
+.related-card img{width:100%;aspect-ratio:16/9;object-fit:cover;display:block}
+.related-card div{padding:14px}
+.related-card p{margin:4px 0 0;font-size:13px;color:var(--muted)}
+.fb-print{margin:12px 0 0}
+@media(max-width:720px){.fu-band{padding:20px 16px}.related-grid{grid-template-columns:1fr}#vote-stance-btns{grid-template-columns:1fr!important}}
