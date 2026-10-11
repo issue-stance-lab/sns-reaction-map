@@ -168,7 +168,7 @@ python3 scripts/build_ai_copyright_redesign.py --mode preview --output-dir /tmp/
 |---|---|
 | 生成器の内蔵照合（件数・理由区分・区分ごとの立場・資料・日付） | 合格 |
 | `verify_theme_page.py`（候補は `--html`） | 候補 NG 0、全10テーマ NG 0 |
-| `verify_number_provenance.py` | 10テーマ NG 0（現行ページ 445/445。新ページは切替後に数える） |
+| `verify_number_provenance.py` | 10テーマ NG 0（現行ページ 445/445。新ページは切替後 609/609） |
 | `verify_top_page.py` | 終了0 |
 | `build_ai_copyright_arena.py --check` | OK |
 | `verify_builder_rebuildability.py` | 10テーマ NG 0 |
@@ -209,4 +209,57 @@ python3 scripts/build_ai_copyright_redesign.py --mode preview --output-dir /tmp/
 
 ## 9. 2026-10-11 公開切替
 
-（切替の記録は切替のコミットで追記する）
+### 9-1. 変えたファイル
+
+| ファイル | 変更 |
+|---|---|
+| `configs/ai-copyright-layout.json` | `enabled: true` |
+| `configs/theme-seo.json` | ai-copyright に `display_headline`「生成AIと著作権、何が侵害になる？」 |
+| `data/page-sources/ai-copyright.html`（新規） | 旧形式の元HTML（切替直前の docs/ のページとバイト一致） |
+| `docs/ai-copyright-reaction-map.html` | 新デザイン（`ai_copyright_layout.finish`。`--mode release --output-dir` の公開候補とバイト一致） |
+| `DATA_REFRESH.md` | 「生成AIと著作権の定期更新（新デザインを維持する、2026-10-11〜）」の節 |
+| `company/APPROVALS.yaml` | 生成AIページの新デザイン公開の承認記録（`approval-20261011-ai-copyright`、承認待ち。並行して他テーマの承認記録が増えても番号がぶつからないよう、連番でなくテーマ名の id にした） |
+| `configs/ai-copyright-background.json` | 9-2 の使い回しの書き直し（背景末尾の日付の文） |
+| `quality/prototypes/ai-copyright-release/`・`ai-copyright-reading/` | 公開候補と確認画面を最終版で作り直し |
+| 共有テスト | 9-4 |
+
+### 9-2. 切替で初めて見つかったことと対応
+
+- **ページ間の言い回しの使い回し**（`verify_page_originality.py`）：手順7の候補の段階で、副首都の新デザインと同じ文が16件
+  （読書面の説明・注記・投稿の案内・背景の案内など）あった。`configs/ai-copyright-reading.json` の11文と
+  `configs/ai-copyright-background.json` の3文を、意味を変えずに生成AI向けの言い方へ書き直した（例：「山の幅は一定より細くしていません」→
+  「山の幅には最小値を決めています」）。切替後に背景末尾の日付の文（「制度の記述は◯月◯日時点の確認です（背景台帳の確認日…）」）が
+  副首都と似すぎる（0.76）と出たため、「SNSの集計は◯月◯日まで。制度は◯月◯日時点の内容で、…」の順に直した。
+  よみやす「完成を止める指摘 0件」、`verify_page_originality.py`「10ページに、使い回された見出し・文はありません」。
+- **H1 の不一致**（`validate_theme_seo.py`）：新デザインの H1 が台帳の headline と違うため、副首都と同じく `display_headline` を足した。
+- **DATA_SHEET.md**：生成AIの行は変わらなかった（`build_data_sheet.py` で「ずれなし」）。
+- 承認台帳は **`status: pending`（承認待ち）** で足した。オーナーの公開承認は受けていない。
+
+### 9-3. 切替後の検査（作業ツリー）
+
+| 検査 | 結果 |
+|---|---|
+| `python3 -m unittest discover -s tests` | 1,831件 OK（skip 4、失敗0・エラー0）。共有テストを直す前は失敗8・エラー5（9-4） |
+| `verify_theme_page.py ai-copyright` / 全テーマ | NG 0 / 10テーマ NG 0 |
+| `verify_number_provenance.py ai-copyright` / 全テーマ | 609/609 説明済み・終了0 / 10テーマ NG 0 |
+| `verify_top_page.py` | 終了0 |
+| `run_public_checks.py` | 終了0（「公開ファイルだけで確かめられる範囲はすべて通りました」） |
+| `build_ai_copyright_arena.py --check` | OK: 差分なし（公開後の経路＝元HTML・新ページ・アリーナデータを作り直して比較） |
+| `verify_builder_rebuildability.py` | 10テーマ NG 0 |
+| `verify_ocean_layer.py` | 生成AIは指摘なし（終了1は既存の他テーマの指摘） |
+| `seo/validate_theme_seo.py` | OK（themes=10、sitemap URLs=16） |
+| `verify_ai_tone.py` | 問題なし（公開ページ10本） |
+| `verify_page_originality.py` | OK |
+| よみやす（docs の新ページ） | 完成を止める指摘 0件・PASS |
+| 2回生成 | md5 一致（`ff06d8d5…`、`PYTHONHASHSEED` 0・7・4242、docs のページとも一致） |
+| `--as-of 2026-10-27` | 止まらず、背景が `after_unconfirmed` |
+| Playwright（docs/ を 127.0.0.1 で配信） | 6節と同じ項目すべて合格。画像は `evidence/`（10枚、切替後に撮り直し） |
+| 10/16 の模擬（4節） | 最終版で再実行して合格（候補の新ページは基準日 2026-10-16・届出「開始前」、公開対象71件、アリーナデータも候補に含まれる） |
+
+### 9-4. 切替に合わせて直した共有テスト
+
+| テスト | 変更 | 理由 |
+|---|---|---|
+| `tests/test_ai_copyright_adapter.py`・`_connected.py`・`_connected_refresh.py`・`_issue_media.py`・`tests/test_theme_hero_assets.py`（生成AIのページ） | 読むページを「公開後は元HTML（data/page-sources）」に | 旧形式の連動表示・論点ごとのX投稿・図解画像・ヒーロー画像の検査。公開後も元HTMLに同じ構造で残る（副首都と同じ扱い） |
+| `tests/test_cite_button.py` | 生成AIの新デザインも論点欄の `id="issue-…"` を受け皿とみなす | 受け皿の形が変わった |
+| `tests/test_theme_design.py` | 生成AIの新デザインを飛ばす | 共通の見た目を掛けない設計 |

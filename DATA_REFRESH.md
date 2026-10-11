@@ -1011,6 +1011,72 @@ mainへ取り込む前に、**「合格した」という報告を鵜呑みに�
 - 「このページの作り方」（ARTICLE_TRUST）・「詳細データ」・「次に読むテーマ」・投票・SEOメタは元HTMLから文字どおり
   引き継ぐ。数字が古いときは元HTML側（`build_fukushuto_arena.py`・`apply_theme_trust.py`）で直る
 
+### 生成AIと著作権の定期更新（新デザインを維持する、2026-10-11〜）
+
+生成AIと著作権のページは2026-10-11から新デザイン（冒頭の2問と件数のものさし・論点ごとの読書面・背景の開閉行）で公開している
+（公開切替はオーナー承認待ち。`company/APPROVALS.yaml`）。副首都・皇室典範改正の新デザイン（上の節）と同じ型で、
+**旧形式の生成器はこれまでどおり「元HTML」に掛け、全生成の最後に新デザインを組み直す。**
+設計と検査の記録: [quality/designs/2026-10-11-ai-copyright-production-candidate.md](quality/designs/2026-10-11-ai-copyright-production-candidate.md)
+
+- **`configs/ai-copyright-layout.json` の `enabled`**: `true` の間、`refresh_topic.py` の公開候補生成（単一・複数テーマ）は
+  隔離コピーで元HTMLを `docs/` に戻し（`ai_copyright_layout.materialize`）、旧形式の全処理（adapter・意見の推移・finalize・SEO・
+  信頼情報・授業節・テーマ共通の見た目・皇室と副首都の新デザイン）のあとに `ai_copyright_layout.finish` で元HTMLを保存し直してから
+  新デザインのページを `docs/` に書く。**他テーマの更新でも毎回この処理が走る**（生成AIの照合が合わないと、その回の
+  公開候補生成全体が止まる）。`false` に戻すと、公開ページが新デザインのまま「更新設定が無効」で止まる。
+  戻すときは旧形式のページ（`data/page-sources/ai-copyright.html`）を先に `docs/` へ戻すこと
+- **元HTMLの場所**: `data/page-sources/ai-copyright.html`（Git管理）。`refresh_adapters/ai_copyright.py`（連動表示・
+  「意見の推移」の貼り直しを含む）・`build_ai_copyright_arena.py`（引数なし）はこれを入力にする。手で編集しない。
+  `docs/ai-copyright-reaction-map.html` を旧形式の生成器に直接渡すと拒否される（新デザインの再入力防止）。
+  旧ページの検索入口（`ai_copyright_search_entry.py`・`docs/ai-copyright-connected-page.js`）・連動表示・論点ごとのX投稿14件
+  （`ai_copyright_issue_media.py`）は元HTMLの中でだけ更新され、新デザインには載せない。新デザインの FAQ の構造化データは、
+  背景の「よくある質問（4問）」から毎回作り直す
+- **新デザインが元HTMLから文字どおり引き継ぐもの**: SEOメタ・Article の構造化データ・GA4・AdSense・共通ヘッダー・
+  投票（`ai-copyright-issue-stance-v1`、論点7×立場3）・調査条件（`#caution`）・PLANET_DATA・**「SNS上の意見の推移」
+  （画像4枚 `docs/images/trend/ai-copyright-*.png` と説明。`trend_support` が元HTMLに貼り、画像は adapter が同じ累積候補から作る）**・
+  「このページの作り方」・「詳細データ」・「次に読むテーマ」・フッター。数字が古いときは元HTML側（adapter・`apply_theme_trust.py`）で直る。
+  アリーナデータ（`docs/ai-copyright-arena-data.js`）は新デザインでは読まないが、adapter が引き続き作って公開物に含める
+- **単独で作り直すとき**（データは変えずに見た目や文言だけ直したとき）:
+  `python3 scripts/build_ai_copyright_arena.py`（新デザイン公開中は、元HTMLに公開JSONの集計と旧形式の生成を掛けてから
+  公開ページを作り直す。アリーナデータも同じ）。成功の形: もう一度 `python3 scripts/build_ai_copyright_arena.py --check` を
+  実行して `OK: 差分なし` と出ること。公開候補を別フォルダに作って見るだけなら
+  `python3 scripts/build_ai_copyright_redesign.py --mode release --output-dir quality/prototypes/ai-copyright-release`
+  （成功の形: `Built 1 file (release, as_of …); no deployment performed.`。docs/ は変わらない）
+- **再読データ（理由区分）を追記したとき**: 5論点（学習データ・無断利用／クリエイター保護・権利／その他／
+  AI生成物の権利・創作性／技術競争・推進）の新しい意見は、本文を読んで理由区分を決め、`data/ai-copyright_issues-reread.json` の
+  各論点の `items` に1件ずつ追記し、`buckets` の件数も合わせる。**論点ごとの `items` の件数が公開JSONの論点の件数と
+  一致しないと新デザインの生成が止まる**（旧ページは「まだ読み直していない分」を残せたが、新デザインは残せない。
+  公開JSONを先に更新して再読を後回しにすると、全テーマの公開候補生成が止まる）。区分ごとの立場の内訳は明細の `stance` から
+  数えるので、明細の立場が公開JSONと違っても止まる。**判定し直し（`rejudge_ai_copyright_wave.py` など）で正典の立場が
+  変わったら、明細の `stance` も正典に合わせる**（2026-10-11 に11件を合わせた記録が `stance_resync_2026_10_11`）。
+  共通台帳（`data/verification/reread/ai-copyright.json`）はこのテーマには無いので `resync-source` は使わない。追記後は
+  1. `python3 scripts/build_public_registry.py --topic ai-copyright`
+  2. 公開候補生成（`--prepare-promotion`）を流す。単独なら `python3 scripts/build_ai_copyright_arena.py`
+  3. `python3 scripts/verify_number_provenance.py ai-copyright`（新デザインの理由区分・区分ごとの立場を明細から数え直す。
+     成功の形: `NG 0件`）
+  理由区分の言い換え・「どんな声か」・代表投稿2件は `configs/ai-copyright-reading.json`。区分が増えたとき・投稿を
+  差し替えるときだけ直す（完成扱いの論点で言い換えの無い区分があると止まる）。法制度・規制整備と利用者モラル・倫理は
+  再読データが無く「理由ごとに読み分けた結果をまだ載せていません」と出る（データが入れば自動で消える）。
+  読書面の生成は非公開の正典を読まないので、GitHub の自動検査でも同じ検査が動く
+- **語られていない争点の再検索の記録**（`data/verification/ai-copyright-sunk-continents.json` の `sns_note`・`life_impact`）と
+  **立場が違っても共通する心配**（`ai-copyright-veins.json`）は画面に出る公開文章。母数 `sns_base` が意見数と違うと生成が止まる
+  （再検索して記録を足す）。追記したらよみやす検査
+  （`python3 scripts/review_with_yomiyasu.py --medium website --strict docs/ai-copyright-reaction-map.html`）を
+  新デザインのページに掛ける（成功の形: `完成を止める指摘: 0件`）
+- **時制（確認日 `checked_on`・プリンシプル・コードの届出開始 2026-10-26）**: 生成は止まらない。
+  - 冒頭と背景の「◯月◯日時点」は `configs/ai-copyright-opening.json` の `checked_on`（制度を確かめた日）1か所から出る。
+    一次資料を確かめ直したらこの日付を進める
+  - 背景（ルールの違い・年表・よくある質問・未確認事項）は、公開JSONの更新日（`--as-of` を渡したときはその日）が届出開始日
+    より前か後かで文を切り替える。開始日を過ぎ、届出の開始をまだ確かめていない間は「始まる予定でした。始まったかどうかは、まだ確かめていません」
+    （開始後・未確認）と出る。**内閣府（内閣官房「AI時代の知的財産権検討会」）のページで届出の開始を確かめたら**、
+    `configs/ai-copyright-opening.json` の `principle_code.filing_confirmed_on` に確かめた日を入れて作り直す（開始日より前の日付、
+    または基準日が開始日より前なのに日付があると止まる）。「始まりました（◯月◯日に確認）」に切り替わり、未確認事項からその1行が消える
+  - 副首都と違い、冒頭には段階の表示が無いので、読む日による JavaScript の切り替えは無い（背景は次の更新で切り替わる）
+  - 段階ごとの文は `configs/ai-copyright-background.json` の `phase_filing`・年表の `texts`・FAQ の `phase_filing`・
+    未確認事項の `hide_when`。欠けていると開始日より前でも生成が止まる
+- 新デザインのページには、テーマ共通の見た目（`apply_theme_design.py`）・授業節の単独適用・信頼情報の単独適用・
+  山なみの単独更新（`refresh_planet_section.py`）・潮目の単独差し込み（`inject_tide_widget.py`）を掛けない
+  （各スクリプトが skipped／SKIP／停止と出す）。更新経路では元HTMLに掛かる
+
 ### 読み込み確認のやり方（質と速さの両立）
 
 消費税減税での失敗（機械的なチェックは通ったのに、実際には本文を読まずに使い回した
