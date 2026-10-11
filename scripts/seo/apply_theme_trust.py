@@ -402,6 +402,10 @@ def main() -> int:
         if not path.is_file():
             raise FileNotFoundError(path)
         source = path.read_text(encoding="utf-8")
+        if 'name="koshitsu-layout"' in source:
+            # 新デザインはSEOメタを元HTMLから引き継ぐ（更新経路では元HTMLにこの処理を掛けてから適用する）
+            print(f"skipped {path.relative_to(PROJECT_ROOT)} (koshitsu-layout)")
+            continue
         if args.observations_only:
             updated = apply_observations_only(source, theme)
         else:

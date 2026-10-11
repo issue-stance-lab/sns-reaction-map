@@ -2100,3 +2100,27 @@ items:
       - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/38063632733"
       - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/38064029420"
       - "https://sns-reaction-map.jp/"
+
+  - id: approval-20261011-002
+    department: engineering-data
+    action: website_publication
+    summary: "皇室典範改正ページを新デザイン（冒頭の短答・論点ごとの読書面・背景の開閉行）に切り替えて公開する"
+    reason: "オーナーが2026-10-11に、皇室典範改正の新デザインの残作業を片付けて公開するよう指示した（「残作業片付け公開」）"
+    risks:
+      - "URL・title・SEOメタ・Article JSON-LD・GA4・AdSense・投票（topic koshitsu-tenpakai-issue-stance-v2、24選択肢）は元ページから継承する。H1 は新デザインの見出しに変わるため configs/theme-seo.json に display_headline を足した"
+      - "引用ボタン・世論の潮目ウィジェット・読書進捗の帯は新デザインに移していない（別課題で判断）"
+      - "件数は変わらない（収集2,565件・意見2,016件、公開JSONの更新日2026-10-05）。語られていない争点の再検索の記録8文を読みやすく直した（意味・件数・日付は変えていない）"
+      - "施行日（2026-10-24）を過ぎても更新は止まらず、施行後の条文を編集部が確かめるまでは「施行される予定でした。施行後の条文は、まだ編集部で確かめていません」と表示する"
+      - "本番ホストでの GA4・AdSense の発火、投票の POST、X埋め込みの実表示は未確認（公開後に確認する）"
+    recommendation: approve
+    evidence:
+      - "quality/designs/2026-10-11-koshitsu-tenpakai-production-candidate.md"
+      - "quality/prototypes/koshitsu-tenpakai-release/evidence/"
+      - "configs/koshitsu-layout.json"
+    status: approved
+    requested_at: "2026-10-11"
+    decided_at: "2026-10-11"
+    decision_note: >-
+      オーナーが2026-10-11に「残作業を片付けて公開」と指示した（司令塔セッション経由で作業ツリーのセッションへ伝達）。
+      対象は作業ブランチ task/renew-koshitsu-tenpakai の新デザイン一式（公開切替・文体の修正8件・施行日以降の時制の設計変更・
+      DATA_REFRESH.md の追記）。main への統合と push は別途行う。
