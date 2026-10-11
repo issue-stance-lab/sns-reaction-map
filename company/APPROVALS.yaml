@@ -2170,3 +2170,38 @@ items:
     decided_at: "2026-10-11"
     decision_note: >-
       検査をすべて通したうえでオーナーが「生成AIを公開」と承認（2026-10-11）。release スキルで main へ統合・push した。
+
+  - id: approval-20261011-001
+    title: 2026-10-11のX投稿5本の記録と計測の本番反映
+    scope: website
+    kind: release
+    requester: AI（X日次セッション）
+    evidence:
+      - content/x/posts.md
+      - THEMES.yaml
+      - docs/index.html
+    status: completed
+    requested_at: "2026-10-11"
+    decided_at: "2026-10-11"
+    decision_note: >-
+      10-11の朝枠2本（@4d3082f29a18457宛の免許更新、@osaka_ishin9宛の自転車の通行区分）、
+      昼枠2本（@KanalocoLocal宛の部活の費用負担、@asahicom宛の外食の税率差）、
+      夕方枠1本（@chitose_yr宛の文化部の楽器整備）の記録と、
+      10-10の2本の計測（朝720・会話フォロー28）、10-10の論点ポスト8表示と昼枠221表示の計測を提示し、
+      オーナーが「反映して」と指示した。
+      **夕方枠はこの日5本目で、1日の目安（朝・昼・夕・夜の4回）を1本超えている。**
+      提示時に「5本目になります。出すかどうかはご判断ください」と明記し、オーナーが投稿を指示した。
+    completed_at: "2026-10-11"
+    result_note: >-
+      main 9f6f08aa（task/x-20261011 のマージ）と a1aa5adc（x_posted_at の更新とトップ同期）で反映。衝突なし。
+      全テスト1,777件OK、公開用検査OK、全テーマ検査NG 0件、数字の出所検査NG 0件、
+      **トップページ検査もNG 0件**（前回あった「collect_at 期限超過: consumption-tax-cut」は、
+      別セッションが収集を済ませたため解消していた）。
+      GitHub Actionsの公開ファイルの検査とPages配信はいずれも成功。
+      公開サイトのトップで自転車テーマの xpost が2026-10-11になっていることをcurlで確認した。
+      x_posted_at は bike-blue-ticket / elderly-license-revocation / consumption-tax-cut を2026-10-11へ更新
+      （bukatsu-chiiki は前日の反映で既に2026-10-11）。
+      非公開正典の差分は時刻だけで内容の違いはなく、移動は不要だった。
+    result_evidence:
+      - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/38125822569"
+      - "https://sns-reaction-map.jp/"
