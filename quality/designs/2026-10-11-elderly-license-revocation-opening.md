@@ -89,3 +89,7 @@
 - 本番HTMLへの差し込み（既存 SEARCH_ENTRY・THEME_COUNT・ヒーローとの置き換え）、FAQのJSON-LD、title・description は未着手。
 - Safari・実機・キーボード操作（開閉6つとリンク）・読み上げは未確認。ものさしは role="img" と説明文を付けた。
 - 10/14の定期更新で件数が変わっても生成し直せば追従するが、その実行は確認していない。
+
+## 2026-10-11 一次資料との照合（Haiku 8本＋司令塔の再確認）
+
+照合表: [quality/reviews/2026-10-11-elderly-license-revocation-opening-source-check.md](../reviews/2026-10-11-elderly-license-revocation-opening-source-check.md)。不一致なし。70歳講習（道交法101条の4）と統計435,067件・297,359件（令和7年版PDF）は司令塔が確認。#8080が警察の窓口であることは未確認のまま。
