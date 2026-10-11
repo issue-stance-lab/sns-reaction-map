@@ -1093,7 +1093,7 @@ def static_ocean(data: dict) -> str:
             if data["theme_id"] == "bike-blue-ticket":
                 sns_note = re.sub(
                     r"\s*20\d{2}-\d{2}-\d{2}に今回新たに採用した\d+件を本文確認し、"
-                    r"この事実への新規言及は見つからなかった。母数は前回確認済み分と合わせた全意見数。$",
+                    r"この事実への新規言及は見つからなかった。母数は前回確認済み分と合わせた全意見数。",
                     "",
                     sns_note,
                 ).rstrip()

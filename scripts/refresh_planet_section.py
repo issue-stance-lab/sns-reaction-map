@@ -814,10 +814,18 @@ def _apply_connected_display(topic: str, html: str) -> str:
     return html
 
 
-def refresh(topic: str, *, source: str | None = None) -> tuple[str, str, list[str]]:
+def refresh(topic: str, *, source: str | None = None,
+            canonical: list | None = None) -> tuple[str, str, list[str]]:
+    """canonical を渡すと、正典の代わりにその累積候補（正典＋今回の追加分）を母数に山なみを作る。
+
+    定期更新の --prepare-promotion では正典がまだ古い。今回分の理由区分を専用ファイルへ先に足すと、
+    正典を母数にした生成は「現行の対象意見ではないID」で止まる（2026-10-10 副首都で発生）。
+    henoko（2026-10-09）・副首都（2026-10-10）と同じく、候補と候補から作った公開JSONを入力にする。
+    """
     page = ROOT / "docs" / f"{topic}-reaction-map.html"
     html = source if source is not None else page.read_text(encoding="utf-8")
-    if topic == "bukatsu-chiiki" and 'name="bukatsu-layout"' in html:
+    if (topic == "bukatsu-chiiki" and 'name="bukatsu-layout"' in html) or (
+            topic == "koshitsu-tenpakai" and 'name="koshitsu-layout"' in html):
         raise SystemExit("新デザインにはrefresh_topicの公開候補生成を使ってください。旧形式で上書きしないため停止しました。")
     if START not in html or END not in html:
         raise SystemExit(
@@ -827,7 +835,11 @@ def refresh(topic: str, *, source: str | None = None) -> tuple[str, str, list[st
     i = html.index(START)
     j = html.index(END) + len(END)
 
-    data = bpd.build(topic)
+    if canonical is None:
+        data = bpd.build(topic)
+    else:
+        from public_registry_common import build_theme_json
+        data = bpd.build(topic, canonical=canonical, public=build_theme_json(topic, canonical))
     cfg = bpd.yaml.safe_load((ROOT / "configs/planet" / f"{topic}.yaml").read_text())
     failures = bpd.independence_gate(data, cfg)
     data = bpd.stabilize(data)
