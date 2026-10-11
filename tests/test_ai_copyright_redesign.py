@@ -241,5 +241,134 @@ class ReadingPageTests(unittest.TestCase):
             self.reading.check_all(d)
 
 
+@unittest.skipUnless(CANON.is_file(), "非公開の正典が無い環境では読書面を生成できない")
+class BackgroundTests(unittest.TestCase):
+    """手順6：残り6論点と背景の開閉行。"""
+
+    @classmethod
+    def setUpClass(cls):
+        from scripts import ai_copyright_reading as reading
+
+        cls.reading = reading
+        cls.tmp = tempfile.TemporaryDirectory()
+        cls.d = reading.load()
+        cls.html = reading.build(Path(cls.tmp.name) / "a").read_text(encoding="utf-8")
+        cls.s = soup_of(cls.html)
+        cls.bg = cls.s.select_one("#ai-copyright-background")
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.tmp.cleanup()
+
+    def render_bg(self, as_of, edit=None):
+        d = copy.deepcopy(self.d)
+        if edit:
+            edit(d)
+        import ai_copyright_background as bgmod
+        return soup_of(bgmod.render(d, as_of, self.reading.ordered_issues(d))).select_one("#ai-copyright-background")
+
+    def test_all_issues_complete_with_two_posts_of_different_stances(self):
+        for iid in self.d["cfg"]["issues"]:
+            panel = self.s.find(id="issue-" + iid)
+            self.assertIn("is-complete", panel["class"], iid)
+            self.assertTrue(panel.select(".fr-desc"), iid)
+            posts = panel.select(".fr-post")
+            self.assertEqual(len(posts), 2, iid)
+            stances = [re.search(r"立場：([^／]+)$", p.select(".fr-fine")[-1].get_text()).group(1) for p in posts]
+            self.assertEqual(len(set(stances)), 2, (iid, stances))
+
+    def test_every_reason_bucket_has_voice(self):
+        for label, rr in self.d["reread"].items():
+            issue = next(i for i in PUBLIC["issues"] if i["label"] == label)
+            panel = self.s.find(id="issue-" + issue["id"])
+            self.assertEqual(len(panel.select(".fr-voice")), len(rr["buckets"]), label)
+
+    def test_veins_shown_on_their_issues(self):
+        for v in PUBLIC["ocean_layer"]["veins"]:
+            for iid in v["issue_ids"]:
+                self.assertTrue(self.s.find(id="issue-" + iid).select(f'.fr-vein[data-vein="{v["id"]}"]'), (iid, v["id"]))
+
+    def test_rows_are_details_and_named_for_this_theme(self):
+        rows = self.bg.select("details.fb-row")
+        self.assertEqual([r["id"] for r in rows], ["bg-article", "bg-kangaekata", "bg-rules", "bg-timeline",
+                                                   "bg-faq", "bg-classroom", "bg-unverified"])
+        for r in rows:
+            self.assertIsNone(r.get("open"))
+        # 作り方・詳細データ・次に読む・意見の推移は手順7で継承する（背景には入れない）
+        for absent in ("bg-method", "bg-table", "bg-related", "bg-trend"):
+            self.assertIsNone(self.bg.find(id=absent))
+
+    def test_checked_on_drives_time_phrases(self):
+        when = opening.jp_date(self.d["ocfg"]["checked_on"])
+        self.assertIn(f"{when}時点", self.bg.select_one("#bg-article").get_text())
+        self.assertIn(f"{when}時点", self.bg.select_one(".fr-footer").get_text())
+        d_edit = lambda d: d["ocfg"].__setitem__("checked_on", "2026-12-01")
+        self.assertIn("2026年12月1日時点", self.render_bg(PUBLIC["updated_on"], d_edit).get_text())
+
+    def test_filing_phase_switches(self):
+        start = self.d["ocfg"]["principle_code"]["filing_starts_on"]
+        before = self.render_bg(PUBLIC["updated_on"])
+        self.assertEqual(before["data-filing-phase"], "before")
+        self.assertIn("始まる予定です", before.select_one("#bg-rules").get_text())
+        after = self.render_bg(start)
+        self.assertEqual(after["data-filing-phase"], "after_unconfirmed")
+        self.assertIn("まだ確かめていません", after.select_one('[data-event="filing"]').get_text())
+
+        def confirm(d):
+            d["ocfg"]["principle_code"]["filing_confirmed_on"] = "2026-10-27"
+        done = self.render_bg("2026-10-28", confirm)
+        self.assertEqual(done["data-filing-phase"], "after_confirmed")
+        self.assertIn("始まりました（2026年10月27日に確認）", done.select_one("#bg-rules").get_text())
+        self.assertNotIn("届出が始まったかどうか", done.select_one("#bg-unverified").get_text())
+        self.assertIn("届出が始まったかどうか", before.select_one("#bg-unverified").get_text())
+
+    def test_impossible_filing_dates_stop(self):
+        def early(d):
+            d["ocfg"]["principle_code"]["filing_confirmed_on"] = "2026-10-01"
+        with self.assertRaises(SystemExit):
+            self.render_bg("2026-10-28", early)
+
+    def test_missing_phase_text_stops(self):
+        def drop(d):
+            row = next(r for g in d["bg"]["cfg"]["groups"] for r in g["rows"] if r["id"] == "rules")
+            del row["phase_filing"]["after_confirmed"]
+        with self.assertRaises(SystemExit):
+            self.render_bg(PUBLIC["updated_on"], drop)
+
+    def test_timeline_has_new_events_after_ledger(self):
+        events = [li["data-event"] for li in self.bg.select(".fb-timeline li")]
+        ledger_ids = [t["id"] for t in self.d["background"]["timeline"]]
+        self.assertEqual(events[: len(ledger_ids)], ledger_ids)
+        self.assertEqual(events[len(ledger_ids):], ["code-revised", "filing"])
+        self.assertNotIn("最も新しい動き", self.bg.select_one("#bg-timeline").get_text())
+
+    def test_faq_four_questions_without_opening_duplicates(self):
+        qs = [dt.get_text() for dt in self.bg.select("#bg-faq dt")]
+        self.assertEqual(len(qs), 4)
+        for q in qs:
+            self.assertNotIn("作風", q)
+            self.assertNotIn("30条の4", q)
+
+    def test_classroom_is_read_from_shared_config(self):
+        cr = json.loads((ROOT / "configs/classroom/ai-copyright.json").read_text(encoding="utf-8"))
+        text = self.bg.select_one("#bg-classroom").get_text()
+        for r in cr["reasons_pro"] + cr["reasons_con"]:
+            self.assertIn(r["text"], text)
+
+    def test_no_forbidden_words_outside_shared_classroom(self):
+        """違法・合法が出てよいのは、共有の授業設定（読むだけ）由来の文だけ。"""
+        for row in self.bg.select("details.fb-row"):
+            if row["id"] == "bg-classroom":
+                continue
+            for w in FORBIDDEN:
+                self.assertNotIn(w, row.get_text(), row["id"])
+
+    def test_themes_yaml_mismatch_stops(self):
+        def edit(d):
+            d["bg"]["theme"]["updated_at"] = "2000-01-01"
+        with self.assertRaises(SystemExit):
+            self.render_bg(PUBLIC["updated_on"], edit)
+
+
 if __name__ == "__main__":
     unittest.main()
