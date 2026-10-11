@@ -1,0 +1,93 @@
+{
+  "_note": "副首都ページ冒頭の文言設定。件数・論点別件数・立場・更新日は公開JSONから読むため、ここには書かない。制度と候補地の記述は checked_on 時点の一次資料で確認した内容（棚卸し記録 quality/designs/2026-10-11-fukushuto-renewal-inventory.md の A1〜A9）。更新時は checked_on と各 date を直す。",
+  "theme_id": "fukushuto",
+  "inputs": {
+    "public_json": "docs/data/themes/fukushuto.json",
+    "planet_config": "configs/planet/fukushuto.yaml",
+    "themes_registry": "THEMES.yaml"
+  },
+  "checked_on": "2026-10-03",
+  "crumb": ["統治機構・地方", "副首都法案・副首都構想"],
+  "title": {
+    "phrases": ["副首都は", "どこに、", "いつ決まる？"],
+    "accent_index": 1,
+    "sub": ["候補地とメリット・デメリット、", "SNSで意見が分かれる理由"]
+  },
+  "lead": "制度の決まり方と各地の動きを先に確かめ、SNSの意見を論点ごとに読みます。",
+  "decision": {
+    "label": "決まり方と時期",
+    "text": "国が要件を定め、議会の議決を経た道府県の申出を受けて指定します。指定の時期はまだ決まっていません。"
+  },
+  "steps": [
+    {"key": "enacted", "title": "法律が成立", "date": "2026-07-24", "date_end": "2026-07-31", "note_template": "{date_end}に公布。法律の枠組みが決まった"},
+    {"key": "draft", "title": "要件案を公表", "date": "2026-10-03", "note_template": "{date_end}まで意見募集", "date_end": "2026-10-16", "source": {"label": "意見募集の資料（e-Gov）", "url": "https://public-comment.e-gov.go.jp/pcm/detail?CLASSNAME=PCMMSTDETAIL&Mode=0&id=060261003"}},
+    {"key": "enforce", "title": "法律の施行", "date": "2026-10-30", "note": "施行予定日として示されている"},
+    {"key": "apply", "title": "道府県が申出", "date": null, "note": "議会の議決が必要"},
+    {"key": "designate", "title": "国が指定", "date": null, "note": "どこになるかは未決定"}
+  ],
+  "answers": [
+    {
+      "key": "where",
+      "question": "どこになる？",
+      "kind": "facts",
+      "kind_label": "制度と自治体の資料",
+      "short": "まだ、どの道府県も指定されていません。",
+      "body_template": "自治体の資料で動きを確認できたのは{regions}地域です。指定を目指すか意思を表明した地域が{aiming}、検討中が{considering}あります。",
+      "link": {"href": "#fuk-op-map", "text": "各地の段階を地図で見る"}
+    },
+    {
+      "key": "when",
+      "question": "いつ決まる？",
+      "kind": "facts",
+      "kind_label": "制度の情報",
+      "short": "指定の時期は示されていません。",
+      "body_template": "要件案は{draft_date}に公表され、{draft_end}まで意見を募集しています。法律の施行は{enforce_date}の予定です。",
+      "link": {"href": "#fuk-op-route", "text": "決まるまでの手順を見る"}
+    },
+    {
+      "key": "merit",
+      "question": "メリット・デメリットは？",
+      "kind": "voices",
+      "kind_label": "制度の目的とSNSの意見",
+      "short": "目的は災害への備えと経済の拠点づくりです。",
+      "body_template": "SNSの意見では、{top_issues}の順に多く語られています。賛成と反対で、何を重く見るかが違います。",
+      "link": {"href": "#fuk-op-count", "text": "論点ごとの件数を見る"}
+    }
+  ],
+  "map": {
+    "title": "各地の動き",
+    "national_label": "国の指定",
+    "national_count": 0,
+    "national_unit": "道府県",
+    "capital_label": "東京（首都）",
+    "note": "色は自治体が公表した動きです。国が認めた候補地の一覧ではなく、全国を網羅した一覧でもありません。"
+  },
+  "stages": [
+    {"key": "aiming", "label": "指定を目指す・意思表明"},
+    {"key": "considering", "label": "検討・要件待ち"},
+    {"key": "not_preparing", "label": "単独申出の準備なし"}
+  ],
+  "candidates": [
+    {"pref": "大阪", "name": "大阪府・大阪市", "stage": "aiming", "label": "構想を公表", "date": "2026-02-12", "source": "大阪市", "url": "https://www.city.osaka.lg.jp/fukushutosuishin/page/0000679231.html"},
+    {"pref": "福岡", "name": "福岡県", "stage": "aiming", "label": "指定を目指す", "date": "2026-08-07", "source": "福岡県", "url": "https://www.pref.fukuoka.lg.jp/contents/fukuoka-fukusyuto.html"},
+    {"pref": "愛知", "name": "愛知県・名古屋市", "stage": "aiming", "label": "指定を目指す", "date": "2026-08-10", "source": "愛知県", "url": "https://www.pref.aichi.jp/site/chiji/20260810.html"},
+    {"pref": "北海道", "name": "北海道・札幌市", "stage": "aiming", "label": "指定を目指す", "date": "2026-08-27", "source": "北海道", "url": "https://www.pref.hokkaido.lg.jp/ss/ssa/270000.html"},
+    {"pref": "群馬", "name": "群馬県", "stage": "aiming", "label": "知事が意思表明", "date": "2026-07-30", "source": "群馬県", "url": "https://www.pref.gunma.jp/site/chiji/769457.html"},
+    {"pref": "広島", "name": "広島県", "stage": "considering", "label": "申出を検討", "date": "2026-08-25", "source": "広島県", "url": "https://www.pref.hiroshima.lg.jp/site/kishakaiken/gpc-20260825.html"},
+    {"pref": "宮城", "name": "宮城県・仙台市", "stage": "considering", "label": "要件を待って判断", "date": "2026-08-26", "source": "宮城県", "url": "https://www.pref.miyagi.jp/site/chiji-kaiken/kk-260826.html"},
+    {"pref": "京都", "name": "京都府", "stage": "not_preparing", "label": "単独申出の準備なし", "date": "2026-07-31", "source": "京都府", "url": "https://www.pref.kyoto.jp/koho/kaiken/260731.html"}
+  ],
+  "count": {
+    "label": "SNSの意見",
+    "caption_template": "{source}で集めた投稿{collected}件のうち、意見を含むもの（{start}〜{end}）",
+    "not_poll": "世論調査ではなく、SNSの公開投稿を分類した結果です。",
+    "issues_title": "論点ごとの件数",
+    "no_reason_tag": "理由は未公開",
+    "no_reason_note_template": "{labels}は、理由の内訳をまだ公開していません。論点の欄でその旨を示します。",
+    "updated_template": "最終更新 {updated}・次回の更新予定 {next}"
+  },
+  "sources": [
+    {"label": "成立した法律（e-Gov）", "url": "https://laws.e-gov.go.jp/law/508AC1000000078"},
+    {"label": "審議経過（衆議院）", "url": "https://www.shugiin.go.jp/internet/itdb_gian.nsf/html/gian/keika/1DE2ACE.htm"}
+  ]
+}
