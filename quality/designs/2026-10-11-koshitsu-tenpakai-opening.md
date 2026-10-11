@@ -67,3 +67,7 @@
 - 一次資料の確認日は棚卸しどおり2026-09-13が最新。今回オンラインでの再確認はしていない。
 - 共通ヘッダー・進捗バー・GA4・AdSense・OGP との組み合わせは試していない（単独ページで確認しただけ）。
 - 公開HTMLへの差し込み方法（`KOSHITSU_OPENING_START/END` の印を使う想定）と、現行の「3分でわかる」・FAQ・FAQ JSON-LD・テスト `tests/test_koshitsu_quick_guide.py` との置き換えは未着手。
+
+## 2026-10-11 一次資料との照合（Haiku 8本＋司令塔の再確認）
+
+照合表: [quality/reviews/2026-10-11-koshitsu-tenpakai-opening-source-check.md](../reviews/2026-10-11-koshitsu-tenpakai-opening-source-check.md)。不一致なし。現行の皇室典範第一条「男系の男子」は司令塔が条文APIで確認。成立日7/17と有識者会議報告書の本文は未確認のまま。
