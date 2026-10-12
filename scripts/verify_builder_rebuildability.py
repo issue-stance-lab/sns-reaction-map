@@ -43,6 +43,8 @@ def _copy_fixture(target: Path) -> None:
     materialize_constitutional(target)
     from scripts.bike_layout import materialize as materialize_bike
     materialize_bike(target)
+    from scripts.elderly_layout import materialize as materialize_elderly
+    materialize_elderly(target)
     # 山なみの直接生成にも、正規テンプレートが必要。
     template = Path("quality/prototypes/planet-prototype.template.html")
     (target / template.parent).mkdir(parents=True, exist_ok=True)
