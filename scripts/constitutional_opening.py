@@ -5,11 +5,21 @@
   configs/constitutional-amendment-opening.json   冒頭の文言・短答・出典（正典）
   docs/data/themes/constitutional-amendment.json  件数・論点別件数・立場（公開JSON）
   configs/planet/constitutional-amendment.yaml    立場の色と模様（山並みと同じ値）
-  data/verification/constitutional-amendment-background.json  状態の確認日
+  data/verification/constitutional-amendment-background.json  背景台帳（確認日の照合用）
 
 出力（--out-dir、既定は quality/prototypes/constitutional-amendment-opening）:
   opening-fragment.html  冒頭の部品（将来ページへ差し込む単位）
   index.html             確認用の単独ページ（同じフォルダーの opening.css を読む）
+  opening.css            scripts/constitutional_redesign/opening.css（正本）の写し
+
+確認日: 設定の checked_on（1か所）。「いまの段階」の確認日と、FAQ の「◯月◯日時点」はここから作る
+（2026-10-12 に一次資料を確かめ直したときに、背景台帳の確認日 2026-09-13 から切り替えた）。
+
+時制（2026-10-12、副首都 fukushuto_opening.phase_of と同じ型）: 国民投票法の改正（令和8年法律第73号）の施行を、
+基準日（--as-of、既定は公開JSONの updated_on）で3段階に切り替える。施行日を過ぎても生成は止めない。
+- before（基準日が施行日より前）／ after_unconfirmed（施行日を過ぎ、law.enforcement_confirmed_on が null）／
+  after_confirmed（施行後の条文を確かめた日を law.enforcement_confirmed_on に入れたとき）
+段階ごとの文は procedure.footnote_phase に書く。欠けていたら止める。
 
 同じ入力なら出力は毎回同じ（日時や乱数を使わない）。--check は書かずに差分の有無だけ返す。
 """
@@ -27,6 +37,8 @@ import yaml
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_CONFIG = ROOT / "configs" / "constitutional-amendment-opening.json"
 DEFAULT_OUT = ROOT / "quality" / "prototypes" / "constitutional-amendment-opening"
+ASSETS = ROOT / "scripts" / "constitutional_redesign"
+LAW_PHASES = ("before", "after_unconfirmed", "after_confirmed")
 
 PATTERN_CLASS = {"plain": "pat-plain", "diagonal": "pat-diagonal", "dots": "pat-dots", "mesh": "pat-mesh"}
 
@@ -101,6 +113,43 @@ def load_inputs(config_path: Path) -> tuple[dict, dict, list, dict]:
     return config, public, planet, background
 
 
+def iso(value: str, where: str) -> str:
+    if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", value or ""):
+        raise OpeningError(f"{where} の日付の形式が不正です: {value!r}")
+    return value
+
+
+def phase_of(config: dict, as_of: str) -> str:
+    """国民投票法の改正の施行の段階。施行の確認日のありえない組み合わせは止める。"""
+    law = config["law"]
+    iso(as_of, "基準日")
+    for key in ("promulgated_on", "enforcement_on"):
+        iso(law[key], f"law.{key}")
+    confirmed = law.get("enforcement_confirmed_on")
+    if confirmed:
+        iso(confirmed, "law.enforcement_confirmed_on")
+        if confirmed < law["enforcement_on"]:
+            raise OpeningError("law.enforcement_confirmed_on が施行日より前です（施行後の条文を確かめた日を入れてください）")
+        if as_of < law["enforcement_on"]:
+            raise OpeningError("law.enforcement_confirmed_on が入っていますが、基準日が施行日より前です")
+    if as_of < law["enforcement_on"]:
+        return "before"
+    return "after_confirmed" if confirmed else "after_unconfirmed"
+
+
+def law_values(config: dict) -> dict:
+    law = config["law"]
+    return {
+        "promulgated": jp_date(law["promulgated_on"]),
+        "enforcement": jp_date(law["enforcement_on"]),
+        "confirmed": jp_date(law["enforcement_confirmed_on"]) if law.get("enforcement_confirmed_on") else "",
+    }
+
+
+def default_as_of(public: dict) -> str:
+    return public["updated_on"]
+
+
 def summarize(public: dict, planet: dict) -> dict:
     """公開JSONから件数・論点・立場を集計し、整合を検査する。"""
     opinion = int(public["opinion_count"])
@@ -150,13 +199,18 @@ def icon(name: str) -> str:
     return f'<svg class="ca-step__icon" viewBox="0 0 50 50" aria-hidden="true" focusable="false">{ICONS[name]}</svg>'
 
 
-def render_fragment(config: dict, data: dict, background: dict, source_label: str) -> str:
+def render_fragment(config: dict, data: dict, background: dict, source_label: str, as_of: str | None = None) -> str:
     sources = config["sources"]
+    as_of = as_of or data["updated_on"]
+    law_phase = phase_of(config, as_of)
+    checked_on = iso(config["checked_on"], "checked_on")
+    if checked_on < background["checked_on"]:
+        raise OpeningError("冒頭の checked_on が背景台帳の確認日より古くなっています")
     period_same_year = data["period_start"][:4] == data["period_end"][:4]
     values = {
         "opinion_count": fmt_int(data["opinion"]),
         "collected_count": fmt_int(data["collected"]),
-        "status_checked_on": jp_date(background["checked_on"]),
+        "status_checked_on": jp_date(checked_on),
         "period_start": jp_date(data["period_start"]),
         "period_end": jp_date(data["period_end"], with_year=not period_same_year),
         "updated_on": jp_date(data["updated_on"]),
@@ -165,7 +219,8 @@ def render_fragment(config: dict, data: dict, background: dict, source_label: st
     out: list[str] = []
     w = out.append
 
-    w('<section class="ca-open" id="ca-open" aria-labelledby="ca-open-title">')
+    w(f'<section class="ca-open" id="ca-open" aria-labelledby="ca-open-title" data-as-of="{esc(as_of)}" '
+      f'data-checked-on="{esc(checked_on)}" data-law-phase="{law_phase}">')
     w('<div class="ca-open__hero">')
     # 左: 題名と短答
     w('<div class="ca-open__lead">')
@@ -183,11 +238,11 @@ def render_fragment(config: dict, data: dict, background: dict, source_label: st
     w(source_links(config.get("short_answer_sources", []), sources))
     w("</div>")
     st = config["status"]
-    if st.get("checked_on_from") != "background_json.checked_on":
-        raise OpeningError("status.checked_on_from は background_json.checked_on のみ対応")
+    if st.get("checked_on_from") != "checked_on":
+        raise OpeningError("status.checked_on_from は checked_on（設定の確認日）のみ対応")
     w(
         f'<p class="ca-open__status"><b>{esc(st["label"])}</b><span>{esc(fill(st["text"], values))}</span>'
-        f'<time datetime="{esc(background["checked_on"])}">{esc(fill(st["checked_label"], values))}</time></p>'
+        f'<time datetime="{esc(checked_on)}">{esc(fill(st["checked_label"], values))}</time></p>'
     )
     w('<nav class="ca-open__entrances" aria-label="知りたいことから読む">')
     for e in config["entrances"]:
@@ -222,7 +277,10 @@ def render_fragment(config: dict, data: dict, background: dict, source_label: st
         )
         w("</li>")
     w("</ol>")
-    w(f'<p class="ca-flow__foot">{esc(pr["footnote"])}</p>')
+    fp = pr["footnote_phase"]
+    if set(fp) != set(LAW_PHASES):
+        raise OpeningError("procedure.footnote_phase に施行の3段階の文がそろっていません")
+    w(f'<p class="ca-flow__foot" data-phase="{law_phase}">{esc(fill(fp[law_phase], law_values(config)))}</p>')
     refs: list[str] = []
     for s in pr["steps"]:
         for r in s["sources"]:
@@ -344,22 +402,29 @@ def render_page(fragment: str, config: dict) -> str:
     )
 
 
-def build(config_path: Path) -> dict[str, str]:
+def fragment_for(config_path: Path = DEFAULT_CONFIG, as_of: str | None = None) -> str:
+    """読書面の試作（scripts/constitutional_reading.py）が冒頭をそのまま差し込むための入口。"""
     config, public, planet, background = load_inputs(config_path)
     data = summarize(public, planet)
-    source_label = planet.get("source_label") or "検索"
-    fragment = render_fragment(config, data, background, source_label)
-    return {"opening-fragment.html": fragment, "index.html": render_page(fragment, config)}
+    return render_fragment(config, data, background, planet.get("source_label") or "検索", as_of)
+
+
+def build(config_path: Path, as_of: str | None = None) -> dict[str, str]:
+    config, public, planet, background = load_inputs(config_path)
+    fragment = fragment_for(config_path, as_of)
+    return {"opening-fragment.html": fragment, "index.html": render_page(fragment, config),
+            "opening.css": (ASSETS / "opening.css").read_text(encoding="utf-8")}
 
 
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--config", type=Path, default=DEFAULT_CONFIG)
     ap.add_argument("--out-dir", type=Path, default=DEFAULT_OUT)
+    ap.add_argument("--as-of", help="基準日 YYYY-MM-DD（既定は公開JSONの updated_on。施行の段階を決める）")
     ap.add_argument("--check", action="store_true", help="書き込まず、出力と既存ファイルの差分の有無だけ返す")
     args = ap.parse_args()
     try:
-        outputs = build(args.config)
+        outputs = build(args.config, args.as_of)
     except OpeningError as exc:
         print(f"エラー: {exc}", file=sys.stderr)
         return 2

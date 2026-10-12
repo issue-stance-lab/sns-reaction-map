@@ -1,0 +1,208 @@
+{
+ "theme_id": "constitutional-amendment",
+ "_about": "憲法改正論議ページの「論点ごとの読書面」の手書き文言。scripts/constitutional_reading.py が読む。件数・割合・日付・判定はここに書かず、公開JSON・再読データ・立場の対応表・照合データ・一次資料メモから読む（非公開の正典は読まない）。生成AI（configs/ai-copyright-reading.json）の部活動型の圧縮済みの型と同じキー構成。山なみは手順7で元HTMLの対話式の図を写すので、ここには静的な山なみの文言を置かない。",
+ "opening_config": "configs/constitutional-amendment-opening.json",
+ "public_json": "docs/data/themes/constitutional-amendment.json",
+ "reread_json": "data/constitutional-amendment_issues-reread.json",
+ "_reread_json": "論点ごとの理由区分は buckets[論点名]（configs/planet/constitutional-amendment.yaml の sub_issues.path）、明細は items（main_issue・bucket・post_key）。区分の件数は明細の bucket を数え直して照合する。明細に立場は無いので、立場は stances_json から引く。",
+ "stances_json": "data/constitutional-amendment_reread-stances.json",
+ "_stances_json": "post_key → 正典の立場の対応表（scripts/constitutional_reread_stances.py が 2026-10-12 に作成。公開JSONとの食い違い0件）。明細と対応表の投稿が一致しないか、論点×立場の合計が公開JSONと違えば生成を止める。",
+ "claim_posts_json": "data/verification/constitutional-amendment-claims.json",
+ "background_json": "data/verification/constitutional-amendment-background.json",
+ "primary_memo": "quality/research/constitutional-amendment-primary-sources.md",
+ "other_issue_id": "constitutional-amendment-other",
+ "sunk_issue_overrides": {
+  "constitutional-amendment-challenge": "constitutional-amendment-referendum",
+  "constitutional-amendment-emergency-review": "constitutional-amendment-emergency"
+ },
+ "_sunk_issue_overrides": "公開JSON ocean_layer.sunk_continents のうち nearest_issue_id が null の2件を、話題の近い論点に置く（国民投票の結果への異議＝国民投票・広告、参議院の緊急集会の措置のその後＝緊急事態条項）。nearest_issue_id が入っている項目にはこの指定を使えない（生成器が止める）。",
+ "section": {
+  "eyebrow": "論点ごとに読む",
+  "title": "どの論点で、何が語られている？",
+  "lead": "タブで論点を選ぶと、その論点の説明と、投稿に多い理由が出ます。"
+ },
+ "trend": {
+  "public_json_key": "trends",
+  "_public_json_key": "公開JSONにこのキーが現れたら生成器は止まる（推移の表示はまだ作っていないため、黙って無視しない）。現行ページの「意見の推移」（潮目のカード）は手順7で保護対象として継承し、論点ごとの小さな折れ線もそのとき入れる。",
+  "title": "収集ごとの割合と件数",
+  "row_label": "{period_start}〜{period_end}（累計）",
+  "note": "収集の回ごとの論点の割合は、このページの「意見の推移」で見られます。この表は最新の累計です。"
+ },
+ "stance_common": {
+  "title": "改正への立場",
+  "lead": "この論点の{count}件を、憲法改正への立場で4つに分けました。",
+  "note": "立場は投稿全体の向きで分けたもので、論点の中の細かな主張とは別です。手続き重視は、改正の中身より進め方を重く見る投稿です。",
+  "caveat": "世論調査ではありません。集めた投稿の中の割合です。"
+ },
+ "reasons_common": {
+  "title": "どんな理由で語られている？",
+  "lead": "この論点の{count}件は、編集部が投稿本文を読み直して理由ごとに分けました。1件の投稿は1つの区分にだけ入れています。",
+  "note": "同じ文面の投稿があっても、1件ずつ数えています。割合の分母はこの論点の{count}件です。立場の内訳は、いまの分類で数えています。",
+  "unpublished": "この論点の投稿は、理由ごとに読み分けた結果をまだ載せていません。いまは件数と立場の内訳だけです。",
+  "voice_label": "どんな声か",
+  "stance_label": "立場の内訳"
+ },
+ "sources_common": {
+  "title": "投稿の主張を、一次資料で確かめる",
+  "lead": "投稿に出てくる主張や前提を、憲法・国民投票法の条文や国会の資料に当てました。当てたのは主張の中身で、下に並べた投稿を1件ずつ判定したものではありません。改正に賛成・反対すべきかを判定するものでもありません。",
+  "check_eyebrow": "制度の確認",
+  "claim_eyebrow": "主張の照合",
+  "matched": "この主張に当たる投稿 {n}件",
+  "checked": "照合日 {checked_on}",
+  "sources_label": "出典をひらく",
+  "empty": "この論点に対応する資料照合は、まだ登録されていません。",
+  "memo_eyebrow": "条文の確認",
+  "_memo_eyebrow": "一次資料メモにだけある確認（背景台帳・主張照合に無いもの）。確認日はメモの該当節の「確認日」から読む。",
+  "memo_checked": "確認日 {checked_on}"
+ },
+ "verdict_labels": {
+  "fact": "資料どおり",
+  "gap": "少しずれる",
+  "miss": "裏が取れない",
+  "_about": "現行ページの判定ラベルと同じ言い換え。公開JSON claim_verification.claims[].verdict を言い換える。知らない判定が来たら生成を止める。"
+ },
+ "sunk_common": {
+  "title": "資料には書かれているのに、投稿ではほぼ話題になっていないこと",
+  "count": "意見{base}件のうち、この話に触れた投稿は{n}件でした（{checked_on}に確認）。",
+  "note_label": "調べた範囲を見る",
+  "_about": "公開JSON ocean_layer.sunk_continents を nearest_issue_id（null の項目は sunk_issue_overrides）で論点に振り分ける。sns_base が意見数と違えば生成を止める。"
+ },
+ "veins_common": {
+  "title": "立場が違っても共通する心配",
+  "shared_label": "共通する心配",
+  "diverging_label": "分かれるところ",
+  "sides": "読んだ投稿：{sides}（確認日 {checked_on}）",
+  "_about": "公開JSON ocean_layer.veins を issue_ids で論点に振り分ける。編集部が少数の投稿を読んで整理したもので、件数の多さを示すものではない。"
+ },
+ "posts_common": {
+  "title": "元の投稿を読む",
+  "lead_two": "改正推進と慎重・反対など、立場の異なる投稿を編集部が2件選びました。要約は編集部が書きました。2件の組み合わせは、論点全体の立場の割合とは関係ありません。",
+  "lead_one": "立場の違う考え方が見える投稿を2件選ぶ方針ですが、この論点では1件にしました。理由は下に書いています。要約は編集部が書いたものです。",
+  "none": "この論点では、実際の投稿の例をまだ選んでいません。理由ごとの件数は上の欄にあります。",
+  "summary": "元の投稿を表示する（{n}件）",
+  "bucket_label": "理由の区分",
+  "stance_label": "立場",
+  "_selection_rule": "正典 social-samples/constitutional_amendment_hermes_arena_classified.json の意見（is_opinion）から選ぶ（生成AI・副首都・皇室と同じ方法）。基準: ①その論点の意見で、理由区分を代表する（最大の区分と、反対側の立場で目立つ区分から1件ずつを基本） ②2件で立場が偏らない（慎重・反対と改正推進を1件ずつを基本。片方が数件しかない論点は理由に書く） ③URLが残っている（tweet_id と URL が一致し、cdn.syndication.twimg.com/tweet-result で本文が返る。TweetTombstone は削除済みとして除く） ④個人・集団への攻撃や差別表現、罵倒、特定の人を名指しした批判を含まない ⑤正典の分類で article_usable が true、risk が low ⑥正典に同じ文面が2件以上ない。強い言い方（intensity=high）の投稿はなるべく避ける。選んだときに正典で①③〜⑥を確かめた（手順5・6）。生成器は非公開の正典を読まないので、公開できる入力で確かめられる条件（再読データでその論点に入っていること・URLとIDの一致・立場の違い・論点をまたいだ重複）だけを検査して止める。現行ページの代表投稿（configs/constitutional-amendment-featured-posts.json の12件）は使い回さず、すべて正典から選び直す。"
+ },
+ "see_also_common": {
+  "title": "あわせて確かめる"
+ },
+ "pending_note": "この論点の説明・資料との照合・投稿例は、次の工程で加えます。",
+ "footer": "SNSの集計：{updated_on}まで。制度の確認日は各項目に記しています。",
+ "compact": {
+  "_about": "部活動型の圧縮の見出し・折りたたみの名前（生成AIの compact と同じキー）。理由一覧に出すのは件数の多い順の上位 top_reasons 件、残りは「ほかの理由を読む」の折りたたみ。選んだ理由1つだけを展開する（JavaScriptが無いときは全理由が並ぶ）。",
+  "top_reasons": 4,
+  "tabs_label": "論点を切り替える",
+  "back": "論点の一覧へ戻る ↑",
+  "desc_more": "くわしく",
+  "reasons_index_title": "この論点の理由一覧（{k}分類）",
+  "reasons_more": "ほかの理由を読む（残り{k}分類）",
+  "reason_eyebrow": "選んだ理由",
+  "reason_next": "この論点の別の理由",
+  "stance_fold": "この論点の立場別集計",
+  "posts_fold": "投稿の例を読む（{n}件）",
+  "evidence_title": "根拠にあたる：投稿の主張と一次資料",
+  "checks_fold": "制度の確認"
+ },
+ "issues": {
+  "constitutional-amendment-general": {
+   "status": "complete",
+   "description": [
+    "9条や緊急事態条項など特定の条文に絞らず、憲法を変えること全体への賛否や進め方を語る意見です。改正には、衆参それぞれ総議員の3分の2以上の賛成による国会の発議と、国民投票での過半数の賛成が要ります（憲法第96条）。",
+    "投稿で最も多いのは、改正への反対や賛成を表明したり、署名やデモへの参加を呼びかけたりする声です。戦争を避けるために憲法を守るべきだという声と、防衛のために変えるべきだという声が続きます。いまの政権や与党が進める改正だから反対という声も目立ちます。"
+   ],
+   "_description": "1段落目の第96条は一次資料メモ【2026-10-12追記】（e-Gov 条文API v2 で原文を確認）。2段落目は再読データの理由区分の件数順（賛否の表明・運動と議論の仕方、戦争を避ける方法と防衛、改正を担う政権・政党への評価）に基づく。件数は書かない（区分の欄に自動で出る）。",
+   "reason_sort": "count_desc",
+   "reasons": {
+    "debate-conditions": {
+     "voice": "改正への反対や賛成をはっきり表明する投稿と、署名・デモ・駅前での意思表示への参加を呼びかける投稿が中心です。反対の立場から、賛成の意見を封じるべきではないと書く投稿や、相手の陣営への決めつけに反発する投稿もあります。"
+    },
+    "peace-security": {
+     "voice": "憲法を変えると戦争に近づくと心配し、平和を守るために反対する声が大半です。家族から聞いた戦争の体験に触れる投稿もあります。改正を進める側からは、自衛隊を書き加える9条の2は必要だという声や、選挙で改正派が多数を得たのだから進めてよいという声があります。"
+    },
+    "political-trust": {
+     "voice": "改正そのものより、いまの政権や与党が進めることに反対する声です。必要なら改正に反対しないが、いまの政権の下では賛成できないという条件付きの意見があります。国民投票に向けた政府の広報予算への警戒も、この区分に入っています。"
+    },
+    "referendum": {
+     "voice": "最後は国民投票で決まることをどう見るかの声です。国民が判断すればよいので発議まで進めるべきだという声と、迷ったら反対票をという呼びかけが並びます。投票の公正さや広告への不安から発議に反対する声や、国会と国民投票の両方の高い要件を説明する投稿もあります。"
+    },
+    "rights-scope": {
+     "voice": "どの条文が変わり、暮らしや人権に何が起きるかを問う声です。自民党の改正草案を読んで人権の保障が弱まると心配する投稿が多く、改正には賛成でもいまの草案には反対という投稿もあります。表現の自由や死刑の廃止など、別の条文の改正を求める声も少しあります。"
+    },
+    "em-control": {
+     "voice": "改正の本当の目的は緊急事態条項だと考え、権限が内閣に集まって独裁につながると心配する声です。改正までの段取りを順に並べて警戒を呼びかける投稿もあります。"
+    },
+    "em-necessity": {
+     "voice": "緊急事態条項や、国会の働きを保つための条項は要らないとする声です。危機のときに改正が急に進むことを警戒する投稿もあります。"
+    },
+    "em-political": {
+     "voice": "緊急事態条項や改正を進める政党・団体への不信を述べる投稿です。"
+    },
+    "em-war": {
+     "voice": "政府の対外政策を批判し、改正と緊急事態条項で戦争に近づくことを心配する投稿です。"
+    },
+    "em-election": {
+     "voice": "次の選挙がある状態を保たなければならないとして、改正への反対を続けて訴える投稿です。"
+    }
+   },
+   "_reasons": "区分名は再読データの label をそのまま使う（法的判断に近い語・誤字が無いため言い換えない）。voice は 2026-10-12 に、区分ごとに明細の投稿を等間隔に最大12件ほど抜き出し、正典の本文と要約を読んで書いた（計約150件）。「em-」で始まる5区分は緊急事態条項の論点と共通の区分名で、改憲全般の中では計13件。",
+   "memo_checks": [
+    {
+     "id": "article-96",
+     "memo_section": "【2026-10-12追記】",
+     "label": "条文の確認",
+     "ask": "憲法は、どうすれば改正される？",
+     "found": "憲法第96条は、衆参それぞれ総議員の3分の2以上の賛成で国会が発議し、国民に提案して承認を得ると定めています。承認には、国民投票などで過半数の賛成が要ります。施行から今まで、条文は一度も改正されていません（e-Govの改正履歴は施行時の版だけです）。",
+     "sources": [
+      {
+       "name": "e-Gov法令検索 日本国憲法 第96条",
+       "url": "https://laws.e-gov.go.jp/law/321CONSTITUTION"
+      }
+     ]
+    }
+   ],
+   "_memo_checks": "一次資料メモ【2026-10-12追記】の1・2（第96条の原文、改正履歴が1件だけ）。",
+   "see_also": [
+    {
+     "href": "#ca-open-procedure",
+     "text": "発議から国民投票までの4段階を、冒頭の図で見る"
+    }
+   ],
+   "posts": {
+    "selection_basis": "最大の区分「賛否の表明・運動と議論の仕方」（慎重・反対が過半）から1件、改正推進が2番目に多い区分「戦争を避ける方法と防衛」から1件を選び、立場の違いを対にした。強い言い方（intensity=high）の投稿と、相手をからかう・名指しで批判する投稿は避けた。2件とも正典で article_usable=true・risk=low、正典に同じ文面は無い（各1件）。2026-10-12 に cdn.syndication.twimg.com で本文が返ることを確かめた。",
+    "items": [
+     {
+      "id": "2068173526709018800",
+      "url": "https://x.com/ema_credo/status/2068173526709018800",
+      "label": "反対だが、賛成の意見を封じる権利はない",
+      "summary": "いまの政権の下での改正には反対だと書いたうえで、反対する側がすべきことは反対意見を広めることで、賛成や容認の意見を妨げることではないとする投稿です。"
+     },
+     {
+      "id": "2106485679983333659",
+      "url": "https://x.com/datsuryoku01/status/2106485679983333659",
+      "label": "国の根幹だからこそ、更新すべき",
+      "summary": "憲法は国の根幹だから更新すべきだとし、自衛のための9条の2は必要だと書いています。緊急事態条項には少し不安があり、国民への説明を求める投稿です。"
+     }
+    ]
+   }
+  },
+  "constitutional-amendment-article9": {
+   "status": "pending"
+  },
+  "constitutional-amendment-emergency": {
+   "status": "pending"
+  },
+  "constitutional-amendment-referendum": {
+   "status": "pending"
+  },
+  "constitutional-amendment-procedure": {
+   "status": "pending"
+  },
+  "constitutional-amendment-deliberation": {
+   "status": "pending"
+  },
+  "constitutional-amendment-other": {
+   "status": "pending"
+  }
+ }
+}
