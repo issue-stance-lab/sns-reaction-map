@@ -214,6 +214,109 @@ class RedesignCandidateTests(unittest.TestCase):
             self.assertRegex(embed.select_one("a.x-original-link")["href"], r"^https://x\.com/[^/]+/status/\d+$")
 
 
+class CompactReadingTests(unittest.TestCase):
+    """2026-10-12 部活動型の圧縮（生成AIと著作権・副首都と同じ型）：見せる量だけを減らし、文・件数・出典は折りたたみの中にそのまま残す。"""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.tmp = tempfile.TemporaryDirectory()
+        cls.source_path = layout.source_for_refresh(ROOT)
+        build(cls.source_path, Path(cls.tmp.name), "release", as_of=AS_OF)
+        cls.release = (Path(cls.tmp.name) / PAGE).read_text(encoding="utf-8")
+        cls.s = soup_of(cls.release)
+        cls.cfg = json.loads((ROOT / "configs/koshitsu-tenpakai-reading.json").read_text(encoding="utf-8"))
+        cls.top = int(cls.cfg["compact"]["top_reasons"])
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.tmp.cleanup()
+
+    def test_folds_start_closed(self):
+        """読書面と背景（作り方・詳細データの行を含む）の折りたたみは、初期表示ですべて閉じている。"""
+        self.assertEqual([d.get("class") for d in self.s.select("details[open]")], [])
+        rows = self.s.select("#koshitsu-background details.kb-row")
+        self.assertGreaterEqual(len(rows), 7)
+        self.assertIsNotNone(self.s.select_one("details#bg-method"))
+        self.assertIsNotNone(self.s.select_one("details#bg-table"))
+
+    def test_tabs_cover_all_issues(self):
+        tabs = self.s.select("#koshitsu-reading nav.kr-tabs a.kr-tab")
+        self.assertEqual(sorted(a["data-issue-id"] for a in tabs), sorted(i["id"] for i in PUBLIC["issues"]))
+        self.assertEqual([a["href"] for a in tabs], ["#issue-" + a["data-issue-id"] for a in tabs])
+        self.assertEqual(len([a for a in tabs if a.get("aria-current") == "true"]), 1)
+        self.assertTrue(all(a.select_one(".kr-tab-icon").get_text() for a in tabs))
+
+    def test_description_first_paragraph_then_more(self):
+        for iid, icfg in self.cfg["issues"].items():
+            head = self.s.find(id="issue-" + iid).select_one(".kr-panel-head")
+            shown = [p.get_text() for p in head.select("p.kr-desc") if not p.find_parent("details")]
+            folded = [p.get_text() for p in head.select("details.kr-desc-more p.kr-desc")]
+            self.assertEqual(shown, icfg["description"][:1], iid)
+            self.assertEqual(folded, icfg["description"][1:], iid)
+            self.assertIsNotNone(head.select_one('.kr-back a[href="#koshitsu-reading"]'), iid)
+
+    def test_reason_index_top_rows_and_one_open_detail(self):
+        for issue in PUBLIC["issues"]:
+            iid, buckets = issue["id"], REREAD["buckets"][issue["label"]]
+            panel = self.s.find(id="issue-" + iid)
+            rows = panel.select(".kr-reasons li.kr-reason")
+            visible = [li for li in rows if not li.find_parent("details")]
+            self.assertEqual(len(rows), len(buckets), iid)
+            self.assertEqual(len(visible), min(self.top, len(rows)), iid)
+            counts = [int(li.select_one(".kr-reason-n b").get_text().replace(",", "")) for li in rows]
+            self.assertEqual(counts, sorted(counts, reverse=True), iid)
+            if len(rows) > self.top:
+                self.assertIn(f"ほかの{len(rows) - self.top}区分", panel.select_one("details.kr-reason-more").summary.get_text(), iid)
+            details = panel.select("article.kr-reason-detail")
+            self.assertEqual([a["data-reason"] for a in details], [li["data-reason"] for li in rows], iid)
+            self.assertEqual([a["data-reason"] for a in details if a.has_attr("data-on")], [rows[0]["data-reason"]], iid)
+            for li in rows:
+                self.assertEqual(li.a["href"], f'#kr-r-{iid}-{li["data-reason"]}')
+                self.assertIsNotNone(panel.find(id=f'kr-r-{iid}-{li["data-reason"]}'))
+            voices = self.cfg["issues"][iid].get("reasons", {})
+            self.assertEqual(len(panel.select("article.kr-reason-detail .kr-voice")),
+                             len([b for b in buckets if voices.get(b, {}).get("voice")]), iid)
+
+    def test_evidence_items_are_folds_with_visible_heading(self):
+        for panel in self.s.select(".kr-panel.is-complete"):
+            for node in panel.select("[data-claim], [data-memo-check], [data-sunk], [data-concern], [data-check]"):
+                self.assertEqual(node.name, "details", (panel["id"], node.attrs))
+                self.assertFalse(node.has_attr("open"))
+                self.assertTrue(node.summary.get_text().strip(), (panel["id"], node.attrs))
+                self.assertIsNotNone(node.find_parent(class_="kr-evidence"), (panel["id"], node.attrs))
+            for node in panel.select("[data-claim]"):
+                self.assertIsNotNone(node.summary.select_one(".kr-verdict"), panel["id"])
+            for sel in (".kr-stance", ".kr-posts", ".kr-trend"):
+                self.assertEqual(panel.select_one(sel).name, "details", (panel["id"], sel))
+            self.assertIsNotNone(panel.select_one(".kr-evidence .kr-evidence-about .kr-lead"), panel["id"])
+
+    def test_concerns_and_sunk_kept_with_same_text(self):
+        """同じ心配から違う結論へ・資料にしかない話は、根拠の欄の折りたたみに移しただけで、文は公開JSONのまま。"""
+        for v in PUBLIC["ocean_layer"]["veins"]:
+            for iid in v["issue_ids"]:
+                node = self.s.find(id="issue-" + iid).select_one(f'[data-concern="{v["id"]}"]')
+                self.assertEqual(node.summary.get_text(), v["shared_concern"])
+                self.assertIn(v["diverging_reason"], node.get_text())
+        for x in PUBLIC["ocean_layer"]["sunk_continents"]:
+            node = self.s.find(id="issue-" + x["nearest_issue_id"]).select_one(f'[data-sunk="{x["id"]}"]')
+            self.assertEqual(node.summary.get_text(), x["topic"])
+            self.assertIn(x["life_impact"], node.get_text())
+
+    def test_hash_into_closed_fold_opens_it(self):
+        self.assertIn("t.closest('details')", self.release)
+        self.assertIn("h.startsWith('kr-r-' + x + '-')", self.release)  # 区分名のハイフン（other-evaluation など）でも理由が開く
+
+    def test_provenance_reads_reason_details(self):
+        from scripts.koshitsu_redesign_provenance import verified_selectors
+        node = self.s.select_one("#issue-koshitsu-tenpakai-patrilineal-matrilineal article.kr-reason-detail .kr-eyebrow span")
+        text = node.get_text()
+        n = re.match(r"(\d[\d,]*)件", text).group(1)
+        broken = self.release.replace(str(node), str(node).replace(f"{n}件", f"{int(n.replace(',', '')) + 1}件", 1), 1)
+        self.assertNotEqual(broken, self.release)
+        with self.assertRaisesRegex(ValueError, "一致しません"):
+            verified_selectors(broken, ROOT)
+
+
 class LayoutTests(unittest.TestCase):
     def _root(self, temp: str) -> Path:
         root = Path(temp)
