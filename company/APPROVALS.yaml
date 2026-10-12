@@ -2229,3 +2229,45 @@ items:
     decided_at: "2026-10-12"
     decision_note: >-
       検査をすべて通したうえでオーナーが「公開して」と承認（2026-10-12）。release スキルで main へ統合・push した。
+
+  - id: approval-20261012-001
+    title: 2026-10-12のX投稿6本と、消費税減税の一次資料（法律案本体・新聞の根拠）の本番反映
+    scope: website
+    kind: release
+    requester: AI（X日次セッション）
+    evidence:
+      - content/x/posts.md
+      - quality/research/consumption-tax-cut-primary-sources.md
+      - .claude/skills/x-daily/SKILL.md
+      - GROWTH.yaml
+      - THEMES.yaml
+      - docs/index.html
+    status: completed
+    requested_at: "2026-10-12"
+    decided_at: "2026-10-12"
+    decision_note: >-
+      10-12のリプライ6本（朝2本・昼2本・夕方1本・夜1本）の記録、10-11の3本の計測、
+      および**オーナー指示による消費税減税の一次資料の取り直し**を提示し、オーナーが「反映して」と指示した。
+      **この日は6本で、1日の目安（朝・昼・夕・夜の4回）を2本超えている。**いずれも提示時に本数を明示している。
+      一次資料は2件に分けて登録した。(1)資料W〜W-3＝2026-10-09に閣議決定され第222回国会に提出された
+      法律案の本体（概要・要綱・法律案）。(2)資料X〜X-4＝新聞を軽減税率の対象にした根拠（消費税法別表第一
+      第二号、平成28年の答弁書2本、平成24年法律第68号第7条第1号ロ）。
+      あわせてオーナー指示2点を SKILL.md・GROWTH.yaml へ反映した。
+      (a)**投稿文の誤りは、こちらから訂正ポストを出さない。指摘の返信が付いたときにその返信で訂正する。**
+      (b)**閣議決定・国会提出があった日は、法案本体を取りに行ってから書く。**
+    completed_at: "2026-10-12"
+    result_note: >-
+      main 13c3919c（task/x-20261012 のマージ）と 10b3f63f（x_posted_at の更新とトップ同期）で反映。衝突なし。
+      全テスト1,927件OK、公開用検査OK、全テーマ検査NG 0件、数字の出所検査NG 0件、トップページ検査NG 0件。
+      GitHub Actionsの公開ファイルの検査とPages配信はいずれも成功。
+      公開サイトのトップで消費税テーマの xpost が2026-10-12になっていることをcurlで確認した。
+      x_posted_at は bukatsu-chiiki と consumption-tax-cut を2026-10-12へ更新。
+      非公開正典の差分は時刻だけで内容の違いはなく、移動は不要だった。
+      **この反映で記録に残した重要な事実**: 一次資料の取り直しにより、10-11昼の@asahicom宛の投稿に
+      「定期購読の新聞も1%になる」と読める誤りがあったことが判明した（実際は新聞は8%据え置き）。
+      オーナーの判断により訂正ポストは出さず、指摘があったときに返信で訂正する。訂正文案は記録に残してある。
+      また、提示段階で条文番号の誤り（別表第一の二→別表第一 第二号）をオーナーの指摘で発見し、
+      投稿前に修正した。未確認の範囲（国会会議録、国税庁Q&A本文、電子版の判断文）も記録に明記した。
+    result_evidence:
+      - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/38239495862"
+      - "https://sns-reaction-map.jp/"
