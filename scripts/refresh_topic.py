@@ -823,8 +823,9 @@ def promote(
     from scripts.fukushuto_layout import enabled as fukushuto_layout_enabled
     from scripts.ai_copyright_layout import enabled as ai_copyright_layout_enabled
     from scripts.constitutional_layout import enabled as constitutional_layout_enabled
+    from scripts.bike_layout import enabled as bike_layout_enabled
     if (enabled(root) or koshitsu_layout_enabled(root) or fukushuto_layout_enabled(root)
-            or ai_copyright_layout_enabled(root) or constitutional_layout_enabled(root)):
+            or ai_copyright_layout_enabled(root) or constitutional_layout_enabled(root) or bike_layout_enabled(root)):
         raise ValueError("新デザインの更新は公開候補manifestを使ってください。旧昇格経路は使用できません。")
     adapter_targets = completion_targets(root, topic, stage, adapter_targets)
     themes = parse_themes_yaml(root / "THEMES.yaml")
@@ -956,6 +957,8 @@ def _copy_candidate_tree(root: Path, stage: Path) -> Path:
     materialize_ai_copyright(candidate_root)
     from scripts.constitutional_layout import materialize as materialize_constitutional
     materialize_constitutional(candidate_root)
+    from scripts.bike_layout import materialize as materialize_bike
+    materialize_bike(candidate_root)
     return candidate_root
 
 
@@ -1035,6 +1038,9 @@ def prepare_public_candidate_bundle(
     # 憲法改正論議の新デザインも同じ位置で適用する
     from scripts.constitutional_layout import finish as finish_constitutional_layout
     layout_targets.update(finish_constitutional_layout(candidate_root))
+    # 自転車の青切符の新デザインも同じ位置で適用する
+    from scripts.bike_layout import finish as finish_bike_layout
+    layout_targets.update(finish_bike_layout(candidate_root))
 
     # 公開候補として変わり得るものをすべて固定する。全テーマJSONはcatalogの入力でもあるため含める。
     # docs/data/ と docs/llms.txt は課題77 案1: data/public/ の写し・AI向け要約で、
@@ -1275,6 +1281,8 @@ def prepare_public_candidate_bundle_multi(
     per_topic_targets.update(finish_ai_copyright_layout(candidate_root))
     from scripts.constitutional_layout import finish as finish_constitutional_layout
     per_topic_targets.update(finish_constitutional_layout(candidate_root))
+    from scripts.bike_layout import finish as finish_bike_layout
+    per_topic_targets.update(finish_bike_layout(candidate_root))
 
     # 課題77 案1のdocs/data・docs/llms.txtを含め、共有ファイルは全テーマ分を1回だけ固定する。
     shared_targets = [

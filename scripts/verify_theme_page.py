@@ -316,6 +316,8 @@ def verify_planet_breakdowns(theme: str, page: str, data: dict[str, Any]) -> tup
     # 憲法改正論議の新デザインも同じ形（scripts/constitutional_layout.py）
     fukushuto_redesign = fukushuto_redesign or (
         theme == "constitutional-amendment" and 'name="constitutional-layout"' in page)
+    # 自転車の青切符の新デザインも同じ形（scripts/bike_layout.py）
+    fukushuto_redesign = fukushuto_redesign or (theme == "bike-blue-ticket" and 'name="bike-layout"' in page)
     redesign_prefix = "fr" if fukushuto_redesign else "kr"
     koshitsu_redesign = koshitsu_redesign or fukushuto_redesign
     if ('id="public-data"' in page and theme == "bukatsu-chiiki") or koshitsu_redesign:

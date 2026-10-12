@@ -45,11 +45,10 @@ def reread_items(reread: dict, public: dict) -> list[tuple[str, dict]]:
     return out
 
 
-def build(made_on: str) -> dict:
-    canon = json.loads(CANON.read_text(encoding="utf-8"))
+def table(canon: list, reread: dict, public: dict, made_on: str, canonical: str, canonical_sha256: str,
+          reread_sha256: str) -> dict:
+    """正典（または定期更新の累積候補）の行と再読データから対応表を作る。公開JSONの論点×立場と1件でも違えば止まる。"""
     by_key = {post_key(r["tweet_id"]): r for r in canon}
-    reread = json.loads(REREAD.read_text(encoding="utf-8"))
-    public = json.loads(PUBLIC.read_text(encoding="utf-8"))
     stances: dict[str, str] = {}
     pairs = reread_items(reread, public)
     for label, item in pairs:
@@ -76,9 +75,9 @@ def build(made_on: str) -> dict:
         "_about": "再読データの明細（post_key＝tweet_id の sha256）ごとの立場。scripts/bike_reread_stances.py が正典から写した。"
                   "読書面の生成器はこれを読み、理由区分ごとの立場と代表投稿の立場を数える。本文・tweet_id は含まない。",
         "made_on": made_on,
-        "canonical": str(CANON.relative_to(ROOT)),
-        "canonical_sha256": hashlib.sha256(CANON.read_bytes()).hexdigest(),
-        "reread_sha256": hashlib.sha256(REREAD.read_bytes()).hexdigest(),
+        "canonical": canonical,
+        "canonical_sha256": canonical_sha256,
+        "reread_sha256": reread_sha256,
         "public_updated_on": public["updated_on"],
         "count": len(stances),
         "public_mismatch": 0,
@@ -87,12 +86,22 @@ def build(made_on: str) -> dict:
     }
 
 
+def build(made_on: str) -> dict:
+    return table(json.loads(CANON.read_text(encoding="utf-8")), json.loads(REREAD.read_text(encoding="utf-8")),
+                 json.loads(PUBLIC.read_text(encoding="utf-8")), made_on, str(CANON.relative_to(ROOT)),
+                 hashlib.sha256(CANON.read_bytes()).hexdigest(), hashlib.sha256(REREAD.read_bytes()).hexdigest())
+
+
+def text_of(data: dict) -> str:
+    return json.dumps(data, ensure_ascii=False, indent=1) + "\n"
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--made-on", required=True, help="作った日 YYYY-MM-DD（今日の日付を自動では入れない）")
     args = ap.parse_args()
     data = build(args.made_on)
-    text = json.dumps(data, ensure_ascii=False, indent=1) + "\n"
+    text = text_of(data)
     old = OUT.read_text(encoding="utf-8") if OUT.exists() else None
     if old != text:
         OUT.write_text(text, encoding="utf-8")

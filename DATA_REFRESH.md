@@ -1163,6 +1163,65 @@ mainへ取り込む前に、**「合格した」という報告を鵜呑みに�
   山なみの単独更新（`refresh_planet_section.py`）・潮目の単独差し込み（`inject_tide_widget.py`）を掛けない
   （各スクリプトが skipped／SKIP／停止と出す）。更新経路では元HTMLに掛かる
 
+### 自転車の青切符の定期更新（新デザインを維持する、2026-10-12〜）
+
+自転車の青切符のページは2026-10-12から新デザイン（冒頭の「何歳から・いくら？」の短答・対話式の山なみ・論点ごとの読書面・背景の開閉行）で公開する
+（公開切替はオーナー承認待ち。`company/APPROVALS.yaml` の `approval-20261012-bike-blue-ticket`）。憲法改正論議（上の節）と同じ型で、
+**旧形式の生成器はこれまでどおり「元HTML」に掛け、全生成の最後に新デザインを組み直す。** 人が読む工程（反対投稿の再読と本文確認記録）は
+上の「自転車青切符だけ、人が読む工程が1つ残っている」のまま変わらない。
+設計と検査の記録: [quality/designs/2026-10-11-bike-blue-ticket-production-candidate.md](quality/designs/2026-10-11-bike-blue-ticket-production-candidate.md)
+
+- **`configs/bike-layout.json` の `enabled`**: `true` の間、`refresh_topic.py` の公開候補生成（単一・複数テーマ）は
+  隔離コピーで元HTMLを `docs/` に戻し（`bike_layout.materialize`）、旧形式の全処理（adapter のアリーナ・山なみ・潮目・連動表示・検索入口・finalize・
+  SEO・信頼情報・授業節・テーマ共通の見た目・皇室／副首都／生成AI／憲法の新デザイン）のあとに `bike_layout.finish` で元HTMLを保存し直してから
+  新デザインのページを `docs/` に書く。**他テーマの更新でも毎回この処理が走る**（自転車の照合が合わないと、その回の公開候補生成全体が止まる）。
+  `false` に戻すと、公開ページが新デザインのまま「更新設定が無効」で止まる。戻すときは旧形式のページ
+  （`data/page-sources/bike-blue-ticket.html`）を先に `docs/` へ戻すこと
+- **元HTMLの場所**: `data/page-sources/bike-blue-ticket.html`（Git管理）。`refresh_adapters/bike.py`（アリーナ・山なみ・潮目・連動表示・検索入口）・
+  `build_bike_arena.py`（引数なし）はこれを入力にする。手で編集しない。`docs/bike-blue-ticket-reaction-map.html` を旧形式の生成器に直接渡すと拒否される
+  （新デザインの再入力防止。`bike_issue_media.py --write-html` も新デザインのページには書かない）。
+  旧ページの検索入口（`scripts/templates/bike_blue_ticket_search_entry.html`・`docs/bike-blue-ticket-search-entry.*`）・連動表示（`bike_blue_ticket_connected*.py`・
+  `docs/bike-blue-ticket-connected*`）・論点ごとのX投稿12件・アリーナの点は元HTMLの中でだけ更新され、新デザインには載せない。
+  新デザインの FAQ の構造化データは、冒頭の「歩道・手信号・支払いの短答」（4問）と背景の「よくある質問」（4問）から毎回作り直す
+- **新デザインが元HTMLから文字どおり引き継ぐもの**: SEOメタ・Article の構造化データ・GA4・AdSense・投票
+  （`bike-blue-ticket-issue-stance-v1`、論点6×立場3。前置きの1文だけ設定 `compact.vote_lead` に差し替え）・調査条件（`#caution`）・PLANET_DATA・
+  **前回の収集との比較（潮目のカード。adapter の `_apply_tide` が元HTMLに貼る）**・「このページの作り方」・「詳細データ」の「注意」
+  （旧体系の3表は載せない）・「次はこのテーマ」とクリック計測・フッター。数字が古いときは元HTML側（adapter・`apply_theme_trust.py`）で直る
+- **「意見の全体像」の山なみ**: 元HTMLの対話式の山なみ（`PLANET_SECTION` の `#planet-block`・PLANET_DATA・山なみのスクリプト）を
+  `build_bike_redesign.py` が毎回そのまま写し、論点タブの上に置く。手で直す所は無い。写すときに変えるのは、連動表示の橋渡しの
+  「読み込み時に件数最多の論点へ自動で着地する」処理だけ（読書面の既定の論点を、ハッシュ・履歴に触れずに選ぶ処理に置き換える。
+  元HTMLの該当箇所が変わると生成が止まる）。山を押すと読書面へ移る橋渡しは `scripts/bike_redesign/planet.js`
+- **折りたたみ（部活動型の圧縮）**: 読書面の理由一覧（上位4件＋「ほかの理由を読む」）・選んだ理由だけの説明・立場別集計・投稿例・根拠の照合・
+  論点の説明の2段落目（「くわしく」）・「前の収集回との違い」の累計の表、前回の収集との比較（「グラフで立場と論点の変化を見る」）、
+  作り方と詳細データ（「このページの作り方と詳細データ」）の `<details>` は、`bike_reading.py`・`build_bike_redesign.py` が毎回作る
+  （見出しの文言は `configs/bike-blue-ticket-reading.json` の `compact`）
+- **単独で作り直すとき**（データは変えずに見た目や文言だけ直したとき）:
+  `python3 scripts/build_bike_arena.py`（新デザイン公開中は、元HTMLに公開JSONの集計・論点ごとのX投稿・アリーナ・山なみと連動表示を掛けてから
+  公開ページを作り直す）。成功の形: もう一度 `python3 scripts/build_bike_arena.py --check` を実行して `OK: 差分なし` と出ること。
+  公開候補を別フォルダに作って見るだけなら
+  `python3 scripts/build_bike_redesign.py --mode release --output-dir quality/prototypes/bike-blue-ticket-release`
+  （成功の形: `Built 1 file (release, as_of …); no deployment performed.`。docs/ は変わらない）
+- **再読データ（理由区分）を追記したとき**: 定期更新では adapter が累積候補から `data/bike-blue-ticket_issues-reread.json` と
+  **立場の対応表 `data/bike-blue-ticket_reread-stances.json`** を作り直し、昇格対象に含める（手作業は要らない）。
+  **論点ごとの明細の件数が公開JSONの論点の件数と一致しないと新デザインの生成が止まる**（旧ページと違い「まだ読み直していない分」を残せない）。
+  定期更新の外で再読データを直したとき（判定し直し・追い読み）は、毎回立場の対応表を作り直す:
+  1. `python3 scripts/bike_reread_stances.py --made-on YYYY-MM-DD`（その日の日付。このスクリプトだけが非公開の正典を読む。
+     成功すると `wrote data/bike-blue-ticket_reread-stances.json（N件）` か `変更なし` と出る）
+  2. `python3 scripts/build_public_registry.py --topic bike-blue-ticket`
+  3. 単独なら `python3 scripts/build_bike_arena.py`
+  4. `python3 scripts/verify_number_provenance.py bike-blue-ticket`（新デザインの理由区分・区分ごとの立場を明細と対応表から数え直す。成功の形: `NG 0件`）
+  作り直さないと「再読データの明細と立場の対応表の投稿が一致しません」などで止まる。対応表には本文・tweet_id を入れない（投稿は post_key で引く）。
+  理由区分の言い換え・「どんな声か」・代表投稿2件は `configs/bike-blue-ticket-reading.json`。区分が増えたときは、その区分の `voice` も書く
+- **資料にしかない話**（`data/verification/bike-blue-ticket-sunk-continents.json` の `life_impact`・`sns_note`）は画面に出る公開文章。
+  adapter が `sns_note` の末尾に追加確認の記録を書き足す。直した文は1文80字以内・読点3個以内に区切り、よみやす検査
+  （`python3 scripts/review_with_yomiyasu.py docs/bike-blue-ticket-reaction-map.html --medium website --strict`。成功の形: `完成を止める指摘: 0件`）を掛ける
+- **確認日 `checked_on`**: 冒頭・読書面・背景の「◯月◯日時点」は `configs/bike-blue-ticket-opening.json` の `checked_on`（制度を確かめた日）1か所から出る。
+  背景台帳（`data/verification/bike-blue-ticket-background.json`、2026-10-12 に「走る場所」を警察庁FAQどおりに直した）の `checked_on` より古い日付は入れられない。
+  出典ごとの確認日が `checked_on` より後でも止まる。施行済み（2026-04-01）なので、読む日や基準日による文の切り替えは無い
+- 新デザインのページには、テーマ共通の見た目（`apply_theme_design.py`）・授業節の単独適用・信頼情報の単独適用・
+  山なみの単独更新（`refresh_planet_section.py`）・潮目の単独差し込み（`inject_tide_widget.py`）・論点ごとのX投稿の単独差し込み（`bike_issue_media.py`）を
+  掛けない（各スクリプトが skipped／SKIP／停止と出す）。更新経路では元HTMLに掛かる
+
 ### 読み込み確認のやり方（質と速さの両立）
 
 消費税減税での失敗（機械的なチェックは通ったのに、実際には本文を読まずに使い回した

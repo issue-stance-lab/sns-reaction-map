@@ -17,7 +17,7 @@
  "_sunk_issue_overrides": "公開JSON ocean_layer.sunk_continents のうち nearest_issue_id が null の1件（側方通過の新しい義務）を、車と自転車の距離の話に近い「車道走行への不安」に置く。nearest_issue_id が入っている項目にはこの指定を使えない（生成器が止める）。",
  "section": {
   "eyebrow": "論点ごとに読む",
-  "title": "6つの論点で、それぞれ何が言われている？",
+  "title": "5つの論点と「その他」で、それぞれ何が言われている？",
   "lead": "タブを押すと、その論点の説明と、投稿に多い理由に切り替わります。"
  },
  "other_note": "「その他」は、5つの論点のどれにも入らない意見です。最も多い理由は「{top}」で、この論点の{share}%を占めます。",
@@ -29,7 +29,7 @@
   "row_label": "{period_start}〜{period_end}（累計）",
   "note": "この表は最新の累計です。前回の収集と比べた動きは、このページの「前回の収集との比較」で見られます。",
   "widget_id": "bike-blue-ticket-tide-widget",
-  "_widget_id": "潮目のカードの id（手順7で scripts/inject_tide_widget.py の自転車の widget_id と合わせる）。「前回との比較を開く」の飛び先。"
+  "_widget_id": "潮目のカードの id（scripts/inject_tide_widget.py の自転車の widget_id）。「収集回ごとの比較へ」の飛び先。"
  },
  "stance_common": {
   "title": "取締りの強化への立場",
@@ -108,8 +108,16 @@
   "evidence_title": "根拠にあたる：投稿の主張と資料",
   "checks_fold": "制度の確認",
   "glance_eyebrow": "前の収集回との違い",
-  "glance_note": "「その他」を除く意見のうち、この論点が占める割合を収集の回ごとに比べます。集めた投稿の構成の変化を示すもので、世論の動きを示すものではありません。",
-  "glance_link": "収集回ごとの比較へ ↓"
+  "glance_note": "「どちらでもない」と「その他」を除いた意見のうち、この論点が占める割合を収集の回ごとに比べます。集めた投稿の構成の変化を示すもので、世論の動きを示すものではありません。",
+  "glance_link": "収集回ごとの比較へ ↓",
+  "glance_caption": "{first_date} {first}% → {last_date} {last}%",
+  "trend_eyebrow": "収集回どうしの比較",
+  "trend_title": "前の収集回と比べて、賛否の割合はどう変わった？",
+  "trend_note": "比べているのは、2回の収集それぞれの賛成と反対の意見だけです。1回分の件数は数十件なので、数件の違いでも割合は大きく動きます。",
+  "trend_more": "グラフで立場と論点の変化を見る",
+  "method_fold": "このページの作り方と詳細データ",
+  "vote_lead": "2026年4月から、16歳以上の自転車の違反にも「青切符」（反則金）が使われています。取り締まりを強めるべきか、まず走る場所の整備が先か。あなたが最も気になる論点はどれですか？",
+  "_compact_step7": "2026-10-12 手順7で足した見出しと文（glance_caption・trend_*・method_fold・vote_lead）。前の収集回との比較（潮目のカード）の要約、作り方・詳細データの折りたたみの名前、投票の前置き（元HTMLの「導入されます」の未来形を、施行済みの言い方に差し替える）。"
  },
  "issues": {
   "bike-blue-ticket-enforcement-support": {
