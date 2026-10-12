@@ -2205,3 +2205,27 @@ items:
     result_evidence:
       - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/38125822569"
       - "https://sns-reaction-map.jp/"
+
+  - id: approval-20261012-constitutional-amendment
+    department: engineering-data
+    action: website_publication
+    summary: "憲法改正論議ページを新デザイン（冒頭の決まり方と争点・対話式の山なみ・論点ごとの読書面・背景の開閉行）に切り替えて公開する"
+    reason: "手順書23の手順7（更新と公開の検査）を生成AIと著作権と同じ型（対話式の山なみを元HTMLから写す＋部活動型の圧縮）で終え、作業ブランチ task/renew-constitutional-amendment で公開切替まで準備した"
+    risks:
+      - "URL・title・SEOメタ・Article JSON-LD・GA4・AdSense・投票（topic constitutional-amendment-issue-stance-v1、論点6×立場4＝24選択肢、保存キーも同じ）・調査条件・PLANET_DATA・前回の収集との比較（潮目のカード）・作り方・詳細データ・次に読むテーマとクリック計測・フッターは元ページから文字どおり継承する。H1 は新デザインの見出し「憲法改正はどう決まり、何が争点か」に変わるため configs/theme-seo.json に display_headline を足した"
+      - "FAQ の構造化データを新たに載せる（冒頭の4問と背景の4問、画面に出ている問いと同じ）。旧ページの検索入口（4つの切替）・読了カウンタ・立場の帯の見出し（「7割近く」）・一次資料クイズ・予想・編集部の整理（9/12時点）は新デザインに移していない。論点ごとのX投稿は正典から選び直した13件に変わる"
+      - "件数は変わらない（収集2,228件・意見1,963件、公開JSONの更新日2026-10-04）。語られていない争点の検索記録3文を区切り、背景台帳の確認日を2026-10-12に進めて年表の2文を直した（数字・出典・判定は変えていない）"
+      - "有効な間は全テーマの公開候補生成の最後に憲法の新デザインが組み直され、憲法の照合（再読データの明細と論点の件数、立場の対応表と公開JSONの立場）が合わないとその回の生成全体が止まる。次回 10/13 の収集で新しい意見が入ったら、同じ回に追い読み（理由区分）と立場の対応表の作り直しを済ませる必要がある"
+      - "国民投票法の改正の施行日（10/31）を過ぎても更新は止まらず、施行後の条文を編集部が確かめるまでは未確認と表示する。ただし静的な表示なので、10/31 をまたいで次の更新が無いと「施行される予定です」の文が残る"
+      - "375pxで論点の欄の高さは 1,978〜2,718px（7論点中4論点が目安の2,500pxを超える）。ページ全体は 12,602px で目安13,000px以下"
+      - "本番ホストでの GA4・AdSense の発火、投票の POST、X埋め込みの実表示は未確認（公開後に確認する）"
+    recommendation: approve
+    evidence:
+      - "quality/designs/2026-10-11-constitutional-amendment-production-candidate.md"
+      - "quality/prototypes/constitutional-amendment-release/evidence/"
+      - "configs/constitutional-layout.json"
+    status: approved
+    requested_at: "2026-10-12"
+    decided_at: "2026-10-12"
+    decision_note: >-
+      検査をすべて通したうえでオーナーが「公開して」と承認（2026-10-12）。release スキルで main へ統合・push した。

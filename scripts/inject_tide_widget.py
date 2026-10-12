@@ -297,8 +297,18 @@ def generate_tide_section(theme: dict, prev_data: list, cur_data: list) -> str:
     return html
 
 
+def _template_page() -> Path:
+    """潮目の汎用JS・CSSの原型を持つページ。憲法改正論議の新デザイン公開後は元HTML（data/page-sources）を読む
+    （constitutional_layout.source_for_refresh。新デザインのページにも潮目のカードは写してあるが、原型は元HTMLに置く）。"""
+    try:
+        from constitutional_layout import source_for_refresh  # type: ignore[import-not-found]
+    except ImportError:
+        from scripts.constitutional_layout import source_for_refresh
+    return source_for_refresh(ROOT)
+
+
 def _load_generic_js() -> str:
-    with open(ROOT / "docs" / "constitutional-amendment-reaction-map.html", encoding="utf-8") as f:
+    with open(_template_page(), encoding="utf-8") as f:
         html = f.read()
     start = html.find("<!-- TIDE_CARD_START -->")
     end = html.find("<!-- TIDE_CARD_END -->")
@@ -316,7 +326,7 @@ def _load_generic_js() -> str:
 
 
 def _load_tide_css() -> str:
-    with open(ROOT / "docs" / "constitutional-amendment-reaction-map.html", encoding="utf-8") as f:
+    with open(_template_page(), encoding="utf-8") as f:
         html = f.read()
     css_m = re.search(r"/\* TIDE_CARD_START \*/(.*?)/\* TIDE_CARD_END \*/", html, re.DOTALL)
     return css_m.group(1).strip() if css_m else ""
@@ -396,7 +406,8 @@ def main() -> None:
 
         html_path = ROOT / theme["html"]
         if re.search(r'<meta name="[a-z-]+-layout"', html_path.read_text(encoding="utf-8")):
-            # 新デザインのページ（bukatsu/koshitsu/fukushuto/ai_copyright_layout.py）は潮目を載せない。旧形式の差し込みで壊さない
+            # 新デザインのページ（bukatsu/koshitsu/fukushuto/ai_copyright/constitutional_layout.py）には旧形式で差し込まない。
+            # 憲法改正論議の潮目は adapter（refresh_adapters/constitutional.py）が元HTMLに貼り、新デザインはそれを写す
             print("  SKIP: 新デザインのページ（潮目は載せない）")
             continue
         new_html = inject_into_html(html_path, tide_html, tide_css)
