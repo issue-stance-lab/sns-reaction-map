@@ -231,8 +231,12 @@ def build_unspoken_issue_review(
     population = sum(row.get("is_opinion") is True for row in candidate)
     day = str(review.get("reviewed_at"))
     note_suffix = (
-        f"2026-09-29に今回新たに採用した{len(newly_adopted)}件を本文確認し、"
+        f"{day}に今回新たに採用した{len(newly_adopted)}件を本文確認し、"
         "この事実への新規言及は見つからなかった。母数は前回確認済み分と合わせた全意見数。"
+    )
+    audit_suffix = re.compile(
+        r"\s*20\d{2}-\d{2}-\d{2}に今回新たに採用した\d+件を本文確認し、"
+        r"この事実への新規言及は見つからなかった。母数は前回確認済み分と合わせた全意見数。"
     )
     for item in source["items"]:
         pattern = re.compile(str((item.get("match_rule") or {}).get("pattern") or "(?!)"), re.I)
@@ -242,7 +246,9 @@ def build_unspoken_issue_review(
                 f"未言及論点 {item.get('id')} に新規一致候補があります。件数と説明を本文確認してください"
             )
         old_base = int(item.get("sns_base") or 0)
-        item["sns_note"] = str(item.get("sns_note") or "").replace(f"{old_base}件", f"{population}件")
+        # 前回の追加確認ログは1つだけ残す（回を重ねて末尾に積み上がらないようにする）。
+        item["sns_note"] = audit_suffix.sub("", str(item.get("sns_note") or "")).rstrip()
+        item["sns_note"] = item["sns_note"].replace(f"{old_base}件", f"{population}件")
         item["sns_note"] = f"{item['sns_note']} {note_suffix}"
         item["sns_base"] = population
         item["checked_on"] = day

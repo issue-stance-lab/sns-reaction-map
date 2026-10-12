@@ -18,7 +18,9 @@ from scripts.refresh_planet_section import _apply_connected_display  # noqa: E40
 class ConstitutionalConnectedTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.original = (ROOT / 'docs/constitutional-amendment-reaction-map.html').read_text(encoding='utf-8')
+        # 新デザイン公開後は、旧形式の元HTML（data/page-sources）を検査する（scripts/constitutional_layout.py）
+        from scripts.constitutional_layout import source_for_refresh
+        cls.original = source_for_refresh(ROOT).read_text(encoding='utf-8')
         cls.page = connected.apply(cls.original, activate=True)
 
     def test_apply_is_idempotent_and_validates(self):

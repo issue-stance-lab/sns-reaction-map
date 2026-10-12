@@ -11,6 +11,10 @@ from scripts.constitutional_connected import planet_data
 
 
 def verified_selectors(source: str, root: Path) -> dict[str, str]:
+    if 'name="constitutional-layout"' in source:
+        # 新デザイン（scripts/constitutional_layout.py）の件数は、論点の欄ごとに数え直す
+        from scripts.constitutional_redesign_provenance import verified_selectors as redesign
+        return redesign(source, root)
     if '<!-- CONSTITUTIONAL_CONNECTED_START -->' not in source:
         return {}
     soup = BeautifulSoup(source, 'html.parser')

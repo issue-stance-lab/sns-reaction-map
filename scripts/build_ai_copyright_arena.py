@@ -823,6 +823,23 @@ def main() -> int:
     parser.add_argument("--output-data", type=Path, help="アリーナデータの書き出し先")
     parser.add_argument("--skip-issue-counts", action="store_true", help="sync_issue_counts.py を呼ばない")
     args = parser.parse_args()
+    if 'name="ai-copyright-layout"' in PAGE.read_text(encoding="utf-8") and not (
+            args.input or args.html_template or args.output_html or args.output_data):
+        # 新デザイン公開後の単独実行：元HTML（data/page-sources）に公開JSONの集計と旧形式の生成を掛け、
+        # 新デザインを掛け直す（ai_copyright_layout.py）。--public-counts-only・--skip-issue-counts も同じ rebuild に含まれる
+        if str(ROOT) not in sys.path:
+            sys.path.insert(0, str(ROOT))
+        from scripts.ai_copyright_layout import rebuild
+        try:
+            changed = rebuild(ROOT, check=args.check)
+        except (BuildError, ValueError, OSError, KeyError, json.JSONDecodeError) as exc:
+            print(f"ERROR: {exc}", file=sys.stderr)
+            return 1
+        if args.check and changed:
+            print("NG  ページが正典から生成した内容と一致しません", file=sys.stderr)
+            return 1
+        print("UPDATE: HTMLを更新しました" if changed else "OK: 差分なし")
+        return 0
     if args.public_counts_only:
         if args.check or args.input or args.html_template or args.output_data or args.skip_issue_counts:
             parser.error("--public-counts-onlyは--output-html以外と併用できません")

@@ -8,7 +8,9 @@ from scripts.build_constitutional_arena import apply_search_entry_counts
 
 
 ROOT = Path(__file__).resolve().parent.parent
-PAGE = ROOT / "docs" / "constitutional-amendment-reaction-map.html"
+# 新デザイン公開後は、旧形式の元HTML（data/page-sources）を検査する（scripts/constitutional_layout.py）
+from scripts.constitutional_layout import source_for_refresh  # noqa: E402
+PAGE = source_for_refresh(ROOT)
 
 
 class ConstitutionalSearchEntryTest(unittest.TestCase):

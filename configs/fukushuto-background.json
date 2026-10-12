@@ -1,0 +1,296 @@
+{
+  "theme_id": "fukushuto",
+  "_about": "副首都ページの「背景として開く内容」（開閉行）の文言。scripts/fukushuto_background.py が読む。日付・件数・確認日はここに書かず、冒頭の設定（law・comment・candidates）・背景台帳・一次資料メモ・公開JSON・THEMES.yaml・授業の設定から差し込む。作り方・詳細データ・次に読むテーマは手順7で現行ページの保護対象として継承するため、ここには入れない。",
+  "inputs": {
+    "background_ledger": "data/verification/fukushuto-background.json",
+    "classroom": "configs/classroom/fukushuto.json",
+    "themes_yaml": "THEMES.yaml",
+    "_inputs": "授業の設定は既存の仕組み（現行ページの授業節）と共有するので読むだけ。THEMES.yaml からは updated_at と sample_period を読み、公開JSONと一致するかだけ確かめる。"
+  },
+  "section": {
+    "eyebrow": "背景をひらく",
+    "title": "制度の背景と、まだ分からないこと",
+    "lead": "読みたい行だけ開けます。上の4行は制度、下の4行は経緯・資料・まだ分からないことです。"
+  },
+  "sources_label": "出典",
+  "dates_line": "制度の確認日：背景台帳 {ledger_checked_on}、冒頭の制度の記述 {opening_checked_on}、一次資料メモの最新 {memo_latest}。SNSの集計：{updated_on}まで。",
+  "phase_note": "段階は{as_of}時点で表示しています。",
+  "groups": [
+    {
+      "id": "system",
+      "label": "制度の中身",
+      "rows": [
+        {
+          "id": "definition",
+          "kind": "definition",
+          "title": "副首都とは何か",
+          "summary": "「首都中枢機能代替地域」との違いと、いまの段階",
+          "paragraphs": [
+            {
+              "text": "法律の第2条は、首都中枢機能の全部または大部分を一定期間代わりに担い、経済圏の中核にもなる道府県を「副首都」としています。一部だけを担う地域は「首都中枢機能代替地域」と呼び、副首都の区域を除いた別の区分です。",
+              "memo_section": "資料K："
+            }
+          ],
+          "phase_now": {
+            "before": "法律は{promulgated}に公布され、{enforcement}の施行が予定されています。どの道府県を指定するかは施行後の手続きで決まるため、いまはまだ指定前の段階です。",
+            "after_unconfirmed": "法律は{enforcement}に施行予定でした。施行後の条文は編集部で確かめていません。どの道府県を指定するかは、施行後の手続きで決まる段階です。",
+            "after_confirmed": "法律は施行されました（{confirmed}に条文を確認）。どの道府県を指定するかは、これからの手続きで決まる段階です。"
+          },
+          "_phase_now": "背景台帳 definition.now（「確認した法律は施行前で」）は時点が固定された文なので使わず、冒頭と同じ段階で切り替える。",
+          "sources": [
+            {
+              "name": "e-Gov：第2条（定義）",
+              "url": "https://laws.e-gov.go.jp/law/508AC1000000078"
+            }
+          ],
+          "issue_ids": [
+            "fukushuto-definition"
+          ]
+        },
+        {
+          "id": "why",
+          "kind": "cause",
+          "title": "なぜ副首都の法律ができたのか",
+          "summary": "東京への集中と、災害時の備え",
+          "paragraphs": [
+            {
+              "text": "法律の第1条は、大規模災害に備えて副首都の整備などを進め、国民生活の向上と、多くの地域に経済の拠点を持つ形を通じた経済の成長に役立てることを目的に掲げています。",
+              "memo_section": "資料K："
+            }
+          ],
+          "sources": [
+            {
+              "name": "e-Gov：第1条（目的）",
+              "url": "https://laws.e-gov.go.jp/law/508AC1000000078"
+            }
+          ],
+          "issue_ids": [
+            "fukushuto-disaster-preparedness",
+            "fukushuto-priority"
+          ]
+        },
+        {
+          "id": "selection",
+          "kind": "selection",
+          "title": "指定までの手続きと、要件案",
+          "summary": "道府県の申出、議会の議決、国の指定。要件はまだ案の段階",
+          "paragraphs": [
+            {
+              "text": "指定を受けたい道府県は、あらかじめ議会の議決を経て国に申し出ます。内閣総理大臣が政令の要件を満たすと判断して指定し、官報で告示した時点で効力が生じます（第18条）。",
+              "memo_section": "資料K："
+            },
+            {
+              "text": "要件案が挙げる条件は、東京圏と同時に被災しにくいこと・国の出先機関の集まり・人口と経済の規模・特別区か連携協約による行政の体制、の4つです。数値は案の段階のもので、確定した要件ではありません。",
+              "memo_section": "資料L："
+            }
+          ],
+          "phase_comment": {
+            "open": "要件案への意見募集は{closes}までです。",
+            "closed": "要件案への意見募集は{closes}に締め切られました。結果はまだ確かめていません。",
+            "published": "要件案への意見募集の結果が公表されました（{published}に確認）。"
+          },
+          "sources": [
+            {
+              "name": "e-Gov：第18条（副首都の指定）",
+              "url": "https://laws.e-gov.go.jp/law/508AC1000000078"
+            },
+            {
+              "name": "e-Gov パブリック・コメント（案件番号060261003）",
+              "url": "https://public-comment.e-gov.go.jp/pcm/detail?CLASSNAME=PCMMSTDETAIL&Mode=0&id=060261003"
+            },
+            {
+              "name": "命令などの案（PDF・別紙1）",
+              "url": "https://public-comment.e-gov.go.jp/pcm/download?seqNo=0000321928"
+            }
+          ],
+          "issue_ids": [
+            "fukushuto-location",
+            "fukushuto-osaka-restoration"
+          ]
+        },
+        {
+          "id": "candidates",
+          "kind": "candidates",
+          "title_template": "動きを公表した{regions}地域",
+          "summary": "自治体の資料と日付。国が認めた候補地の一覧ではない",
+          "lead": "冒頭の地図と同じ一覧です。自治体が公表した動きで、全国を網羅したものではありません。",
+          "map_link": {
+            "href": "#fuk-op-map",
+            "text": "地図で見る"
+          },
+          "_about": "地域・段階・日付・出典は冒頭の設定 candidates と stages を読む（二重に持たない）。",
+          "issue_ids": [
+            "fukushuto-location"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "history",
+      "label": "経緯・資料・まだ分からないこと",
+      "rows": [
+        {
+          "id": "timeline",
+          "kind": "timeline",
+          "title": "住民投票から施行までの経緯",
+          "summary": "2020年の住民投票、2026年の成立、要件案、施行",
+          "drop": [
+            "unimplemented-2026"
+          ],
+          "_drop": "背景台帳の「2026年9月確認：e-Govでは施行前」は時点が固定された記述なので使わず、冒頭の設定の日付から段階つきで差し込む。",
+          "events": [
+            {
+              "id": "draft",
+              "after": "enactment-2026",
+              "date_from": "comment.opens_on",
+              "era": "指定の要件案を公表",
+              "text": "内閣官房が、副首都の指定要件などを定める政令・規則の案を公表し、意見募集を始めました。",
+              "sources": [
+                {
+                  "name": "e-Gov パブリック・コメント（案件番号060261003）",
+                  "url": "https://public-comment.e-gov.go.jp/pcm/detail?CLASSNAME=PCMMSTDETAIL&Mode=0&id=060261003"
+                }
+              ],
+              "memo_section": "資料L："
+            },
+            {
+              "id": "comment-close",
+              "after": "draft",
+              "date_from": "comment.closes_on",
+              "phase": "comment",
+              "texts": {
+                "open": {
+                  "era": "意見募集の締切（予定）",
+                  "text": "要件案への意見募集の締切です。結果は、締切のあとに公表されます。"
+                },
+                "closed": {
+                  "era": "意見募集の締切",
+                  "text": "要件案への意見募集が締め切られました。結果はまだ確かめていません。"
+                },
+                "published": {
+                  "era": "意見募集の締切・結果公表",
+                  "text": "要件案への意見募集が締め切られ、結果が公表されました（{published}に確認）。"
+                }
+              },
+              "sources": [
+                {
+                  "name": "e-Gov パブリック・コメント（案件番号060261003）",
+                  "url": "https://public-comment.e-gov.go.jp/pcm/detail?CLASSNAME=PCMMSTDETAIL&Mode=0&id=060261003"
+                }
+              ],
+              "memo_section": "資料L："
+            },
+            {
+              "id": "enforce",
+              "after": "comment-close",
+              "date_from": "law.enforcement_on",
+              "phase": "law",
+              "texts": {
+                "before": {
+                  "era": "法律の施行（予定）",
+                  "text": "施行日は政令で定めることになっていて、この日が予定日として示されています。施行と同時に推進本部が置かれます。"
+                },
+                "after_unconfirmed": {
+                  "era": "法律の施行（予定日）",
+                  "text": "施行予定でした。施行後の条文は編集部で確かめていません。"
+                },
+                "after_confirmed": {
+                  "era": "法律の施行",
+                  "text": "施行されました（{confirmed}に条文を確認）。"
+                }
+              },
+              "sources": [
+                {
+                  "name": "e-Gov：成立した法律",
+                  "url": "https://laws.e-gov.go.jp/law/508AC1000000078"
+                }
+              ],
+              "memo_section": "資料K："
+            }
+          ]
+        },
+        {
+          "id": "faq",
+          "kind": "faq",
+          "title": "よくある質問（4問）",
+          "summary": "施行、代替地域との違い、都構想との違い、整備費",
+          "_dropped": "現行のFAQ6問のうち「副首都は大阪に決まったのですか？」「副首都は、いつ決まりますか？」は冒頭の短答（どこになる？・いつ決まる？）と同じ問いなので背景からは外した。現行の答えにある「2026年10月3日時点では」などの固定した時点は、段階の切り替えに置き換えた。",
+          "items": [
+            {
+              "q": "副首都法は、もう施行されていますか？",
+              "a": "まだです。{enacted}に成立し、{promulgated}に公布されました。施行日は政令で定めることになっていて、{enforcement}が予定日として示されています。",
+              "phase": {
+                "after_unconfirmed": {
+                  "q": "副首都法は、もう施行されていますか？",
+                  "a": "{enforcement}に施行予定でした。施行後の条文は、編集部でまだ確かめていません。成立は{enacted}、公布は{promulgated}です。"
+                },
+                "after_confirmed": {
+                  "q": "副首都法は、いつ施行されましたか？",
+                  "a": "施行されました（{confirmed}に条文を確認）。成立は{enacted}、公布は{promulgated}です。"
+                }
+              }
+            },
+            {
+              "q": "首都中枢機能代替地域と副首都は同じですか？",
+              "a": "別です。代替地域は首都中枢機能の一部を担います。副首都はその全部または大部分を代替し、経済圏の中核も担う道府県です。法律は両者を分けています。"
+            },
+            {
+              "q": "大阪都構想と副首都法は同じ制度ですか？",
+              "a": "別です。大阪都構想は大阪市を廃止して特別区を設ける構想で、副首都法には道府県名を「都」に変える規定はありません。ただし、意見募集にかけられた要件案は、特別区の設置を連携協約と並ぶ選択肢の一つにしています。"
+            },
+            {
+              "q": "副首都の整備費は4兆〜7.5兆円ですか？",
+              "a": "確定した総額ではありません。4兆〜7.5兆円は、過去の首都機能移転の試算として国会審議で引用された数字です。今回の制度の整備総額は示されていません。"
+            }
+          ]
+        },
+        {
+          "id": "classroom",
+          "kind": "classroom",
+          "title": "授業や話し合いで使う",
+          "summary": "賛成・反対の理由3つずつ、確かめる資料、問いの例",
+          "intro": "賛成と反対の理由を、論点ごとに3つずつ並べました。理由の文は、現行ページの授業の節と同じものです。",
+          "questions_label": "話し合いの問いの例",
+          "sources_label": "確かめる一次資料"
+        },
+        {
+          "id": "unverified",
+          "kind": "unverified",
+          "title": "まだ確かめていないこと",
+          "summary": "意見募集の結果、施行後の条文、自治体の申出",
+          "from_ledger": [
+            "unknown",
+            "caveat"
+          ],
+          "items": [
+            {
+              "text": "要件案への意見募集の結果と、案から変わった点は、まだ確かめていません。",
+              "hide_when": {
+                "comment": [
+                  "published"
+                ]
+              }
+            },
+            {
+              "text": "施行日を定める政令と、施行後の条文は、まだ確かめていません。施行と同時に置かれる推進本部の設置も同じです。",
+              "hide_when": {
+                "law": [
+                  "after_confirmed"
+                ]
+              },
+              "memo_ref": "資料K："
+            },
+            {
+              "text": "大阪府・大阪市が、道府県として指定の申出を表明したかは確認できていません。",
+              "memo_ref": "確認できなかったこと 6"
+            },
+            {
+              "text": "愛知県の2026年8月10日の発表は、元のページが見られなくなっていて、現在のURLを特定できていません。地図では県と名古屋市の協議会のページを出典にしています。",
+              "memo_ref": "確認できなかったこと 6"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
