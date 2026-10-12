@@ -469,7 +469,16 @@ class AllIssuesAndBackgroundTests(unittest.TestCase):
         self.assertEqual(len(self.s.select("#bg-help")), 1)
         self.assertEqual(self.s.select_one("#bg-help .fb-phone a")["href"], "tel:0120078310")
         self.assertTrue(self.s.select('#school-nickname-safety a[href="#bg-help"]'))
-        self.assertEqual(self.html.count("0120-0-78310"), 1)
+        # 番号は冒頭の「つらい場合」と背景の相談先の2か所に出るが、設定は冒頭の safety.phone の1か所だけ（2026-10-13 司令塔の決定）
+        self.assertEqual(self.s.select_one("#school-nickname-safety .nop-phone a")["href"], "tel:0120078310")
+        self.assertEqual(self.html.count("0120-0-78310"), 2)
+        configs = [(ROOT / "configs" / n).read_text(encoding="utf-8") for n in
+                   ("school-nickname-ban-opening.json", "school-nickname-ban-background.json", "school-nickname-ban-reading.json")]
+        self.assertEqual(sum(c.count("0120-0-78310") for c in configs), 1)
+        d = copy.deepcopy(self.d)
+        del d["ocfg"]["safety"]["phone"]
+        with self.assertRaises(SystemExit):
+            self.render_bg(d)
 
     def test_timeline_adds_notice(self):
         node = self.s.select_one("#bg-timeline")

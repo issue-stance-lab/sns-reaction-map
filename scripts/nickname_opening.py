@@ -328,6 +328,8 @@ def render_fragment(data: dict) -> str:
             render_scope(config),
             render_count(data),
             f'<aside class="nop-safety" id="school-nickname-safety"><b>{esc(s["title"])}</b><p>{esc(s["text"])}</p>'
+            + (f'<p class="nop-phone"><span>{esc(s["phone"]["label"])}</span>'
+               f'<a href="tel:{esc(s["phone"]["tel"])}">{esc(s["phone"]["number"])}</a></p>' if s.get("phone") else "")
             + (f'<p><a href="{esc(s["link_href"])}">{esc(s["link_text"])}</a></p>' if s.get("link_href") else "")
             + "</aside>",
             f'<nav class="nop-links" aria-label="このページの読み方">{links}</nav>',

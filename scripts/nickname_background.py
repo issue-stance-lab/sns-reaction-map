@@ -9,7 +9,7 @@ scripts/nickname_reading.py から呼ぶ（単独では実行しない）。高�
 - 期待と懸念（kind "voices"）は、冒頭の設定 background_candidates（旧検索入口の3タブ）から読み、「ここからはSNSの意見」と明示する。
 - よくある質問（kind "faq"）は、冒頭の設定 faq.items から、冒頭と重ならない問いを番号で選んで読む（文は二重に持たない）。
   冒頭の設定 faq.placement が "background" でないと止まる（冒頭と背景に同じFAQが出るのを防ぐ）。
-- 相談先（kind "help"）は、冒頭の「つらい場合」の案内からこの行へつなぐ。
+- 相談先（kind "help"）は、冒頭の「つらい場合」の案内からこの行へつなぐ。電話番号は冒頭の設定 safety.phone の1か所から読む（冒頭にも同じ番号が出る）。
 
 入力
 - configs/school-nickname-ban-background.json : 行の名前・並び・手書きの文言（SNSの件数・日付は書かない）
@@ -100,6 +100,8 @@ def check(d: dict) -> None:
         for iid in row.get("issue_ids", []) + [i["issue_id"] for i in row.get("items", []) if "issue_id" in i]:
             if iid not in ids:
                 raise SystemExit(f"背景の行 {row['id']} の論点 {iid} が公開JSONにありません")
+        if row["kind"] == "help" and not (ocfg.get("safety") or {}).get("phone"):
+            raise SystemExit("相談先の行には、冒頭の設定 safety.phone（電話番号）が要ります")
         if row["kind"] in ("national", "points", "ledger_text", "help") and not row.get("sources"):
             raise SystemExit(f"背景の行 {row['id']} に出典がありません")
         if row["kind"] == "national" and not (row.get("confirmed") and row.get("unconfirmed")):
@@ -216,8 +218,9 @@ def body_faq(d: dict, row: dict, ctx: dict) -> str:
 
 
 def body_help(d: dict, row: dict, ctx: dict) -> str:
+    phone = d["ocfg"]["safety"]["phone"]  # 番号は冒頭の設定の1か所（冒頭の案内にも同じ番号を出す）
     return (f'<p>{esc(row["text"])}</p>'
-            f'<p class="fb-phone"><span>{esc(row["phone_label"])}</span><a href="tel:{esc(row["tel"])}">{esc(row["phone"])}</a></p>'
+            f'<p class="fb-phone"><span>{esc(phone["label"])}</span><a href="tel:{esc(phone["tel"])}">{esc(phone["number"])}</a></p>'
             f'<p>{esc(row["more"])}</p><div class="fb-cite">出典（{esc(ctx["dates"]["checked"])}に確認）{links(row["sources"])}</div>')
 
 

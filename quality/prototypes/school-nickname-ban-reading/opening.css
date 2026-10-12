@@ -131,6 +131,9 @@ a { color: var(--board); }
 /* つらい場合・リンク・出典 */
 .nop-safety { margin-top: 20px; padding: 14px 18px; border-left: 5px solid var(--yellow); background: var(--card); border-radius: 0 10px 10px 0; font-size: 14px; }
 .nop-safety p { margin: 4px 0 0; }
+.nop-phone { display: flex; flex-wrap: wrap; gap: 2px 12px; align-items: baseline; }
+.nop-phone span { font-weight: 800; font-size: 13px; }
+.nop-phone a { font-size: 22px; font-weight: 800; color: var(--ink); font-variant-numeric: tabular-nums; }
 .nop-links { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
 .nop-link { display: inline-block; padding: 10px 16px; border-radius: 999px; background: var(--board); color: var(--chalk); font-weight: 700; font-size: 14px; text-decoration: none; }
 .nop-link + .nop-link { background: var(--card); color: var(--board); border: 1.5px solid var(--board); }
