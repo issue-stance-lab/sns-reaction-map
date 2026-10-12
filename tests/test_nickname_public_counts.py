@@ -16,7 +16,10 @@ from scripts.build_nickname_arena import IssueCountError, apply_public_counts
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / "social-samples/school-nickname-ban_hermes_arena_classified.json"
-PAGE = ROOT / "docs/school-nickname-ban-reaction-map.html"
+# 新デザイン公開後は、旧形式の元HTML（data/page-sources）を検査する（scripts/nickname_layout.py）
+from scripts.nickname_layout import source_for_refresh  # noqa: E402
+
+PAGE = source_for_refresh(ROOT)
 PUBLIC = ROOT / "data/public/themes/school-nickname-ban.json"
 TMP = ROOT / ".tmp-nickname-public-counts.json"
 
