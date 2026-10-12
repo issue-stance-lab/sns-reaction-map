@@ -8,6 +8,8 @@ from scripts.verify_theme_page import _planet_data
 
 
 ROOT = Path(__file__).resolve().parents[1]
+# 新デザイン公開後は、旧形式の元HTML（data/page-sources）を検査する（scripts/constitutional_layout.py）
+from scripts.constitutional_layout import source_for_refresh  # noqa: E402
 
 
 class ConstitutionalPublicCountsTests(unittest.TestCase):
@@ -15,7 +17,7 @@ class ConstitutionalPublicCountsTests(unittest.TestCase):
         public_path = ROOT / "data/public/themes/constitutional-amendment.json"
         public = json.loads(public_path.read_text(encoding="utf-8"))
         page = apply_public_counts(
-            (ROOT / "docs/constitutional-amendment-reaction-map.html").read_text(encoding="utf-8"),
+            source_for_refresh(ROOT).read_text(encoding="utf-8"),
             public_path,
         )
         self.assertIn(f'公開投稿 {public["collected_count"]}件のうち、意見と判定した{public["opinion_count"]}件', page)
