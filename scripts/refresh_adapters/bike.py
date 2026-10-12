@@ -283,7 +283,8 @@ def build_reread_stances(candidate_path: Path, editorial_path: Path, output_path
         "issues": [{"label": label, "stances": [{"label": s, "count": n} for s, n in sorted(by.items())]}
                    for label, by in sorted(counts.items()) if label in reread],
     }
-    data = table(rows, reread, tallied, current_date, "（定期更新の累積候補）",
+    # 累積候補は昇格すると正典そのものになる（canonical_sha256 も昇格後の正典と同じ値）
+    data = table(rows, reread, tallied, current_date, "social-samples/bike-blue-ticket_2d_classified.json",
                  hashlib.sha256(candidate_path.read_bytes()).hexdigest(), _digest(editorial_path))
     output_path.write_text(text_of(data), encoding="utf-8")
     return data

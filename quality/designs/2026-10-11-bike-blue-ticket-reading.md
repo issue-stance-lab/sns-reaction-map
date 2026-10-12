@@ -177,6 +177,8 @@ FAQ は冒頭の短答4つ（何歳から・いくら・切られた後・必ず
 6. 投票の導入文の未来形（棚卸し31）、編集部の横断整理の件数入りの文（棚卸し24）の扱い。
 7. 立場の対応表は、追い読み・定期更新のたびに `python3 scripts/bike_reread_stances.py --made-on YYYY-MM-DD` で作り直す（明細と合わないと生成が止まる）。DATA_REFRESH.md への1行は手順7で足す。
 
+→ 2026-10-12 の手順7で1〜7をすべて処理した（[2026-10-11-bike-blue-ticket-production-candidate.md](2026-10-11-bike-blue-ticket-production-candidate.md) の0・2・4節。7は adapter が定期更新で作り直す形にした）。
+
 ### 8-8. 確認していないこと
 
 - 実機（iPhone Safari など）。Playwright の Chromium だけ。スクリーンリーダーでの読み上げ。
