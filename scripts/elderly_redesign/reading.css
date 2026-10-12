@@ -1,0 +1,304 @@
+/* 高齢者免許返納・論点ごとの読書面と背景の開閉行の試作（正本。scripts/elderly_reading.py が試作フォルダーへ写す）。
+   型は自転車の青切符の reading.css（憲法改正論議の部活動型の圧縮済み）と同じ。山なみの規則は持たない（手順7で元HTMLの対話式の山なみを写す）。
+   色は冒頭の opening.css（標識の青・柿色・路面の墨）を引き継ぎ、共通部品が使う変数名をここで冒頭の色に読み替える。立場の4色は planet 設定から行内で入る。 */
+.fr,.fb,.fr-site{--panel:var(--card);--ai:var(--sign);--ai-pale:var(--sign-soft);--ai-soft:#b9cbe4;
+  --orig:var(--kaki);--orig-wash:var(--kaki-soft);--focus:var(--kaki);--shu:#163f75;--odo:var(--kaki);--none:#e6e2da;
+  --paper-2:#ebe6dc;--vermilion:var(--kaki);--vermilion-soft:var(--kaki-soft)}
+.fr{width:min(1180px,calc(100% - 32px));margin:0 auto;padding:8px 0 56px}
+.fr-eyebrow{margin:0;font-size:12.5px;font-weight:800;color:var(--shu);letter-spacing:.06em;
+  display:flex;flex-wrap:wrap;gap:4px 12px;align-items:baseline}
+.fr-eyebrow span{font-weight:600;color:var(--muted);letter-spacing:0}
+.fr h2{margin:4px 0 6px;font-size:clamp(24px,3vw,32px);line-height:1.3}
+.fr-lead{margin:0 0 10px;font-size:15px;color:var(--muted)}
+.fr-fine{margin:8px 0 0;font-size:12.5px;color:var(--muted);line-height:1.7}
+.fr-live{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* 読書面 */
+.fr-panels{margin-top:22px;display:grid;gap:22px}
+.fr-panel{padding:26px 28px 28px;background:var(--card);border:1px solid var(--line);border-top:5px solid var(--ai);
+  border-radius:18px;scroll-margin-top:16px}
+.fr-panel.is-pending{border-top-color:#b9bfcc}
+.fr-panel-head{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px 28px;align-items:start}
+.fr-panel h3{margin:4px 0 8px;font-size:clamp(24px,3.2vw,34px);line-height:1.25;color:var(--ai)}
+.fr-panel h3:focus{outline:none}
+.fr-desc{margin:0 0 8px;font-size:16px;max-width:42em}
+.fr-count{margin:0;text-align:right;min-width:11em}
+.fr-count b{font-size:46px;line-height:1;font-variant-numeric:tabular-nums;color:var(--ink)}
+.fr-count span{font-size:16px;font-weight:700;margin-left:2px}
+.fr-count small{display:block;margin-top:6px;font-size:12.5px;color:var(--muted);max-width:15em;margin-left:auto}
+.fr-pending{margin:12px 0 0;padding:10px 14px;background:var(--paper);border-left:4px solid #b9bfcc;font-size:14px}
+.fr-grid{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:22px;margin-top:18px}
+.fr-main,.fr-side{display:grid;gap:18px;align-content:start;min-width:0}
+.fr-block{padding:18px 20px;border:1px solid var(--line);border-radius:14px;background:#fff;min-width:0}
+.fr-block h4{margin:0 0 6px;font-size:18px}
+.fr-block h5{margin:4px 0 6px;font-size:15px;line-height:1.55}
+.fr-block p{margin:0 0 6px;font-size:14.5px}
+.fr-empty{color:var(--muted)}
+
+/* 理由（主役） */
+.fr-reasons{border-color:var(--ai);border-width:1.5px}
+.fr-reason-list{list-style:none;margin:10px 0 0;padding:0;display:grid;gap:12px}
+.fr-reason{padding-bottom:12px;border-bottom:1px solid var(--line)}
+.fr-reason:last-child{border-bottom:0;padding-bottom:0}
+.fr-reason-head{display:flex;justify-content:space-between;gap:12px;align-items:baseline}
+.fr-reason-name{font-weight:800;font-size:15.5px}
+.fr-reason-n{white-space:nowrap;font-variant-numeric:tabular-nums;font-size:13px}
+.fr-reason-n b{font-size:20px;margin-right:1px}
+.fr-reason-n small{margin-left:8px;color:var(--muted);font-size:12.5px}
+.fr-reason-bar{display:block;height:8px;margin:6px 0 8px;background:var(--paper);border-radius:4px;overflow:hidden}
+.fr-reason-bar i{display:block;height:100%;background:var(--ai);border-radius:4px}
+.fr-voice{font-size:14px!important;color:var(--ink)}
+.fr-voice span{display:inline-block;margin-right:8px;padding:0 6px;border-radius:4px;background:var(--ai-pale);
+  color:var(--ai);font-size:11.5px;font-weight:800;vertical-align:1px}
+
+/* 立場（脇役） */
+.fr-stance{background:var(--paper)}
+
+/* 推移・照合・投稿 */
+.fr-trend table{width:100%;border-collapse:collapse;font-size:14px;margin:6px 0 2px}
+.fr-trend th,.fr-trend td{padding:8px 6px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+.fr-trend thead th{font-size:12px;color:var(--muted);font-weight:700}
+.fr-trend td{font-variant-numeric:tabular-nums;white-space:nowrap}
+.fr-trend td small{display:block;font-size:11.5px;color:var(--muted)}
+.fr-check,.fr-claim{margin-top:12px;padding-top:12px;border-top:1px solid var(--line)}
+.fr-verdict{display:inline-block;padding:2px 10px;border-radius:999px;font-size:12.5px!important;font-weight:800}
+.fr-verdict-fact .fr-verdict{background:#e3f1ee;color:#1f6b61}
+.fr-verdict-miss .fr-verdict{background:#fff3e0;color:#8a4b00}
+.fr-verdict-gap .fr-verdict{background:#fbe7e3;color:#9a3523}
+.fr-sources{margin-top:6px;font-size:13px}
+.fr-sources summary{cursor:pointer;color:var(--ai);font-weight:700;min-height:32px;display:flex;align-items:center}
+.fr-sources ul{margin:4px 0 0;padding-left:18px}
+.fr-sources li{margin:2px 0;overflow-wrap:anywhere}
+.fr-sources li span{display:block;font-size:12px;color:var(--muted)}
+.fr-post-list{list-style:none;margin:8px 0 0;padding:0;display:grid;gap:10px}
+.fr-post{padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--paper)}
+.fr-post-label{font-weight:800}
+.fr-posts .original-posts{margin-top:12px}
+.fr-posts .original-posts>summary{cursor:pointer;font-weight:800;color:var(--ai);min-height:44px;display:flex;align-items:center}
+.fr-posts .original-posts>a{display:block;font-size:13px}
+.fr-footer{margin:18px 0 0;font-size:12.5px;color:var(--muted)}
+
+/* JavaScriptが動くときだけ、選んでいない論点を隠す */
+.fr-js .fr-panel:not([data-selected]){display:none}
+
+@media (max-width:900px){
+  .fr-grid{grid-template-columns:1fr}
+}
+@media (max-width:650px){
+  .fr-panel{padding:20px 16px 22px}
+  .fr-panel-head{grid-template-columns:1fr}
+  .fr-count{text-align:left}
+  .fr-count small{margin-left:0;max-width:none}
+  .fr-block{padding:14px 14px}
+  .fr-reason-head{flex-wrap:wrap}
+}
+
+
+.fr-sunk{background:var(--paper)}
+.fr-sunk-item{margin-top:12px;padding-top:12px;border-top:1px solid var(--line)}
+.fr-sunk-item:first-of-type{margin-top:6px;padding-top:0;border-top:0}
+
+/* 副首都から引き継いだ部品：サイトの簡易ヘッダー、立場の帯、理由区分ごとの立場の内訳、あわせて確かめる */
+.fr-site{display:flex;flex-wrap:wrap;gap:4px 16px;align-items:baseline;padding:10px 24px;background:var(--ink);color:#fff;font-size:13px}
+.fr-logo{color:#fff;font-weight:800;text-decoration:none}
+.fr-panel-head+.fr-stance{margin-top:16px}
+.fr-band{display:flex;height:16px;border-radius:8px;overflow:hidden;background:var(--none);margin:8px 0 6px}
+.fr-band i,.fr-mini i{display:block;height:100%}
+.fr-stance-list{list-style:none;margin:6px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:4px 18px;font-size:13.5px}
+.fr-stance-list li{display:flex;align-items:baseline;gap:5px}
+.fr-stance-list b{font-size:17px;font-variant-numeric:tabular-nums}
+.fr-stance-list small{color:var(--muted)}
+.fr-sw{display:inline-block;width:12px;height:12px;border-radius:3px;align-self:center}
+.fr-reason-stance{display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px;font-size:12.5px!important;color:var(--muted);margin:2px 0 0!important}
+.fr-mini{display:inline-flex;width:72px;height:8px;border-radius:4px;overflow:hidden;background:var(--none);flex:none}
+.fr-see ul{margin:6px 0 0;padding-left:18px}
+.fr-see a{font-weight:700;min-height:32px;display:inline-flex;align-items:center}
+.fr-sunk{margin-top:14px;padding:12px 14px;background:var(--paper);border-radius:10px}
+.fr-sunk-item{margin-top:10px;padding-top:10px;border-top:1px solid var(--line)}
+.fr-sunk-item:first-of-type{margin-top:6px;padding-top:0;border-top:0}
+.fr-memo-check .fr-eyebrow{color:var(--ai)}
+.fr-checks .fr-eyebrow{color:var(--ai)}
+.fr-checks .fr-check:first-of-type{margin-top:4px;padding-top:0;border-top:0}
+@media (max-width:650px){.fr-site{padding:10px 16px}}
+
+
+/* 背景の開閉行（手順6。JavaScriptなしでも <details> で開ける。型は皇室と同じ） */
+.fb{width:min(1180px,calc(100% - 32px));margin:0 auto;padding:8px 0 64px}
+.fb h2{margin:4px 0 6px;font-size:clamp(22px,2.8vw,30px);line-height:1.3}
+.fb-group{margin-top:18px}
+.fb-group-label{margin:0 0 8px;font-size:13px;font-weight:800;color:var(--muted);letter-spacing:.06em}
+.fb-row{background:var(--card);border:1px solid var(--line);border-radius:14px;margin:0 0 10px;min-width:0}
+.fb-row>summary{cursor:pointer;list-style:none;padding:14px 48px 14px 18px;position:relative;display:flex;flex-direction:column;gap:2px;min-height:44px}
+.fb-row>summary::-webkit-details-marker{display:none}
+.fb-row>summary::after{content:"＋";position:absolute;right:18px;top:50%;transform:translateY(-50%);font-weight:800;color:var(--ai);font-size:18px}
+.fb-row[open]>summary::after{content:"－"}
+.fb-row>summary:focus-visible{outline:3px solid var(--odo);outline-offset:2px;border-radius:14px}
+.fb-title{font-weight:800;font-size:16.5px;color:var(--ink)}
+.fb-sum{font-size:13px;color:var(--muted)}
+.fb-body{padding:4px 18px 18px;border-top:1px solid var(--line);min-width:0}
+.fb-body h4{margin:16px 0 6px;font-size:16px}
+.fb-body p,.fb-body li,.fb-body dd{font-size:15px;line-height:1.85}
+.fb-body p{margin:8px 0}
+.fb-body a{color:var(--ai);overflow-wrap:anywhere}
+.fb-cite{font-size:12.5px!important;color:var(--muted)}
+.fb-issues{font-size:13.5px!important}
+.fb-timeline{list-style:none;margin:12px 0 0;padding:0 0 0 14px;border-left:3px solid var(--ai-soft)}
+.fb-timeline li{margin:0 0 14px;position:relative}
+.fb-timeline li::before{content:"";position:absolute;left:-21px;top:9px;width:11px;height:11px;border-radius:50%;background:var(--ai)}
+.fb-when{margin:0!important;display:flex;flex-wrap:wrap;gap:2px 10px;align-items:baseline}
+.fb-when b{font-size:15px}
+.fb-faq{margin:10px 0 0}
+.fb-faq>div{padding:10px 0;border-bottom:1px solid var(--line)}
+.fb-faq dt{font-weight:800;font-size:15px}
+.fb-faq dd{margin:4px 0 0}
+.fb-sides{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:8px}
+.fb-sides section{background:var(--paper);border-radius:10px;padding:4px 14px 10px;min-width:0}
+.fb-sides ol{padding-left:20px;margin:6px 0}
+.fb-sides li{margin:0 0 8px}
+.fb-to-issue{font-size:13px;font-weight:700;white-space:nowrap}
+.fb-src-label{font-weight:800;margin-top:14px!important}
+.fb-src{padding-left:20px;margin:4px 0}
+.fb-src li span{display:block;font-size:13px;color:var(--muted)}
+.fb-questions{padding-left:22px;margin:4px 0}
+.fb-table-wrap{overflow-x:auto;margin-top:10px;max-width:100%}
+.fb-table{border-collapse:collapse;font-size:13.5px;min-width:620px;width:100%;font-variant-numeric:tabular-nums}
+.fb-table-cap{font-weight:800;font-size:14px!important;margin:12px 0 0!important}
+.fb-table th,.fb-table td{padding:7px 8px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+.fb-table th[scope="row"],.fb-table thead th:first-child{text-align:left}
+.fb-table thead th{font-size:12px;color:var(--muted);white-space:normal;vertical-align:bottom}
+.fb-total th,.fb-total td{border-top:2px solid var(--muted)}
+.fb-notes{padding-left:20px;margin:8px 0 0}
+.fb-notes li{font-size:13px!important}
+.fb-facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px 16px;margin:12px 0}
+.fb-facts dt{font-size:12px;color:var(--muted);font-weight:700}
+.fb-facts dd{margin:0;font-weight:800;font-size:14.5px}
+.fb-strong{font-weight:700}
+.fb-editorial>div{padding:8px 0;border-bottom:1px solid var(--line)}
+.fb-editorial dt{font-weight:800;font-size:14px;color:var(--ai)}
+.fb-editorial dd{margin:2px 0 0}
+.fb-unverified{padding-left:20px;margin:10px 0 0}
+.fb-unverified li{margin:0 0 6px}
+@media (max-width:650px){
+  .fb-sides{grid-template-columns:1fr}
+  .fb-facts{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .fb-row>summary{padding:12px 42px 12px 14px}
+  .fb-body{padding:4px 14px 16px}
+}
+/* 生成AIだけの部品：立場が違っても共通する心配、背景の条文の引用 */
+.fr-veins{margin-top:14px;padding:12px 14px;background:var(--ai-pale);border-radius:10px}
+.fr-vein{margin-top:10px;padding-top:10px;border-top:1px solid var(--line)}
+.fr-vein:first-of-type{margin-top:6px;padding-top:0;border-top:0}
+.fr-vein b{display:inline-block;margin-right:8px;font-size:12px;color:var(--ai)}
+.fb-checked{font-size:12.5px;color:var(--muted)}
+.fb-quote{margin:10px 0;padding:10px 14px;border-left:4px solid var(--orig);background:var(--orig-wash);font-size:14.5px;line-height:1.9}
+.fb-quote cite{display:block;margin-top:4px;font-style:normal;font-size:12.5px;color:var(--muted)}
+
+/* 2026-10-12 部活動型の圧縮：論点タブ、折りたたみ（<details>）、理由一覧の1行、選んだ理由だけの説明、ひと目で見る推移 */
+.fr-tabs{min-width:0;max-width:100%}
+.fr-tabs ul{list-style:none;margin:0;padding:0 0 4px;display:flex;gap:6px;overflow-x:auto;scrollbar-width:thin}
+.fr-tabs li{flex:none}
+.fr-tab{display:inline-flex;align-items:center;gap:6px;min-height:40px;padding:6px 12px;border:1px solid var(--line);border-radius:999px;
+  background:var(--card);color:var(--ink);text-decoration:none;font-size:13.5px;font-weight:800;white-space:nowrap}
+.fr-tab:hover{border-color:var(--ai)}
+.fr-tab:focus-visible{outline:3px solid var(--odo);outline-offset:2px}
+.fr-tab[aria-current="true"]{background:var(--ai);border-color:var(--ai);color:#fff}
+.fr-tab-icon{font-size:15px;line-height:1}
+.fr-fold>summary{cursor:pointer;list-style:none;position:relative;padding:8px 30px 8px 0;min-height:44px;box-sizing:border-box;
+  display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px;font-weight:800;color:var(--ai);font-size:14.5px}
+.fr-fold>summary::-webkit-details-marker{display:none}
+.fr-fold>summary::after{content:"＋";position:absolute;right:4px;top:50%;transform:translateY(-50%);font-weight:800;color:var(--ai)}
+.fr-fold[open]>summary::after{content:"－"}
+.fr-fold>summary:focus-visible{outline:3px solid var(--odo);outline-offset:2px;border-radius:6px}
+.fr-fold-title{font-weight:800;margin-top:4px!important}
+.fr-sum-text{color:var(--ink);font-weight:800;line-height:1.55;min-width:0;overflow-wrap:anywhere}
+.fr-sum-text b{display:inline-block;margin-right:8px;font-size:12px;color:var(--ai)}
+details.fr-block{padding:4px 20px}
+details.fr-block[open]{padding-bottom:16px}
+.fr-desc-more>summary{min-height:32px;padding:2px 30px 2px 0;font-size:13.5px;display:inline-flex}
+.fr-back{grid-column:1 / -1;margin:0;font-size:13px}
+.fr-back a{color:var(--ai);font-weight:700;display:inline-flex;align-items:center;min-height:32px}
+.fr-panels>.fr-tabs{margin-bottom:-8px}
+/* 理由一覧：理由名と件数の1行 */
+.fr-reasons .fr-reason-list{gap:0;margin-top:4px}
+.fr-reasons .fr-reason{padding:0;border-bottom:1px solid var(--line)}
+.fr-reason-more .fr-reason:last-child{border-bottom:0}
+.fr-reason-pick{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:9px 6px;min-height:44px;box-sizing:border-box;
+  color:var(--ink);text-decoration:none;border-radius:6px}
+.fr-reason-pick:hover .fr-reason-name{color:var(--ai);text-decoration:underline}
+.fr-reason-pick[aria-current="true"]{background:var(--ai-pale)}
+.fr-reason-pick[aria-current="true"] .fr-reason-name{color:var(--ai)}
+.fr-reason-pick:focus-visible{outline:3px solid var(--odo);outline-offset:1px}
+.fr-reasons .fr-reason-name{font-size:14.5px;min-width:0}
+.fr-reason-more>summary{margin-top:2px}
+/* 選んだ理由の説明 */
+.fr-reason-reading{display:grid;gap:12px}
+.fr-reason-detail{padding:16px 18px;border:1.5px solid var(--ai);border-radius:14px;background:#fff;min-width:0}
+.fr-reason-detail h5{margin:4px 0 6px;font-size:17px;line-height:1.5}
+.fr-reason-detail p{margin:0 0 6px;font-size:14.5px}
+.fr-js .fr-reason-detail:not([data-on]){display:none}
+.fr-next{display:flex;flex-wrap:wrap;gap:2px 10px;align-items:baseline;margin:10px 0 0!important;padding-top:10px;border-top:1px solid var(--line);font-size:13.5px!important}
+.fr-next span{color:var(--muted);font-size:12.5px;font-weight:700}
+.fr-next a{color:var(--ai);font-weight:800;display:inline-flex;align-items:center;min-height:32px}
+/* 根拠にあたる・制度の確認：主張ごとの折りたたみ */
+.fr-evidence .fr-fold,.fr-checks .fr-fold{border-top:1px solid var(--line);margin-top:6px}
+.fr-evidence .fr-fold[open],.fr-checks .fr-fold[open]{padding-bottom:6px}
+.fr-claim>summary .fr-verdict{flex:none}
+.fr-claim.fr-fold,.fr-check.fr-fold,.fr-sunk-item.fr-fold,.fr-vein.fr-fold{padding-top:0}
+.fr-checks .fr-check.fr-fold:first-of-type{border-top:0;margin-top:0}
+/* ひと目で見る、この論点の推移 */
+.fr-glance{margin-top:16px}
+.fr-glance h4{margin:2px 0 4px;font-size:16px}
+.fr-glance-chart svg{display:block;width:100%;max-width:360px;height:auto;color:var(--ai)}
+.fr-glance-chart .gl-axis{font-size:11px;fill:#7a8291}
+.fr-glance-chart .gl-num{font-size:14px;font-weight:800;fill:var(--ink)}
+.fr-glance-cap{margin:4px 0 0!important;font-size:13.5px!important;font-weight:700;font-variant-numeric:tabular-nums}
+.fr-glance-link{display:inline-flex;align-items:center;min-height:36px;font-size:13.5px;font-weight:800;color:var(--ai)}
+.fr-glance-table>summary{font-size:13px;min-height:36px;padding:4px 30px 4px 0}
+@media (max-width:650px){
+  details.fr-block{padding:2px 14px}
+  details.fr-block[open]{padding-bottom:14px}
+  .fr-reason-detail{padding:14px}
+}
+.fr-evidence-about>summary{font-size:13.5px;min-height:36px;padding:4px 30px 4px 0}
+.fr-checks{margin-top:14px}
+.fr-checks .fr-eyebrow{margin-bottom:2px}
+@media (max-width:650px){.fr-desc{font-size:15px}.fr-evidence h4{font-size:17px}}
+@media (max-width:650px){
+  .fr-grid{gap:14px;margin-top:14px}
+  .fr-main,.fr-side{gap:14px}
+  .fr-glance{margin-top:14px}
+  .fr-sunk,.fr-veins{margin-top:10px;padding:10px 12px}
+}
+@media (max-width:650px){
+  .fr-evidence h4{font-size:16px}
+  .fr-see ul{margin-top:2px}
+  .fr-panel-head{gap:8px 28px}
+}
+.fr-claim>summary{display:block;line-height:1.55}
+.fr-claim>summary .fr-verdict{margin:2px 0 0 6px;vertical-align:1px;line-height:1.5}
+
+/* 憲法改正論議から引き継いだ部品：読書面の見出し、論点の見出しの下の立場の帯と注記、タブの件数 */
+.fr-head{padding:4px 2px 0}
+.fr-head .fr-lead{margin-bottom:0}
+.fr-head-stance{grid-column:1 / -1;min-width:0}
+.fr-head-stance .fr-band{margin:2px 0 6px}
+.fr-stance-mini{font-size:12.5px;gap:2px 14px}
+.fr-stance-mini b{font-size:14px}
+.fr-caveat{margin:6px 0 0;padding:4px 10px;border-left:4px solid var(--vermilion);background:var(--vermilion-soft);
+  color:var(--ink);font-size:12.5px;line-height:1.6}
+.fr-tab small{font-size:11.5px;font-weight:700;color:var(--muted);font-variant-numeric:tabular-nums}
+.fr-tab[aria-current="true"] small{color:#dde6f3}
+.fr-tab.is-other:not([aria-current="true"]){background:var(--paper-2);color:var(--muted)}
+.fr-glance{margin-top:0}
+.fr-glance-chart:empty{display:none}
+span.fr-reason-pick{cursor:default}
+.fb-src-list{margin:2px 0 0;padding-left:18px}
+.fb-src-list li{margin:0}
+
+/* 高齢者免許返納だけの部品：「その他」は冒頭の件数欄と同じ灰色で区切る。理由区分の無い論点の「理由は未公開」は柿色の線で示す */
+.fr-tab.is-other:not([aria-current="true"]){background:var(--paper-2);border-style:dashed}
+.fr-panel[data-issue-panel="elderly-license-revocation-other"]{border-top:5px dashed var(--road)}
+.fr-empty[data-unpublished]{margin:4px 0 0;padding:8px 12px;border-left:4px solid var(--kaki);background:var(--kaki-soft);color:var(--ink);font-size:14px}
+.fr-reasons.is-unpublished{border-color:var(--line);border-width:1px}
+.fr-rechecks{margin:4px 0 0;padding-left:18px;font-size:12.5px;color:var(--muted)}
+.fr-rechecks li{margin:0 0 4px}

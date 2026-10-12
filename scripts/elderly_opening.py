@@ -9,6 +9,9 @@
 出力（既定は quality/prototypes/elderly-license-revocation-opening/）:
   opening-fragment.html  冒頭の部品（マーカー付き）
   index.html             確認用の単独ページ（同じフォルダーの opening.css を読む）
+  opening.css            正本 scripts/elderly_redesign/opening.css の写し（2026-10-12に試作フォルダーから正本を移した）
+
+制度を一次資料で確かめた日は設定の checked_on 1か所。読書面（scripts/elderly_reading.py）と背景もここを読む。
 
 時刻や乱数は使わないので、同じ入力なら何度実行しても同じ出力になる。
 """
@@ -19,6 +22,7 @@ import argparse
 import datetime as dt
 import html
 import json
+import shutil
 from pathlib import Path
 
 import yaml
@@ -26,6 +30,7 @@ import yaml
 ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_CONFIG = ROOT / "configs" / "elderly-license-revocation-opening.json"
 DEFAULT_OUT = ROOT / "quality" / "prototypes" / "elderly-license-revocation-opening"
+ASSETS = ROOT / "scripts" / "elderly_redesign"
 START = "<!-- ELDERLY_OPENING_START -->"
 END = "<!-- ELDERLY_OPENING_END -->"
 
@@ -85,6 +90,11 @@ def load_inputs(config_path: Path) -> dict:
         raise SystemExit(f"THEMES.yaml に {config['theme_id']} がありません")
     if public.get("theme_id") != config["theme_id"]:
         raise SystemExit("公開JSONのテーマIDが設定と一致しません")
+    if "dates" in config:
+        raise SystemExit("確認日は checked_on 1か所に持つ（dates は使わない）")
+    checked = dt.date.fromisoformat(config["checked_on"])
+    if checked < dt.date.fromisoformat(public["claim_verification"]["checked_on"]):
+        raise SystemExit("制度の確認日 checked_on が、主張の照合日より古くなっています")
     return {
         "config": config,
         "public": public,
@@ -237,10 +247,8 @@ def render_count(data: dict) -> str:
         updated=jp_date(public["updated_on"]),
         next=jp_date(data["next_collect"], with_year=False) if data["next_collect"] else "未定",
     )
-    dates = config["dates"]
     checked = c["checked_template"].format(
-        memo_from=jp_date(dates["memo_checked_from"]),
-        memo_to=jp_date(dates["memo_checked_to"], with_year=False),
+        checked=jp_date(config["checked_on"]),
         claims=jp_date(public["claim_verification"]["checked_on"]),
     )
     return (
@@ -254,7 +262,7 @@ def render_count(data: dict) -> str:
         f'<div class="elo-count__issues"><h3>{esc(c["issues_title"])}</h3><p class="elo-count__lead">{esc(c["issues_lead"])}</p>'
         f'<ol class="elo-issues">{"".join(rows)}</ol>'
         f'<p class="elo-count__note">{esc(note)}</p><p class="elo-count__updated">{esc(updated)}</p>'
-        f'<p class="elo-count__updated">{esc(checked)}</p></div>'
+        f'<p class="elo-count__updated" data-checked-on="{esc(config["checked_on"])}">{esc(checked)}</p></div>'
         f"</section>"
     )
 
@@ -301,6 +309,15 @@ def render_page(fragment: str) -> str:
 """
 
 
+def fragment_for(config_path: Path = DEFAULT_CONFIG) -> str:
+    """冒頭の部品（マーカー付き）。読書面の試作（scripts/elderly_reading.py）がこの下に読書面をつなぐ。"""
+    return render_fragment(load_inputs(config_path))
+
+
+def copy_assets(out: Path) -> None:
+    shutil.copyfile(ASSETS / "opening.css", out / "opening.css")
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--config", type=Path, default=DEFAULT_CONFIG)
@@ -311,6 +328,7 @@ def main() -> None:
     args.out_dir.mkdir(parents=True, exist_ok=True)
     (args.out_dir / "opening-fragment.html").write_text(fragment, encoding="utf-8")
     (args.out_dir / "index.html").write_text(render_page(fragment), encoding="utf-8")
+    copy_assets(args.out_dir)
     print(f"wrote {args.out_dir / 'opening-fragment.html'}")
     print(f"wrote {args.out_dir / 'index.html'}")
 

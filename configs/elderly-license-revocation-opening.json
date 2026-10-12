@@ -6,11 +6,8 @@
     "planet_config": "configs/planet/elderly-license-revocation.yaml",
     "themes_registry": "THEMES.yaml"
   },
-  "dates": {
-    "_note": "日付は2つだけ持つ。制度の記述は一次資料メモの確認日（memo_checked_from〜memo_checked_to）。主張の照合日は公開JSONの claim_verification.checked_on（2026-09-30）を読む。現行ページに残る「照合確認日 2026-08-18」は使わない。",
-    "memo_checked_from": "2026-08-30",
-    "memo_checked_to": "2026-09-07"
-  },
+  "checked_on": "2026-10-12",
+  "_checked_on": "制度（年齢の節目・返納の手続き・運転経歴証明書・＃8080・統計）を一次資料で確かめた日。冒頭の注記と、読書面・背景の「◯月◯日時点」はすべてここから作る（1か所だけ）。2026-10-12 に e-Gov 条文API v2（道路交通法 第101条の4・第104条の4・第105条の2・第91条の2）、警察庁の自主返納・認知機能検査・運転技能検査・サポートカー限定免許・安全運転相談窓口のページ、運転免許統計 令和7年版（令和8年版は未公表）で確かめた。一次資料メモ【2026-10-12追記】。主張の照合日は公開JSONの claim_verification.checked_on（2026-09-30）を読む。現行ページに残る「照合確認日 2026-08-18」は使わない。",
   "crumb": ["交通ルール・日常論争", "高齢者の運転免許返納"],
   "title": {
     "phrases": ["免許返納は", "何歳から、", "どう切り出すか"],
@@ -85,7 +82,7 @@
   },
   "count": {
     "label": "SNSの意見",
-    "caption_template": "{source}で集めた公開投稿{collected}件のうち、意見と判定した投稿です（{start}〜{end}）。",
+    "caption_template": "意見と判定した数です。もとにしたのは、{start}から{end}に{source}で集めた公開投稿{collected}件です。",
     "stance_title": "立場の内訳",
     "issues_title": "論点ごとの件数",
     "issues_lead": "義務化の是非は、ここから論点ごとに読みます。",
@@ -93,12 +90,12 @@
     "no_reason_note_template": "{labels}は、投稿を読み直して理由を分ける作業がまだです。件数だけを示しています。",
     "not_poll": "世論調査ではありません。SNSの公開投稿をAIで分類した結果です。",
     "updated_template": "最終更新 {updated}。次回の収集予定は{next}です。",
-    "checked_template": "制度の記述は一次資料で{memo_from}〜{memo_to}に確認しました。投稿の主張と資料の照合は{claims}に確認しています。"
+    "checked_template": "年齢の節目と返納の手続きは、{checked}に条文と警察庁の案内で確かめました。投稿の主張を資料と突き合わせたのは{claims}です。"
   },
   "sources": [
     {"label": "警察庁「運転免許証の自主返納」", "url": "https://www.npa.go.jp/policies/application/license_renewal/jishuhennou.html"},
     {"label": "警察庁「認知機能検査」", "url": "https://www.npa.go.jp/policies/application/license_renewal/ninchi.html"},
-    {"label": "道路交通法（e-Gov法令検索）", "url": "https://elaws.e-gov.go.jp/document?lawid=335AC0000000105"},
+    {"label": "道路交通法（e-Gov法令検索）", "url": "https://laws.e-gov.go.jp/law/335AC0000000105"},
     {"label": "内閣府 令和7年版高齢社会白書（＃8080）", "url": "https://www8.cao.go.jp/kourei/whitepaper/w-2025/html/zenbun/s2_2_4.html"}
   ]
 }
