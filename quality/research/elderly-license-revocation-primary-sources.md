@@ -263,4 +263,5 @@ e-Gov法令API（lawdata/335AC0000000105）の本文、警察庁PDF、警察庁�
 - 報道発表（2026年7月31日）の資料（https://www.npa.go.jp/publications/statistics/koutsuu/jiko/R8kamihanki_bunseki.pdf ）。
 - 75歳以上の運転者による死亡事故は、令和8年6月末で202件。上半期どうしで比べて2年続けて増えた。75歳以上の死亡事故のうち車両単独の事故の割合は42.1%で、75歳未満（24.0%）の約1.8倍。
 - 主張の照合「高齢ドライバーの事故は増えている」（照合日 2026-09-30、判定は「少しずれる」）は令和7年の年間の統計に基づく。上半期の資料は照合の後に読んだので、判定は変えず、読書面で注記として示す。照合データ（`data/verification/elderly-license-revocation-claims.json`）の見直しは次の定期更新の作業。
+- 2026-10-12 司令塔の決定（手順7）：判定「少しずれる」は変えず、令和8年上半期の統計（75歳以上の死亡事故202件、上半期どうしで2年続けて増加）の注記（`configs/elderly-license-revocation-reading.json` の `claim_notes.increase`）を付けた状態で公開する。**次の定期更新（2026-10-14 の回）で照合をやり直す**。やり直すときは、令和7年の年間の統計と資料Wの上半期の統計の両方を読み、照合の文（`scripts/build_elderly_process_sections.py` の FACT_CHECKS `increase` の source・note・verdict と `CHECKED_AT`）を直してから `build_public_registry.py --topic elderly-license-revocation` で公開JSONを作り直す。見直したら注記 `claim_notes.increase` は外す。
 - 確認日：2026-10-12

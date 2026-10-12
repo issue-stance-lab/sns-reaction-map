@@ -31,7 +31,7 @@ import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
 CONFIG = ROOT / "configs" / "elderly-license-revocation-background.json"
-KINDS = ("points", "ledger_text", "stats", "timeline", "faq", "classroom", "unverified")
+KINDS = ("points", "checklist", "ledger_text", "stats", "timeline", "faq", "classroom", "unverified")
 
 
 def esc(value: object) -> str:
@@ -106,6 +106,8 @@ def check(d: dict) -> None:
                     raise SystemExit(f"授業の設定の論点 {r['issue_id']} が公開JSONにありません")
         if row["kind"] == "points" and not row.get("points"):
             raise SystemExit(f"背景の行 {row['id']} に要点がありません")
+        if row["kind"] == "checklist" and (not row.get("items") or any(not (i.get("label") and i.get("text")) for i in row["items"])):
+            raise SystemExit(f"背景の行 {row['id']} の確認項目に見出しか本文がありません")
         if row.get("cause_rewrites") and len(row["cause_rewrites"]) != len(ledger["cause"]):
             raise SystemExit("cause_rewrites の段落の数が背景台帳の cause と違います（台帳が変わったら言い換えも見直す）")
         if row["kind"] == "stats":
@@ -159,6 +161,12 @@ def body_points(d: dict, row: dict, ctx: dict) -> str:
     out.append("</dl>")
     out.append(f'<div class="fb-cite">出典{links(row["sources"])}</div>')
     return "".join(out)
+
+
+def body_checklist(d: dict, row: dict, ctx: dict) -> str:
+    """家族で話す前の確認（編集部の整理。一次資料の記述ではないので確認日は付けない）。"""
+    items = "".join(f'<div><dt>{esc(i["step"])}：{esc(i["label"])}</dt><dd>{esc(i["text"])}</dd></div>' for i in row["items"])
+    return f'<p>{esc(row["lead"])}</p><dl class="fb-editorial fb-checklist">{items}</dl>'
 
 
 def body_ledger_text(d: dict, row: dict, ctx: dict) -> str:
@@ -239,7 +247,7 @@ def body_unverified(d: dict, row: dict, ctx: dict) -> str:
 
 
 BODIES = {
-    "points": body_points, "ledger_text": body_ledger_text, "stats": body_stats, "timeline": body_timeline,
+    "points": body_points, "checklist": body_checklist, "ledger_text": body_ledger_text, "stats": body_stats, "timeline": body_timeline,
     "faq": body_faq, "classroom": body_classroom, "unverified": body_unverified,
 }
 

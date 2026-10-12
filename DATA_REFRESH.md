@@ -1222,6 +1222,20 @@ mainへ取り込む前に、**「合格した」という報告を鵜呑みに�
   山なみの単独更新（`refresh_planet_section.py`）・潮目の単独差し込み（`inject_tide_widget.py`）・論点ごとのX投稿の単独差し込み（`bike_issue_media.py`）を
   掛けない（各スクリプトが skipped／SKIP／停止と出す）。更新経路では元HTMLに掛かる
 
+### 高齢者免許返納の定期更新（新デザインを維持する、2026-10-12〜）
+
+次回の定期更新は **2026-10-14**（THEMES.yaml の `refresh_at`）。この回で次の2つを必ず行う。
+
+- **照合「高齢ドライバーの事故は増えている」をやり直す**: 照合（2026-09-30、判定「少しずれる」）は令和7年の年間の統計に基づく。
+  その後に出た令和8年上半期の統計（75歳以上の運転者による死亡事故202件、上半期どうしで2年続けて増加。一次資料メモの資料W）は、
+  判定を変えずに読書面の注記（`configs/elderly-license-revocation-reading.json` の `claim_notes.increase`）で示している。
+  10/14 の回で両方の統計を読み直し、照合の文（`scripts/build_elderly_process_sections.py` の FACT_CHECKS `increase` と `CHECKED_AT`）を直してから
+  `python3 scripts/build_public_registry.py --topic elderly-license-revocation` を実行する（成功の形: `OK elderly-license-revocation: collected=… opinion=…`）。
+  見直したら注記 `claim_notes.increase` を外す
+- **再読データの `population` は古いまま（注意）**: `data/elderly-license_issues-reread.json` の `population`（意見全体353・221・29）は
+  2026-10-10 の追い読み前の数のまま。新デザインの生成には使っていない（論点ごとの件数は公開JSON、理由区分の件数は明細 `items` から数え直す）ので
+  値は変えていない。次に追い読みしたとき、明細と一緒に直す。この数を画面や照合に使わないこと
+
 ### 読み込み確認のやり方（質と速さの両立）
 
 消費税減税での失敗（機械的なチェックは通ったのに、実際には本文を読まずに使い回した

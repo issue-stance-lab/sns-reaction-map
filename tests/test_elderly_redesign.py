@@ -432,7 +432,7 @@ class AllIssuesAndBackgroundTests(unittest.TestCase):
     def test_rows_are_closed_details(self):
         rows = self.s.select("#elderly-license-revocation-background details.fb-row")
         self.assertEqual([r["id"] for r in rows],
-                         ["bg-renewal", "bg-options", "bg-why", "bg-stats", "bg-timeline", "bg-faq", "bg-classroom", "bg-unverified"])
+                         ["bg-renewal", "bg-options", "bg-family", "bg-why", "bg-stats", "bg-timeline", "bg-faq", "bg-classroom", "bg-unverified"])
         self.assertTrue(all(not r.has_attr("open") for r in rows))
         for r in rows:
             self.assertNotIn("義務化", r.select_one(".fb-title").get_text())
