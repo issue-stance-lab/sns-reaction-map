@@ -18,7 +18,9 @@ ROOT = Path(__file__).resolve().parents[1]
 class ElderlyConnectedTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.current = (ROOT / "docs/elderly-license-revocation-reaction-map.html").read_text(encoding="utf-8")
+        # 新デザイン公開後は、旧形式の元HTML（data/page-sources）を検査する（scripts/elderly_layout.py）
+        from scripts.elderly_layout import source_for_refresh
+        cls.current = source_for_refresh(ROOT).read_text(encoding="utf-8")
         # 候補ページから連動表示の静的ブロックだけを外し、工程6の明示的な有効化を検査する。
         cls.base = re.sub(
             re.escape(connected.START) + r".*?" + re.escape(connected.END) + r"\n?",

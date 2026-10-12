@@ -858,6 +858,24 @@ def main() -> int:
     parser.add_argument("--html-template", type=Path)
     parser.add_argument("--output-html", type=Path)
     args = parser.parse_args()
+    candidate_args = (args.input, args.html_template, args.output_html)
+    page_path = ROOT / "docs" / f"{THEME}-reaction-map.html"
+    if 'name="bike-layout"' in page_path.read_text(encoding="utf-8") and not any(candidate_args):
+        # 新デザイン公開後の単独実行：元HTML（data/page-sources）に公開JSONの集計・論点ごとのX投稿・旧形式の生成・
+        # 山なみと連動表示を掛け、新デザインを掛け直す（bike_layout.py）。--public-counts-only も同じ rebuild に含まれる
+        if str(ROOT) not in sys.path:
+            sys.path.insert(0, str(ROOT))
+        from scripts.bike_layout import rebuild
+        try:
+            changed = rebuild(ROOT, check=args.check)
+        except (IssueCountError, ValueError, OSError, KeyError, TypeError, json.JSONDecodeError) as exc:
+            print(f"ERROR: {exc}", file=sys.stderr)
+            return 1
+        if args.check and changed:
+            print("NG: ページが正典から生成した内容と一致しません", file=sys.stderr)
+            return 1
+        print("UPDATE: HTMLを更新しました" if changed else "OK: 差分なし")
+        return 0
     try:
         if args.public_counts_only:
             if args.check or args.input or args.html_template:

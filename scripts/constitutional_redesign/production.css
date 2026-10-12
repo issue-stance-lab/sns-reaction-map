@@ -1,0 +1,161 @@
+/* 憲法改正論議・新デザインを公開ページに載せるときだけ足す見た目（生成AIと著作権 ai_copyright_redesign/production.css と同じ役目）。
+   冒頭（opening.css）と読書面・背景（reading.css）は変えず、
+   現行ページ（元HTML）から引き継ぐ部品（共通ヘッダー・山なみ・前回の収集との比較・投票・作り方・詳細データ・次に読むテーマ・フッター）を
+   この配色（条文の用紙・墨・藍・朱）に合わせる。 */
+:root{--grad-1:#27496d;--grad-2:#1c2333;--accent:#27496d;--accent-soft:#e3e9f0;--bg:var(--paper)}
+body.constitutional-layout{--panel:var(--card);--line:var(--rule);--ai:var(--indigo);--ai-pale:var(--indigo-soft)}
+body.constitutional-layout{background:var(--paper);color:var(--ink);overflow-x:hidden}
+body.constitutional-layout main{display:block}
+.cap-preview{margin:0;padding:8px 16px;background:#9a7a3e;color:#fff;font-size:13px;font-weight:800;text-align:center}
+.cap-research{margin:10px 0 0}
+.cap-research .caution{margin:0;font-size:13px;line-height:1.75;color:var(--muted)}
+.cap-band{width:min(1180px,calc(100% - 32px));margin:0 auto 40px;padding:28px;background:var(--panel);border:1px solid var(--line);border-radius:18px;box-sizing:border-box}
+.cap-band .panel-title{display:flex;justify-content:space-between;gap:12px;align-items:end;flex-wrap:wrap;margin-bottom:14px}
+.cap-band .panel-title h2{margin:0;font-size:clamp(22px,2.6vw,28px);line-height:1.35}
+.cap-band .panel-title span{color:var(--muted);font-size:13px;font-weight:700}
+/* 前回の収集との比較（元HTMLの潮目のカード TIDE_CARD をそのまま。枠の幅だけ読書面に合わせる） */
+.cap-trend{width:min(1180px,calc(100% - 32px));margin:0 auto 40px}
+.cap-trend .update-dashboard{padding:0;background:transparent}
+.cap-trend .tide-card{max-width:none;margin:0;box-shadow:none;border-color:var(--line)}
+/* このページの作り方（ARTICLE_TRUST をそのまま。枠だけ合わせる） */
+.cap-trust .article-trust{margin:0;max-width:none;border:0;padding:0;background:transparent;box-shadow:none}
+/* 詳細データ（現行ページの規則をそのまま） */
+.cap-detail details{border:1px solid var(--line);border-radius:10px;background:#fff;margin:10px 0;padding:12px}
+.cap-detail summary{cursor:pointer;font-weight:800;color:var(--ai)}
+.cap-detail .table-wrap{overflow-x:auto}
+.cap-detail table{border-collapse:collapse;width:100%;font-size:14px}
+.cap-detail th,.cap-detail td{border-bottom:1px solid var(--line);padding:6px 8px;text-align:left}
+.cap-detail ul{margin:8px 0 0;padding-left:1.2em;font-size:14px}
+/* 投票（元HTMLの規則をそのまま。ボタンの中身は元HTMLの投票スクリプトが作る：論点＝絵文字・名前・説明、立場＝記号・名前・説明） */
+.vote-step-label{display:flex;align-items:center;gap:8px;font-weight:900;margin:18px 0 14px;flex-wrap:wrap}.vote-step-label small{font-weight:400;color:var(--muted)}
+.step-num{display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--accent);color:#fff;font-size:13px;flex-shrink:0}
+#vote-issue-btns{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.vote-issue-btn{display:flex;gap:10px;align-items:flex-start;min-height:48px;border:1px solid var(--line);border-radius:10px;padding:14px;background:#fff;text-align:left;cursor:pointer;font-family:inherit;color:var(--ink)}
+.vote-issue-btn>span:first-child{font-size:22px;line-height:1.2}
+.vote-issue-btn strong,.vote-issue-btn small{display:block}
+.vote-issue-btn small{color:var(--muted);margin-top:4px;line-height:1.6}
+#vote-stance-btns{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.vote-stance-btn{border:1px solid var(--line);border-top:5px solid var(--stance-color);border-radius:10px;padding:14px;background:#fff;text-align:left;cursor:pointer;font-family:inherit;color:var(--ink)}
+.vote-stance-btn b,.vote-stance-btn strong,.vote-stance-btn small{display:block}
+.vote-stance-btn b{color:var(--stance-color);font-size:22px}
+.vote-stance-btn small{color:var(--muted);margin-top:5px;line-height:1.6}
+.vote-issue-btn:hover,.vote-issue-btn:focus-visible,.vote-stance-btn:hover,.vote-stance-btn:focus-visible{border-color:var(--accent);outline:2px solid var(--accent);outline-offset:2px}
+#vote-result{border-left:5px solid var(--accent);background:var(--accent-soft);padding:14px 18px;border-radius:8px}
+#vote-result p{margin:5px 0}
+#vote-redo{border:1px solid var(--line);background:#fff;border-radius:7px;padding:6px 10px;cursor:pointer;font:inherit}
+/* 次に読むテーマ */
+.related-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.related-card{display:block;text-decoration:none;padding:0;overflow:hidden;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--ink)}
+.related-card img{width:100%;aspect-ratio:16/9;object-fit:cover;display:block}
+.related-card div{padding:14px}
+.related-card p{margin:4px 0 0;font-size:13px;color:var(--muted)}
+.fb-print{margin:12px 0 0}
+@media(max-width:760px){.cap-band{padding:20px 16px}.related-grid{grid-template-columns:1fr}#vote-issue-btns,#vote-stance-btns{grid-template-columns:1fr}}
+/* 対話式の山なみ（元HTMLの #planet-block をそのまま写したもの。生成AIと著作権と同じ）。
+   山なみ自身の <style> は暗い地の配色なので、旧ページで theme-design.css・constitutional-connected.css が掛けていた
+   明るい配色と並べ方（立場カード・論点ボタンの格子・海面下の演出を隠す）を、この用紙・藍に合わせて写す。 */
+.cap-planet.panel{width:auto;max-width:none;margin:14px 0 0!important;padding:0!important;background:transparent!important;border:0!important;border-radius:0!important;box-shadow:none!important}
+.cap-planet #planet-block{--bg:#fff;--panel:#fff;--line:#d9d6cb;--fg:#172033;--muted:#5d6578;--accent:#27496d;--rest-dot:#e2dfd3;background:transparent;color:var(--ink,#172033);font-family:inherit;font-size:16px}
+.cap-planet #planet-block > .panel-title{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap;margin:0 0 6px}
+.cap-planet #planet-block > .panel-title h2{margin:0;font-size:20px;line-height:1.4}
+.cap-planet #planet-block > .panel-title span{font-size:12px;font-weight:700;color:var(--muted)}
+.cap-planet #planet-block .q{margin:0 0 4px;font-size:14px;color:var(--muted)}
+.cap-planet #planet-block .cap-research{margin:8px 0 0}
+.cap-planet #planet-block #caution{margin:0;padding:10px 12px;background:var(--paper,#f6f3ea);border:1px solid var(--line);border-radius:8px;font-size:12px;line-height:1.75;color:var(--muted)}
+.cap-planet #planet-block #caution b{color:var(--ink)}
+.cap-planet #planet-block .tap-hint,.cap-planet #planet-block #guesses,.cap-planet-progress{display:none!important}
+.cap-planet #planet-block #modes{display:grid;align-items:stretch;grid-template-columns:repeat(4,minmax(0,1fr));margin:12px 0 0;gap:7px}
+.cap-planet #planet-block #modes button{display:block;width:100%;margin:0;transform:none;font:inherit;font-size:12px;text-align:left;padding:10px;min-height:64px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink);box-shadow:none;cursor:pointer}
+.cap-planet #planet-block #modes button::after{display:none}
+.cap-planet #planet-block #modes .cap-mode-name{display:block;margin-bottom:3px}
+.cap-planet #planet-block #modes .sg-pick-btn .cap-mode-name::before{content:'';display:inline-block;width:7px;height:7px;margin-right:6px;border-radius:50%;background:var(--cap-stance-color)}
+.cap-planet #planet-block #modes strong{font-size:17px;font-variant-numeric:tabular-nums}
+.cap-planet #planet-block #modes small{font-size:11px;font-weight:400;opacity:.85}
+.cap-planet #planet-block #modes button[aria-pressed="true"],.cap-planet #planet-block #list button[aria-pressed="true"]{color:#fff;background:var(--ai,#27496d);border-color:var(--ai,#27496d)}
+.cap-planet #planet-block #list button[aria-pressed="true"] .m{color:#e3e9f0}
+.cap-planet #planet-block .stage{display:flex;flex-direction:column;gap:0;margin-top:8px}
+.cap-planet #planet-block .chart-box{order:0;position:relative;width:100%;margin:0;padding:12px 6px 4px;border:0;border-radius:10px;background:#fbfaf6}
+.cap-planet #planet-block .chart-box #section{width:100%;height:210px;max-height:none;margin-bottom:0;display:block}
+.cap-planet #planet-block .chart-box .dive,.cap-planet #planet-block .chart-box #seafloor,.cap-planet #planet-block .chart-box #seacover,
+.cap-planet #planet-block .chart-box #section > rect[fill="#12314f"],.cap-planet #planet-block .chart-box #section > line[opacity="0.13"]{display:none}
+.cap-planet #planet-block .chart-box #section text{fill:var(--muted)}
+.cap-planet #planet-block .chart-box #section line[stroke="#2b3440"]{stroke:#e2dfd3}
+.cap-planet #planet-block .chart-box .hint{margin:8px 4px 0;font-size:12px;color:var(--muted)}
+.cap-planet #planet-block .floor-note{margin:4px 4px 0;font-size:11px;color:var(--muted)}
+.cap-planet #planet-block #list{order:1;width:100%;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;margin:14px 0 18px;padding:0;list-style:none}
+.cap-planet #planet-block #list li{min-width:0;margin:0}
+.cap-planet #planet-block #list button{width:100%;height:100%;padding:9px 10px;font:inherit;font-size:12px;text-align:left;line-height:1.5;border:1px solid var(--line);border-radius:7px;background:#fff;color:var(--ink);cursor:pointer}
+.cap-planet #planet-block #list .m{display:block;margin:2px 0 0;font-size:11px;color:var(--muted)}
+.cap-planet #planet-block #panel{order:2;width:100%;padding:20px 0 0;margin:0;border:0;border-top:3px solid var(--ai,#27496d);border-radius:0;background:transparent;box-shadow:none;color:var(--ink)}
+.cap-planet #planet-block #panel h2{margin:0 0 6px;font-size:20px;line-height:1.45}
+.cap-planet #planet-block #panel .sub{font-size:13px;color:var(--muted)}
+/* 選択パネルでは、論点の切り替え（上の論点ボタンと重なる）・図解画像（中身を一次資料と突き合わせていない）・
+   旧い理由区分の名前（読書面で言い換えた）を出さない。100マス・件数・立場の内訳はそのまま。 */
+.cap-planet #planet-block #panel .issue-tabs,.cap-planet #planet-block #panel .landing-image,.cap-planet #planet-block #panel .islands{display:none}
+.cap-planet #planet-block #panel .note,.cap-planet #planet-block #panel .cross{background:var(--paper,#f6f3ea);border-color:var(--line);color:var(--muted)}
+.cap-planet #planet-block #panel .cross b,.cap-planet #planet-block #panel .note b{color:var(--ink)}
+.cap-planet #planet-block #panel h2:focus{outline:none}
+.cap-planet #planet-block #panel .back{color:var(--ink);border-color:var(--line);background:#fff}
+.cap-planet #planet-block .dotbox .ro .v{color:var(--ink)}
+/* 100マス：旧ページでは右側に山なみを薄く敷いていた。新ページでは山なみを上に残すので、右側に読み取りを並べる */
+.cap-planet #planet-block .dotbox{display:grid;grid-template-columns:230px minmax(0,1fr);column-gap:24px;align-items:start;background:#fff;border-color:var(--line)}
+.cap-planet #planet-block .dotbox > *{grid-column:2}
+.cap-planet #planet-block .dotbox > .waffle{grid-column:1;grid-row:1 / span 4}
+.cap-planet #planet-block .dotbox .dot-cap{margin-top:0}
+.cap-planet #planet-block .dotbox .ro,.cap-planet #planet-block .dotbox .dot-mech{background:var(--paper,#f5f3ec)}
+.cap-planet #planet-block .sec{margin:18px 0 6px;font-size:15px}
+.cap-planet #planet-block .meta{font-size:12px;color:var(--muted)}
+.cap-planet #planet-block #modes button:focus-visible,.cap-planet #planet-block #list button:focus-visible,.cap-planet #planet-block #panel :focus-visible{outline:3px solid var(--ai,#27496d);outline-offset:3px}
+@media(max-width:760px){
+  .cap-planet #planet-block #modes,.cap-planet #planet-block #list{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .cap-planet #planet-block #modes [data-m="all"]{grid-column:1 / -1;min-height:44px;display:flex;align-items:center;justify-content:space-between}
+  .cap-planet #planet-block #modes small{display:block;margin-top:2px;line-height:1.3}
+  .cap-planet #planet-block .dotbox{display:block}
+  .cap-planet #planet-block .dotbox .dot-cap{margin-top:8px}
+}
+@media(max-width:450px){.cap-planet #planet-block .chart-box #section{height:180px}}
+/* 部活動型の圧縮：前回の収集との比較は要約＋元の潮目のカードの折りたたみ、作り方と詳細データは1つの折りたたみ */
+.cap-trend-glance{padding:24px 28px;background:var(--panel);border:1px solid var(--line);border-radius:18px;box-sizing:border-box;min-width:0}
+.cap-trend-glance h2{margin:4px 0 10px;font-size:clamp(20px,2.6vw,26px);line-height:1.4}
+.cap-trend-spark svg{display:block;width:100%;max-width:560px;height:auto}
+.cap-trend-legend{list-style:none;margin:8px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:4px 16px;font-size:13px;color:var(--muted)}
+.cap-trend-legend li{display:flex;align-items:center;gap:6px}
+.cap-trend-legend i{display:inline-block;width:14px;height:4px;border-radius:2px}
+.cap-trend-lead{margin:10px 0 4px;font-size:14.5px;line-height:1.8}
+.cap-trend-more{margin-top:6px;border-top:1px solid var(--line);min-width:0}
+.cap-trend-more[open]>summary{margin-bottom:10px}
+.cap-method{padding-top:10px;padding-bottom:10px}
+.cap-method>summary{cursor:pointer;list-style:none;position:relative;display:flex;align-items:center;min-height:48px;padding-right:32px;
+  font-size:clamp(18px,2.2vw,22px);font-weight:800;color:var(--ink)}
+.cap-method>summary::-webkit-details-marker{display:none}
+.cap-method>summary::after{content:"＋";position:absolute;right:4px;top:50%;transform:translateY(-50%);color:var(--ai);font-weight:800}
+.cap-method[open]>summary::after{content:"－"}
+.cap-method>summary:focus-visible{outline:3px solid var(--ai);outline-offset:3px;border-radius:8px}
+.cap-method .cap-trust{margin-top:12px}
+.cap-method .cap-band{width:auto;margin:20px 0 0;padding:0;border:0;border-radius:0;background:transparent}
+@media(max-width:720px){.cap-trend-glance{padding:20px 16px}}
+/* 憲法改正論議だけの調整：立場は4つ（「すべて」と合わせて5つのボタン）。選択パネルの、旧ページの図解への案内と
+   中身を隠した理由一覧の見出しは出さない（理由は下の読書面で読む）。次に読むテーマは元HTMLの札の形（画像・名前・説明）に合わせる */
+.cap-planet #planet-block #modes{grid-template-columns:repeat(5,minmax(0,1fr))}
+.cap-planet #planet-block #panel p.sub:has(+ ul.islands),.cap-planet #planet-block #panel p:has(> a[href^="#figure-"]){display:none}
+.related-card strong{display:block;padding:12px 14px 0;font-size:15px}
+.related-card span{display:block;padding:4px 14px 14px;font-size:13px;color:var(--muted)}
+/* 前回の収集と比べると：小さな折れ線と数字2つを横に並べ、論点の欄を短く保つ */
+.fr-glance .fr-glance-chart{display:flex;align-items:center;gap:12px;margin-top:4px}
+.fr-glance .fr-glance-chart svg{flex:none;width:132px;height:auto}
+.fr-glance .fr-glance-cap{margin:0!important}
+.fr-glance .fr-glance-table{margin-top:2px}
+.fr-glance-head{justify-content:space-between;align-items:center;flex-wrap:nowrap}
+.fr-glance-head .fr-glance-link{min-height:28px;letter-spacing:0;font-size:12.5px;white-space:nowrap}
+@media(max-width:760px){
+  .cap-planet #planet-block #modes{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .fr-glance-link{min-height:32px}
+  .fr-glance .fr-eyebrow{margin-bottom:2px}
+  .fr-glance .fr-glance-chart svg{width:80px}
+  .fr-main,.fr-side{gap:14px}
+  /* 次に読むテーマ：スマートフォンでは画像を左に小さく置き、3枚を縦に短く並べる */
+  .related-card{display:grid;grid-template-columns:112px minmax(0,1fr);align-items:center}
+  .related-card img{grid-row:1 / span 2;height:100%;min-height:72px}
+  .related-card strong{padding:10px 12px 0;font-size:14px}
+  .related-card span{padding:2px 12px 10px;font-size:12.5px}
+}

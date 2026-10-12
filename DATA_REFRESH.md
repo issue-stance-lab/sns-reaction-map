@@ -621,6 +621,9 @@ collect_at を迎えたテーマにデータを追加した後、以下を順番
     （立場は、それより前の回を同じAIで判定し直したため、切替の影響を受けない）
   - 論点の「その他」は割合から外す。立場・論点の並びは `scripts/bukatsu_taxonomy.py`（`inject_tide_widget.THEMES` には無いテーマ）。
     ラベルを変えるときは `TREND_THEMES.short_labels` も合わせて直す
+  - **新デザインの「意見の全体像」（2026-10-11〜）**: 元HTMLの対話式の山なみ（`PLANET_SECTION`）を `build_bukatsu_redesign.py` が毎回そのまま写す
+    （app.js が描いていた図の代わり）。手で直す所は無い。山を押すと読書面へ移る橋渡しは `scripts/bukatsu_redesign/planet.js`、見た目は同じ場所の `planet.css`
+    （設計記録 `quality/designs/2026-10-10-bukatsu-production-candidate.md` の「山なみを対話式に戻す」）
 
 - [ ] 生成AIと著作権だけ: **潮目カードは出さない**（2026-10-08に外した。`ai-copyright-tide-widget` が戻ると数字検査が止める）。
   外枠（`<section class="update-dashboard">`）の中の「意見の推移」（立場・論点の2タブ。理由タブと年表の縦線は無い）と、
@@ -909,6 +912,393 @@ mainへ取り込む前に、**「合格した」という報告を鵜呑みに�
   note更新の要否確認。`apply_theme_trust.py` を手で直接流すと全10テーマのページが書き換わるので、
   辺野古以外の差分は戻す（標準の経路では隔離コピーの中だけで、公開物には入らない）
 - 経緯と検証の記録: [quality/reviews/2026-10-09-task69-henoko-standard-route-details.md](quality/reviews/2026-10-09-task69-henoko-standard-route-details.md)
+
+### 皇室典範改正の定期更新（新デザインを維持する、2026-10-11〜）
+
+皇室典範改正のページは2026-10-11から新デザイン（冒頭・論点ごとの読書面・背景の開閉行）で公開している。
+部活動の新デザイン（`scripts/bukatsu_layout.py`・`configs/bukatsu-layout.json`）と同じ型で、
+**旧形式の生成器はこれまでどおり「元HTML」に掛け、全生成の最後に新デザインを組み直す。**
+設計と検査の記録: [quality/designs/2026-10-11-koshitsu-tenpakai-production-candidate.md](quality/designs/2026-10-11-koshitsu-tenpakai-production-candidate.md)
+
+- **`configs/koshitsu-layout.json` の `enabled`**: `true` の間、`refresh_topic.py` の公開候補生成（単一・複数テーマ）は
+  隔離コピーで元HTMLを `docs/` に戻し（`koshitsu_layout.materialize`）、旧形式の全処理のあとに
+  `koshitsu_layout.finish` で元HTMLを保存し直してから新デザインのページを `docs/` に書く。
+  **他テーマの更新でも毎回この処理が走る**（皇室の照合が合わないと、その回の公開候補生成全体が止まる）。
+  `false` に戻すと、公開ページが新デザインのまま「更新設定が無効」で止まる。戻すときは旧形式のページを先に戻すこと
+- **元HTMLの場所**: `data/page-sources/koshitsu-tenpakai.html`（Git管理）。`refresh_adapters/koshitsu.py`・
+  `build_koshitsu_arena.py`（引数なし）はこれを入力にする。手で編集しない。`docs/koshitsu-tenpakai-reaction-map.html` を
+  旧形式の生成器に直接渡すと拒否される（新デザインの再入力防止）
+- **単独で作り直すとき**（データは変えずに見た目や文言だけ直したとき）:
+  `python3 scripts/build_koshitsu_arena.py`（新デザイン公開中は元HTMLと公開ページの両方を作り直す）。
+  成功の形: もう一度 `python3 scripts/build_koshitsu_arena.py --check` を実行して `OK` と出ること
+- **「論点ごとに読む」の山なみ（2026-10-11〜）**: 元HTMLの対話式の山なみ（`PLANET_SECTION` の `#planet-block`・PLANET_DATA・山なみのスクリプト）を
+  `build_koshitsu_redesign.py` が毎回そのまま写す（立場モード6つ・100マス・論点の一覧・見かた）。手で直す所は無い。山を押すと読書面へ移る橋渡しは
+  `scripts/koshitsu_redesign/planet.js`（設計記録の10節）
+- **折りたたみ（2026-10-12〜、部活動型の圧縮）**: 読書面の論点タブ・理由一覧（上位4件＋「ほかのN区分を表示」）・選んだ理由だけの説明・「理由の数え方」・
+  立場（今回案全体への賛否）・投稿例・根拠の照合（同じ心配・制度の確認・主張・資料にしかない話）・論点の説明の2段落目（「続きを読む」）・収集ごとの表の
+  `<details>` は `koshitsu_reading.py` が毎回作る。手で開閉や中身を直す所は無い（見出しの文言は `configs/koshitsu-tenpakai-reading.json` の `compact`。設計記録の11節）
+- **再読データ（理由区分）を追記したとき**: 新しい収集回の意見は、本文を読んで理由区分を決め、
+  `data/koshitsu-tenpakai_issues-reread.json` の `items` に1件ずつ追記し、`buckets` の件数も合わせる。
+  **`items` の件数が公開JSONの意見数と一致しないと新デザインの生成が止まる**（公開JSONを先に更新して再読を
+  後回しにすると、全テーマの公開候補生成が止まる）。追記後は次の順で反映する。
+  1. 共通台帳の指紋を合わせる（上の「定期更新1回分の実務手順」8の `manage_reread_registry.py resync-source`）
+  2. `data/verification/koshitsu-tenpakai-issues-reread.json`（専用ファイル items の写し。数字の出所検査の根拠）を作り直す:
+     `python3 -c "import json;d=json.load(open('data/koshitsu-tenpakai_issues-reread.json',encoding='utf-8'));open('data/verification/koshitsu-tenpakai-issues-reread.json','w',encoding='utf-8').write(json.dumps(d['items'],ensure_ascii=False,indent=2)+chr(10))"`
+     （書式は既存ファイルに合わせる。`git diff --stat` で追記した件数ぶんだけ増えていれば成功）
+  3. `python3 scripts/build_public_registry.py --topic koshitsu-tenpakai`
+  4. 公開候補生成（`--prepare-promotion`）を流す。単独なら `python3 scripts/build_koshitsu_arena.py`
+  5. `python3 scripts/verify_number_provenance.py koshitsu-tenpakai`（新デザインの理由区分の件数を明細から数え直す）
+  投稿の説明文や代表投稿2件は `configs/koshitsu-tenpakai-reading.json`。区分が増えたときだけ直す
+- **語られていない争点の再検索の記録**（`data/verification/koshitsu-tenpakai-sunk-continents.json` の `sns_note`）は
+  画面に出る公開文章。追記したらよみやす検査（`review_with_yomiyasu.py --medium website --strict`）を新デザインの
+  ページに掛ける
+- **施行日（2026-10-24）以降の時制**: 生成は止まらない。冒頭と背景（年表・よくある質問・未確認事項）は
+  公開JSONの更新日（`--as-of` を渡したときはその日）で時制を決める。施行日を過ぎ、施行後の条文をまだ確かめて
+  いない間は「施行される予定でした。施行後の条文は、まだ編集部で確かめていません」と出る（施行後・未確認）。
+  **e-Gov の現行の条文が改正後の内容に切り替わったことを確かめたら**、`configs/koshitsu-tenpakai-opening.json` の
+  `law.enforcement_confirmed_on` に確かめた日（`YYYY-MM-DD`）を入れ、一次資料メモの「確認できなかったこと 7」を
+  解消済みにしてから作り直す。冒頭・年表・FAQ が「施行されました」に切り替わり、未確認事項からその1行が消える。
+  施行日より前の日付を入れると止まる。施行後の文言は `configs/koshitsu-tenpakai-background.json` の
+  `phase_events`（年表）・`phase`（FAQ）・`hide_in`（未確認事項）にあり、欠けていると施行日より前でも生成が止まる
+- 新デザインのページには、テーマ共通の見た目（`apply_theme_design.py`）・授業節の単独適用・信頼情報の単独適用を
+  掛けない（各スクリプトが skipped と出す）。更新経路では元HTMLに掛かる
+
+### 副首都の定期更新（新デザインを維持する、2026-10-11〜）
+
+副首都のページは2026-10-11から新デザイン（冒頭の路線図と地図・論点ごとの読書面・背景の開閉行）で公開している。
+皇室典範改正の新デザイン（上の節）と同じ型で、**旧形式の生成器はこれまでどおり「元HTML」に掛け、全生成の最後に新デザインを組み直す。**
+設計と検査の記録: [quality/designs/2026-10-11-fukushuto-production-candidate.md](quality/designs/2026-10-11-fukushuto-production-candidate.md)
+
+- **`configs/fukushuto-layout.json` の `enabled`**: `true` の間、`refresh_topic.py` の公開候補生成（単一・複数テーマ）は
+  隔離コピーで元HTMLを `docs/` に戻し（`fukushuto_layout.materialize`）、旧形式の全処理（adapter・潮目・finalize・SEO・
+  信頼情報・授業節・テーマ共通の見た目・皇室の新デザイン）のあとに `fukushuto_layout.finish` で元HTMLを保存し直してから
+  新デザインのページを `docs/` に書く。**他テーマの更新でも毎回この処理が走る**（副首都の照合が合わないと、その回の
+  公開候補生成全体が止まる）。`false` に戻すと、公開ページが新デザインのまま「更新設定が無効」で止まる。
+  戻すときは旧形式のページ（`data/page-sources/fukushuto.html`）を先に `docs/` へ戻すこと
+- **元HTMLの場所**: `data/page-sources/fukushuto.html`（Git管理）。`refresh_adapters/fukushuto.py`（潮目の差し込みを含む）・
+  `build_fukushuto_arena.py`（引数なし）はこれを入力にする。手で編集しない。`docs/fukushuto-reaction-map.html` を
+  旧形式の生成器に直接渡すと拒否される（新デザインの再入力防止）。旧ページの検索入口（`fukushuto_search_entry.py`、
+  FAQ 6問）・連動表示・潮目は元HTMLの中でだけ更新され、新デザインには載せない。新デザインの FAQ の構造化データは、
+  背景の「よくある質問（4問）」から毎回作り直す
+- **単独で作り直すとき**（データは変えずに見た目や文言だけ直したとき）:
+  `python3 scripts/build_fukushuto_arena.py`（新デザイン公開中は元HTMLと公開ページの両方を作り直す）。
+  成功の形: もう一度 `python3 scripts/build_fukushuto_arena.py --check` を実行して `OK: 差分なし` と出ること。
+  公開候補を別フォルダに作って見るだけなら
+  `python3 scripts/build_fukushuto_redesign.py --mode release --output-dir quality/prototypes/fukushuto-release`
+  （成功の形: `Built 1 file (release, as_of …); no deployment performed.`。docs/ は変わらない）
+- **「論点ごとに読む」の山なみ（2026-10-11〜）**: 元HTMLの対話式の山なみ（`PLANET_SECTION` の `#planet-block`・PLANET_DATA・山なみのスクリプト）を
+  `build_fukushuto_redesign.py` が毎回そのまま写す（立場モード・100マス・論点の一覧・見かた）。手で直す所は無い。山を押すと読書面へ移る橋渡しは
+  `scripts/fukushuto_redesign/planet.js`（設計記録の10節）
+- **折りたたみ（2026-10-12〜、部活動型の圧縮）**: 読書面の論点タブ・理由一覧（上位4件＋「残りの理由を見る」）・選んだ理由だけの説明・立場別集計・投稿例・
+  根拠の照合・論点の説明の2段落目（「説明の続き」）・収集ごとの表、作り方と詳細データ（「集計の方法と、全データ」）の `<details>` は
+  `fukushuto_reading.py`・`build_fukushuto_redesign.py` が毎回作る。手で開閉や中身を直す所は無い（見出しの文言は `configs/fukushuto-reading.json` の `compact`。設計記録の11節）
+- **再読データ（理由区分）を追記したとき**: 5論点（候補地・防災・災害・優先順位・その他・費用・財源）の新しい意見は、
+  これまでどおり本文を読んで理由区分を決め、`data/fukushuto_5issues-reread.json` の各論点の `items` に1件ずつ追記し、
+  `buckets` の件数も合わせる。**論点ごとの `items` の件数が公開JSONの論点の件数と一致しないと新デザインの生成が止まる**
+  （公開JSONを先に更新して再読を後回しにすると、全テーマの公開候補生成が止まる）。区分ごとの立場の内訳も明細の
+  `stance` から数えるので、明細の立場が公開JSONと違っても止まる。追記後は
+  1. `python3 scripts/build_public_registry.py --topic fukushuto`
+  2. 公開候補生成（`--prepare-promotion`）を流す。単独なら `python3 scripts/build_fukushuto_arena.py`
+  3. `python3 scripts/verify_number_provenance.py fukushuto`（新デザインの理由区分・区分ごとの立場を明細から数え直す。
+     成功の形: `NG 0件`）
+  理由区分の言い換え・「どんな声か」・代表投稿2件は `configs/fukushuto-reading.json`。区分が増えたとき・投稿を
+  差し替えるときだけ直す（完成扱いの論点で言い換えの無い区分があると止まる）。都構想・維新と定義・中身は
+  再読データが無く「理由別に読み直したデータをまだ公開していません」と出る（データが入れば自動で消える）
+- **語られていない争点の再検索の記録**（`data/verification/fukushuto-sunk-continents.json` の `sns_note`・`life_impact`）は
+  画面に出る公開文章。母数 `sns_base` が意見数と違うと生成が止まる（再検索して記録を足す）。追記したらよみやす検査
+  （`python3 scripts/review_with_yomiyasu.py --medium website --strict docs/fukushuto-reaction-map.html`）を
+  新デザインのページに掛ける（成功の形: `完成を止める指摘: 0件`）
+- **時制（意見募集の締切 2026-10-16・施行予定日 2026-10-30）**: 生成は止まらない。冒頭（路線図・「いつ決まる？」）と
+  背景（定義・手続き・年表・よくある質問・未確認事項）は、公開JSONの更新日（`--as-of` を渡したときはその日）で
+  段階を決める。読む日が締切・施行日を過ぎたら、冒頭の路線図と「いつ決まる？」だけは JavaScript が次の段階の文に
+  切り替える（背景は次の更新で切り替わる）。
+  - 締切を過ぎ、結果を確かめていない間: 「締め切った。結果は編集部でまだ確かめていない」。
+    **e-Gov で意見募集の結果公示を確かめたら**、`configs/fukushuto-opening.json` の `comment.result_published_on` に
+    確かめた日を入れて作り直す（締切より前の日付、または基準日が締切より前なのに日付があると止まる）
+  - 施行予定日を過ぎ、施行後の条文を確かめていない間: 「施行予定でした。施行後の条文は編集部で確かめていません」。
+    **e-Gov で施行済みの表示と施行日を確かめたら**、`configs/fukushuto-opening.json` の `law.enforcement_confirmed_on` に
+    確かめた日を入れ、一次資料メモの未確認事項を解消済みにしてから作り直す（施行日より前の日付は止まる）
+  - 段階ごとの文は `configs/fukushuto-opening.json` の `phase_text` と `configs/fukushuto-background.json` の
+    `phase_now`・`phase_comment`・年表の `texts`・FAQ の `phase`・未確認事項の `hide_when`。欠けていると
+    締切・施行日より前でも生成が止まる
+- 新デザインのページには、テーマ共通の見た目（`apply_theme_design.py`）・授業節の単独適用・信頼情報の単独適用・
+  潮目の単独差し込み（`inject_tide_widget.py`）を掛けない（各スクリプトが skipped／SKIP と出す）。更新経路では元HTMLに掛かる
+- 「このページの作り方」（ARTICLE_TRUST）・「詳細データ」・「次に読むテーマ」・投票・SEOメタは元HTMLから文字どおり
+  引き継ぐ。数字が古いときは元HTML側（`build_fukushuto_arena.py`・`apply_theme_trust.py`）で直る
+
+### 生成AIと著作権の定期更新（新デザインを維持する、2026-10-11〜）
+
+生成AIと著作権のページは2026-10-11から新デザイン（冒頭の2問と件数のものさし・論点ごとの読書面・背景の開閉行）で公開している
+（公開切替はオーナー承認待ち。`company/APPROVALS.yaml`）。副首都・皇室典範改正の新デザイン（上の節）と同じ型で、
+**旧形式の生成器はこれまでどおり「元HTML」に掛け、全生成の最後に新デザインを組み直す。**
+設計と検査の記録: [quality/designs/2026-10-11-ai-copyright-production-candidate.md](quality/designs/2026-10-11-ai-copyright-production-candidate.md)
+
+- **`configs/ai-copyright-layout.json` の `enabled`**: `true` の間、`refresh_topic.py` の公開候補生成（単一・複数テーマ）は
+  隔離コピーで元HTMLを `docs/` に戻し（`ai_copyright_layout.materialize`）、旧形式の全処理（adapter・意見の推移・finalize・SEO・
+  信頼情報・授業節・テーマ共通の見た目・皇室と副首都の新デザイン）のあとに `ai_copyright_layout.finish` で元HTMLを保存し直してから
+  新デザインのページを `docs/` に書く。**他テーマの更新でも毎回この処理が走る**（生成AIの照合が合わないと、その回の
+  公開候補生成全体が止まる）。`false` に戻すと、公開ページが新デザインのまま「更新設定が無効」で止まる。
+  戻すときは旧形式のページ（`data/page-sources/ai-copyright.html`）を先に `docs/` へ戻すこと
+- **元HTMLの場所**: `data/page-sources/ai-copyright.html`（Git管理）。`refresh_adapters/ai_copyright.py`（連動表示・
+  「意見の推移」の貼り直しを含む）・`build_ai_copyright_arena.py`（引数なし）はこれを入力にする。手で編集しない。
+  `docs/ai-copyright-reaction-map.html` を旧形式の生成器に直接渡すと拒否される（新デザインの再入力防止）。
+  旧ページの検索入口（`ai_copyright_search_entry.py`・`docs/ai-copyright-connected-page.js`）・連動表示・論点ごとのX投稿14件
+  （`ai_copyright_issue_media.py`）は元HTMLの中でだけ更新され、新デザインには載せない。新デザインの FAQ の構造化データは、
+  背景の「よくある質問（4問）」から毎回作り直す
+- **新デザインが元HTMLから文字どおり引き継ぐもの**: SEOメタ・Article の構造化データ・GA4・AdSense・共通ヘッダー・
+  投票（`ai-copyright-issue-stance-v1`、論点7×立場3）・調査条件（`#caution`）・PLANET_DATA・**「SNS上の意見の推移」
+  （画像4枚 `docs/images/trend/ai-copyright-*.png` と説明。`trend_support` が元HTMLに貼り、画像は adapter が同じ累積候補から作る）**・
+  「このページの作り方」・「詳細データ」・「次に読むテーマ」・フッター。数字が古いときは元HTML側（adapter・`apply_theme_trust.py`）で直る。
+  アリーナデータ（`docs/ai-copyright-arena-data.js`）は新デザインでは読まないが、adapter が引き続き作って公開物に含める
+- **「意見の全体像」の山なみ（2026-10-11〜）**: 元HTMLの対話式の山なみ（`PLANET_SECTION` の `#planet-block`・PLANET_DATA・山なみのスクリプト）を
+  `build_ai_copyright_redesign.py` が毎回そのまま写す（立場モード・100マス・論点の一覧・見かた）。元HTMLの山なみが更新されれば新ページにも載り、手で直す所は無い。
+  山を押すと読書面へ移る橋渡しは `scripts/ai_copyright_redesign/planet.js`（設計記録の10節）
+- **折りたたみ（2026-10-12〜、部活動型の圧縮）**: 読書面の理由一覧（上位4件＋「ほかの理由を読む」）・選んだ理由だけの説明・立場別集計・投稿例・
+  根拠の照合・論点の説明の2段落目（「くわしく」）、意見の推移（「詳しいグラフと表を開く」）、作り方と詳細データ（「調査方法と、集計の全データ」）の
+  `<details>` は、`ai_copyright_reading.py`・`build_ai_copyright_redesign.py` が毎回作る。手で開閉や中身を直す所は無い（見出しの文言は
+  `configs/ai-copyright-reading.json` の `compact`。設計記録の11節）
+- **単独で作り直すとき**（データは変えずに見た目や文言だけ直したとき）:
+  `python3 scripts/build_ai_copyright_arena.py`（新デザイン公開中は、元HTMLに公開JSONの集計と旧形式の生成を掛けてから
+  公開ページを作り直す。アリーナデータも同じ）。成功の形: もう一度 `python3 scripts/build_ai_copyright_arena.py --check` を
+  実行して `OK: 差分なし` と出ること。公開候補を別フォルダに作って見るだけなら
+  `python3 scripts/build_ai_copyright_redesign.py --mode release --output-dir quality/prototypes/ai-copyright-release`
+  （成功の形: `Built 1 file (release, as_of …); no deployment performed.`。docs/ は変わらない）
+- **再読データ（理由区分）を追記したとき**: 5論点（学習データ・無断利用／クリエイター保護・権利／その他／
+  AI生成物の権利・創作性／技術競争・推進）の新しい意見は、本文を読んで理由区分を決め、`data/ai-copyright_issues-reread.json` の
+  各論点の `items` に1件ずつ追記し、`buckets` の件数も合わせる。**論点ごとの `items` の件数が公開JSONの論点の件数と
+  一致しないと新デザインの生成が止まる**（旧ページは「まだ読み直していない分」を残せたが、新デザインは残せない。
+  公開JSONを先に更新して再読を後回しにすると、全テーマの公開候補生成が止まる）。区分ごとの立場の内訳は明細の `stance` から
+  数えるので、明細の立場が公開JSONと違っても止まる。**判定し直し（`rejudge_ai_copyright_wave.py` など）で正典の立場が
+  変わったら、明細の `stance` も正典に合わせる**（2026-10-11 に11件を合わせた記録が `stance_resync_2026_10_11`）。
+  共通台帳（`data/verification/reread/ai-copyright.json`）はこのテーマには無いので `resync-source` は使わない。追記後は
+  1. `python3 scripts/build_public_registry.py --topic ai-copyright`
+  2. 公開候補生成（`--prepare-promotion`）を流す。単独なら `python3 scripts/build_ai_copyright_arena.py`
+  3. `python3 scripts/verify_number_provenance.py ai-copyright`（新デザインの理由区分・区分ごとの立場を明細から数え直す。
+     成功の形: `NG 0件`）
+  理由区分の言い換え・「どんな声か」・代表投稿2件は `configs/ai-copyright-reading.json`。区分が増えたとき・投稿を
+  差し替えるときだけ直す（完成扱いの論点で言い換えの無い区分があると止まる）。法制度・規制整備と利用者モラル・倫理は
+  再読データが無く「理由ごとに読み分けた結果をまだ載せていません」と出る（データが入れば自動で消える）。
+  読書面の生成は非公開の正典を読まないので、GitHub の自動検査でも同じ検査が動く
+- **語られていない争点の再検索の記録**（`data/verification/ai-copyright-sunk-continents.json` の `sns_note`・`life_impact`）と
+  **立場が違っても共通する心配**（`ai-copyright-veins.json`）は画面に出る公開文章。母数 `sns_base` が意見数と違うと生成が止まる
+  （再検索して記録を足す）。追記したらよみやす検査
+  （`python3 scripts/review_with_yomiyasu.py --medium website --strict docs/ai-copyright-reaction-map.html`）を
+  新デザインのページに掛ける（成功の形: `完成を止める指摘: 0件`）
+- **時制（確認日 `checked_on`・プリンシプル・コードの届出開始 2026-10-26）**: 生成は止まらない。
+  - 冒頭と背景の「◯月◯日時点」は `configs/ai-copyright-opening.json` の `checked_on`（制度を確かめた日）1か所から出る。
+    一次資料を確かめ直したらこの日付を進める
+  - 背景（ルールの違い・年表・よくある質問・未確認事項）は、公開JSONの更新日（`--as-of` を渡したときはその日）が届出開始日
+    より前か後かで文を切り替える。開始日を過ぎ、届出の開始をまだ確かめていない間は「始まる予定でした。始まったかどうかは、まだ確かめていません」
+    （開始後・未確認）と出る。**内閣府（内閣官房「AI時代の知的財産権検討会」）のページで届出の開始を確かめたら**、
+    `configs/ai-copyright-opening.json` の `principle_code.filing_confirmed_on` に確かめた日を入れて作り直す（開始日より前の日付、
+    または基準日が開始日より前なのに日付があると止まる）。「始まりました（◯月◯日に確認）」に切り替わり、未確認事項からその1行が消える
+  - 副首都と違い、冒頭には段階の表示が無いので、読む日による JavaScript の切り替えは無い（背景は次の更新で切り替わる）
+  - 段階ごとの文は `configs/ai-copyright-background.json` の `phase_filing`・年表の `texts`・FAQ の `phase_filing`・
+    未確認事項の `hide_when`。欠けていると開始日より前でも生成が止まる
+- 新デザインのページには、テーマ共通の見た目（`apply_theme_design.py`）・授業節の単独適用・信頼情報の単独適用・
+  山なみの単独更新（`refresh_planet_section.py`）・潮目の単独差し込み（`inject_tide_widget.py`）を掛けない
+  （各スクリプトが skipped／SKIP／停止と出す）。更新経路では元HTMLに掛かる
+
+### 憲法改正論議の定期更新（新デザインを維持する、2026-10-12〜）
+
+憲法改正論議のページは2026-10-12から新デザイン（冒頭の決まり方と争点・対話式の山なみ・論点ごとの読書面・背景の開閉行）で公開する
+（公開切替はオーナー承認待ち。`company/APPROVALS.yaml` の `approval-20261012-constitutional-amendment`）。生成AIと著作権（上の節）と同じ型で、
+**旧形式の生成器はこれまでどおり「元HTML」に掛け、全生成の最後に新デザインを組み直す。**
+設計と検査の記録: [quality/designs/2026-10-11-constitutional-amendment-production-candidate.md](quality/designs/2026-10-11-constitutional-amendment-production-candidate.md)
+
+- **`configs/constitutional-layout.json` の `enabled`**: `true` の間、`refresh_topic.py` の公開候補生成（単一・複数テーマ）は
+  隔離コピーで元HTMLを `docs/` に戻し（`constitutional_layout.materialize`）、旧形式の全処理（adapter の山なみ・潮目・連動表示・finalize・
+  SEO・信頼情報・授業節・テーマ共通の見た目・皇室／副首都／生成AIの新デザイン）のあとに `constitutional_layout.finish` で元HTMLを保存し直してから
+  新デザインのページを `docs/` に書く。**他テーマの更新でも毎回この処理が走る**（憲法の照合が合わないと、その回の公開候補生成全体が止まる）。
+  `false` に戻すと、公開ページが新デザインのまま「更新設定が無効」で止まる。戻すときは旧形式のページ
+  （`data/page-sources/constitutional-amendment.html`）を先に `docs/` へ戻すこと
+- **元HTMLの場所**: `data/page-sources/constitutional-amendment.html`（Git管理）。`refresh_adapters/constitutional.py`（山なみ・潮目・連動表示）・
+  `build_constitutional_arena.py`（引数なし）・`inject_tide_widget.py`（潮目の汎用JS・CSSの原型）はこれを入力にする。手で編集しない。
+  `docs/constitutional-amendment-reaction-map.html` を旧形式の生成器に直接渡すと拒否される（新デザインの再入力防止）。
+  旧ページの検索入口（`docs/constitutional-search-entry.*`）・連動表示（`constitutional_connected*.py`・`docs/constitutional-connected*`）・
+  論点ごとのX投稿12件は元HTMLの中でだけ更新され、新デザインには載せない。新デザインの FAQ の構造化データは、
+  冒頭の「よく聞かれること」（4問）と背景の「よくある質問」（4問）から毎回作り直す
+- **新デザインが元HTMLから文字どおり引き継ぐもの**: SEOメタ・Article の構造化データ・GA4・AdSense・投票
+  （`constitutional-amendment-issue-stance-v1`、論点6×立場4）・調査条件（`#caution`）・PLANET_DATA・**前回の収集との比較（潮目のカード。
+  adapter の `_apply_tide` が元HTMLに貼る）**・「このページの作り方」・「詳細データ」・「次に見るテーマ」とクリック計測・フッター。
+  数字が古いときは元HTML側（adapter・`apply_theme_trust.py`）で直る。共通ヘッダーは生成器が静的に置く（元HTMLには無い）
+- **「意見の全体像」の山なみ**: 元HTMLの対話式の山なみ（`PLANET_SECTION` の `#planet-block`・PLANET_DATA・山なみのスクリプト）を
+  `build_constitutional_redesign.py` が毎回そのまま写し、論点タブの上に置く（立場モード・100マス・論点の一覧・見かた）。手で直す所は無い。
+  山を押すと読書面へ移る橋渡しは `scripts/constitutional_redesign/planet.js`
+- **折りたたみ（部活動型の圧縮）**: 読書面の理由一覧（上位4件＋「ほかの理由を読む」）・選んだ理由だけの説明・立場別集計・投稿例・
+  根拠の照合・論点の説明の2段落目（「くわしく」）・「前回の収集と比べると」の累計の表、前回の収集との比較（「立場と論点の比較グラフを開く」）、
+  作り方と詳細データ（「このページの作り方と、集計の全データ」）の `<details>` は、`constitutional_reading.py`・`build_constitutional_redesign.py` が
+  毎回作る（見出しの文言は `configs/constitutional-amendment-reading.json` の `compact`）
+- **単独で作り直すとき**（データは変えずに見た目や文言だけ直したとき）:
+  `python3 scripts/build_constitutional_arena.py`（新デザイン公開中は、元HTMLに公開JSONの集計・山なみ・連動表示を掛けてから
+  公開ページを作り直す）。成功の形: もう一度 `python3 scripts/build_constitutional_arena.py --check` を実行して `OK: 差分なし` と出ること。
+  公開候補を別フォルダに作って見るだけなら
+  `python3 scripts/build_constitutional_redesign.py --mode release --output-dir quality/prototypes/constitutional-amendment-release`
+  （成功の形: `Built 1 file (release, as_of …); no deployment performed.`。docs/ は変わらない）
+- **再読データ（理由区分）を追記したとき（追い読み）**: 新しい意見は本文を読んで理由区分を決め、`data/constitutional-amendment_issues-reread.json` の
+  `items` に1件ずつ追記し、`buckets` の件数も合わせる。**論点ごとの明細の件数が公開JSONの論点の件数と一致しないと新デザインの生成が止まる**
+  （旧ページと違い「まだ読み直していない分」を残せない。公開JSONを先に更新して追い読みを後回しにすると、全テーマの公開候補生成が止まる）。
+  明細には立場が無いので、**追い読みや判定し直しのあとは、毎回立場の対応表を作り直す**:
+  1. `python3 scripts/constitutional_reread_stances.py --made-on YYYY-MM-DD`（その日の日付。このスクリプトだけが非公開の正典を読む。
+     成功すると `data/constitutional-amendment_reread-stances.json` が書き換わる）
+  2. `python3 scripts/build_public_registry.py --topic constitutional-amendment`
+  3. 公開候補生成（`--prepare-promotion`）を流す。単独なら `python3 scripts/build_constitutional_arena.py`
+  4. `python3 scripts/verify_number_provenance.py constitutional-amendment`（新デザインの理由区分・区分ごとの立場を明細と対応表から数え直す。成功の形: `NG 0件`）
+  作り直さないと「再読データの明細と立場の対応表の投稿が一致しません」または「明細の立場の内訳が公開JSONと一致しません」で止まる。
+  対応表には本文・tweet_id を入れない（投稿は post_key で引く）。理由区分の言い換え・「どんな声か」・代表投稿2件は
+  `configs/constitutional-amendment-reading.json`。区分が増えたときは、その区分の `voice` も書く（完成扱いの論点で説明の無い区分があると止まる）
+- **語られていない争点の再検索の記録**（`data/verification/constitutional-amendment-sunk-continents.json` の `sns_note`）と
+  **立場が違っても共通する心配**（`constitutional-amendment-veins.json`）は画面に出る公開文章。母数 `sns_base` が意見数と違うと生成が止まる
+  （再検索して記録を足す）。追記した文は1文80字以内に区切り、よみやす検査
+  （`python3 scripts/review_with_yomiyasu.py docs/constitutional-amendment-reaction-map.html --medium website --strict`。成功の形: `完成を止める指摘: 0件`）を掛ける
+- **時制（確認日 `checked_on`・国民投票法の改正の施行 2026-10-31）**: 生成は止まらない。
+  - 冒頭・読書面・背景の「◯月◯日時点」は `configs/constitutional-amendment-opening.json` の `checked_on`（制度を確かめた日）1か所から出る。
+    背景台帳（`data/verification/constitutional-amendment-background.json`）の `checked_on` より古い日付は入れられない
+  - 冒頭の流れ図の脚注と背景（国民投票法の行・年表・まだ確かめていないこと）は、公開JSONの更新日（`--as-of` を渡したときはその日）が
+    施行日より前か後かで文を切り替える。施行日を過ぎ、施行後の条文をまだ確かめていない間は「施行される予定でした。施行後の条文は
+    編集部で確かめていません」と出る。**10/31 以降に e-Gov で施行後の条文を確かめたら**、`law.enforcement_confirmed_on` に確かめた日を入れて作り直す
+    （施行日より前の日付、または基準日が施行日より前なのに日付があると止まる）
+  - 生成AIと同じく、読む日による JavaScript の切り替えは無い（10/31 をまたいで更新が無いと、次の更新まで「予定です」の文が残る）
+- 新デザインのページには、テーマ共通の見た目（`apply_theme_design.py`）・授業節の単独適用・信頼情報の単独適用・
+  山なみの単独更新（`refresh_planet_section.py`）・潮目の単独差し込み（`inject_tide_widget.py`）を掛けない
+  （各スクリプトが skipped／SKIP／停止と出す）。更新経路では元HTMLに掛かる
+
+### 自転車の青切符の定期更新（新デザインを維持する、2026-10-12〜）
+
+自転車の青切符のページは2026-10-12から新デザイン（冒頭の「何歳から・いくら？」の短答・対話式の山なみ・論点ごとの読書面・背景の開閉行）で公開する
+（公開切替はオーナー承認待ち。`company/APPROVALS.yaml` の `approval-20261012-bike-blue-ticket`）。憲法改正論議（上の節）と同じ型で、
+**旧形式の生成器はこれまでどおり「元HTML」に掛け、全生成の最後に新デザインを組み直す。** 人が読む工程（反対投稿の再読と本文確認記録）は
+上の「自転車青切符だけ、人が読む工程が1つ残っている」のまま変わらない。
+設計と検査の記録: [quality/designs/2026-10-11-bike-blue-ticket-production-candidate.md](quality/designs/2026-10-11-bike-blue-ticket-production-candidate.md)
+
+- **`configs/bike-layout.json` の `enabled`**: `true` の間、`refresh_topic.py` の公開候補生成（単一・複数テーマ）は
+  隔離コピーで元HTMLを `docs/` に戻し（`bike_layout.materialize`）、旧形式の全処理（adapter のアリーナ・山なみ・潮目・連動表示・検索入口・finalize・
+  SEO・信頼情報・授業節・テーマ共通の見た目・皇室／副首都／生成AI／憲法の新デザイン）のあとに `bike_layout.finish` で元HTMLを保存し直してから
+  新デザインのページを `docs/` に書く。**他テーマの更新でも毎回この処理が走る**（自転車の照合が合わないと、その回の公開候補生成全体が止まる）。
+  `false` に戻すと、公開ページが新デザインのまま「更新設定が無効」で止まる。戻すときは旧形式のページ
+  （`data/page-sources/bike-blue-ticket.html`）を先に `docs/` へ戻すこと
+- **元HTMLの場所**: `data/page-sources/bike-blue-ticket.html`（Git管理）。`refresh_adapters/bike.py`（アリーナ・山なみ・潮目・連動表示・検索入口）・
+  `build_bike_arena.py`（引数なし）はこれを入力にする。手で編集しない。`docs/bike-blue-ticket-reaction-map.html` を旧形式の生成器に直接渡すと拒否される
+  （新デザインの再入力防止。`bike_issue_media.py --write-html` も新デザインのページには書かない）。
+  旧ページの検索入口（`scripts/templates/bike_blue_ticket_search_entry.html`・`docs/bike-blue-ticket-search-entry.*`）・連動表示（`bike_blue_ticket_connected*.py`・
+  `docs/bike-blue-ticket-connected*`）・論点ごとのX投稿12件・アリーナの点は元HTMLの中でだけ更新され、新デザインには載せない。
+  新デザインの FAQ の構造化データは、冒頭の「歩道・手信号・支払いの短答」（4問）と背景の「よくある質問」（4問）から毎回作り直す
+- **新デザインが元HTMLから文字どおり引き継ぐもの**: SEOメタ・Article の構造化データ・GA4・AdSense・投票
+  （`bike-blue-ticket-issue-stance-v1`、論点6×立場3。前置きの1文だけ設定 `compact.vote_lead` に差し替え）・調査条件（`#caution`）・PLANET_DATA・
+  **前回の収集との比較（潮目のカード。adapter の `_apply_tide` が元HTMLに貼る）**・「このページの作り方」・「詳細データ」の「注意」
+  （旧体系の3表は載せない）・「次はこのテーマ」とクリック計測・フッター。数字が古いときは元HTML側（adapter・`apply_theme_trust.py`）で直る
+- **「意見の全体像」の山なみ**: 元HTMLの対話式の山なみ（`PLANET_SECTION` の `#planet-block`・PLANET_DATA・山なみのスクリプト）を
+  `build_bike_redesign.py` が毎回そのまま写し、論点タブの上に置く。手で直す所は無い。写すときに変えるのは、連動表示の橋渡しの
+  「読み込み時に件数最多の論点へ自動で着地する」処理だけ（読書面の既定の論点を、ハッシュ・履歴に触れずに選ぶ処理に置き換える。
+  元HTMLの該当箇所が変わると生成が止まる）。山を押すと読書面へ移る橋渡しは `scripts/bike_redesign/planet.js`
+- **折りたたみ（部活動型の圧縮）**: 読書面の理由一覧（上位4件＋「ほかの理由を読む」）・選んだ理由だけの説明・立場別集計・投稿例・根拠の照合・
+  論点の説明の2段落目（「くわしく」）・「前の収集回との違い」の累計の表、前回の収集との比較（「グラフで立場と論点の変化を見る」）、
+  作り方と詳細データ（「このページの作り方と詳細データ」）の `<details>` は、`bike_reading.py`・`build_bike_redesign.py` が毎回作る
+  （見出しの文言は `configs/bike-blue-ticket-reading.json` の `compact`）
+- **単独で作り直すとき**（データは変えずに見た目や文言だけ直したとき）:
+  `python3 scripts/build_bike_arena.py`（新デザイン公開中は、元HTMLに公開JSONの集計・論点ごとのX投稿・アリーナ・山なみと連動表示を掛けてから
+  公開ページを作り直す）。成功の形: もう一度 `python3 scripts/build_bike_arena.py --check` を実行して `OK: 差分なし` と出ること。
+  公開候補を別フォルダに作って見るだけなら
+  `python3 scripts/build_bike_redesign.py --mode release --output-dir quality/prototypes/bike-blue-ticket-release`
+  （成功の形: `Built 1 file (release, as_of …); no deployment performed.`。docs/ は変わらない）
+- **再読データ（理由区分）を追記したとき**: 定期更新では adapter が累積候補から `data/bike-blue-ticket_issues-reread.json` と
+  **立場の対応表 `data/bike-blue-ticket_reread-stances.json`** を作り直し、昇格対象に含める（手作業は要らない）。
+  **論点ごとの明細の件数が公開JSONの論点の件数と一致しないと新デザインの生成が止まる**（旧ページと違い「まだ読み直していない分」を残せない）。
+  定期更新の外で再読データを直したとき（判定し直し・追い読み）は、毎回立場の対応表を作り直す:
+  1. `python3 scripts/bike_reread_stances.py --made-on YYYY-MM-DD`（その日の日付。このスクリプトだけが非公開の正典を読む。
+     成功すると `wrote data/bike-blue-ticket_reread-stances.json（N件）` か `変更なし` と出る）
+  2. `python3 scripts/build_public_registry.py --topic bike-blue-ticket`
+  3. 単独なら `python3 scripts/build_bike_arena.py`
+  4. `python3 scripts/verify_number_provenance.py bike-blue-ticket`（新デザインの理由区分・区分ごとの立場を明細と対応表から数え直す。成功の形: `NG 0件`）
+  作り直さないと「再読データの明細と立場の対応表の投稿が一致しません」などで止まる。対応表には本文・tweet_id を入れない（投稿は post_key で引く）。
+  理由区分の言い換え・「どんな声か」・代表投稿2件は `configs/bike-blue-ticket-reading.json`。区分が増えたときは、その区分の `voice` も書く
+- **資料にしかない話**（`data/verification/bike-blue-ticket-sunk-continents.json` の `life_impact`・`sns_note`）は画面に出る公開文章。
+  adapter が `sns_note` の末尾に追加確認の記録を書き足す。直した文は1文80字以内・読点3個以内に区切り、よみやす検査
+  （`python3 scripts/review_with_yomiyasu.py docs/bike-blue-ticket-reaction-map.html --medium website --strict`。成功の形: `完成を止める指摘: 0件`）を掛ける
+- **確認日 `checked_on`**: 冒頭・読書面・背景の「◯月◯日時点」は `configs/bike-blue-ticket-opening.json` の `checked_on`（制度を確かめた日）1か所から出る。
+  背景台帳（`data/verification/bike-blue-ticket-background.json`、2026-10-12 に「走る場所」を警察庁FAQどおりに直した）の `checked_on` より古い日付は入れられない。
+  出典ごとの確認日が `checked_on` より後でも止まる。施行済み（2026-04-01）なので、読む日や基準日による文の切り替えは無い
+- 新デザインのページには、テーマ共通の見た目（`apply_theme_design.py`）・授業節の単独適用・信頼情報の単独適用・
+  山なみの単独更新（`refresh_planet_section.py`）・潮目の単独差し込み（`inject_tide_widget.py`）・論点ごとのX投稿の単独差し込み（`bike_issue_media.py`）を
+  掛けない（各スクリプトが skipped／SKIP／停止と出す）。更新経路では元HTMLに掛かる
+
+### 高齢者免許返納の定期更新（新デザインを維持する、2026-10-12〜）
+
+高齢者免許返納のページは2026-10-12から新デザイン（冒頭の「何歳から」の短答と年齢のものさし・対話式の山なみ・論点ごとの読書面・背景の開閉行）で公開する
+（公開切替はオーナー承認待ち。`company/APPROVALS.yaml` の `approval-20261012-elderly-license-revocation`）。自転車の青切符（上の節）と同じ型で、
+**旧形式の生成器はこれまでどおり「元HTML」に掛け、全生成の最後に新デザインを組み直す。**
+設計と検査の記録: [quality/designs/2026-10-11-elderly-license-revocation-production-candidate.md](quality/designs/2026-10-11-elderly-license-revocation-production-candidate.md)
+
+次回の定期更新は **2026-10-14**（THEMES.yaml の `refresh_at`）。この回で次の3つを必ず確かめる。
+
+- **新しい意見が入った回は、追い読みしないと全テーマの公開候補生成が止まる**: 理由区分がある2論点（義務化・事故防止、地方の足・移動権）は、
+  再読データ（`data/elderly-license_issues-reread.json`）の明細の件数が公開JSONの論点の件数と一致しないと新デザインの生成
+  （`elderly_layout.finish`）が止まる。`finish` は**どのテーマの公開候補生成でも最後に走る**ので、高齢者の新しい意見を追い読みしないままだと、
+  その回の公開候補生成全体が止まる（旧ページと違い「まだ読み直していない分」を残せない）。10/14 の回で新しい意見があれば、
+  その回のうちに2論点の新しい意見を追い読みして、明細（`items`。`tweet_id`・`main_issue`・**`stance`**・`bucket`）と `buckets` の件数を足す。
+  明細の `stance` は正典の `classification.stance` をそのまま書く（立場の対応表は無い。`stance` が無い明細があると adapter の
+  `check_reread_stances` が「立場（stance）がありません」で止まる）。新規0件の回は公開候補を作らないので止まらない
+  （2026-10-12 に隔離コピーで新規0件の 10/14 を模擬し、新デザインのまま通ることを確かめた）
+- **照合「高齢ドライバーの事故は増えている」をやり直す**: 照合（2026-09-30、判定「少しずれる」）は令和7年の年間の統計に基づく。
+  その後に出た令和8年上半期の統計（75歳以上の運転者による死亡事故202件、上半期どうしで2年続けて増加。一次資料メモの資料W）は、
+  判定を変えずに読書面の注記（`configs/elderly-license-revocation-reading.json` の `claim_notes.increase`）で示している。
+  10/14 の回で両方の統計を読み直し、照合の文（`scripts/build_elderly_process_sections.py` の FACT_CHECKS `increase` と `CHECKED_AT`）を直してから
+  `python3 scripts/build_public_registry.py --topic elderly-license-revocation` を実行する（成功の形: `OK elderly-license-revocation: collected=… opinion=…`）。
+  見直したら注記 `claim_notes.increase` を外す
+- **取得期間は自動で伸びない**: THEMES.yaml の `sample_period_source: owner_confirmed` なので、収集した回まで `sample_period` を手で伸ばす
+  （伸ばさないと公開候補生成の `verify_sample_periods.py --generate` が「取得期間の終わりが最終更新日と違う」で止まる。新デザイン以前からの動き）
+
+その他の項目（自転車の節と同じ並び）:
+
+- **`configs/elderly-layout.json` の `enabled`**: `true` の間、`refresh_topic.py` の公開候補生成（単一・複数テーマ）は
+  隔離コピーで元HTMLを `docs/` に戻し（`elderly_layout.materialize`）、旧形式の全処理（adapter のアリーナ・潮目、finalize、山なみと連動表示、
+  SEO・信頼情報・授業節・テーマ共通の見た目・他テーマの新デザイン）のあとに `elderly_layout.finish` で元HTMLを保存し直してから
+  新デザインのページを `docs/` に書く。`false` に戻すと、公開ページが新デザインのまま「更新設定が無効」で止まる。戻すときは旧形式のページ
+  （`data/page-sources/elderly-license-revocation.html`）を先に `docs/` へ戻すこと
+- **元HTMLの場所**: `data/page-sources/elderly-license-revocation.html`（Git管理）。`refresh_adapters/elderly.py`（アリーナ・潮目）・
+  `build_elderly_arena.py`（引数なし）・`refresh_planet_section.py`（山なみ・連動表示）はこれを入力にする。手で編集しない。
+  `docs/elderly-license-revocation-reaction-map.html` を旧形式の生成器に直接渡すと拒否される（`elderly_issue_media.py --write-html` も新デザインのページには書かない）。
+  旧ページの検索入口（ページ直書きの SEARCH_ENTRY・`docs/elderly-search-entry.*`）・連動表示（`elderly_connected*.py`・`docs/elderly-connected*`）・
+  立場の帯（STANCE_GLANCE）・論点カード（ELDERLY_ISSUE_MEDIA）・アリーナの点は元HTMLの中でだけ更新され、新デザインには載せない。
+  新デザインの FAQ の構造化データは、冒頭の「よく検索される疑問」（6問）と背景の「よくある質問」（3問）から毎回作り直す
+- **新デザインが元HTMLから文字どおり引き継ぐもの**: SEOメタ・Article の構造化データ・GA4・AdSense・投票
+  （`elderly-license-revocation-issue-stance-v1`、論点6×立場3。前置きの文も元のまま）・調査条件（`#caution`）・PLANET_DATA・
+  **前の収集回との比較（潮目のカード。adapter の `_apply_tide` が元HTMLに貼る）**・「このページの作り方」・「詳細データ」の3表
+  （論点別・スタンス別・表現強度別）・「次に見るテーマ」とクリック計測・フッター。数字が古いときは元HTML側（adapter・`apply_theme_trust.py`）で直る
+- **「意見の全体像」の山なみ**: 元HTMLの対話式の山なみ（`PLANET_SECTION` の `#planet-block`・PLANET_DATA・山なみのスクリプト）を
+  `build_elderly_redesign.py` が毎回そのまま写し、論点タブの上に置く。手で直す所は無い。写すときに変えるのは、連動表示の橋渡し
+  （ELDERLY_CONNECTED_BRIDGE の `initialLand`）の「読み込み時に件数最多の論点へ自動で着地する」処理だけ（読書面の既定の論点を、ハッシュ・履歴に
+  触れずに選ぶ処理に置き換える。元HTMLの該当箇所が変わると生成が止まる）。山を押すと読書面へ移る橋渡しは `scripts/elderly_redesign/planet.js`
+- **折りたたみ（部活動型の圧縮）**: 読書面の理由一覧（上位4件＋「ほかの理由を開く」）・選んだ理由だけの説明・立場ごとの件数と割合・投稿の例・
+  資料に照らす・論点の説明の2段落目（「くわしく」）・累計の表、前の収集回との比較（「グラフで立場と論点の変化を見る」）、
+  作り方と詳細データ（「このページの作り方と詳細データ」）の `<details>` は、`elderly_reading.py`・`build_elderly_redesign.py` が毎回作る
+  （見出しの文言は `configs/elderly-license-revocation-reading.json` の `compact`）
+- **単独で作り直すとき**（データは変えずに見た目や文言だけ直したとき）:
+  `python3 scripts/build_elderly_arena.py`（新デザイン公開中は、元HTMLに公開JSONの集計・旧形式の生成・山なみと連動表示を掛けてから
+  公開ページを作り直す）。成功の形: もう一度 `python3 scripts/build_elderly_arena.py --check` を実行して `OK: 差分なし` と出ること。
+  公開候補を別フォルダに作って見るだけなら
+  `python3 scripts/build_elderly_redesign.py --mode release --output-dir quality/prototypes/elderly-license-revocation-release`
+  （成功の形: `Built 1 file (release, as_of …); no deployment performed.`。docs/ は変わらない）
+- **再読データ（理由区分）を追記したとき**（定期更新の外の追い読み・判定し直しも同じ）:
+  1. 明細（`items`）と `buckets` の件数を足す。明細には `stance` を必ず書く
+  2. `python3 scripts/build_public_registry.py --topic elderly-license-revocation`
+  3. 単独なら `python3 scripts/build_elderly_arena.py`
+  4. `python3 scripts/verify_number_provenance.py elderly-license-revocation`（新デザインの理由区分・区分ごとの立場を明細から数え直す。成功の形: `NG 0件`）
+  **未再読の4論点（適性検査強化57・自主返納支援26・代替交通整備25・その他25、計133件、2026-09-30時点）**を追い読みして、`buckets` に論点を足し、
+  `configs/planet/elderly-license-revocation.yaml` の `sub_issues` にその論点を足せば、読書面の「理由は未公開」の1行は自動で理由一覧に変わる
+  （そのとき設定の `issues.{論点ID}.reasons` に区分ごとの `voice` を書く。無いと「完成扱いの論点で、説明（voice）の無い理由区分があります」で止まる）
+- **再読データの `population` は古いまま（注意）**: `data/elderly-license_issues-reread.json` の `population`（意見全体353・221・29）は
+  2026-10-10 の追い読み前の数のまま。新デザインの生成には使っていない（論点ごとの件数は公開JSON、理由区分の件数は明細 `items` から数え直す）ので
+  値は変えていない。次に追い読みしたとき、明細と一緒に直す。この数を画面や照合に使わないこと
+- **資料にしかない話**（`data/verification/elderly-license-revocation-sunk-continents.json` の `life_impact`・`sns_note`）は画面に出る公開文章。
+  直した文は1文80字以内・読点3個以内に区切り、よみやす検査
+  （`python3 scripts/review_with_yomiyasu.py docs/elderly-license-revocation-reaction-map.html --medium website --strict`。成功の形: `完成を止める指摘: 0件`）を掛ける
+- **確認日 `checked_on`**: 冒頭・読書面・背景の「◯月◯日時点」は `configs/elderly-license-revocation-opening.json` の `checked_on`（制度を確かめた日）1か所から出る。
+  主張の照合日・背景台帳の確認日より古い日付は入れられない。一次資料メモの節の確認日が `checked_on` より後でも止まる。期限付きの制度イベントは無いので、
+  読む日や基準日による文の切り替えは無い
+- 新デザインのページには、テーマ共通の見た目（`apply_theme_design.py`）・授業節の単独適用・信頼情報の単独適用・
+  山なみの単独更新（`refresh_planet_section.py`）・潮目の単独差し込み（`inject_tide_widget.py`）・論点ごとのX投稿の単独差し込み（`elderly_issue_media.py`）を
+  掛けない（各スクリプトが skipped／SKIP／停止と出す）。更新経路では元HTMLに掛かる
 
 ### 読み込み確認のやり方（質と速さの両立）
 

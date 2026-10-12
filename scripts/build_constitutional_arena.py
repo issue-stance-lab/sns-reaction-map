@@ -1020,6 +1020,22 @@ def main() -> int:
     parser.add_argument("--output-html", type=Path, help="書き出し先（既定は読み込んだHTML）")
     args = parser.parse_args()
     candidate_args = (args.input, args.html_template, args.output_html)
+    if 'name="constitutional-layout"' in PAGE.read_text(encoding="utf-8") and not any(candidate_args):
+        # 新デザイン公開後の単独実行：元HTML（data/page-sources）に公開JSONの集計と旧形式の生成・連動表示を掛け、
+        # 新デザインを掛け直す（constitutional_layout.py）。--public-counts-only も同じ rebuild に含まれる
+        if str(ROOT) not in sys.path:
+            sys.path.insert(0, str(ROOT))
+        from scripts.constitutional_layout import rebuild
+        try:
+            changed = rebuild(ROOT, check=args.check)
+        except (IssueCountError, ValueError, OSError, KeyError, TypeError, json.JSONDecodeError) as exc:
+            print(f"ERROR: {exc}", file=sys.stderr)
+            return 1
+        if args.check and changed:
+            print("NG  ページが正典から生成した内容と一致しません", file=sys.stderr)
+            return 1
+        print("UPDATE: HTMLを更新しました" if changed else "OK: 差分なし")
+        return 0
     if args.public_counts_only:
         if args.check or args.input or args.html_template:
             parser.error("--public-counts-onlyは--output-html以外と併用できません")

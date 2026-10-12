@@ -96,7 +96,8 @@ class ClassroomPageTests(unittest.TestCase):
             with self.subTest(theme=theme_id):
                 text = (ROOT / url).read_text(encoding="utf-8")
                 classroom_index = text.index(CLASSROOM_START)
-                trust_index = text.index(TRUST_START)
+                # 皇室典範の新デザインは「このページの作り方」を背景の行 #bg-method に置く
+                trust_index = text.index('id="bg-method"') if 'name="koshitsu-layout"' in text else text.index(TRUST_START)
                 self.assertLess(classroom_index, trust_index, f"{theme_id}: 節がARTICLE_TRUST_STARTより後ろにある")
 
     def test_takaichi_page_has_no_classroom_section(self):

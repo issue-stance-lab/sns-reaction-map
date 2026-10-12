@@ -20,7 +20,9 @@ from scripts.seo import apply_theme_trust as trust  # noqa: E402
 class FukushutoConnectedTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.original = (ROOT / "docs/fukushuto-reaction-map.html").read_text(encoding="utf-8")
+        # 新デザイン公開後は、旧形式の元HTML（data/page-sources）を検査する（scripts/fukushuto_layout.py）
+        from scripts.fukushuto_layout import source_for_refresh
+        cls.original = source_for_refresh(ROOT).read_text(encoding="utf-8")
         cls.page = connected.apply(cls.original, activate=True)
 
     def test_activation_is_explicit_and_other_themes_are_unchanged(self):

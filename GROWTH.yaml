@@ -44,6 +44,19 @@ phase:
 kpi:
   # 週1回、月曜に更新。値が取れない週は null でよい（欠測を偽装しない）
   snapshots:
+    - date: 2026-10-11
+      weekly_users: 13           # GA4: 過去7日アクティブユーザー（公開ホスト限定）
+      pageviews: 98              # GA4: 過去7日（公開ホスト限定）
+      pages_per_session: 2.042   # GA4: 98 PV / 48 sessions
+      votes_total: 25            # Supabase
+      votes_week: null           # Supabase: 未取得
+      gsc_impressions: 84        # Search Console: 28日間（修正後5回連続で取得正常）
+      gsc_clicks: 2              # Search Console: 28日間
+      x_followers: 23            # Xプロフィール画面（x.com/sns_hannou_ma）をChromeで開いて確認した実測値（2026-10-11夜。フォロー中14・ポスト376。10-06は21）
+      notes: >-
+        X週次レビュー（2026-10-11）の定例タスクで fetch_growth_kpi.py を共有ツリーで実行して取得。
+        10-06比で weekly_users 18→13、PV 94→98、GSC impressions 64→84（clicks 2→2）。
+        X経由は20セッション／4ユーザーで、16セッションは post_20260921 の1ユーザーの繰り返し訪問。
     - date: 2026-10-06
       weekly_users: 18           # GA4: 過去7日アクティブユーザー（公開ホスト限定）
       pageviews: 94              # GA4: 過去7日（公開ホスト限定）
@@ -612,7 +625,7 @@ recurring:
         （2026-09-21、引用RTを運用枠として復活。返信と同じ予測重み5.0のため）。
         content/x/weekly-reviews.md で到達・会話・関心・流入を確認し、
         翌週に変える変数を1つだけ決める。プロフィール・固定ポストも見直す
-    last_run: 2026-10-04       # 10-04に論点ポスト4本（部活動・形式4型の検証）を投稿。10-01〜10-03にもリプライ・引用RTを投稿（10-02・10-03分は未マージのtask/x-20261002にのみ記録）。週次レビューは2026-10-04に記録
+    last_run: 2026-10-11       # 10-05〜10-11にリプライ22本・論点ポスト5本を投稿（最終投稿は10-11 17:35）。週次レビューは2026-10-11に記録（content/x/weekly-reviews.md「2026-10-05〜2026-10-11」）
     procedure: >-
       正典 .claude/skills/x-daily/SKILL.md に従う。先に対象者と追加価値を判定し、通過した候補だけを
       返信数・表示速度・時事性で並べ替える。画像と問いかけは必須にせず、理解や会話を助ける場合だけ使う。
@@ -638,12 +651,13 @@ recurring:
       「RealGraph」関係性スコア説（同じ相手と間隔を空けて繰り返しやり取りすると有利）を検討したが、
       一次資料未確認のため今回は見送り、Xコミュニティ機能は2026年に廃止案内が出ているため提案から除外した。
       詳細は `.claude/skills/x-daily/SKILL.md` §1・§4、`X_POSTING_GUIDE.md` §6。
+      2026-10-12、オーナー指示を2点追加。(1)**投稿文の誤りは、こちらから訂正ポストを出さない。指摘の返信が付いたときに、その返信で訂正する。**記録は公開の有無と関係なく content/x/posts.md に必ず残す。(2)**閣議決定・国会提出があった日は、法案本体（概要・要綱・法律案）を取りに行ってから書く。**報道と大綱だけを根拠にしない。2026-10-09の消費税減税法案の閣議決定後、大綱だけで3日間6本投稿し、「軽減税率の対象」（飲食料品＋定期購読新聞）と「今回の引下げの対象」（飲食料品だけ）を同じものとして書いた誤りが出た。法案本体は `quality/research/consumption-tax-cut-primary-sources.md` の資料W〜W-3に登録済み。
 
   update-work-queue:
     title: データ更新（収集→本文確認→公開を1セッションで）の遅れ確認
     cadence: 毎日22時（自動実行、課題86。cronの日跨ぎ制約のため「2日に1回」から変更）
     stale_after_days: 3
-    last_run: 2026-10-09   # consumption-tax-cut: あと1日
+    last_run: 2026-10-11   # constitutional-amendment: あと2日
     procedure: >-
       THEMES.yamlのpending_wave（収集済み・未公開の回）があれば最優先で報告し、次にcollect_at
       （=refresh_at。2026-09-25から予定日は1本）が一番遅れているテーマを1つ報告する（読む・確定はしない。

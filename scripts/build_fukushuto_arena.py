@@ -1064,6 +1064,24 @@ def main() -> int:
     parser.add_argument("--output-html", type=Path, help="書き出し先（既定は読み込んだHTML）")
     parser.add_argument("--public-counts-only", action="store_true", help="公開JSONから集計表示だけを更新する")
     args = parser.parse_args()
+    published = ROOT / "docs" / f"{THEME}-reaction-map.html"
+    if 'name="fukushuto-layout"' in published.read_text(encoding="utf-8") and not (
+            args.input or args.html_template or args.output_html):
+        # 新デザイン公開後の単独実行：元HTMLを作り直し、新デザインを掛け直す（fukushuto_layout.py）。
+        # --public-counts-only も元HTMLの集計を貼り直してから新デザインを掛け直す（同じ rebuild に含まれる）
+        if str(ROOT) not in sys.path:
+            sys.path.insert(0, str(ROOT))
+        from scripts.fukushuto_layout import rebuild
+        try:
+            changed = rebuild(ROOT, check=args.check)
+        except ValueError as exc:
+            print(f"ERROR: {exc}", file=sys.stderr)
+            return 1
+        if args.check and changed:
+            print("NG  ページが正典から生成した内容と一致しません", file=sys.stderr)
+            return 1
+        print("UPDATE: HTMLを更新しました" if changed else "OK: 差分なし")
+        return 0
     try:
         if args.public_counts_only:
             if args.check or args.input or args.html_template:

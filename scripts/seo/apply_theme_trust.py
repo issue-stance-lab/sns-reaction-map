@@ -402,6 +402,11 @@ def main() -> int:
         if not path.is_file():
             raise FileNotFoundError(path)
         source = path.read_text(encoding="utf-8")
+        layout = next((name for name in ("koshitsu-layout", "fukushuto-layout", "ai-copyright-layout", "constitutional-layout", "bike-layout", "elderly-layout") if f'name="{name}"' in source), None)
+        if layout:
+            # 新デザインはSEOメタ・作り方を元HTMLから引き継ぐ（更新経路では元HTMLにこの処理を掛けてから適用する）
+            print(f"skipped {path.relative_to(PROJECT_ROOT)} ({layout})")
+            continue
         if args.observations_only:
             updated = apply_observations_only(source, theme)
         else:

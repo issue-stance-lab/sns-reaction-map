@@ -23,6 +23,9 @@ def read(*parts):
 class FukushutoTaxonomyTest(unittest.TestCase):
     def setUp(self):
         self.html = read("docs", "fukushuto-reaction-map.html")
+        if 'name="fukushuto-layout"' in self.html:
+            # 新デザイン公開後は、潮目・山なみを持つ旧形式の元HTML（data/page-sources）を検査する
+            self.html = read("data", "page-sources", "fukushuto.html")
 
     def test_classifier_uses_the_shared_definition(self):
         self.assertEqual(classifier.ISSUES, taxonomy.ISSUES)

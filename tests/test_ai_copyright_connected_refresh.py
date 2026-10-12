@@ -22,7 +22,9 @@ from refresh_planet_section import refresh, _apply_connected_display
 class AiCopyrightConnectedRefreshTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.original = (ROOT / "docs/ai-copyright-reaction-map.html").read_text(encoding="utf-8")
+        # 新デザイン公開後は、旧形式の元HTML（data/page-sources）を検査する（scripts/ai_copyright_layout.py）
+        from scripts.ai_copyright_layout import source_for_refresh
+        cls.original = source_for_refresh(ROOT).read_text(encoding="utf-8")
         cls.enabled_page = connected.apply(cls.original, activate=True)
         cls.data = connected.planet_data(cls.enabled_page)
 

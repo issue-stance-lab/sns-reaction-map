@@ -33,6 +33,18 @@ def _copy_fixture(target: Path) -> None:
     # Reproduce the same legacy-input stage as the publication candidate pipeline.
     from scripts.bukatsu_layout import materialize
     materialize(target)
+    from scripts.koshitsu_layout import materialize as materialize_koshitsu
+    materialize_koshitsu(target)
+    from scripts.fukushuto_layout import materialize as materialize_fukushuto
+    materialize_fukushuto(target)
+    from scripts.ai_copyright_layout import materialize as materialize_ai_copyright
+    materialize_ai_copyright(target)
+    from scripts.constitutional_layout import materialize as materialize_constitutional
+    materialize_constitutional(target)
+    from scripts.bike_layout import materialize as materialize_bike
+    materialize_bike(target)
+    from scripts.elderly_layout import materialize as materialize_elderly
+    materialize_elderly(target)
     # 山なみの直接生成にも、正規テンプレートが必要。
     template = Path("quality/prototypes/planet-prototype.template.html")
     (target / template.parent).mkdir(parents=True, exist_ok=True)

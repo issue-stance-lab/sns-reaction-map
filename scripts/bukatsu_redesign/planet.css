@@ -1,0 +1,74 @@
+/* 部活動の地域移行・新デザインに載せた対話式の山なみの見た目（build_bukatsu_redesign.py が <style id="bukatsu-planet-style"> として入れる）。
+   app.js が描いていた #map の山なみ・論点ボタン・立場の切り替えの代わり。 */
+/* 対話式の山なみ（元HTMLの #planet-block をそのまま写したもの。2026-10-11 に静的SVGから戻した）。
+   山なみ自身の <style> は暗い地の配色なので、旧ページで bukatsu-connected.css が掛けていた
+   明るい配色と並べ方（立場カード・論点ボタンの格子・海面下の演出を隠す）を、このページの白地・基調色（--deep。共通ヘッダーに合わせた青）に合わせて写す（生成AIと著作権 ai_copyright_redesign/production.css の写し）。 */
+.bk-planet.panel{width:auto;max-width:none;margin:14px 0 0!important;padding:0!important;background:transparent!important;border:0!important;border-radius:0!important;box-shadow:none!important}
+.bk-planet #planet-block{--bg:#fff;--panel:#fff;--line:#d5e1ef;--fg:#071e45;--muted:#59677c;--accent:#0758d9;--rest-dot:#e2dfd3;background:transparent;color:var(--ink,#071e45);font-family:inherit;font-size:16px}
+.bk-planet #planet-block > .panel-title{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap;margin:0 0 6px}
+.bk-planet #planet-block > .panel-title h2{margin:0;font-size:20px;line-height:1.4}
+.bk-planet #planet-block > .panel-title span{font-size:12px;font-weight:700;color:var(--muted)}
+.bk-planet #planet-block .q{margin:0 0 4px;font-size:14px;color:var(--muted)}
+.bk-planet #planet-block .bk-research{margin:8px 0 0}
+.bk-planet #planet-block #caution{margin:0;padding:10px 12px;background:var(--pale,#edf5ff);border:1px solid var(--line);border-radius:8px;font-size:12px;line-height:1.75;color:var(--muted)}
+.bk-planet #planet-block #caution b{color:var(--ink)}
+.bk-planet #planet-block .tap-hint,.bk-planet #planet-block #guesses,.bk-planet-progress{display:none!important}
+.bk-planet #planet-block #modes{display:grid;align-items:stretch;grid-template-columns:repeat(5,minmax(0,1fr));margin:12px 0 0;gap:7px}
+.bk-planet #planet-block #modes button{display:block;width:100%;margin:0;transform:none;font:inherit;font-size:12px;text-align:left;padding:10px;min-height:64px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink);box-shadow:none;cursor:pointer}
+.bk-planet #planet-block #modes button::after{display:none}
+.bk-planet #planet-block #modes .bk-mode-name{display:block;margin-bottom:3px}
+.bk-planet #planet-block #modes .sg-pick-btn .bk-mode-name::before{content:'';display:inline-block;width:7px;height:7px;margin-right:6px;border-radius:50%;background:var(--bk-stance-color)}
+.bk-planet #planet-block #modes strong{font-size:17px;font-variant-numeric:tabular-nums}
+.bk-planet #planet-block #modes small{font-size:11px;font-weight:400;opacity:.85}
+.bk-planet #planet-block #modes button[aria-pressed="true"],.bk-planet #planet-block #list button[aria-pressed="true"]{color:#fff;background:var(--deep,#0758d9);border-color:var(--deep,#0758d9)}
+.bk-planet #planet-block #list button[aria-pressed="true"] .m{color:#dce9fb}
+.bk-planet #planet-block .stage{display:flex;flex-direction:column;gap:0;margin-top:8px}
+.bk-planet #planet-block .chart-box{order:0;position:relative;width:100%;margin:0;padding:12px 6px 4px;border:0;border-radius:10px;background:#f7faff}
+.bk-planet #planet-block .chart-box #section{width:100%;height:210px;max-height:none;margin-bottom:0;display:block}
+.bk-planet #planet-block .chart-box .dive,.bk-planet #planet-block .chart-box #seafloor,.bk-planet #planet-block .chart-box #seacover,
+.bk-planet #planet-block .chart-box #section > rect[fill="#12314f"],.bk-planet #planet-block .chart-box #section > line[opacity="0.13"]{display:none}
+.bk-planet #planet-block .chart-box #section text{fill:var(--muted)}
+.bk-planet #planet-block .chart-box #section line[stroke="#2b3440"]{stroke:#e2dfd3}
+.bk-planet #planet-block .chart-box .hint{margin:8px 4px 0;font-size:12px;color:var(--muted)}
+.bk-planet #planet-block .floor-note{margin:4px 4px 0;font-size:11px;color:var(--muted)}
+.bk-planet #planet-block #list{order:1;width:100%;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;margin:14px 0 18px;padding:0;list-style:none}
+.bk-planet #planet-block #list li{min-width:0;margin:0}
+.bk-planet #planet-block #list button{width:100%;height:100%;padding:9px 10px;font:inherit;font-size:12px;text-align:left;line-height:1.5;border:1px solid var(--line);border-radius:7px;background:#fff;color:var(--ink);cursor:pointer}
+.bk-planet #planet-block #list .m{display:block;margin:2px 0 0;font-size:11px;color:var(--muted)}
+.bk-planet #planet-block #panel{order:2;width:100%;padding:20px 0 0;margin:0;border:0;border-top:3px solid var(--deep,#0758d9);border-radius:0;background:transparent;box-shadow:none;color:var(--ink)}
+.bk-planet #planet-block #panel h2{margin:0 0 6px;font-size:20px;line-height:1.45}
+.bk-planet #planet-block #panel .sub{font-size:13px;color:var(--muted)}
+/* 選択パネルでは、論点の切り替え（上の論点ボタンと重なる）・図解画像（中身を一次資料と突き合わせていない）・
+   旧い理由区分の名前（読書面で言い換えた）を出さない。100マス・件数・立場の内訳はそのまま。 */
+.bk-planet #planet-block #panel .issue-tabs,.bk-planet #planet-block #panel .landing-image,.bk-planet #planet-block #panel .islands{display:none}
+.bk-planet #planet-block #panel .note,.bk-planet #planet-block #panel .cross{background:var(--pale,#edf5ff);border-color:var(--line);color:var(--muted)}
+.bk-planet #planet-block #panel .cross b,.bk-planet #planet-block #panel .note b{color:var(--ink)}
+.bk-planet #planet-block #panel h2:focus{outline:none}
+.bk-planet #planet-block #panel .back{color:var(--ink);border-color:var(--line);background:#fff}
+.bk-planet #planet-block .dotbox .ro .v{color:var(--ink)}
+/* 100マス：旧ページでは右側に山なみを薄く敷いていた。新ページでは山なみを上に残すので、右側に読み取りを並べる */
+.bk-planet #planet-block .dotbox{display:grid;grid-template-columns:230px minmax(0,1fr);column-gap:24px;align-items:start;background:#fff;border-color:var(--line)}
+.bk-planet #planet-block .dotbox > *{grid-column:2}
+.bk-planet #planet-block .dotbox > .waffle{grid-column:1;grid-row:1 / span 4}
+.bk-planet #planet-block .dotbox .dot-cap{margin-top:0}
+.bk-planet #planet-block .dotbox .ro,.bk-planet #planet-block .dotbox .dot-mech{background:var(--pale,#edf5ff)}
+.bk-planet #planet-block .sec{margin:18px 0 6px;font-size:15px}
+.bk-planet #planet-block .meta{font-size:12px;color:var(--muted)}
+.bk-planet #planet-block #modes button:focus-visible,.bk-planet #planet-block #list button:focus-visible,.bk-planet #planet-block #panel :focus-visible{outline:3px solid var(--deep,#0758d9);outline-offset:3px}
+@media(max-width:760px){
+  .bk-planet #planet-block #modes,.bk-planet #planet-block #list{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .bk-planet #planet-block #modes [data-m="all"]{grid-column:1 / -1;min-height:44px;display:flex;align-items:center;justify-content:space-between}
+  .bk-planet #planet-block #modes small{display:block;margin-top:2px;line-height:1.3}
+  .bk-planet #planet-block .dotbox{display:block}
+  .bk-planet #planet-block .dotbox .dot-cap{margin-top:8px}
+}
+@media(max-width:450px){.bk-planet #planet-block .chart-box #section{height:180px}}
+/* このページの全体の規則（ボタンの最小の高さ・押したときの色・#map の調査条件）を、山なみの部品では打ち消す */
+.bk-planet #planet-block #list button,.bk-planet #planet-block #modes button,.bk-planet #planet-block #panel button{min-height:0}
+.bk-planet #planet-block #modes button{min-height:64px}
+.bk-planet #planet-block #modes button:hover,.bk-planet #planet-block #list button:hover{background:var(--pale,#edf5ff)}
+.bk-planet #planet-block #modes button[aria-pressed="true"]:hover,.bk-planet #planet-block #list button[aria-pressed="true"]:hover{background:var(--deep,#0758d9)}
+#map .bk-planet #caution{margin:0}
+/* 部活動の山なみだけにある「この論点の中身（編集部が本文を読んで分けたもの）」の見出し。中身（島の一覧 .islands）は
+   旧い理由区分の名前で、読書面で言い換えたため上で隠している。見出しだけが空で残らないよう一緒に隠す */
+.bk-planet #planet-block #panel p.sub:has(+ .islands){display:none}

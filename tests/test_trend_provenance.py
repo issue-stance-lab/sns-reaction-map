@@ -28,7 +28,7 @@ from refresh_adapters import consumption_tax as adapter  # noqa: E402
 
 PAGE = ROOT / "docs/consumption-tax-cut-reaction-map.html"
 CANON = ROOT / "social-samples/consumption-tax-cut_hermes_arena_classified.json"
-NEW_DAY = "2026-10-10"
+NEW_DAY = "2026-10-18"
 
 
 class TrendProvenanceTest(unittest.TestCase):
@@ -140,11 +140,11 @@ class NextRoundTest(unittest.TestCase):
         html = self.rebuild()
         for kind in ("stance", "issue"):
             panel = re.search(rf'<div class="trend-panel" id="consumption-tax-cut-trend-panel-{kind}".*?</table>', html, re.S).group(0)
-            self.assertEqual(len(re.findall(r'<tr id="[^"]+-row-2026-', panel)), 10)
+            self.assertEqual(len(re.findall(r'<tr id="[^"]+-row-2026-', panel)), 11)
             self.assertIn(f"-row-{NEW_DAY}", panel)
-        self.assertIn("2026年10月10日時点", html)
+        self.assertIn("2026年10月18日時点", html)
         # 見出し（H2）の末尾の日付も、右上のバッジと同じく最新の収集日になる。
-        self.assertEqual(html.count('<span class="trend-h2-date">（2026年10月10日時点）</span>'), 3)  # 3つのタブ
+        self.assertEqual(html.count('<span class="trend-h2-date">（2026年10月18日時点）</span>'), 3)  # 3つのタブ
         self.assertNotIn("（2026年10月3日時点）", html)
         self.assertEqual(html.count("<!-- TREND_CARD_START -->"), 1)
 

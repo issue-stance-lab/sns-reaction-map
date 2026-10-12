@@ -10,6 +10,8 @@ from pathlib import Path
 from bs4 import BeautifulSoup
 
 ROOT = Path(__file__).resolve().parents[1]
+# 新デザイン公開後は、旧形式の元HTML（data/page-sources）を検査する（scripts/bike_layout.py）
+from scripts.bike_layout import source_for_refresh  # noqa: E402
 sys.path.insert(0, str(ROOT))
 
 from scripts import bike_blue_ticket_connected as connected  # noqa: E402
@@ -18,7 +20,7 @@ from scripts import bike_blue_ticket_connected as connected  # noqa: E402
 class BikeBlueTicketConnectedTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.original = (ROOT / "docs/bike-blue-ticket-reaction-map.html").read_text(encoding="utf-8")
+        cls.original = source_for_refresh(ROOT).read_text(encoding="utf-8")
         cls.page = connected.apply(cls.original, activate=True)
 
     def test_activation_is_explicit_and_other_themes_are_unchanged(self):
@@ -110,7 +112,7 @@ class BikeBlueTicketConnectedTests(unittest.TestCase):
     def test_number_provenance_accepts_display_cleaned_source_notes(self):
         from scripts.bike_blue_ticket_count_provenance import verified_selectors
 
-        page = (ROOT / "docs/bike-blue-ticket-reaction-map.html").read_text(encoding="utf-8")
+        page = source_for_refresh(ROOT).read_text(encoding="utf-8")
         verified = verified_selectors(page, ROOT)
         self.assertIn("#bike-source-note-bike-blue-ticket-sc-1", verified)
 
