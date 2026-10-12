@@ -19,7 +19,9 @@ sys.path.insert(0, str(ROOT / "scripts"))
 
 import ai_copyright_issue_media as media  # noqa: E402
 
-PAGE = ROOT / "docs" / "ai-copyright-reaction-map.html"
+PUBLISHED = ROOT / "docs" / "ai-copyright-reaction-map.html"
+# 新デザイン公開後は、旧形式の元HTML（data/page-sources）を検査する（scripts/ai_copyright_layout.py）
+PAGE = ROOT / "data/page-sources/ai-copyright.html" if 'name="ai-copyright-layout"' in PUBLISHED.read_text(encoding="utf-8") else PUBLISHED
 PUBLIC = json.loads((ROOT / "data" / "public" / "themes" / "ai-copyright.json").read_text(encoding="utf-8"))
 LABEL_BY_KEY = {item["id"].removeprefix("ai-copyright-"): item["label"] for item in PUBLIC["issues"]}
 

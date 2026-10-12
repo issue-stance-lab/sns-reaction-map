@@ -250,11 +250,18 @@ def apply(source: str, opinions: int) -> str:
     """入口を挿入または更新する。何度呼んでも同じ結果になる。"""
     css = f'<link rel="stylesheet" href="{CSS_HREF}">'
     script = f'<script src="{JS_SRC}" defer></script>'
-    source = re.sub(r'<link rel="stylesheet" href="fukushuto-search-entry\.css\?v=\d+">\n', "", source)
-    source = re.sub(r'<script src="fukushuto-search-entry\.js\?v=\d+" defer></script>\n', "", source)
-    if source.count("</head>") != 1:
-        raise ValueError("副首都の検索入口アセットを置くhead要素が1つではありません")
-    source = source.replace("</head>", css + "\n" + script + "\n</head>", 1)
+    pair = re.compile(r'<link rel="stylesheet" href="fukushuto-search-entry\.css\?v=\d+">\n'
+                      r'<script src="fukushuto-search-entry\.js\?v=\d+" defer></script>\n')
+    if len(pair.findall(source)) == 1:
+        # すでに置いてあれば、その位置のまま版だけ合わせる（後から入る THEME_DESIGN との順序を動かさない。
+        # 動かすと build_fukushuto_arena.py --check が毎回差分ありになる）
+        source = pair.sub(lambda _m: css + "\n" + script + "\n", source, count=1)
+    else:
+        source = re.sub(r'<link rel="stylesheet" href="fukushuto-search-entry\.css\?v=\d+">\n', "", source)
+        source = re.sub(r'<script src="fukushuto-search-entry\.js\?v=\d+" defer></script>\n', "", source)
+        if source.count("</head>") != 1:
+            raise ValueError("副首都の検索入口アセットを置くhead要素が1つではありません")
+        source = source.replace("</head>", css + "\n" + script + "\n</head>", 1)
     block = render(opinions)
     if START in source or END in source:
         if source.count(START) != 1 or source.count(END) != 1:

@@ -205,7 +205,9 @@ def finalize(root: Path, current_date: str) -> None:
 def build(root: Path, stage: Path, current_date: str) -> dict[Path, Path]:
     """候補を2回生成し、2回目に差分がない場合だけ公開対象を返す。"""
     candidate = stage / "cumulative-candidate.json"
-    current_page = root / PAGE
+    # 新デザイン公開後も、旧形式の生成器（と潮目の差し込み）は元HTML（data/page-sources）を入力にする（fukushuto_layout.py）
+    from scripts.fukushuto_layout import source_for_refresh
+    current_page = source_for_refresh(root)
     current_wave = stage / "reviewed-wave.json"
     if not current_wave.is_file():
         current_wave = root / "social-samples" / "updates" / TOPIC / current_date / "classified.json"

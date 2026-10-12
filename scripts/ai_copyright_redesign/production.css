@@ -1,0 +1,133 @@
+/* 生成AIと著作権・新デザインを公開ページに載せるときだけ足す見た目（副首都 fukushuto_redesign/production.css と同じ役目）。
+   冒頭（opening.css）と読書面・背景（reading.css）は変えず、
+   現行ページから引き継ぐ部品（共通ヘッダー・意見の推移・投票・作り方・詳細データ・次に読むテーマ・フッター）を
+   この配色（紙色の地・藍・古紙の縁）に合わせる。 */
+:root{--grad-1:#2b3d8f;--grad-2:#172033;--accent:#2b3d8f;--accent-soft:#e7e9f6;--bg:var(--paper)}
+body.ai-copyright-layout{background:var(--paper);color:var(--ink);overflow-x:hidden}
+body.ai-copyright-layout main{display:block}
+.acp-preview{margin:0;padding:8px 16px;background:#9a7a3e;color:#fff;font-size:13px;font-weight:800;text-align:center}
+.acp-research{margin:10px 0 0}
+.acp-research .caution{margin:0;font-size:13px;line-height:1.75;color:var(--muted)}
+.acp-band{width:min(1180px,calc(100% - 32px));margin:0 auto 40px;padding:28px;background:var(--panel);border:1px solid var(--line);border-radius:18px;box-sizing:border-box}
+.acp-band .panel-title{display:flex;justify-content:space-between;gap:12px;align-items:end;flex-wrap:wrap;margin-bottom:14px}
+.acp-band .panel-title h2{margin:0;font-size:clamp(22px,2.6vw,28px);line-height:1.35}
+.acp-band .panel-title span{color:var(--muted);font-size:13px;font-weight:700}
+/* 意見の推移（TREND_CARD をそのまま。枠の幅だけ読書面に合わせる） */
+.acp-trend{width:min(1180px,calc(100% - 32px));margin:0 auto 40px}
+.acp-trend .update-dashboard{padding:0;background:transparent}
+.acp-trend .trend-card{max-width:none;margin:0}
+/* このページの作り方（ARTICLE_TRUST をそのまま。枠だけ合わせる） */
+.acp-trust .article-trust{margin:0;max-width:none;border:0;padding:0;background:transparent;box-shadow:none}
+/* 詳細データ（現行ページの規則をそのまま） */
+.acp-detail details{border:1px solid var(--line);border-radius:10px;background:#fff;margin:10px 0;padding:12px}
+.acp-detail summary{cursor:pointer;font-weight:800;color:var(--ai)}
+.acp-detail .table-wrap{overflow-x:auto}
+.acp-detail table{border-collapse:collapse;width:100%;font-size:14px}
+.acp-detail th,.acp-detail td{border-bottom:1px solid var(--line);padding:6px 8px;text-align:left}
+.acp-detail ul{margin:8px 0 0;padding-left:1.2em;font-size:14px}
+/* 投票（現行ページの規則をそのまま。色だけ藍に合わせる） */
+.vote-stance-btn{border:0;border-radius:10px;padding:16px 22px;cursor:pointer;font-size:15px;font-weight:900;font-family:inherit;color:#fff;box-shadow:0 4px 14px rgba(16,24,40,.22);transition:transform .15s,box-shadow .15s,filter .15s;width:100%}
+.vote-step-label{display:inline-flex;align-items:center;gap:8px;font-weight:900;font-size:16px;margin:0 0 14px;flex-wrap:wrap}
+.vote-step-label .step-num{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;background:var(--accent);color:#fff;font-size:13px;flex-shrink:0}
+#vote-issue-btns{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px}
+.vote-issue-btn{display:flex;align-items:center;gap:10px;width:100%;min-height:48px;border:1.5px solid rgba(43,61,143,.2);border-radius:10px;padding:13px 16px;background:#fff;cursor:pointer;font-family:inherit;text-align:left;box-shadow:0 4px 14px rgba(16,24,40,.07);transition:transform .15s,box-shadow .15s,border-color .15s}
+.vote-issue-btn:hover,.vote-issue-btn:focus-visible{transform:translateY(-2px);border-color:var(--accent);box-shadow:0 10px 24px rgba(43,61,143,.14);outline:2px solid var(--accent);outline-offset:2px}
+.vote-issue-icon{font-size:22px;line-height:1;flex-shrink:0}
+.vote-issue-title{font-size:13px;font-weight:900;color:var(--ink);line-height:1.35}
+#vote-stance-btns{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px!important;max-width:900px}
+#vote-stance-btns .vote-stance-btn{border-top:6px solid var(--stance-color);background:linear-gradient(180deg,#fff,var(--stance-bg));color:var(--ink);text-align:left;box-shadow:0 8px 22px rgba(16,24,40,.1)}
+#vote-stance-btns .vote-stance-btn:hover,#vote-stance-btns .vote-stance-btn:focus-visible{border-color:var(--stance-color);filter:none;box-shadow:0 14px 30px rgba(16,24,40,.18);outline:2px solid var(--stance-color);outline-offset:2px}
+.vote-stance-btn .vs-icon{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;background:var(--stance-color);color:#fff;font-size:18px;font-weight:900;margin-bottom:8px}
+.vote-stance-btn .vs-title{display:block;font-size:16px;font-weight:900;line-height:1.35;color:var(--stance-color)}
+.vote-stance-btn .vs-desc{display:block;margin-top:6px;font-size:12px;font-weight:700;line-height:1.6;color:var(--muted)}
+/* 次に読むテーマ */
+.related-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.related-card{display:block;text-decoration:none;padding:0;overflow:hidden;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--ink)}
+.related-card img{width:100%;aspect-ratio:16/9;object-fit:cover;display:block}
+.related-card div{padding:14px}
+.related-card p{margin:4px 0 0;font-size:13px;color:var(--muted)}
+.fb-print{margin:12px 0 0}
+@media(max-width:720px){.acp-band{padding:20px 16px}.related-grid{grid-template-columns:1fr}#vote-stance-btns{grid-template-columns:1fr!important}}
+/* 対話式の山なみ（元HTMLの #planet-block をそのまま写したもの。2026-10-11 に静的SVGから戻した）。
+   山なみ自身の <style> は暗い地の配色なので、旧ページで theme-design.css・ai-copyright-connected.css が掛けていた
+   明るい配色と並べ方（立場カード・論点ボタンの格子・海面下の演出を隠す）を、この紙色・藍に合わせて写す。 */
+.acp-planet.panel{width:auto;max-width:none;margin:14px 0 0!important;padding:0!important;background:transparent!important;border:0!important;border-radius:0!important;box-shadow:none!important}
+.acp-planet #planet-block{--bg:#fff;--panel:#fff;--line:#d9d6cb;--fg:#172033;--muted:#5d6578;--accent:#2b3d8f;--rest-dot:#e2dfd3;background:transparent;color:var(--ink,#172033);font-family:inherit;font-size:16px}
+.acp-planet #planet-block > .panel-title{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap;margin:0 0 6px}
+.acp-planet #planet-block > .panel-title h2{margin:0;font-size:20px;line-height:1.4}
+.acp-planet #planet-block > .panel-title span{font-size:12px;font-weight:700;color:var(--muted)}
+.acp-planet #planet-block .q{margin:0 0 4px;font-size:14px;color:var(--muted)}
+.acp-planet #planet-block .acp-research{margin:8px 0 0}
+.acp-planet #planet-block #caution{margin:0;padding:10px 12px;background:var(--paper,#f6f3ea);border:1px solid var(--line);border-radius:8px;font-size:12px;line-height:1.75;color:var(--muted)}
+.acp-planet #planet-block #caution b{color:var(--ink)}
+.acp-planet #planet-block .tap-hint,.acp-planet #planet-block #guesses,.acp-planet-progress{display:none!important}
+.acp-planet #planet-block #modes{display:grid;align-items:stretch;grid-template-columns:repeat(4,minmax(0,1fr));margin:12px 0 0;gap:7px}
+.acp-planet #planet-block #modes button{display:block;width:100%;margin:0;transform:none;font:inherit;font-size:12px;text-align:left;padding:10px;min-height:64px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink);box-shadow:none;cursor:pointer}
+.acp-planet #planet-block #modes button::after{display:none}
+.acp-planet #planet-block #modes .aic-mode-name{display:block;margin-bottom:3px}
+.acp-planet #planet-block #modes .sg-pick-btn .aic-mode-name::before{content:'';display:inline-block;width:7px;height:7px;margin-right:6px;border-radius:50%;background:var(--aic-stance-color)}
+.acp-planet #planet-block #modes strong{font-size:17px;font-variant-numeric:tabular-nums}
+.acp-planet #planet-block #modes small{font-size:11px;font-weight:400;opacity:.85}
+.acp-planet #planet-block #modes button[aria-pressed="true"],.acp-planet #planet-block #list button[aria-pressed="true"]{color:#fff;background:var(--ai,#2b3d8f);border-color:var(--ai,#2b3d8f)}
+.acp-planet #planet-block #list button[aria-pressed="true"] .m{color:#e7e9f6}
+.acp-planet #planet-block .stage{display:flex;flex-direction:column;gap:0;margin-top:8px}
+.acp-planet #planet-block .chart-box{order:0;position:relative;width:100%;margin:0;padding:12px 6px 4px;border:0;border-radius:10px;background:#fbfaf6}
+.acp-planet #planet-block .chart-box #section{width:100%;height:210px;max-height:none;margin-bottom:0;display:block}
+.acp-planet #planet-block .chart-box .dive,.acp-planet #planet-block .chart-box #seafloor,.acp-planet #planet-block .chart-box #seacover,
+.acp-planet #planet-block .chart-box #section > rect[fill="#12314f"],.acp-planet #planet-block .chart-box #section > line[opacity="0.13"]{display:none}
+.acp-planet #planet-block .chart-box #section text{fill:var(--muted)}
+.acp-planet #planet-block .chart-box #section line[stroke="#2b3440"]{stroke:#e2dfd3}
+.acp-planet #planet-block .chart-box .hint{margin:8px 4px 0;font-size:12px;color:var(--muted)}
+.acp-planet #planet-block .floor-note{margin:4px 4px 0;font-size:11px;color:var(--muted)}
+.acp-planet #planet-block #list{order:1;width:100%;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;margin:14px 0 18px;padding:0;list-style:none}
+.acp-planet #planet-block #list li{min-width:0;margin:0}
+.acp-planet #planet-block #list button{width:100%;height:100%;padding:9px 10px;font:inherit;font-size:12px;text-align:left;line-height:1.5;border:1px solid var(--line);border-radius:7px;background:#fff;color:var(--ink);cursor:pointer}
+.acp-planet #planet-block #list .m{display:block;margin:2px 0 0;font-size:11px;color:var(--muted)}
+.acp-planet #planet-block #panel{order:2;width:100%;padding:20px 0 0;margin:0;border:0;border-top:3px solid var(--ai,#2b3d8f);border-radius:0;background:transparent;box-shadow:none;color:var(--ink)}
+.acp-planet #planet-block #panel h2{margin:0 0 6px;font-size:20px;line-height:1.45}
+.acp-planet #planet-block #panel .sub{font-size:13px;color:var(--muted)}
+/* 選択パネルでは、論点の切り替え（上の論点ボタンと重なる）・図解画像（中身を一次資料と突き合わせていない）・
+   旧い理由区分の名前（読書面で言い換えた）を出さない。100マス・件数・立場の内訳はそのまま。 */
+.acp-planet #planet-block #panel .issue-tabs,.acp-planet #planet-block #panel .landing-image,.acp-planet #planet-block #panel .islands{display:none}
+.acp-planet #planet-block #panel .note,.acp-planet #planet-block #panel .cross{background:var(--paper,#f6f3ea);border-color:var(--line);color:var(--muted)}
+.acp-planet #planet-block #panel .cross b,.acp-planet #planet-block #panel .note b{color:var(--ink)}
+.acp-planet #planet-block #panel h2:focus{outline:none}
+.acp-planet #planet-block #panel .back{color:var(--ink);border-color:var(--line);background:#fff}
+.acp-planet #planet-block .dotbox .ro .v{color:var(--ink)}
+/* 100マス：旧ページでは右側に山なみを薄く敷いていた。新ページでは山なみを上に残すので、右側に読み取りを並べる */
+.acp-planet #planet-block .dotbox{display:grid;grid-template-columns:230px minmax(0,1fr);column-gap:24px;align-items:start;background:#fff;border-color:var(--line)}
+.acp-planet #planet-block .dotbox > *{grid-column:2}
+.acp-planet #planet-block .dotbox > .waffle{grid-column:1;grid-row:1 / span 4}
+.acp-planet #planet-block .dotbox .dot-cap{margin-top:0}
+.acp-planet #planet-block .dotbox .ro,.acp-planet #planet-block .dotbox .dot-mech{background:var(--paper,#f5f3ec)}
+.acp-planet #planet-block .sec{margin:18px 0 6px;font-size:15px}
+.acp-planet #planet-block .meta{font-size:12px;color:var(--muted)}
+.acp-planet #planet-block #modes button:focus-visible,.acp-planet #planet-block #list button:focus-visible,.acp-planet #planet-block #panel :focus-visible{outline:3px solid var(--ai,#2b3d8f);outline-offset:3px}
+@media(max-width:760px){
+  .acp-planet #planet-block #modes,.acp-planet #planet-block #list{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .acp-planet #planet-block #modes [data-m="all"]{grid-column:1 / -1;min-height:44px;display:flex;align-items:center;justify-content:space-between}
+  .acp-planet #planet-block #modes small{display:block;margin-top:2px;line-height:1.3}
+  .acp-planet #planet-block .dotbox{display:block}
+  .acp-planet #planet-block .dotbox .dot-cap{margin-top:8px}
+}
+@media(max-width:450px){.acp-planet #planet-block .chart-box #section{height:180px}}
+/* 2026-10-12 部活動型の圧縮：意見の推移は「ひと目で見る」要約＋元の推移カードの折りたたみ、作り方と詳細データは1つの折りたたみ */
+.acp-trend-glance{padding:24px 28px;background:var(--panel);border:1px solid var(--line);border-radius:18px;box-sizing:border-box;min-width:0}
+.acp-trend-glance h2{margin:4px 0 10px;font-size:clamp(20px,2.6vw,26px);line-height:1.4}
+.acp-trend-spark svg{display:block;width:100%;max-width:560px;height:auto}
+.acp-trend-legend{list-style:none;margin:8px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:4px 16px;font-size:13px;color:var(--muted)}
+.acp-trend-legend li{display:flex;align-items:center;gap:6px}
+.acp-trend-legend i{display:inline-block;width:14px;height:4px;border-radius:2px}
+.acp-trend-lead{margin:10px 0 4px;font-size:14.5px;line-height:1.8}
+.acp-trend-more{margin-top:6px;border-top:1px solid var(--line);min-width:0}
+.acp-trend-more[open]>summary{margin-bottom:10px}
+.acp-method{padding-top:10px;padding-bottom:10px}
+.acp-method>summary{cursor:pointer;list-style:none;position:relative;display:flex;align-items:center;min-height:48px;padding-right:32px;
+  font-size:clamp(18px,2.2vw,22px);font-weight:800;color:var(--ink)}
+.acp-method>summary::-webkit-details-marker{display:none}
+.acp-method>summary::after{content:"＋";position:absolute;right:4px;top:50%;transform:translateY(-50%);color:var(--ai);font-weight:800}
+.acp-method[open]>summary::after{content:"－"}
+.acp-method>summary:focus-visible{outline:3px solid var(--ai);outline-offset:3px;border-radius:8px}
+.acp-method .acp-trust{margin-top:12px}
+.acp-method .acp-band{width:auto;margin:20px 0 0;padding:0;border:0;border-radius:0;background:transparent}
+@media(max-width:720px){.acp-trend-glance{padding:20px 16px}}

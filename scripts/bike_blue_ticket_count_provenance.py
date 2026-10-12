@@ -18,6 +18,10 @@ from scripts.bike_blue_ticket_connected import (
 
 
 def verified_selectors(source: str, root: Path) -> dict[str, str]:
+    if 'name="bike-layout"' in source:
+        # 新デザイン（scripts/bike_layout.py）の件数は、論点の欄ごとに数え直す
+        from scripts.bike_redesign_provenance import verified_selectors as redesign
+        return redesign(source, root)
     if BIKE_CONNECTED_START not in source:
         return {}
     soup = BeautifulSoup(source, "html.parser")

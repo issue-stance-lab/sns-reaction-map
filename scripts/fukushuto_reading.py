@@ -1,0 +1,718 @@
+#!/usr/bin/env python3
+"""副首都ページの「山なみ＋論点の読書面」を、冒頭の試作の下につないで生成する試作。
+
+皇室典範改正（scripts/koshitsu_reading.py）と同じ型。テーマごとに違うのは設定JSONと、
+立場の見せ方（副首都は「法案賛成・推進／法案反対／中立・情報」の3立場を帯で出し、
+理由区分ごとの立場の内訳も再読データの明細から数える）。
+
+入力
+- configs/fukushuto-reading.json        : 論点の説明・理由の言い換え・照合の注記・投稿の選定（手書き文言）
+- configs/fukushuto-opening.json        : 冒頭の文言（冒頭部品をそのまま使う。候補地の数もここから数える）
+- docs/data/themes/fukushuto.json       : 件数・論点・立場・強い表現・主張の照合・資料にしかない話（公開JSON）
+- configs/planet/fukushuto.yaml         : 立場の色と順序、理由区分のある論点（sub_issues）と再読データのキー
+- data/fukushuto_5issues-reread.json    : 理由区分（5論点。明細の bucket と stance を数え直す）
+- data/verification/fukushuto-claims.json : 主張ごとの該当投稿（件数の照合だけに使う）
+- data/verification/fukushuto-background.json : 制度の確認4項目
+- quality/research/fukushuto-primary-sources.md : 一次資料メモ（資料の確認日）
+- configs/fukushuto-background.json ほか : 背景の開閉行（scripts/fukushuto_background.py が描く。設定に background_config があるときだけ）
+
+出力: quality/prototypes/fukushuto-reading/index.html
+（同じフォルダーに reading.css・reading.js・opening.css の写しを置く。正本は scripts/fukushuto_redesign/）
+
+基準日（--as-of）の既定は公開JSONの updated_on。今日の日付・乱数は使わない。件数・割合は手で書かない。
+合計が公開JSONと合わなければ止まる。同じ入力なら出力は同じ。
+
+    python3 scripts/fukushuto_reading.py
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+import re
+import shutil
+import sys
+from collections import Counter
+from datetime import date
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "scripts"))
+
+import fukushuto_opening as opening  # noqa: E402
+from bukatsu_redesign.x_embeds import add_x_embeds  # noqa: E402
+
+CONFIG = ROOT / "configs" / "fukushuto-reading.json"
+OUT_DIR = ROOT / "quality" / "prototypes" / "fukushuto-reading"
+ASSETS = opening.ASSETS
+READING_START = "<!-- FUKUSHUTO_READING_START -->"
+READING_END = "<!-- FUKUSHUTO_READING_END -->"
+DATE_RE = re.compile(r"確認日[:：]\s*(\d{4}-\d{2}-\d{2})")
+POST_URL = re.compile(r"^https://x\.com/[A-Za-z0-9_]+/status/(\d+)$")
+
+esc = opening.esc
+jp_date = opening.jp_date
+
+
+def fmt(n: int) -> str:
+    return f"{int(n):,}"
+
+
+def pct1(part: int, whole: int) -> str:
+    return f"{part / whole * 100:.1f}" if whole else "0.0"
+
+
+def read_json(rel: str):
+    return json.loads((ROOT / rel).read_text(encoding="utf-8"))
+
+
+# ---------------------------------------------------------------- 一次資料メモ
+
+
+class Memo:
+    """一次資料メモを見出しで引く。確認日は節の中の「確認日：YYYY-MM-DD」の最新を使う（皇室と同じ読み方）。"""
+
+    def __init__(self, path: Path):
+        self.text = path.read_text(encoding="utf-8")
+        self.lines = self.text.splitlines()
+
+    def section(self, heading: str) -> str:
+        hits = [i for i, l in enumerate(self.lines) if re.match(r"#{2,3} ", l) and heading in l]
+        if len(hits) != 1:
+            raise SystemExit(f"一次資料メモで見出し「{heading}」が {len(hits)} 件あります（1件だけのはず）")
+        start = hits[0]
+        level = len(self.lines[start]) - len(self.lines[start].lstrip("#"))
+        end = next((j for j in range(start + 1, len(self.lines))
+                    if re.match(r"#{1,%d} " % level, self.lines[j])), len(self.lines))
+        return "\n".join(self.lines[start:end])
+
+    def checked_on(self, heading: str) -> str:
+        dates = DATE_RE.findall(self.section(heading))
+        if not dates:
+            raise SystemExit(f"一次資料メモの「{heading}」に確認日がありません")
+        return max(dates)
+
+    def latest(self) -> str:
+        return max(DATE_RE.findall(self.text))
+
+    def has_ref(self, ref: str) -> bool:
+        """「確認できなかったこと 6」は節の中の番号付きの項目、それ以外は見出し。"""
+        m = re.fullmatch(r"(.+?) (\d+)", ref)
+        if m:
+            body = self.section(m.group(1))
+            return re.search(rf"^{m.group(2)}\. ", body, flags=re.M) is not None
+        self.section(ref)
+        return True
+
+
+# ---------------------------------------------------------------- データと照合
+
+
+def load(config_path: Path = CONFIG) -> dict:
+    cfg = json.loads(config_path.read_text(encoding="utf-8"))
+    data = opening.load_inputs(ROOT / cfg["opening_config"])
+    public, planet = data["public"], data["planet"]
+    if public.get("theme_id") != cfg["theme_id"] or data["config"]["theme_id"] != cfg["theme_id"]:
+        raise SystemExit("設定と公開JSONのテーマが一致しません")
+    if cfg["public_json"] != data["config"]["inputs"]["public_json"]:
+        raise SystemExit("冒頭と読書面で別の公開JSONを読もうとしています")
+    raw = read_json(cfg["reread_json"])
+    reread = {}
+    for label, sub in (planet.get("sub_issues") or {}).items():
+        if sub["file"] != cfg["reread_json"]:
+            raise SystemExit(f"planet設定の理由区分 {label} が別のファイル {sub['file']} を指しています")
+        key, leaf = sub["path"]
+        if leaf != "buckets" or key not in raw:
+            raise SystemExit(f"再読データに {key}.buckets がありません（{label}）")
+        reread[label] = raw[key]
+    d = {
+        "cfg": cfg,
+        "data": data,
+        "ocfg": data["config"],
+        "public": public,
+        "planet": planet,
+        "reread": reread,
+        "claim_posts": read_json(cfg["claim_posts_json"]),
+        "background": read_json(cfg["background_json"]),
+        "memo": Memo(ROOT / cfg["primary_memo"]),
+    }
+    if cfg.get("background_config"):
+        import fukushuto_background as background  # 背景の部品（手順6）
+
+        d["bg"] = background.load(d, ROOT / cfg["background_config"])
+    return d
+
+
+def stance_order(d: dict) -> list[dict]:
+    """立場の順序・色・名前は planet 設定（冒頭の帯・山なみと同じ定義）。"""
+    return list(d["planet"]["stances"])
+
+
+def check_all(d: dict) -> None:
+    """表示する数が公開JSONとずれていたら止める。"""
+    public, cfg = d["public"], d["cfg"]
+    opinion = int(public["opinion_count"])
+    issues = public["issues"]
+    ids = {i["id"] for i in issues}
+    labels = {i["label"] for i in issues}
+    if sum(int(i["count"]) for i in issues) != opinion:
+        raise SystemExit("論点の合計が意見数と一致しません")
+    stances = stance_order(d)
+    stance_ids = [s["id"] for s in stances]
+    if sum(int(s["count"]) for i in issues for s in i["stances"]) != opinion:
+        raise SystemExit("立場の合計が意見数と一致しません")
+    if cfg["trend"]["public_json_key"] in public:
+        raise SystemExit("公開JSONに推移データが入りました。読書面の推移表示を作ってから生成してください")
+    if set(d["reread"]) - labels:
+        raise SystemExit(f"理由区分のある論点に、公開JSONに無い論点があります: {set(d['reread']) - labels}")
+    label_of_stance = {s["key"]: s["id"] for s in stances}
+    for issue in issues:
+        n = int(issue["count"])
+        if sorted(s["id"] for s in issue["stances"]) != sorted(stance_ids):
+            raise SystemExit(f"{issue['id']}: 立場の種類が planet 設定と違います")
+        if sum(int(s["count"]) for s in issue["stances"]) != n:
+            raise SystemExit(f"{issue['id']}: 立場の合計が論点の件数と一致しません")
+        if sum(int(x["count"]) for x in issue["intensities"]) != n:
+            raise SystemExit(f"{issue['id']}: 強さの合計が論点の件数と一致しません")
+        rr = d["reread"].get(issue["label"])
+        if rr is None:
+            continue  # 理由データが無い論点は「未公開」と表示する
+        buckets, items = rr["buckets"], rr["items"]
+        if sum(int(b["count"]) for b in buckets.values()) != n:
+            raise SystemExit(f"{issue['id']}: 理由区分の合計が論点の件数 {n} と一致しません")
+        if len(items) != n:
+            raise SystemExit(f"{issue['id']}: 再読データの明細 {len(items)} 件が論点の件数 {n} と一致しません")
+        if len({i["tweet_id"] for i in items}) != n:
+            raise SystemExit(f"{issue['id']}: 再読データの明細に同じ投稿が重複しています")
+        tally = Counter(i["bucket"] for i in items)
+        for bid, b in buckets.items():
+            if tally[bid] != int(b["count"]):
+                raise SystemExit(f"{issue['id']}: 理由区分 {bid} の件数が明細と一致しません")
+        if set(tally) - set(buckets):
+            raise SystemExit(f"{issue['id']}: 明細に区分の定義が無い bucket があります")
+        st = Counter(label_of_stance.get(i["stance"], i["stance"]) for i in items)
+        if {s["id"]: int(s["count"]) for s in issue["stances"]} != {sid: st.get(sid, 0) for sid in stance_ids}:
+            raise SystemExit(f"{issue['id']}: 再読データの立場の内訳が公開JSONと一致しません")
+    cv = public["claim_verification"]
+    per_claim = Counter(p["claim"] for p in d["claim_posts"])
+    for c in cv["claims"]:
+        if c["verdict"] not in cfg["verdict_labels"]:
+            raise SystemExit(f"主張 {c['id']} の判定 {c['verdict']} の言い換えが設定にありません")
+        if set(c["issue_ids"]) - ids:
+            raise SystemExit(f"主張 {c['id']} の論点が公開JSONにありません")
+        if per_claim[c["id"]] != int(c["matched_post_count"]):
+            raise SystemExit(f"主張 {c['id']} の該当投稿数 {c['matched_post_count']} が照合データの {per_claim[c['id']]} 件と違います")
+    for sc in public["ocean_layer"]["sunk_continents"]:
+        if sc["nearest_issue_id"] not in ids:
+            raise SystemExit(f"資料にしかない話 {sc['id']} の論点 {sc['nearest_issue_id']} が公開JSONにありません")
+        if int(sc["sns_base"]) != opinion:
+            raise SystemExit(f"資料にしかない話 {sc['id']} の母数 {sc['sns_base']} が意見数 {opinion} と違います（再検索の記録を更新してください）")
+    if set(cfg["issues"]) != ids:
+        raise SystemExit(f"設定の論点と公開JSONの論点が一致しません: {set(cfg['issues']) ^ ids}")
+    memo = d["memo"]
+    checklist = d["background"]["checklist"]["items"]
+    for iid, icfg in cfg["issues"].items():
+        issue = next(i for i in issues if i["id"] == iid)
+        rr = d["reread"].get(issue["label"])
+        buckets = rr["buckets"] if rr else {}
+        extra = set(icfg.get("reasons", {})) - set(buckets)
+        if extra:
+            raise SystemExit(f"{iid}: 再読データに無い理由区分が設定にあります: {extra}")
+        complete = icfg.get("status") == "complete"
+        if complete and set(icfg.get("reasons", {})) != set(buckets):
+            raise SystemExit(f"{iid}: 完成扱いの論点で、言い換えの無い理由区分があります")
+        if complete and not icfg.get("description"):
+            raise SystemExit(f"{iid}: 完成扱いの論点に説明がありません")
+        claims = {c["id"] for c in cv["claims"] if iid in c["issue_ids"]}
+        if set(icfg.get("claim_notes", {})) - claims:
+            raise SystemExit(f"{iid}: この論点に無い照合への注記があります")
+        checks = {c["id"] for c in checklist if iid in (c.get("issue_ids") or [])}
+        if set(icfg.get("check_notes", {})) - checks:
+            raise SystemExit(f"{iid}: この論点に無い制度確認への注記があります")
+        for mc in icfg.get("memo_checks", []):
+            memo.checked_on(mc["memo_section"])
+        posts = icfg.get("posts", {}).get("items", [])
+        if len(posts) > 2:
+            raise SystemExit(f"{iid}: X投稿は最大2件です")
+        if len({p["id"] for p in posts}) != len(posts):
+            raise SystemExit(f"{iid}: 同じ投稿を2回選んでいます")
+        if complete and posts and not icfg["posts"].get("selection_basis"):
+            raise SystemExit(f"{iid}: 投稿の選定理由（selection_basis）がありません")
+        if complete and len(posts) == 1 and not icfg["posts"].get("one_reason"):
+            raise SystemExit(f"{iid}: 投稿が1件の理由（one_reason）がありません")
+        for p in posts:
+            m = POST_URL.match(p["url"])
+            if not m or m.group(1) != p["id"]:
+                raise SystemExit(f"{iid}: 投稿IDとURLが一致しません: {p['id']}")
+            if rr is not None and post_record(rr, p["id"]) is None:
+                raise SystemExit(f"{iid}: 投稿 {p['id']} は再読データでこの論点に入っていません")
+            if rr is None and not p.get("stance_id"):
+                raise SystemExit(f"{iid}: 再読データの無い論点の投稿 {p['id']} には stance_id（正典の立場）が要ります")
+            if p.get("stance_id") and p["stance_id"] not in stance_ids:
+                raise SystemExit(f"{iid}: 投稿 {p['id']} の stance_id が planet 設定にありません")
+    # 他の論点の投稿を使い回していないか（論点をまたいで同じ投稿を出さない）
+    all_posts = [p["id"] for c in cfg["issues"].values() for p in c.get("posts", {}).get("items", [])]
+    if len(all_posts) != len(set(all_posts)):
+        raise SystemExit("同じ投稿が2つの論点に選ばれています")
+
+
+def post_record(rr: dict, tweet_id: str) -> dict | None:
+    return next((i for i in rr["items"] if i["tweet_id"] == tweet_id), None)
+
+
+# ---------------------------------------------------------------- 山なみ（静的SVG）
+
+
+def ordered_issues(d: dict) -> list[dict]:
+    """件数の多い順。「その他」は最後（皇室と同じ）。"""
+    other = d["cfg"]["other_issue_id"]
+    return sorted(d["public"]["issues"], key=lambda i: (i["id"] == other, -int(i["count"]), i["id"]))
+
+
+def issue_name(d: dict, issue: dict) -> str:
+    return d["cfg"]["issues"].get(issue["id"], {}).get("name") or issue["label"]
+
+
+def high_pct(issue: dict) -> float:
+    high = next((int(x["count"]) for x in issue["intensities"] if x["id"] == "high"), 0)
+    return round(high / int(issue["count"]) * 100, 1)
+
+
+def mountains_svg(d: dict, issues: list[dict], selected: str) -> str:
+    """幅＝意見の件数、高さ＝強い表現の割合。皇室・部活動の新デザインと同じ形と規則。"""
+    W, B, T, L, GAP, MIN = 1100, 230, 24, 40, 10, 96
+    usable = W - L - 10 - GAP * (len(issues) - 1)
+    total = sum(int(i["count"]) for i in issues)
+    widths = [max(MIN, usable * int(i["count"]) / total) for i in issues]
+    over = sum(widths) - usable
+    slack = sum(max(0, w - MIN) for w in widths)
+    widths = [w - over * (w - MIN) / slack if w > MIN else w for w in widths]
+    top_pct = max(high_pct(i) for i in issues)
+    vmax = max(40, -(-int(top_pct) // 20) * 20)
+    p = ['<defs><linearGradient id="fr-hill" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#c8d1e6"/>'
+         '<stop offset="1" stop-color="#ece7da"/></linearGradient>'
+         '<linearGradient id="fr-hill-on" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#24407a"/>'
+         '<stop offset="1" stop-color="#8fa1cb"/></linearGradient></defs>']
+    for v in range(0, vmax + 1, 20):
+        y = B - (B - T) * v / vmax
+        dash = ' stroke-dasharray="3 7"' if v else ""
+        p.append(f'<line x1="{L}" x2="{W - 10}" y1="{y:.1f}" y2="{y:.1f}" stroke="#ddd6c6"{dash}/>'
+                 f'<text class="fr-axis" x="{L - 8}" y="{y + 4:.1f}" text-anchor="end">{v}%</text>')
+    x = float(L)
+    for issue, w in zip(issues, widths):
+        rate = high_pct(issue)
+        top = B - (B - T) * rate / vmax
+        cx = x + w / 2
+        h = B - top
+        path = (f"M{x:.1f} {B} L{x + w * .24:.1f} {top + h * .52:.1f} L{x + w * .34:.1f} {top + h * .6:.1f} "
+                f"L{cx:.1f} {top:.1f} L{x + w * .72:.1f} {top + h * .45:.1f} L{x + w * .8:.1f} {top + h * .4:.1f} "
+                f"L{x + w:.1f} {B} Z")
+        on = issue["id"] == selected
+        aria = f'{issue_name(d, issue)}、{fmt(issue["count"])}件、強い表現{rate}%'
+        p.append(f'<a class="fr-hill{" is-on" if on else ""}" href="#issue-{esc(issue["id"])}" '
+                 f'data-issue-id="{esc(issue["id"])}" tabindex="-1" aria-label="{esc(aria)}">'
+                 f'<rect class="fr-hit" x="{x:.1f}" y="8" width="{w:.1f}" height="{B + 4}" fill="transparent"/>'
+                 f'<path class="fr-silhouette" d="{path}"/>'
+                 f'<text class="fr-hill-n" x="{cx:.1f}" y="{top - 10:.1f}" text-anchor="middle">'
+                 f'{fmt(issue["count"])}<tspan>件</tspan></text></a>')
+        x += w + GAP
+    return ('<svg class="fr-mountains" viewBox="0 0 1100 250" role="group" '
+            'aria-label="論点の山なみ。幅は意見の件数、高さは強い表現の割合">' + "".join(p) + "</svg>")
+
+
+# ---------------------------------------------------------------- 読書面の部品
+
+
+def details_sources(items: list[dict], label: str) -> str:
+    if not items:
+        return ""
+    rows = "".join(f'<li><a href="{esc(s["url"])}" target="_blank" rel="noopener noreferrer">{esc(s["name"])}</a>'
+                   + (f'<span>{esc(s["location"])}</span>' if s.get("location") else "") + "</li>" for s in items)
+    return f'<details class="fr-sources"><summary>{esc(label)}</summary><ul>{rows}</ul></details>'
+
+
+def stance_bar(d: dict, counts: dict, total: int, cls: str = "fr-band") -> str:
+    """立場の帯。色と順序は planet 設定（冒頭の帯と同じ）。"""
+    segs = "".join(f'<i style="width:{counts.get(s["id"], 0) / total * 100:.2f}%;background:{s["color"]}"></i>'
+                   for s in stance_order(d) if total)
+    aria = "、".join(f'{s["label"]} {fmt(counts.get(s["id"], 0))}件' for s in stance_order(d))
+    return f'<span class="{cls}" role="img" aria-label="{esc(aria)}">{segs}</span>'
+
+
+def compact(d: dict) -> dict:
+    """2026-10-12 の部活動型の圧縮で使う見出し・折りたたみの名前（設定 compact）。生成AIと著作権と同じ型。"""
+    return d["cfg"]["compact"]
+
+
+def fold(cls: str, summary: str, body: str, attrs: str = "") -> str:
+    """JavaScriptが無くても開閉できる折りたたみ。初期状態は閉じる。"""
+    return f'<details class="fr-fold {cls}"{attrs}><summary>{summary}</summary>{body}</details>'
+
+
+def render_stance(d: dict, issue: dict) -> str:
+    """立場別集計。部活動と同じく折りたたむ（中身は前と同じ帯・一覧・注記）。"""
+    sc = d["cfg"]["stance_common"]
+    n = int(issue["count"])
+    by = {s["id"]: int(s["count"]) for s in issue["stances"]}
+    items = "".join(f'<li><span class="fr-sw" style="background:{s["color"]}"></span>{esc(s["label"])}'
+                    f'<b>{fmt(by[s["id"]])}</b>件<small>{pct1(by[s["id"]], n)}%</small></li>' for s in stance_order(d))
+    body = (f'<p class="fr-fold-title">{esc(sc["title"])}</p>'
+            f'<p class="fr-lead">{esc(sc["lead"].format(count=fmt(n)))}</p>'
+            + stance_bar(d, by, n) + f'<ul class="fr-stance-list">{items}</ul>'
+            f'<p class="fr-fine">{esc(sc["note"])}</p>')
+    return fold("fr-block fr-stance", esc(compact(d)["stance_fold"]), body)
+
+
+def render_trend(d: dict, issue: dict) -> str:
+    """収集ごとの割合と件数（最新の累計の1行）。推移の図は公開データに無いので、表を折りたたむだけ。"""
+    t = d["cfg"]["trend"]
+    public = d["public"]
+    period = public["collection_period"]
+    row = t["row_label"].format(period_start=jp_date(period["start"]), period_end=jp_date(period["end"], False))
+    n, total = int(issue["count"]), int(public["opinion_count"])
+    body = ('<table><thead><tr><th scope="col">収集</th><th scope="col">件数</th>'
+            '<th scope="col">意見全体に占める割合</th></tr></thead>'
+            f'<tbody><tr><th scope="row">{esc(row)}</th><td>{fmt(n)}件</td>'
+            f'<td>{pct1(n, total)}%<small>（{fmt(total)}件中）</small></td></tr></tbody></table>'
+            f'<p class="fr-fine">{esc(t["note"])}</p>')
+    return fold("fr-block fr-trend", esc(t["title"]), body)
+
+
+def ordered_reasons(d: dict, issue: dict, icfg: dict) -> list[tuple[str, dict]]:
+    rr = d["reread"].get(issue["label"])
+    if not rr:
+        return []
+    voices = icfg.get("reasons", {})
+    items = list(rr["buckets"].items())
+    if icfg.get("reason_sort", "count_desc") == "config" and voices:
+        order = list(voices)
+        items.sort(key=lambda kv: order.index(kv[0]) if kv[0] in order else len(order))
+    else:
+        items.sort(key=lambda kv: (-int(kv[1]["count"]), kv[0]))
+    return items
+
+
+def reason_label(icfg: dict, bid: str, bucket: dict) -> str:
+    return icfg.get("reasons", {}).get(bid, {}).get("label_override", bucket["label"])
+
+
+def render_reasons(d: dict, issue: dict, icfg: dict) -> str:
+    """理由一覧：理由名と件数の1行ずつ。上位 top_reasons 件だけ見せ、残りは「ほかの理由を読む」の折りたたみ。"""
+    rc, c = d["cfg"]["reasons_common"], compact(d)
+    n = int(issue["count"])
+    iid = issue["id"]
+    items = ordered_reasons(d, issue, icfg)
+    if not items:
+        # 見出しと注記の間の改行は表示に影響しない。言い回しの検査（verify_page_originality.py）は見出しに隙間なく続く段落を
+        # 書き出しとして拾わないので、改行を入れて、この見出しの本当の書き出し（未公開の注記）が比べられるようにする
+        return (f'<section class="fr-block fr-reasons"><h4>{esc(rc["title"])}</h4>\n'
+                f'<p class="fr-empty" data-unpublished>{esc(rc["unpublished"])}</p></section>')
+    top = int(c["top_reasons"])
+
+    def row(i: int, bid: str, b: dict) -> str:
+        cnt = int(b["count"])
+        current = ' aria-current="true"' if i == 0 else ""
+        return (f'<li class="fr-reason" data-reason="{esc(bid)}"><a class="fr-reason-pick" href="#fr-r-{esc(iid)}-{esc(bid)}" '
+                f'data-reason-pick="{esc(bid)}"{current}><span class="fr-reason-name">{esc(reason_label(icfg, bid, b))}</span>'
+                f'<span class="fr-reason-n"><b>{fmt(cnt)}</b>件<small>{pct1(cnt, n)}%</small></span></a></li>')
+
+    out = [f'<section class="fr-block fr-reasons"><h4>{esc(c["reasons_index_title"].format(k=len(items)))}</h4>'
+           f'<p class="fr-lead">{esc(rc["title"])}</p>',
+           '<ol class="fr-reason-list">' + "".join(row(i, bid, b) for i, (bid, b) in enumerate(items[:top])) + "</ol>"]
+    rest = items[top:]
+    method = f'<p class="fr-fine">{esc(rc["lead"].format(count=fmt(n)))}{esc(rc["note"].format(count=fmt(n)))}</p>'
+    if rest:
+        # 数え方の注記は、残りの理由と一緒に折りたたむ（部活動の「ほかの理由を読む」と同じ置き方）
+        out.append(fold("fr-reason-more", esc(c["reasons_more"].format(k=len(rest))),
+                        f'<ol class="fr-reason-list" start="{top + 1}">'
+                        + "".join(row(top + i, bid, b) for i, (bid, b) in enumerate(rest)) + "</ol>" + method))
+    else:
+        out.append(method)
+    out.append("</section>")
+    return "".join(out)
+
+
+def render_reason_details(d: dict, issue: dict, icfg: dict) -> str:
+    """選んだ理由の説明（どんな声か・立場の内訳）。JavaScriptが動くときは1つだけ見せる（最初は件数1位）。"""
+    rc, c = d["cfg"]["reasons_common"], compact(d)
+    items = ordered_reasons(d, issue, icfg)
+    if not items:
+        return ""
+    rr = d["reread"][issue["label"]]
+    n, iid = int(issue["count"]), issue["id"]
+    stances = stance_order(d)
+    label_of_stance = {s["key"]: s["id"] for s in stances}
+    out = ['<div class="fr-reason-reading">']
+    for i, (bid, b) in enumerate(items):
+        cnt = int(b["count"])
+        st = Counter(label_of_stance.get(x["stance"], x["stance"]) for x in rr["items"] if x["bucket"] == bid)
+        st_text = "・".join(f'{s["label"]}{fmt(st.get(s["id"], 0))}' for s in stances)
+        voice = icfg.get("reasons", {}).get(bid, {}).get("voice")
+        nb, nxt = items[(i + 1) % len(items)]
+        out.append(f'<article class="fr-reason-detail" id="fr-r-{esc(iid)}-{esc(bid)}" data-reason="{esc(bid)}"'
+                   f'{" data-on" if i == 0 else ""}><p class="fr-eyebrow">{esc(c["reason_eyebrow"])}'
+                   f'<span>{fmt(cnt)}件・{pct1(cnt, n)}%</span></p><h5>{esc(reason_label(icfg, bid, b))}</h5>')
+        if voice:
+            out.append(f'<p class="fr-voice"><span>{esc(rc["voice_label"])}</span>{esc(voice)}</p>')
+        out.append(f'<p class="fr-reason-stance">{stance_bar(d, st, cnt, "fr-mini")}'
+                   f'<span>{esc(rc["stance_label"])}：{esc(st_text)}</span></p>')
+        if len(items) > 1:
+            out.append(f'<p class="fr-next"><span>{esc(c["reason_next"])}</span>'
+                       f'<a href="#fr-r-{esc(iid)}-{esc(nb)}" data-reason-pick="{esc(nb)}">'
+                       f'{esc(reason_label(icfg, nb, nxt))} →</a></p>')
+        out.append("</article>")
+    out.append("</div>")
+    return "".join(out)
+
+
+def render_posts(d: dict, issue: dict, icfg: dict) -> str:
+    pc = d["cfg"]["posts_common"]
+    posts = icfg.get("posts", {}).get("items", [])
+    if not posts:
+        return (f'<section class="fr-block fr-posts"><h4>{esc(pc["title"])}</h4>'
+                f'<p class="fr-empty">{esc(pc["none"])}</p></section>')
+    rr = d["reread"].get(issue["label"])
+    stances = {s["id"]: s for s in stance_order(d)}
+    by_key = {s["key"]: s for s in stance_order(d)}
+    lead = pc["lead_two"] if len(posts) == 2 else pc["lead_one"]
+    out = [f'<p class="fr-fold-title">{esc(pc["title"])}</p><p class="fr-lead">{esc(lead)}</p>']
+    if len(posts) == 1 and icfg["posts"].get("one_reason"):
+        out.append(f'<p class="fr-fine">{esc(icfg["posts"]["one_reason"])}</p>')
+    out.append('<ul class="fr-post-list">')
+    for p in posts:
+        rec = post_record(rr, p["id"]) if rr else None
+        meta = []
+        if rec:
+            label = icfg.get("reasons", {}).get(rec["bucket"], {}).get("label_override", rr["buckets"][rec["bucket"]]["label"])
+            meta.append(f'{pc["bucket_label"]}：{label}')
+            st = by_key.get(rec["stance"])
+        else:
+            st = stances.get(p.get("stance_id"))
+        if st:
+            meta.append(f'{pc["stance_label"]}：{st["label"]}')
+        out.append(f'<li class="fr-post"><p class="fr-post-label">{esc(p["label"])}</p><p>{esc(p["summary"])}</p>'
+                   + (f'<p class="fr-fine">{esc("／".join(meta))}</p>' if meta else "") + "</li>")
+    out.append("</ul>")
+    links = "".join(f'<a href="{esc(p["url"])}">{esc(p["label"])}</a>' for p in posts)
+    out.append(f'<details class="original-posts"><summary>{esc(pc["summary"].format(n=len(posts)))}</summary>{links}</details>')
+    return fold("fr-block fr-posts", esc(compact(d)["posts_fold"].format(n=len(posts))), "".join(out))
+
+
+def render_evidence(d: dict, issue: dict, icfg: dict) -> str:
+    """根拠にあたる：一次資料との照合（主張の照合・資料の確認・資料にしかない話・制度の確認）。
+    部活動と同じく、主張ごとに見出しだけを見せる折りたたみにする（中身の文・件数・出典は前と同じ）。"""
+    s = d["cfg"]["sources_common"]
+    iid = issue["id"]
+    cv = d["public"]["claim_verification"]
+    claims = [c for c in cv["claims"] if iid in c["issue_ids"]]
+    memo_checks = icfg.get("memo_checks", [])
+    out = [f'<section class="fr-block fr-evidence"><h4>{esc(compact(d)["evidence_title"])}</h4>'
+           + fold("fr-evidence-about", esc(s["title"]), f'<p class="fr-lead">{esc(s["lead"])}</p>')]
+    for c in claims:
+        lab = d["cfg"]["verdict_labels"][c["verdict"]]
+        note = icfg.get("claim_notes", {}).get(c["id"])
+        body = (f'<p class="fr-eyebrow">{esc(s["claim_eyebrow"])}<span>{esc(s["checked"].format(checked_on=jp_date(cv["checked_on"])))}</span></p>'
+                f'<p>{esc(c["finding"])}</p>'
+                + (f'<p class="fr-fine">{esc(note)}</p>' if note else "")
+                + f'<p class="fr-fine">{esc(s["matched"].format(n=fmt(c["matched_post_count"])))}</p>'
+                + details_sources(c["sources"], s["sources_label"]))
+        out.append(fold(f'fr-claim fr-verdict-{esc(c["verdict"])}',
+                        f'<span class="fr-sum-text">「{esc(c["claim"])}」</span><span class="fr-verdict">{esc(lab)}</span>',
+                        body, f' data-claim="{esc(c["id"])}"'))
+    for mc in memo_checks:
+        when = d["memo"].checked_on(mc["memo_section"])
+        body = (f'<p class="fr-eyebrow">{esc(s["memo_eyebrow"])}<span>{esc(s["memo_checked"].format(checked_on=jp_date(when)))}</span></p>'
+                f'<p>{esc(mc["found"])}</p>' + details_sources(mc["sources"], s["sources_label"]))
+        out.append(fold("fr-check fr-memo-check", f'<span class="fr-sum-text">{esc(mc["label"])}：{esc(mc["ask"])}</span>',
+                        body, f' data-memo-check="{esc(mc["id"])}"'))
+    sunk = [x for x in d["public"]["ocean_layer"]["sunk_continents"] if x["nearest_issue_id"] == iid]
+    if sunk:
+        sk = d["cfg"]["sunk_common"]
+        out.append(f'<div class="fr-sunk"><p class="fr-eyebrow">{esc(sk["title"])}</p>')
+        for x in sunk:
+            srcs = [{"name": s2["name"], "url": s2["url"], "location": s2.get("location")} for s2 in x["sources"]]
+            body = (f'<p>{esc(x["life_impact"])}</p>'
+                    f'<p class="fr-fine">{esc(sk["count"].format(base=fmt(x["sns_base"]), n=fmt(x["sns_count"]), checked_on=jp_date(x["checked_on"])))}</p>'
+                    f'<details class="fr-sources"><summary>{esc(sk["note_label"])}</summary><p class="fr-fine">{esc(x["sns_note"])}</p></details>'
+                    + details_sources(srcs, s["sources_label"]))
+            out.append(fold("fr-sunk-item", f'<span class="fr-sum-text">{esc(x["topic"])}</span>', body,
+                            f' data-sunk="{esc(x["id"])}"'))
+        out.append("</div>")
+    checks = render_checks(d, issue, icfg)
+    if not claims and not memo_checks and not sunk and not checks:
+        out.append(f'<p class="fr-empty">{esc(s["empty"])}</p>')
+    out.append(checks)
+    out.append("</section>")
+    return "".join(out)
+
+
+def render_checks(d: dict, issue: dict, icfg: dict) -> str:
+    """制度の確認（背景台帳の checklist のうち、この論点に紐づく項目）。問いだけを見せる折りたたみ。"""
+    s = d["cfg"]["sources_common"]
+    bg = d["background"]
+    checks = [c for c in bg["checklist"]["items"] if issue["id"] in (c.get("issue_ids") or [])]
+    if not checks:
+        return ""
+    out = [f'<div class="fr-checks"><p class="fr-eyebrow">{esc(s["check_eyebrow"])}</p>']
+    for c in checks:
+        note = icfg.get("check_notes", {}).get(c["id"])
+        body = (f'<p class="fr-eyebrow">{esc(c["label"])}'
+                f'<span>{esc(s["checked"].format(checked_on=jp_date(bg["checked_on"])))}</span></p>'
+                f'<p>{esc(c["found"])}</p>'
+                + (f'<p class="fr-fine">{esc(note)}</p>' if note else "")
+                + details_sources(c["sources"], s["sources_label"]))
+        out.append(fold("fr-check", f'<span class="fr-sum-text">{esc(c["ask"])}</span>', body, f' data-check="{esc(c["id"])}"'))
+    out.append("</div>")
+    return "".join(out)
+
+
+def render_see_also(d: dict, icfg: dict) -> str:
+    links = icfg.get("see_also", [])
+    if not links:
+        return ""
+    values = {"regions": len(d["ocfg"]["candidates"])}
+    items = "".join(f'<li><a href="{esc(l["href"])}">{esc(l["text_template"].format(**values))}</a></li>' for l in links)
+    return (f'<section class="fr-block fr-see"><h4>{esc(d["cfg"]["see_also_common"]["title"])}</h4>'
+            f'<ul>{items}</ul></section>')
+
+
+def render_panel(d: dict, issue: dict, selected: str, rank: int) -> str:
+    cfg, public, c = d["cfg"], d["public"], compact(d)
+    iid = issue["id"]
+    icfg = cfg["issues"].get(iid, {})
+    n, total = int(issue["count"]), int(public["opinion_count"])
+    name = issue_name(d, issue)
+    complete = icfg.get("status") == "complete"
+    k = len(public["issues"])
+    rank_text = f"{k}つの分類で最も多い件数です。" if rank == 1 else f"{k}つの分類のうち{rank}番目の件数です。"
+    out = [f'<section class="fr-panel issue-panel{" is-complete" if complete else " is-pending"}" id="issue-{esc(iid)}" '
+           f'data-issue-panel="{esc(iid)}" aria-labelledby="fr-h-{esc(iid)}"{" data-selected" if iid == selected else ""}>',
+           '<header class="fr-panel-head"><div>'
+           f'<p class="fr-eyebrow">選んだ論点<span>分類名「{esc(issue["label"])}」</span></p>'
+           f'<h3 id="fr-h-{esc(iid)}" tabindex="-1">{esc(name)}</h3>']
+    paras = icfg.get("description", [])
+    # 論点の説明は1段落目だけを見せ、2段落目からは「くわしく」の折りたたみ（文は変えない）
+    for para in paras[:1]:
+        out.append(f'<p class="fr-desc">{esc(para)}</p>')
+    if len(paras) > 1:
+        out.append(fold("fr-desc-more", esc(c["desc_more"]), "".join(f'<p class="fr-desc">{esc(p)}</p>' for p in paras[1:])))
+    out.append(f'</div><p class="fr-count"><b>{fmt(n)}</b><span>件</span>'
+               f'<small>SNSの意見{fmt(total)}件のうち{pct1(n, total)}%。{esc(rank_text)}</small></p>'
+               f'<p class="fr-back"><a href="#fukushuto-reading">{esc(c["back"])}</a></p></header>')
+    if not complete:
+        out.append(render_stance(d, issue))
+        out.append(f'<p class="fr-pending">{esc(cfg["pending_note"])}</p>')
+        out.append(render_reasons(d, issue, icfg))
+        out.append("</section>")
+        return "".join(out)
+    out.append('<div class="fr-grid"><div class="fr-main">')
+    out.append(render_reasons(d, issue, icfg))
+    out.append(render_reason_details(d, issue, icfg))
+    out.append(render_stance(d, issue))
+    out.append(render_posts(d, issue, icfg))
+    out.append('</div><div class="fr-side">')
+    out.append(render_evidence(d, issue, icfg))  # 制度の確認（render_checks）もこの中に入る
+    out.append(render_see_also(d, icfg))
+    out.append(render_trend(d, issue))
+    out.append("</div></div></section>")
+    return "".join(out)
+
+
+def render_tabs(d: dict, issues: list[dict], selected: str) -> str:
+    """論点タブ（アイコン＋論点名）。山なみの図とは別に、読書面の上で論点を切り替える。"""
+    icons = {i["id"]: i.get("icon", "") for i in d["planet"].get("issues", [])}
+    on = ' aria-current="true"'
+    items = "".join(
+        f'<li><a class="fr-tab" href="#issue-{esc(i["id"])}" data-issue-id="{esc(i["id"])}"'
+        f'{on if i["id"] == selected else ""}>'
+        f'<span class="fr-tab-icon" aria-hidden="true">{esc(icons.get(i["id"], ""))}</span>{esc(issue_name(d, i))}</a></li>'
+        for i in issues)
+    return f'<nav class="fr-tabs" aria-label="{esc(compact(d)["tabs_label"])}"><ul>{items}</ul></nav>'
+
+
+def render_reading(d: dict) -> str:
+    cfg = d["cfg"]
+    sec = cfg["section"]
+    issues = ordered_issues(d)
+    completes = [i["id"] for i in issues if cfg["issues"][i["id"]].get("status") == "complete"]
+    selected = completes[0] if completes else issues[0]["id"]
+    total = int(d["public"]["opinion_count"])
+    out = [READING_START, '<section class="fr" id="fukushuto-reading" aria-labelledby="fr-title" '
+           f'data-default-issue="{esc(selected)}">', '<div class="fr-map">',
+           f'<p class="fr-eyebrow">{esc(sec["eyebrow"])}</p><h2 id="fr-title">{esc(sec["title"])}</h2>',
+           f'<p class="fr-lead">{esc(sec["lead"])}</p>',
+           '<div class="fr-map-shell">' + mountains_svg(d, issues, selected) + "</div>",
+           f'<p class="fr-fine">{esc(sec["axis_note"])}{esc(sec["min_width_note"])}</p>',
+           f'<nav class="fr-chips" aria-label="{esc(sec["chips_label"])}"><ul>']
+    for issue in issues:
+        n = int(issue["count"])
+        other = " is-other" if issue["id"] == cfg["other_issue_id"] else ""
+        current = ' aria-current="true"' if issue["id"] == selected else ""
+        out.append(f'<li><a class="fr-chip{other}" href="#issue-{esc(issue["id"])}" data-issue-id="{esc(issue["id"])}"{current}>'
+                   f'<span class="fr-chip-name">{esc(issue_name(d, issue))}</span>'
+                   f'<span class="fr-chip-n">{fmt(n)}<small>件・{pct1(n, total)}%</small></span></a></li>')
+    out.append('</ul></nav><p class="fr-live" aria-live="polite" id="fr-live"></p></div>')
+    out.append('<div class="fr-panels">')
+    out.append(render_tabs(d, issues, selected))
+    ranks = {i["id"]: r for r, i in enumerate(sorted(d["public"]["issues"], key=lambda i: (-int(i["count"]), i["id"])), 1)}
+    # 既定の論点を先頭に置く（JavaScriptなしで最初に読めるように）。残りは件数順（その他は最後）。
+    for issue in sorted(issues, key=lambda i: i["id"] != selected):
+        out.append(render_panel(d, issue, selected, ranks[issue["id"]]))
+    out.append("</div>")
+    out.append(f'<p class="fr-footer">{esc(cfg["footer"].format(updated_on=jp_date(d["public"]["updated_on"])))}</p>')
+    out.append("</section>")
+    out.append(READING_END)
+    return "\n".join(out) + "\n"
+
+
+def default_as_of(d: dict) -> str:
+    return opening.default_as_of(d["data"])
+
+
+def render_page(d: dict, as_of: str) -> str:
+    fragment = opening.render_fragment(d["data"], as_of)
+    reading = render_reading(d)
+    bg = ""
+    if "bg" in d:
+        import fukushuto_background as background
+
+        bg = background.render(d, as_of, ordered_issues(d))
+    title = "副首都・論点の読書面" + ("と背景" if bg else "") + "の試作"
+    page = (
+        "<!doctype html>\n<html lang=\"ja\">\n<head>\n<meta charset=\"utf-8\">\n"
+        "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n"
+        f"<title>{esc(title)}</title>\n<meta name=\"robots\" content=\"noindex\">\n"
+        "<link rel=\"stylesheet\" href=\"opening.css\">\n"
+        "<link rel=\"stylesheet\" href=\"reading.css\">\n"
+        "<script src=\"reading.js\" defer></script>\n</head>\n<body>\n"
+        "<header class=\"fr-site\"><a href=\"#\" class=\"fr-logo\">SNS反応まっぷ</a>"
+        f"<span>{esc(title)}（基準日 {esc(as_of)}）</span></header>\n"
+        "<main>\n<div class=\"fop-page\">\n" + fragment + "</div>\n" + reading + bg + "</main>\n</body>\n</html>\n"
+    )
+    return add_x_embeds(page)
+
+
+def build(out_dir: Path = OUT_DIR, as_of: str | None = None, config: Path = CONFIG) -> Path:
+    d = load(config)
+    check_all(d)
+    as_of = as_of or default_as_of(d)
+    date.fromisoformat(as_of)
+    out_dir.mkdir(parents=True, exist_ok=True)
+    out = out_dir / "index.html"
+    out.write_text(render_page(d, as_of), encoding="utf-8")
+    for name in ("reading.css", "reading.js", "opening.css"):
+        shutil.copyfile(ASSETS / name, out_dir / name)
+    return out
+
+
+def main() -> None:
+    ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    ap.add_argument("--config", type=Path, default=CONFIG)
+    ap.add_argument("--as-of", help="基準日 YYYY-MM-DD（既定は公開JSONの updated_on）")
+    ap.add_argument("--out-dir", type=Path, default=OUT_DIR)
+    args = ap.parse_args()
+    print(f"wrote {build(args.out_dir, args.as_of, args.config)}")
+
+
+if __name__ == "__main__":
+    main()

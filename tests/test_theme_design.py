@@ -11,6 +11,7 @@ class ThemeDesignTests(unittest.TestCase):
         for slug in THEMES:
             with self.subTest(slug=slug):
                 text=(ROOT/'docs'/f'{slug}-reaction-map.html').read_text()
+                if any(f'name="{n}-layout"' in text for n in ("koshitsu","fukushuto","ai-copyright","constitutional","bike")):continue  # 新デザインは共通の見た目を掛けない（apply_theme_design.finish が飛ばす）
                 result=transform(text,slug)
                 self.assertEqual(result,transform(result,slug))
                 old=BeautifulSoup(text,'html.parser');new=BeautifulSoup(result,'html.parser')

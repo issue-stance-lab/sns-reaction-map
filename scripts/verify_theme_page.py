@@ -225,7 +225,8 @@ _ISSUE_COUNT_PATTERNS = (
     r"(?<![0-9])(\d+)論点(?![0-9])",
 )
 _OPINION_COUNT_PATTERNS = (
-    r"意見\s*(\d[\d,]*)\s*件",
+    # 「制度の説明・背景への意見」「対象を限定しない意見」は理由区分の名前で、ページ全体の意見数ではない
+    r"(?<!への)(?<!しない)意見\s*(\d[\d,]*)\s*件",
     r"分析対象の意見\s*(\d[\d,]*)\s*件",
 )
 _COLLECTED_COUNT_PATTERNS = (
@@ -306,7 +307,20 @@ def verify_planet_breakdowns(theme: str, page: str, data: dict[str, Any]) -> tup
     failures = 0
     count_free = theme == "school-nickname-ban"
     redesign = None
-    if 'id="public-data"' in page and theme == "bukatsu-chiiki":
+    # 新デザインは理由の件数を <b> に分けて描く。表示形式だけが違うので、各論点の欄の中で照合する。
+    koshitsu_redesign = theme == "koshitsu-tenpakai" and 'name="koshitsu-layout"' in page
+    # 副首都の新デザインも同じ形（理由区分の件数は .fr-reason-n b、論点の件数は .fr-count b）
+    fukushuto_redesign = theme == "fukushuto" and 'name="fukushuto-layout"' in page
+    # 生成AIと著作権の新デザインも副首都と同じ形（scripts/ai_copyright_layout.py）
+    fukushuto_redesign = fukushuto_redesign or (theme == "ai-copyright" and 'name="ai-copyright-layout"' in page)
+    # 憲法改正論議の新デザインも同じ形（scripts/constitutional_layout.py）
+    fukushuto_redesign = fukushuto_redesign or (
+        theme == "constitutional-amendment" and 'name="constitutional-layout"' in page)
+    # 自転車の青切符の新デザインも同じ形（scripts/bike_layout.py）
+    fukushuto_redesign = fukushuto_redesign or (theme == "bike-blue-ticket" and 'name="bike-layout"' in page)
+    redesign_prefix = "fr" if fukushuto_redesign else "kr"
+    koshitsu_redesign = koshitsu_redesign or fukushuto_redesign
+    if ('id="public-data"' in page and theme == "bukatsu-chiiki") or koshitsu_redesign:
         from bs4 import BeautifulSoup
         redesign = BeautifulSoup(page, "html.parser")
     for issue in data.get("issues", []):
@@ -327,7 +341,19 @@ def verify_planet_breakdowns(theme: str, page: str, data: dict[str, Any]) -> tup
                 item["label"] for item in items
                 if f'{item["count"]}件</span>' not in page
             ] if not count_free else []
-            if redesign is not None:
+            if redesign is not None and koshitsu_redesign:
+                panel = redesign.find(id="issue-" + issue_id)
+                mismatched = []
+                for item in items:
+                    node = panel.select_one(
+                        f'li.{redesign_prefix}-reason[data-reason="{item["id"]}"] .{redesign_prefix}-reason-n b'
+                    ) if panel else None
+                    if node is None or node.get_text() != f'{int(item["count"]):,}':
+                        mismatched.append(item["label"])
+                heading = panel.select_one(f".{redesign_prefix}-count b") if panel else None
+                if heading is None or heading.get_text() != f"{int(total):,}":
+                    mismatched.append("論点の件数")
+            elif redesign is not None:
                 panel = redesign.find(id=issue_id)
                 mismatched = []
                 for item in items:
