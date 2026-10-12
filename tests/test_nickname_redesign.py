@@ -361,3 +361,135 @@ class ReadingPageTests(unittest.TestCase):
     def test_check_dates_come_from_ledger(self):
         node = self.panel(FIRST).select_one('.fr-check[data-check="reason"]')
         self.assertIn(f'確認日 {self.reading.jp_date(self.d["background"]["checked_on"])}', node.get_text())
+
+
+class AllIssuesAndBackgroundTests(unittest.TestCase):
+    """手順6：残りの論点と背景の開閉行。"""
+
+    @classmethod
+    def setUpClass(cls):
+        from scripts import nickname_background as background
+        from scripts import nickname_reading as reading
+
+        cls.reading, cls.background = reading, background
+        cls.tmp = tempfile.TemporaryDirectory()
+        cls.html = reading.build(Path(cls.tmp.name) / "a").read_text(encoding="utf-8")
+        cls.s = soup_of(cls.html)
+        cls.d = reading.load()
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.tmp.cleanup()
+
+    def render_bg(self, d=None):
+        d = d or self.d
+        return self.background.render(d, PUBLIC["updated_on"], self.reading.ordered_issues(d))
+
+    def row(self, d, rid):
+        return next(r for g in d["bg"]["cfg"]["groups"] for r in g["rows"] if r["id"] == rid)
+
+    def test_all_shown_issues_complete(self):
+        labels = {i["id"]: i["label"] for i in PUBLIC["issues"]}
+        for issue in self.reading.ordered_issues(self.d):
+            icfg = self.d["cfg"]["issues"][issue["id"]]
+            self.assertEqual(icfg["status"], "complete", issue["id"])
+            self.assertEqual(len(icfg["description"]), 2, issue["id"])
+            self.assertEqual(set(icfg["reasons"]), set(self.d["reread"][labels[issue["id"]]]["buckets"]), issue["id"])
+            self.assertIn(len(icfg["posts"]["items"]), (1, 2), issue["id"])
+            self.assertTrue(icfg["posts"]["selection_basis"], issue["id"])
+        self.assertEqual(self.s.select(".fr-panel.is-pending"), [])
+        self.assertEqual(len(self.s.select(".fr-panel")), 6)
+
+    def test_posts_not_reused_across_issues(self):
+        ids = [p["id"] for c in self.d["cfg"]["issues"].values() for p in c.get("posts", {}).get("items", [])]
+        self.assertEqual(len(ids), len(set(ids)))
+        self.assertEqual(len(ids), 11)
+
+    def test_in_page_links_resolve(self):
+        for a in self.s.select('a[href^="#"]'):
+            href = a["href"]
+            if href in ("#", "#planet-block", "#school-nickname-ban-tide-widget"):
+                continue  # 手順7で元HTMLから写す山なみ・潮目のカード
+            self.assertIsNotNone(self.s.find(id=href[1:]), href)
+
+    def test_rows_are_closed_details(self):
+        rows = self.s.select("#school-nickname-ban-background details.fb-row")
+        self.assertEqual([r["data-row"] for r in rows],
+                         ["national", "school", "voices", "why", "timeline", "faq", "help", "classroom", "unverified"])
+        self.assertTrue(all(not r.has_attr("open") for r in rows))
+        self.assertEqual(self.s.select_one('[data-row="national"]')["id"], "bg-national")
+        self.assertEqual(self.s.select_one('[data-row="faq"]')["id"], "school-nickname-faq")
+
+    def test_national_row_keeps_three_layers(self):
+        node = self.s.select_one("#bg-national")
+        self.assertTrue(node.select_one(".fb-ok"))
+        self.assertTrue(node.select_one(".fb-ng"))
+        text = node.get_text()
+        for word in ("「あだ名」「さん付け」の語はありませんでした", "第13条", "校長", "2021年6月8日の事務連絡"):
+            self.assertIn(word, text)
+        voices = self.s.select_one("#bg-voices")
+        self.assertIn("ここからはSNSの意見", voices.select_one(".fb-opinion-label").get_text())
+        cand = json.loads(OPENING_CONFIG.read_text(encoding="utf-8"))["background_candidates"]["items"]
+        for k, v in cand.items():
+            self.assertIn(v["expectation"], voices.get_text())
+            self.assertIn(v["concern"], voices.get_text())
+
+    def test_checked_on_drives_time_wording(self):
+        when = opening.jp_date(self.d["ocfg"]["checked_on"])
+        self.assertIn(f"{when}時点のいじめ防止対策推進法", self.s.select_one("#bg-national").get_text())
+        self.assertIn(f"{when}時点で、あだ名や呼び方を全国一律に定める", self.s.select_one("#bg-timeline").get_text())
+        d = copy.deepcopy(self.d)
+        d["ocfg"]["checked_on"] = "2026-12-01"
+        self.assertIn("2026年12月1日時点", self.render_bg(d))
+        d["ocfg"]["checked_on"] = "2026-09-01"  # 背景台帳の確認日より古い
+        with self.assertRaises(SystemExit):
+            self.render_bg(d)
+
+    def test_unverified_mentions_uncollected_and_next(self):
+        text = self.s.select_one("#bg-unverified").get_text()
+        self.assertIn("9月21日以降の投稿", text)
+        self.assertIn("10月18日", text)
+        self.assertIn("判例", text)
+
+    def test_faq_moved_from_opening_without_overlap(self):
+        oc = json.loads(OPENING_CONFIG.read_text(encoding="utf-8"))
+        self.assertEqual(oc["faq"]["placement"], "background")
+        self.assertNotIn("nop-faq", self.html)
+        qs = [dt.get_text() for dt in self.s.select("#school-nickname-faq dt")]
+        self.assertEqual(len(qs), 4)
+        self.assertFalse(set(qs) & {a["q"] for a in oc["answers"]})
+        for q in ("学校のあだ名禁止は法律で決まっていますか？", "あだ名禁止と、全員をさん付けで呼ぶことは同じですか？"):
+            self.assertNotIn(q, qs)
+        d = copy.deepcopy(self.d)
+        d["ocfg"]["faq"]["placement"] = "opening"
+        with self.assertRaises(SystemExit):
+            self.render_bg(d)
+
+    def test_help_row_once_and_linked_from_opening(self):
+        self.assertEqual(len(self.s.select("#bg-help")), 1)
+        self.assertEqual(self.s.select_one("#bg-help .fb-phone a")["href"], "tel:0120078310")
+        self.assertTrue(self.s.select('#school-nickname-safety a[href="#bg-help"]'))
+        self.assertEqual(self.html.count("0120-0-78310"), 1)
+
+    def test_timeline_adds_notice(self):
+        node = self.s.select_one("#bg-timeline")
+        self.assertEqual([li["data-event"] for li in node.select("li[data-event]")], ["law-2013", "policy-2017", "notice-2021", "guidance-2022"])
+        d = copy.deepcopy(self.d)
+        del self.row(d, "timeline")["extra"][0]["before_ledger_reason"]
+        with self.assertRaises(SystemExit):
+            self.render_bg(d)
+
+    def test_classroom_is_read_from_shared_config(self):
+        cr = json.loads((ROOT / "configs/classroom/school-nickname-ban.json").read_text(encoding="utf-8"))
+        text = self.s.select_one("#bg-classroom").get_text()
+        for r in cr["reasons_pro"] + cr["reasons_con"]:
+            self.assertIn(r["text"], text)
+
+    def test_themes_yaml_mismatch_stops(self):
+        d = copy.deepcopy(self.d)
+        d["bg"]["theme"]["updated_at"] = "2026-01-01"
+        with self.assertRaises(SystemExit):
+            self.render_bg(d)
+
+    def test_opening_why_says_reason_unverified(self):
+        self.assertIn("この理由は、国の資料と事務連絡には書かれていませんでした。", self.html)

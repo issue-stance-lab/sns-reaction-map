@@ -89,6 +89,19 @@
 
   addEventListener('hashchange', () => { const id = fromHash(); if (id) select(id, true); else reasonFromHash(); });
 
+  // 背景の開閉行（details.fb-row）へのページ内リンク：行き先を開いてから移動する（あだ名禁止だけの動き。
+  // 各論点の根拠欄の「背景の1行目」、冒頭の「相談できる窓口」「よくある質問」が開いた状態で読めるように）。
+  const openRow = h => {
+    const el = h && document.getElementById(decodeURIComponent(h.slice(1)));
+    if (el && el.matches('details.fb-row')) el.open = true;
+  };
+  document.addEventListener('click', ev => {
+    const a = ev.target.closest('a[href^="#"]');
+    if (a) openRow(a.getAttribute('href'));
+  });
+  openRow(location.hash);
+  addEventListener('hashchange', () => openRow(location.hash));
+
   // 山なみ（手順7で元HTMLから写す対話式の図）から論点を選ぶための入口。
   window.NicknameReading = Object.freeze({
     select(id) { if (!ids.includes(id)) return false; select(id, true); return true; }

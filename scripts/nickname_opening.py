@@ -288,7 +288,11 @@ def render_count(data: dict) -> str:
 
 
 def render_faq(config: dict) -> str:
+    """FAQ。設定 faq.placement が "background" のときは冒頭に出さない（背景の「よくある質問」の行が
+    冒頭と重ならない問いだけを読む。scripts/nickname_background.py）。"""
     f = config["faq"]
+    if f.get("placement") == "background":
+        return ""
     items = "".join(
         f'<details class="nop-faq__item"><summary>{esc(item["q"])}</summary><p>{esc(item["a"])}</p></details>'
         for item in f["items"]
@@ -323,7 +327,9 @@ def render_fragment(data: dict) -> str:
             f'<div class="nop-answers">{answers}</div>',
             render_scope(config),
             render_count(data),
-            f'<aside class="nop-safety"><b>{esc(s["title"])}</b><p>{esc(s["text"])}</p></aside>',
+            f'<aside class="nop-safety" id="school-nickname-safety"><b>{esc(s["title"])}</b><p>{esc(s["text"])}</p>'
+            + (f'<p><a href="{esc(s["link_href"])}">{esc(s["link_text"])}</a></p>' if s.get("link_href") else "")
+            + "</aside>",
             f'<nav class="nop-links" aria-label="このページの読み方">{links}</nav>',
             f'<div class="nop-sources"><p data-checked-on="{esc(config["checked_on"])}">{esc(checked)}</p><ul>{sources}</ul></div>',
             "</section>",
