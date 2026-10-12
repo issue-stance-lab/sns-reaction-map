@@ -299,3 +299,96 @@ python3 scripts/build_fukushuto_redesign.py --mode preview --output-dir /tmp/fuk
 - 実機（iPhone Safari など）とスクリーンリーダー。
 - 新規の意見がある回の定期更新（模擬は新規0件）。
 - `#issue-…` 付きで読み込んだとき、読書面は切り替わるが、画面の位置は山なみの選択パネル付近に止まる（生成AIと同じ。読書面の欄までは運ばない）。
+
+## 11. 部活動型の圧縮（2026-10-12）
+
+ブランチ `task/compact-two-themes`。生成AIと著作権（`2026-10-11-ai-copyright-production-candidate.md` 11節、コミット 944adfc9）と同じ型で、
+論点ごとの読書面と「作り方・詳細データ」を部活動（`docs/bukatsu-chiiki-reaction-map.html`）の収め方にした。
+**文・件数・出典は1つも変えていない**。変えたのは最初に見せる量だけ（折りたたみ・上位4件・選んだ1件だけ展開）。冒頭・対話式の山なみ・
+投票・背景の開閉行・保護対象（作り方・詳細データ・SEO・GA4・AdSense）の中身は変えていない。
+
+### 11-1. 変えたもの
+
+| ファイル | 変更 |
+|---|---|
+| `scripts/fukushuto_reading.py` | 生成AIの `ai_copyright_reading.py`（11節）と同じ部品に差し替えた：論点タブ（`nav.fr-tabs`、山なみ設定の絵文字＋論点名）、説明の1段落目だけ見せて2段落目は「説明の続き」、「山なみへ戻る ↑」、理由一覧は理由名＋件数の上位4件（残りと数え方の注記は「残りの理由を見る（N区分）」）、理由の説明（どんな声か・立場の内訳）は区分ごとの `article.fr-reason-detail` で件数1位だけ表示・「次の理由へ」、立場別集計・投稿例・収集ごとの表は折りたたみ、照合（主張・資料の確認・資料にしかない話・制度の確認）は「資料と照らす：投稿の主張と制度の確認」の下に1件ずつ見出し（判定ラベル付き）だけの折りたたみ。理由区分の無い論点（都構想・維新、定義・中身）は未公開の表示のまま |
+| `configs/fukushuto-reading.json` | `compact`（見出し・折りたたみの名前だけ。生成AIとは別の言い回しにした。上位件数 `top_reasons: 4`） |
+| `scripts/build_fukushuto_redesign.py` | 作り方（ARTICLE_TRUST）と詳細データを1つの折りたたみ `#fu-method`「集計の方法と、全データ」へ（中身は元HTMLのまま）。旧アンカーの読み替えスクリプトに、折りたたみの中（`#detail-data`・`#article-trust-title` など）へ来たら外側を開いて移る処理を追加 |
+| `scripts/fukushuto_redesign/reading.js` | 生成AIと同じ：論点タブも切り替える、理由の行・「次の理由へ」で説明を1つだけ見せる、`#fr-r-{論点}-{区分}` で来たらその理由を開く |
+| `scripts/fukushuto_redesign/reading.css`・`production.css` | 生成AIの追加分を写した（推移の「ひと目」の分は除く。藍の淡色は `--ai-soft`）。作り方の折りたたみの見た目 |
+| `scripts/fukushuto_redesign_provenance.py` | 区分ごとの立場の帯と「どんな声か」を理由の説明（`article.fr-reason-detail`）から照合。説明の件数も照合 |
+| `tests/test_fukushuto_redesign.py` | `CompactReadingTests` 9件（折りたたみの初期状態、タブ、説明の1段落目、上位4件と1件だけ展開、理由区分の無い論点の未公開表示、照合の折りたたみと判定ラベル、作り方と詳細データが折りたたみの中に文字どおり、折りたたみの中への移動、出所検査の改ざん検知） |
+| `tests/test_fukushuto_redesign_browser.cjs` | 新しい構造に合わせた（`.fr-chip`→`.fr-tab`、山は `#section .hill`、GA4 の `issue_view` を gtag の差し替えで確認、理由の切替、全論点の折りたたみ全開、作り方を開く、`#detail-data`・`#article-trust-title`・`#fr-r-…` 付きの読み込み）。10節で `.fr-chip`・`.fr-hill` が無くなり動かなくなっていたのも直した。`#fb-…` は山なみのスクリプトが `#fukushuto-finance` に書き換えることがあるので両方を認めた（生成AIと同じ） |
+| `docs/fukushuto-reaction-map.html`・`quality/prototypes/fukushuto-release/`・`quality/prototypes/fukushuto-reading/` | 作り直し |
+
+テーマ固有の違い：推移の節は新デザインに無い（元HTMLの潮目ウィジェットも載せない）ので、生成AIの「ひと目で見る推移」は作らず、
+論点ごとの「収集ごとの割合と件数」の1行の表を折りたたんだだけ。新しい公開文言は見出し・折りたたみの名前だけ。
+言い回しの検査（`verify_page_originality.py`）は見出しに隙間なく続く段落を書き出しとして拾わないため、理由区分の無い論点では
+次の段落（立場別集計の「この論点のN件を、副首都法案への立場で分けました。」）が生成AIの同じ役目の文と比べられて 0.72 で止まった。
+見出しと未公開の注記の間に改行を1つ入れ（表示は変わらない）、見出しの本当の書き出し（未公開の注記）が比べられるようにした。
+
+### 11-2. 折りたたみの初期状態（375px・1280px 共通）
+
+| 場所 | 初期表示で見えるもの | 折りたたんだもの（初期は閉） |
+|---|---|---|
+| 読書面の上 | 論点タブ7つ（選んだ論点が藍） | — |
+| 論点の見出し | 分類名・論点名・説明の1段落目・件数と割合・「山なみへ戻る ↑」 | 説明の2段落目（「説明の続き」） |
+| 理由の内訳（N区分） | 件数上位4件の理由名＋件数＋割合。都構想・維新と定義・中身は未公開の注記 | 残りの理由と数え方の注記（「残りの理由を見る（N区分）」。候補地3区分・その他1区分） |
+| いま読んでいる理由 | 件数1位の理由の見出し・どんな声か・立場の内訳・「次の理由へ」 | 他の理由の説明（JSで非表示。JSなしでは全部並ぶ） |
+| 立場 | — | 「法案への立場の内訳」（帯・3立場の件数・注記） |
+| 投稿 | — | 「実際の投稿を見る（2件）」（要約2件・元の投稿の埋め込み） |
+| 資料と照らす | 主張・資料の確認・資料にしかない話・制度の確認の見出し（主張は判定ラベル付き） | 各項目の中身（照合の結果・該当投稿数・出典）、照合の前置き |
+| あわせて確かめる | リンク（前のまま） | — |
+| 収集ごとの割合と件数 | — | 最新の累計の表と注記 |
+| 背景 | 前のまま（8行すべて閉） | — |
+| 作り方・詳細データ | 「集計の方法と、全データ」1行 | このページの作り方・詳細データ（中身は元HTMLのまま） |
+
+ページ全体の `<details>` は43個→99個。初期状態で `open` なのは1個（詳細データの「論点別件数（main_issue）」。元HTMLのまま）で、
+閉じた「集計の方法と、全データ」の中にあるため、初期表示で開いて見えるものは0個。JavaScriptが無くても、すべて `<details>` で開閉できる。
+
+### 11-3. 前後の計測（Playwright・Chromium、`docs/` を 127.0.0.1 で配信、x.com・platform.twitter.com・twimg.com を遮断）
+
+測り方は生成AIの11-3と同じ（h2の節＝その h2 の上端から次の表示中の h2 の上端まで。選んだ論点の読書面 `.fr-panel[data-selected]` は直接。
+文字数の「表示中」は `checkVisibility()` が真の要素、「旧方式」は `getClientRects()` が空でない要素。前は `git archive HEAD docs` の写しで測った）。
+
+| 375px | 前 | 後 |
+|---|---|---|
+| ページ全体の高さ | 15,211px | **10,889px** |
+| h2「🏛️ 都構想・維新」の節（山なみの選択パネル＋タブ＋読書面）＝司令塔の「読書面」 | 5,751px | **2,972px** |
+| 同、表示中の文字数（旧方式） | 2,399字（3,436字） | **1,078字**（2,979字） |
+| 論点1つの読書面（`.fr-panel`、都構想・維新） | 4,450px | **1,612px** |
+| 同、7論点の最大／最小 | 5,653px（候補地）／3,677px | 2,302px（費用・財源）／1,511px（定義・中身） |
+| 同、表示中の文字数 | 1,951字 | 583字 |
+| 作り方＋詳細データ | 849＋787px | 70px（閉じた1行） |
+| 制度の背景 | 1,284px | 変えていない（h2の節は閉じた作り方の1行を含めて 1,377px） |
+
+| 1280px | 前 | 後 |
+|---|---|---|
+| ページ全体の高さ | 9,142px | 6,550px |
+| h2の節（都構想・維新） | 3,285px | 1,828px |
+| 論点1つの読書面 | 2,472px | 957px |
+
+目標（375pxで読書面 3,000px以下・表示文字 2,000字以下・ページ全体 13,000px以下）は、h2の節で測っても満たした。
+
+### 11-4. 検査結果（作業ツリー、2026-10-12）
+
+| 検査 | 結果 |
+|---|---|
+| `build_fukushuto_arena.py` → `--check` | 「UPDATE: HTMLを更新しました」→「OK: 差分なし」 |
+| 2回生成 | md5 一致（`afefb2c1…`、`PYTHONHASHSEED=0` でも同じ、docs・公開候補とも一致） |
+| `verify_theme_page.py` | 全10テーマ NG 0 |
+| `verify_number_provenance.py fukushuto` | 323/323 説明済み・NG 0。閉じた折りたたみの中の件数（主張の投稿数・「残りの理由」の行）を1つずらすと止まることも確かめた |
+| `verify_builder_rebuildability.py`・`run_public_checks.py`・`python3 -m unittest discover tests` | 10テーマ NG 0・終了0・1,866件 OK（skip 8）。皇室の11節と同じ回（両テーマの変更が入った状態）でまとめて実行 |
+| よみやす（docs、`--strict`） | 完成を止める指摘 0件・PASS |
+| `verify_page_originality.py` | 使い回し0（11-1 の改行の対処後） |
+| 10/19 の模擬（新規0件、使い捨てコピー） | `refresh_adapters/fukushuto.build` → `prepare_public_candidate_bundle`（完了記録の検査だけ外した。保存回 10/10 の report を代用）。公開対象66件。候補の新ページは基準日 2026-10-19 でタブ7つ・折りたたみ入り、375pxで h2の節 2,972px・読書面 1,612px・ページ 10,931px。候補の中で `verify_theme_page.py` 全テーマ NG 0、`verify_number_provenance.py fukushuto` NG 0、よみやす PASS、部活動・皇室・生成AIの公開ページは変わらず |
+| Playwright（`tests/test_fukushuto_redesign_browser.cjs`、1280/375px） | 合格。横はみ出し0（全論点の折りたたみを全部開いても0）、コンソールエラー0（遮断した外部読み込みの失敗だけ）。タブ7つで scrollY 不変、山を押すと読書面が画面上部へ・`issue_view` がその論点で記録、理由の行で説明が1つだけ・「次の理由へ」で次へ、`#detail-data`・`#article-trust-title` で外側が開く、`#fr-r-…` で理由が開く、JSなしで7論点・作り方・詳細データが開ける、X埋め込み遮断で案内と元投稿リンク2件。投票は押していない |
+
+撮影: `quality/prototypes/fukushuto-release/evidence/compact/`（`page-{desktop,mobile}.png` 全体、`reading-1/2-*.png` 読書面の先頭2画面、
+`reason-open-*.png` 理由を1つ開いた画面（候補地）、`background-open-*`・`nojs-desktop`・`x-embed-fallback`）。
+
+### 11-5. 確認していないこと
+
+- 実機（iPhone Safari など）とスクリーンリーダー。Playwright の Chromium だけ。
+- 新規の意見がある回の定期更新（模擬は新規0件）。
+- GA4 の `issue_view` の実際の送信（localhost では GA のタグが読み込まれないので、gtag を差し替えて呼び出しだけを確かめた）。

@@ -34,6 +34,7 @@ import json
 import re
 import sys
 from datetime import date
+from html import escape
 from pathlib import Path
 
 from bs4 import BeautifulSoup, Comment
@@ -314,8 +315,11 @@ def _alias_script() -> str:
             "else if(id.startsWith('fuk-entry-panel-'))id='fukushuto-opening';"
             "else if(aliases[id])id=aliases[id];else return;"
             "location.replace('#'+id);const t=document.getElementById(id);if(t&&t.tagName==='DETAILS')t.open=true;}"
+            # 折りたたみの中の場所（作り方・詳細データなど）へ来たら、外側の折りたたみを開いて見せる（生成AIと同じ）
             "function openRow(){const t=document.getElementById(decodeURIComponent(location.hash.slice(1)));"
-            "if(t&&t.tagName==='DETAILS')t.open=true;}"
+            "if(!t)return;let d=t.tagName==='DETAILS'?t:t.closest('details'),moved=false;"
+            "while(d){if(!d.open){d.open=true;moved=true;}d=d.parentElement&&d.parentElement.closest('details');}"
+            "if(moved)requestAnimationFrame(()=>t.scrollIntoView({block:'start'}));}"
             "addEventListener('hashchange',()=>{resolve();openRow();});resolve();openRow();})();</script>")
 
 
@@ -409,8 +413,10 @@ def compose(source: str, root: Path, mode: str, as_of: str | None = None) -> str
         page += '<p class="fu-preview">公開前の確認用ページ（投票は送信されません）</p>\n'
     page += _header() + "\n<main>\n"
     page += body_html[:background_at] + _vote_section(src) + "\n" + body_html[background_at:]
-    page += '<div class="fu-band fu-trust">' + trust + "</div>\n"
-    page += _band(src, "#detail-data", "詳細データ", "fu-detail") + "\n"
+    # 作り方と詳細データは、部活動・生成AIと同じく1つの折りたたみに入れる（中身は元HTMLのまま）
+    page += (f'<details class="fu-band fu-fold fu-method" id="fu-method"><summary>{escape(d["cfg"]["compact"]["method_fold"])}</summary>'
+             '<div class="fu-trust">' + trust + "</div>\n"
+             + _band(src, "#detail-data", "詳細データ", "fu-detail") + "</details>\n")
     page += _band(src, "#related-topics", "次に読むテーマ", "fu-related") + "\n</main>\n"
     page += str(_one(src, "body > footer", "フッター")) + "\n"
     page += "<script>" + reading_js + "</script>\n"

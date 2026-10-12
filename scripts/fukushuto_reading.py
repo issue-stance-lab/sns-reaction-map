@@ -339,69 +339,129 @@ def stance_bar(d: dict, counts: dict, total: int, cls: str = "fr-band") -> str:
     return f'<span class="{cls}" role="img" aria-label="{esc(aria)}">{segs}</span>'
 
 
+def compact(d: dict) -> dict:
+    """2026-10-12 の部活動型の圧縮で使う見出し・折りたたみの名前（設定 compact）。生成AIと著作権と同じ型。"""
+    return d["cfg"]["compact"]
+
+
+def fold(cls: str, summary: str, body: str, attrs: str = "") -> str:
+    """JavaScriptが無くても開閉できる折りたたみ。初期状態は閉じる。"""
+    return f'<details class="fr-fold {cls}"{attrs}><summary>{summary}</summary>{body}</details>'
+
+
 def render_stance(d: dict, issue: dict) -> str:
+    """立場別集計。部活動と同じく折りたたむ（中身は前と同じ帯・一覧・注記）。"""
     sc = d["cfg"]["stance_common"]
     n = int(issue["count"])
     by = {s["id"]: int(s["count"]) for s in issue["stances"]}
     items = "".join(f'<li><span class="fr-sw" style="background:{s["color"]}"></span>{esc(s["label"])}'
                     f'<b>{fmt(by[s["id"]])}</b>件<small>{pct1(by[s["id"]], n)}%</small></li>' for s in stance_order(d))
-    return (f'<section class="fr-block fr-stance" aria-label="{esc(sc["title"])}"><h4>{esc(sc["title"])}</h4>'
+    body = (f'<p class="fr-fold-title">{esc(sc["title"])}</p>'
             f'<p class="fr-lead">{esc(sc["lead"].format(count=fmt(n)))}</p>'
             + stance_bar(d, by, n) + f'<ul class="fr-stance-list">{items}</ul>'
-            f'<p class="fr-fine">{esc(sc["note"])}</p></section>')
+            f'<p class="fr-fine">{esc(sc["note"])}</p>')
+    return fold("fr-block fr-stance", esc(compact(d)["stance_fold"]), body)
 
 
 def render_trend(d: dict, issue: dict) -> str:
+    """収集ごとの割合と件数（最新の累計の1行）。推移の図は公開データに無いので、表を折りたたむだけ。"""
     t = d["cfg"]["trend"]
     public = d["public"]
     period = public["collection_period"]
     row = t["row_label"].format(period_start=jp_date(period["start"]), period_end=jp_date(period["end"], False))
     n, total = int(issue["count"]), int(public["opinion_count"])
-    return (f'<section class="fr-block fr-trend"><h4>{esc(t["title"])}</h4>'
-            '<table><thead><tr><th scope="col">収集</th><th scope="col">件数</th>'
+    body = ('<table><thead><tr><th scope="col">収集</th><th scope="col">件数</th>'
             '<th scope="col">意見全体に占める割合</th></tr></thead>'
             f'<tbody><tr><th scope="row">{esc(row)}</th><td>{fmt(n)}件</td>'
             f'<td>{pct1(n, total)}%<small>（{fmt(total)}件中）</small></td></tr></tbody></table>'
-            f'<p class="fr-fine">{esc(t["note"])}</p></section>')
+            f'<p class="fr-fine">{esc(t["note"])}</p>')
+    return fold("fr-block fr-trend", esc(t["title"]), body)
 
 
-def render_reasons(d: dict, issue: dict, icfg: dict) -> str:
-    rc = d["cfg"]["reasons_common"]
-    n = int(issue["count"])
+def ordered_reasons(d: dict, issue: dict, icfg: dict) -> list[tuple[str, dict]]:
     rr = d["reread"].get(issue["label"])
-    out = [f'<section class="fr-block fr-reasons"><h4>{esc(rc["title"])}</h4>']
     if not rr:
-        out.append(f'<p class="fr-empty" data-unpublished>{esc(rc["unpublished"])}</p></section>')
-        return "".join(out)
-    buckets = rr["buckets"]
+        return []
     voices = icfg.get("reasons", {})
-    items = list(buckets.items())
+    items = list(rr["buckets"].items())
     if icfg.get("reason_sort", "count_desc") == "config" and voices:
         order = list(voices)
         items.sort(key=lambda kv: order.index(kv[0]) if kv[0] in order else len(order))
     else:
         items.sort(key=lambda kv: (-int(kv[1]["count"]), kv[0]))
+    return items
+
+
+def reason_label(icfg: dict, bid: str, bucket: dict) -> str:
+    return icfg.get("reasons", {}).get(bid, {}).get("label_override", bucket["label"])
+
+
+def render_reasons(d: dict, issue: dict, icfg: dict) -> str:
+    """理由一覧：理由名と件数の1行ずつ。上位 top_reasons 件だけ見せ、残りは「ほかの理由を読む」の折りたたみ。"""
+    rc, c = d["cfg"]["reasons_common"], compact(d)
+    n = int(issue["count"])
+    iid = issue["id"]
+    items = ordered_reasons(d, issue, icfg)
+    if not items:
+        # 見出しと注記の間の改行は表示に影響しない。言い回しの検査（verify_page_originality.py）は見出しに隙間なく続く段落を
+        # 書き出しとして拾わないので、改行を入れて、この見出しの本当の書き出し（未公開の注記）が比べられるようにする
+        return (f'<section class="fr-block fr-reasons"><h4>{esc(rc["title"])}</h4>\n'
+                f'<p class="fr-empty" data-unpublished>{esc(rc["unpublished"])}</p></section>')
+    top = int(c["top_reasons"])
+
+    def row(i: int, bid: str, b: dict) -> str:
+        cnt = int(b["count"])
+        current = ' aria-current="true"' if i == 0 else ""
+        return (f'<li class="fr-reason" data-reason="{esc(bid)}"><a class="fr-reason-pick" href="#fr-r-{esc(iid)}-{esc(bid)}" '
+                f'data-reason-pick="{esc(bid)}"{current}><span class="fr-reason-name">{esc(reason_label(icfg, bid, b))}</span>'
+                f'<span class="fr-reason-n"><b>{fmt(cnt)}</b>件<small>{pct1(cnt, n)}%</small></span></a></li>')
+
+    out = [f'<section class="fr-block fr-reasons"><h4>{esc(c["reasons_index_title"].format(k=len(items)))}</h4>'
+           f'<p class="fr-lead">{esc(rc["title"])}</p>',
+           '<ol class="fr-reason-list">' + "".join(row(i, bid, b) for i, (bid, b) in enumerate(items[:top])) + "</ol>"]
+    rest = items[top:]
+    method = f'<p class="fr-fine">{esc(rc["lead"].format(count=fmt(n)))}{esc(rc["note"].format(count=fmt(n)))}</p>'
+    if rest:
+        # 数え方の注記は、残りの理由と一緒に折りたたむ（部活動の「ほかの理由を読む」と同じ置き方）
+        out.append(fold("fr-reason-more", esc(c["reasons_more"].format(k=len(rest))),
+                        f'<ol class="fr-reason-list" start="{top + 1}">'
+                        + "".join(row(top + i, bid, b) for i, (bid, b) in enumerate(rest)) + "</ol>" + method))
+    else:
+        out.append(method)
+    out.append("</section>")
+    return "".join(out)
+
+
+def render_reason_details(d: dict, issue: dict, icfg: dict) -> str:
+    """選んだ理由の説明（どんな声か・立場の内訳）。JavaScriptが動くときは1つだけ見せる（最初は件数1位）。"""
+    rc, c = d["cfg"]["reasons_common"], compact(d)
+    items = ordered_reasons(d, issue, icfg)
+    if not items:
+        return ""
+    rr = d["reread"][issue["label"]]
+    n, iid = int(issue["count"]), issue["id"]
     stances = stance_order(d)
     label_of_stance = {s["key"]: s["id"] for s in stances}
-    per = {bid: Counter(label_of_stance.get(i["stance"], i["stance"]) for i in rr["items"] if i["bucket"] == bid)
-           for bid in buckets}
-    top = max(int(b["count"]) for _, b in items)
-    out.append(f'<p class="fr-lead">{esc(rc["lead"].format(count=fmt(n)))}</p><ol class="fr-reason-list">')
-    for bid, b in items:
-        c = int(b["count"])
-        label = voices.get(bid, {}).get("label_override", b["label"])
-        voice = voices.get(bid, {}).get("voice")
-        st = per[bid]
+    out = ['<div class="fr-reason-reading">']
+    for i, (bid, b) in enumerate(items):
+        cnt = int(b["count"])
+        st = Counter(label_of_stance.get(x["stance"], x["stance"]) for x in rr["items"] if x["bucket"] == bid)
         st_text = "・".join(f'{s["label"]}{fmt(st.get(s["id"], 0))}' for s in stances)
-        out.append(f'<li class="fr-reason" data-reason="{esc(bid)}"><div class="fr-reason-head">'
-                   f'<span class="fr-reason-name">{esc(label)}</span>'
-                   f'<span class="fr-reason-n"><b>{fmt(c)}</b>件<small>{pct1(c, n)}%</small></span></div>'
-                   f'<span class="fr-reason-bar" aria-hidden="true"><i style="width:{c / top * 100:.1f}%"></i></span>')
+        voice = icfg.get("reasons", {}).get(bid, {}).get("voice")
+        nb, nxt = items[(i + 1) % len(items)]
+        out.append(f'<article class="fr-reason-detail" id="fr-r-{esc(iid)}-{esc(bid)}" data-reason="{esc(bid)}"'
+                   f'{" data-on" if i == 0 else ""}><p class="fr-eyebrow">{esc(c["reason_eyebrow"])}'
+                   f'<span>{fmt(cnt)}件・{pct1(cnt, n)}%</span></p><h5>{esc(reason_label(icfg, bid, b))}</h5>')
         if voice:
             out.append(f'<p class="fr-voice"><span>{esc(rc["voice_label"])}</span>{esc(voice)}</p>')
-        out.append(f'<p class="fr-reason-stance">{stance_bar(d, st, c, "fr-mini")}'
-                   f'<span>{esc(rc["stance_label"])}：{esc(st_text)}</span></p></li>')
-    out.append(f'</ol><p class="fr-fine">{esc(rc["note"].format(count=fmt(n)))}</p></section>')
+        out.append(f'<p class="fr-reason-stance">{stance_bar(d, st, cnt, "fr-mini")}'
+                   f'<span>{esc(rc["stance_label"])}：{esc(st_text)}</span></p>')
+        if len(items) > 1:
+            out.append(f'<p class="fr-next"><span>{esc(c["reason_next"])}</span>'
+                       f'<a href="#fr-r-{esc(iid)}-{esc(nb)}" data-reason-pick="{esc(nb)}">'
+                       f'{esc(reason_label(icfg, nb, nxt))} →</a></p>')
+        out.append("</article>")
+    out.append("</div>")
     return "".join(out)
 
 
@@ -415,7 +475,7 @@ def render_posts(d: dict, issue: dict, icfg: dict) -> str:
     stances = {s["id"]: s for s in stance_order(d)}
     by_key = {s["key"]: s for s in stance_order(d)}
     lead = pc["lead_two"] if len(posts) == 2 else pc["lead_one"]
-    out = [f'<section class="fr-block fr-posts"><h4>{esc(pc["title"])}</h4><p class="fr-lead">{esc(lead)}</p>']
+    out = [f'<p class="fr-fold-title">{esc(pc["title"])}</p><p class="fr-lead">{esc(lead)}</p>']
     if len(posts) == 1 and icfg["posts"].get("one_reason"):
         out.append(f'<p class="fr-fine">{esc(icfg["posts"]["one_reason"])}</p>')
     out.append('<ul class="fr-post-list">')
@@ -435,66 +495,74 @@ def render_posts(d: dict, issue: dict, icfg: dict) -> str:
     out.append("</ul>")
     links = "".join(f'<a href="{esc(p["url"])}">{esc(p["label"])}</a>' for p in posts)
     out.append(f'<details class="original-posts"><summary>{esc(pc["summary"].format(n=len(posts)))}</summary>{links}</details>')
-    out.append("</section>")
-    return "".join(out)
+    return fold("fr-block fr-posts", esc(compact(d)["posts_fold"].format(n=len(posts))), "".join(out))
 
 
 def render_evidence(d: dict, issue: dict, icfg: dict) -> str:
-    """一次資料との照合（主張の照合・資料の確認・資料にしかない話）。"""
+    """根拠にあたる：一次資料との照合（主張の照合・資料の確認・資料にしかない話・制度の確認）。
+    部活動と同じく、主張ごとに見出しだけを見せる折りたたみにする（中身の文・件数・出典は前と同じ）。"""
     s = d["cfg"]["sources_common"]
     iid = issue["id"]
     cv = d["public"]["claim_verification"]
     claims = [c for c in cv["claims"] if iid in c["issue_ids"]]
     memo_checks = icfg.get("memo_checks", [])
-    out = [f'<section class="fr-block fr-evidence"><h4>{esc(s["title"])}</h4><p class="fr-lead">{esc(s["lead"])}</p>']
+    out = [f'<section class="fr-block fr-evidence"><h4>{esc(compact(d)["evidence_title"])}</h4>'
+           + fold("fr-evidence-about", esc(s["title"]), f'<p class="fr-lead">{esc(s["lead"])}</p>')]
     for c in claims:
         lab = d["cfg"]["verdict_labels"][c["verdict"]]
         note = icfg.get("claim_notes", {}).get(c["id"])
-        out.append(f'<article class="fr-claim fr-verdict-{esc(c["verdict"])}" data-claim="{esc(c["id"])}">'
-                   f'<p class="fr-eyebrow">{esc(s["claim_eyebrow"])}<span>{esc(s["checked"].format(checked_on=jp_date(cv["checked_on"])))}</span></p>'
-                   f'<h5>「{esc(c["claim"])}」</h5><p class="fr-verdict">{esc(lab)}</p><p>{esc(c["finding"])}</p>'
-                   + (f'<p class="fr-fine">{esc(note)}</p>' if note else "")
-                   + f'<p class="fr-fine">{esc(s["matched"].format(n=fmt(c["matched_post_count"])))}</p>'
-                   + details_sources(c["sources"], s["sources_label"]) + "</article>")
+        body = (f'<p class="fr-eyebrow">{esc(s["claim_eyebrow"])}<span>{esc(s["checked"].format(checked_on=jp_date(cv["checked_on"])))}</span></p>'
+                f'<p>{esc(c["finding"])}</p>'
+                + (f'<p class="fr-fine">{esc(note)}</p>' if note else "")
+                + f'<p class="fr-fine">{esc(s["matched"].format(n=fmt(c["matched_post_count"])))}</p>'
+                + details_sources(c["sources"], s["sources_label"]))
+        out.append(fold(f'fr-claim fr-verdict-{esc(c["verdict"])}',
+                        f'<span class="fr-sum-text">「{esc(c["claim"])}」</span><span class="fr-verdict">{esc(lab)}</span>',
+                        body, f' data-claim="{esc(c["id"])}"'))
     for mc in memo_checks:
         when = d["memo"].checked_on(mc["memo_section"])
-        out.append(f'<article class="fr-check fr-memo-check" data-memo-check="{esc(mc["id"])}"><p class="fr-eyebrow">{esc(s["memo_eyebrow"])}'
-                   f'<span>{esc(s["memo_checked"].format(checked_on=jp_date(when)))}</span></p>'
-                   f'<h5>{esc(mc["label"])}：{esc(mc["ask"])}</h5><p>{esc(mc["found"])}</p>'
-                   + details_sources(mc["sources"], s["sources_label"]) + "</article>")
+        body = (f'<p class="fr-eyebrow">{esc(s["memo_eyebrow"])}<span>{esc(s["memo_checked"].format(checked_on=jp_date(when)))}</span></p>'
+                f'<p>{esc(mc["found"])}</p>' + details_sources(mc["sources"], s["sources_label"]))
+        out.append(fold("fr-check fr-memo-check", f'<span class="fr-sum-text">{esc(mc["label"])}：{esc(mc["ask"])}</span>',
+                        body, f' data-memo-check="{esc(mc["id"])}"'))
     sunk = [x for x in d["public"]["ocean_layer"]["sunk_continents"] if x["nearest_issue_id"] == iid]
     if sunk:
         sk = d["cfg"]["sunk_common"]
         out.append(f'<div class="fr-sunk"><p class="fr-eyebrow">{esc(sk["title"])}</p>')
         for x in sunk:
             srcs = [{"name": s2["name"], "url": s2["url"], "location": s2.get("location")} for s2 in x["sources"]]
-            out.append(f'<article class="fr-sunk-item" data-sunk="{esc(x["id"])}"><h5>{esc(x["topic"])}</h5><p>{esc(x["life_impact"])}</p>'
-                       f'<p class="fr-fine">{esc(sk["count"].format(base=fmt(x["sns_base"]), n=fmt(x["sns_count"]), checked_on=jp_date(x["checked_on"])))}</p>'
-                       f'<details class="fr-sources"><summary>{esc(sk["note_label"])}</summary><p class="fr-fine">{esc(x["sns_note"])}</p></details>'
-                       + details_sources(srcs, s["sources_label"]) + "</article>")
+            body = (f'<p>{esc(x["life_impact"])}</p>'
+                    f'<p class="fr-fine">{esc(sk["count"].format(base=fmt(x["sns_base"]), n=fmt(x["sns_count"]), checked_on=jp_date(x["checked_on"])))}</p>'
+                    f'<details class="fr-sources"><summary>{esc(sk["note_label"])}</summary><p class="fr-fine">{esc(x["sns_note"])}</p></details>'
+                    + details_sources(srcs, s["sources_label"]))
+            out.append(fold("fr-sunk-item", f'<span class="fr-sum-text">{esc(x["topic"])}</span>', body,
+                            f' data-sunk="{esc(x["id"])}"'))
         out.append("</div>")
-    if not claims and not memo_checks and not sunk:
+    checks = render_checks(d, issue, icfg)
+    if not claims and not memo_checks and not sunk and not checks:
         out.append(f'<p class="fr-empty">{esc(s["empty"])}</p>')
+    out.append(checks)
     out.append("</section>")
     return "".join(out)
 
 
 def render_checks(d: dict, issue: dict, icfg: dict) -> str:
-    """制度の確認（背景台帳の checklist のうち、この論点に紐づく項目）。"""
+    """制度の確認（背景台帳の checklist のうち、この論点に紐づく項目）。問いだけを見せる折りたたみ。"""
     s = d["cfg"]["sources_common"]
     bg = d["background"]
     checks = [c for c in bg["checklist"]["items"] if issue["id"] in (c.get("issue_ids") or [])]
     if not checks:
         return ""
-    out = [f'<section class="fr-block fr-checks"><h4>{esc(s["check_eyebrow"])}</h4>']
+    out = [f'<div class="fr-checks"><p class="fr-eyebrow">{esc(s["check_eyebrow"])}</p>']
     for c in checks:
         note = icfg.get("check_notes", {}).get(c["id"])
-        out.append(f'<article class="fr-check" data-check="{esc(c["id"])}"><p class="fr-eyebrow">{esc(c["label"])}'
-                   f'<span>{esc(s["checked"].format(checked_on=jp_date(bg["checked_on"])))}</span></p>'
-                   f'<h5>{esc(c["ask"])}</h5><p>{esc(c["found"])}</p>'
-                   + (f'<p class="fr-fine">{esc(note)}</p>' if note else "")
-                   + details_sources(c["sources"], s["sources_label"]) + "</article>")
-    out.append("</section>")
+        body = (f'<p class="fr-eyebrow">{esc(c["label"])}'
+                f'<span>{esc(s["checked"].format(checked_on=jp_date(bg["checked_on"])))}</span></p>'
+                f'<p>{esc(c["found"])}</p>'
+                + (f'<p class="fr-fine">{esc(note)}</p>' if note else "")
+                + details_sources(c["sources"], s["sources_label"]))
+        out.append(fold("fr-check", f'<span class="fr-sum-text">{esc(c["ask"])}</span>', body, f' data-check="{esc(c["id"])}"'))
+    out.append("</div>")
     return "".join(out)
 
 
@@ -509,7 +577,7 @@ def render_see_also(d: dict, icfg: dict) -> str:
 
 
 def render_panel(d: dict, issue: dict, selected: str, rank: int) -> str:
-    cfg, public = d["cfg"], d["public"]
+    cfg, public, c = d["cfg"], d["public"], compact(d)
     iid = issue["id"]
     icfg = cfg["issues"].get(iid, {})
     n, total = int(issue["count"]), int(public["opinion_count"])
@@ -522,26 +590,44 @@ def render_panel(d: dict, issue: dict, selected: str, rank: int) -> str:
            '<header class="fr-panel-head"><div>'
            f'<p class="fr-eyebrow">選んだ論点<span>分類名「{esc(issue["label"])}」</span></p>'
            f'<h3 id="fr-h-{esc(iid)}" tabindex="-1">{esc(name)}</h3>']
-    for para in icfg.get("description", []):
+    paras = icfg.get("description", [])
+    # 論点の説明は1段落目だけを見せ、2段落目からは「くわしく」の折りたたみ（文は変えない）
+    for para in paras[:1]:
         out.append(f'<p class="fr-desc">{esc(para)}</p>')
+    if len(paras) > 1:
+        out.append(fold("fr-desc-more", esc(c["desc_more"]), "".join(f'<p class="fr-desc">{esc(p)}</p>' for p in paras[1:])))
     out.append(f'</div><p class="fr-count"><b>{fmt(n)}</b><span>件</span>'
-               f'<small>SNSの意見{fmt(total)}件のうち{pct1(n, total)}%。{esc(rank_text)}</small></p></header>')
-    out.append(render_stance(d, issue))
+               f'<small>SNSの意見{fmt(total)}件のうち{pct1(n, total)}%。{esc(rank_text)}</small></p>'
+               f'<p class="fr-back"><a href="#fukushuto-reading">{esc(c["back"])}</a></p></header>')
     if not complete:
+        out.append(render_stance(d, issue))
         out.append(f'<p class="fr-pending">{esc(cfg["pending_note"])}</p>')
         out.append(render_reasons(d, issue, icfg))
         out.append("</section>")
         return "".join(out)
     out.append('<div class="fr-grid"><div class="fr-main">')
     out.append(render_reasons(d, issue, icfg))
+    out.append(render_reason_details(d, issue, icfg))
+    out.append(render_stance(d, issue))
     out.append(render_posts(d, issue, icfg))
     out.append('</div><div class="fr-side">')
-    out.append(render_evidence(d, issue, icfg))
-    out.append(render_checks(d, issue, icfg))
+    out.append(render_evidence(d, issue, icfg))  # 制度の確認（render_checks）もこの中に入る
     out.append(render_see_also(d, icfg))
     out.append(render_trend(d, issue))
     out.append("</div></div></section>")
     return "".join(out)
+
+
+def render_tabs(d: dict, issues: list[dict], selected: str) -> str:
+    """論点タブ（アイコン＋論点名）。山なみの図とは別に、読書面の上で論点を切り替える。"""
+    icons = {i["id"]: i.get("icon", "") for i in d["planet"].get("issues", [])}
+    on = ' aria-current="true"'
+    items = "".join(
+        f'<li><a class="fr-tab" href="#issue-{esc(i["id"])}" data-issue-id="{esc(i["id"])}"'
+        f'{on if i["id"] == selected else ""}>'
+        f'<span class="fr-tab-icon" aria-hidden="true">{esc(icons.get(i["id"], ""))}</span>{esc(issue_name(d, i))}</a></li>'
+        for i in issues)
+    return f'<nav class="fr-tabs" aria-label="{esc(compact(d)["tabs_label"])}"><ul>{items}</ul></nav>'
 
 
 def render_reading(d: dict) -> str:
@@ -567,6 +653,7 @@ def render_reading(d: dict) -> str:
                    f'<span class="fr-chip-n">{fmt(n)}<small>件・{pct1(n, total)}%</small></span></a></li>')
     out.append('</ul></nav><p class="fr-live" aria-live="polite" id="fr-live"></p></div>')
     out.append('<div class="fr-panels">')
+    out.append(render_tabs(d, issues, selected))
     ranks = {i["id"]: r for r, i in enumerate(sorted(d["public"]["issues"], key=lambda i: (-int(i["count"]), i["id"])), 1)}
     # 既定の論点を先頭に置く（JavaScriptなしで最初に読めるように）。残りは件数順（その他は最後）。
     for issue in sorted(issues, key=lambda i: i["id"] != selected):

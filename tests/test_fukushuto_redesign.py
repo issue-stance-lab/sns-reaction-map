@@ -565,6 +565,123 @@ class RedesignCandidateTests(unittest.TestCase):
                 self.assertEqual(s.select_one("#fukushuto-background")["data-law-phase"], law)
 
 
+class CompactReadingTests(unittest.TestCase):
+    """2026-10-12 部活動型の圧縮（生成AIと著作権と同じ型）：見せる量だけを減らし、文・件数・出典は折りたたみの中にそのまま残す。"""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.tmp = tempfile.TemporaryDirectory()
+        cls.source_path = layout.source_for_refresh(ROOT)
+        cls.source = cls.source_path.read_text(encoding="utf-8")
+        redesign.build(cls.source_path, Path(cls.tmp.name), "release", as_of=AS_OF)
+        cls.release = (Path(cls.tmp.name) / redesign.PAGE).read_text(encoding="utf-8")
+        cls.s = soup_of(cls.release)
+        cls.cfg = json.loads((ROOT / "configs/fukushuto-reading.json").read_text(encoding="utf-8"))
+        cls.top = int(cls.cfg["compact"]["top_reasons"])
+        cls.d = reading.load()
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.tmp.cleanup()
+
+    def test_reading_folds_start_closed(self):
+        """読書面と背景の折りたたみは、初期表示ですべて閉じている（JavaScriptなしでも <details> で開ける）。"""
+        for sel in ("#fukushuto-reading", "#fukushuto-background"):
+            opened = [d.get("class") for d in self.s.select(sel + " details[open]")]
+            self.assertEqual(opened, [], sel)
+        method = self.s.select_one("#fu-method")
+        self.assertEqual(method.name, "details")
+        self.assertFalse(method.has_attr("open"))
+        # 初期状態で open の <details> は、閉じた「調査方法と、集計の全データ」の中にしか無い（元HTMLの詳細データのまま）
+        for d in self.s.select("details[open]"):
+            self.assertIsNotNone(d.find_parent(id="fu-method"), d.get("class"))
+
+    def test_tabs_cover_all_issues(self):
+        tabs = self.s.select("#fukushuto-reading nav.fr-tabs a.fr-tab")
+        self.assertEqual(sorted(a["data-issue-id"] for a in tabs), sorted(i["id"] for i in PUBLIC["issues"]))
+        self.assertEqual([a["href"] for a in tabs], ["#issue-" + a["data-issue-id"] for a in tabs])
+        self.assertEqual(len([a for a in tabs if a.get("aria-current") == "true"]), 1)
+
+    def test_description_first_paragraph_then_more(self):
+        for iid, icfg in self.cfg["issues"].items():
+            head = self.s.find(id="issue-" + iid).select_one(".fr-panel-head")
+            shown = [p.get_text() for p in head.select("p.fr-desc") if not p.find_parent("details")]
+            folded = [p.get_text() for p in head.select("details.fr-desc-more p.fr-desc")]
+            self.assertEqual(shown, icfg["description"][:1], iid)
+            self.assertEqual(folded, icfg["description"][1:], iid)
+            self.assertIsNotNone(head.select_one('.fr-back a[href="#fukushuto-reading"]'), iid)
+
+    def test_reason_index_top_rows_and_one_open_detail(self):
+        for label, sub in self.d["reread"].items():
+            iid = next(i["id"] for i in PUBLIC["issues"] if i["label"] == label)
+            panel = self.s.find(id="issue-" + iid)
+            rows = panel.select(".fr-reasons li.fr-reason")
+            visible = [li for li in rows if not li.find_parent("details")]
+            self.assertEqual(len(rows), len(sub["buckets"]), iid)
+            self.assertEqual(len(visible), min(self.top, len(rows)), iid)
+            counts = [int(li.select_one(".fr-reason-n b").get_text().replace(",", "")) for li in rows]
+            self.assertEqual(counts, sorted(counts, reverse=True), iid)
+            more = panel.select_one(".fr-reasons details.fr-reason-more")
+            if len(rows) > self.top:
+                self.assertIn(f"（{len(rows) - self.top}区分）", more.summary.get_text(), iid)
+            else:
+                self.assertIsNone(more, iid)
+            details = panel.select("article.fr-reason-detail")
+            self.assertEqual([a["data-reason"] for a in details], [li["data-reason"] for li in rows], iid)
+            self.assertEqual([a["data-reason"] for a in details if a.has_attr("data-on")], [rows[0]["data-reason"]], iid)
+            for li in rows:
+                self.assertEqual(li.a["href"], f'#fr-r-{iid}-{li["data-reason"]}')
+                self.assertIsNotNone(panel.find(id=f'fr-r-{iid}-{li["data-reason"]}'))
+            self.assertEqual(len(panel.select("article.fr-reason-detail .fr-voice")), len(sub["buckets"]), iid)
+            self.assertEqual(len(panel.select("article.fr-reason-detail .fr-mini")), len(sub["buckets"]), iid)
+
+    def test_issues_without_reasons_keep_unpublished_note(self):
+        """都構想・維新と定義・中身は理由区分が無いので、未公開の表示のまま（理由の説明・別の理由は出さない）。"""
+        without = [i for i in PUBLIC["issues"] if i["label"] not in self.d["reread"]]
+        self.assertTrue(without)
+        for issue in without:
+            panel = self.s.find(id="issue-" + issue["id"])
+            self.assertIsNotNone(panel.select_one(".fr-reasons [data-unpublished]"), issue["id"])
+            self.assertEqual(panel.select("article.fr-reason-detail, .fr-reason-more"), [], issue["id"])
+
+    def test_evidence_items_are_folds(self):
+        for panel in self.s.select(".fr-panel.is-complete"):
+            for node in panel.select("[data-claim], [data-memo-check], [data-sunk], [data-check]"):
+                self.assertEqual(node.name, "details", (panel["id"], node.attrs))
+                self.assertFalse(node.has_attr("open"))
+                self.assertTrue(node.summary.get_text().strip(), (panel["id"], node.attrs))  # 見出しは閉じても見える
+            for node in panel.select("[data-claim]"):
+                self.assertIsNotNone(node.summary.select_one(".fr-verdict"), panel["id"])  # 判定ラベルも見える
+            for sel in (".fr-stance", ".fr-posts", ".fr-trend"):
+                self.assertEqual(panel.select_one(sel).name, "details", (panel["id"], sel))
+            self.assertIsNotNone(panel.select_one(".fr-evidence .fr-evidence-about .fr-lead"), panel["id"])
+
+    def test_method_fold_holds_trust_and_detail_data(self):
+        method = self.s.select_one("#fu-method")
+        self.assertIsNotNone(method.select_one("#article-trust-title"))
+        self.assertIsNotNone(method.select_one("#detail-data"))
+        trust = protected(self.source, "ARTICLE_TRUST")
+        self.assertEqual(self.release.count(trust), 1)  # 元HTMLの作り方を1文字も変えずに折りたたみの中へ
+        self.assertLess(self.release.index('id="fu-method"'), self.release.index(trust))
+        self.assertLess(self.release.index(trust), self.release.index('id="related-topics"'))
+        self.assertEqual(method.select_one("#detail-data").get_text(), soup_of(self.source).select_one("#detail-data").get_text())
+
+    def test_hash_into_closed_fold_opens_it(self):
+        """#detail-data・#article-trust-title など折りたたみの中へ来たら、外側の折りたたみを開く。"""
+        self.assertIn("t.closest('details')", self.release)
+        self.assertIn("requestAnimationFrame(()=>t.scrollIntoView", self.release)
+
+    def test_provenance_reads_reason_details(self):
+        from scripts.fukushuto_redesign_provenance import verified_selectors
+        node = self.s.select_one('#issue-fukushuto-location article.fr-reason-detail .fr-mini')
+        label = node["aria-label"]
+        m = re.search(r"(\S+) (\d[\d,]*)件", label)
+        name, n = m.group(1), m.group(2)
+        broken = self.release.replace(label, label.replace(f"{name} {n}件", f"{name} {int(n.replace(',', '')) + 1}件", 1), 1)
+        with self.assertRaisesRegex(ValueError, "一致しません"):
+            verified_selectors(broken, ROOT)
+
+
 class LayoutTests(unittest.TestCase):
     def _root(self, temp: str) -> Path:
         root = Path(temp)

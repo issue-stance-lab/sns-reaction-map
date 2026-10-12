@@ -213,3 +213,77 @@
 .fb-cand th,.fb-cand td{text-align:left;white-space:normal}
 .fb-cand td:first-of-type{white-space:nowrap}
 .fb-cand .fop-key{margin-right:6px;vertical-align:-1px}
+
+/* 2026-10-12 部活動型の圧縮（生成AIと著作権と同じ型）：論点タブ、折りたたみ（<details>）、理由一覧の1行、選んだ理由だけの説明。推移の図は公開データに無いので、収集ごとの表を折りたたむだけ */
+.fr-tabs{min-width:0;max-width:100%}
+.fr-tabs ul{list-style:none;margin:0;padding:0 0 4px;display:flex;gap:6px;overflow-x:auto;scrollbar-width:thin}
+.fr-tabs li{flex:none}
+.fr-tab{display:inline-flex;align-items:center;gap:6px;min-height:40px;padding:6px 12px;border:1px solid var(--line);border-radius:999px;
+  background:var(--card);color:var(--ink);text-decoration:none;font-size:13.5px;font-weight:800;white-space:nowrap}
+.fr-tab:hover{border-color:var(--ai)}
+.fr-tab:focus-visible{outline:3px solid var(--odo);outline-offset:2px}
+.fr-tab[aria-current="true"]{background:var(--ai);border-color:var(--ai);color:#fff}
+.fr-tab-icon{font-size:15px;line-height:1}
+.fr-fold>summary{cursor:pointer;list-style:none;position:relative;padding:8px 30px 8px 0;min-height:44px;box-sizing:border-box;
+  display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px;font-weight:800;color:var(--ai);font-size:14.5px}
+.fr-fold>summary::-webkit-details-marker{display:none}
+.fr-fold>summary::after{content:"＋";position:absolute;right:4px;top:50%;transform:translateY(-50%);font-weight:800;color:var(--ai)}
+.fr-fold[open]>summary::after{content:"－"}
+.fr-fold>summary:focus-visible{outline:3px solid var(--odo);outline-offset:2px;border-radius:6px}
+.fr-fold-title{font-weight:800;margin-top:4px!important}
+.fr-sum-text{color:var(--ink);font-weight:800;line-height:1.55;min-width:0;overflow-wrap:anywhere}
+.fr-sum-text b{display:inline-block;margin-right:8px;font-size:12px;color:var(--ai)}
+details.fr-block{padding:4px 20px}
+details.fr-block[open]{padding-bottom:16px}
+.fr-desc-more>summary{min-height:32px;padding:2px 30px 2px 0;font-size:13.5px;display:inline-flex}
+.fr-back{grid-column:1 / -1;margin:0;font-size:13px}
+.fr-back a{color:var(--ai);font-weight:700;display:inline-flex;align-items:center;min-height:32px}
+.fr-panels>.fr-tabs{margin-bottom:-8px}
+/* 理由一覧：理由名と件数の1行 */
+.fr-reasons .fr-reason-list{gap:0;margin-top:4px}
+.fr-reasons .fr-reason{padding:0;border-bottom:1px solid var(--line)}
+.fr-reason-more .fr-reason:last-child{border-bottom:0}
+.fr-reason-pick{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:9px 6px;min-height:44px;box-sizing:border-box;
+  color:var(--ink);text-decoration:none;border-radius:6px}
+.fr-reason-pick:hover .fr-reason-name{color:var(--ai);text-decoration:underline}
+.fr-reason-pick[aria-current="true"]{background:var(--ai-soft)}
+.fr-reason-pick[aria-current="true"] .fr-reason-name{color:var(--ai)}
+.fr-reason-pick:focus-visible{outline:3px solid var(--odo);outline-offset:1px}
+.fr-reasons .fr-reason-name{font-size:14.5px;min-width:0}
+.fr-reason-more>summary{margin-top:2px}
+/* 選んだ理由の説明 */
+.fr-reason-reading{display:grid;gap:12px}
+.fr-reason-detail{padding:16px 18px;border:1.5px solid var(--ai);border-radius:14px;background:#fff;min-width:0}
+.fr-reason-detail h5{margin:4px 0 6px;font-size:17px;line-height:1.5}
+.fr-reason-detail p{margin:0 0 6px;font-size:14.5px}
+.fr-js .fr-reason-detail:not([data-on]){display:none}
+.fr-next{display:flex;flex-wrap:wrap;gap:2px 10px;align-items:baseline;margin:10px 0 0!important;padding-top:10px;border-top:1px solid var(--line);font-size:13.5px!important}
+.fr-next span{color:var(--muted);font-size:12.5px;font-weight:700}
+.fr-next a{color:var(--ai);font-weight:800;display:inline-flex;align-items:center;min-height:32px}
+/* 根拠にあたる・制度の確認：主張ごとの折りたたみ */
+.fr-evidence .fr-fold,.fr-checks .fr-fold{border-top:1px solid var(--line);margin-top:6px}
+.fr-evidence .fr-fold[open],.fr-checks .fr-fold[open]{padding-bottom:6px}
+.fr-claim>summary .fr-verdict{flex:none}
+.fr-claim.fr-fold,.fr-check.fr-fold,.fr-sunk-item.fr-fold,.fr-vein.fr-fold{padding-top:0}
+.fr-checks .fr-check.fr-fold:first-of-type{border-top:0;margin-top:0}
+@media (max-width:650px){
+  details.fr-block{padding:2px 14px}
+  details.fr-block[open]{padding-bottom:14px}
+  .fr-reason-detail{padding:14px}
+}
+.fr-evidence-about>summary{font-size:13.5px;min-height:36px;padding:4px 30px 4px 0}
+.fr-checks{margin-top:14px}
+.fr-checks .fr-eyebrow{margin-bottom:2px}
+@media (max-width:650px){.fr-desc{font-size:15px}.fr-evidence h4{font-size:17px}}
+@media (max-width:650px){
+  .fr-grid{gap:14px;margin-top:14px}
+  .fr-main,.fr-side{gap:14px}
+  .fr-sunk,.fr-veins{margin-top:10px;padding:10px 12px}
+}
+@media (max-width:650px){
+  .fr-evidence h4{font-size:16px}
+  .fr-see ul{margin-top:2px}
+  .fr-panel-head{gap:8px 28px}
+}
+.fr-claim>summary{display:block;line-height:1.55}
+.fr-claim>summary .fr-verdict{margin:2px 0 0 6px;vertical-align:1px;line-height:1.5}
