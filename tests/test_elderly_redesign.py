@@ -383,5 +383,138 @@ class ReadingPageTests(unittest.TestCase):
             self.assertEqual(len(node.select(".fr-rechecks li")), n, sc["id"])
 
 
+class AllIssuesAndBackgroundTests(unittest.TestCase):
+    """手順6：残りの論点と背景の開閉行。"""
+
+    @classmethod
+    def setUpClass(cls):
+        from scripts import elderly_background as background
+        from scripts import elderly_reading as reading
+
+        cls.reading, cls.background = reading, background
+        cls.tmp = tempfile.TemporaryDirectory()
+        cls.html = reading.build(Path(cls.tmp.name) / "a").read_text(encoding="utf-8")
+        cls.s = soup_of(cls.html)
+        cls.d = reading.load()
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.tmp.cleanup()
+
+    def render_bg(self, d=None):
+        d = d or self.d
+        return self.background.render(d, PUBLIC["updated_on"], self.reading.ordered_issues(d))
+
+    def row(self, d, rid):
+        return next(r for g in d["bg"]["cfg"]["groups"] for r in g["rows"] if r["id"] == rid)
+
+    def test_all_issues_complete_with_posts(self):
+        labels = {i["id"]: i["label"] for i in PUBLIC["issues"]}
+        for iid, icfg in self.d["cfg"]["issues"].items():
+            self.assertEqual(icfg["status"], "complete", iid)
+            self.assertEqual(len(icfg["description"]), 2, iid)
+            rr = self.d["reread"].get(labels[iid])
+            self.assertEqual(set(icfg.get("reasons", {})), set(rr["buckets"]) if rr else set(), iid)
+            self.assertEqual(len(icfg["posts"]["items"]), 2, iid)
+            self.assertTrue(icfg["posts"]["selection_basis"], iid)
+        self.assertEqual(self.s.select(".fr-panel.is-pending"), [])
+
+    def test_unpublished_only_where_reread_is_missing(self):
+        marked = {p["data-issue-panel"] for p in self.s.select(".fr-panel") if p.select_one("[data-unpublished]")}
+        labels = {i["id"]: i["label"] for i in PUBLIC["issues"]}
+        self.assertEqual(marked, {iid for iid, lab in labels.items() if lab not in WITH_REASONS})
+        self.assertEqual(len(marked), 4)
+
+    def test_see_also_and_issue_links_exist(self):
+        for a in self.s.select(".fr-see a, .fb-issues a, .fb-to-issue"):
+            self.assertIsNotNone(self.s.find(id=a["href"][1:]), a["href"])
+
+    def test_rows_are_closed_details(self):
+        rows = self.s.select("#elderly-license-revocation-background details.fb-row")
+        self.assertEqual([r["id"] for r in rows],
+                         ["bg-renewal", "bg-options", "bg-why", "bg-stats", "bg-timeline", "bg-faq", "bg-classroom", "bg-unverified"])
+        self.assertTrue(all(not r.has_attr("open") for r in rows))
+        for r in rows:
+            self.assertNotIn("義務化", r.select_one(".fb-title").get_text())
+
+    def test_checked_on_drives_time_wording(self):
+        """期限付きの制度イベントは無い。「◯月◯日時点」は冒頭の設定 checked_on 1か所から作る。"""
+        when = opening.jp_date(self.d["ocfg"]["checked_on"])
+        self.assertIn(f"{when}時点で、運転技能検査の見直しは府令案の段階", self.s.select_one("#bg-timeline").get_text())
+        self.assertIn(f"{when}時点で、警察庁は2025年までの件数しか", self.s.select_one("#bg-unverified").get_text())
+        self.assertIn(f"{when}時点で最新の令和7年版", self.s.select_one("#bg-stats").get_text())
+        d = copy.deepcopy(self.d)
+        d["ocfg"]["checked_on"] = "2026-12-01"
+        self.assertIn("2026年12月1日時点で", self.render_bg(d))
+        d["ocfg"]["checked_on"] = "2026-09-01"  # 背景台帳の確認日より古い
+        with self.assertRaises(SystemExit):
+            self.render_bg(d)
+
+    def test_system_rows_cover_required_topics(self):
+        text = self.s.select_one("#bg-renewal").get_text() + self.s.select_one("#bg-options").get_text()
+        for word in ("高齢者講習", "認知機能検査", "運転技能検査", "第101条の4第1項", "同第2項", "運転経歴証明書",
+                     "本人確認書類", "サポートカー", "第91条の2", "＃8080", "第104条の4"):
+            self.assertIn(word, text)
+
+    def test_stats_latest_row_matches_opening(self):
+        text = self.s.select_one("#bg-stats").get_text()
+        self.assertIn("435,067", text)
+        self.assertIn("297,359", text)
+        d = copy.deepcopy(self.d)
+        self.row(d, "stats")["rows"][-1]["returned"] = 1
+        with self.assertRaises(SystemExit):
+            self.render_bg(d)
+
+    def test_timeline_adds_events_after_ledger(self):
+        node = self.s.select_one("#bg-timeline")
+        added = [li["data-event"] for li in node.select("li[data-added]")]
+        self.assertEqual(added, ["report202609", "rule2027"])
+        self.assertNotIn("8月を目途", node.get_text())
+        self.assertIn("2027年6月1日", node.get_text())
+        d = copy.deepcopy(self.d)
+        del self.row(d, "timeline")["extra"][0]["before_ledger_reason"]
+        with self.assertRaises(SystemExit):
+            self.render_bg(d)
+
+    def test_faq_does_not_repeat_opening(self):
+        qs = [dt.get_text() for dt in self.s.select("#bg-faq dt")]
+        self.assertEqual(len(qs), 3)
+        oc = json.loads(OPENING_CONFIG.read_text(encoding="utf-8"))
+        opening_qs = [i["q"] for i in oc["faq"]["items"]] + [a["question"] for a in oc["answers"]]
+        self.assertFalse(set(qs) & set(opening_qs))
+
+    def test_classroom_is_read_from_shared_config(self):
+        cr = json.loads((ROOT / "configs/classroom/elderly-license-revocation.json").read_text(encoding="utf-8"))
+        text = self.s.select_one("#bg-classroom").get_text()
+        for r in cr["reasons_pro"] + cr["reasons_con"]:
+            self.assertIn(r["text"], text)
+
+    def test_why_row_follows_ledger_paragraph_count(self):
+        ledger = self.d["background"]
+        self.assertIn(ledger["definition"]["one_line"], self.s.select_one("#bg-why").get_text())
+        d = copy.deepcopy(self.d)
+        d["bg"]["ledger"]["cause"].append("段落を足した")
+        d["background"] = d["bg"]["ledger"]
+        with self.assertRaises(SystemExit):
+            self.render_bg(d)
+
+    def test_themes_yaml_mismatch_stops(self):
+        d = copy.deepcopy(self.d)
+        d["bg"]["theme"]["updated_at"] = "2026-01-01"
+        with self.assertRaises(SystemExit):
+            self.render_bg(d)
+
+    def test_unknown_memo_section_stops(self):
+        d = copy.deepcopy(self.d)
+        self.row(d, "renewal")["points"][0]["memo_section"] = "存在しない見出し"
+        with self.assertRaises(SystemExit):
+            self.render_bg(d)
+
+    def test_assessment_shows_skill_test_review(self):
+        panel = self.s.find(id="issue-elderly-license-revocation-assessment")
+        self.assertIn("方向変換", panel.select_one('.fr-check[data-check="skilltest-review"]').get_text())
+        self.assertTrue(panel.select('.fr-claim[data-claim="skilltest"]'))
+
+
 if __name__ == "__main__":
     unittest.main()
