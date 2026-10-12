@@ -9,6 +9,10 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 CANON = ROOT / "social-samples/bike-blue-ticket_2d_classified.json"
 PAGE = ROOT / "docs/bike-blue-ticket-reaction-map.html"
+# 新デザイン公開後は、旧形式の元HTML（data/page-sources）を検査する（scripts/bike_layout.py）
+sys.path.insert(0, str(ROOT))
+from scripts.bike_layout import source_for_refresh  # noqa: E402
+SOURCE = source_for_refresh(ROOT)
 REREAD = ROOT / "data/bike-blue-ticket_opposition_reread.json"
 
 SUPPORT = "賛成（取締り強化支持）"
@@ -49,7 +53,7 @@ class BikeArenaBuilderTests(unittest.TestCase):
             [
                 sys.executable, str(ROOT / "scripts/build_bike_arena.py"),
                 "--input", str(source),
-                "--html-template", str(PAGE),
+                "--html-template", str(SOURCE),
                 "--output-html", str(work / "page.html"),
             ],
             cwd=ROOT, capture_output=True, text=True,
@@ -205,7 +209,7 @@ class BikeAdapterTests(unittest.TestCase):
 
         public_path = ROOT / "data/public/themes/bike-blue-ticket.json"
         public = json.loads(public_path.read_text(encoding="utf-8"))
-        source = PAGE.read_text(encoding="utf-8")
+        source = SOURCE.read_text(encoding="utf-8")
         self.assertIn("<!-- PLANET_SECTION_START -->", source)
         page = apply_public_counts(source, public_path)
 
@@ -223,7 +227,7 @@ class BikeAdapterTests(unittest.TestCase):
         sys.path.insert(0, str(ROOT))
         from scripts.refresh_adapters.bike import VOTE_CHOICES, VOTE_TOPIC, vote_fingerprint
 
-        topic, issues, stances, choices = vote_fingerprint(PAGE.read_text(encoding="utf-8"))
+        topic, issues, stances, choices = vote_fingerprint(SOURCE.read_text(encoding="utf-8"))
         self.assertEqual(topic, VOTE_TOPIC)
         self.assertEqual(choices, VOTE_CHOICES)
         self.assertEqual(len(issues) * len(stances), VOTE_CHOICES)

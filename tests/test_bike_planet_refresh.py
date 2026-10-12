@@ -6,6 +6,8 @@ import unittest
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+# 新デザイン公開後は、旧形式の元HTML（data/page-sources）を検査する（scripts/bike_layout.py）
+from scripts.bike_layout import source_for_refresh  # noqa: E402
 sys.path.insert(0, str(ROOT / "scripts"))
 from refresh_planet_section import _sync_bike_method_text
 from build_bike_editorial_reread import apply_review_updates
@@ -15,7 +17,7 @@ from scripts.bike_blue_ticket_connected import planet_data
 
 class BikeMethodTextTests(unittest.TestCase):
     def test_real_page_updates_collected_and_opinions_separately(self):
-        html = (ROOT / "docs/bike-blue-ticket-reaction-map.html").read_text()
+        html = source_for_refresh(ROOT).read_text()
         data = {"totals": {"collected": 504, "opinions": 392},
                 "issues": [
                     {"key": "その他", "count": 140},
@@ -32,7 +34,7 @@ class BikeMethodTextTests(unittest.TestCase):
             self.assertEqual(html.count(marker), result.count(marker))
 
     def test_bike_planet_builders_do_not_restore_process_only_copy(self):
-        page = (ROOT / "docs/bike-blue-ticket-reaction-map.html").read_text(encoding="utf-8")
+        page = source_for_refresh(ROOT).read_text(encoding="utf-8")
         data = planet_data(page)
         self.assertNotIn("AI分類", static_caution(data))
         fallback = static_fallback(data)
@@ -61,7 +63,7 @@ class BikeMethodTextTests(unittest.TestCase):
     def test_bike_full_page_js_does_not_restore_unread_explanation(self):
         import json
 
-        data = planet_data((ROOT / "docs/bike-blue-ticket-reaction-map.html").read_text(encoding="utf-8"))
+        data = planet_data(source_for_refresh(ROOT).read_text(encoding="utf-8"))
         template = (ROOT / "quality/prototypes/planet-prototype.template.html").read_text(encoding="utf-8")
         result = render_page(data, template, json.dumps(data, ensure_ascii=False))
         self.assertNotIn("AIが自動でつけた区分", result)
@@ -87,7 +89,7 @@ class BikePlanetRefreshTests(unittest.TestCase):
         一度も通されておらず、次の収集日まで気づけなかった。
         """
         from refresh_planet_section import refresh
-        old, new, failures = refresh("bike-blue-ticket")
+        old, new, failures = refresh("bike-blue-ticket", source=source_for_refresh(ROOT).read_text(encoding="utf-8"))
         self.assertEqual(failures, [])
         self.assertNotIn("資料にあるのに、SNSにないこと＝人が一次資料を読んで見つけたもの", new)
         self.assertNotIn("一次資料に当たった人にしか作れない問題", new)

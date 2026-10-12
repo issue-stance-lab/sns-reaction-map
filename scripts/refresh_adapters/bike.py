@@ -28,6 +28,8 @@ OPPOSITION_REREAD = Path("data/bike-blue-ticket_opposition_reread.json")
 REREAD_REGISTRY = Path("data/verification/reread/bike-blue-ticket.json")
 FETCH_HISTORY_RECOVERY = Path("data/verification/bike-blue-ticket-fetch-history-recovery.json")
 SUNK_CONTINENTS = Path("data/verification/bike-blue-ticket-sunk-continents.json")
+# 新デザイン（scripts/bike_layout.py）が理由区分ごとの立場を数える対応表。再読データの明細が増える回は、累積候補から作り直す
+REREAD_STANCES = Path("data/bike-blue-ticket_reread-stances.json")
 
 # 更新回ディレクトリを持たない時代の前回収集回。2026-08-10 以降の更新回が
 # social-samples/updates/ に揃うまでの間だけ使う。
@@ -259,6 +261,35 @@ def build_unspoken_issue_review(
     return source
 
 
+def build_reread_stances(candidate_path: Path, editorial_path: Path, output_path: Path, current_date: str) -> dict:
+    """累積候補と、候補から作った再読データ（理由区分の明細）から、立場の対応表を作る（scripts/bike_reread_stances.py と同じ表）。
+
+    正典はまだ古い（昇格前）ので、立場は累積候補の分類から写し、論点×立場も累積候補で数えて照合する。
+    明細と対応表の投稿が一致しないと新デザインの生成（bike_layout.finish）が止まるため、昇格対象に含めて同じ回で揃える。
+    """
+    from scripts.bike_reread_stances import table, text_of
+
+    rows = json.loads(candidate_path.read_text(encoding="utf-8"))
+    reread = json.loads(editorial_path.read_text(encoding="utf-8"))
+    counts: dict[str, dict[str, int]] = {}
+    for row in rows:
+        if row.get("is_opinion") is not True:
+            continue
+        c = row.get("classification") or {}
+        counts.setdefault(str(c.get("main_issue")), {}).setdefault(str(c.get("stance")), 0)
+        counts[str(c.get("main_issue"))][str(c.get("stance"))] += 1
+    tallied = {
+        "updated_on": current_date,
+        "issues": [{"label": label, "stances": [{"label": s, "count": n} for s, n in sorted(by.items())]}
+                   for label, by in sorted(counts.items()) if label in reread],
+    }
+    # 累積候補は昇格すると正典そのものになる（canonical_sha256 も昇格後の正典と同じ値）
+    data = table(rows, reread, tallied, current_date, "social-samples/bike-blue-ticket_2d_classified.json",
+                 hashlib.sha256(candidate_path.read_bytes()).hexdigest(), _digest(editorial_path))
+    output_path.write_text(text_of(data), encoding="utf-8")
+    return data
+
+
 def _apply_connected_display(root: Path, page: Path) -> None:
     """自転車の候補ページへ、読書面と連動表示を再適用する。
 
@@ -323,7 +354,12 @@ def finalize(root: Path, current_date: str) -> None:
 def build(root: Path, stage: Path, current_date: str) -> dict[Path, Path]:
     """候補を2回生成し、2回目に差分がない場合だけ公開対象を返す。"""
     candidate = stage / "cumulative-candidate.json"
-    current_page = root / PAGE
+    # 新デザイン公開後も、旧形式の生成器（アリーナ・山なみ・潮目・連動表示・検索入口）は元HTML（data/page-sources）を入力にする
+    # （bike_layout.py）。公開候補生成では、隔離コピーの finish がこの元HTMLから新デザインを組み直す
+    if str(root) not in sys.path:
+        sys.path.insert(0, str(root))
+    from scripts.bike_layout import source_for_refresh
+    current_page = source_for_refresh(root)
     current_wave = _wave(root, current_date)
     _previous_path, previous_date = _previous_wave(root, current_date)
 
@@ -359,6 +395,10 @@ def build(root: Path, stage: Path, current_date: str) -> dict[Path, Path]:
     second_editorial = second / "bike-blue-ticket_issues-reread.json"
     _run(root, "build_bike_editorial_reread.py", "--input", str(candidate), "--output", str(first_editorial))
     _run(root, "build_bike_editorial_reread.py", "--input", str(candidate), "--output", str(second_editorial))
+    first_stances = first / REREAD_STANCES.name
+    second_stances = second / REREAD_STANCES.name
+    build_reread_stances(candidate, first_editorial, first_stances, current_date)
+    build_reread_stances(candidate, second_editorial, second_stances, current_date)
     first_registry = first / REREAD_REGISTRY.name
     second_registry = second / REREAD_REGISTRY.name
     from scripts.build_bike_refresh_candidate import build_verified_reread_manifest
@@ -380,7 +420,7 @@ def build(root: Path, stage: Path, current_date: str) -> dict[Path, Path]:
 
     for name in ("page-candidate.html", REREAD_RECORDS.name, CLAIM_RECORDS.name,
                  "bike-blue-ticket_issues-reread.json", "opposition-reread-candidate.json",
-                 REREAD_REGISTRY.name, FETCH_HISTORY_RECOVERY.name, SUNK_CONTINENTS.name):
+                 REREAD_REGISTRY.name, FETCH_HISTORY_RECOVERY.name, SUNK_CONTINENTS.name, REREAD_STANCES.name):
         if _digest(first / name) != _digest(second / name):
             raise ValueError(f"自転車青切符adapterは同じ候補の2回目実行で差分が出ました: {name}")
 
@@ -407,4 +447,5 @@ def build(root: Path, stage: Path, current_date: str) -> dict[Path, Path]:
         REREAD_REGISTRY: first_registry,
         FETCH_HISTORY_RECOVERY: first_fetch_history,
         SUNK_CONTINENTS: first_sunk,
+        REREAD_STANCES: first_stances,
     }
