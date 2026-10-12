@@ -6,7 +6,10 @@ from bs4 import BeautifulSoup
 
 
 ROOT = Path(__file__).resolve().parent.parent
-PAGE = ROOT / "docs" / "elderly-license-revocation-reaction-map.html"
+# 検索入口は旧形式のページにだけある。新デザイン公開後は元HTML（data/page-sources）を検査する（scripts/elderly_layout.py）
+_DOCS = ROOT / "docs" / "elderly-license-revocation-reaction-map.html"
+_SOURCE = ROOT / "data" / "page-sources" / "elderly-license-revocation.html"
+PAGE = _SOURCE if 'name="elderly-layout"' in _DOCS.read_text(encoding="utf-8") else _DOCS
 
 
 class ElderlySearchEntryTest(unittest.TestCase):

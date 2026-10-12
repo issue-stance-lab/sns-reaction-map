@@ -182,20 +182,20 @@ python3 scripts/build_elderly_redesign.py --mode release --output-dir quality/pr
 | 検査 | 公開候補（enabled=false） | 切替後（9節） |
 |---|---|---|
 | 生成器の内蔵照合（件数・理由区分・区分ごとの立場・資料・日付・潮目の日付） | 合格 | 合格 |
-| `verify_theme_page.py elderly-license-revocation`（候補は `--html`） | NG 0（OK 29） | 9-2 |
-| `verify_number_provenance.py` | 10テーマ NG 0（現行ページ 275/275。候補は複製で NG 0） | 9-2 |
-| `verify_top_page.py` | 終了0 | 9-2 |
-| `build_elderly_arena.py --check` | OK: 差分なし | 9-2 |
-| `verify_builder_rebuildability.py` | 10テーマ NG 0 | 9-2 |
+| `verify_theme_page.py elderly-license-revocation`（候補は `--html`） | NG 0（OK 29） | NG 0（OK 29）、全10テーマ NG 0 |
+| `verify_number_provenance.py` | 10テーマ NG 0（現行ページ 275/275。候補は複製で NG 0） | 高齢者 309/309・10テーマ NG 0 |
+| `verify_top_page.py` | 終了0 | 終了0 |
+| `build_elderly_arena.py --check` | OK: 差分なし | OK: 差分なし（公開後の経路＝元HTMLと新ページを作り直して比較） |
+| `verify_builder_rebuildability.py` | 10テーマ NG 0 | 10テーマ NG 0 |
 | `verify_ocean_layer.py` | 直す前と出力が完全に同じ（他テーマの既存の指摘。終了1） | 同じ |
-| `python3 -m unittest discover tests` | 2,062件 OK（skip 4） | 9-2 |
-| `run_public_checks.py` | 終了0 | 9-2 |
+| `python3 -m unittest discover tests` | 2,062件 OK（skip 4） | 2,062件 OK（skip 4。共有テストを直す前は失敗7・エラー4） |
+| `run_public_checks.py` | 終了0 | 終了0 |
 | `tests/test_elderly_redesign.py` | 72件 OK（手順7分28件：同じ入力で同じ出力・docs出力と新ページ再入力の拒否・保護対象・GA/AdSense・投票定義・adapter の指紋・FAQ と画面の一致・継承部品・詳細データ・潮目の継承と折りたたみ・論点ごとの折れ線と飛び先・作り方の折りたたみ・初期状態・理由は未公開の表示・授業節・家族の確認とメリデメなし・旧アンカー・山なみの写し・元HTMLの更新への追随と自動着地の変化で停止・旧部品なし・出所検査の改ざん検知3種、レイアウト7件：無効時・状態の一貫・元HTML無し・往復・照合不一致で書かない・立場の無い明細で adapter が止まる・更新経路の配線） | 同じ |
 | 2回生成 | md5 一致（`546db31e…`、`PYTHONHASHSEED` 0・1・999・指定なし） | docs のページとも一致 |
 | よみやす（`--strict`） | 候補 58/100・完成を止める指摘 0件・PASS（平均35.9字） | 同じ |
-| 使い回し（`verify_page_originality.py`、切替後の複製で） | 最初は1件（前の収集回との比較の見出しが自転車と 0.91）→ 見出しを書き直して 0件 | 9-2 |
-| AI臭（`verify_ai_tone.py`） | 問題なし | 9-2 |
-| `seo/validate_theme_seo.py` | — | 9-2（H1 が変わるので `display_headline` を足す） |
+| 使い回し（`verify_page_originality.py`、切替後の複製で） | 最初は1件（前の収集回との比較の見出しが自転車と 0.91）→ 見出しを書き直して 0件 | 「10ページに、使い回された見出し・文はありません」 |
+| AI臭（`verify_ai_tone.py`） | 問題なし | 問題なし |
+| `seo/validate_theme_seo.py` | — | OK（themes=10。H1 が変わるので `display_headline` を足した） |
 
 操作（Playwright、`tests/test_elderly_redesign_browser.cjs`、x.com・platform.twitter.com・twimg.com を遮断、docs/ の写しを 127.0.0.1 で配信）:
 - 1280px・375px とも横はみ出し0（scrollWidth＝画面幅。読書面の折りたたみ全開・背景9行・比較・詳細データを開いても0）、ページのコンソールエラー0。
@@ -253,4 +253,29 @@ python3 scripts/build_elderly_redesign.py --mode release --output-dir quality/pr
 
 ## 9. 2026-10-12 公開切替
 
-9節は公開切替のコミットで書き足す。
+### 9-1. 変えたファイル
+
+| ファイル | 変更 |
+|---|---|
+| `configs/elderly-layout.json` | `enabled: true` |
+| `configs/theme-seo.json` | elderly-license-revocation に `display_headline`（新しい H1 の文字列そのまま。H1 は題と副題を1つの見出しに持つので「…どう切り出すか年齢の節目と…」とつながって読まれる） |
+| `data/page-sources/elderly-license-revocation.html`（新規） | 旧形式の元HTML（切替直前の docs/ のページとバイト一致） |
+| `docs/elderly-license-revocation-reaction-map.html` | 新デザイン（`elderly_layout.finish`。公開候補とバイト一致、md5 `546db31e…`） |
+| `DATA_SHEET.md` | 作り直した（高齢者の「マップの点」の列。新デザインにアリーナの点が無いため。自転車と同じ） |
+| `company/APPROVALS.yaml` | 末尾に `approval-20261012-elderly-license-revocation`（`status: pending`、`decided_at: null`）。既存の記録は動かしていない |
+| 共有テスト | 9-3 |
+
+### 9-2. 切替後の検査（作業ツリー）
+
+6節の「切替後」の列。全テスト・公開検査は 9-3 の共有テストを直したあとの結果。切替後の docs/ のページは公開候補とバイト一致なので、
+Playwright の確認画面（`evidence/`）は切替後のページにもそのまま当てはまる。単独スクリプトは複製で確かめた：`elderly_issue_media.py --write-html` と
+`refresh_planet_section.py --for-docs` は停止、`inject_tide_widget.py`・`apply_classroom_section.py`・`apply_theme_trust.py`・`apply_theme_design.py`・
+`build_elderly_arena.py`（`--public-counts-only` を含む）・`sync_issue_counts.py` を流しても新デザインのページと元HTMLはバイト不変。
+
+### 9-3. 切替に合わせて直した共有テスト
+
+| テスト | 変更 | 理由 |
+|---|---|---|
+| `tests/test_elderly_adapter.py`・`test_elderly_connected.py`・`test_elderly_search_entry.py` | 読むページを「公開後は元HTML（`source_for_refresh`）」に | 旧形式のアリーナ・連動表示・検索入口の検査。公開後も元HTMLに同じ構造で残る（自転車と同じ扱い） |
+| `tests/test_cite_button.py` | 高齢者の新デザインも論点欄の `id="issue-…"` を受け皿とみなす | 受け皿の形が変わった |
+| `tests/test_theme_design.py` | 高齢者の新デザインを飛ばす | 共通の見た目を掛けない設計 |
