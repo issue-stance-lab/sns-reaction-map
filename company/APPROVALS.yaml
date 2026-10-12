@@ -2294,3 +2294,26 @@ items:
     decided_at: "2026-10-12"
     decision_note: >-
       検査をすべて通したうえでオーナーが「公開して」と承認（2026-10-12）。release スキルで main へ統合・push した。
+  - id: approval-20261012-elderly-license-revocation
+    department: engineering-data
+    action: website_publication
+    summary: "高齢者免許返納ページを新デザイン（冒頭の「何歳から」の短答と年齢のものさし・対話式の山なみ・論点ごとの読書面・背景の開閉行）に切り替えて公開する"
+    reason: "手順書23の手順7（更新と公開の検査）を自転車の青切符と同じ型（対話式の山なみを元HTMLから写す＋部活動型の圧縮）で終え、作業ブランチ task/renew-elderly-license-revocation で公開切替まで準備した"
+    risks:
+      - "URL・title・SEOメタ・Article JSON-LD・GA4・AdSense・投票（topic elderly-license-revocation-issue-stance-v1、論点6×立場3＝18選択肢、保存キー・前置きの文も同じ）・調査条件・PLANET_DATA・前の収集回との比較（潮目のカード）・作り方・詳細データの3表・次に見るテーマとクリック計測・フッターは元ページから文字どおり継承する。H1 は新デザインの見出し「免許返納は何歳から、どう切り出すか」に変わるため configs/theme-seo.json に display_headline を足した"
+      - "title・description・Article の見出しには「メリットとデメリット」が残るが、新ページにはメリット・デメリットの節を載せていない（司令塔の決定。中身は論点と背景の返納の手続きの行に分かれて出る）。現行ページの「家族で話す前の確認」4項目は背景の1行に移した"
+      - "FAQ の構造化データを新たに載せる（冒頭の「よく検索される疑問」6問と背景の3問、画面に出ている問いと同じ）。旧ページの検索入口・進み具合の帯・立場の帯・一次資料クイズ・予想・編集部の横断整理・論点カード・アリーナの点は新デザインに移していない（投稿例は正典から選び直した12件、開いたときに読み込む）"
+      - "件数は変わらない（収集662件・意見455件、公開JSONの更新日2026-09-30）。手順7の前に、資料にしかない話の3文と照合1件の文を区切った（数字・出典・判定は変えていない）。照合「高齢ドライバーの事故は増えている」は判定を変えず令和8年上半期の統計の注記を付けたまま公開し、10/14 の定期更新で照合をやり直す"
+      - "理由区分があるのは2論点（322件）だけで、残り4論点（133件）は「理由は未公開」と表示する。有効な間は全テーマの公開候補生成の最後に高齢者の新デザインが組み直され、高齢者の照合（再読データの明細と論点の件数）が合わないとその回の生成全体が止まる。10/14 の回で新しい意見が入ったら、その回のうちに2論点の新しい意見を追い読みする必要がある（新規0件の 10/14 は隔離コピーで模擬して通ることを確認）"
+      - "375pxでページ全体は 12,782px（目安13,000px以下）、論点の欄は 1,113〜2,496px（6論点とも目安2,500px以下）"
+      - "本番ホストでの GA4・AdSense の発火、投票の POST、X埋め込みの実表示は未確認（公開後に確認する）"
+    recommendation: approve
+    evidence:
+      - "quality/designs/2026-10-11-elderly-license-revocation-production-candidate.md"
+      - "quality/prototypes/elderly-license-revocation-release/evidence/"
+      - "configs/elderly-layout.json"
+    status: approved
+    requested_at: "2026-10-12"
+    decided_at: "2026-10-12"
+    decision_note: >-
+      検査をすべて通したうえでオーナーが「公開して」と事前承認（2026-10-12）。release スキルで main へ統合・push した。

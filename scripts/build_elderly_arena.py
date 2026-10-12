@@ -627,6 +627,24 @@ def main() -> int:
     parser.add_argument("--output-html", type=Path)
     parser.add_argument("--public-counts-only", action="store_true")
     args = parser.parse_args()
+    page_path = ROOT / "docs" / f"{THEME}-reaction-map.html"
+    if 'name="elderly-layout"' in page_path.read_text(encoding="utf-8") and not any(
+            (args.input, args.html_template, args.output_html)):
+        # 新デザイン公開後の単独実行：元HTML（data/page-sources）に公開JSONの集計・旧形式の生成・山なみと連動表示を掛け、
+        # 新デザインを掛け直す（elderly_layout.py）。--public-counts-only も同じ rebuild に含まれる
+        if str(ROOT) not in sys.path:
+            sys.path.insert(0, str(ROOT))
+        from scripts.elderly_layout import rebuild
+        try:
+            changed = rebuild(ROOT, check=args.check)
+        except (IssueCountError, ValueError, OSError, KeyError, TypeError, json.JSONDecodeError) as exc:
+            print(f"ERROR: {exc}", file=sys.stderr)
+            return 1
+        if args.check and changed:
+            print("NG: ページが正典から生成した内容と一致しません", file=sys.stderr)
+            return 1
+        print("UPDATE: HTMLを更新しました" if changed else "OK: 差分なし")
+        return 0
     try:
         if args.check and any((args.input, args.html_template, args.output_html, args.public_counts_only)):
             parser.error("--checkは公開ページと正典の一致確認専用です")

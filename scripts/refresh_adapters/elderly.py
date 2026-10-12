@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import hashlib
+import json
 import re
 import subprocess
 import sys
@@ -14,6 +15,9 @@ PAGE = Path("docs/elderly-license-revocation-reaction-map.html")
 LEGACY_PREVIOUS_WAVE = Path(
     "social-samples/elderly-license-revocation_hermes_cur_20260726.json"
 )
+# 新デザイン（scripts/elderly_layout.py）は、理由区分ごとの立場を再読データの明細の stance から数える（自転車のような立場の対応表は無い）
+REREAD = Path("data/elderly-license_issues-reread.json")
+PLANET = Path("configs/planet/elderly-license-revocation.yaml")
 VOTE_TOPIC = "elderly-license-revocation-issue-stance-v1"
 VOTE_CHOICES = 18
 PROTECTED = (
@@ -23,6 +27,31 @@ PROTECTED = (
     '<link rel="canonical"',
     'property="og:image"',
 )
+
+
+def check_reread_stances(root: Path) -> int:
+    """再読データの明細がすべて立場（stance）を持ち、それが planet 設定の立場かを確かめる。明細の数を返す。
+
+    追い読みで足した明細に立場が無いと、新デザインの理由区分ごとの立場が数えられず、公開候補の生成の最後
+    （elderly_layout.finish）で止まる。adapter の段階で、何を直せばよいかが分かる形で先に止める。
+    """
+    import yaml
+
+    raw = json.loads((root / REREAD).read_text(encoding="utf-8"))
+    planet = yaml.safe_load((root / PLANET).read_text(encoding="utf-8"))
+    known = {s["key"] for s in planet["stances"]} | {s["label"] for s in planet["stances"]}
+    items = raw.get("items") or []
+    missing = [str(i.get("tweet_id")) for i in items if not i.get("stance")]
+    unknown = sorted({str(i["stance"]) for i in items if i.get("stance") and i["stance"] not in known})
+    if missing:
+        raise ValueError(
+            f"再読データ {REREAD} の明細 {len(missing)} 件に立場（stance）がありません（例: {missing[0]}）。"
+            "追い読みで足した明細には、正典の classification.stance をそのまま書いてください。"
+            "新デザインの照合が止まるため、ここで停止しました。"
+        )
+    if unknown:
+        raise ValueError(f"再読データ {REREAD} の明細に、planet 設定に無い立場があります: {unknown}")
+    return len(items)
 
 
 def _digest(path: Path) -> str:
@@ -131,7 +160,13 @@ def finalize(root: Path, current_date: str) -> None:
 def build(root: Path, stage: Path, current_date: str) -> dict[Path, Path]:
     """候補を2回生成し、2回目に差分がない場合だけ公開対象を返す。"""
     candidate = stage / "cumulative-candidate.json"
-    current_page = root / PAGE
+    # 新デザイン公開後も、旧形式の生成器（アリーナ・山なみ・潮目・連動表示）は元HTML（data/page-sources）を入力にする
+    # （elderly_layout.py）。公開候補生成では、隔離コピーの finish がこの元HTMLから新デザインを組み直す
+    if str(root) not in sys.path:
+        sys.path.insert(0, str(root))
+    from scripts.elderly_layout import source_for_refresh
+    current_page = source_for_refresh(root)
+    check_reread_stances(root)
     current_wave = (
         root
         / "social-samples"

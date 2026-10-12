@@ -406,8 +406,9 @@ def main() -> None:
 
         html_path = ROOT / theme["html"]
         if re.search(r'<meta name="[a-z-]+-layout"', html_path.read_text(encoding="utf-8")):
-            # 新デザインのページ（bukatsu/koshitsu/fukushuto/ai_copyright/constitutional/bike_layout.py）には旧形式で差し込まない。
-            # 憲法改正論議・自転車の青切符の潮目は adapter（refresh_adapters/constitutional.py・bike.py）が元HTMLに貼り、新デザインはそれを写す
+            # 新デザインのページ（bukatsu/koshitsu/fukushuto/ai_copyright/constitutional/bike/elderly_layout.py）には旧形式で差し込まない。
+            # 憲法改正論議・自転車の青切符・高齢者免許返納の潮目は adapter（refresh_adapters/constitutional.py・bike.py・elderly.py）が
+            # 元HTMLに貼り、新デザインはそれを写す
             print("  SKIP: 新デザインのページ（潮目は載せない）")
             continue
         new_html = inject_into_html(html_path, tide_html, tide_css)

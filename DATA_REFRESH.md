@@ -1222,6 +1222,84 @@ mainへ取り込む前に、**「合格した」という報告を鵜呑みに�
   山なみの単独更新（`refresh_planet_section.py`）・潮目の単独差し込み（`inject_tide_widget.py`）・論点ごとのX投稿の単独差し込み（`bike_issue_media.py`）を
   掛けない（各スクリプトが skipped／SKIP／停止と出す）。更新経路では元HTMLに掛かる
 
+### 高齢者免許返納の定期更新（新デザインを維持する、2026-10-12〜）
+
+高齢者免許返納のページは2026-10-12から新デザイン（冒頭の「何歳から」の短答と年齢のものさし・対話式の山なみ・論点ごとの読書面・背景の開閉行）で公開する
+（公開切替はオーナー承認待ち。`company/APPROVALS.yaml` の `approval-20261012-elderly-license-revocation`）。自転車の青切符（上の節）と同じ型で、
+**旧形式の生成器はこれまでどおり「元HTML」に掛け、全生成の最後に新デザインを組み直す。**
+設計と検査の記録: [quality/designs/2026-10-11-elderly-license-revocation-production-candidate.md](quality/designs/2026-10-11-elderly-license-revocation-production-candidate.md)
+
+次回の定期更新は **2026-10-14**（THEMES.yaml の `refresh_at`）。この回で次の3つを必ず確かめる。
+
+- **新しい意見が入った回は、追い読みしないと全テーマの公開候補生成が止まる**: 理由区分がある2論点（義務化・事故防止、地方の足・移動権）は、
+  再読データ（`data/elderly-license_issues-reread.json`）の明細の件数が公開JSONの論点の件数と一致しないと新デザインの生成
+  （`elderly_layout.finish`）が止まる。`finish` は**どのテーマの公開候補生成でも最後に走る**ので、高齢者の新しい意見を追い読みしないままだと、
+  その回の公開候補生成全体が止まる（旧ページと違い「まだ読み直していない分」を残せない）。10/14 の回で新しい意見があれば、
+  その回のうちに2論点の新しい意見を追い読みして、明細（`items`。`tweet_id`・`main_issue`・**`stance`**・`bucket`）と `buckets` の件数を足す。
+  明細の `stance` は正典の `classification.stance` をそのまま書く（立場の対応表は無い。`stance` が無い明細があると adapter の
+  `check_reread_stances` が「立場（stance）がありません」で止まる）。新規0件の回は公開候補を作らないので止まらない
+  （2026-10-12 に隔離コピーで新規0件の 10/14 を模擬し、新デザインのまま通ることを確かめた）
+- **照合「高齢ドライバーの事故は増えている」をやり直す**: 照合（2026-09-30、判定「少しずれる」）は令和7年の年間の統計に基づく。
+  その後に出た令和8年上半期の統計（75歳以上の運転者による死亡事故202件、上半期どうしで2年続けて増加。一次資料メモの資料W）は、
+  判定を変えずに読書面の注記（`configs/elderly-license-revocation-reading.json` の `claim_notes.increase`）で示している。
+  10/14 の回で両方の統計を読み直し、照合の文（`scripts/build_elderly_process_sections.py` の FACT_CHECKS `increase` と `CHECKED_AT`）を直してから
+  `python3 scripts/build_public_registry.py --topic elderly-license-revocation` を実行する（成功の形: `OK elderly-license-revocation: collected=… opinion=…`）。
+  見直したら注記 `claim_notes.increase` を外す
+- **取得期間は自動で伸びない**: THEMES.yaml の `sample_period_source: owner_confirmed` なので、収集した回まで `sample_period` を手で伸ばす
+  （伸ばさないと公開候補生成の `verify_sample_periods.py --generate` が「取得期間の終わりが最終更新日と違う」で止まる。新デザイン以前からの動き）
+
+その他の項目（自転車の節と同じ並び）:
+
+- **`configs/elderly-layout.json` の `enabled`**: `true` の間、`refresh_topic.py` の公開候補生成（単一・複数テーマ）は
+  隔離コピーで元HTMLを `docs/` に戻し（`elderly_layout.materialize`）、旧形式の全処理（adapter のアリーナ・潮目、finalize、山なみと連動表示、
+  SEO・信頼情報・授業節・テーマ共通の見た目・他テーマの新デザイン）のあとに `elderly_layout.finish` で元HTMLを保存し直してから
+  新デザインのページを `docs/` に書く。`false` に戻すと、公開ページが新デザインのまま「更新設定が無効」で止まる。戻すときは旧形式のページ
+  （`data/page-sources/elderly-license-revocation.html`）を先に `docs/` へ戻すこと
+- **元HTMLの場所**: `data/page-sources/elderly-license-revocation.html`（Git管理）。`refresh_adapters/elderly.py`（アリーナ・潮目）・
+  `build_elderly_arena.py`（引数なし）・`refresh_planet_section.py`（山なみ・連動表示）はこれを入力にする。手で編集しない。
+  `docs/elderly-license-revocation-reaction-map.html` を旧形式の生成器に直接渡すと拒否される（`elderly_issue_media.py --write-html` も新デザインのページには書かない）。
+  旧ページの検索入口（ページ直書きの SEARCH_ENTRY・`docs/elderly-search-entry.*`）・連動表示（`elderly_connected*.py`・`docs/elderly-connected*`）・
+  立場の帯（STANCE_GLANCE）・論点カード（ELDERLY_ISSUE_MEDIA）・アリーナの点は元HTMLの中でだけ更新され、新デザインには載せない。
+  新デザインの FAQ の構造化データは、冒頭の「よく検索される疑問」（6問）と背景の「よくある質問」（3問）から毎回作り直す
+- **新デザインが元HTMLから文字どおり引き継ぐもの**: SEOメタ・Article の構造化データ・GA4・AdSense・投票
+  （`elderly-license-revocation-issue-stance-v1`、論点6×立場3。前置きの文も元のまま）・調査条件（`#caution`）・PLANET_DATA・
+  **前の収集回との比較（潮目のカード。adapter の `_apply_tide` が元HTMLに貼る）**・「このページの作り方」・「詳細データ」の3表
+  （論点別・スタンス別・表現強度別）・「次に見るテーマ」とクリック計測・フッター。数字が古いときは元HTML側（adapter・`apply_theme_trust.py`）で直る
+- **「意見の全体像」の山なみ**: 元HTMLの対話式の山なみ（`PLANET_SECTION` の `#planet-block`・PLANET_DATA・山なみのスクリプト）を
+  `build_elderly_redesign.py` が毎回そのまま写し、論点タブの上に置く。手で直す所は無い。写すときに変えるのは、連動表示の橋渡し
+  （ELDERLY_CONNECTED_BRIDGE の `initialLand`）の「読み込み時に件数最多の論点へ自動で着地する」処理だけ（読書面の既定の論点を、ハッシュ・履歴に
+  触れずに選ぶ処理に置き換える。元HTMLの該当箇所が変わると生成が止まる）。山を押すと読書面へ移る橋渡しは `scripts/elderly_redesign/planet.js`
+- **折りたたみ（部活動型の圧縮）**: 読書面の理由一覧（上位4件＋「ほかの理由を開く」）・選んだ理由だけの説明・立場ごとの件数と割合・投稿の例・
+  資料に照らす・論点の説明の2段落目（「くわしく」）・累計の表、前の収集回との比較（「グラフで立場と論点の変化を見る」）、
+  作り方と詳細データ（「このページの作り方と詳細データ」）の `<details>` は、`elderly_reading.py`・`build_elderly_redesign.py` が毎回作る
+  （見出しの文言は `configs/elderly-license-revocation-reading.json` の `compact`）
+- **単独で作り直すとき**（データは変えずに見た目や文言だけ直したとき）:
+  `python3 scripts/build_elderly_arena.py`（新デザイン公開中は、元HTMLに公開JSONの集計・旧形式の生成・山なみと連動表示を掛けてから
+  公開ページを作り直す）。成功の形: もう一度 `python3 scripts/build_elderly_arena.py --check` を実行して `OK: 差分なし` と出ること。
+  公開候補を別フォルダに作って見るだけなら
+  `python3 scripts/build_elderly_redesign.py --mode release --output-dir quality/prototypes/elderly-license-revocation-release`
+  （成功の形: `Built 1 file (release, as_of …); no deployment performed.`。docs/ は変わらない）
+- **再読データ（理由区分）を追記したとき**（定期更新の外の追い読み・判定し直しも同じ）:
+  1. 明細（`items`）と `buckets` の件数を足す。明細には `stance` を必ず書く
+  2. `python3 scripts/build_public_registry.py --topic elderly-license-revocation`
+  3. 単独なら `python3 scripts/build_elderly_arena.py`
+  4. `python3 scripts/verify_number_provenance.py elderly-license-revocation`（新デザインの理由区分・区分ごとの立場を明細から数え直す。成功の形: `NG 0件`）
+  **未再読の4論点（適性検査強化57・自主返納支援26・代替交通整備25・その他25、計133件、2026-09-30時点）**を追い読みして、`buckets` に論点を足し、
+  `configs/planet/elderly-license-revocation.yaml` の `sub_issues` にその論点を足せば、読書面の「理由は未公開」の1行は自動で理由一覧に変わる
+  （そのとき設定の `issues.{論点ID}.reasons` に区分ごとの `voice` を書く。無いと「完成扱いの論点で、説明（voice）の無い理由区分があります」で止まる）
+- **再読データの `population` は古いまま（注意）**: `data/elderly-license_issues-reread.json` の `population`（意見全体353・221・29）は
+  2026-10-10 の追い読み前の数のまま。新デザインの生成には使っていない（論点ごとの件数は公開JSON、理由区分の件数は明細 `items` から数え直す）ので
+  値は変えていない。次に追い読みしたとき、明細と一緒に直す。この数を画面や照合に使わないこと
+- **資料にしかない話**（`data/verification/elderly-license-revocation-sunk-continents.json` の `life_impact`・`sns_note`）は画面に出る公開文章。
+  直した文は1文80字以内・読点3個以内に区切り、よみやす検査
+  （`python3 scripts/review_with_yomiyasu.py docs/elderly-license-revocation-reaction-map.html --medium website --strict`。成功の形: `完成を止める指摘: 0件`）を掛ける
+- **確認日 `checked_on`**: 冒頭・読書面・背景の「◯月◯日時点」は `configs/elderly-license-revocation-opening.json` の `checked_on`（制度を確かめた日）1か所から出る。
+  主張の照合日・背景台帳の確認日より古い日付は入れられない。一次資料メモの節の確認日が `checked_on` より後でも止まる。期限付きの制度イベントは無いので、
+  読む日や基準日による文の切り替えは無い
+- 新デザインのページには、テーマ共通の見た目（`apply_theme_design.py`）・授業節の単独適用・信頼情報の単独適用・
+  山なみの単独更新（`refresh_planet_section.py`）・潮目の単独差し込み（`inject_tide_widget.py`）・論点ごとのX投稿の単独差し込み（`elderly_issue_media.py`）を
+  掛けない（各スクリプトが skipped／SKIP／停止と出す）。更新経路では元HTMLに掛かる
+
 ### 読み込み確認のやり方（質と速さの両立）
 
 消費税減税での失敗（機械的なチェックは通ったのに、実際には本文を読まずに使い回した
