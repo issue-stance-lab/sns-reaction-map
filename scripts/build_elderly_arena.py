@@ -503,7 +503,7 @@ def stance_glance(stances: list[dict], opinions: int) -> str:
 {STANCE_GLANCE_END}"""
 
 
-def apply_elderly_stance_glance(page: str) -> str:
+def apply_elderly_stance_glance(page: str, records: list[dict[str, Any]] | None = None) -> str:
     """ヒーロー直後に、立場の内訳＋「まず、あなたは？」を貼り直す。
 
     build()は候補生成中の正典行から、apply_public_counts()は昇格後の公開JSONから、
@@ -520,7 +520,16 @@ def apply_elderly_stance_glance(page: str) -> str:
     else:  # python3 scripts/build_elderly_arena.py
         from build_planet_page_preview import bpd  # type: ignore[no-redef]
 
-    data = bpd.build(THEME)
+    if records is None:
+        data = bpd.build(THEME)
+    else:
+        # 候補生成中は正典がまだ古い。候補（正典＋今回分）と候補由来の公開JSONを母数にする
+        # （2026-10-10 副首都・2026-10-13 高齢者で、再読台帳の対象集合ずれで止まった）。
+        if __package__:
+            from .public_registry_common import build_theme_json
+        else:
+            from public_registry_common import build_theme_json  # type: ignore[no-redef]
+        data = bpd.build(THEME, canonical=records, public=build_theme_json(THEME, records))
     opinions = int(data["totals"]["opinions"])
     stances = data["stances"]
 
@@ -608,7 +617,7 @@ def build(
         page = replace_once(page, r'<section class="panel" id="issue-blocks-section">.*?</section>', build_issue_blocks(rows), "論点別サマリー", flags=re.S)
         page = replace_once(page, r'<section class="panel conflict-panel">.*?</section>', build_stance_summary(rows), "スタンス集計", flags=re.S)
     page = replace_once(page, r'<section class="panel details-panel" id="detail-data">.*?</section>', build_details(rows), "詳細データ", flags=re.S)
-    page = apply_elderly_stance_glance(page)
+    page = apply_elderly_stance_glance(page, json.loads(input_path.read_text(encoding="utf-8")) if input_path is not None else None)
     page = apply_progress_wording(page)
 
     changed = page != before

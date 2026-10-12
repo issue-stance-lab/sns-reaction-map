@@ -164,9 +164,23 @@ def _sync_elderly_method_text(html: str, data: dict) -> str:
     """
     opinions = data["totals"]["opinions"]
     collected = data["totals"]["collected"]
-    new_html, n = ELDERLY_OPINION_COUNT_RE.subn(
-        lambda m: f"{m.group(1)}{opinions:,}{m.group(3)}", html
+    # 連動表示（ELDERLY_CONNECTED）の区間は、このあと _apply_connected_display が公開JSONから作り直す。
+    # 2026-10-12 の新デザインで区間内に「意見と判定したN件のうち…」が入り、ここで数えると3か所を超える。
+    # 山なみ区間（この関数の直前に公開JSONから作り直したもの）も同様に数えから外す。
+    skip = re.compile(
+        r"<!-- (PLANET_SECTION|ELDERLY_CONNECTED)_START -->.*?<!-- \1_END -->", re.S
     )
+    pieces, n, last = [], 0, 0
+    for block in skip.finditer(html):
+        outside, k = ELDERLY_OPINION_COUNT_RE.subn(
+            lambda m: f"{m.group(1)}{opinions:,}{m.group(3)}", html[last:block.start()]
+        )
+        pieces.append(outside); pieces.append(block.group(0)); n += k; last = block.end()
+    outside, k = ELDERLY_OPINION_COUNT_RE.subn(
+        lambda m: f"{m.group(1)}{opinions:,}{m.group(3)}", html[last:]
+    )
+    pieces.append(outside); n += k
+    new_html = "".join(pieces)
     if n != 3:
         raise SystemExit(f"「意見と判定したN件」の想定箇所数(3)と一致しません（elderly-license-revocation）: {n}件")
     new_html, n = ELDERLY_COLLECTED_COUNT_RE.subn(
