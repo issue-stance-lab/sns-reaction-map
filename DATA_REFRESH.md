@@ -1099,6 +1099,19 @@ mainへ取り込む前に、**「合格した」という報告を鵜呑みに�
   山なみの単独更新（`refresh_planet_section.py`）・潮目の単独差し込み（`inject_tide_widget.py`）を掛けない
   （各スクリプトが skipped／SKIP／停止と出す）。更新経路では元HTMLに掛かる
 
+### 憲法改正論議：追い読みのあとに立場の対応表を作り直す（2026-10-12〜）
+
+憲法改正論議の新デザインの読書面（`scripts/constitutional_reading.py`）は、理由区分ごとの立場を
+`data/constitutional-amendment_reread-stances.json`（再読データの明細の投稿 → 正典の立場の対応表）から数える。
+再読データ `data/constitutional-amendment_issues-reread.json` の明細には立場が無いので、**追い読み（明細の追記）や
+判定し直しで正典の立場が変わったら、毎回この対応表を作り直す**。
+
+1. `python3 scripts/constitutional_reread_stances.py --made-on YYYY-MM-DD`（その日の日付。このスクリプトだけが非公開の正典を読む）
+2. `python3 scripts/constitutional_reading.py`（成功の形: `wrote …/index.html`）
+
+作り直さないと「再読データの明細と立場の対応表の投稿が一致しません」または「明細の立場の内訳が公開JSONと一致しません」で
+生成が止まる。対応表には本文・tweet_id を入れない（投稿は post_key で引く）。
+
 ### 読み込み確認のやり方（質と速さの両立）
 
 消費税減税での失敗（機械的なチェックは通ったのに、実際には本文を読まずに使い回した
