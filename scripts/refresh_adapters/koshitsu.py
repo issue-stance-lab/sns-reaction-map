@@ -136,7 +136,9 @@ def build(root: Path, stage: Path, current_date: str) -> dict[Path, Path]:
     が正典から山なみ全体を作り直す（課題69・koshitsu標準化）。
     """
     candidate = stage / "cumulative-candidate.json"
-    current_page = root / PAGE
+    # 新デザイン公開後も、旧形式の生成器は元HTML（data/page-sources）を入力にする（koshitsu_layout.py）
+    from scripts.koshitsu_layout import source_for_refresh
+    current_page = source_for_refresh(root)
     first_page = stage / "page-candidate.html"
     second_page = stage / "idempotence" / "page-candidate.html"
     second_page.parent.mkdir(parents=True, exist_ok=True)

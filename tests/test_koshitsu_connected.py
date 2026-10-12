@@ -16,7 +16,9 @@ ROOT = Path(__file__).resolve().parents[1]
 class KoshitsuConnectedTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.page = (ROOT / "docs/koshitsu-tenpakai-reaction-map.html").read_text(encoding="utf-8")
+        # 新デザイン公開後は、連動表示を持つ旧形式の元HTML（data/page-sources）を検査する
+        from scripts.koshitsu_layout import source_for_refresh
+        cls.page = source_for_refresh(ROOT).read_text(encoding="utf-8")
         cls.data = connected.planet_data(cls.page)
         cls.index = connected.content_index(cls.data)
 

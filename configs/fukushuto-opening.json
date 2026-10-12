@@ -1,0 +1,267 @@
+{
+  "_note": "副首都ページ冒頭の文言設定。件数・論点別件数・立場・更新日は公開JSONから読むため、ここには書かない。制度と候補地の記述は checked_on 時点の一次資料で確認した内容（一次資料メモ quality/research/fukushuto-primary-sources.md の資料K・L・N〜U）。更新時は checked_on と law・comment・candidates の日付を直す。段階（意見募集中か、施行前か）は「今日」ではなく基準日で決める。基準日の既定は公開JSONの updated_on で、--as-of で上書きできる。",
+  "theme_id": "fukushuto",
+  "inputs": {
+    "public_json": "docs/data/themes/fukushuto.json",
+    "planet_config": "configs/planet/fukushuto.yaml",
+    "themes_registry": "THEMES.yaml"
+  },
+  "checked_on": "2026-10-11",
+  "_checked_on": "2026-10-11 に e-Gov 法令API（lawId 508AC1000000078）で附則第1条・第1条・第18条を、e-Gov パブリック・コメント（案件番号060261003）で締切日と資料PDF2点を確かめた。一次資料メモ 資料K・L の【2026-10-11追記】。",
+  "law": {
+    "enacted_on": "2026-07-24",
+    "promulgated_on": "2026-07-31",
+    "enforcement_on": "2026-10-30",
+    "_enforcement_on": "施行予定日。附則第1条は「公布の日から起算して三月を超えない範囲内において政令で定める日」から施行するとし、e-Gov API の amendment_scheduled_enforcement_date が 2026-10-30、amendment_enforcement_date は null（2026-10-11確認）。施行期日を定める政令は e-Gov にまだ無い。",
+    "enforcement_confirmed_on": null,
+    "_enforcement_confirmed_on": "施行後に e-Gov で条文（施行済みの表示と施行日）を編集部が確かめた日を入れる。null の間、施行日を過ぎると「施行予定でした。施行後の条文は編集部で確かめていません」と出す。施行日より前の日付は入れられない（生成が止まる）。"
+  },
+  "comment": {
+    "opens_on": "2026-10-03",
+    "closes_on": "2026-10-16",
+    "result_published_on": null,
+    "_result_published_on": "意見募集の結果（e-Gov の結果公示）を編集部が確かめた日を入れる。null の間、締切を過ぎると「締め切り済み（結果は未確認）」と出す。締切より前の日付は入れられない。",
+    "source": {
+      "label": "意見募集の資料（e-Gov）",
+      "url": "https://public-comment.e-gov.go.jp/pcm/detail?CLASSNAME=PCMMSTDETAIL&Mode=0&id=060261003"
+    }
+  },
+  "phase_text": {
+    "comment": {
+      "open": "{closes}まで意見募集",
+      "closed": "{closes}に意見募集を締め切った。結果は編集部でまだ確かめていない",
+      "published": "意見募集の結果が公表された（{published}に確認）"
+    },
+    "enforce": {
+      "before": "施行予定日として示されている",
+      "after_unconfirmed": "施行予定でした。施行後の条文は編集部で確かめていません",
+      "after_confirmed": "施行されました（{confirmed}に条文を確認）"
+    },
+    "answer_comment": {
+      "open": "要件案は{draft_date}に公表され、{draft_end}まで意見を募集しています。",
+      "closed": "要件案は{draft_date}に公表され、意見募集は{draft_end}に締め切られました。結果はまだ確かめていません。",
+      "published": "要件案は{draft_date}に公表され、意見募集の結果も公表されました。"
+    },
+    "answer_enforce": {
+      "before": "法律の施行は{enforce_date}の予定です。",
+      "after_unconfirmed": "法律は{enforce_date}に施行予定でした。施行後の条文は編集部で確かめていません。",
+      "after_confirmed": "法律は施行されました（{confirmed}に条文を確認）。"
+    },
+    "state_labels": {
+      "done": "済み",
+      "current": "基準日の時点",
+      "planned": "予定",
+      "undecided": "未定",
+      "unconfirmed": "施行日を過ぎた・条文は未確認"
+    },
+    "checked_line": "制度の確認日 {checked}。段階は{as_of}時点で表示"
+  },
+  "crumb": [
+    "統治機構・地方",
+    "副首都法案・副首都構想"
+  ],
+  "title": {
+    "phrases": [
+      "副首都は",
+      "どこに、",
+      "いつ決まる？"
+    ],
+    "accent_index": 1,
+    "sub": [
+      "候補地とメリット・デメリット、",
+      "SNSで意見が分かれる理由"
+    ]
+  },
+  "lead": "法律で決まった手順と、各地の自治体の動きを確かめてから、SNSの意見を論点別に読んでいきます。",
+  "decision": {
+    "label": "決まり方と時期",
+    "text": "国が要件を定め、議会の議決を経た道府県の申出を受けて指定します。指定の時期はまだ決まっていません。"
+  },
+  "steps": [
+    {
+      "key": "enacted",
+      "title": "法律が成立",
+      "date_from": "law.enacted_on",
+      "note_template": "{promulgated}に公布。法律の枠組みが決まった"
+    },
+    {
+      "key": "draft",
+      "title": "要件案を公表",
+      "date_from": "comment.opens_on",
+      "note_phase": "comment",
+      "source_from": "comment.source"
+    },
+    {
+      "key": "enforce",
+      "title": "法律の施行",
+      "date_from": "law.enforcement_on",
+      "note_phase": "enforce"
+    },
+    {
+      "key": "apply",
+      "title": "道府県が申出",
+      "date_from": null,
+      "note": "議会の議決が必要"
+    },
+    {
+      "key": "designate",
+      "title": "国が指定",
+      "date_from": null,
+      "note": "どこになるかは未決定"
+    }
+  ],
+  "answers": [
+    {
+      "key": "where",
+      "question": "どこになる？",
+      "kind": "facts",
+      "kind_label": "制度と自治体の資料",
+      "short": "まだ、どの道府県も指定されていません。",
+      "body_template": "自治体の資料で動きを確認できたのは{regions}地域です。指定を目指すか意思を表明した地域が{aiming}、検討中が{considering}あります。",
+      "link": {
+        "href": "#fuk-op-map",
+        "text": "各地の段階を地図で見る"
+      }
+    },
+    {
+      "key": "when",
+      "question": "いつ決まる？",
+      "kind": "facts",
+      "kind_label": "制度の情報",
+      "short": "指定の時期は示されていません。",
+      "body_template": "{comment_sentence}{enforce_sentence}",
+      "link": {
+        "href": "#fuk-op-route",
+        "text": "決まるまでの手順を見る"
+      }
+    },
+    {
+      "key": "merit",
+      "question": "メリット・デメリットは？",
+      "kind": "voices",
+      "kind_label": "制度の目的とSNSの意見",
+      "short": "目的は災害への備えと経済の拠点づくりです。",
+      "body_template": "SNSの意見では、{top_issues}の順に多く語られています。賛成と反対で、何を重く見るかが違います。",
+      "link": {
+        "href": "#fuk-op-count",
+        "text": "論点ごとの件数を見る"
+      }
+    }
+  ],
+  "map": {
+    "title": "各地の動き",
+    "national_label": "国の指定",
+    "national_count": 0,
+    "national_unit": "道府県",
+    "capital_label": "東京（首都）",
+    "note": "色は自治体が公表した動きです。国が認めた候補地の一覧ではなく、全国を網羅した一覧でもありません。"
+  },
+  "stages": [
+    {
+      "key": "aiming",
+      "label": "指定を目指す・意思表明"
+    },
+    {
+      "key": "considering",
+      "label": "検討・要件待ち"
+    },
+    {
+      "key": "not_preparing",
+      "label": "単独申出の準備なし"
+    }
+  ],
+  "candidates": [
+    {
+      "pref": "大阪",
+      "name": "大阪府・大阪市",
+      "stage": "considering",
+      "label": "構想を取りまとめ（申出は未表明）",
+      "date": "2026-02-12",
+      "source": "大阪市",
+      "url": "https://www.city.osaka.lg.jp/fukushutosuishin/page/0000679231.html"
+    },
+    {
+      "pref": "福岡",
+      "name": "福岡県",
+      "stage": "aiming",
+      "label": "指定を目指す",
+      "date": "2026-08-07",
+      "source": "福岡県",
+      "url": "https://www.pref.fukuoka.lg.jp/contents/fukuoka-fukusyuto.html"
+    },
+    {
+      "pref": "愛知",
+      "name": "愛知県・名古屋市",
+      "stage": "aiming",
+      "label": "指定に向け県市で協議",
+      "date": "2026-08-06",
+      "source": "愛知県",
+      "url": "https://www.pref.aichi.jp/soshiki/kikaku/hukusyutokaigi.html",
+      "_url": "旧URL（2026-08-10の知事発表 https://www.pref.aichi.jp/site/chiji/20260810.html）は404。一次資料メモ 資料N の【2026-10-11追記】どおり、県市の協議会ページ（第1回 2026-08-06）を根拠にした。"
+    },
+    {
+      "pref": "北海道",
+      "name": "北海道・札幌市",
+      "stage": "aiming",
+      "label": "指定を目指す",
+      "date": "2026-08-27",
+      "source": "北海道",
+      "url": "https://www.pref.hokkaido.lg.jp/ss/ssa/270000.html"
+    },
+    {
+      "pref": "群馬",
+      "name": "群馬県",
+      "stage": "aiming",
+      "label": "知事が意思表明",
+      "date": "2026-07-30",
+      "source": "群馬県",
+      "url": "https://www.pref.gunma.jp/site/chiji/769457.html"
+    },
+    {
+      "pref": "広島",
+      "name": "広島県",
+      "stage": "considering",
+      "label": "申出を検討",
+      "date": "2026-08-25",
+      "source": "広島県",
+      "url": "https://www.pref.hiroshima.lg.jp/site/kishakaiken/gpc-20260825.html"
+    },
+    {
+      "pref": "宮城",
+      "name": "宮城県・仙台市",
+      "stage": "considering",
+      "label": "要件を待って判断",
+      "date": "2026-08-26",
+      "source": "宮城県",
+      "url": "https://www.pref.miyagi.jp/site/chiji-kaiken/kk-260826.html"
+    },
+    {
+      "pref": "京都",
+      "name": "京都府",
+      "stage": "not_preparing",
+      "label": "単独申出の準備なし",
+      "date": "2026-07-31",
+      "source": "京都府",
+      "url": "https://www.pref.kyoto.jp/koho/kaiken/260731.html"
+    }
+  ],
+  "count": {
+    "label": "SNSの意見",
+    "caption_template": "{source}で集めた投稿{collected}件のうち、意見を含むもの（{start}〜{end}）",
+    "not_poll": "世論調査ではなく、SNSの公開投稿を分類した結果です。",
+    "issues_title": "論点ごとの件数",
+    "no_reason_tag": "理由は未公開",
+    "no_reason_note_template": "{labels}は、理由の内訳をまだ公開していません。論点の欄でその旨を示します。",
+    "updated_template": "最終更新 {updated}・次回の更新予定 {next}"
+  },
+  "sources": [
+    {
+      "label": "成立した法律（e-Gov）",
+      "url": "https://laws.e-gov.go.jp/law/508AC1000000078"
+    },
+    {
+      "label": "審議経過（衆議院）",
+      "url": "https://www.shugiin.go.jp/internet/itdb_gian.nsf/html/gian/keika/1DE2ACE.htm"
+    }
+  ]
+}

@@ -227,6 +227,11 @@ def main() -> int:
         if not path.is_file():
             raise FileNotFoundError(path)
         source = path.read_text(encoding="utf-8")
+        layout = next((name for name in ("koshitsu-layout", "fukushuto-layout", "ai-copyright-layout") if f'name="{name}"' in source), None)
+        if layout:
+            # 新デザインは授業の行を自前で生成する（koshitsu_layout.py・fukushuto_layout.py・ai_copyright_layout.py）。旧形式の節で上書きしない
+            print(f"skipped {path.relative_to(PROJECT_ROOT)} ({layout})")
+            continue
         updated = apply_theme(source, theme_id, config, theme_data)
         if updated != source:
             changed += 1

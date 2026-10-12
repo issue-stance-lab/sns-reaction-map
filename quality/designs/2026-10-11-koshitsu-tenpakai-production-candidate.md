@@ -1,0 +1,368 @@
+# 皇室典範改正（koshitsu-tenpakai）新デザインの公開候補と検査（手順7）
+
+2026-10-11。ブランチ `task/renew-koshitsu-tenpakai`。手順書23の「7. 更新と公開を検査する」。
+**docs/ は変更していない。main への統合・push・投票の送信（POST）はしていない。** `configs/koshitsu-layout.json` は `enabled: false` のまま。
+（2026-10-11 の公開準備で `enabled: true` にして docs/ に適用した。末尾の「9. 2026-10-11 公開準備」を参照。）
+
+公開候補: `quality/prototypes/koshitsu-tenpakai-release/koshitsu-tenpakai-reaction-map.html`（基準日＝公開JSONの更新日 2026-10-05）
+確認画面: `quality/prototypes/koshitsu-tenpakai-release/evidence/`（PC・375px・論点選択・背景を開いた画面・X遮断時・JSなし）
+
+## 1. 仕組み（部活動 `bukatsu_layout.py` と同じ型）
+
+| ファイル | 役目 |
+|---|---|
+| `scripts/build_koshitsu_redesign.py`（新規） | 冒頭・読書面・背景の生成器（`koshitsu_opening/reading/background.py`）を呼び、元HTMLの保護対象を継承して完成HTMLを組む。`--mode preview|release`、`--output-dir`、`--as-of`。docs/ への出力は拒否。新デザインのページを入力に渡すと拒否 |
+| `scripts/koshitsu_layout.py`（新規） | `enabled` / `source_for_refresh`（新デザイン公開後は `data/page-sources/koshitsu-tenpakai.html` を返す）/ `materialize`（隔離コピーで元HTMLを docs/ に戻す）/ `finish`（全生成の最後に元HTMLを保存し、新デザインを docs/ に書く）/ `rebuild`（公開後に `build_koshitsu_arena.py` を単独で動かしたとき用） |
+| `configs/koshitsu-layout.json`（新規） | `enabled: false`。公開切替時に true |
+| `scripts/koshitsu_redesign/`（移動＋新規） | 見た目の正本。`opening.css`・`reading.css`・`reading.js` を試作フォルダーから移した（試作の生成器は生成時に写しを置く）。`production.css` は共通ヘッダー・投票・次に読むテーマ・フッターをこの配色に合わせる追加分 |
+| `scripts/koshitsu_redesign_provenance.py`（新規） | 新デザインの件数を公開JSON・再読データの明細・設定から数え直して照合（`verify_number_provenance.py` から呼ぶ） |
+
+施行までの日数：静的HTMLは「施行は10月24日」と書き、日数は読む日に JS で数える（施行日を過ぎたら「施行日を過ぎました（条文は未確認）」に切り替わる）。生成日に依存しないので、同じデータなら同じページになる（`build_koshitsu_arena.py --check` が日をまたいでも崩れない）。
+
+## 2. 保護対象の一覧と継承結果
+
+| 保護対象 | 現行ページ | 公開候補 | 結果 |
+|---|---|---|---|
+| title | 「皇室典範改正で何が変わる？女性皇族・旧宮家養子の論点｜SNS反応まっぷ」 | 同じ | 継承 |
+| SEO_META（description・canonical・OGP・Twitter） | マーカー区間 | 区間を文字どおり複写 | 継承（テストで一致確認） |
+| Article JSON-LD | マーカー区間 | 文字どおり複写 | 継承 |
+| FAQ JSON-LD | 旧FAQ 6問 | 新デザインの背景「よくある質問（6問）」から作り直し | 画面と構造化データの一致をテストで確認 |
+| GA4（G-K10S4YCZFH、ホスト限定） | GA_TAG 区間 | release だけ文字どおり複写。preview には載せない | 継承 |
+| AdSense タグ・`google-adsense-account` meta | ADSENSE_TAG 区間・meta | release だけ複写（meta は両方） | 継承。`docs/ads.txt` は変更なし |
+| Supabase 投票 | topic `koshitsu-tenpakai-issue-stance-v2`、論点6×立場4＝24、`choiceIdx:issueIdx*STANCES.length+stanceIdx`、保存キー `sns_vote_<topic>_my` | 投票節とスクリプトを複写。VOTE_ISSUES・STANCES は元と完全一致。保存キーは本番ホストでだけ既存キー、他のホストでは `sns_vote_preview_` | 継承。`vote-config.js?v=1`→ホスト判定→`vote-store.js?v=1` の順 |
+| 投票の参加者数 n= 表示・やり直し・シェア | topic-modern.js | topic-modern.js?v=13 を読み込み | 継承 |
+| 調査条件（#caution）・PLANET_DATA | 山なみ節 | 山なみの注記の下に #caution、末尾に PLANET_DATA（公開検査が読む契約） | 継承 |
+| 既存アンカー | 外部・他ページ・note からの `#` 付き参照は0件（`grep` 結果） | `#issue-{論点ID}` は同じIDで新しい論点欄に。旧 `#planet-block` `#fb-{ID}` `#detail-data` `#issue-cards` `#bukatsu-background` `#koshitsu-quick-guide` など17件は `location.replace` で新しい置き場所へ読み替え（背景の行なら開く） | 継承（Playwright で確認） |
+| noscript 本文 | 現行ページに noscript は無い | JSなしで6論点・背景がすべて読める | 該当なし（JSなし表示は確認済み） |
+| 関連テーマへの導線 | 次に読むテーマ（憲法改正・副首都） | 同じ節を複写 | 継承 |
+| 運営者情報・訂正窓口 | フッターと信頼情報 | フッターを複写。背景「集め方と、この集計の限界」に `about.html#corrections` | 継承 |
+| 公開日・更新日の `<time>` | ARTICLE_TRUST | 背景の事実欄を `<time datetime>` に | 継承 |
+| 授業節（印刷ボタン・GA4 計測） | CLASSROOM 区間 | 背景「授業や話し合いで使う」を `classroom-section`・資料・問い・印刷ボタンの約束に合わせ、CLASSROOM マーカーで囲む | 継承 |
+| 読書進捗のキー `isa-seen-koshitsu-tenpakai` | 進捗の帯で使用 | 新デザインには進捗の帯が無いので読み書きしない。既存の保存値は消さない | 継承しない（機能ごと移していない） |
+| 引用ボタン（topic-modern.js の cite） | `article.ic` に付く | 論点欄に付けていない | 継承しない（論点欄の切替と並びが合わないため。残作業） |
+| 世論の潮目ウィジェット | TIDE_CARD | 載せていない | 継承しない（入力が非公開の更新回で、公開JSONに推移が無い。読書面に「推移はまだ公開データに無い」と明記） |
+| テーマ共通の見た目（theme-design.css/js・件数スタンプ） | THEME_DESIGN | 載せない。`apply_theme_design.py` は新デザインのページを飛ばす | 意図的に外した |
+| llms.txt・sitemap | URL のみ参照 | URL 不変のため変更不要 | 継承（`validate_theme_seo.py` で確認） |
+
+## 3. 生成方法
+
+リポジトリ（作業ツリー）の直下で実行する。
+
+公開候補（公開操作ではない）:
+```sh
+python3 scripts/build_koshitsu_redesign.py --mode release --output-dir quality/prototypes/koshitsu-tenpakai-release
+```
+成功すると `Built 1 file (release, as_of 2026-10-05); no deployment performed.` と出る。指紋は同じフォルダーの `build-manifest.json`。
+
+確認用（GA・AdSense なし、noindex、投票は送らない）:
+```sh
+python3 scripts/build_koshitsu_redesign.py --mode preview --output-dir /tmp/koshitsu-preview
+```
+
+公開切替（release スキルの手順の中で行う。今回はしていない）:
+1. `configs/koshitsu-layout.json` を `enabled: true` にする。
+2. 同じコミットで `configs/theme-seo.json` の koshitsu-tenpakai に `"display_headline": "皇室典範改正、何が変わる？愛子さまは？　何が問題？"` を足す（H1 が変わるため。`validate_theme_seo.py` が H1 と照合する）。
+3. `python3 -c "import sys;sys.path.insert(0,'.');from pathlib import Path;from scripts import koshitsu_layout as l;l.finish(Path('.'))"` で元HTMLを `data/page-sources/` に保存し、docs/ のページを新デザインにする。
+
+この3段を作業ツリーの複製（スクラッチ）で実行し、下の検査を「切替後の状態」でも通した。
+
+## 4. 定期更新との両立
+
+- `refresh_topic.py` の公開候補生成（単一・複数テーマ）は、隔離コピーで `materialize` → 旧形式の全処理（adapter・finalize・SEO・信頼情報・授業節・テーマ共通の見た目）→ 最後に `koshitsu_layout.finish`。旧昇格経路（`promote`）は新デザイン有効時に止める。
+- `refresh_adapters/koshitsu.py` は `source_for_refresh` を入力にする（公開後も元HTMLから2回生成・投票互換・保護タグを検査）。
+- 新デザインの照合（再読データの件数＝意見数など）が合わないと `finish` は ValueError で止まり、元HTMLも公開ページも書き換えない（テストで確認）。
+
+### データ更新時にどの生成元を直すか（データ対応表・最終版）
+
+| 表示 | 生成元 | 更新時に直すもの |
+|---|---|---|
+| 件数（収集・意見・論点別・立場別）、収集期間、更新日 | 公開JSON `docs/data/themes/koshitsu-tenpakai.json`（正典から `build_public_registry.py`） | 自動（正典の更新で変わる） |
+| 理由区分と件数 | `data/koshitsu-tenpakai_issues-reread.json` | **新しい収集回の意見を再読して追記**（件数が意見数と合わないと生成が止まる） |
+| 理由の「どんな声か」・論点の説明・投稿2件の選定 | `configs/koshitsu-tenpakai-reading.json` | 区分が増えたとき・投稿を差し替えるとき |
+| 主張の照合・共通の心配・資料にしかない話 | 公開JSON（`data/verification/koshitsu-tenpakai-sunk-continents.json` ほか） | 再検索の記録を追記したとき（母数 sns_base が意見数と違うと止まる） |
+| 制度の確認（3項目）・年表・未確認事項 | `data/verification/koshitsu-tenpakai-background.json`、一次資料メモ | 一次資料の再確認時 |
+| 冒頭の短答・問い・日付 | `configs/koshitsu-tenpakai-opening.json` | 施行後に条文を確かめたら `enforcement_confirmed_on` |
+| 背景の行・FAQ・授業 | `configs/koshitsu-tenpakai-background.json`、`scripts/koshitsu_background_detail.py` | 施行日以降は時制の見直し（見直すまで生成が止まる） |
+| 公開日・次回更新予定・収集元 | `THEMES.yaml`、`configs/theme-seo.json` | 自動（更新手順で変わる） |
+| SEOメタ・JSON-LD・GA・AdSense・投票 | 元HTML（`data/page-sources/`、公開前は docs/） | 変更しない（継承するだけ） |
+
+## 5. 共有スクリプト・共有テストの変更箇所と理由
+
+| ファイル | 変更 | 理由 |
+|---|---|---|
+| `scripts/refresh_topic.py` | `promote` の新デザイン停止条件に皇室を追加／`_copy_candidate_tree` で皇室の `materialize`／単一・複数の公開候補生成で、テーマ共通の見た目の後に皇室の `finish` | 部活動の分岐と並べた最小の追加（計10行） |
+| `scripts/refresh_adapters/koshitsu.py` | 入力を `source_for_refresh(root)` に | 公開後も元HTMLから生成するため |
+| `scripts/build_koshitsu_arena.py` | 公開ページが新デザインで引数なしのとき `koshitsu_layout.rebuild` | 単独実行で新ページを旧形式で上書きしないため |
+| `scripts/refresh_planet_section.py` | 皇室の新デザインも停止 | 部活動と同じ保護 |
+| `scripts/apply_theme_design.py` | 新デザインのページを飛ばす | 共通の見た目を重ねないため |
+| `scripts/seo/apply_classroom_section.py`・`apply_theme_trust.py` | 新デザインのページを飛ばす（skipped と表示） | 単独実行で授業節・H1を旧形式に戻す事故を防ぐ。更新経路では元HTMLに掛かる |
+| `scripts/verify_builder_rebuildability.py` | 皇室の `materialize` | 更新経路と同じ入力で再生成を比べるため |
+| `scripts/verify_theme_page.py` | 新デザインの理由件数を論点欄の中で照合する分岐／意見数パターンから「〜への意見」「〜しない意見」を除外 | 表示形式が変わった照合だけの対応（基準は緩めていない）。後者は理由区分の名前「制度の説明・背景への意見 18件」を意見数と誤認したため |
+| `scripts/koshitsu_count_provenance.py` | 新デザインなら `koshitsu_redesign_provenance` を呼ぶ | 数字の出所検査 |
+| `tests/test_koshitsu_connected.py`・`_public_copy.py`・`_quick_guide.py` | 読むページを「公開後は元HTML」に | 旧形式の連動表示の検査。公開後も元HTMLは同じ構造で残るため（前提が変わった検査） |
+| `tests/test_classroom_section.py` | 新デザインでは授業節が `#bg-method` より前か | 信頼情報の置き場所が変わったため |
+| `tests/test_cite_button.py` | 新デザインでは論点欄の `id="issue-…"` を受け皿とみなす | 受け皿の形が変わったため |
+| `tests/test_theme_design.py` | 新デザインのページを飛ばす | 共通の見た目を掛けない設計に合わせた |
+
+## 6. 検査結果
+
+| 検査 | 公開前（作業ツリー） | 切替後（スクラッチで切替） |
+|---|---|---|
+| 生成器の内蔵照合（件数・理由区分・立場・資料・日付） | 合格 | 合格 |
+| `verify_theme_page.py koshitsu-tenpakai`（候補は `--html`） | NG 0 | NG 0 |
+| `verify_number_provenance.py koshitsu-tenpakai` | 298/298 説明済み（現行ページ） | 284/284 説明済み |
+| `seo/validate_theme_seo.py` | OK | OK（display_headline 追加後） |
+| `verify_builder_rebuildability.py` | 皇室 OK（消費税だけNG、下記） | 皇室 OK（同上） |
+| `verify_ai_tone.py` | 問題なし | 問題なし（新ページを含む10本） |
+| `verify_trend_images.py` | NG 0 | — |
+| tests/test_koshitsu_*（6本）＋ `test_koshitsu_redesign.py`（15件） | 合格 | 合格 |
+| 全テスト `python3 -m unittest discover -s tests`（pytest は未導入） | 1,719件中 失敗11・エラー5 | 1,719件中 失敗12・エラー5（消費税の16件＋授業節1件）。授業節を直したあと、関係する12ファイル84件を再実行して合格（全件の再実行はしていない） |
+| `run_public_checks.py` | テスト2件だけNG（同じ原因） | — |
+
+全テストの失敗16件は、すべて消費税減税（と推移の表の照合）。原因は main 側の「消費税減税 2026-10-11 更新回」（84451388）がこのブランチに入っておらず、復元した非公開正典は新しい版のため、公開JSONの source_sha256 が合わないこと。変更を外しても同じ失敗が出ることを `run_public_checks.py` で確認した。皇室・部活動・他テーマのテストで、今回の変更で落ちたものは無い。切替後に初めて落ちた12件（授業節・引用の受け皿・共通の見た目・旧形式の連動表示の検査）は、5.の更新と授業節の生成で0件にした。
+
+数値と出典の照合：冒頭の総数2,016件・立場の3区分（476／1,511／29件）・6論点の件数・各論点の理由区分の件数（再読データの明細を数え直し）・論点×立場・主張に当たる投稿数・資料にしかない話の母数を、公開JSONと再読データから独立に数え直して一致（`koshitsu_redesign_provenance.py`）。リンクは `validate_theme_seo.py` の手元参照切れ0件。
+
+操作（Playwright、`tests/test_koshitsu_redesign_browser.cjs`）:
+- 1280px・375px とも横はみ出し0、コンソールエラー0。
+- 論点名6つと山を押しても scrollY 不変。背景の10行の開閉（開いても横はみ出し0）。
+- 戻る：論点を6回切り替えても history.length 不変、「戻る」で前のページ（index.html）へ。
+- 旧アンカー：`#fb-…` は論点、`#detail-data` は件数表の行を開く、`#issue-…` で論点を選ぶ。
+- キーボード：Tab で論点名を移り Enter で選択（位置・フォーカス不変）、背景の行を Enter で開く、フォーカス枠が見える。
+- X埋め込みを遮断：「埋め込みを表示できません」の案内と元投稿リンク2件が残り、ページエラー0。
+- JSなし：6論点すべて表示、背景も開ける。施行札は「施行は10月24日」。JSありでは「施行まで あと13日」、日付を10月25日にすると「施行日を過ぎました（条文は未確認）」。
+
+投票：本番 Origin（https://sns-reaction-map.jp）から GET `cast-vote?topic_id=koshitsu-tenpakai-issue-stance-v2` → HTTP 200、CORS 一致、既存 counts（2票、choice 0 と 16）を取得。POST はしていない。
+
+よみやす（`review_with_yomiyasu.py --medium website --strict`）：手順6で残った11件のうち、背景の既存文3件は直した（`koshitsu_background_detail.py` の読点4個2文、「ます」3連続1件）。投稿の導入文で生じた文末の連続2件も直した。残る8件はすべて `data/verification/koshitsu-tenpakai-sunk-continents.json`（公開JSONの `sns_note`＝再検索の記録7件、`life_impact` 1件）。画面に出る（再検索の記録は「検索の記録」を開いたとき、life_impact は常に表示）ので対象外ではない。直すには公開JSON（docs/data）と現行ページの再生成が要り、今回の「docs を変えない」範囲を超えるため残した。ほかに「世論調査ではありません」の文を「世論調査ではなく、…」に直した（サイト共通の信頼表示の文言検査に合わせた。意味は同じ）、件数表の要約「6論点×」を「論点（その他を含む）×」に直した（論点数の表記を5つに統一）。
+
+## 7. 公開前の残作業
+
+1. オーナーが公開候補の表示・内容を確認する（evidence の画像、またはローカル配信）。
+2. `sunk-continents.json` の文8件をよみやす基準で直し、公開JSONを作り直す（公開切替と同じコミットで docs を再生成）。
+3. 公開切替（3.の3段）を release スキルの手順で行う。その前に main（消費税の更新回など）を取り込み、全テストを再実行する。
+4. 施行日（10月24日）以降の初回更新の前に、背景の年表・FAQの時制を直す（直すまで `finish` が止まり、有効時は全テーマの公開候補生成も止まる）。**10月15日の定期更新は enabled=false のままなら影響なし。**
+5. 新しい収集回の意見を `issues-reread.json` に再読して追記する手順を、更新の正典（DATA_REFRESH.md）に足す。追記しないと有効化後の更新で止まる。
+6. 引用ボタン・潮目ウィジェット・読書進捗の帯を新デザインに戻すかの判断（私なら、潮目は公開JSONに推移が入ってから読書面の推移欄に統合、引用ボタンは論点見出しに付ける形で別課題）。
+
+## 8. 未確認事項
+
+- 本番ホストでの GA4・AdSense の実際の発火、投票 POST の保存と重複防止（実票になるため未実施）。
+- X埋め込みが実際に表示されるか（遮断時の表示だけ確認。8件の投稿が今も閲覧できるかは未確認）。
+- 印刷ボタンの実際の印刷結果（OS の印刷ダイアログ・改ページ）。
+- 次に読むテーマの画像は全画面撮影で空白に写った（遅延読み込みの撮影上の問題とみられるが、目視で確かめていない）。
+- 全テストは pytest が無いため unittest で実行した。消費税減税の16件は main の取り込み後に通るかを確かめていない。
+
+## 9. 2026-10-11 公開準備
+
+オーナー指示「残作業を片付けて公開」（2026-10-11）。作業ツリー `isa-wt-renew-koshitsu-tenpakai`。**main への統合・push はしていない（司令塔が行う）。**
+
+### 9-1. main の取り込み
+
+- `git merge main -m "Merge main into task/renew-koshitsu-tenpakai"` → マージコミット `2f5dfab7`（main `3ff165d5` を取り込み、19コミット。消費税減税 10/11 更新回 `84451388`、自転車青切符 10/11 更新回 `d9e428f1` など）。**衝突は0件。**
+- 非公開データ（Git で運ばれない `social-samples/`）: 内容の比較（`rsync -anc`）で共有ツリーと違ったのは自転車青切符の4ファイル（`bike-blue-ticket_2d_classified.json`、`updates/bike-blue-ticket/2026-10-11/` の3件）。共有ツリー→作業ツリーへコピーし、差分0件を確かめた。消費税減税の 10/11 データは前回の復元で作業ツリーに入っており、差は無かった。逆方向のコピーはしていない。
+
+### 9-2. 文体の警告8件（`data/verification/koshitsu-tenpakai-sunk-continents.json`）
+
+よみやす検査（`review_with_yomiyasu.py --medium website --strict`）で完成を止めていた8件を直した。意味・件数・日付・候補語は変えていない。
+
+| 場所 | 指摘 | 直し方 |
+|---|---|---|
+| 養子の年齢 `sns_note`（9/18） | 87字 | 「再検索。候補語は〜等。」の2文に |
+| 男子出生の重圧 `sns_note`（9/18） | 89字 | 同上 |
+| 男子出生の重圧 `sns_note`（9/27） | 99字・読点4 | 「3件が候補に挙がった。内容は〜という批判。いずれも〜不一致。」の3文に |
+| 三十年ごとの見直し `sns_note` | 97字 | 「一致は1件あった。」で区切る |
+| 修正案 `life_impact` | 85字 | 「修正案の内容がそのまま」→「修正案どおりに」、「制度自体が」→「制度が」 |
+| 修正案 `sns_note` | 157字・読点4（2件） | 3文に分け、「〜という事実」→「〜事実」 |
+
+そのあと `build_public_registry.py --topic koshitsu-tenpakai`（公開JSON・catalog）、`build_koshitsu_arena.py`（旧形式の元HTMLに同じ文を反映）、`build_adoption_registry.py`（公開JSONの指紋）を実行。よみやす検査は「完成を止める指摘 0件、判定 PASS（78/100）」。
+
+### 9-3. 施行日（10月24日）以降の時制の設計変更
+
+- 変更前: `koshitsu_background.check` が基準日≧施行日で SystemExit。`finish` 経由で ValueError になり、有効時は**全テーマの公開候補生成が止まる**設計だった。
+- 変更後: 生成は止めない。時制は冒頭と同じ `koshitsu_opening.phase_of` の3段階（`before`／`after_unconfirmed`／`after_confirmed`）。
+  - 年表: `configs/koshitsu-tenpakai-background.json` の `phase_events`（公布・施行の2行）。施行後・未確認は「この日に施行される予定でした。…施行後の条文は、まだ編集部で確かめていません。」
+  - FAQ: 施行に触れる問いに `phase`（q と a）。構造化データ（FAQPage）も画面から作るので同じ時制になる。
+  - 未確認事項: 「施行後に e-Gov の条文が切り替わったか」は `hide_in: ["after_confirmed"]`。
+  - `law.enforcement_confirmed_on` を入れると「施行されました。施行後の条文は○月○日に確かめています。」に切り替わる。施行日より前の日付、または基準日が施行日より前なのに確認日がある場合は止まる。
+  - 施行後の文が設定に欠けていると、**施行日より前でも**止まる（10/24 当日の更新で初めて止まらないように）。
+- テスト（`tests/test_koshitsu_redesign.py` に5件追加、計20件）: 施行日当日・翌年で生成でき未確認表示になる／確認日で施行後の文に切り替わる／確認日が施行日より前なら止まる／施行後の文の欠落は施行日前でも止まる／`refresh_topic.py` と同じく as_of を渡さない `finish` が、皇室の公開JSONの更新日が施行日を過ぎていても止まらない（他テーマの公開候補生成を止めない）。
+- 既知の限界: 背景の時制は公開JSONの更新日で決まる。10/24 から次の更新までの間、背景は施行前の書き方のまま（冒頭の札と状況文だけは JS が読む日で「施行日を過ぎました（条文は未確認）」に切り替わる）。
+
+### 9-4. 公開切替で変わったファイル
+
+| ファイル | 変更 |
+|---|---|
+| `configs/koshitsu-layout.json` | `enabled: true`、説明文を施行後の設計に合わせた |
+| `configs/theme-seo.json` | koshitsu-tenpakai に `display_headline`「皇室典範改正、何が変わる？愛子さまは？　何が問題？」 |
+| `data/page-sources/koshitsu-tenpakai.html`（新規） | 旧形式の元HTML（9-2 の文を反映した版） |
+| `docs/koshitsu-tenpakai-reaction-map.html` | 新デザイン（`koshitsu_layout.finish` ＝ `build_koshitsu_redesign` の release。`--mode release --output-dir` の公開候補とバイト一致） |
+| `docs/data/themes/koshitsu-tenpakai.json`・`docs/data/catalog.json`・`data/public/` の同名 | 9-2 の文の変更 |
+| `data/verification/adoption/registry.json` | 公開JSONの指紋 |
+| `quality/prototypes/koshitsu-tenpakai-release/` | 公開候補と指紋を作り直し、`evidence/docs-*.png` を追加 |
+| `DATA_REFRESH.md` | 「皇室典範改正の定期更新（新デザインを維持する）」の節 |
+| `company/APPROVALS.yaml` | `approval-20261011-002` |
+
+- `docs/index.html`: `sync_portal_stats.py` は「変更なし（すでに同期済み）」。件数（収集2,565・意見2,016）は変わらない。
+- sitemap・JSON-LD・可視の最終更新日: `validate_theme_seo.py` OK。`THEMES.yaml` の `updated_at` は変えていない（データ更新ではないため）。
+
+### 9-5. 検査結果（作業ツリー、切替後）
+
+| 検査 | 結果 |
+|---|---|
+| `verify_theme_page.py` | 全テーマ10件 NG 0件（再生成可能性も10テーマ NG 0件） |
+| `verify_number_provenance.py` | 終了0。10テーマ NG 0件（皇室 284/284 説明済み） |
+| `verify_top_page.py` | 終了0、NG 0件 |
+| `python3 -m unittest discover -s tests` | 1,731件 OK（失敗0・エラー0、skip 4）。前回の消費税減税16件は main 取り込みで解消 |
+| `run_public_checks.py` | 終了0（「公開ファイルだけで確かめられる範囲はすべて通りました」）。初回は採用台帳の指紋（公開JSONを直したため）で NG 1件 → `build_adoption_registry.py` で解消。途中の「復元確認に失敗」行はバックアップの失敗系テストの出力 |
+| `verify_ai_tone.py` | 問題なし（公開ページ10本） |
+| `seo/validate_theme_seo.py` | OK（themes=10、sitemap URLs=16） |
+| `build_koshitsu_arena.py --check` | OK |
+| よみやす（新デザインのページ） | 完成を止める指摘 0件 |
+| Playwright（docs/ を 127.0.0.1 で配信、`tests/test_koshitsu_redesign_browser.cjs`） | 1280px・375px とも横はみ出し0・コンソールエラー0、論点6つと山で scrollY 不変、背景10行の開閉、戻る・旧アンカー・キーボード・X遮断・JSなしも合格。画像は `evidence/docs-*.png`（8枚） |
+
+### 9-6. 未確認
+
+- 本番ホストでの GA4・AdSense の発火、投票 POST、X埋め込みの実表示（公開後に確認）。
+- 承認台帳の番号 `approval-20261011-002` は、並行する他ブランチが同じ番号を使うと統合時に重なる（現時点で他ブランチに 002 は無い）。
+
+## 10. 山なみを対話式に戻す（2026-10-11）
+
+ブランチ `task/planet-three-themes`。生成AIと著作権（`2026-10-11-ai-copyright-production-candidate.md` 10節）と同じ型で、
+「論点ごとに読む」の静的SVGの山なみ（`.kr-map-shell`）と論点名リスト（`nav.kr-chips`）を、元HTMLの対話式の山なみに置き換えた。
+冒頭・論点ごとの読書面・背景の開閉行・保護対象の継承は変えていない。
+
+### 10-1. 変えたファイル
+
+| ファイル | 変更 |
+|---|---|
+| `scripts/build_koshitsu_redesign.py` | `_planet()` を追加（生成AIと同じ写し方。部品12個が1つずつ無ければ止まる）。調査条件は山なみの中で `RESEARCH_CONDITIONS` に囲む（`div.ko-research`）。PLANET_DATA は山なみの直後の1つだけ（末尾の写しはやめた）。旧アンカー `planet-block` の読み替えを外し、隠した受け皿 `HIDDEN_RECEIVERS`（`fallback`・`quiz`）は「表示されていなければ読み替える」形にした |
+| `scripts/koshitsu_redesign/planet.js`（新規） | 生成AIの planet.js の写し。読書面の入口を `window.KoshitsuReading`、見出しを `#kr-h-…` に |
+| `scripts/koshitsu_redesign/reading.js` | `window.KoshitsuReading.select(id)` を公開。動きは変えていない |
+| `scripts/koshitsu_redesign/production.css` | 山なみの配色と並べ方（`.ko-planet`）。生成AIの写しで、色だけ皇室の紺（`--indigo` `#27346a`）・紙色（`#f6f2ea`）・線（`#e4dccd`）に |
+| `tests/test_koshitsu_redesign.py` | `test_planet_is_copied_from_source`・`test_planet_follows_source_updates` を追加。旧アンカーの検査を受け皿に対応 |
+| `docs/koshitsu-tenpakai-reaction-map.html`・`quality/prototypes/koshitsu-tenpakai-release/`・`quality/prototypes/koshitsu-tenpakai-reading/reading.js` | 作り直し |
+
+### 10-2. 皇室だけの違い
+
+- 立場モードが6つ（すべて＋「今回案全体」への評価5つ）。PCでは3列×2行、375pxでは「すべて」を1行にして残りを2列。論点ボタン6つも3列。
+- 山なみの中に元HTMLの注記「色は『今回案全体』への評価です…未表明は、中立や無関心の意味ではありません」があり、そのまま出る。
+- 論点IDは PLANET_DATA・公開JSON・読書面（`data-issue-panel`）で同じ6つ（`scripts/koshitsu_taxonomy.py`）。変換表は要らない。
+- 旧ページの連動表示（`koshitsu-connected.*`・`theme-design.*`）は読み込まない。選択パネルの中身は生成AIと同じ（論点タブ・図解画像・旧い理由区分の名前は CSS で出さない）。
+- 旧ページの別名表は「ページにあるIDでも読み替える」作りだったので、生成AIと同じく「表示されている要素なら読み替えない」判定を足した。
+
+### 10-3. 検査結果
+
+| 検査（3テーマまとめて、作業ツリー） | 結果 |
+|---|---|
+| `verify_theme_page.py`（全テーマ） | 10テーマ NG 0 |
+| `verify_number_provenance.py` | 部活動 533/533・皇室 282/282・副首都 293/293 説明済み、全テーマで終了0 |
+| `verify_builder_rebuildability.py` | 10テーマ NG 0 |
+| `run_public_checks.py` | 終了0 |
+| `python3 -m unittest discover tests` | 1,839件 OK（skip 8） |
+| よみやす（docs の新ページ、`--strict`） | 皇室 info 11件・副首都 info 17件で PASS、部活動 warn 27件・info 3件（どれも変更前と同数。部活動の warn は資料名などの長い文で、前から「要修正」のまま） |
+| 10/19 の模擬（新規0件、使い捨てコピー） | 皇室・副首都を新規0件の回として `adapter.build` → `prepare_public_candidate_bundle_multi`（完了記録の検査だけ外した。保存回の report を代用）。公開対象67件。候補の3ページとも山なみ（`#planet-block`）・PLANET_DATA（1つ）・planet.js 入り、皇室・副首都は基準日 2026-10-19。候補の中で `verify_theme_page.py` 全テーマ NG 0、数字の出所 3テーマ NG 0、よみやすは上と同数、Playwright でもコンソールエラー0・山を押すと読書面へ |
+| 2回生成 | md5 一致（`e7276042…`、`PYTHONHASHSEED=7` でも同じ、docs のページとも一致）。`build_koshitsu_arena.py` →「UPDATE」→ `--check`「OK」 |
+| Playwright（docs、1280/375px、x.com・platform.twitter.com・twimg.com 遮断） | コンソールエラー0、scrollWidth 一致。読み込み直後は画面が動かない（scrollY 0）。立場「今回案全体を支持」（46件・2.3%）で100マスと件数が変わる。山（旧宮家養子縁組）を押すと読書面がその論点に切り替わり、欄の上端が画面上104px・見出し `#kr-h-koshitsu-tenpakai-former-royal-adoption` にフォーカス・URL `#issue-…`。Enter でも同じ。論点ボタンは地図の中で切り替わり、読書面も合わせて切り替わる。`#issue-…` 付きの読み込みも読書面がその論点に。画像は `quality/prototypes/koshitsu-tenpakai-release/evidence/planet-restore/` |
+
+### 10-4. 確認していないこと
+
+- 実機（iPhone Safari など）とスクリーンリーダー。
+- 新規の意見がある回の定期更新（模擬は新規0件）。施行日（10/24）以降の表示と山なみの組み合わせ（山なみ側は日付で変わらない）。
+- `#issue-…` 付きで読み込んだとき、読書面は切り替わるが、画面の位置は山なみの選択パネル付近に止まる（生成AIと同じ）。
+
+## 11. 部活動型の圧縮（2026-10-12）
+
+ブランチ `task/compact-two-themes`。生成AIと著作権（`2026-10-11-ai-copyright-production-candidate.md` 11節、コミット 944adfc9）・
+副首都（同日の11節）と同じ型で、論点ごとの読書面を部活動（`docs/bukatsu-chiiki-reaction-map.html`）の収め方にした。
+**文・件数・出典は1つも変えていない**。変えたのは最初に見せる量と、根拠の欄の中の並び順だけ。冒頭・対話式の山なみ・投票・
+背景の開閉行（作り方 `#bg-method`・件数表 `#bg-table` を含む）・保護対象（SEO・GA4・AdSense）の中身は変えていない。
+
+### 11-1. 変えたもの
+
+| ファイル | 変更 |
+|---|---|
+| `scripts/koshitsu_reading.py` | 生成AIと同じ部品（`fold`・`ordered_reasons`・`render_reason_details`・`render_tabs`）に差し替えた：論点タブ（`nav.kr-tabs`、山なみ設定の絵文字＋論点名）、説明の1段落目だけ見せて2段落目は「続きを読む」、図解へのリンクは前のまま、「論点の山なみへ ↑」、理由一覧は理由名＋件数の上位4件（残りは「ほかのN区分を表示」）、理由の説明（どんな声か）は区分ごとの `article.kr-reason-detail` で件数1位だけ表示・「別の理由を読む」、数え方の注記は説明のあとの「理由の数え方」、立場（今回案全体への賛否）・投稿例・収集ごとの表は折りたたみ、根拠は「条文と資料で確かめる」の下に1件ずつ見出し（主張は判定ラベル付き）だけの折りたたみ |
+| `configs/koshitsu-tenpakai-reading.json` | `compact`（見出し・折りたたみの名前だけ。生成AI・副首都とは別の言い回し。上位件数 `top_reasons: 4`） |
+| `scripts/build_koshitsu_redesign.py` | 旧アンカーの読み替えスクリプトに、折りたたみの中へ来たら外側も開いて移る処理を追加（生成AIと同じ） |
+| `scripts/koshitsu_redesign/reading.js` | 生成AIと同じ動き。理由への直接リンク `#kr-r-{論点}-{区分}` は、皇室の区分名にハイフンがある（`other-evaluation` など）ので、論点IDの長い順に頭から当てて区分名を取り出す |
+| `scripts/koshitsu_redesign/reading.css` | 生成AIの追加分を紺・金・和紙の変数に読み替えて写した（推移の「ひと目」の分は除く）。資料にしかない話・同じ心配の小さな枠 |
+| `scripts/koshitsu_redesign_provenance.py` | 理由の説明（`article.kr-reason-detail`）の件数と「どんな声か」も照合 |
+| `tests/test_koshitsu_redesign.py` | `CompactReadingTests` 8件（折りたたみの初期状態と背景の作り方・件数表の行、タブ、説明の1段落目、上位4件と1件だけ展開、根拠の折りたたみと判定ラベル、同じ心配・資料にしかない話の文が公開JSONのまま、折りたたみの中への移動とハイフン入りの区分名、出所検査の改ざん検知） |
+| `tests/test_koshitsu_redesign_browser.cjs` | 新しい構造に合わせた（`.kr-chip`→`.kr-tab`、山は `#section .hill`、GA4 の `issue_view`、理由の切替、全論点・背景の折りたたみ全開、投稿例を開いてからX埋め込みの失敗表示、`#kr-r-…-other-evaluation`）。10節で `.kr-chip`・`.kr-hill` が無くなり動かなくなっていたのも直した。x.com・twimg.com を常に遮断 |
+| `docs/koshitsu-tenpakai-reaction-map.html`・`quality/prototypes/koshitsu-tenpakai-release/`・`quality/prototypes/koshitsu-tenpakai-reading/` | 作り直し |
+
+テーマ固有の違いと対処：
+
+- **推移の節が無い**ので、生成AIの「ひと目で見る推移」は作らず、論点ごとの「収集ごとの割合と件数」の1行の表を折りたたんだだけ。作り方と詳細データは
+  もともと背景の開閉行（`#bg-method`・`#bg-table`、初期は閉）なので、副首都の「集計の方法と、全データ」に当たる折りたたみは作っていない。
+- **理由区分に区分ごとの立場の内訳が無い**（前から出していない）。理由の説明は「どんな声か」だけで、新しい数字は足していない。
+- **「同じ心配から、違う結論へ」**（前は立場の欄の中）と「資料にしかない話」（前は別の欄）を、生成AIと同じく根拠の欄の折りたたみへ移した。
+  照合の文の直後に置くと、よみやすの「同一文末が3回以上」に掛かったので、同じ心配は根拠の欄の先頭に置いた。
+- **数え方の注記**（「この論点のN件を、投稿本文を読み直して…」「同じ文面の投稿も…」）は、生成AIのように1段落にまとめて「ほかの理由」の中に
+  入れると、言い回しの検査で生成AIの同じ役目の文と 0.74 で似すぎ、説明（どんな声か）の直後に立場の文が来ると文末が3回そろった。前と同じ2段落のまま、
+  理由の説明のあとの折りたたみ「理由の数え方」に置いた。
+- 「資料にはあるが、投稿ではほとんど語られていないこと」は副首都と同じ文なので、段落にすると「同じ文が複数ページ」に掛かる。前と同じく見出し要素（h5）にした。
+
+### 11-2. 折りたたみの初期状態（375px・1280px 共通）
+
+| 場所 | 初期表示で見えるもの | 折りたたんだもの（初期は閉） |
+|---|---|---|
+| 読書面の上 | 論点タブ6つ（選んだ論点が紺） | — |
+| 論点の見出し | 分類名・論点名・説明の1段落目・図解へのリンク・件数と割合・「論点の山なみへ ↑」 | 説明の2段落目（「続きを読む」） |
+| 語られている理由（N区分） | 件数上位4件の理由名＋件数＋割合 | 残りの理由（「ほかのN区分を表示」。6論点とも2〜5区分） |
+| 表示中の理由 | 件数1位の理由の見出し・どんな声か・「別の理由を読む」 | 他の理由の説明（JSで非表示。JSなしでは全部並ぶ）、「理由の数え方」 |
+| 立場 | — | 「今回案全体への賛否の内訳」（帯・3区分・内訳・注記） |
+| 投稿 | — | 「投稿の例（2件）を開く」（要約2件・元の投稿の埋め込み） |
+| 条文と資料で確かめる | 同じ心配・制度の確認・資料の確認・主張・資料にしかない話の見出し（主張は判定ラベル付き） | 各項目の中身（照合の結果・該当投稿数・出典・検索の記録）、照合の前置き |
+| 収集ごとの割合と件数 | — | 最新の累計の表と注記 |
+| 背景 | 前のまま（10行すべて閉。作り方・件数表の行も閉） | — |
+
+ページ全体の `<details>` は37個→98個。初期状態で `open` なのは0個。JavaScriptが無くても、すべて `<details>` で開閉できる。
+
+### 11-3. 前後の計測（Playwright・Chromium、`docs/` を 127.0.0.1 で配信、x.com・platform.twitter.com・twimg.com を遮断）
+
+測り方は生成AIの11-3・副首都の11-3と同じ（前は `git archive HEAD docs` の写しで測った）。
+
+| 375px | 前 | 後 |
+|---|---|---|
+| ページ全体の高さ | 15,957px | **12,163px** |
+| h2「⚖️ 男系vs女系」の節（山なみの選択パネル＋タブ＋読書面）＝司令塔の「読書面」 | 7,283px | **3,489px** |
+| 同、表示中の文字数（旧方式） | 3,005字（3,215字） | **1,224字**（2,982字） |
+| 論点1つの読書面（`.kr-panel`、男系か女系か） | 5,932px | **2,080px** |
+| 同、6論点の最大／最小 | 6,484px（旧宮家の養子）／3,959px | 2,193px（旧宮家の養子）／1,530px（その他） |
+| 同、表示中の文字数 | 2,525字 | 690字 |
+| 制度の背景と、このページの資料 | 1,505px | 1,505px（変えていない） |
+
+| 1280px | 前 | 後 |
+|---|---|---|
+| ページ全体の高さ | 8,282px | 7,128px |
+| h2の節（男系vs女系） | 3,149px | 1,995px |
+| 論点1つの読書面 | 2,336px | 1,124px |
+
+目標のうち、表示文字 2,000字以下・ページ全体 13,000px以下は満たした。読書面は `.fr-panel` に当たる `.kr-panel` で測ると 2,080px（2,500px以下）だが、
+h2の節で測ると 3,489px で 3,000px を超える。差の約1,400px は山なみの選択パネル（100マス・凡例・帯・戻るボタン。保護対象、963px）と論点ボタンの一覧で、
+読書面の圧縮では減らせない。
+
+### 11-4. 検査結果（作業ツリー、2026-10-12）
+
+| 検査 | 結果 |
+|---|---|
+| `build_koshitsu_arena.py` → `--check` | 「UPDATE」→「OK」 |
+| 2回生成 | md5 一致（`252192b9…`、`PYTHONHASHSEED=0` でも同じ、docs・公開候補とも一致） |
+| `verify_theme_page.py` | 全10テーマ NG 0 |
+| `verify_number_provenance.py koshitsu-tenpakai` | 337/337 説明済み・NG 0。閉じた折りたたみの中の件数（主張の投稿数・「ほかの区分」の行）を1つずらすと止まることも確かめた |
+| `verify_builder_rebuildability.py`・`run_public_checks.py`・`python3 -m unittest discover tests` | 10テーマ NG 0・終了0・1,866件 OK（skip 8）。副首都の11節と同じ回（両テーマの変更が入った状態）でまとめて実行 |
+| よみやす（docs、`--strict`） | 完成を止める指摘 0件・PASS（11-1 の並び順の対処後） |
+| `verify_page_originality.py` | 使い回し0（11-1 の対処後） |
+| 10/15 の模擬（新規0件、使い捨てコピー） | `refresh_adapters/koshitsu.build` → `prepare_public_candidate_bundle`（完了記録の検査だけ外した。保存回 10/05 の report を代用）。公開対象65件。候補の新ページは基準日 2026-10-15 でタブ6つ・折りたたみ入り（初期 open 0）、375pxで読書面 2,080px・h2の節 3,489px・ページ 12,163px。候補の中で `verify_theme_page.py` 全テーマ NG 0、`verify_number_provenance.py koshitsu-tenpakai` NG 0、よみやす PASS、部活動・副首都・生成AIの公開ページは変わらず |
+| Playwright（`tests/test_koshitsu_redesign_browser.cjs`、1280/375px） | 合格。横はみ出し0（全論点の折りたたみ・背景の全折りたたみを開いても0）、コンソールエラー0（遮断した外部読み込みの失敗だけ）。タブ6つで scrollY 不変、山を押すと読書面が画面上部へ・`issue_view` がその論点で記録、理由の行で説明が1つだけ・「別の理由を読む」で次へ、`#detail-data`→件数表を開く、`#kr-r-…-other-evaluation` で理由が開く、JSなしで6論点と背景が開ける、X埋め込み遮断で案内と元投稿リンク2件。投票は押していない |
+
+撮影: `quality/prototypes/koshitsu-tenpakai-release/evidence/compact/`（`page-{desktop,mobile}.png` 全体、`reading-1/2-*.png` 読書面の先頭2画面、
+`reason-open-*.png` 理由を1つ開いた画面、`background-open-*.png` 背景を開いた画面、`nojs-desktop`・`x-embed-fallback`）。
+
+### 11-5. 確認していないこと
+
+- 実機（iPhone Safari など）とスクリーンリーダー。Playwright の Chromium だけ。
+- 新規の意見がある回の定期更新（模擬は新規0件）。施行日（10/24）以降の表示と折りたたみの組み合わせ。
+- GA4 の `issue_view` の実際の送信（gtag を差し替えて呼び出しだけを確かめた）。

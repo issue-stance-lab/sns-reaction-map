@@ -6,6 +6,7 @@ import argparse
 import copy
 import hashlib
 import json
+import re
 from pathlib import Path
 from typing import Any
 
@@ -34,6 +35,19 @@ ALLOWED_BUCKETS = {
     "s_enforcement_gap", "s_shared_responsibility", "s_stronger_sanctions",
     "excluded_information_or_off_topic",
 }
+
+
+def _registered_buckets(root: Path) -> set[str]:
+    """既存の論点内区分（data/bike-blue-ticket_issues-reread.json）に登録済みの区分キー。"""
+    try:
+        data = json.loads((root / EDITORIAL_REREAD).read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return set()
+    keys: set[str] = set()
+    for value in data.values():
+        if isinstance(value, dict) and isinstance(value.get("buckets"), dict):
+            keys |= set(value["buckets"])
+    return keys
 
 
 def digest_bytes(value: bytes) -> str:
@@ -139,6 +153,7 @@ def build(root: Path, stage: Path, plan_path: Path, update_path: Path) -> dict[s
     if len(new_by_id) != len(new_rows) or set(new_by_id) != set(wave_by_id):
         raise ValueError("新規投稿と分類済み投稿のID集合が一致しません")
     items: list[dict[str, Any]] = []
+    allowed_buckets = ALLOWED_BUCKETS | _registered_buckets(root)
     finalized_at = str(plan["finalized_at"])
     read_at = str(plan["read_at"])
     for index in range(len(wave)):
@@ -157,7 +172,7 @@ def build(root: Path, stage: Path, plan_path: Path, update_path: Path) -> dict[s
         if not decision.get("reason"):
             raise ValueError(f"本文確認の理由がありません: index={index}")
         bucket = decision.get("bucket")
-        if bucket not in ALLOWED_BUCKETS:
+        if bucket not in allowed_buckets:
             raise ValueError(f"本文確認の区分が未登録です: index={index} bucket={bucket}")
         is_adopted = decision["decision"] == "adopt"
         if is_adopted:
@@ -251,7 +266,8 @@ def build(root: Path, stage: Path, plan_path: Path, update_path: Path) -> dict[s
     if (
         not isinstance(unspoken_review, dict)
         or unspoken_review.get("reviewer") != "editorial_ai"
-        or unspoken_review.get("reviewed_at") != "2026-09-29"
+        or not re.fullmatch(r"\d{4}-\d{2}-\d{2}", str(unspoken_review.get("reviewed_at") or ""))
+        or str(unspoken_review.get("reviewed_at")) < str(report["date"])
         or unspoken_review.get("scope") != "all_newly_adopted_opinions"
         or int(unspoken_review.get("reviewed_opinion_count", -1)) != len(adopted_ids)
         or set(unspoken_review.get("topic_ids") or []) != expected_unspoken_ids

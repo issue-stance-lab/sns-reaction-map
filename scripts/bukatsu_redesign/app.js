@@ -4,11 +4,13 @@ const short=['教員の働き方','制度・移行','教育の機会','受け皿
 const topicColors=['#008b92','#dc6256','#2177be','#aa7500','#008d86','#7650b4','#1e79c6'];
 const topicPales=['#cceeed','#ffdbd6','#d8eaff','#fff0b8','#ccede8','#e5dcf6','#d8ecfa'];
 const topicIcons=["<svg class=\"picto\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><rect x=\"10\" y=\"3\" width=\"12\" height=\"11\" rx=\"1\"/><circle cx=\"5\" cy=\"8\" r=\"2\"/><path d=\"M2 21v-8h5l4-4M5 13v8M16 14v6\"/></svg>", "<svg class=\"picto\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"5\" cy=\"12\" r=\"3\"/><circle cx=\"19\" cy=\"5\" r=\"3\"/><circle cx=\"19\" cy=\"19\" r=\"3\"/><path d=\"m8 10 8-4M8 14l8 4\"/></svg>", "<svg class=\"picto\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M12 6C8 3 4 3 2 4v15c4-1 7 0 10 2 3-2 6-3 10-2V4c-4-1-7 0-10 2v15\"/></svg>", "<svg class=\"picto\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M3 12a7 7 0 1 0 13 3l6-3V6H11l-4 6Z\"/><circle cx=\"9\" cy=\"15\" r=\"2\"/><path d=\"M17 2v2M22 2l-2 2\"/></svg>", "<svg class=\"picto\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><rect x=\"3\" y=\"6\" width=\"18\" height=\"15\" rx=\"2\"/><path d=\"m4 6 13-3v3M16 11h6v6h-6Z\"/><circle cx=\"18\" cy=\"14\" r=\".5\"/></svg>", "<svg class=\"picto\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M3 4h18v13H9l-6 4Z\"/><circle cx=\"7\" cy=\"10\" r=\".5\"/><circle cx=\"12\" cy=\"10\" r=\".5\"/><circle cx=\"17\" cy=\"10\" r=\".5\"/></svg>", "<svg class=\"picto\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M12 22s8-9 8-14a8 8 0 0 0-16 0c0 5 8 14 8 14Z\"/><circle cx=\"12\" cy=\"8\" r=\"3\"/></svg>"];
-let selected=0,mode='all';
-$('#global-stances').innerHTML=D.stances.map(s=>'<div><span><i style="background:'+s.color+'"></i>'+esc(s.label.replace('・改善要求','').replace('・情報',''))+'</span><strong>'+((s.count/D.totals.opinions)*100).toFixed(1)+'<small>%</small></strong></div>').join('');
-$('#map-filters').innerHTML=D.modes.map(m=>'<button data-mode="'+esc(m.id)+'" aria-pressed="'+(m.id===mode)+'">'+esc(m.label)+'</button>').join('');
+let selected=0,mode='all',routed=null;
+// 公開ページでは #map の図を元HTMLの対話式の山なみ（planet.js）に置き換えるので、図の部品が無ければ描かない。
+if($('#global-stances'))$('#global-stances').innerHTML=D.stances.map(s=>'<div><span><i style="background:'+s.color+'"></i>'+esc(s.label.replace('・改善要求','').replace('・情報',''))+'</span><strong>'+((s.count/D.totals.opinions)*100).toFixed(1)+'<small>%</small></strong></div>').join('');
+if($('#map-filters'))$('#map-filters').innerHTML=D.modes.map(m=>'<button data-mode="'+esc(m.id)+'" aria-pressed="'+(m.id===mode)+'">'+esc(m.label)+'</button>').join('');
 $('#issue-tabs').innerHTML=D.issues.map((i,j)=>'<button style="--topic:'+topicColors[j]+';--topic-pale:'+topicPales[j]+'" data-select="'+j+'" aria-pressed="'+(j===selected)+'">'+topicIcons[j]+short[j]+'</button>').join('');
 function draw(){
+ if(!$('#mountains')){$$('#issue-tabs button').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.select===selected)));return}
  const mobile=matchMedia('(max-width:650px)').matches,m=D.modes.find(x=>x.id===mode),W=1100,B=mobile?260:230,T=20,MAX=Math.max(40,Math.ceil(Math.max(...Object.values(m.high_pct))/20)*20),MIN=mobile?84:70,GAP=10,L=38,usable=W-L-10-GAP*6;
  // The labeled axis fits the active data. Minimum hit widths are disclosed.
  const raw=D.issues.map(i=>usable*m.counts[i.id]/m.total), widths=raw.map(x=>Math.max(MIN,x));
@@ -30,7 +32,7 @@ function draw(){
 function choose(index,scroll=true,save=true){
  selected=index;$$('.issue-panel').forEach((p,j)=>p.hidden=j!==index);const panel=$('.issue-panel[data-issue="'+index+'"]');if(panel.dataset.default)reason(panel,panel.dataset.default,false,false);draw();
  $('#reading-announcement').textContent=D.issues[index].label+'の意見と推移に切り替えました。';
- if(save)history.pushState(null,'','#'+D.issues[index].id);
+ if(save){history.pushState(null,'','#'+D.issues[index].id);routed=location.hash}
  if(scroll){$('#reading').scrollIntoView({behavior:'instant'});$('#heading-'+index).focus({preventScroll:true})}
 }
 function reason(panel,id,scroll=true,save=true){
@@ -38,25 +40,30 @@ function reason(panel,id,scroll=true,save=true){
  panel.querySelectorAll('.reason-detail').forEach(x=>x.hidden=x!==found);
  panel.querySelectorAll('.reason-choice').forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.reason===id)));
  const active=[...panel.querySelectorAll('.reason-choice')].find(x=>x.dataset.reason===id);const more=active?.closest('.all-reasons');if(more)more.open=true;
- if(save)history.pushState(null,'','#'+found.id);
+ if(save){history.pushState(null,'','#'+found.id);routed=location.hash}
  if(scroll){if(matchMedia('(max-width:650px)').matches)panel.querySelector('.reason-menu').open=false;found.scrollIntoView({behavior:'instant',block:'start'});found.querySelector('h3').focus({preventScroll:true})}
 }
 document.addEventListener('click',ev=>{
  const select=ev.target.closest('button[data-select]');if(select){const local=select.closest('#mobile-issues,#issue-tabs');choose(+select.dataset.select,!local);if(local)document.querySelector('#'+local.id+' button[data-select="'+select.dataset.select+'"]').focus({preventScroll:true});return}
  const r=ev.target.closest('button[data-reason]');if(r){reason(r.closest('.issue-panel'),r.dataset.reason);return}
- const a=ev.target.closest('a[href^="#"]');if(a){const el=document.getElementById(a.hash.slice(1));if(el){for(let p=el;p;p=p.parentElement)if(p.tagName==='DETAILS')p.open=true;if(a.classList.contains('trend-detail-link')){ev.preventDefault();history.pushState(null,'',a.hash);el.scrollIntoView({behavior:'instant',block:'start'});}}}
+ const a=ev.target.closest('a[href^="#"]');if(a){const el=document.getElementById(a.hash.slice(1));if(el){for(let p=el;p;p=p.parentElement)if(p.tagName==='DETAILS')p.open=true;if(a.classList.contains('trend-detail-link')){ev.preventDefault();history.pushState(null,'',a.hash);routed=location.hash;el.scrollIntoView({behavior:'instant',block:'start'});}}}
 });
-$('#mountains').addEventListener('click',e=>{const b=e.target.closest('[data-index]');if(b){choose(+b.dataset.index,false);$('#mountains [data-index="'+b.dataset.index+'"]').focus({preventScroll:true})}});
+if($('#mountains')){$('#mountains').addEventListener('click',e=>{const b=e.target.closest('[data-index]');if(b){choose(+b.dataset.index,false);$('#mountains [data-index="'+b.dataset.index+'"]').focus({preventScroll:true})}});
 $('#mountains').addEventListener('keydown',e=>{const b=e.target.closest('[data-index]');if(!b)return;if(e.key==='Enter'||e.key===' '){e.preventDefault();choose(+b.dataset.index,false);$('#mountains [data-index="'+b.dataset.index+'"]').focus({preventScroll:true})}
  else if(e.key==='ArrowRight'||e.key==='ArrowLeft'){e.preventDefault();const j=(+b.dataset.index+(e.key==='ArrowRight'?1:6))%7;$('#mountains [data-index="'+j+'"]').focus()}});
 $('#map-filters').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;mode=b.dataset.mode;$$('#map-filters button').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));draw()});
-$('#explain-toggle').addEventListener('click',()=>{const open=$('#explain-toggle').getAttribute('aria-expanded')==='true';$('#explain-toggle').setAttribute('aria-expanded',String(!open));$('#map-explain').hidden=open});
+$('#explain-toggle').addEventListener('click',()=>{const open=$('#explain-toggle').getAttribute('aria-expanded')==='true';$('#explain-toggle').setAttribute('aria-expanded',String(!open));$('#map-explain').hidden=open});}
 function route(scroll=false){
  const hash=decodeURIComponent(location.hash.slice(1)),parts=hash.split('--'),j=D.issues.findIndex(i=>i.id===parts[0]);
  if(j>=0){choose(j,false,false);if(parts[1])reason($('.issue-panel[data-issue="'+j+'"]'),parts[1],scroll,false);else if(scroll)$('#reading').scrollIntoView({behavior:'instant'});}
  else{const el=document.getElementById(hash);if(el){for(let p=el;p;p=p.parentElement)if(p.tagName==='DETAILS')p.open=true;if(scroll)el.scrollIntoView({behavior:'instant'})}}
 }
 function adapt(){const mobile=matchMedia('(max-width:650px)').matches;$$('.reason-menu').forEach(x=>x.open=true);draw()}
-adapt();route(true);addEventListener('popstate',()=>route(true));addEventListener('hashchange',()=>route(true));
+// 山なみ（planet.js）は読み込み時に論点を自動で選び、URL に論点IDを付ける。読み込み時の URL が空なら読書面へは移らない。
+// 同じ URL への2回目の通知（popstate と hashchange）と、山なみが静かに書いた URL（BUKATSU_PLANET_QUIET）では画面を動かさない。
+function navigated(){if(location.hash===routed)return;routed=location.hash;route(!window.BUKATSU_PLANET_QUIET)}
+adapt();route(!('BUKATSU_LOAD_HASH' in window)||!!window.BUKATSU_LOAD_HASH);routed=location.hash;addEventListener('popstate',navigated);addEventListener('hashchange',navigated);
+// 山なみ（元HTMLから写した対話式の図、planet.js）から論点を選ぶための入口。scroll が真なら読書面へ移り見出しにフォーカスする。
+window.BukatsuReading=Object.freeze({select(id,scroll){const j=D.issues.findIndex(i=>i.id===id);if(j<0)return false;choose(j,!!scroll,false);routed=location.hash;return true}});
 matchMedia('(max-width:650px)').addEventListener('change',adapt);
 })();

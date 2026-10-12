@@ -1,5 +1,5 @@
 """Script-free complete reading/printing view derived from the verified page."""
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, Comment
 
 READ_PAGE = 'bukatsu-chiiki-full.html'
 CSS = '''
@@ -40,6 +40,16 @@ def readable(markup, page):
             menu.insert_before(node.extract())
     for group in s.select('.global-stances'):
         group.parent.decompose()
+    # 対話式の山なみ（スクリプトが無いと動かない）は外し、調査条件だけを同じ位置に残す
+    for planet in s.select('section.planet-panel'):
+        research = planet.select_one('#research-conditions')
+        if research is not None:
+            planet.insert_before(Comment(' RESEARCH_CONDITIONS_START '))
+            planet.insert_before(research.extract())
+            planet.insert_before(Comment(' RESEARCH_CONDITIONS_END '))
+        planet.decompose()
+    for node in s.select('#progress.bk-planet-progress,style#bukatsu-planet-style'):
+        node.decompose()
     for group in s.select('.original-posts,.issue-examples'):
         for node in group.select('.fine'):node.decompose()
     for node in s.select('script,noscript,iframe,.trend-stage,.trend-controls,.trend-tabs,.trend-share,#vote-section,.reason-menu,.another,.other-reason,.issue-next,.map-shell,.map-top,.map-caption,.map-tools,#mobile-issues,#issue-tabs,#reading-announcement,.global-stances'):
