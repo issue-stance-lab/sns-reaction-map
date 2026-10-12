@@ -23,10 +23,12 @@
  },
  "trend": {
   "public_json_key": "trends",
-  "_public_json_key": "公開JSONにこのキーが現れたら生成器は止まる（推移の表示はまだ作っていないため、黙って無視しない）。現行ページの「意見の推移」（潮目のカード）は手順7で保護対象として継承し、論点ごとの小さな折れ線もそのとき入れる。",
+  "_public_json_key": "公開JSONにこのキーが現れたら生成器は止まる（推移の表示はまだ作っていないため、黙って無視しない）。前回と今回の収集の比較は、元HTMLの潮目のカード（inject_tide_widget.py・adapter の _apply_tide）を公開ページの組み立て（build_constitutional_redesign.py）が折りたたみの中へそのまま写し、論点ごとの小さな折れ線もそこから描く。",
   "title": "収集ごとの割合と件数",
   "row_label": "{period_start}〜{period_end}（累計）",
-  "note": "収集の回ごとの論点の割合は、このページの「意見の推移」で見られます。この表は最新の累計です。"
+  "note": "前回と今回の収集の比較は、このページの「前回の収集との比較」で見られます。この表は最新の累計です。",
+  "widget_id": "constitutional-tide-widget",
+  "_widget_id": "潮目のカードの id（scripts/inject_tide_widget.py の constitutional-amendment の widget_id）。「前回との比較を開く」の飛び先。"
  },
  "stance_common": {
   "title": "改正への立場",
@@ -36,8 +38,8 @@
  },
  "reasons_common": {
   "title": "どんな理由で語られている？",
-  "lead": "この論点の{count}件は、編集部が投稿本文を読み直して理由ごとに分けました。1件の投稿は1つの区分にだけ入れています。",
-  "note": "同じ文面の投稿があっても、1件ずつ数えています。割合の分母はこの論点の{count}件です。立場の内訳は、いまの分類で数えています。",
+  "lead": "編集部が{count}件の投稿を1件ずつ読み、挙げている理由で区分しました。どの投稿も、入れた区分は1つだけです。",
+  "note": "同じ文面が複数あっても、投稿ごとに数えています。割合はこの論点の{count}件に対する値です。区分ごとの立場は、現在の分類結果から数えています。",
   "unpublished": "この論点の投稿は、理由ごとに読み分けた結果をまだ載せていません。いまは件数と立場の内訳だけです。",
   "voice_label": "どんな声か",
   "stance_label": "立場の内訳"
@@ -63,7 +65,7 @@
  },
  "sunk_common": {
   "title": "資料にあるのに、投稿ではほとんど語られていない話",
-  "count": "意見{base}件のうち、この話に触れた投稿は{n}件でした（{checked_on}に確認）。",
+  "count": "検索した意見{base}件の中で、この話題に言及した投稿は{n}件です（{checked_on}確認）。",
   "note_label": "調べた範囲を見る",
   "_about": "公開JSON ocean_layer.sunk_continents を nearest_issue_id（null の項目は sunk_issue_overrides）で論点に振り分ける。sns_base が意見数と違えば生成を止める。"
  },
@@ -102,7 +104,16 @@
   "stance_fold": "この論点の立場別集計",
   "posts_fold": "投稿の例を読む（{n}件）",
   "evidence_title": "根拠にあたる：投稿の主張と一次資料",
-  "checks_fold": "制度の確認"
+  "checks_fold": "制度の確認",
+  "glance_eyebrow": "前回の収集と比べると",
+  "glance_caption": "{first_date} {first}% → {last_date} {last}%",
+  "glance_note": "「その他」を除く意見の投稿のうち、この論点が占める割合を、前回と今回の収集回で比べています。集めた投稿の構成の変化で、世論の動きを示すものではありません。",
+  "glance_link": "前回との比較を開く ↓",
+  "trend_eyebrow": "前回の収集との比較",
+  "trend_title": "前回の収集から、立場の割合はどう動いた？",
+  "trend_more": "立場と論点の比較グラフを開く",
+  "method_fold": "このページの作り方と、集計の全データ",
+  "_compact_step7": "2026-10-12 手順7で足した見出し（glance_*・trend_*・method_fold）。前回と今回の収集の比較（潮目のカード）と、作り方・詳細データの折りたたみの名前。"
  },
  "issues": {
   "constitutional-amendment-general": {

@@ -402,9 +402,10 @@ def render_stance(d: dict, issue: dict) -> str:
 
 
 def render_cumulative(d: dict, issue: dict) -> str:
-    """最新の累計の件数と割合（折りたたみ）。収集の回ごとの小さな折れ線は、手順7で「意見の推移」から入れる
-    （生成AIの _issue_glances と同じ受け皿 .fr-glance-chart と data-glance を置く）。"""
-    t = d["cfg"]["trend"]
+    """前回の収集と比べた、この論点の割合（生成AIの render_glance と同じ型）。小さな折れ線と数字2つは、公開ページの組み立て
+    （build_constitutional_redesign.py）が元HTMLの潮目のカード（前回と今回の収集の比較）から .fr-glance-chart に入れる。
+    最新の累計の表は折りたたむ。"""
+    t, c = d["cfg"]["trend"], compact(d)
     public = d["public"]
     period = public["collection_period"]
     row = t["row_label"].format(period_start=jp_date(period["start"]), period_end=jp_date(period["end"], False))
@@ -414,8 +415,12 @@ def render_cumulative(d: dict, issue: dict) -> str:
              f'<tbody><tr><th scope="row">{esc(row)}</th><td>{fmt(n)}件</td>'
              f'<td>{pct1(n, total)}%<small>（{fmt(total)}件中）</small></td></tr></tbody></table>'
              f'<p class="fr-fine">{esc(t["note"])}</p>')
-    return (f'<div class="fr-glance fr-trend" data-glance="{esc(issue["label"])}"><div class="fr-glance-chart"></div>'
-            + fold("fr-glance-table", esc(t["title"]), table) + "</div>")
+    return (f'<section class="fr-block fr-glance fr-trend" data-glance="{esc(issue["label"])}">'
+            f'<p class="fr-eyebrow fr-glance-head">{esc(c["glance_eyebrow"])}'
+            f'<a class="fr-glance-link" href="#{esc(t["widget_id"])}" data-tide-mode="issue">{esc(c["glance_link"])}</a></p>'
+            '<div class="fr-glance-chart"></div>'
+            + fold("fr-glance-table", esc(t["title"]), f'<p class="fr-fine fr-glance-note">{esc(c["glance_note"])}</p>' + table)
+            + "</section>")
 
 
 def ordered_reasons(d: dict, issue: dict, icfg: dict) -> list[tuple[str, dict]]:

@@ -1,6 +1,6 @@
 /* 憲法改正論議・論点ごとの読書面の試作（生成AIの reading.js と同じ動き。部活動型の圧縮済みの型）。
    論点タブを押すと、下の読書面だけを切り替える。ページは動かさない（scrollY を変えない）。
-   公開ページでは手順7で元HTMLの対話式の山なみを上に写し、その橋渡しが window.ConstitutionalReading.select を呼ぶ。
+   公開ページでは元HTMLの対話式の山なみを上に写し、その橋渡し（planet.js）が window.ConstitutionalReading.select を呼ぶ。
    理由一覧の行（data-reason-pick）を押すと、その論点の中で選んだ理由の説明（.fr-reason-detail）だけを見せる。
    JavaScriptが無いときは、全論点の読書面と全理由の説明が縦に並び、リンクはその場所へ移動する。 */
 (() => {
@@ -43,12 +43,15 @@
     }
     return true;
   }
+  // 理由区分のIDにもハイフンが入る（debate-conditions・a9-war など）ので、論点IDの前方一致で分ける
   function reasonFromHash() {
-    const m = decodeURIComponent(location.hash.slice(1)).match(/^fr-r-(.+)-([^-]+)$/);
-    if (!m || !ids.includes(m[1])) return false;
-    select(m[1], false);
-    const panel = panels.find(p => p.dataset.issuePanel === m[1]);
-    return pickReason(panel, m[2], true);
+    const h = decodeURIComponent(location.hash.slice(1));
+    if (!h.startsWith('fr-r-')) return false;
+    const id = ids.find(x => h.startsWith('fr-r-' + x + '-'));
+    if (!id) return false;
+    select(id, false);
+    const panel = panels.find(p => p.dataset.issuePanel === id);
+    return pickReason(panel, h.slice(('fr-r-' + id + '-').length), true);
   }
 
   root.classList.add('fr-js');
@@ -85,7 +88,7 @@
 
   addEventListener('hashchange', () => { const id = fromHash(); if (id) select(id, true); else reasonFromHash(); });
 
-  // 山なみ（手順7で元HTMLから写す対話式の図）から論点を選ぶための入口。
+  // 山なみ（元HTMLから写す対話式の図。planet.js）から論点を選ぶための入口。
   window.ConstitutionalReading = Object.freeze({
     select(id) { if (!ids.includes(id)) return false; select(id, true); return true; }
   });
