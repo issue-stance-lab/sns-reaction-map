@@ -10,6 +10,9 @@
 出力（既定は quality/prototypes/bike-blue-ticket-opening/）:
   opening-fragment.html  冒頭の部品（マーカー付き）
   index.html             確認用の単独ページ（同じフォルダーの opening.css と opening.js を読む）
+  opening.css・opening.js 正本 scripts/bike_redesign/ の写し（2026-10-12に試作フォルダーから正本を移した）
+
+制度の確認日は設定の checked_on 1か所。出典ごとの checked_on はこの日より後にできない（止まる）。
 
 時刻や乱数は使わないので、同じ入力なら何度実行しても同じ出力になる。
 件数の合計が公開JSONの意見件数と合わないときは、生成を止める。
@@ -21,6 +24,7 @@ import argparse
 import datetime as dt
 import html
 import json
+import shutil
 from pathlib import Path
 
 import yaml
@@ -28,6 +32,7 @@ import yaml
 ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_CONFIG = ROOT / "configs" / "bike-blue-ticket-opening.json"
 DEFAULT_OUT = ROOT / "quality" / "prototypes" / "bike-blue-ticket-opening"
+ASSETS = ROOT / "scripts" / "bike_redesign"
 START = "<!-- BIKE_BLUE_TICKET_OPENING_START -->"
 END = "<!-- BIKE_BLUE_TICKET_OPENING_END -->"
 
@@ -86,6 +91,12 @@ def load_inputs(config_path: Path) -> dict:
         for src in _source_ids(config[key]):
             if src not in config["sources"]:
                 raise SystemExit(f"出典 {src} が sources にありません（{key}）")
+    checked = dt.date.fromisoformat(config["checked_on"])
+    for sid, src in config["sources"].items():
+        if not src.get("checked_on"):
+            raise SystemExit(f"出典 {sid} に確認日がありません")
+        if dt.date.fromisoformat(src["checked_on"]) > checked:
+            raise SystemExit(f"出典 {sid} の確認日 {src['checked_on']} が設定の checked_on {config['checked_on']} より後です")
     return {
         "config": config,
         "public": public,
@@ -293,6 +304,8 @@ def render_warning(c: dict) -> str:
         f'<figcaption><span class="bop-key bop-key--ticket" aria-hidden="true"></span>青切符'
         f'<span class="bop-key" aria-hidden="true"></span>指導警告票<b>{esc(label)}</b></figcaption></figure>'
         f'<p class="bop-note">{esc(w["note"])}</p>'
+        f'<p class="bop-note" data-checked-on="{esc(c["checked_on"])}">'
+        f'{esc(w["latest_note_template"].format(checked=jp_date(c["checked_on"])))}</p>'
         f'<p class="bop-sources">{srcs}</p>'
         '</article>'
     )
@@ -384,8 +397,7 @@ def render_count(ctx: dict) -> str:
 
 
 def render_sources(c: dict) -> str:
-    dated = sorted({s["checked_on"] for s in c["sources"].values() if s.get("checked_on")})
-    note = c["checked_note_template"].format(first=jp_date(dated[0]), last=jp_date(dated[-1], with_year=False))
+    note = c["checked_note_template"].format(checked=jp_date(c["checked_on"]))
     links = "".join(f"<li>{ext_link(s['url'], s['label'])}</li>" for s in c["sources"].values())
     return f'<footer class="bop-foot"><p>{esc(note)}</p><ul class="bop-foot__links">{links}</ul></footer>'
 
@@ -408,7 +420,7 @@ def render_fragment(ctx: dict) -> str:
         f'{render_faq(c)}</section>'
     )
     body = (
-        '<section class="bop" aria-label="自転車の青切符の冒頭">'
+        f'<section class="bop" aria-label="自転車の青切符の冒頭" data-checked-on="{esc(c["checked_on"])}">'
         f'{hero}{answers}{render_count(ctx)}{render_sources(c)}</section>'
     )
     return f"{START}\n{body}\n{END}\n"
@@ -432,6 +444,16 @@ PAGE = """<!doctype html>
 """
 
 
+def fragment_for(config_path: Path = DEFAULT_CONFIG) -> str:
+    """冒頭の部品（マーカー付き）。読書面の試作（scripts/bike_reading.py）がこの下に読書面をつなぐ。"""
+    return render_fragment(load_inputs(config_path))
+
+
+def copy_assets(out: Path) -> None:
+    for name in ("opening.css", "opening.js"):
+        shutil.copyfile(ASSETS / name, out / name)
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--config", type=Path, default=DEFAULT_CONFIG)
@@ -442,6 +464,7 @@ def main() -> None:
     args.out.mkdir(parents=True, exist_ok=True)
     (args.out / "opening-fragment.html").write_text(fragment, encoding="utf-8")
     (args.out / "index.html").write_text(PAGE.format(fragment=fragment), encoding="utf-8")
+    copy_assets(args.out)
     print(f"wrote {args.out / 'opening-fragment.html'}")
     print(f"wrote {args.out / 'index.html'}")
 

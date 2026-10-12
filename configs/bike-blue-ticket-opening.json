@@ -1,12 +1,14 @@
 {
   "theme_id": "bike-blue-ticket",
-  "note": "自転車の青切符ページの冒頭の文言。件数・論点・立場は公開JSONから読むので、ここには書かない。制度の記述は quality/research/bike-blue-ticket-primary-sources.md の資料記号（A〜T）と確認日に対応させる。年齢・反則金・FAQの文は課題97で2026-09-28に公開した検索入口と同文（評価日2026-10-28まで中身を変えない）。",
+  "note": "自転車の青切符ページの冒頭の文言。件数・論点・立場は公開JSONから読むので、ここには書かない。制度の記述は quality/research/bike-blue-ticket-primary-sources.md の資料記号（A〜T）と確認日に対応させる。年齢・反則金・FAQの文は課題97で2026-09-28に公開した検索入口と同文（評価日2026-10-28まで中身を変えない）。2026-10-12に一次資料を再確認し、確認日を checked_on に集めた。",
   "inputs": {
     "public_json": "docs/data/themes/bike-blue-ticket.json",
     "planet_config": "configs/planet/bike-blue-ticket.yaml",
     "reread": "data/bike-blue-ticket_issues-reread.json",
     "themes_registry": "THEMES.yaml"
   },
+  "checked_on": "2026-10-12",
+  "_checked_on": "制度の記述を一次資料で確かめた日（1か所だけ）。冒頭の出典の注記・運用実績の「◯月◯日時点」・背景の「◯月◯日時点」はここから作る。各出典の checked_on はこの日より後にできない（生成器が止める）。2026-10-12の再確認は quality/research/bike-blue-ticket-primary-sources.md【2026-10-12追記】。",
   "crumb": "交通ルール・日常論争 ／ 自転車の青切符",
   "title": {
     "lead": "自転車の青切符、",
@@ -172,13 +174,13 @@
       },
       {
         "title": "納付書で納める",
-        "body": "銀行や郵便局などの金融機関で支払います。現場で現金は渡しません。",
-        "source": "npa_faq"
+        "body": "取締りの翌日から原則7日以内に、銀行や郵便局などで納めます。現場で現金は渡しません。",
+        "source": "npa_system"
       },
       {
         "title": "刑事手続に進まない",
-        "body": "反則金を納めれば前科は付かないと、大阪府が説明しています。",
-        "source": "osaka"
+        "body": "期限内に納めれば起訴されず、前科も付きません。納めないと刑事手続に移ります。",
+        "source": "npa_system"
       }
     ],
     "license": "運転免許の点数は付きません。ただし重大な事故や飲酒運転など特に悪質な場合は、免許停止になることがあります。",
@@ -197,7 +199,8 @@
     "sources": [
       "npa_release",
       "npa_control"
-    ]
+    ],
+    "latest_note_template": "{checked}時点で、警察庁はこれより新しい運用状況を公表していません。"
   },
   "faq": {
     "kind": "よく検索される疑問",
@@ -236,7 +239,7 @@
   "count": {
     "heading": "SNSの意見",
     "caption_template": "{source}で集めた投稿{collected}件のうち、意見を含むもの（{start}〜{end}）",
-    "poll_note": "世論調査ではなく、SNSの公開投稿を分類した結果です。",
+    "poll_note": "SNSの公開投稿を分類して数えたもので、世論調査の結果とは違います。",
     "issues_heading": "論点ごとの件数",
     "other_label": "その他",
     "other_sub": "5つの論点に入らない意見",
@@ -245,61 +248,61 @@
     "no_reason_tag": "理由は未公開",
     "updated_template": "最終更新 {updated}・次回の収集予定 {next}"
   },
-  "checked_note_template": "制度の記述は、{first}〜{last}に一次資料で確認しました。",
+  "checked_note_template": "制度の記述は、{checked}に一次資料で確かめました。",
   "sources": {
     "npa_system": {
       "label": "警察庁｜自転車の新しい制度",
       "url": "https://www.npa.go.jp/bureau/traffic/bicycle/portal/system.html",
       "memo": "資料A・J",
-      "checked_on": "2026-08-30"
+      "checked_on": "2026-10-12"
     },
     "npa_control": {
       "label": "警察庁｜取締りについて",
       "url": "https://www.npa.go.jp/bureau/traffic/bicycle/portal/control.html",
       "memo": "資料B・M",
-      "checked_on": "2026-08-30"
+      "checked_on": "2026-10-12"
     },
     "npa_faq": {
       "label": "警察庁｜よくある質問",
       "url": "https://www.npa.go.jp/bureau/traffic/bicycle/portal/faq.html",
       "memo": "資料C・F・K",
-      "checked_on": "2026-08-30"
+      "checked_on": "2026-10-12"
     },
     "egov_law": {
       "label": "e-Gov｜道路交通法",
       "url": "https://laws.e-gov.go.jp/law/335AC0000000105",
       "memo": "資料N",
-      "checked_on": "2026-08-31"
+      "checked_on": "2026-10-12"
     },
     "npa_release": {
       "label": "警察庁｜導入後1月間の運用状況",
       "url": "https://www.npa.go.jp/news/release/2026/20260514.pdf",
       "memo": "資料P",
-      "checked_on": "2026-08-31"
+      "checked_on": "2026-10-12"
     },
     "osaka": {
       "label": "大阪府｜青切符導入について",
       "url": "https://www.pref.osaka.lg.jp/o130080/kotsukeikaku/anzentaisaku/jitennsyanhenokoutuuhannsokutukokuseidodounyuu.html",
-      "memo": "資料Q",
-      "checked_on": "2026-08-31"
+      "memo": "資料Q・一次資料メモ【2026-10-12追記】8",
+      "checked_on": "2026-10-12"
     },
     "egov_order": {
       "label": "e-Gov｜道路交通法施行令",
       "url": "https://laws.e-gov.go.jp/law/335CO0000000270",
       "memo": "資料T（別表第六）",
-      "checked_on": "2026-09-07"
+      "checked_on": "2026-10-12"
     },
     "tokyo": {
       "label": "東京都｜自転車の青切符",
       "url": "https://www.tomin-anzen.metro.tokyo.lg.jp/kotsu/topics-k/blue_ticket_system",
-      "memo": "一次資料メモに未収載（課題97の検索入口から移した）",
-      "checked_on": null
+      "memo": "一次資料メモ【2026-10-12追記】9（原文で確認）",
+      "checked_on": "2026-10-12"
     },
     "npa_fraud": {
       "label": "警察庁｜詐欺への注意喚起",
       "url": "https://www.npa.go.jp/bureau/traffic/shidou/fraud-alert.html",
-      "memo": "一次資料メモに未収載（課題97の検索入口から移した）",
-      "checked_on": null
+      "memo": "資料V・一次資料メモ【2026-10-12追記】6",
+      "checked_on": "2026-10-12"
     }
   }
 }

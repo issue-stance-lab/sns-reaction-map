@@ -1,0 +1,227 @@
+{
+ "theme_id": "bike-blue-ticket",
+ "_about": "自転車の青切符ページの「論点ごとの読書面」の手書き文言。scripts/bike_reading.py が読む。件数・割合・日付・判定はここに書かず、公開JSON・再読データ・立場の対応表・照合データ・一次資料メモから読む（非公開の正典は読まない）。憲法改正論議（configs/constitutional-amendment-reading.json）の部活動型の圧縮済みの型と同じキー構成。山なみは手順7で元HTMLの対話式の図を写すので、ここには静的な山なみの文言を置かない。",
+ "opening_config": "configs/bike-blue-ticket-opening.json",
+ "public_json": "docs/data/themes/bike-blue-ticket.json",
+ "reread_json": "data/bike-blue-ticket_issues-reread.json",
+ "_reread_json": "論点ごとの理由区分は [論点名].buckets（configs/planet/bike-blue-ticket.yaml の sub_issues.path）、明細は [論点名].items（tweet_id・bucket）。区分の件数は明細の bucket を数え直して照合する。明細に立場は無いので、立場は stances_json から引く。",
+ "stances_json": "data/bike-blue-ticket_reread-stances.json",
+ "_stances_json": "post_key（tweet_id の sha256）→ 正典の立場の対応表（scripts/bike_reread_stances.py が 2026-10-12 に作成。公開JSONとの食い違い0件）。明細と対応表の投稿が一致しないか、論点×立場の合計が公開JSONと違えば生成を止める。",
+ "claim_posts_json": "data/verification/bike-blue-ticket-claims.json",
+ "background_json": "data/verification/bike-blue-ticket-background.json",
+ "primary_memo": "quality/research/bike-blue-ticket-primary-sources.md",
+ "other_issue_id": "bike-blue-ticket-other",
+ "sunk_issue_overrides": {
+  "bike-blue-ticket-sc-3": "bike-blue-ticket-road-safety"
+ },
+ "_sunk_issue_overrides": "公開JSON ocean_layer.sunk_continents のうち nearest_issue_id が null の1件（側方通過の新しい義務）を、車と自転車の距離の話に近い「車道走行への不安」に置く。nearest_issue_id が入っている項目にはこの指定を使えない（生成器が止める）。",
+ "section": {
+  "eyebrow": "論点ごとに読む",
+  "title": "6つの論点で、それぞれ何が言われている？",
+  "lead": "タブを押すと、その論点の説明と、投稿に多い理由に切り替わります。"
+ },
+ "other_note": "「その他」は、5つの論点のどれにも入らない意見です。最も多い理由は「{top}」で、この論点の{share}%を占めます。",
+ "_other_note": "「その他」の論点の見出しの下に出す1文。{top}・{share} は再読データの区分の件数から作る（冒頭の「その他」の中身と同じ数え方）。",
+ "trend": {
+  "public_json_key": "trends",
+  "_public_json_key": "公開JSONにこのキーが現れたら生成器は止まる（推移の表示はまだ作っていないため、黙って無視しない）。前回と今回の収集の比較は、手順7で元HTMLの潮目のカード（inject_tide_widget.py・adapter の _apply_tide）を折りたたみの中へ写し、論点ごとの小さな折れ線もそこから描く。",
+  "title": "収集ごとの割合と件数",
+  "row_label": "{period_start}〜{period_end}（累計）",
+  "note": "この表は最新の累計です。前回の収集と比べた動きは、このページの「前回の収集との比較」で見られます。",
+  "widget_id": "bike-blue-ticket-tide-widget",
+  "_widget_id": "潮目のカードの id（手順7で scripts/inject_tide_widget.py の自転車の widget_id と合わせる）。「前回との比較を開く」の飛び先。"
+ },
+ "stance_common": {
+  "title": "取締りの強化への立場",
+  "lead": "この論点の{count}件を、取締りの強化への立場で3つに分けました。",
+  "note": "立場は投稿全体から読み取った向きで、この論点の中の主張とは分けて数えています。反対（インフラ・制度優先）には、取締りより先に道路の整備や制度の見直しを求める投稿が入ります。",
+  "caveat": "世論調査ではなく、集めた投稿の中での割合です。"
+ },
+ "reasons_common": {
+  "title": "投稿は、どんな理由を挙げている？",
+  "lead": "編集部が{count}件の投稿を1件ずつ読み、挙げている理由ごとに分けました。1件の投稿は、1つの区分にだけ入れています。",
+  "note": "同じ文面の投稿も1件ずつ数えています。割合の分母は、この論点の{count}件です。区分ごとの立場は、いまの分類結果から数えました。",
+  "unpublished": "この論点の投稿は、理由ごとに分けた結果をまだ載せていません。いまは件数と立場の内訳だけです。",
+  "voice_label": "どんな声か",
+  "stance_label": "立場の内訳"
+ },
+ "sources_common": {
+  "title": "投稿の主張を、警察庁などの資料で確かめる",
+  "lead": "投稿に出てくる主張や前提を、法令や警察庁などの資料に当てました。確かめたのは主張の中身で、投稿を1件ずつ判定したものではありません。取締りを強めるべきかどうかを決めるものでもありません。",
+  "check_eyebrow": "制度の確認",
+  "claim_eyebrow": "主張の照合",
+  "matched": "この主張に当たる投稿 {n}件",
+  "checked": "照合日 {checked_on}",
+  "sources_label": "出典をひらく",
+  "empty": "この論点では、資料と照らし合わせた項目をまだ用意していません。",
+  "memo_eyebrow": "条文の確認",
+  "_memo_eyebrow": "一次資料メモにだけある確認（背景台帳・主張照合に無いもの）。確認日はメモの該当節の「確認日」から読む。",
+  "memo_checked": "確認日 {checked_on}"
+ },
+ "verdict_labels": {
+  "fact": "資料どおり",
+  "gap": "少しずれる",
+  "miss": "裏が取れない",
+  "_about": "現行ページの判定ラベルと同じ言い換え。公開JSON claim_verification.claims[].verdict を言い換える。知らない判定が来たら生成を止める。"
+ },
+ "sunk_common": {
+  "title": "資料にはあるのに、投稿ではほとんど出てこない話",
+  "count": "調べた意見{base}件のうち、この話に触れた投稿は{n}件でした（{checked_on}確認）。",
+  "note_label": "調べた範囲を見る",
+  "_about": "公開JSON ocean_layer.sunk_continents を nearest_issue_id（null の項目は sunk_issue_overrides）で論点に振り分ける。sns_base が意見数と違えば生成を止める。"
+ },
+ "veins_common": {
+  "title": "立場が違っても共通する心配",
+  "shared_label": "共通する心配",
+  "diverging_label": "分かれるところ",
+  "sides": "読んだ投稿：{sides}（確認日 {checked_on}）",
+  "_about": "公開JSON ocean_layer.veins を issue_ids で論点に振り分ける。自転車の公開JSONはいま空なので出ない。"
+ },
+ "posts_common": {
+  "title": "実際の投稿を読む",
+  "lead_two": "立場の違う投稿を、編集部が2件選びました。要約も編集部が書いています。2件の組み合わせは、この論点の立場の割合とは関係ありません。",
+  "lead_same": "この論点では、同じ立場の投稿を2件選びました。理由は下に書いています。要約は編集部が書いたものです。",
+  "lead_one": "立場の違う投稿を2件選ぶ方針ですが、この論点では1件だけにしました。理由は下に書いています。要約は編集部が書いたものです。",
+  "none": "この論点では、実際の投稿の例をまだ選んでいません。理由ごとの件数は上の欄にあります。",
+  "summary": "元の投稿を表示する（{n}件）",
+  "bucket_label": "理由の区分",
+  "stance_label": "立場",
+  "_selection_rule": "正典 social-samples/bike-blue-ticket_2d_classified.json の意見（is_opinion）から選ぶ（憲法・生成AI・副首都・皇室と同じ方法）。基準: ①その論点の意見で、理由区分を代表する（最大の区分と、別の見方を示す区分から1件ずつを基本） ②2件で立場が偏らない（論点の中で少数の立場があれば1件を基本。片方の立場が数件しかなく③〜⑥を満たさない論点は same_stance_reason に書く） ③URLが残っている（tweet_id と URL が一致し、cdn.syndication.twimg.com/tweet-result で本文が返る。TweetTombstone は削除済みとして除く） ④個人・集団への攻撃や差別表現、罵倒、特定の人を名指しした批判を含まない ⑤正典の分類で article_usable が true、risk が low ⑥正典に同じ文面が2件以上ない。強い言い方（intensity=high）の投稿は選ばない。生成器は非公開の正典を読まないので、公開できる入力で確かめられる条件（再読データでその論点に入っていること・URLとIDの一致・立場の違い・論点をまたいだ重複）だけを検査して止める。現行ページの代表投稿（scripts/bike_issue_media.py の12件）は使い回さず、すべて正典から選び直す。"
+ },
+ "see_also_common": {
+  "title": "あわせて確かめる"
+ },
+ "pending_note": "この論点の説明・資料との照合・投稿の例は、次の工程で加えます。",
+ "footer": "SNSの集計は{updated_on}までです。制度を確かめた日は、項目ごとに書いています。",
+ "compact": {
+  "_about": "部活動型の圧縮の見出し・折りたたみの名前（憲法・生成AIの compact と同じキー）。理由一覧に出すのは件数の多い順の上位 top_reasons 件、残りは「ほかの理由を読む」の折りたたみ。選んだ理由1つだけを展開する（JavaScriptが無いときは全理由が並ぶ）。",
+  "top_reasons": 4,
+  "tabs_label": "論点を選ぶ",
+  "back": "論点の一覧へ戻る ↑",
+  "desc_more": "くわしく",
+  "reasons_index_title": "この論点の理由一覧（{k}分類）",
+  "reasons_more": "ほかの理由を読む（残り{k}分類）",
+  "reason_eyebrow": "選んだ理由",
+  "reason_next": "この論点の別の理由",
+  "stance_fold": "この論点の立場別集計",
+  "posts_fold": "投稿の例を読む（{n}件）",
+  "evidence_title": "根拠にあたる：投稿の主張と資料",
+  "checks_fold": "制度の確認",
+  "glance_eyebrow": "前の収集回との違い",
+  "glance_note": "「その他」を除く意見のうち、この論点が占める割合を収集の回ごとに比べます。集めた投稿の構成の変化を示すもので、世論の動きを示すものではありません。",
+  "glance_link": "収集回ごとの比較へ ↓"
+ },
+ "issues": {
+  "bike-blue-ticket-enforcement-support": {
+   "name": "取締りを強めてほしい",
+   "status": "complete",
+   "description": [
+    "自転車の違反をもっと取り締まってほしい、という意見です。16歳以上の違反に反則金（青切符）を使えるようになりましたが、警察は基本的に指導警告にとどめ、悪質・危険な違反を検挙するとしています。",
+    "最も多いのは、制度が始まっても信号無視や逆走、ながらスマホが減っていないとして、実際に取り締まるよう求める声です。危険な走り方への不満、歩行者の安全、自転車にも責任を求める声が続きます。罰則を重くする、免許制にするなど、さらに厳しくする提案もあります。"
+   ],
+   "_description": "1段落目の制度の説明は警察庁の制度・取締りのページ（一次資料メモ 資料A・B、【2026-10-12追記】3・4）。2段落目は再読データの理由区分の件数順（s_enforcement_gap・s_dangerous_riding・s_pedestrian_safety・s_shared_responsibility・s_stronger_sanctions）に基づく。件数は書かない（区分の欄に自動で出る）。",
+   "reason_sort": "count_desc",
+   "reasons": {
+    "s_enforcement_gap": {
+     "voice": "信号無視や逆走、ながらスマホが、青切符が始まっても減っていないと感じる声です。目の前の違反を警察官が注意しなかったと書く投稿もあり、実際に取り締まるよう求めています。"
+    },
+    "s_dangerous_riding": {
+     "voice": "一時停止をしない、並んで走る、車の間をすり抜けるといった、目の前で見た危ない走り方を挙げる声です。駅前や交差点など場所を挙げて、警察に取締りを頼む投稿が目立ちます。実際に青切符を切られる場面を見たという投稿もあります。"
+    },
+    "s_shared_responsibility": {
+     "voice": "自転車も車両なので、ルールを守り、事故を起こしたら責任を負うべきだという声です。青切符の対象になった違反は、もともとしてはいけないことだったと書く投稿があります。事故が起きると車の側ばかりが責められることへの不満も見られます。"
+    },
+    "s_stronger_sanctions": {
+     "voice": "青切符より重い罰や、対象を広げることを求める声です。自転車の免許制や登録制、16歳未満への適用、電動アシスト自転車や違法なモペットの速度の上限などが挙がります。ヘルメットの義務化を求める投稿もあります。"
+    },
+    "s_pedestrian_safety": {
+     "voice": "歩道を速く走る自転車や、並んで走る自転車に怖い思いをした歩行者の声です。ぶつかられた経験を書く投稿や、車道が怖くても、歩道で人を傷つけるほうがずっと怖いと書く投稿があります。"
+    },
+    "s_other_road_users": {
+     "voice": "自転車だけでなく、歩行者のながらスマホや信号無視、電動キックボード、車の違法駐車や合図の出し方も取り締まってほしいという声です。自転車の取締りに賛成したうえで、道路を使う全員にルールを守るよう求めています。"
+    },
+    "s_unspecified_support": {
+     "voice": "理由をくわしく書かずに、取締りの強化に賛成する、どんどん取り締まってほしいと書く投稿です。自分も自転車に乗るが賛成だ、という投稿もあります。"
+    },
+    "s_education": {
+     "voice": "取締りと合わせて、広報や学校での交通安全教育、警察官の模範運転、自転車が走る場所の分かりやすい表示を求める声です。罰則を決めるだけでは、乗り方の習慣は変わらないという考えが共通しています。"
+    },
+    "s_deterrence": {
+     "voice": "青切符の効果を感じた、または期待する声です。傘を差して走る自転車を見なくなったという観察や、反則金があれば違反は減るはずだという意見があります。"
+    },
+    "s_bike_priority": {
+     "voice": "車より先に、自転車の違反を取り締まってほしいという声です。生活道路の速度規制など車への規制が進む一方で、自転車の違反が後回しになっていると感じています。"
+    },
+    "s_penalty_assessment": {
+     "voice": "制度の中身を知って受け止めが変わった投稿です。違反すればすぐ切符になるわけではないと知って、騒ぐほどではなかったと書く投稿や、以前の刑事手続より処分が軽くなったと見る投稿があります。"
+    },
+    "s_bike_parking": {
+     "voice": "道路に違法に止めた自転車にも、反則金などの責任を求める声です。"
+    },
+    "place": {
+     "voice": "燃料が高いので車をやめて自転車に乗ろうとしても、青切符が始まってから怖くて控える人が多い、という投稿です。走る道路の実情を見ずに制度を決めたと批判しています。"
+    },
+    "s_license_burden": {
+     "voice": "自転車を免許制にすると、車の免許が止められたときに自転車にも乗れなくなるとして、免許制よりも取締りの強化を選ぶ投稿です。"
+    },
+    "s_infrastructure_concern": {
+     "voice": "道路や信号の見直しのほうが早いのに、取締りを先に進めていることに疑問を示す投稿です。"
+    },
+    "distrust": {
+     "voice": "警察の幹部人事や電動キックボードの事故への対応を挙げて、自転車の取締りより重大な事件に力を入れるべきだと批判する投稿です。"
+    }
+   },
+   "_reasons": "区分名は再読データの label をそのまま使う。voice は 2026-10-12 に、この論点の明細109件をすべて正典の本文で読んで書いた。place・distrust は反対側の旧区分と共通の区分名で、この論点では反対（インフラ・制度優先）の投稿が入る。",
+   "see_also": [
+    {
+     "href": "#bop-warning",
+     "text": "違反したら必ず切られるのかを、冒頭で確かめる"
+    }
+   ],
+   "posts": {
+    "selection_basis": "最大の区分「導入後も違反が残り取締りの実効性を求める」から1件、効果を評価する区分「事故や違反を減らす効果を評価・期待する」から1件を選び、取締りが足りないと感じる声と効果を感じる声を対にした。2件とも正典で article_usable=true・risk=low・intensity=medium、正典に同じ文面は無い（各1件）。2026-10-12 に cdn.syndication.twimg.com で本文が返ることを確かめた。",
+    "same_stance_reason": "この論点の投稿は、ほとんどが賛成（取締り強化支持）です。反対（インフラ・制度優先）の投稿はごく少なく、どれも相手を見下す言い方を含むか、同じ文面の投稿が複数あるため選びませんでした。代わりに、取締りが足りないと感じる声と、効果を感じた声を1件ずつ選んでいます。",
+    "items": [
+     {
+      "id": "2108376809188491745",
+      "url": "https://x.com/ikimonokakari/status/2108376809188491745",
+      "label": "取り締まる警察官を見かけない",
+      "summary": "導入から半年あまりで、ながらスマホの自転車をまた見かけるようになったと感じる投稿です。交通安全運動の時期なのに、自転車を取り締まる警察官を見かけないと書いています。"
+     },
+     {
+      "id": "2068089032639455519",
+      "url": "https://x.com/hiroe4WD/status/2068089032639455519",
+      "label": "傘を差して走る自転車が減った",
+      "summary": "この春から、駅へ向かう道で傘を差して並んで走る自転車を見なくなったとして、青切符の効果を感じると書く投稿です。"
+     }
+    ]
+   },
+   "check_overrides": {
+    "unyou": {
+     "found": "警察庁は、基本的には現場で指導警告を行うと説明しています。歩行者や他の車両にとって危険性・迷惑性が高い「悪質・危険な違反」や、指導警告に従わずに違反を続けた場合は、検挙して青切符の対象にします。単に歩道を通行しただけなら、原則は指導警告です。"
+    }
+   },
+   "_check_overrides": "背景台帳 checklist の unyou は「ます」で終わる文が3つ続き、よみやす検査で止まる。読書面だけ文末を言い換えた（中身は同じ。警察庁の取締りのページ・FAQ、一次資料メモ【2026-10-12追記】4・5）。台帳は現行ページと共有なので変えない。"
+  },
+  "bike-blue-ticket-infrastructure-first": {
+   "name": "先に走る場所を整えて",
+   "status": "pending"
+  },
+  "bike-blue-ticket-rule-ambiguity": {
+   "name": "ルールが分かりにくい・運用が不安",
+   "status": "pending"
+  },
+  "bike-blue-ticket-license-requirement": {
+   "name": "自転車にも免許制を",
+   "status": "pending"
+  },
+  "bike-blue-ticket-road-safety": {
+   "name": "車道を走るのが怖い",
+   "status": "pending"
+  },
+  "bike-blue-ticket-other": {
+   "name": "その他",
+   "status": "pending"
+  }
+ }
+}
