@@ -1,7 +1,11 @@
 /* 皇室典範改正・新デザインの公開候補の表示・操作検査。ローカルで配信した候補だけを対象にする。
    KOSHITSU_REDESIGN_URL=http://127.0.0.1:8765/koshitsu-tenpakai-reaction-map.html \
    KOSHITSU_EVIDENCE_DIR=quality/prototypes/koshitsu-tenpakai-release/evidence node tests/test_koshitsu_redesign_browser.cjs
-   投票は押さない（本番Supabaseへ送らないため。localhost では投票設定自体が無効になる）。 */
+   投票は押さない（本番Supabaseへ送らないため。localhost では投票設定自体が無効になる）。
+   2026-10-12 部活動型の圧縮に合わせた（生成AIと著作権・副首都の browser 検査と同じ項目）：論点名は読書面の論点タブ（.kr-tab）、
+   山は対話式の山なみ（#section .hill）。10-11 に山なみを対話式へ戻した時点で .kr-chip・.kr-hill が無くなり動かなくなっていたのも直した。
+   投稿例・照合・背景の作り方と件数表は折りたたみの中にあるので、開いてから確かめる。
+   x.com・platform.twitter.com・twimg.com への通信はすべて遮断する。GA4 の issue_view は gtag を差し替えて記録だけを見る。 */
 const { chromium } = require('playwright');
 const assert = require('node:assert/strict');
 const path = require('node:path');
@@ -12,13 +16,19 @@ if (!url || !['127.0.0.1', 'localhost'].includes(new URL(url).hostname)) {
 }
 const evidence = process.env.KOSHITSU_EVIDENCE_DIR;
 const shot = (page, name, full = false) => evidence ? page.screenshot({ path: path.join(evidence, name), fullPage: full }) : null;
+const X_HOSTS = /(^|\.)(x\.com|twitter\.com|twimg\.com)$/;
 
 async function open(browser, options = {}) {
   const context = await browser.newContext({ viewport: { width: 1280, height: 900 }, ...options });
+  await context.route(r => X_HOSTS.test(new URL(r).hostname), r => r.abort());
+  await context.addInitScript(() => { window.gtag = (...a) => { (window.__ga = window.__ga || []).push(a); }; });
   const page = await context.newPage();
   const errors = [];
   page.on('pageerror', e => errors.push('pageerror: ' + e.message));
-  page.on('console', m => { if (m.type() === 'error') errors.push('console: ' + m.text()); });
+  page.on('console', m => {
+    // 遮断した X への通信の失敗はブラウザが console に出す。ページ自身のエラーだけを数える
+    if (m.type() === 'error' && !/ERR_FAILED|ERR_BLOCKED|net::/.test(m.text())) errors.push('console: ' + m.text());
+  });
   return { context, page, errors };
 }
 
@@ -34,7 +44,7 @@ async function open(browser, options = {}) {
       await shot(page, `page-${name}.png`, true);
 
       // 論点を選んでも、ページの位置は動かない
-      const chips = page.locator('#koshitsu-reading .kr-chip');
+      const chips = page.locator('#koshitsu-reading .kr-tab');
       assert.equal(await chips.count(), 6);
       for (let i = 0; i < 6; i++) {
         const chip = chips.nth(i);
@@ -50,15 +60,44 @@ async function open(browser, options = {}) {
         const wide = await page.evaluate(() => document.documentElement.scrollWidth - innerWidth);
         assert.ok(wide <= 0, `${name}: 論点 ${id} の表示で横にはみ出しています`);
       }
-      // 山を押しても同じ
-      const hill = page.locator('#koshitsu-reading .kr-hill').first();
+      // 山を押すと、その論点の読書面へ移る（設計記録 10節）。GA4 の issue_view もその論点で記録される
+      const hill = page.locator('#section .hill').nth(3);
       await hill.scrollIntoViewIfNeeded();
-      const y0 = await page.evaluate(() => scrollY);
-      await hill.click();
-      assert.equal(await page.evaluate(() => scrollY), y0, `${name}: 山の選択で位置が動きました`);
+      const hillId = await page.evaluate(() => window.PLANET_DATA.issues[3].id);
+      await hill.click({ force: true });
+      await page.waitForFunction(id => location.hash === '#issue-' + id, hillId);
+      await page.waitForTimeout(1500);  // なめらかなスクロールが止まるまで待つ
+      assert.equal(await page.locator('[data-issue-panel][data-selected]').getAttribute('data-issue-panel'), hillId);
+      const top = await page.locator('[data-issue-panel][data-selected]').evaluate(e => e.getBoundingClientRect().top);
+      assert.ok(top >= 0 && top < 300, `${name}: 山を押しても読書面が画面に来ません（${top}px）`);
+      const ga = await page.evaluate(() => (window.__ga || []).filter(a => a[0] === 'event' && a[1] === 'issue_view').map(a => a[2].issue_id));
+      assert.ok(ga.includes(hillId), `${name}: GA4 の issue_view が ${hillId} で記録されません（${ga}）`);
       await chips.first().click();
-      await page.locator('[data-issue-panel][data-selected]').scrollIntoViewIfNeeded();
-      await shot(page, `issue-selected-${name}.png`);
+      await page.locator('#koshitsu-reading .kr-tabs').scrollIntoViewIfNeeded();
+      await shot(page, `reading-1-${name}.png`);
+      await page.evaluate(() => scrollBy(0, innerHeight - 60));
+      await shot(page, `reading-2-${name}.png`);
+      // 理由一覧の行を押すと、その理由の説明だけが出る。「別の理由を読む」で次へ
+      const panel = page.locator('[data-issue-panel][data-selected]');
+      const rowsR = panel.locator('.kr-reasons li.kr-reason');
+      assert.equal(await panel.locator('.kr-reasons > .kr-reason-list li.kr-reason').count(), 4, `${name}: 理由一覧の上位が4件ではありません`);
+      await rowsR.nth(1).locator('a').click();
+      const shownR = await panel.locator('.kr-reason-detail').evaluateAll(as => as.filter(a => a.offsetHeight > 0).map(a => a.dataset.reason));
+      assert.deepEqual(shownR, [await rowsR.nth(1).getAttribute('data-reason')], `${name}: 選んだ理由の説明だけが出ていません`);
+      await panel.locator('.kr-reason-detail[data-on]').scrollIntoViewIfNeeded();
+      await shot(page, `reason-open-${name}.png`);
+      await panel.locator('.kr-reason-detail[data-on] .kr-next a').click();
+      const shownN = await panel.locator('.kr-reason-detail').evaluateAll(as => as.filter(a => a.offsetHeight > 0).map(a => a.dataset.reason));
+      assert.deepEqual(shownN, [await rowsR.nth(2).getAttribute('data-reason')], `${name}: 「別の理由を読む」で次の理由へ移りません`);
+      // 読書面の折りたたみをすべて開いても横にはみ出さない（全論点）
+      for (const id of await chips.evaluateAll(as => as.map(a => a.dataset.issueId))) {
+        await page.locator(`#koshitsu-reading .kr-tab[data-issue-id="${id}"]`).click();
+        for (const d of await panel.locator('details').all()) await d.evaluate(e => { e.open = true; });
+        const wideFold = await page.evaluate(() => document.documentElement.scrollWidth - innerWidth);
+        assert.ok(wideFold <= 0, `${name}: 論点 ${id} の折りたたみを開くと横にはみ出します`);
+        for (const d of await panel.locator('details').all()) await d.evaluate(e => { e.open = false; });
+      }
+      await chips.first().click();
 
       // 背景の開閉行
       const rows = page.locator('#koshitsu-background details.kb-row');
@@ -77,8 +116,12 @@ async function open(browser, options = {}) {
         await rows.nth(i).locator('summary').click();
         assert.equal(await rows.nth(i).evaluate(d => d.open), false);
       }
+      // 背景の各行は初期状態で閉じている（作り方 #bg-method・件数表 #bg-table を含む）。中の折りたたみも開いて横にはみ出さない
+      for (const d of await page.locator('#koshitsu-background details').all()) await d.evaluate(e => { e.open = true; });
+      const wideBg = await page.evaluate(() => document.documentElement.scrollWidth - innerWidth);
+      assert.ok(wideBg <= 0, `${name}: 背景の折りたたみを全部開くと横にはみ出します`);
       assert.deepEqual(errors, [], `${name}: コンソールエラー`);
-      summary.push(`${name}: はみ出し0・論点6つと山で scrollY 不変・背景${n}行の開閉・エラー0`);
+      summary.push(`${name}: はみ出し0・論点タブ6つで scrollY 不変・山で読書面へ（issue_view 記録）・理由の切替と「別の理由」・全論点の折りたたみ全開・背景${n}行の開閉・エラー0`);
       await context.close();
     }
 
@@ -89,7 +132,7 @@ async function open(browser, options = {}) {
       await page.goto(previous, { waitUntil: 'domcontentloaded' });
       await page.goto(url, { waitUntil: 'networkidle' });
       const length = await page.evaluate(() => history.length);
-      for (const chip of await page.locator('#koshitsu-reading .kr-chip').all()) await chip.click();
+      for (const chip of await page.locator('#koshitsu-reading .kr-tab').all()) await chip.click();
       assert.equal(await page.evaluate(() => history.length), length, '論点の切替で履歴が増えました');
       assert.match(page.url(), /#issue-/);
       await page.goBack({ waitUntil: 'domcontentloaded' });
@@ -108,7 +151,12 @@ async function open(browser, options = {}) {
       assert.equal(await page.locator('#bg-table').evaluate(d => d.open), true);
       await page.goto(url + '#issue-koshitsu-tenpakai-female-emperor', { waitUntil: 'networkidle' });
       assert.equal(await page.locator('[data-issue-panel][data-selected]').getAttribute('data-issue-panel'), 'koshitsu-tenpakai-female-emperor');
-      summary.push('旧アンカー: #fb-…→論点、#detail-data→件数表を開く、#issue-…で論点選択');
+      // 理由への直接リンク（区分名にハイフンがある other-evaluation）で、その論点とその理由が開く
+      await page.goto('about:blank');
+      await page.goto(url + '#kr-r-koshitsu-tenpakai-female-emperor-other-evaluation', { waitUntil: 'networkidle' });
+      assert.equal(await page.locator('[data-issue-panel][data-selected]').getAttribute('data-issue-panel'), 'koshitsu-tenpakai-female-emperor');
+      assert.equal(await page.locator('#kr-r-koshitsu-tenpakai-female-emperor-other-evaluation').isVisible(), true, '理由への直接リンクで説明が開きません');
+      summary.push('旧アンカー: #fb-…→論点、#detail-data→件数表を開く、#issue-…で論点選択、#kr-r-…（区分名にハイフン）で理由が開く');
       await context.close();
     }
 
@@ -116,9 +164,9 @@ async function open(browser, options = {}) {
     {
       const { context, page, errors } = await open(browser);
       await page.goto(url, { waitUntil: 'networkidle' });
-      const target = page.locator('#koshitsu-reading .kr-chip').nth(2);
+      const target = page.locator('#koshitsu-reading .kr-tab').nth(2);
       const id = await target.getAttribute('data-issue-id');
-      await page.locator('#koshitsu-reading .kr-chip').nth(1).focus();
+      await page.locator('#koshitsu-reading .kr-tab').nth(1).focus();
       await page.keyboard.press('Tab');
       assert.equal(await page.evaluate(() => document.activeElement.dataset.issueId), id, 'Tab で次の論点名へ移れません');
       const before = await page.evaluate(() => scrollY);
@@ -143,8 +191,8 @@ async function open(browser, options = {}) {
     // X埋め込みの失敗時：読み込みを遮断しても、案内と元投稿へのリンクが残る
     {
       const { context, page, errors } = await open(browser);
-      await page.route(/platform\.twitter\.com|twimg\.com|syndication\.twitter\.com/, r => r.abort());
       await page.goto(url, { waitUntil: 'networkidle' });
+      await page.locator('[data-issue-panel][data-selected] details.kr-posts > summary').click();
       const posts = page.locator('[data-issue-panel][data-selected] details.original-posts');
       await posts.locator('summary').click();
       const status = posts.locator('.x-embed-status').first();

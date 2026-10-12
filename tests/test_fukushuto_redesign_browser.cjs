@@ -3,6 +3,10 @@
    NODE_PATH=<main>/node_modules FUKUSHUTO_REDESIGN_URL=http://127.0.0.1:8766/fukushuto-reaction-map.html \
    FUKUSHUTO_EVIDENCE_DIR=quality/prototypes/fukushuto-release/evidence node tests/test_fukushuto_redesign_browser.cjs
    投票は押さない（本番Supabaseへ送らないため。localhost では投票設定自体が無効になる）。
+   2026-10-12 部活動型の圧縮に合わせた（生成AIと著作権 tests/test_ai_copyright_redesign_browser.cjs と同じ項目）：
+   論点名は読書面の論点タブ（.fr-tab）、山は対話式の山なみ（#section .hill）。10-11 に山なみを対話式へ戻した時点で
+   .fr-chip・.fr-hill が無くなり動かなくなっていたのも直した。作り方・詳細データ・投稿例は折りたたみの中にあるので、開いてから確かめる。
+   GA4 の issue_view は gtag を差し替えて記録だけを見る（localhost では GA のタグ自体が読み込まれない）。
    x.com・platform.twitter.com への通信はすべて遮断する（X埋め込みは失敗時の表示を確かめる）。 */
 const { chromium } = require('playwright');
 const assert = require('node:assert/strict');
@@ -20,6 +24,7 @@ const X_HOSTS = /(^|\.)(x\.com|twitter\.com|twimg\.com)$/;
 async function open(browser, options = {}) {
   const context = await browser.newContext({ viewport: { width: 1280, height: 900 }, ...options });
   await context.route(r => X_HOSTS.test(new URL(r).hostname), r => r.abort());
+  await context.addInitScript(() => { window.gtag = (...a) => { (window.__ga = window.__ga || []).push(a); }; });
   const page = await context.newPage();
   const errors = [];
   page.on('pageerror', e => errors.push('pageerror: ' + e.message));
@@ -42,7 +47,7 @@ async function open(browser, options = {}) {
       await shot(page, `page-${name}.png`, true);
 
       // 論点を選んでも、ページの位置は動かない
-      const chips = page.locator('#fukushuto-reading .fr-chip');
+      const chips = page.locator('#fukushuto-reading .fr-tab');
       assert.equal(await chips.count(), ISSUES);
       for (let i = 0; i < ISSUES; i++) {
         const chip = chips.nth(i);
@@ -58,15 +63,46 @@ async function open(browser, options = {}) {
         const wide = await page.evaluate(() => document.documentElement.scrollWidth - innerWidth);
         assert.ok(wide <= 0, `${name}: 論点 ${id} の表示で横にはみ出しています`);
       }
-      // 山を押しても同じ
-      const hill = page.locator('#fukushuto-reading .fr-hill').first();
+      // 山を押すと、その論点の読書面へ移る（設計記録 10節）。GA4 の issue_view もその論点で記録される
+      const hill = page.locator('#section .hill').nth(1);
       await hill.scrollIntoViewIfNeeded();
-      const y0 = await page.evaluate(() => scrollY);
-      await hill.click();
-      assert.equal(await page.evaluate(() => scrollY), y0, `${name}: 山の選択で位置が動きました`);
+      const hillId = await page.evaluate(() => window.PLANET_DATA.issues[1].id);
+      await hill.click({ force: true });
+      await page.waitForFunction(id => location.hash === '#issue-' + id, hillId);
+      await page.waitForTimeout(1500);  // なめらかなスクロールが止まるまで待つ
+      assert.equal(await page.locator('[data-issue-panel][data-selected]').getAttribute('data-issue-panel'), hillId);
+      const top = await page.locator('[data-issue-panel][data-selected]').evaluate(e => e.getBoundingClientRect().top);
+      assert.ok(top >= 0 && top < 300, `${name}: 山を押しても読書面が画面に来ません（${top}px）`);
+      const ga = await page.evaluate(() => (window.__ga || []).filter(a => a[0] === 'event' && a[1] === 'issue_view').map(a => a[2].issue_id));
+      assert.ok(ga.includes(hillId), `${name}: GA4 の issue_view が ${hillId} で記録されません（${ga}）`);
+      // 既定の論点（都構想・維新）は理由区分が無いので、理由の確かめは候補地で行う
       await chips.first().click();
-      await page.locator('[data-issue-panel][data-selected]').scrollIntoViewIfNeeded();
-      await shot(page, `issue-selected-${name}.png`);
+      await page.locator('#fukushuto-reading .fr-tabs').scrollIntoViewIfNeeded();
+      await shot(page, `reading-1-${name}.png`);
+      await page.evaluate(() => scrollBy(0, innerHeight - 60));
+      await shot(page, `reading-2-${name}.png`);
+      await page.locator('#fukushuto-reading .fr-tab[data-issue-id="fukushuto-location"]').click();
+      // 理由一覧の行を押すと、その理由の説明だけが出る。「この論点の別の理由」で次へ
+      const panel = page.locator('[data-issue-panel][data-selected]');
+      const rowsR = panel.locator('.fr-reasons li.fr-reason');
+      assert.equal(await panel.locator('.fr-reasons > .fr-reason-list li.fr-reason').count(), 4, `${name}: 理由一覧の上位が4件ではありません`);
+      await rowsR.nth(1).locator('a').click();
+      const shownR = await panel.locator('.fr-reason-detail').evaluateAll(as => as.filter(a => a.offsetHeight > 0).map(a => a.dataset.reason));
+      assert.deepEqual(shownR, [await rowsR.nth(1).getAttribute('data-reason')], `${name}: 選んだ理由の説明だけが出ていません`);
+      await panel.locator('.fr-reason-detail[data-on]').scrollIntoViewIfNeeded();
+      await shot(page, `reason-open-${name}.png`);
+      await panel.locator('.fr-reason-detail[data-on] .fr-next a').click();
+      const shownN = await panel.locator('.fr-reason-detail').evaluateAll(as => as.filter(a => a.offsetHeight > 0).map(a => a.dataset.reason));
+      assert.deepEqual(shownN, [await rowsR.nth(2).getAttribute('data-reason')], `${name}: 「この論点の別の理由」で次の理由へ移りません`);
+      // 読書面の折りたたみをすべて開いても横にはみ出さない（全論点）
+      for (const id of await chips.evaluateAll(as => as.map(a => a.dataset.issueId))) {
+        await page.locator(`#fukushuto-reading .fr-tab[data-issue-id="${id}"]`).click();
+        for (const d of await panel.locator('details').all()) await d.evaluate(e => { e.open = true; });
+        const wideFold = await page.evaluate(() => document.documentElement.scrollWidth - innerWidth);
+        assert.ok(wideFold <= 0, `${name}: 論点 ${id} の折りたたみを開くと横にはみ出します`);
+        for (const d of await panel.locator('details').all()) await d.evaluate(e => { e.open = false; });
+      }
+      await chips.first().click();
 
       // 背景の開閉行
       const rows = page.locator('#fukushuto-background details.fb-row');
@@ -85,12 +121,15 @@ async function open(browser, options = {}) {
         await rows.nth(i).locator('summary').click();
         assert.equal(await rows.nth(i).evaluate(d => d.open), false);
       }
-      // 詳細データの折りたたみも、開いて横にはみ出さない
+      // 作り方と詳細データの折りたたみも、開いて横にはみ出さない
+      await page.locator('#fu-method > summary').scrollIntoViewIfNeeded();
+      await page.locator('#fu-method > summary').click();
+      assert.equal(await page.locator('#fu-method').evaluate(d => d.open), true);
       for (const d of await page.locator('#detail-data details').all()) await d.evaluate(e => { e.open = true; });
       const wideDetail = await page.evaluate(() => document.documentElement.scrollWidth - innerWidth);
       assert.ok(wideDetail <= 0, `${name}: 詳細データを開くと横にはみ出します`);
       assert.deepEqual(errors, [], `${name}: コンソールエラー`);
-      summary.push(`${name}: はみ出し0・論点${ISSUES}つと山で scrollY 不変・背景${n}行の開閉・詳細データ・エラー0`);
+      summary.push(`${name}: はみ出し0・論点タブ${ISSUES}つで scrollY 不変・山で読書面へ（issue_view 記録）・理由の切替と「別の理由」・全論点の折りたたみ全開・背景${n}行の開閉・作り方と詳細データ・エラー0`);
       await context.close();
     }
 
@@ -101,7 +140,7 @@ async function open(browser, options = {}) {
       await page.goto(previous, { waitUntil: 'domcontentloaded' });
       await page.goto(url, { waitUntil: 'networkidle' });
       const length = await page.evaluate(() => history.length);
-      for (const chip of await page.locator('#fukushuto-reading .fr-chip').all()) await chip.click();
+      for (const chip of await page.locator('#fukushuto-reading .fr-tab').all()) await chip.click();
       assert.equal(await page.evaluate(() => history.length), length, '論点の切替で履歴が増えました');
       assert.match(page.url(), /#issue-/);
       await page.goBack({ waitUntil: 'domcontentloaded' });
@@ -115,7 +154,8 @@ async function open(browser, options = {}) {
       const { context, page } = await open(browser);
       const selected = () => page.locator('[data-issue-panel][data-selected]').getAttribute('data-issue-panel');
       await page.goto(url + '#fb-fukushuto-finance', { waitUntil: 'networkidle' });
-      await page.waitForFunction(() => location.hash === '#issue-fukushuto-finance');
+      // 山なみのスクリプトが #fukushuto-finance に書き換えることがある（10-11 に対話式へ戻してから。生成AIと同じ）
+      await page.waitForFunction(() => ['#issue-fukushuto-finance', '#fukushuto-finance'].includes(location.hash));
       assert.equal(await selected(), 'fukushuto-finance');
       await page.goto(url + '#fukushuto-faq', { waitUntil: 'networkidle' });
       await page.waitForFunction(() => location.hash === '#bg-faq');
@@ -124,10 +164,24 @@ async function open(browser, options = {}) {
       await page.waitForFunction(() => location.hash === '#fukushuto-background');
       await page.goto(url + '#issue-fukushuto-priority', { waitUntil: 'networkidle' });
       assert.equal(await selected(), 'fukushuto-priority');
+      // 折りたたみの中の旧アンカー（作り方・詳細データ）も、開いて見せる
+      await page.goto('about:blank');
+      await page.goto(url + '#detail-data', { waitUntil: 'networkidle' });
+      assert.equal(await page.locator('#detail-data').isVisible(), true, '#detail-data で詳細データが開きません');
+      await page.goto('about:blank');
+      await page.goto(url + '#article-trust-title', { waitUntil: 'networkidle' });
+      assert.equal(await page.locator('#article-trust-title').isVisible(), true, '#article-trust-title で作り方が開きません');
+      // 理由への直接リンク（#fr-r-{論点}-{区分}）で、その論点とその理由が開く
+      await page.goto('about:blank');
+      const rid = await (async () => { await page.goto(url, { waitUntil: 'networkidle' }); return page.locator('#issue-fukushuto-location .fr-reason').nth(2).getAttribute('data-reason'); })();
+      await page.goto('about:blank');
+      await page.goto(url + `#fr-r-fukushuto-location-${rid}`, { waitUntil: 'networkidle' });
+      assert.equal(await selected(), 'fukushuto-location');
+      assert.equal(await page.locator(`#fr-r-fukushuto-location-${rid}`).isVisible(), true, '理由への直接リンクで説明が開きません');
       for (const kept of ['vote-section', 'detail-data', 'related-topics', 'article-trust-title', 'caution']) {
         assert.equal(await page.locator('#' + kept).count(), 1, `#${kept} がありません`);
       }
-      summary.push('旧アンカー: #fb-…→論点、#fukushuto-faq→よくある質問を開く、#bukatsu-background→背景、#issue-…で論点選択、#vote-section など5件はそのまま');
+      summary.push('旧アンカー: #fb-…→論点、#fukushuto-faq→よくある質問を開く、#bukatsu-background→背景、#issue-…で論点選択、#detail-data・#article-trust-title は折りたたみを開く、#fr-r-…で理由が開く、#vote-section など5件はそのまま');
       await context.close();
     }
 
@@ -135,9 +189,9 @@ async function open(browser, options = {}) {
     {
       const { context, page, errors } = await open(browser);
       await page.goto(url, { waitUntil: 'networkidle' });
-      const target = page.locator('#fukushuto-reading .fr-chip').nth(2);
+      const target = page.locator('#fukushuto-reading .fr-tab').nth(2);
       const id = await target.getAttribute('data-issue-id');
-      await page.locator('#fukushuto-reading .fr-chip').nth(1).focus();
+      await page.locator('#fukushuto-reading .fr-tab').nth(1).focus();
       await page.keyboard.press('Tab');
       assert.equal(await page.evaluate(() => document.activeElement.dataset.issueId), id, 'Tab で次の論点名へ移れません');
       const before = await page.evaluate(() => scrollY);
@@ -164,6 +218,7 @@ async function open(browser, options = {}) {
     {
       const { context, page, errors } = await open(browser);
       await page.goto(url, { waitUntil: 'networkidle' });
+      await page.locator('[data-issue-panel][data-selected] details.fr-posts > summary').click();
       const posts = page.locator('[data-issue-panel][data-selected] details.original-posts');
       await posts.locator('summary').click();
       const status = posts.locator('.x-embed-status').first();
@@ -207,6 +262,8 @@ async function open(browser, options = {}) {
       await page.goto(url, { waitUntil: 'domcontentloaded' });
       const visible = await page.locator('[data-issue-panel]').evaluateAll(ps => ps.filter(p => p.offsetHeight > 0).length);
       assert.equal(visible, ISSUES, `JSなしで${ISSUES}論点が表示されません`);
+      // 折りたたみは JavaScript なしでも開く（作り方と詳細データ）
+      await page.locator('#fu-method > summary').click();
       const text = await page.locator('main').innerText();
       for (const word of ['副首都は', 'どんな理由で語られている', 'よくある質問', '世論調査ではありません', 'このページの作り方', '詳細データ']) {
         assert.ok(text.includes(word), `JSなしで「${word}」が読めません`);

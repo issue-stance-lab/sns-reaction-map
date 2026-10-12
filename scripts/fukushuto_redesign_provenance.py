@@ -123,11 +123,16 @@ def verified_selectors(source: str, root: Path) -> dict[str, str]:
                 li = panel.select_one(f'li.fr-reason[data-reason="{bid}"]')
                 _check(li is not None, f"{iid} の理由 {bid} の行が無い")
                 _check(li.select_one(".fr-reason-n b").get_text() == _fmt(len(items)), f"{iid} の理由 {bid}（期待 {len(items)}）")
+                # 理由の説明（2026-10-12 から一覧の行とは別の欄。折りたたみ・非表示でもHTMLにはあるので数え直せる）
+                detail = panel.select_one(f'article.fr-reason-detail[data-reason="{bid}"]')
+                _check(detail is not None, f"{iid} の理由 {bid} の説明が無い")
+                _check(_fmt(len(items)) + "件" in detail.select_one(".fr-eyebrow").get_text(),
+                       f"{iid} の理由 {bid} の説明の件数（期待 {len(items)}）")
                 per = Counter(id_of_key.get(i["stance"], i["stance"]) for i in items)
-                _stance_numbers(li.select_one(".fr-mini"), stances, per, f"{iid} の理由 {bid}")
+                _stance_numbers(detail.select_one(".fr-mini"), stances, per, f"{iid} の理由 {bid}")
                 allowed.add(len(items))
                 allowed.update(per.get(s["id"], 0) for s in stances)
-                voice = li.select_one(".fr-voice")
+                voice = detail.select_one(".fr-voice")
                 if voice is not None:
                     expected = icfg.get("reasons", {}).get(bid, {}).get("voice", "")
                     _check(bool(expected) and voice.get_text().endswith(expected), f"{iid} の理由 {bid} の説明文が設定と違う")

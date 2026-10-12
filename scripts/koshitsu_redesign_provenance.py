@@ -84,9 +84,15 @@ def verified_selectors(source: str, root: Path) -> dict[str, str]:
             if node is not None:
                 _check(node.get_text() == _fmt(count), f"{iid} の理由 {bid}（期待 {count}）")
                 allowed.add(count)
+        # 理由の説明（2026-10-12 から一覧の行とは別の欄。折りたたみ・非表示でもHTMLにはあるので数え直せる）
+        for bid, bucket in buckets.items():
+            detail = panel.select_one(f'article.kr-reason-detail[data-reason="{bid}"]')
+            _check(detail is not None, f"{iid} の理由 {bid} の説明が無い")
+            _check(_fmt(recount[(issue["label"], bid)]) + "件" in detail.select_one(".kr-eyebrow").get_text(),
+                   f"{iid} の理由 {bid} の説明の件数（期待 {recount[(issue['label'], bid)]}）")
         # 「どんな声か」は設定の確認済みの文。文中の件数（読み直した件数など）は設定の文と完全一致のときだけ認める
         voices = reading["issues"].get(iid, {}).get("reasons", {})
-        for li in panel.select("li.kr-reason"):
+        for li in panel.select("li.kr-reason, article.kr-reason-detail"):
             voice = li.select_one(".kr-voice")
             if voice is None:
                 continue

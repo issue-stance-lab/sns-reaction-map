@@ -105,3 +105,13 @@ body.fukushuto-layout main{display:block}
   .fu-planet #planet-block .dotbox .dot-cap{margin-top:8px}
 }
 @media(max-width:450px){.fu-planet #planet-block .chart-box #section{height:180px}}
+/* 2026-10-12 部活動型の圧縮：作り方と詳細データは1つの折りたたみ（生成AIと著作権の .acp-method と同じ見た目） */
+.fu-method{padding-top:10px;padding-bottom:10px}
+.fu-method>summary{cursor:pointer;list-style:none;position:relative;display:flex;align-items:center;min-height:48px;padding-right:32px;
+  font-size:clamp(18px,2.2vw,22px);font-weight:800;color:var(--ink)}
+.fu-method>summary::-webkit-details-marker{display:none}
+.fu-method>summary::after{content:"＋";position:absolute;right:4px;top:50%;transform:translateY(-50%);color:var(--ai);font-weight:800}
+.fu-method[open]>summary::after{content:"－"}
+.fu-method>summary:focus-visible{outline:3px solid var(--ai);outline-offset:3px;border-radius:8px}
+.fu-method .fu-trust{margin-top:12px}
+.fu-method .fu-band{width:auto;margin:20px 0 0;padding:0;border:0;border-radius:0;background:transparent}

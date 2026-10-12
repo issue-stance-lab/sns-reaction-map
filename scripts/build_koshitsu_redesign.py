@@ -276,8 +276,11 @@ def _alias_script() -> str:
             "if(!id)return;const cur=document.getElementById(id);if(cur&&cur.getClientRects().length)return;"
             "if(id.startsWith('fb-'))id='issue-'+id.slice(3);else if(aliases[id])id=aliases[id];else return;"
             "location.replace('#'+id);const t=document.getElementById(id);if(t&&t.tagName==='DETAILS')t.open=true;}"
+            # 折りたたみの中の場所（背景の行の中・読書面の折りたたみの中）へ来たら、外側の折りたたみも開いて見せる（生成AIと同じ）
             "function openRow(){const t=document.getElementById(decodeURIComponent(location.hash.slice(1)));"
-            "if(t&&t.tagName==='DETAILS')t.open=true;}"
+            "if(!t)return;let d=t.tagName==='DETAILS'?t:t.closest('details'),moved=false;"
+            "while(d){if(!d.open){d.open=true;moved=true;}d=d.parentElement&&d.parentElement.closest('details');}"
+            "if(moved)requestAnimationFrame(()=>t.scrollIntoView({block:'start'}));}"
             "addEventListener('hashchange',()=>{resolve();openRow();});resolve();openRow();})();</script>")
 
 
