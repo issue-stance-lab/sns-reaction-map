@@ -8,7 +8,10 @@
 
 出力（既定は quality/prototypes/school-nickname-ban-opening/）:
   opening-fragment.html  冒頭の部品（マーカー付き）
-  index.html             確認用の単独ページ（opening.css を読む）
+  index.html             確認用の単独ページ（同じフォルダーの opening.css を読む）
+  opening.css            正本 scripts/nickname_redesign/opening.css の写し（2026-10-13に試作フォルダーから正本を移した）
+
+国の資料の本文と制度を確かめた日は設定の checked_on 1か所。読書面（scripts/nickname_reading.py）と背景もここを読む。
 
 時刻や乱数は使わないので、同じ入力なら何度実行しても同じ出力になる。
 """
@@ -19,6 +22,7 @@ import argparse
 import datetime as dt
 import html
 import json
+import shutil
 from pathlib import Path
 
 import yaml
@@ -26,6 +30,7 @@ import yaml
 ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_CONFIG = ROOT / "configs" / "school-nickname-ban-opening.json"
 DEFAULT_OUT = ROOT / "quality" / "prototypes" / "school-nickname-ban-opening"
+ASSETS = ROOT / "scripts" / "nickname_redesign"
 START = "<!-- SCHOOL_NICKNAME_OPENING_START -->"
 END = "<!-- SCHOOL_NICKNAME_OPENING_END -->"
 
@@ -56,6 +61,11 @@ def load_inputs(config_path: Path) -> dict:
         raise SystemExit(f"THEMES.yaml に {config['theme_id']} がありません")
     if public.get("theme_id") != config["theme_id"]:
         raise SystemExit("公開JSONのテーマIDが設定と一致しません")
+    if "checked" in config:
+        raise SystemExit("確認日は checked_on 1か所に持つ（checked の2つの日付は使わない）")
+    checked = dt.date.fromisoformat(config["checked_on"])
+    if checked < dt.date.fromisoformat(public["claim_verification"]["checked_on"]):
+        raise SystemExit("国の資料を確かめた日 checked_on が、主張の照合日より古くなっています")
     return {
         "config": config,
         "public": public,
@@ -120,7 +130,7 @@ def render_documents(config: dict) -> str:
         f'<span class="nop-doc__hit">{ICON_LENS}<b>{esc(d["result_label"])}</b></span></li>'
         for item in d["items"]
     )
-    checked = jp_date(config["checked"]["memo_checked_on"])
+    checked = jp_date(config["checked_on"])
     return (
         f'<figure class="nop-docs" aria-labelledby="nop-docs-title">'
         f'<figcaption id="nop-docs-title" class="nop-docs__title">{esc(d["title"])}</figcaption>'
@@ -298,8 +308,8 @@ def render_fragment(data: dict) -> str:
         f'<a class="nop-link" href="{esc(l["href"])}">{esc(l["label_template"].format(n=n_issues))}</a>'
         for l in config["links"]
     )
-    ch = config["checked"]
-    checked = ch["template"].format(memo=jp_date(ch["memo_checked_on"]), system=jp_date(ch["system_checked_on"]))
+    checked = config["checked_template"].format(checked=jp_date(config["checked_on"]),
+                                                claims=jp_date(public["claim_verification"]["checked_on"]))
     sources = "".join(
         f"<li>{esc(item['publisher'])}：{link(item['url'], item['name'])}</li>" for item in config["documents"]["items"]
     )
@@ -315,7 +325,7 @@ def render_fragment(data: dict) -> str:
             render_count(data),
             f'<aside class="nop-safety"><b>{esc(s["title"])}</b><p>{esc(s["text"])}</p></aside>',
             f'<nav class="nop-links" aria-label="このページの読み方">{links}</nav>',
-            f'<div class="nop-sources"><p>{esc(checked)}</p><ul>{sources}</ul></div>',
+            f'<div class="nop-sources"><p data-checked-on="{esc(config["checked_on"])}">{esc(checked)}</p><ul>{sources}</ul></div>',
             "</section>",
             render_faq(config),
             END,
@@ -342,6 +352,11 @@ def render_page(fragment: str) -> str:
 """
 
 
+def fragment_for(config_path: Path = DEFAULT_CONFIG) -> str:
+    """冒頭の部品（マーカー付き）。読書面の試作（scripts/nickname_reading.py）がこの下に読書面をつなぐ。"""
+    return render_fragment(load_inputs(config_path))
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--config", type=Path, default=DEFAULT_CONFIG)
@@ -352,6 +367,7 @@ def main() -> None:
     args.out_dir.mkdir(parents=True, exist_ok=True)
     (args.out_dir / "opening-fragment.html").write_text(fragment, encoding="utf-8")
     (args.out_dir / "index.html").write_text(render_page(fragment), encoding="utf-8")
+    shutil.copyfile(ASSETS / "opening.css", args.out_dir / "opening.css")
     print(f"wrote {args.out_dir / 'opening-fragment.html'}")
     print(f"wrote {args.out_dir / 'index.html'}")
 

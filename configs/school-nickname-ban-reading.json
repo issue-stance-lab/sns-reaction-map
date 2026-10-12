@@ -1,0 +1,178 @@
+{
+  "theme_id": "school-nickname-ban",
+  "_about": "学校でのあだ名禁止ページの「論点ごとの読書面」の手書き文言。scripts/nickname_reading.py が読む。件数・割合・日付・判定はここに書かず、公開JSON・再読データ・立場の対応表・照合データ・背景台帳から読む（非公開の正典は読まない）。高齢者免許返納（configs/elderly-license-revocation-reading.json）の部活動型の圧縮済みの型と同じキー構成。山なみは手順7で元HTMLの対話式の図を写すので、ここには静的な山なみの文言を置かない。",
+  "opening_config": "configs/school-nickname-ban-opening.json",
+  "public_json": "docs/data/themes/school-nickname-ban.json",
+  "reread_json": "data/school-nickname-ban_issues-reread.json",
+  "reread_stances_json": "data/school-nickname-ban_reread-stances.json",
+  "_reread_json": "論点ごとの理由区分は buckets[論点名]（configs/planet/school-nickname-ban.yaml の sub_issues.path）、明細は全論点を含む平坦な items（post_key＝tweet_id の sha256・main_issue・bucket）。明細は立場を持たないので、立場は scripts/nickname_reread_stances.py が正典から写した対応表 reread_stances_json から読む（2026-10-13 に100件すべて正典と一致、論点×立場の食い違い0件）。excluded_items（質問だけの投稿1件、正典で意見でない）は数えない。6論点すべてに理由区分がある（13区分）。",
+  "claim_posts_json": "data/school-nickname-ban_claim_posts.json",
+  "background_json": "data/verification/school-nickname-ban-background.json",
+  "other_issue_id": "school-nickname-ban-other",
+  "_other_issue_id": "「その他」はいま0件なので、タブも欄も出さない。公開JSONで1件以上になれば自動で最後に出る（理由区分が無ければ「理由は未公開」）。",
+  "section": {
+    "eyebrow": "論点ごとに読む",
+    "title": "論点ごとに、投稿はどんな理由で分かれている？",
+    "lead": "論点の名前を押すと、下の欄の中身だけが替わります。読んでいる位置はそのままです。",
+    "note": "意見は{total}件と少なめです。{after}以降の投稿はまだ集めていません（次回の収集予定は{next}）。"
+  },
+  "trend": {
+    "public_json_key": "trends",
+    "_public_json_key": "公開JSONにこのキーが現れたら生成器は止まる（推移の表示は潮目のカードから作るので、公開JSONの推移は使っていない。黙って無視しない）。前回と今回の収集の比較は、手順7で元HTMLの潮目のカード（inject_tide_widget.py・adapter の _apply_tide）を折りたたみの中へ写す。",
+    "title": "この論点が意見全体に占める割合",
+    "row_label": "{period_start}〜{period_end}の累計",
+    "note": "表は最新の累計です。前の収集回との違いは、ページ下の回ごとの比較で読めます。",
+    "widget_id": "school-nickname-ban-tide-widget",
+    "_widget_id": "潮目のカードの id（scripts/inject_tide_widget.py のあだ名禁止の widget_id と同じ）。「回ごとの比較へ」の飛び先。"
+  },
+  "stance_common": {
+    "title": "一律に禁止することへの立場",
+    "lead": "この論点の{count}件を、あだ名を一律に禁止することへの立場で4つに分けました。",
+    "note": "立場は投稿全体の向きから読み取ったもので、論点とは別の物差しです。条件付き・個別対応には、悪意のある呼び方だけを止めるなど、範囲を絞る案が入ります。中立・情報は、賛否を言わずに体験や知っていることを書いた投稿の区分です。",
+    "caveat": "SNSで集めた投稿の中の内訳で、世論調査の結果ではありません。"
+  },
+  "reasons_common": {
+    "title": "投稿に書かれた理由",
+    "lead": "この論点の{count}件は、編集部が本文を1件ずつ読み直し、中心の理由で1つの区分に入れました。",
+    "note": "割合の分母は、この論点の{count}件です。区分ごとの立場は、投稿ごとの立場の分類をそのまま数えています。",
+    "unpublished": "この論点の投稿は、まだ理由ごとに読み分けていません。件数と立場の内訳だけを先に載せています。",
+    "voice_label": "どんな声か",
+    "stance_label": "立場の内訳"
+  },
+  "sources_common": {
+    "title": "照らし合わせの方法",
+    "lead": "いじめ防止対策推進法、文部科学省の基本方針、生徒指導提要を物差しにしました。照らしたのは、SNSで何度も出てくる言い分です。1件ずつの投稿の正しさを採点したものではなく、あだ名を禁止すべきかの答えも出していません。",
+    "check_eyebrow": "制度の確認",
+    "claim_eyebrow": "主張の照合",
+    "matched": "この主張に当たる投稿 {n}件",
+    "checked": "照合日 {checked_on}",
+    "ledger_checked": "確認日 {checked_on}",
+    "_ledger_checked": "制度の確認（背景台帳 checklist）の確認日。台帳の checked_on から読む。",
+    "sources_label": "出典をひらく",
+    "empty": "この論点に結びつく照合は、まだ用意していません。",
+    "national": "国があだ名や呼び方を決めているかどうかは、背景の1行目にまとめました",
+    "national_href": "#bg-national",
+    "_national": "「国の定めは確認できない」を論点ごとに繰り返さず、背景への1行のリンクにする（手順6で背景に #bg-national を作る。無いと生成が止まる）。"
+  },
+  "verdict_labels": {
+    "fact": "資料どおり",
+    "gap": "少しずれる",
+    "miss": "裏が取れない",
+    "_about": "現行ページの判定ラベルと同じ言い換え。公開JSON claim_verification.claims[].verdict を言い換える。知らない判定が来たら生成を止める。"
+  },
+  "sunk_common": {
+    "title": "国の資料にはあるのに、投稿ではほぼ触れられていない話",
+    "count": "意見と判定した{base}件のうち、この話に触れていた投稿は{n}件でした（{checked_on}確認）。",
+    "note_label": "調べた範囲を見る",
+    "recheck": "{when}の再確認：{text}。",
+    "_about": "公開JSON ocean_layer.sunk_continents を nearest_issue_id で論点に振り分ける。nearest_issue_id が null の3件は sunk_issue_overrides で論点を決める。sns_base が意見数と違えば生成を止める。"
+  },
+  "sunk_issue_overrides": {
+    "school-nickname-ban-review-rule": "school-nickname-ban-uniform-rule",
+    "school-nickname-ban-share-case": "school-nickname-ban-psychological-safety",
+    "school-nickname-ban-follow-up": "school-nickname-ban-psychological-safety"
+  },
+  "_sunk_issue_overrides": "公開JSONで論点が null の「資料にしかない話」の置き場所。校則を見直す手続き（生徒指導提要 3.6.1）はルールの効果と理由を問う論点へ、いじめの情報共有と解消の判断（基本方針）は嫌な呼び名といじめの論点へ置く。",
+  "veins_common": {
+    "title": "立場が違っても重なる心配",
+    "shared_label": "重なる心配",
+    "diverging_label": "分かれるところ",
+    "sides": "読んだ投稿：{sides}（確認日 {checked_on}）",
+    "_about": "公開JSON ocean_layer.veins を issue_ids で論点に振り分ける。"
+  },
+  "posts_common": {
+    "title": "もとの投稿を読む",
+    "lead_two": "立場の違う投稿を2件選び、編集部が要約しました。どの2件を選んだかは、この論点の立場の比率と結びついていません。",
+    "lead_same": "この論点では同じ立場の投稿を2件選びました。理由は下に書いています。要約は編集部によるものです。",
+    "lead_one": "この論点では投稿を1件だけ選びました。理由は下に書いています。要約は編集部によるものです。",
+    "none": "この論点の投稿の例は、まだ選んでいません。",
+    "summary": "X（旧Twitter）で元の投稿を開く（{n}件）",
+    "bucket_label": "理由の区分",
+    "stance_label": "立場",
+    "_selection_rule": "正典 social-samples/school-nickname-ban_hermes_arena_classified.json（THEMES.yaml の sample_file）の意見（classification.is_opinion=true、100件＝公開JSONの opinion_count）から選ぶ（高齢者・自転車と同じ方法に、子どもに関わるテーマとしての配慮を足した）。基準: ①その論点の意見で、理由区分を代表する（最大の区分と、別の見方を示す区分から1件ずつを基本） ②2件で立場が偏らない ③削除されていない（tweet_id と URL が一致し、cdn.syndication.twimg.com/tweet-result で本文が返る） ④個人・集団への攻撃や差別、罵倒、名指しの批判を含まない ⑤子どもや学校、教員が特定できる書き方、いじめ被害の生々しい描写を含まない ⑥正典の分類で article_usable が true、risk が low ⑦正典に同じ文面が2件以上ない ⑧強い言い方（intensity=high）を選ばない ⑨自動応答のアカウント（grok）と当サイト自身の投稿は選ばない。生成器は非公開の正典を読まないので、公開できる入力で確かめられる条件（再読データでその論点に入っていること・URLとIDの一致・立場の違い・論点をまたいだ重複）だけを検査して止める。①②⑥〜⑨は tests/test_nickname_redesign.py が正典で確かめる（正典が無い環境ではスキップ）。③は選んだ日に確かめた（selection_basis に日付）。④⑤は本文を読んで決めた。現行ページの代表投稿（scripts/nickname_issue_media.py）は参考にしただけで、選び直した。件数が少ないので、記事に使える投稿の中から選ぶと現行ページと重なるものがある（重なりは selection_basis に書いた）。"
+  },
+  "see_also_common": {
+    "title": "あわせて確かめる"
+  },
+  "pending_note": "この論点の説明・資料との照合・投稿の例は、次の工程で加えます。",
+  "footer": "SNSの件数は{updated_on}までの集計です。国の資料を確かめた日は、それぞれの項目に書いています。",
+  "compact": {
+    "_about": "部活動型の圧縮の見出し・折りたたみの名前（高齢者・自転車の compact と同じキー。文言はこのテーマ用に書いた）。理由一覧に出すのは件数の多い順の上位 top_reasons 件、残りは折りたたみ（区分が top_reasons 以下なら折りたたみは出ない）。選んだ理由1つだけを展開する（JavaScriptが無いときは全理由が並ぶ）。count_caption に割合を出さないのは、意見が100件で件数と割合が同じ数になり、二重に書くと紛らわしいため（冒頭の件数欄と同じ判断）。",
+    "top_reasons": 4,
+    "tabs_label": "論点を切り替える",
+    "back": "論点の一覧へ戻る ↑",
+    "desc_more": "くわしく",
+    "reasons_index_title": "理由の区分（{k}つ）",
+    "reasons_more": "ほかの理由を読む（残り{k}分類）",
+    "reason_eyebrow": "選んだ理由",
+    "reason_next": "この論点の別の理由",
+    "stance_fold": "立場ごとの件数と割合",
+    "posts_fold": "投稿の例（{n}件）",
+    "evidence_title": "資料に照らす：主張の照合と制度",
+    "glance_eyebrow": "前の回との違い",
+    "glance_note": "前の収集回との比較は、「さん付け・ジェンダー配慮」を除いた論点の意見を100%として、この論点の割合を並べます。比べているのは集めた投稿どうしで、世の中の意見がどう変わったかは分かりません。",
+    "glance_link": "回ごとの比較へ ↓",
+    "count_caption": "SNSの意見{total}件のうち、",
+    "rank_first": "いちばん多い論点です。",
+    "rank_other": "{rank}番目に多い論点です。",
+    "small_note": "件数が{threshold}件に届かない少数の論点で、数件の違いでも割合が大きく動きます。ほかの論点と割合で比べるのには向きません。",
+    "_small_note": "「少数」の印の文字と、しきい値は冒頭の設定（count.small_tag・small_threshold）から読む。"
+  },
+  "issues": {
+    "school-nickname-ban-uniform-rule": {
+      "name": "一律に禁止して、効果はあるのか",
+      "status": "complete",
+      "description": [
+        "あだ名を学校全体で一律に禁止して、本当にいじめが減るのかを問う意見です。禁止そのものへの違和感と、効果や理由の説明を問う声が中心です。",
+        "呼び方まで学校が決めるのは管理のしすぎだ、と受け止める投稿が最も多くあります。次に多いのは、陰で呼ばれれば先生は気づけない、いじめる側は別の方法をとる、と効果を疑う投稿です。禁止の理由を子どもに説明して考えさせるべきだという、条件付きの意見もあります。"
+      ],
+      "_description": "1段落目は論点の範囲。2段落目は再読データの区分の件数順（group-5・group-6）に基づく。件数は書かない（区分の欄に自動で出る）。2026-10-13 に36件の本文を正典で全件読んで書いた。",
+      "reason_sort": "count_desc",
+      "reasons": {
+        "group-5": {
+          "voice": "呼び方まで学校が決めるのはやりすぎだ、という受け止めです。運動会の短縮や組体操の廃止と並べて、学校が何でも禁止する流れの1つとして挙げる投稿が目立ちます。"
+        },
+        "group-6": {
+          "voice": "禁止してもいじめは減らないのではないか、と効果を疑う声です。陰で呼ばれれば気づけない、いじめる側は別の方法をとる、といった理由が挙がります。理由を伝えて考えさせるべきだという条件付きの意見や、加害した側への対応を先にという意見もあります。"
+        },
+        "group-7": {
+          "voice": "あだ名をやめて「さん」で呼ばせると、建前だけの付き合いが広がり、社会にまで響くと推測する投稿です。根拠は示されておらず、ほぼ同じ文面がくり返されています。"
+        }
+      },
+      "_reasons": "区分名は再読データの label をそのまま使う。voice は 2026-10-13 に区分ごとに本文を正典で全件読んで書いた（group-5 18件、group-6 16件、group-7 2件）。",
+      "checks": [
+        "reason"
+      ],
+      "_checks": "背景台帳 checklist の項目IDのうち、この論点で開くもの。国の定めがあるか（scope）は論点ごとに繰り返さず、背景の1行目へのリンクにする。",
+      "see_also": [
+        {
+          "href": "#nop-q-why",
+          "text": "「なぜ始まったの？」の答えを見る"
+        }
+      ],
+      "posts": {
+        "selection_basis": "最大の区分「禁止への違和感・過剰管理」から一律禁止に反対の1件、次の区分「禁止の実効性・理由の説明」から条件付き・個別対応の1件を選び、やりすぎだという受け止めと、ねらいは分かるが極端だという受け止めを対にした。この論点は36件のうち33件が一律禁止に反対なので、立場の違う2件目は条件付きの2件から、言い方の穏やかなほう（intensity=low）にした。最大の区分は「気持ち悪い」「アホか」など強い言い方の投稿が多いので外した。2件とも正典で article_usable=true・risk=low・intensity は medium と low、正典に同じ文面は無い。2026-10-13 に cdn.syndication.twimg.com で2件とも本文が返った。現行ページのリンク36件とは重ならない。",
+        "items": [
+          {
+            "id": "2094397648304521661",
+            "url": "https://x.com/nae_monnn_ka/status/2094397648304521661",
+            "label": "大人が決めたルールはやりすぎ",
+            "summary": "いじめにつながるという理由は聞いたうえで、一部の小学校で大人が決めたあだ名禁止は、さすがにやりすぎだと書いた投稿です。"
+          },
+          {
+            "id": "2064354053803712950",
+            "url": "https://x.com/Nira24_/status/2064354053803712950",
+            "label": "いじめ対策としては分かる",
+            "summary": "いじめ対策としてのねらいは分かるとしつつ、あだ名まで禁止するのは極端に振れているのではないかと書いた投稿です。"
+          }
+        ]
+      }
+    },
+    "school-nickname-ban-psychological-safety": {},
+    "school-nickname-ban-naming-culture": {},
+    "school-nickname-ban-school-practice": {},
+    "school-nickname-ban-gender-consideration": {},
+    "school-nickname-ban-individual-choice": {},
+    "school-nickname-ban-other": {}
+  }
+}

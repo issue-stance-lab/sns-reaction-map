@@ -1,16 +1,14 @@
 {
-  "_note": "学校でのあだ名禁止ページ冒頭の文言設定。件数・論点別件数・立場・収集期間・更新日は公開JSON（docs/data/themes/school-nickname-ban.json）から、収集元と次回の収集予定は THEMES.yaml から、立場の色と理由データの有無は configs/planet/school-nickname-ban.yaml から読むため、ここには数字を書かない。資料の検索結果（0回）は quality/research/school-nickname-ban-primary-sources.md の資料A〜C（2026-09-07確認）、制度の記述は data/verification/school-nickname-ban-background.json（2026-09-12確認）の範囲だけを書く。FAQは scripts/school_nickname_connected_content.py の FAQS から移した（よみやす検査のため4問の文末・読点だけ直した。内容は同じ）。",
+  "_note": "学校でのあだ名禁止ページ冒頭の文言設定。件数・論点別件数・立場・収集期間・更新日は公開JSON（docs/data/themes/school-nickname-ban.json）から、収集元と次回の収集予定は THEMES.yaml から、立場の色と理由データの有無は configs/planet/school-nickname-ban.yaml から読むため、ここには数字を書かない。資料の検索結果（0回）は quality/research/school-nickname-ban-primary-sources.md の資料A〜C（2026-10-13再確認、確認日は checked_on 1か所）、制度の記述は data/verification/school-nickname-ban-background.json の範囲だけを書く。FAQは scripts/school_nickname_connected_content.py の FAQS から移した（よみやす検査のため4問の文末・読点だけ直した。内容は同じ）。",
   "theme_id": "school-nickname-ban",
   "inputs": {
     "public_json": "docs/data/themes/school-nickname-ban.json",
     "planet_config": "configs/planet/school-nickname-ban.yaml",
     "themes_registry": "THEMES.yaml"
   },
-  "checked": {
-    "memo_checked_on": "2026-09-07",
-    "system_checked_on": "2026-09-12",
-    "template": "資料の本文確認 {memo}／制度の確認 {system}"
-  },
+  "checked_on": "2026-10-13",
+  "_checked_on": "国の資料（いじめ防止対策推進法・基本方針・生徒指導提要）の本文と、事務連絡（令和3年6月8日）の所在を確かめた日。冒頭・読書面・背景の「◯月◯日時点」「確認日」はここ1か所から作る。2026-10-13 に e-Gov 条文API v2 と curl＋pdftotext で取り直し、「あだ名」「さん付け」は3本とも0回（一次資料メモ【2026-10-13追記】）。主張の照合日（公開JSON claim_verification.checked_on）より古いと生成が止まる。",
+  "checked_template": "国の資料の本文は{checked}に確かめました（投稿の主張との照合は{claims}）",
   "crumb": [
     "教育・日常論争",
     "学校でのあだ名禁止"
@@ -121,8 +119,8 @@
   },
   "count": {
     "label": "SNSの意見",
-    "caption_template": "{source}で集めた公開投稿{collected}件のうち、意見と判定した投稿の数です。期間は{start}〜{end}。",
-    "not_poll": "世論調査ではなく、SNSの公開投稿を分類した結果です。",
+    "caption_template": "期間は{start}〜{end}。{source}で拾えた公開投稿{collected}件から、意見と判定したものを数えています。",
+    "not_poll": "全国の賛否を測る世論調査とは違い、SNSの公開投稿を分類した結果です。",
     "stance_title": "立場の内訳",
     "issues_title_template": "{n}つの論点と件数",
     "small_threshold": 10,
