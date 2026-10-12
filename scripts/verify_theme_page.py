@@ -320,6 +320,8 @@ def verify_planet_breakdowns(theme: str, page: str, data: dict[str, Any]) -> tup
     fukushuto_redesign = fukushuto_redesign or (theme == "bike-blue-ticket" and 'name="bike-layout"' in page)
     # 高齢者免許返納の新デザインも同じ形（scripts/elderly_layout.py）
     fukushuto_redesign = fukushuto_redesign or (theme == "elderly-license-revocation" and 'name="elderly-layout"' in page)
+    # 学校でのあだ名禁止の新デザインも同じ形（scripts/nickname_layout.py）。旧ページの count_free（件数を出さない論点一覧）とは別に、論点の欄の中で照合する
+    fukushuto_redesign = fukushuto_redesign or (theme == "school-nickname-ban" and 'name="nickname-layout"' in page)
     redesign_prefix = "fr" if fukushuto_redesign else "kr"
     koshitsu_redesign = koshitsu_redesign or fukushuto_redesign
     if ('id="public-data"' in page and theme == "bukatsu-chiiki") or koshitsu_redesign:

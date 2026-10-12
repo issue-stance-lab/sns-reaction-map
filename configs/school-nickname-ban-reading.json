@@ -33,8 +33,8 @@
   },
   "reasons_common": {
     "title": "投稿に書かれた理由",
-    "lead": "この論点の{count}件は、編集部が本文を1件ずつ読み直し、中心の理由で1つの区分に入れました。",
-    "note": "割合の分母は、この論点の{count}件です。区分ごとの立場は、投稿ごとの立場の分類をそのまま数えています。",
+    "lead": "編集部がこの{count}件を1件ずつ読み、中心の理由で1つの区分に入れました。",
+    "note": "割合の分母はこの{count}件で、区分ごとの立場は投稿ごとの分類をそのまま数えました。",
     "unpublished": "この論点の投稿は、まだ理由ごとに読み分けていません。件数と立場の内訳だけを先に載せています。",
     "voice_label": "どんな声か",
     "stance_label": "立場の内訳"
@@ -115,7 +115,14 @@
     "rank_first": "いちばん多い論点です。",
     "rank_other": "{rank}番目に多い論点です。",
     "small_note": "件数が{threshold}件に届かない少数の論点で、数件の違いでも割合が大きく動きます。ほかの論点と割合で比べるのには向きません。",
-    "_small_note": "「少数」の印の文字と、しきい値は冒頭の設定（count.small_tag・small_threshold）から読む。"
+    "_small_note": "「少数」の印の文字と、しきい値は冒頭の設定（count.small_tag・small_threshold）から読む。",
+    "glance_caption": "{first_date} {first}% → {last_date} {last}%",
+    "trend_eyebrow": "2回の収集の比較",
+    "trend_title": "収集の回が変わると、禁止への賛否の割合も動いたのか",
+    "trend_note": "比べているのは、2回の収集のうち中立・情報を除いた意見だけです。どちらの回も件数が少なく、数件の違いで割合が大きく動きます。",
+    "trend_more": "折れ線で、立場と論点の動きを確かめる",
+    "method_fold": "このページの作り方と、調査上の注意",
+    "_compact_step7": "2026-10-13 手順7で足した見出しと文（glance_caption・trend_*・method_fold）。前の収集回との比較（元HTMLの潮目のカード）の要約と、作り方・調査上の注意（#detail-data。あだ名禁止は表を持たない）の折りたたみの名前。潮目の立場の比較は中立・情報を除く3立場（inject_tide_widget.py の stance_labels）。高齢者の同じ見出しと使い回しにならないよう書き分けた。"
   },
   "issues": {
     "school-nickname-ban-uniform-rule": {
