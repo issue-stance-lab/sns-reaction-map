@@ -1,0 +1,315 @@
+{
+ "theme_id": "constitutional-amendment",
+ "_about": "憲法改正論議ページの「背景として開く内容」（開閉行）の文言。scripts/constitutional_background.py が読む。日付・件数・確認日はここに書かず、冒頭の設定（checked_on・law）・背景台帳・一次資料メモ・公開JSON・THEMES.yaml・授業の設定から差し込む。作り方・詳細データ・次に読むテーマ・意見の推移は手順7で現行ページの保護対象として継承するため、ここには入れない。",
+ "inputs": {
+  "background_ledger": "data/verification/constitutional-amendment-background.json",
+  "classroom": "configs/classroom/constitutional-amendment.json",
+  "themes_yaml": "THEMES.yaml",
+  "_inputs": "授業の設定は既存の仕組み（現行ページの授業節）と共有するので読むだけ。THEMES.yaml からは updated_at と sample_period を読み、公開JSONと一致するかだけ確かめる。"
+ },
+ "section": {
+  "eyebrow": "背景をひらく",
+  "title": "改正の手続きと、これまでの経緯",
+  "lead": "行を押すと、その行だけが開きます。上の4行は条文と制度、下の4行は経緯・よくある質問・授業の材料・未確認のことです。"
+ },
+ "dates_line": "SNSの集計は{updated_on}まで。制度は{checked}時点の内容で、背景台帳は{ledger_checked_on}、一次資料メモは{memo_latest}に確かめたものが最新です。",
+ "phase_note": "国民投票法の改正の施行は、{as_of}時点の段階で表示しています。",
+ "groups": [
+  {
+   "id": "system",
+   "label": "条文と制度",
+   "rows": [
+    {
+     "id": "article96",
+     "kind": "article",
+     "title": "憲法第96条は、改正の手続きをどう定めているか",
+     "summary": "国会の発議と国民の承認。施行から改正は一度もない",
+     "quote": "この憲法の改正は、各議院の総議員の三分の二以上の賛成で、国会が、これを発議し、国民に提案してその承認を経なければならない。この承認には、特別の国民投票又は国会の定める選挙の際行はれる投票において、その過半数の賛成を必要とする。",
+     "quote_cite": "日本国憲法 第96条第1項",
+     "_quote": "e-Gov 条文API v2 で 2026-10-12 に取得した原文（一次資料メモ【2026-10-12追記】1）。第2項（天皇の公布）は本文で触れる。",
+     "paragraphs": [
+      {
+       "text": "改正は二つの段階を踏みます。衆議院と参議院がそれぞれ総議員の3分の2以上の賛成で改正案を決め、国民に提案します。これが発議です。そのうえで国民投票を行い、過半数の賛成があれば承認されます。",
+       "memo_section": "【2026-10-12追記】"
+      },
+      {
+       "text": "承認されると、天皇が国民の名で、憲法と一体のものとして公布します（第2項）。政党が案を示しただけでは、条文は変わりません。",
+       "memo_section": "【2026-10-12追記】"
+      }
+     ],
+     "now": "{checked}時点で、日本国憲法は1947年の施行から一度も改正されていません。e-Govの改正履歴にも、施行時の版しか登録されていません。",
+     "sources": [
+      {
+       "name": "e-Gov法令検索 日本国憲法",
+       "url": "https://laws.e-gov.go.jp/law/321CONSTITUTION"
+      }
+     ],
+     "issue_ids": [
+      "constitutional-amendment-general",
+      "constitutional-amendment-procedure",
+      "constitutional-amendment-referendum"
+     ]
+    },
+    {
+     "id": "referendum-law",
+     "kind": "rules",
+     "title": "国民投票法は、投票のやり方をどう決めているか",
+     "summary": "投票日、承認の数え方、結果への異議、2026年の改正",
+     "lead": "憲法第96条が定める国民投票の具体的なやり方は、2007年に成立した国民投票法（日本国憲法の改正手続に関する法律）が決めています。",
+     "items": [
+      {
+       "label": "投票日",
+       "text": "国会が発議した日から数えて60日以後180日以内に、国会が議決した日に行います（第2条）。",
+       "memo_section": "【2026-10-12追記】"
+      },
+      {
+       "label": "承認の数え方",
+       "text": "賛成の票が、賛成と反対を合わせた票の2分の1を超えると承認です（第126条、第98条第2項）。白票や無効票は分母に入りません。最低投票率の定めはありません。",
+       "memo_section": "【2026-10-12追記】"
+      },
+      {
+       "label": "結果への異議",
+       "text": "結果に異議がある投票人は、告示の日から30日以内に、東京高等裁判所に訴えを起こせます（第127条）。",
+       "memo_section": "資料G-3"
+      },
+      {
+       "label": "2026年の改正",
+       "text": "2026年7月に成立した改正は、投票や開票に立ち会う人の選び方を広げ、改正案の広報の放送にFMを加える内容です。公職選挙法ですでに整えた仕組みを、国民投票にも合わせました。",
+       "memo_section": "【2026-10-12追記】"
+      }
+     ],
+     "phase_law": {
+      "before": "この改正は{enforcement}に施行される予定です（公布は{promulgated}）。",
+      "after_unconfirmed": "この改正は{enforcement}に施行される予定でした。施行後の条文は、編集部でまだ確かめていません。",
+      "after_confirmed": "この改正は{enforcement}に施行されました（{confirmed}に施行後の条文を確認）。"
+     },
+     "sources": [
+      {
+       "name": "e-Gov法令検索 日本国憲法の改正手続に関する法律（国民投票法）",
+       "url": "https://laws.e-gov.go.jp/law/419AC1000000051"
+      },
+      {
+       "name": "衆議院 国民投票法改正案（第221回衆法第11号）の審議経過",
+       "url": "https://www.shugiin.go.jp/internet/itdb_gian.nsf/html/gian/keika/1DE28DE.htm"
+      },
+      {
+       "name": "衆議院 国民投票法改正案の要綱",
+       "url": "https://www.shugiin.go.jp/Internet/itdb_kenpou.nsf/html/kenpou/221shuho11youkou.pdf/$File/221shuho11youkou.pdf"
+      }
+     ],
+     "issue_ids": [
+      "constitutional-amendment-referendum",
+      "constitutional-amendment-procedure"
+     ]
+    },
+    {
+     "id": "issues-map",
+     "kind": "points",
+     "title": "9条と緊急事態条項は、何が論点になっているか",
+     "summary": "いまの条文と、示されている案。発議は項目ごとに分ける",
+     "lead": "SNSで多く語られる2つの条項について、いまの条文と、国会や政党が示した案を分けて並べました。案は議論の材料で、決まった内容ではありません。",
+     "points": [
+      {
+       "label": "9条のいま",
+       "text": "戦争の放棄と、陸海空軍その他の戦力を持たないこと、交戦権を認めないことを定めています。条文に「自衛隊」の語はありません。",
+       "memo_section": "【2026-10-12追記】"
+      },
+      {
+       "label": "9条の案",
+       "text": "自民党の2026年の解説は、9条1項・2項を残して9条の2を新しく置き、自衛隊を書き加える案を示しています。自衛隊の行動は国会の承認などの統制に従うとしています。",
+       "memo_section": "資料I（"
+      },
+      {
+       "label": "緊急時のいま",
+       "text": "衆議院の解散中に緊急の必要があれば、内閣は参議院の緊急集会を求められます。そこで採った措置は、次の国会が開いてから10日以内に衆議院の同意がないと効力を失います（第54条）。",
+       "memo_section": "【2026-10-12追記】"
+      },
+      {
+       "label": "緊急時の案",
+       "text": "2026年5月に衆議院の憲法審査会で示されたイメージ案は、選挙ができないときの議員任期の特例などを整理した議論の材料です。国会承認の要件や期間の上限には、選択肢や空欄が残っています。",
+       "memo_section": "資料I-2"
+      },
+      {
+       "label": "発議の分け方",
+       "text": "改正案は、内容が関連する事項ごとに区分して発議します（国会法第68条の3）。いくつかの項目が同時に発議されても、投票は項目ごとに行います。",
+       "memo_section": "資料B-2"
+      }
+     ],
+     "sources": [
+      {
+       "name": "e-Gov法令検索 日本国憲法",
+       "url": "https://laws.e-gov.go.jp/law/321CONSTITUTION"
+      },
+      {
+       "name": "自民党「日本国憲法の改正実現に向けて」（2026年解説版）",
+       "url": "https://storage.jimin.jp/pdf/constitution/document/kenpou_manual2026.pdf"
+      },
+      {
+       "name": "衆議院「緊急事態条項」のイメージ（案）（2026年5月14日）",
+       "url": "https://www.shugiin.go.jp/Internet/itdb_kenpou.nsf/html/kenpou/2210514housei_kenshin-siryou.pdf/$File/2210514housei_kenshin-siryou.pdf"
+      },
+      {
+       "name": "衆議院憲法審査会 関係資料集（令和8年版）",
+       "url": "https://www.shugiin.go.jp/internet/itdb_kenpou.nsf/html/kenpou/r8_shiryosyu.pdf/$File/r8_shiryosyu.pdf"
+      }
+     ],
+     "issue_ids": [
+      "constitutional-amendment-article9",
+      "constitutional-amendment-emergency",
+      "constitutional-amendment-procedure"
+     ]
+    },
+    {
+     "id": "why",
+     "kind": "ledger_text",
+     "title": "なぜ改正が議論されてきたのか",
+     "summary": "憲法の成り立ちの評価、9条と自衛隊、緊急時の国会",
+     "_about": "背景台帳の definition と cause（3段落）・cause_sources をそのまま出す（現行ページの「何が、どこまで進んでいるのか」の本文と同じ）。",
+     "issue_ids": [
+      "constitutional-amendment-general",
+      "constitutional-amendment-article9",
+      "constitutional-amendment-emergency"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "history",
+   "label": "経緯・資料・まだ分からないこと",
+   "rows": [
+    {
+     "id": "timeline",
+     "kind": "timeline",
+     "title": "現行憲法の成立から、2026年の臨時国会まで",
+     "summary": "1946年の公布から、国民投票法の改正と施行まで",
+     "overrides": {
+      "recent-law": {
+       "text": "6月5日に提出、6月19日に衆議院、7月24日に参議院で可決され、7月31日に公布されました。投票・開票立会人の選び方を広げ、FM放送での広報を可能にする内容です。改正案への賛否を決めた議決ではありません。"
+      },
+      "current-stage": {
+       "when": "2026年10月",
+       "era": "臨時国会の召集と、いまの段階",
+       "text": "10月5日に第222回国会（臨時会）が召集されました。会期は12月12日までです。前の第221回国会の憲法審査会では、緊急事態条項・9条・国民投票・合区などを討議しました。{checked}時点で、臨時国会の憲法審査会の開会予定は衆参とも出ていません。",
+       "sources": [
+        {
+         "name": "衆議院憲法審査会 第221回国会の会議日誌",
+         "url": "https://www.shugiin.go.jp/Internet/itdb_kenpou.nsf/html/kenpou/221.htm"
+        },
+        {
+         "name": "衆議院憲法審査会（開会予定）",
+         "url": "https://www.shugiin.go.jp/internet/itdb_kenpou.nsf/html/kenpou/index.htm"
+        },
+        {
+         "name": "参議院憲法審査会（開会情報）",
+         "url": "https://www.kenpoushinsa.sangiin.go.jp/"
+        }
+       ],
+       "memo_section": "【2026-10-12追記】"
+      }
+     },
+     "_overrides": "背景台帳の年表のうち、recent-law の「9月13日時点では施行前」と current-stage の「直近の通常国会」（第221回は特別会）は事実と合わなくなったので、表示だけ差し替える（台帳は現行ページも使うので変えない）。",
+     "events": [
+      {
+       "id": "law-enforcement",
+       "after": "current-stage",
+       "date_from": "law.enforcement_on",
+       "phase": "law",
+       "texts": {
+        "before": {
+         "era": "国民投票法の改正の施行（予定）",
+         "text": "7月に公布された国民投票法の改正が施行される予定です。施行日以後に投票人名簿の登録の基準日がある国民投票から、新しい規定が当てはまります。"
+        },
+        "after_unconfirmed": {
+         "era": "国民投票法の改正の施行（予定日）",
+         "text": "国民投票法の改正が施行される予定でした。施行後の条文は、編集部でまだ確かめていません。"
+        },
+        "after_confirmed": {
+         "era": "国民投票法の改正の施行",
+         "text": "国民投票法の改正が施行されました（{confirmed}に施行後の条文を確認）。"
+        }
+       },
+       "sources": [
+        {
+         "name": "e-Gov法令検索 日本国憲法の改正手続に関する法律（国民投票法）",
+         "url": "https://laws.e-gov.go.jp/law/419AC1000000051"
+        }
+       ],
+       "memo_section": "【2026-10-12追記】"
+      }
+     ]
+    },
+    {
+     "id": "faq",
+     "kind": "faq",
+     "title": "よくある質問（4問）",
+     "summary": "9条の案で変わること、緊急時の選挙、項目ごとの投票、結果への異議",
+     "_dropped": "現行ページのFAQ5問のうち、「もう決まった？」「何回改正された？」「最低投票率は？」「国民投票法の改正＝憲法改正？」は冒頭の「よく聞かれること」と、「誰が決める？」は冒頭の短答・4段階の図と同じ問いなので外した。代わりに、検索の疑問の候補（棚卸し記録4節）のうち冒頭で答えていない問いを、一次資料メモで確かめられる範囲で足した。",
+     "items": [
+      {
+       "q": "9条に自衛隊を書き加えると、何が変わりますか？",
+       "a": "自民党の2026年の解説は、9条1項・2項はそのまま残すので、自衛権の行使は必要最小限度という政府の解釈は変わらないと説明しています。条文が変わると運用がどう変わるかは、党の説明と反対する側の心配とで分かれています。",
+       "memo_section": "資料I（"
+      },
+      {
+       "q": "緊急事態条項ができると、選挙はどうなりますか？",
+       "a": "決まった案はまだありません。衆議院で示されたイメージ案は、選挙ができないときに議員の任期を延ばす特例などを整理した議論の材料で、要件や期間の上限は空欄や選択肢のままです。",
+       "memo_section": "資料I-2"
+      },
+      {
+       "q": "いくつかの改正案に、まとめて賛成か反対かを投票するのですか？",
+       "a": "いいえ。改正案は内容が関連する事項ごとに区分して発議され（国会法第68条の3）、国民投票も項目ごとに行います。ある項目に賛成し、別の項目に反対することができます。",
+       "memo_section": "資料B-2"
+      },
+      {
+       "q": "国民投票の結果に不服があるときは、どうなりますか？",
+       "a": "投票人は、結果の告示から30日以内に東京高等裁判所へ訴えを起こせます（国民投票法第127条）。SNSで語られる不正への不安とは別に、異議の期限と相手が法律で決まっています。",
+       "memo_section": "資料G-3"
+      }
+     ]
+    },
+    {
+     "id": "classroom",
+     "kind": "classroom",
+     "title": "授業や話し合いで使う",
+     "summary": "改正推進・慎重側の理由3つずつ、確かめる資料、問いの例",
+     "intro": "改正を進める側と慎重な側の理由を3つずつ並べました。理由の文は、いまのページの授業の節と同じです。",
+     "questions_label": "話し合いの問いの例",
+     "sources_label": "確かめる一次資料"
+    },
+    {
+     "id": "unverified",
+     "kind": "unverified",
+     "title": "まだ確かめていないこと",
+     "summary": "世論調査、全政党の案、施行後の条文、臨時国会の動き",
+     "from_ledger": [
+      "unknown",
+      "caveat"
+     ],
+     "items": [
+      {
+       "text": "立憲民主党・日本維新の会・公明党・日本共産党などの公式の改正案や見解は、まだ集めていません。このページは全政党の案を比べていません。",
+       "memo_ref": "確認できなかったこと 5"
+      },
+      {
+       "text": "国民投票法の改正の施行後の条文は、まだ確かめていません。",
+       "hide_when": {
+        "law": [
+         "after_confirmed"
+        ]
+       },
+       "memo_ref": "【2026-10-12追記】"
+      },
+      {
+       "text": "臨時国会で憲法審査会が開かれるかどうかは、{checked}より後の動きを確かめていません。",
+       "memo_ref": "【2026-10-12追記】"
+      },
+      {
+       "text": "「憲法はこれまで改正されていない」と明言した公的機関の文章は見つけていません。0回という説明は、e-Govの改正履歴で確かめたものです。",
+       "memo_ref": "【2026-10-12追記】"
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

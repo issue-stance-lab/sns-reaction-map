@@ -319,5 +319,109 @@ class ReadingPageTests(unittest.TestCase):
                             "is-pending" in self.panel(iid)["class"], sc["id"])
 
 
+class AllIssuesAndBackgroundTests(unittest.TestCase):
+    """手順6：残りの論点と背景の開閉行。"""
+
+    @classmethod
+    def setUpClass(cls):
+        from scripts import constitutional_reading as reading
+        from scripts import constitutional_background as background
+
+        cls.reading, cls.background = reading, background
+        cls.tmp = tempfile.TemporaryDirectory()
+        cls.html = reading.build(Path(cls.tmp.name) / "a").read_text(encoding="utf-8")
+        cls.s = soup_of(cls.html)
+        cls.d = reading.load()
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.tmp.cleanup()
+
+    def render_bg(self, d=None, as_of=None):
+        d = d or self.d
+        return self.background.render(d, as_of or PUBLIC["updated_on"], self.reading.ordered_issues(d))
+
+    def test_all_issues_complete_with_voices_and_posts(self):
+        labels = {i["id"]: i["label"] for i in PUBLIC["issues"]}
+        for iid, icfg in self.d["cfg"]["issues"].items():
+            self.assertEqual(icfg["status"], "complete", iid)
+            self.assertEqual(len(icfg["description"]), 2, iid)
+            buckets = self.d["reread"][labels[iid]]["buckets"]
+            self.assertEqual(set(icfg["reasons"]), set(buckets), iid)
+            posts = icfg["posts"]["items"]
+            self.assertIn(len(posts), (1, 2), iid)
+            if len(posts) == 1:
+                self.assertTrue(icfg["posts"]["one_reason"], iid)
+                self.assertLess(int(next(i for i in PUBLIC["issues"] if i["id"] == iid)["count"]), 50, iid)
+        self.assertEqual(self.s.select(".fr-panel.is-pending"), [])
+
+    def test_see_also_targets_exist(self):
+        for a in self.s.select(".fr-see a, .fb-issues a, .fb-to-issue"):
+            self.assertIsNotNone(self.s.find(id=a["href"][1:]), a["href"])
+
+    def test_rows_are_closed_details(self):
+        rows = self.s.select("#constitutional-amendment-background details.fb-row")
+        ids = [r["id"] for r in rows]
+        self.assertEqual(ids, ["bg-article96", "bg-referendum-law", "bg-issues-map", "bg-why",
+                               "bg-timeline", "bg-faq", "bg-classroom", "bg-unverified"])
+        self.assertTrue(all(not r.has_attr("open") for r in rows))
+
+    def test_law_phase_in_background(self):
+        before = soup_of(self.render_bg(as_of="2026-10-30"))
+        self.assertIn("施行される予定です", before.select_one("#bg-referendum-law [data-phase]").get_text())
+        self.assertIn("（予定）", before.select_one('[data-event="law-enforcement"]').get_text())
+        after = soup_of(self.render_bg(as_of="2026-11-02"))
+        self.assertIn("施行される予定でした", after.select_one("#bg-referendum-law [data-phase]").get_text())
+        self.assertIn("施行後の条文は、まだ確かめていません", after.select_one(".fb-unverified").get_text())
+        d = copy.deepcopy(self.d)
+        d["ocfg"]["law"]["enforcement_confirmed_on"] = "2026-11-02"
+        done = soup_of(self.render_bg(d, as_of="2026-11-05"))
+        self.assertIn("施行されました", done.select_one("#bg-referendum-law [data-phase]").get_text())
+        self.assertNotIn("施行後の条文は、まだ確かめていません", done.select_one(".fb-unverified").get_text())
+        d = copy.deepcopy(self.d)
+        del d["bg"]["cfg"]["groups"][0]["rows"][1]["phase_law"]["after_confirmed"]
+        with self.assertRaises(SystemExit):
+            self.render_bg(d)
+
+    def test_timeline_overrides_ledger_wording(self):
+        tl = self.s.select_one("#bg-timeline")
+        text = tl.get_text()
+        self.assertNotIn("通常国会", text)
+        self.assertNotIn("9月13日時点では施行前", text)
+        self.assertIn("第222回国会（臨時会）", text)
+        events = [li["data-event"] for li in tl.select("li[data-event]")]
+        self.assertEqual(events[-2:], ["current-stage", "law-enforcement"])
+
+    def test_faq_four_questions_without_opening_duplicates(self):
+        qs = [dt.get_text() for dt in self.s.select("#bg-faq dt")]
+        self.assertEqual(len(qs), 4)
+        opening_qs = [i["q"] for i in json.loads(OPENING_CONFIG.read_text(encoding="utf-8"))["faq"]["items"]]
+        self.assertFalse(set(qs) & set(opening_qs))
+
+    def test_classroom_is_read_from_shared_config(self):
+        cr = json.loads((ROOT / "configs/classroom/constitutional-amendment.json").read_text(encoding="utf-8"))
+        text = self.s.select_one("#bg-classroom").get_text()
+        for r in cr["reasons_pro"] + cr["reasons_con"]:
+            self.assertIn(r["text"], text)
+
+    def test_why_row_is_ledger_text(self):
+        ledger = self.d["background"]
+        text = self.s.select_one("#bg-why").get_text()
+        for para in ledger["cause"]:
+            self.assertIn(para, text)
+
+    def test_themes_yaml_mismatch_stops(self):
+        d = copy.deepcopy(self.d)
+        d["bg"]["theme"]["updated_at"] = "2026-01-01"
+        with self.assertRaises(SystemExit):
+            self.render_bg(d)
+
+    def test_unknown_memo_section_stops(self):
+        d = copy.deepcopy(self.d)
+        d["bg"]["cfg"]["groups"][1]["rows"][1]["items"][0]["memo_section"] = "存在しない見出し"
+        with self.assertRaises(SystemExit):
+            self.render_bg(d)
+
+
 if __name__ == "__main__":
     unittest.main()
