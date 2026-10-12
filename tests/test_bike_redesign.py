@@ -340,5 +340,115 @@ class ReadingPageTests(unittest.TestCase):
                             "is-pending" in self.panel(iid)["class"], sc["id"])
 
 
+class AllIssuesAndBackgroundTests(unittest.TestCase):
+    """手順6：残りの論点と背景の開閉行。"""
+
+    @classmethod
+    def setUpClass(cls):
+        from scripts import bike_background as background
+        from scripts import bike_reading as reading
+
+        cls.reading, cls.background = reading, background
+        cls.tmp = tempfile.TemporaryDirectory()
+        cls.html = reading.build(Path(cls.tmp.name) / "a").read_text(encoding="utf-8")
+        cls.s = soup_of(cls.html)
+        cls.d = reading.load()
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.tmp.cleanup()
+
+    def render_bg(self, d=None):
+        d = d or self.d
+        return self.background.render(d, PUBLIC["updated_on"], self.reading.ordered_issues(d))
+
+    def test_all_issues_complete_with_voices_and_posts(self):
+        labels = {i["id"]: i["label"] for i in PUBLIC["issues"]}
+        for iid, icfg in self.d["cfg"]["issues"].items():
+            self.assertEqual(icfg["status"], "complete", iid)
+            self.assertEqual(len(icfg["description"]), 2, iid)
+            buckets = self.d["reread"][labels[iid]]["buckets"]
+            self.assertEqual(set(icfg["reasons"]), set(buckets), iid)
+            self.assertEqual(len(icfg["posts"]["items"]), 2, iid)
+            self.assertTrue(icfg["posts"]["selection_basis"], iid)
+        self.assertEqual(self.s.select(".fr-panel.is-pending"), [])
+
+    def test_see_also_targets_exist(self):
+        for a in self.s.select(".fr-see a, .fb-issues a, .fb-to-issue"):
+            self.assertIsNotNone(self.s.find(id=a["href"][1:]), a["href"])
+
+    def test_rows_are_closed_details(self):
+        rows = self.s.select("#bike-blue-ticket-background details.fb-row")
+        self.assertEqual([r["id"] for r in rows], ["bg-system", "bg-why", "bg-timeline", "bg-faq", "bg-classroom", "bg-unverified"])
+        self.assertTrue(all(not r.has_attr("open") for r in rows))
+
+    def test_checked_on_drives_time_wording(self):
+        """施行済み。「◯月◯日時点」は冒頭の設定 checked_on 1か所から作る。"""
+        when = opening.jp_date(self.d["ocfg"]["checked_on"])
+        self.assertIn(f"{when}時点で、警察庁が公表した全国の運用状況は", self.s.select_one("#bg-timeline").get_text())
+        self.assertIn(f"{when}時点で、その後の全国の件数は公表されていません", self.s.select_one("#bg-unverified").get_text())
+        d = copy.deepcopy(self.d)
+        d["ocfg"]["checked_on"] = "2026-12-01"
+        self.assertIn("2026年12月1日時点で", self.render_bg(d))
+        d["ocfg"]["checked_on"] = "2026-09-01"  # 背景台帳の確認日より古い
+        with self.assertRaises(SystemExit):
+            self.render_bg(d)
+
+    def test_system_row_covers_required_topics(self):
+        labels = [dt.get_text() for dt in self.s.select("#bg-system dt")]
+        self.assertEqual(labels, ["対象年齢", "反則金の額", "納め方", "前科と免許の点数", "指導警告票との関係"])
+        text = self.s.select_one("#bg-system").get_text()
+        for word in ("16歳", "原則7日以内", "10日以内", "前科", "点数", "指導警告票", "赤切符", "3,000円"):
+            self.assertIn(word, text)
+
+    def test_faq_does_not_repeat_opening(self):
+        qs = [dt.get_text() for dt in self.s.select("#bg-faq dt")]
+        self.assertEqual(len(qs), 4)
+        oc = json.loads(OPENING_CONFIG.read_text(encoding="utf-8"))
+        opening_qs = [i["q"] for i in oc["faq"]["items"]] + [oc[k]["question"] for k in ("age", "fines", "after", "warning")]
+        self.assertFalse(set(qs) & set(opening_qs))
+
+    def test_classroom_is_read_from_shared_config(self):
+        cr = json.loads((ROOT / "configs/classroom/bike-blue-ticket.json").read_text(encoding="utf-8"))
+        text = self.s.select_one("#bg-classroom").get_text()
+        for r in cr["reasons_pro"] + cr["reasons_con"]:
+            self.assertIn(r["text"], text)
+
+    def test_why_row_follows_ledger_paragraph_count(self):
+        ledger = self.d["background"]
+        text = self.s.select_one("#bg-why").get_text()
+        self.assertIn(ledger["definition"]["one_line"], text)
+        d = copy.deepcopy(self.d)
+        d["bg"]["ledger"]["cause"].append("段落を足した")
+        d["background"] = d["bg"]["ledger"]
+        with self.assertRaises(SystemExit):
+            self.render_bg(d)
+
+    def test_sidewalk_check_matches_npa_faq(self):
+        """台帳の「子乗せ自転車は歩道を通行でき」は警察庁FAQと合わないので、読書面では言い換える。"""
+        for iid in ("bike-blue-ticket-road-safety", "bike-blue-ticket-infrastructure-first"):
+            body = self.s.find(id="issue-" + iid).select_one('.fr-check[data-check="basho"]').get_text()
+            self.assertIn("70歳以上", body)
+            self.assertNotIn("子乗せ自転車は歩道を通行でき", body)
+
+    def test_unknown_check_rewrite_stops(self):
+        d = copy.deepcopy(self.d)
+        d["cfg"]["check_rewrites"]["nai"] = {"found": "x"}
+        with self.assertRaises(SystemExit):
+            self.reading.check_all(d)
+
+    def test_themes_yaml_mismatch_stops(self):
+        d = copy.deepcopy(self.d)
+        d["bg"]["theme"]["updated_at"] = "2026-01-01"
+        with self.assertRaises(SystemExit):
+            self.render_bg(d)
+
+    def test_unknown_memo_section_stops(self):
+        d = copy.deepcopy(self.d)
+        d["bg"]["cfg"]["groups"][0]["rows"][0]["points"][0]["memo_section"] = "存在しない見出し"
+        with self.assertRaises(SystemExit):
+            self.render_bg(d)
+
+
 if __name__ == "__main__":
     unittest.main()

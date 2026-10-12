@@ -289,6 +289,8 @@ def check_all(d: dict) -> None:
             raise SystemExit(f"共通する心配 {v['id']} の論点が公開JSONにありません")
         if {s["stance_label"] for s in v["sides"]} - stance_labels:
             raise SystemExit(f"共通する心配 {v['id']} の立場名が planet 設定にありません")
+    if set(cfg.get("check_rewrites", {})) - {c["id"] for c in d["background"]["checklist"]["items"]}:
+        raise SystemExit("check_rewrites に背景台帳の checklist に無い項目があります")
     if set(cfg["issues"]) != ids:
         raise SystemExit(f"設定の論点と公開JSONの論点が一致しません: {set(cfg['issues']) ^ ids}")
     memo = d["memo"]
@@ -311,7 +313,7 @@ def check_all(d: dict) -> None:
         if set(icfg.get("claim_notes", {})) - claims:
             raise SystemExit(f"{iid}: この論点に無い照合への注記があります")
         checks = {c["id"] for c in checklist if iid in (c.get("issue_ids") or [])}
-        if (set(icfg.get("check_notes", {})) | set(icfg.get("check_overrides", {}))) - checks:
+        if (set(icfg.get("check_notes", {})) | set(icfg.get("check_overrides", {})) | set(icfg.get("checks_exclude", []))) - checks:
             raise SystemExit(f"{iid}: この論点に無い制度確認への注記・言い換えがあります")
         for mc in icfg.get("memo_checks", []):
             memo.checked_on(mc["memo_section"])
@@ -611,13 +613,14 @@ def render_checks(d: dict, issue: dict, icfg: dict) -> str:
     """制度の確認（背景台帳の checklist のうち、この論点に紐づく項目）。問いだけを見せる折りたたみ。"""
     s = d["cfg"]["sources_common"]
     bg = d["background"]
-    checks = [c for c in bg["checklist"]["items"] if issue["id"] in (c.get("issue_ids") or [])]
+    skip = set(icfg.get("checks_exclude", []))  # 同じ確認を別の論点・背景で読めるときだけ外す（理由は設定の _checks_exclude）
+    checks = [c for c in bg["checklist"]["items"] if issue["id"] in (c.get("issue_ids") or []) and c["id"] not in skip]
     if not checks:
         return ""
     out = [f'<div class="fr-checks"><p class="fr-eyebrow">{esc(s["check_eyebrow"])}</p>']
     for c in checks:
         note = icfg.get("check_notes", {}).get(c["id"])
-        over = icfg.get("check_overrides", {}).get(c["id"], {})
+        over = {**d["cfg"].get("check_rewrites", {}).get(c["id"], {}), **icfg.get("check_overrides", {}).get(c["id"], {})}
         ask = over.get("ask", c["ask"])
         found = over.get("found", c["found"])  # 台帳の文を読書面だけ言い換える（理由は設定の _check_overrides）
         body = (f'<p class="fr-eyebrow">{esc(c["label"])}'
