@@ -86,6 +86,8 @@ COUNT_PROVENANCE_MODULES = {
     "elderly-license-revocation": "scripts.elderly_license_count_provenance",
     "fukushuto": "scripts.fukushuto_count_provenance",
     "henoko-student-accident": "scripts.henoko_count_provenance",
+    # 学校でのあだ名禁止は旧ページに専用の照合が無い。新デザイン（scripts/nickname_layout.py）のときだけ論点の欄ごとに数え直す
+    "school-nickname-ban": "scripts.nickname_redesign_provenance",
 }
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))

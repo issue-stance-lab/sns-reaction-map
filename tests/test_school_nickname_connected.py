@@ -19,7 +19,9 @@ from scripts import school_nickname_connected as connected  # noqa: E402
 class SchoolNicknameConnectedTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.original = (ROOT / "docs/school-nickname-ban-reaction-map.html").read_text(encoding="utf-8")
+        # 新デザイン公開後は、旧形式の元HTML（data/page-sources）を検査する（scripts/nickname_layout.py）
+        from scripts.nickname_layout import source_for_refresh
+        cls.original = source_for_refresh(ROOT).read_text(encoding="utf-8")
         cls.page = connected.apply(cls.original, activate=True)
 
     def test_activation_is_explicit_and_other_themes_are_unchanged(self):

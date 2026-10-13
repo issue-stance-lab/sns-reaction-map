@@ -9,7 +9,12 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 CANON = ROOT / "social-samples/school-nickname-ban_hermes_arena_classified.json"
-PAGE = ROOT / "docs/school-nickname-ban-reaction-map.html"
+DOCS_PAGE = ROOT / "docs/school-nickname-ban-reaction-map.html"
+# 新デザイン公開後は、旧形式の元HTML（data/page-sources）を検査する（scripts/nickname_layout.py）
+sys.path.insert(0, str(ROOT))
+from scripts.nickname_layout import source_for_refresh  # noqa: E402
+
+PAGE = source_for_refresh(ROOT)
 ARENA_DATA = ROOT / "docs/school-nickname-ban-arena-data.js"
 BUILDER = ROOT / "scripts/build_nickname_arena.py"
 
@@ -265,7 +270,7 @@ class NicknameAdapterTests(unittest.TestCase):
         from scripts.refresh_adapters.nickname import ARENA_DATA as TARGET, PAGE as PAGE_TARGET
 
         self.assertEqual(TARGET, ARENA_DATA.relative_to(ROOT))
-        self.assertEqual(PAGE_TARGET, PAGE.relative_to(ROOT))
+        self.assertEqual(PAGE_TARGET, DOCS_PAGE.relative_to(ROOT))
 
     def test_tide_widget_is_not_rebuilt_from_fixed_files(self):
         """潮目は更新回から作る。固定ファイル名が戻ると他テーマごと巻き戻る（課題38）。"""
