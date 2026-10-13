@@ -20,9 +20,9 @@
   "_public_json_key": "公開JSONにこのキーが現れたら生成器は止まる（推移の表示は手順7で元HTMLの推移の欄と潮目のカードから作るので、公開JSONの推移は使っていない。黙って無視しない）。",
   "title": "この論点の件数と、意見全体での割合",
   "row_label": "{period_start}から{period_end}まで（累計）",
-  "note": "表は最新の累計です。回ごとの動きは、ページの推移の欄にあります。",
-  "widget_id": "consumption-tax-cut-tide-widget",
-  "_widget_id": "潮目のカードの id（scripts/inject_tide_widget.py の消費税減税の widget_id と同じ）。「回ごとの比較へ」の飛び先。手順7で、現行ページの推移の欄（#consumption-tax-cut-trend-panel-issue）と合わせて写す。"
+  "note": "表は最新の累計で、回ごとの動きはページの推移のグラフにあります。",
+  "widget_id": "consumption-tax-cut-trend-panel-issue",
+  "_widget_id": "「回ごとの比較へ」の飛び先。公開ページでは元HTMLの「意見の推移」（TREND_CARD）を折りたたみに写し、その論点のタブの id を指す。外部の埋め込みコードも同じ id（#consumption-tax-cut-trend-panel-issue）を指すので変えない。押すと折りたたみが開き、論点の変化のタブに切り替わる（scripts/build_consumption_tax_redesign.py）。"
  },
  "stance_common": {
   "title": "食料品の減税への立場",
@@ -104,12 +104,21 @@
   "stance_fold": "立場ごとの件数と割合",
   "posts_fold": "投稿の例（{n}件）",
   "evidence_title": "資料に照らす：SNSの意見と政府の方針",
-  "glance_eyebrow": "前の回との違い",
-  "glance_note": "収集の回ごとの比較は、ページの推移の欄で見られます。比べるのは集まった投稿の顔ぶれで、社会全体の意見の動きとは別物です。",
-  "glance_link": "回ごとの比較へ ↓",
+  "glance_eyebrow": "回ごとの動き",
+  "glance_note": "「その他」を除いた意見のうち、この論点が占める割合を収集の回ごとに並べた線で、数字は最初の回と最新の回です。集まった投稿の顔ぶれの変化で、社会全体の意見の動きとは別物です。",
+  "glance_link": "推移のグラフへ ↓",
   "count_caption": "SNSの意見{total}件のうち{pct}%。",
   "rank_first": "論点の中で、いちばん多い件数です。",
-  "rank_other": "論点の中で{rank}番目に多い件数です。"
+  "rank_other": "論点の中で{rank}番目に多い件数です。",
+  "glance_caption": "{first_short} {first}% → {last_short} {last}%",
+  "glance_missing": "「その他」は推移のグラフに入れていないので、回ごとの割合はありません。",
+  "trend_eyebrow": "収集を重ねた推移",
+  "trend_title": "{rounds}回の収集で見る、減税への立場の割合",
+  "trend_note": "1回あたりの意見は{lo}〜{hi}件で、割合には±{margin}ポイント前後のぶれが出ます。収集日の前の{days}日間より古い投稿の混入は、回ごとに最大{old}%です。",
+  "trend_note_break": "{break_date}の回から分類に使うAIが替わったので、それより前の回との差にはAIの違いも混じります。",
+  "trend_more": "{rounds}回分の折れ線と表を開く",
+  "method_fold": "集め方と分類、全部の集計表",
+  "_trend": "手順7で足した、推移の要約（ひと目で見る推移）と論点ごとの小さな折れ線の文言。数字は元HTMLの「意見の推移」（TREND_CARD）の panels と注意書きから読む。trend_note の件数の幅・ぶれ・古い投稿の割合、trend_note_break の切替日は、推移の注意書き（scripts/build_trend_section.py の note_lines・model_break_notes）から写す。"
  },
  "issues": {
   "consumption-tax-cut-political-trust": {

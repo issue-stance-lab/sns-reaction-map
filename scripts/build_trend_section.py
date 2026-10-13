@@ -1614,6 +1614,10 @@ def main() -> int:
             print(item["date"], item["n"], *(f"{item['shares'][label]:5.1f}" for label in labels))
     if args.apply:
         html = page.read_text(encoding="utf-8")
+        if re.search(r'<meta name="[a-z-]+-layout"', html):
+            # 新デザインのページ（*_layout.py）は推移の節を元HTMLから写す。公開ページへ直接貼らない
+            # （更新経路では adapter が元HTMLに貼り、finish が新デザインに写す）
+            raise SystemExit(f"{page} は新デザインのページです。--page に data/page-sources の元HTMLを渡してください。")
         if args.drop_tide:
             html = drop_tide_card(html)
         page.write_text(render_for(args.topic, html, source), encoding="utf-8")

@@ -1,6 +1,7 @@
 """消費税減税の候補ページを生成し、投票互換性と冪等性を検査する。
 
-ページ本体は scripts/build_consumption_tax_page.py が累積候補から作る。
+ページ本体は scripts/build_consumption_tax_page.py が累積候補から作る。新デザイン公開後（scripts/consumption_tax_layout.py）は、
+入力は元HTML（data/page-sources/consumption-tax-cut.html）で、新デザインは公開候補生成の最後に finish が組む。
 ここは refresh_topic.py --promote から呼ばれ、候補を2回作って差分がないこと、
 投票の選択肢（論点7×立場4＝28通り）と保護タグが変わらないことだけを見る。
 
@@ -237,7 +238,12 @@ def _build_images(stage: Path, candidate: Path) -> dict[Path, Path]:
 def build(root: Path, stage: Path, current_date: str) -> dict[Path, Path]:
     """候補を2回生成し、2回目に差分がない場合だけ公開対象を返す。"""
     candidate = stage / "cumulative-candidate.json"
-    current_page = root / PAGE
+    # 新デザイン公開後も、旧形式の生成器（ページ生成器・意見の推移・連動表示・検索入口・計算部品）は元HTML（data/page-sources）を
+    # 入力にする（consumption_tax_layout.py）。公開候補生成では、隔離コピーの finish がこの元HTMLから新デザインを組み直す
+    if str(root) not in sys.path:
+        sys.path.insert(0, str(root))
+    from scripts.consumption_tax_layout import source_for_refresh
+    current_page = source_for_refresh(root)
     first_page = stage / "page-candidate.html"
     second_page = stage / "idempotence" / "page-candidate.html"
     second_page.parent.mkdir(parents=True, exist_ok=True)

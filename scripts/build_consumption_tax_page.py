@@ -34,6 +34,8 @@ sys.path.insert(0, str(ROOT / "scripts"))
 
 from x_embed import embed_html  # noqa: E402
 PAGE = ROOT / "docs" / "consumption-tax-cut-reaction-map.html"
+# 新デザイン（scripts/consumption_tax_layout.py）の目印。公開後は公開ページを旧形式で上書きしない
+LAYOUT_MARKER = 'name="consumption-tax-layout"'
 # 既定のテンプレートは自分自身。副首都ページから作った初版だけ --html-template で指定した。
 TEMPLATE = PAGE
 OUTPUT = PAGE
@@ -2034,8 +2036,10 @@ def apply_public_counts(html: str, public_theme: Path = PUBLIC_THEME) -> str:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--input", type=Path, default=None, help="分類済みJSON（既定: 累積正典）")
-    parser.add_argument("--html-template", type=Path, default=TEMPLATE, help="作り直しの土台にするHTML")
-    parser.add_argument("--output-html", type=Path, default=OUTPUT)
+    parser.add_argument("--html-template", type=Path, default=None, help="作り直しの土台にするHTML（既定: 公開ページ。新デザイン公開後は元HTML）")
+    parser.add_argument("--output-html", type=Path, default=None, help="書き出し先（既定: 公開ページ）")
+    parser.add_argument("--check", action="store_true",
+                        help="新デザイン公開後の引数なしの実行で、書き換えずに差分の有無だけ返す（差分があれば exit 1）")
     parser.add_argument("--connected-layout", action="store_true",
                         help="消費税の連動表示を有効にした候補を作る（以後の部分更新も維持）")
     parser.add_argument(
@@ -2080,6 +2084,52 @@ def main() -> int:
         help="sync_issue_counts.py を呼ばない（公開ページ以外へ書き出すときに使う）",
     )
     args = parser.parse_args()
+    partial = (args.claim_audit_only or args.background_only or args.search_entry_only or args.issue_cards_only
+               or args.conditions_only or args.public_counts_only)
+    published = PAGE.is_file() and LAYOUT_MARKER in PAGE.read_text(encoding="utf-8")
+    if published and not partial and not any((args.input, args.html_template, args.output_html, args.verification_dest,
+                                              args.connected_layout, args.skip_issue_counts)):
+        # 新デザイン公開後の単独実行：元HTML（data/page-sources）に旧形式の生成（ページ生成・意見の推移・調査条件・
+        # 公開JSONの集計と山なみ・連動表示）を掛け、新デザインを掛け直す（consumption_tax_layout.py）
+        if str(ROOT) not in sys.path:
+            sys.path.insert(0, str(ROOT))
+        from scripts.consumption_tax_layout import rebuild
+        try:
+            changed = rebuild(ROOT, check=args.check)
+        except (ValueError, OSError, KeyError, TypeError, json.JSONDecodeError) as exc:
+            print(f"ERROR: {exc}", file=sys.stderr)
+            return 1
+        if args.check and changed:
+            print("NG: ページが正典から生成した内容と一致しません", file=sys.stderr)
+            return 1
+        print("UPDATE: HTMLを更新しました" if changed else "OK: 差分なし")
+        return 0
+    if args.check:
+        parser.error("--check は新デザイン公開後に、ほかの引数なしで使います")
+    if partial:
+        args.output_html = args.output_html or OUTPUT
+        if LAYOUT_MARKER in args.output_html.read_text(encoding="utf-8"):
+            # 新デザインのページに旧形式の部分更新を貼らない（公開後は引数なしの実行が元HTMLから作り直す）
+            print("ERROR: 新デザインのページには旧形式の部分更新を貼れません。引数なしで実行してください", file=sys.stderr)
+            return 1
+    else:
+        if args.html_template is None:
+            args.html_template = TEMPLATE
+            if published:
+                # 新デザイン公開後に --input などだけを渡したとき：土台は旧形式の元HTML（data/page-sources）
+                if str(ROOT) not in sys.path:
+                    sys.path.insert(0, str(ROOT))
+                from scripts.consumption_tax_layout import source_for_refresh
+                args.html_template = source_for_refresh(ROOT)
+        if args.output_html is None:
+            if published:
+                print("ERROR: 新デザインの公開ページへ旧形式で書き出すことはできません。--output-html を指定するか、引数なしで実行してください",
+                      file=sys.stderr)
+                return 1
+            args.output_html = OUTPUT
+        if LAYOUT_MARKER in args.html_template.read_text(encoding="utf-8"):
+            print("ERROR: 新デザインのページは土台にできません。data/page-sources の元HTMLを渡してください", file=sys.stderr)
+            return 1
     from consumption_tax_connected import apply as connect_page, enabled as is_connected
 
     def finish(html: str, *, refresh_map: bool = False) -> str:

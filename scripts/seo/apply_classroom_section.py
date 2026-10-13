@@ -227,9 +227,9 @@ def main() -> int:
         if not path.is_file():
             raise FileNotFoundError(path)
         source = path.read_text(encoding="utf-8")
-        layout = next((name for name in ("koshitsu-layout", "fukushuto-layout", "ai-copyright-layout", "constitutional-layout", "bike-layout", "elderly-layout", "nickname-layout", "henoko-layout") if f'name="{name}"' in source), None)
+        layout = next((name for name in ("koshitsu-layout", "fukushuto-layout", "ai-copyright-layout", "constitutional-layout", "bike-layout", "elderly-layout", "nickname-layout", "henoko-layout", "consumption-tax-layout") if f'name="{name}"' in source), None)
         if layout:
-            # 新デザインは授業の行を自前で生成する（koshitsu_layout.py・fukushuto_layout.py・ai_copyright_layout.py・constitutional_layout.py・bike_layout.py・elderly_layout.py・nickname_layout.py・henoko_layout.py）。旧形式の節で上書きしない
+            # 新デザインは授業の行を自前で生成する（koshitsu_layout.py・fukushuto_layout.py・ai_copyright_layout.py・constitutional_layout.py・bike_layout.py・elderly_layout.py・nickname_layout.py・henoko_layout.py・consumption_tax_layout.py）。旧形式の節で上書きしない
             print(f"skipped {path.relative_to(PROJECT_ROOT)} ({layout})")
             continue
         updated = apply_theme(source, theme_id, config, theme_data)
