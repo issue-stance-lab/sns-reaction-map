@@ -2363,3 +2363,26 @@ items:
     decision_note: >-
       検査をすべて通したうえでオーナーが「公開して」と承認（2026-10-13）。SEOメタの学校名と投票の説明文の語はオーナー判断を保留し、そのまま公開。release スキルで main へ統合・push した。
     decision_note: null
+  - id: approval-20261013-consumption-tax-cut
+    department: engineering-data
+    action: website_publication
+    summary: "消費税減税ページを新デザイン（冒頭の「いつから・何%・いつまで？」「1%と給付付き税額控除とは？」「何が1%になる？」の短答・レシートの計算・段階図・SNSの意見の件数・対話式の山なみ・7論点の読書面・10回分の推移の要約・背景の開閉行）に切り替えて公開する"
+    reason: "手順書23の手順7（更新と公開の検査）を辺野古と同じ型（対話式の山なみを元HTMLから写す＋部活動型の圧縮）で終え、作業ブランチ task/renew-consumption-tax-cut で公開切替まで準備した"
+    risks:
+      - "URL・title・meta description（課題96の10/27判定のため文字どおり）・SEOメタ・Article JSON-LD・GA4・AdSense・投票（topic consumption-tax-cut-issue-stance-v1、論点7×立場4＝28選択肢。VOTE_ISSUES・STANCES・CHOICES と前置きの文も同じ。保存キーは本番ホストだけ既存キー）・調査条件・PLANET_DATA・意見の推移（外部の埋め込みが指す #consumption-tax-cut-trend-panel-stance・-issue を含む）・作り方・詳細データ・次に読むテーマとクリック計測・フッターは元ページから文字どおり継承する。H1 は新デザインの見出しに変わるため configs/theme-seo.json に display_headline を足した"
+      - "description は「政府大綱が閣議決定済み」「法律成立前」のまま（法律案は10/9に国会提出済み）。課題96の判定（10/27）まで変えない。本文は法律案の段階に合わせ、成立日を設定に入れると冒頭・読書面・背景の文が切り替わる"
+      - "FAQ の構造化データを画面に出ている6問（冒頭の短答3問と背景の3問）で新しく作る（現行ページには FAQPage が無かった）。旧ページの検索入口（税率を直書きした計算部品）・連動表示・立場の帯・論点カード・主張の照合の一覧・編集部の横断整理・論点の図解画像は新デザインに移していない（税率は冒頭の設定だけが正。投稿例は正典から選び直した14件で、10/13 に14件とも残っていることを確認）"
+      - "件数は変わらない（収集6,101件・意見5,370件、公開JSONの更新日2026-10-11）。手順7の前に、重なる心配2件・資料にしかない話4件の長い文を区切り（数字・出典・判定は変えていない）、授業向けの資料を法律案の概要に差し替え、推移の注意書きに分類AIの切替（10/3）を足した"
+      - "理由区分が未公開の論点が3つ（選挙の約束・財源・その他。意見の48.1%）。最初に開く論点は件数1位の「選挙の約束は守られたのか」で、理由の一覧は「未公開」と出る"
+      - "有効な間は全テーマの公開候補生成の最後に消費税減税の新デザインが組み直され、照合（再読データの明細・立場の対応表・論点の件数）が合わないとその回の生成全体が止まる。10/20 の定期更新で4論点（対象範囲・効果・給付・事業者）に新しい意見が入ったら、その回のうちに追い読みする必要がある（立場の対応表は更新経路が作り直す。新規0件相当の 10/20 は隔離コピーで模擬して通ることを確認）"
+      - "375pxでページ全体は 12,216px（目安13,000px以下）、論点の欄は 1,321〜2,489px（7論点とも目安2,500px以下）"
+      - "本番ホストでの GA4・AdSense の発火、投票の POST、X埋め込みの実表示、実機での表示は未確認（公開後に確認する）"
+    recommendation: approve
+    evidence:
+      - "quality/designs/2026-10-13-consumption-tax-cut-production-candidate.md"
+      - "quality/prototypes/consumption-tax-cut-release/evidence/"
+      - "configs/consumption-tax-layout.json"
+    status: pending
+    requested_at: "2026-10-13"
+    decided_at: null
+    decision_note: null

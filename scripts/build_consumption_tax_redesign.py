@@ -420,14 +420,14 @@ def _trend_band(trend: str, panels: dict, compact: dict) -> str:
     """意見の推移：ひと目で見る要約（見出し・立場ごとの小さな折れ線・推移の1文・小標本などの注記1行）と、
     元の推移カードを丸ごと入れた折りたたみ。推移カード（TREND_CARD）は1文字も変えずに折りたたみの中へ入れる。"""
     card = BeautifulSoup(trend, "html.parser")
-    # 要約の1文は、推移のカードの最初の説明文（最新の回の立場の内訳。生成AIと著作権と同じ）。
-    # 全期間の動きの説明（「◯月◯日から…◯回の収集を、日付順に並べました」）はカードの中で読める
-    lead = card.select_one(f"#{TREND_PANELS[0]} .trend-lead")
+    # 要約の1文は、推移のカードの「前回から今回にかけて」の1行（最も動いた立場と、ぶれの範囲かどうか）。
+    # 最新の回の内訳・全期間の動きの説明はカードの中で読める（部活動・生成AIの要約と書き出しが同じにならないよう、こちらを使う）
+    lead = card.select_one(f"#{TREND_PANELS[0]}-prev")
     stance = panels["stance"]
     rounds = stance["rounds"]
     span = f"{_jp_md(rounds[0]['d'])}から{_jp_md(rounds[-1]['d'])}までの{len(rounds)}回"
-    if lead is None or not lead.get_text().startswith(_jp_md(rounds[-1]["d"], year=True)):
-        raise ValueError("「意見の推移」に、最新の回の内訳を述べた説明文が見つかりません。")
+    if lead is None or f"今回（{_jp_md(rounds[-1]['d'])}）" not in lead.get_text():
+        raise ValueError("「意見の推移」に、前回から今回への動きを述べた1行が見つかりません。")
     series = list(enumerate(stance["colors"]))
     legend = "".join(f'<li><i style="background:{escape(c)}"></i>{escape(lab)}</li>' for lab, c in zip(stance["labels"], stance["colors"]))
     aria = f"{span}の収集の、立場ごとの割合の推移"

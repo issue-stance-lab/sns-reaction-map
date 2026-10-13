@@ -87,6 +87,8 @@ def legacy_refresh(root, html: str) -> str:
     ページ生成（build_consumption_tax_page.build：山なみの件数・論点カード・主張の照合・背景・立場の内訳・検索入口・連動表示）→
     意見の推移（refresh_adapters/consumption_tax._apply_trend。正典から数え直す）→ 調査条件（research_conditions）→
     公開JSONの集計（apply_public_counts と山なみの作り直し）。どれも正典（非公開）と公開JSONだけを読む。
+    最後にテーマ共通の見た目（apply_theme_design.transform。件数の札 THEME_COUNT など）を掛け直す（更新経路では公開候補生成の
+    apply_theme_design.finish が元HTMLに掛ける。掛けないと単独実行のたびに元HTMLから件数の札が落ちる）。
     SEO・信頼情報（apply_theme_trust.py）と授業節（apply_classroom_section.py）は更新経路の共通処理なので、ここでは掛けない。
     """
     root = Path(root)
@@ -112,7 +114,8 @@ def legacy_refresh(root, html: str) -> str:
     _, html, failures = refresh(TOPIC, source=html)
     if failures:
         raise ValueError("連動表示の再生成検査: " + "; ".join(failures))
-    return connect_page(html)
+    from scripts.apply_theme_design import transform
+    return transform(connect_page(html), TOPIC)
 
 
 def rebuild(root, check: bool = False, as_of: str | None = None) -> bool:

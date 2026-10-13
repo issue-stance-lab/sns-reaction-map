@@ -8,7 +8,11 @@ from scripts.build_consumption_tax_page import apply_search_entry
 
 
 ROOT = Path(__file__).resolve().parent.parent
-PAGE = ROOT / "docs" / "consumption-tax-cut-reaction-map.html"
+# 新デザイン公開後は、旧形式の元HTML（data/page-sources）を検査する（scripts/consumption_tax_layout.py）。
+# 検索入口（課題96）と計算部品は元HTMLの中にだけ残り、新デザインのページは冒頭のレシート（設定 rates・calc）を使う
+from scripts.consumption_tax_layout import source_for_refresh  # noqa: E402
+
+PAGE = source_for_refresh(ROOT)
 
 
 class ConsumptionTaxSearchEntryTest(unittest.TestCase):
