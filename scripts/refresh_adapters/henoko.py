@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import hashlib
+import json
 import re
 import subprocess
 import sys
@@ -11,6 +12,10 @@ from pathlib import Path
 TOPIC = "henoko-student-accident"
 PAGE = Path("docs/henoko-student-accident-reaction-map.html")
 ARENA_DATA = Path("docs/henoko-arena-data.js")
+# 新デザイン（scripts/henoko_layout.py）の読書面は、再読データの明細ごとの立場をこの対応表から読む（明細は立場を持たない）。
+# あだ名禁止・自転車と同じく、更新経路で累積候補から作り直し、公開対象に含めて同じ回で揃える
+REREAD = Path("data/henoko-student-accident_issues-reread.json")
+REREAD_STANCES = Path("data/henoko-student-accident_reread-stances.json")
 TIDE_SLUG = "henoko"
 VOTE_TOPIC = "henoko-student-accident-issue-stance-v1"
 VOTE_CHOICES = 18
@@ -19,6 +24,45 @@ PROTECTED = ("G-K10S4YCZFH", "ca-pub-2542211932832864", "vote-store.js")
 
 def _digest(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def build_reread_stances(root: Path, candidate_path: Path, output_path: Path, current_date: str) -> dict:
+    """累積候補と再読データ（理由区分の明細）から、立場の対応表を作る（scripts/henoko_reread_stances.py と同じ表）。
+
+    正典はまだ古い（昇格前）ので、立場は累積候補の分類から写し、論点×立場も累積候補で数えて照合する（あだ名禁止の
+    refresh_adapters/nickname.py の build_reread_stances と同じ考え方）。新しい意見を追い読みして再読データの明細に足していないと、
+    「正典の意見のうち N 件が再読データの明細にありません」で止まる（新デザインの読書面の生成が止まる前に、ここで止める）。
+    """
+    import yaml
+
+    if str(root) not in sys.path:
+        sys.path.insert(0, str(root))
+    from scripts.henoko_reread_stances import table, text_of
+
+    rows = json.loads(candidate_path.read_text(encoding="utf-8"))
+    reread_path = root / REREAD
+    reread = json.loads(reread_path.read_text(encoding="utf-8"))
+    counts: dict[str, dict[str, int]] = {}
+    for row in rows:
+        c = row.get("classification") or {}
+        if c.get("is_opinion") is not True:
+            continue
+        by = counts.setdefault(str(c.get("main_issue")), {})
+        by[str(c.get("stance"))] = by.get(str(c.get("stance")), 0) + 1
+    tallied = {
+        "updated_on": current_date,
+        "issues": [{"label": label, "stances": [{"label": st, "count": n} for st, n in sorted(by.items())]}
+                   for label, by in sorted(counts.items())],
+    }
+    canonical = str(yaml.safe_load((root / "THEMES.yaml").read_text(encoding="utf-8"))["themes"][TOPIC]["sample_file"])
+    try:
+        # 累積候補は昇格すると正典そのものになる（canonical_sha256 も昇格後の正典と同じ値）
+        data = table(rows, reread, tallied, current_date, canonical, _digest(candidate_path), _digest(reread_path))
+    except SystemExit as exc:
+        raise ValueError(f"辺野古高校生死亡事故の立場の対応表を作れません: {exc}。"
+                         "新しい意見を追い読みして data/henoko-student-accident_issues-reread.json の明細に足してください（DATA_REFRESH.md）") from None
+    output_path.write_text(text_of(data), encoding="utf-8")
+    return data
 
 
 def vote_fingerprint(html: str) -> tuple[str, tuple[str, ...], tuple[str, ...], int]:
@@ -149,7 +193,12 @@ def finalize(root: Path, current_date: str) -> None:
 def build(root: Path, stage: Path, current_date: str) -> dict[Path, Path]:
     """候補を2回生成し、2回目に差分がない場合だけ公開対象を返す。"""
     candidate = stage / "cumulative-candidate.json"
-    current_page = root / PAGE
+    # 新デザイン公開後も、旧形式の生成器（山なみの件数・潮目・連動表示・アリーナの点。山なみの入力の版の守り henoko_planet_guard を含む）は
+    # 元HTML（data/page-sources）を入力にする（henoko_layout.py）。公開候補生成では、隔離コピーの finish がこの元HTMLから新デザインを組み直す
+    if str(root) not in sys.path:
+        sys.path.insert(0, str(root))
+    from scripts.henoko_layout import source_for_refresh
+    current_page = source_for_refresh(root)
     first_page = stage / "page-candidate.html"
     first_data = stage / "arena-data-candidate.js"
     second_page = stage / "idempotence" / "page-candidate.html"
@@ -157,14 +206,20 @@ def build(root: Path, stage: Path, current_date: str) -> dict[Path, Path]:
     second_page.parent.mkdir(parents=True, exist_ok=True)
 
     before_vote = vote_fingerprint(current_page.read_text(encoding="utf-8"))
+    first_stances = stage / REREAD_STANCES.name
+    second_stances = stage / "idempotence" / REREAD_STANCES.name
     _run_builder(root, candidate, current_page, first_page, first_data)
     _apply_tide(root, first_page, stage / "classified-wave.json", current_date)
     _apply_connected_display(root, first_page)
+    build_reread_stances(root, candidate, first_stances, current_date)
     _run_builder(root, candidate, first_page, second_page, second_data)
     _apply_tide(root, second_page, stage / "classified-wave.json", current_date)
     _apply_connected_display(root, second_page)
+    build_reread_stances(root, candidate, second_stances, current_date)
 
-    if (_digest(first_page), _digest(first_data)) != (_digest(second_page), _digest(second_data)):
+    # ページとアリーナの点、立場の対応表を同じ候補から2回作って比べる
+    if ((_digest(first_page), _digest(first_data), _digest(first_stances))
+            != (_digest(second_page), _digest(second_data), _digest(second_stances))):
         raise ValueError("辺野古adapterは同じ候補の2回目実行で差分が出ました")
 
     candidate_html = first_page.read_text(encoding="utf-8")
@@ -178,4 +233,4 @@ def build(root: Path, stage: Path, current_date: str) -> dict[Path, Path]:
     if changed:
         raise ValueError("保護タグの個数が変わりました: " + ", ".join(changed))
 
-    return {PAGE: first_page, ARENA_DATA: first_data}
+    return {PAGE: first_page, ARENA_DATA: first_data, REREAD_STANCES: first_stances}

@@ -47,6 +47,8 @@ def _copy_fixture(target: Path) -> None:
     materialize_elderly(target)
     from scripts.nickname_layout import materialize as materialize_nickname
     materialize_nickname(target)
+    from scripts.henoko_layout import materialize as materialize_henoko
+    materialize_henoko(target)
     # 山なみの直接生成にも、正規テンプレートが必要。
     template = Path("quality/prototypes/planet-prototype.template.html")
     (target / template.parent).mkdir(parents=True, exist_ok=True)

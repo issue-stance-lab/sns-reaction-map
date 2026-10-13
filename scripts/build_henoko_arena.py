@@ -1002,6 +1002,24 @@ def main() -> int:
     parser.add_argument("--check", action="store_true", help="書き換えずに差分の有無だけ返す")
     parser.add_argument("--public-counts-only", action="store_true", help="公開JSONから集計表示だけを更新する")
     args = parser.parse_args()
+    if (ROOT / PAGE).is_file() and 'name="henoko-layout"' in (ROOT / PAGE).read_text(encoding="utf-8") and not any(
+            (args.input, args.html_template, args.output_html, args.output_data)):
+        # 新デザイン公開後の単独実行：元HTML（data/page-sources）に旧形式の生成（山なみの件数・連動表示・アリーナの点。
+        # 山なみの入力の版は henoko_planet_guard が確かめる）と公開JSONの集計を掛け、新デザインを掛け直す（henoko_layout.py）。
+        # --public-counts-only も同じ rebuild に含まれる
+        if str(ROOT) not in sys.path:
+            sys.path.insert(0, str(ROOT))
+        from scripts.henoko_layout import rebuild
+        try:
+            changed = rebuild(ROOT, check=args.check)
+        except (IssueCountError, ValueError, OSError, KeyError, TypeError, json.JSONDecodeError) as exc:
+            print(f"ERROR: {exc}", file=sys.stderr)
+            return 1
+        if args.check and changed:
+            print("NG: ページが正典から生成した内容と一致しません", file=sys.stderr)
+            return 1
+        print("UPDATE: HTMLを更新しました" if changed else "OK: 差分なし")
+        return 0
 
     if args.public_counts_only:
         if args.check or args.input or args.html_template or args.output_data:
