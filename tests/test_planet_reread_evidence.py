@@ -122,13 +122,15 @@ class ConnectedThemeRegressionTest(unittest.TestCase):
 
         2026-10-10、過去の未読72件を追い読みし両論点とも未読0件になった
         （quality/reviews/2026-10-10-elderly-license-revocation-catchup.json）。
+        2026-10-13の定期収集（新ルール: 今回分は同じ回で全件本文確認）で、義務化・事故防止13件、
+        地方の足・移動権4件を理由区分へ接続し、既読339件・未読0件のまま。
         """
         data = bpd.build("elderly-license-revocation")
-        self.assertEqual(data["reread_summary"]["connected_editorial_count"], 322)
+        self.assertEqual(data["reread_summary"]["connected_editorial_count"], 339)
         reviewed = [i for i in data["issues"] if i["sub"]["status"] == "reread"]
-        self.assertEqual(sorted(i["sub"]["reread_count"] for i in reviewed), [39, 283])
+        self.assertEqual(sorted(i["sub"]["reread_count"] for i in reviewed), [43, 296])
         unread_by_count = {i["count"]: i["sub"]["unread_count"] for i in reviewed}
-        self.assertEqual(unread_by_count, {283: 0, 39: 0})
+        self.assertEqual(unread_by_count, {296: 0, 43: 0})
         self.assertTrue(all(i["sub"]["skipped_count"] == 0 for i in reviewed))
 
 
