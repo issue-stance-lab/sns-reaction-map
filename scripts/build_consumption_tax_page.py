@@ -61,7 +61,20 @@ SEARCH_ENTRY_END = "<!-- TAX_SEARCH_ENTRY_END -->"
 SEARCH_ENTRY_CSS = '<link rel="stylesheet" href="consumption-tax-search-entry.css?v=3">'
 SEARCH_ENTRY_JS = '<script src="consumption-tax-search-entry.js?v=1" defer></script>'
 PUBLISHED_AT = "2026-07-28"
-MODIFIED_AT = "2026-09-27"
+SEO_CONFIG = ROOT / "configs" / "theme-seo.json"
+
+
+def modified_at() -> str:
+    """構造化データ・作り方の「最終更新日」。手入力の日付を持たず、configs/theme-seo.json の dateModified を読む
+    （定期更新では refresh_topic.py の update_seo_date が更新日に書き換え、apply_theme_trust.py も同じ値を貼る）。
+    2026-10-13 まではここに MODIFIED_AT="2026-09-27" を直書きしていた（後段の apply_theme_trust.py が上書きするので、
+    公開ページには出ていなかったが、出所が2つあった）。"""
+    themes = json.loads(SEO_CONFIG.read_text(encoding="utf-8"))["themes"]
+    value = next(t["dateModified"] for t in themes if t["id"] == "consumption-tax-cut")
+    if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", value):
+        raise ValueError(f"configs/theme-seo.json の消費税減税の dateModified が日付ではありません: {value!r}")
+    return value
+
 ORGANIZATION = {
     "@type": "Organization",
     "name": "SNS反応まっぷ編集部",
@@ -1292,7 +1305,7 @@ def apply_search_metadata(html: str) -> str:
             "image": [OGP_IMAGE],
             "mainEntityOfPage": {"@type": "WebPage", "@id": PAGE_URL},
             "datePublished": published_at,
-            "dateModified": MODIFIED_AT,
+            "dateModified": modified_at(),
             "author": ORGANIZATION,
             "publisher": ORGANIZATION,
         },
@@ -1317,7 +1330,7 @@ def apply_search_metadata(html: str) -> str:
     )
     trust, modified_count = re.subn(
         r'(<dt>最終更新日</dt><dd>)<time datetime="[^"]+">[^<]+</time>',
-        rf'\1<time datetime="{MODIFIED_AT}">{japanese_date(MODIFIED_AT)}</time>',
+        rf'\1<time datetime="{modified_at()}">{japanese_date(modified_at())}</time>',
         trust,
         count=1,
     )
@@ -1338,7 +1351,7 @@ def build(
     period = collection_period(rows)
     html = template.read_text(encoding="utf-8")
     published_at, _modified_at = existing_dates(html)
-    modified_at = MODIFIED_AT
+    modified = modified_at()
 
     opinions = data["opinions"]
     relevant = data["relevant"]
@@ -1382,7 +1395,7 @@ def build(
             "image": [OGP_IMAGE],
             "mainEntityOfPage": {"@type": "WebPage", "@id": PAGE_URL},
             "datePublished": published_at,
-            "dateModified": modified_at,
+            "dateModified": modified,
             "author": ORGANIZATION,
             "publisher": ORGANIZATION,
         },
@@ -1537,7 +1550,7 @@ def build(
             html,
         )
     else:
-        existing_trust = trust_block(total, relevant, opinions, published_at, modified_at)
+        existing_trust = trust_block(total, relevant, opinions, published_at, modified)
 
     vote_intro = (
         f'{vote_open_tag}<div class="panel-title"><h2>あなたが一番気になる「減税の論点」は？</h2>'

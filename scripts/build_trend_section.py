@@ -92,6 +92,10 @@ TREND_THEMES = {
         "focus_stance": "減税反対・慎重",
         # 立場・論点のグラフを、単体の画像（PNG）としても配る（scripts/build_trend_images.py）。
         "share_images": True,
+        # 分類に使うAIを切り替えた最初の収集日（軸ごと）。9/24の回まで kimi-k2.6、10/3の回から kimi-k2.7-code
+        # （social-samples/updates/consumption-tax-cut/*/report.json の provenance.model）。それより前の回は判定し直していないので、
+        # 両方の軸に切替の影響が残る。新しい回でAIが変わると adapter が止まる（refresh_adapters/consumption_tax.py）。
+        "model_breaks": {"stance": ["2026-10-03"], "issue": ["2026-10-03"]},
         # スマホの表の見出し用（\n で折り返す）。凡例・ツールチップ・PCの表は正式名を使う。
         "short_labels": {
             "stance": ["減税推進", "条件付き\n賛成", "反対・\n慎重", "中立・\n情報"],
