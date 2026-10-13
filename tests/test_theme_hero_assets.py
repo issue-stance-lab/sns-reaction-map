@@ -129,7 +129,9 @@ class ThemeHeroAssetTests(unittest.TestCase):
                 page = ROOT / "docs" / spec["page"]
                 html = page.read_text(encoding="utf-8")
 
-                self.assertGreaterEqual(html.count(spec["asset"]), 2)
+                if 'name="henoko-layout"' not in html:
+                    # 辺野古の新デザインはヒーロー写真を載せない（冒頭の図柄が役目を持つ。OGP画像は継承）。旧形式のページだけ数える
+                    self.assertGreaterEqual(html.count(spec["asset"]), 2)
                 self.assertNotIn("-hero-v2.webp", html)
                 self.assertIn(spec["ogp"], html)
                 self.assertIn("G-K10S4YCZFH", html)

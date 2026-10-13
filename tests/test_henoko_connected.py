@@ -20,7 +20,9 @@ from scripts.refresh_planet_section import _apply_connected_display
 class HenokoConnectedTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.original = (ROOT / "docs/henoko-student-accident-reaction-map.html").read_text(encoding="utf-8")
+        # 新デザイン公開後は、旧形式の元HTML（data/page-sources）を検査する（scripts/henoko_layout.py）
+        from scripts.henoko_layout import source_for_refresh
+        cls.original = source_for_refresh(ROOT).read_text(encoding="utf-8")
         cls.base = re.sub(re.escape(connected.START) + r".*?" + re.escape(connected.END) + r"\n?", "", cls.original, flags=re.S)
         cls.base = re.sub(re.escape(CONTENT_START) + r".*?" + re.escape(CONTENT_END) + r"\n?", "", cls.base, flags=re.S)
         cls.base = re.sub(re.escape(connected.BRIDGE_START) + r".*?" + re.escape(connected.BRIDGE_END) + r"\n?", "", cls.base, flags=re.S)

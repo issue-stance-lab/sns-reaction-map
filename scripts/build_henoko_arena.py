@@ -1002,16 +1002,47 @@ def main() -> int:
     parser.add_argument("--check", action="store_true", help="書き換えずに差分の有無だけ返す")
     parser.add_argument("--public-counts-only", action="store_true", help="公開JSONから集計表示だけを更新する")
     args = parser.parse_args()
+    if (ROOT / PAGE).is_file() and 'name="henoko-layout"' in (ROOT / PAGE).read_text(encoding="utf-8") and not any(
+            (args.input, args.html_template, args.output_html, args.output_data)):
+        # 新デザイン公開後の単独実行：元HTML（data/page-sources）に旧形式の生成（山なみの件数・連動表示・アリーナの点。
+        # 山なみの入力の版は henoko_planet_guard が確かめる）と公開JSONの集計を掛け、新デザインを掛け直す（henoko_layout.py）。
+        # --public-counts-only も同じ rebuild に含まれる
+        if str(ROOT) not in sys.path:
+            sys.path.insert(0, str(ROOT))
+        from scripts.henoko_layout import rebuild
+        try:
+            changed = rebuild(ROOT, check=args.check)
+        except (IssueCountError, ValueError, OSError, KeyError, TypeError, json.JSONDecodeError) as exc:
+            print(f"ERROR: {exc}", file=sys.stderr)
+            return 1
+        if args.check and changed:
+            print("NG: ページが正典から生成した内容と一致しません", file=sys.stderr)
+            return 1
+        print("UPDATE: HTMLを更新しました" if changed else "OK: 差分なし")
+        return 0
 
     if args.public_counts_only:
         if args.check or args.input or args.html_template or args.output_data:
             parser.error("--public-counts-only は --output-html だけを指定してください")
         destination = args.output_html or ROOT / PAGE
+        if 'name="henoko-layout"' in destination.read_text(encoding="utf-8"):
+            # 新デザインのページに旧形式の集計を貼らない（公開後は引数なしの実行が元HTMLから作り直す）
+            print("ERROR: 新デザインのページには旧形式の集計を貼れません。引数なしで実行してください", file=sys.stderr)
+            return 1
         destination.write_text(apply_public_counts(destination.read_text(encoding="utf-8")), encoding="utf-8")
         print(f"updated public JSON aggregates in {destination}")
         return 0
 
     template = args.html_template or ROOT / PAGE
+    if args.html_template is None and template.is_file() and 'name="henoko-layout"' in template.read_text(encoding="utf-8"):
+        # 新デザイン公開後に --input などだけを渡したとき：土台は旧形式の元HTML（data/page-sources）。新デザインのページは土台にしない
+        if str(ROOT) not in sys.path:
+            sys.path.insert(0, str(ROOT))
+        from scripts.henoko_layout import source_for_refresh
+        template = source_for_refresh(ROOT)
+        if args.output_html is None:
+            print("ERROR: 新デザインの公開ページへ旧形式で書き出すことはできません。--output-html を指定するか、引数なしで実行してください", file=sys.stderr)
+            return 1
     output_html = args.output_html or ROOT / PAGE
     output_data = args.output_data or ROOT / ARENA_DATA
 

@@ -15,11 +15,15 @@ from scripts import build_planet_page_preview as preview
 
 ROOT = Path(__file__).resolve().parents[1]
 TOPIC = builder.THEME
+# 新デザイン公開後は、旧形式の元HTML（data/page-sources）を検査する（scripts/henoko_layout.py）
+from scripts.henoko_layout import source_for_refresh  # noqa: E402
+
+SOURCE_PAGE = source_for_refresh(ROOT)
 
 
 class VoteScrollTests(unittest.TestCase):
     def test_only_scroll_changes_and_vote_protection_remains_strict(self):
-        page = (ROOT / builder.PAGE).read_text()
+        page = SOURCE_PAGE.read_text()
         corrected = preview.fix_henoko_vote_scroll(page)
         self.assertIn("getElementById('vote-result').scrollIntoView", corrected)
         self.assertNotIn("getElementById('issue-arena-section').scrollIntoView", corrected)
@@ -36,7 +40,7 @@ class VoteScrollTests(unittest.TestCase):
 class VerifiedRefreshTests(unittest.TestCase):
     def setUp(self):
         self.records, self.opinions = builder.load_records(None)
-        self.page = (ROOT / builder.PAGE).read_text()
+        self.page = SOURCE_PAGE.read_text()
         self.tmp = tempfile.TemporaryDirectory()
         self.addCleanup(self.tmp.cleanup)
         self.root = Path(self.tmp.name)
