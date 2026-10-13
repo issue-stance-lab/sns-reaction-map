@@ -30,8 +30,8 @@ START = "<!-- CLAIM_AUDIT_START -->"
 END = "<!-- CLAIM_AUDIT_END -->"
 
 # 旧34投稿を再監査した日。全母数の網羅的な読み足しではない（背景に範囲を表示）。
-CHECKED_AT = "2026年9月13日"
-SOURCE_CHECKED_AT = "2026年9月13日"
+CHECKED_AT = "2026年10月13日"
+SOURCE_CHECKED_AT = "2026年10月13日"
 
 # 一次資料に当たって確かめた結果。内部判定は全テーマ共通の fact / gap / miss。
 # 既存ページの読者向け表示は、課題54の画面刷新まで変更しない。
