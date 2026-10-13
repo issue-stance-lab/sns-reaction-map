@@ -1,0 +1,239 @@
+{
+  "theme_id": "school-nickname-ban",
+  "_about": "学校でのあだ名禁止ページの「背景として開く内容」（開閉行）の文言。scripts/nickname_background.py が読む。SNSの件数・確認日はここに書かず、冒頭の設定（checked_on・期待と懸念・FAQ）・背景台帳・公開JSON・THEMES.yaml・授業の設定から差し込む。「確認できたこと／確認できないこと／ここからはSNSの意見」の3段を守る。作り方・詳細データ・次に読むテーマ・意見の推移（潮目）は手順7で現行ページの保護対象として継承するため、ここには入れない。期限付きの制度イベントは無いので、段階の切り替えは持たない。「◯月◯日時点」は冒頭の checked_on から作る。",
+  "inputs": {
+    "background_ledger": "data/verification/school-nickname-ban-background.json",
+    "classroom": "configs/classroom/school-nickname-ban.json",
+    "themes_yaml": "THEMES.yaml",
+    "_inputs": "授業の設定は既存の仕組み（現行ページの授業節）と共有するので読むだけ。THEMES.yaml からは updated_at・sample_period・collect_at を読む。"
+  },
+  "section": {
+    "eyebrow": "背景をひらく",
+    "title": "国の資料、学校の決め方、SNSの期待と懸念",
+    "lead": "最初の2行は国の資料と学校の決め方、次の1行はSNSで語られる期待と懸念です。見出しを押した行だけが開きます。"
+  },
+  "opinion_label": "ここからはSNSの意見",
+  "dates_line": "国の資料の本文は{checked}に確かめました（背景台帳 {ledger_checked_on}）。SNSの件数は{updated_on}までの集計で、次回の収集予定は{next_collect}です。",
+  "groups": [
+    {
+      "id": "rules",
+      "label": "国の資料と学校の決め方",
+      "rows": [
+        {
+          "id": "national",
+          "kind": "national",
+          "title": "国は、あだ名や呼び方を決めているのか",
+          "summary": "法律・国の方針・指導資料・事務連絡の本文を調べた結果",
+          "confirmed_label": "確認できたこと",
+          "confirmed": [
+            "{checked}時点のいじめ防止対策推進法、国の基本方針、生徒指導提要の本文に、「あだ名」「さん付け」の語はありませんでした。",
+            "法律は呼び方を定めず、学校ごとに「その学校の実情に応じ」て、いじめ防止の基本方針を定めるとしています（第13条）。",
+            "生徒指導提要は、校則は法令に規定が無く、最終的に校長が定めるものだと説明しています。",
+            "文部科学省は2021年6月8日の事務連絡で、校則の見直しの取組事例を教育委員会などに示しました。本文と別添の2つの資料にも、あだ名や呼び方の語はありませんでした。"
+          ],
+          "unconfirmed_label": "確認できないこと",
+          "unconfirmed": [
+            "あだ名を禁止している学校の数や割合。国の統計は見つかりませんでした。",
+            "校則の合理性について、生徒指導提要が触れる判例の名前と年月日。"
+          ],
+          "note": "生徒指導提要には「呼称の工夫」という言葉が1か所あります。性同一性障害のある児童生徒への支援の例で、あだ名の禁止やさん付けの指導とは別の話です。",
+          "sources": [
+            {
+              "name": "e-Gov法令検索 いじめ防止対策推進法（第2条・第13条）",
+              "url": "https://laws.e-gov.go.jp/law/425AC1000000071"
+            },
+            {
+              "name": "文部科学省 いじめの防止等のための基本的な方針（PDF）",
+              "url": "https://www.mext.go.jp/component/a_menu/education/detail/__icsFiles/afieldfile/2019/06/26/1400030_007.pdf"
+            },
+            {
+              "name": "文部科学省 生徒指導提要（改訂版）（PDF）",
+              "url": "https://www.mext.go.jp/content/20230220-mxt_jidou01-000024699-201-1.pdf"
+            },
+            {
+              "name": "文部科学省 校則の見直し等に関する取組事例（事務連絡）",
+              "url": "https://www.mext.go.jp/a_menu/shotou/seitoshidou/1414737_00004.htm"
+            }
+          ],
+          "issue_ids": [
+            "school-nickname-ban-school-practice",
+            "school-nickname-ban-uniform-rule"
+          ]
+        },
+        {
+          "id": "school",
+          "kind": "points",
+          "title": "学校のルールは、どう決まり、どう見直せるのか",
+          "summary": "校則は校長が定める、公開と見直し、いじめの情報は組織で共有",
+          "lead": "国の資料は呼び方を決めていませんが、学校がルールを作り、見直すときの考え方は書かれています。{checked}時点の本文から3つにまとめました。",
+          "points": [
+            {
+              "label": "校則は校長が定める",
+              "text": "校則は、児童生徒の発達段階や地域の状況を踏まえ、最終的に校長が定めます。社会通念上合理的と認められる範囲で定めるものとされています。"
+            },
+            {
+              "label": "公開して、意見を聞いて見直す",
+              "text": "生徒指導提要は、校則をホームページなどで公開し、決めた背景も示すのが適切だとしています。見直すときは、児童生徒や保護者の意見を聞いたうえで決めるのが望ましいとしています。"
+            },
+            {
+              "label": "柔軟な対応でも、組織に共有する",
+              "text": "国の基本方針は、軽い言葉で傷つけてもすぐに謝って関係を戻せた場合などに、柔軟な対応を認めています。その場合も、いじめに当たる事案は学校の対策組織に共有します。"
+            }
+          ],
+          "unconfirmed": "個別の学校が呼び方のルールをどう決め、どう説明しているかを書いた資料は、このページではまだ確かめていません。自分の学校のルールは、学校の説明で確かめられます。",
+          "sources": [
+            {
+              "name": "文部科学省 生徒指導提要（改訂版）3.6.1 校則の運用・見直し（PDF）",
+              "url": "https://www.mext.go.jp/content/20230220-mxt_jidou01-000024699-201-1.pdf"
+            },
+            {
+              "name": "文部科学省 いじめの防止等のための基本的な方針（PDF）",
+              "url": "https://www.mext.go.jp/component/a_menu/education/detail/__icsFiles/afieldfile/2019/06/26/1400030_007.pdf"
+            }
+          ],
+          "issue_ids": [
+            "school-nickname-ban-school-practice",
+            "school-nickname-ban-psychological-safety"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "voices",
+      "label": "SNSの期待と懸念",
+      "rows": [
+        {
+          "id": "voices",
+          "kind": "voices",
+          "title": "期待と懸念：SNSで語られていること",
+          "summary": "共通ルールの安心、嫌な呼び方を早く止める、線引きの明確さと、その裏の心配",
+          "lead": "旧ページの冒頭にあった3つの問いごとに、SNSの投稿に見られた期待と懸念を並べました。制度の効果を示したものではありません。",
+          "_lead": "期待・懸念の文は冒頭の設定 background_candidates（旧検索入口 GUIDES の3タブ）から読む。2026-10-11 のオーナー指示で冒頭から背景へ移した。",
+          "items": [
+            {
+              "key": "rule",
+              "topic": "全国の決まり",
+              "issue_id": "school-nickname-ban-school-practice"
+            },
+            {
+              "key": "why",
+              "topic": "嫌な呼び名",
+              "issue_id": "school-nickname-ban-psychological-safety"
+            },
+            {
+              "key": "scope",
+              "topic": "ルールの範囲",
+              "issue_id": "school-nickname-ban-uniform-rule"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "history",
+      "label": "経緯・質問・資料",
+      "rows": [
+        {
+          "id": "why",
+          "kind": "ledger_text",
+          "title": "なぜ、あだ名のルールが議論になるのか",
+          "summary": "親しさの表現にも、からかいにもなる呼び名",
+          "sources": [
+            {
+              "name": "e-Gov法令検索 いじめ防止対策推進法",
+              "url": "https://laws.e-gov.go.jp/law/425AC1000000071"
+            },
+            {
+              "name": "文部科学省 生徒指導提要（改訂版）（PDF）",
+              "url": "https://www.mext.go.jp/content/20230220-mxt_jidou01-000024699-201-1.pdf"
+            }
+          ],
+          "_sources": "背景台帳に cause の出典が無いので、設定に書く。"
+        },
+        {
+          "id": "timeline",
+          "kind": "timeline",
+          "title": "2013年のいじめ防止の法律から、校則見直しの事務連絡まで",
+          "summary": "法律、国の基本方針の改定、事務連絡、生徒指導提要の改訂",
+          "extra": [
+            {
+              "id": "notice-2021",
+              "when": "2021年",
+              "era": "校則見直しの事務連絡",
+              "date": "2021-06-08",
+              "text": "文部科学省が、校則の見直しの取組事例を教育委員会などに示しました。呼び方を定める内容はありません。",
+              "before_ledger_reason": "背景台帳を作った時点（2026-09-12）では事務連絡の原文を確かめていなかった。2026-10-11 に所在、10-13 に本文と別添2本を確かめたので、表示にだけ足す（台帳は現行ページと共有なので変えない）。",
+              "sources": [
+                {
+                  "name": "文部科学省 校則の見直し等に関する取組事例（事務連絡）",
+                  "url": "https://www.mext.go.jp/a_menu/shotou/seitoshidou/1414737_00004.htm"
+                }
+              ]
+            }
+          ],
+          "latest": "{checked}時点で、あだ名や呼び方を全国一律に定める国の資料は確認できていません。"
+        },
+        {
+          "id": "faq",
+          "kind": "faq",
+          "title": "よくある質問",
+          "summary": "嫌なあだ名はいじめか、本人の希望、ルールの見直し、SNSの比率",
+          "anchor": "school-nickname-faq",
+          "_anchor": "現行ページのよくある質問の場所（#school-nickname-faq）を、この行に引き継ぐ。冒頭のFAQ10問のうち、冒頭の短答・範囲の表と重なる4問（法律で決まっているか／文科省は求めているか／なぜ小学校で行うか／禁止とさん付けは同じか）と、背景の期待と懸念の行と重なる2問（メリット／デメリット）を外し、残る4問をここへ移した。",
+          "from_opening": [
+            3,
+            7,
+            8,
+            9
+          ],
+          "_from_opening": "冒頭の設定 faq.items の番号（0から数える）。文は冒頭の設定から読む（二重に持たない）。"
+        },
+        {
+          "id": "help",
+          "kind": "help",
+          "title": "嫌な呼び方でつらいときの相談先",
+          "summary": "身近な大人と、文部科学省が案内する24時間の電話",
+          "text": "嫌だと感じていることは、保護者や先生、養護教諭など、話しやすい大人へ伝えてください。学校や家の人に言いにくいときは、文部科学省が案内している「24時間こどもSOSダイヤル」に電話できます。",
+          "more": "SNSで相談できる窓口や、地元の窓口は、文部科学省の案内ページで探せます。",
+          "sources": [
+            {
+              "name": "文部科学省 子供のSOSの相談窓口",
+              "url": "https://www.mext.go.jp/a_menu/shotou/seitoshidou/06112210.htm"
+            }
+          ],
+          "_about": "電話番号は冒頭の設定 safety.phone の1か所から読む（冒頭の「今、嫌な呼び方でつらい場合」にも同じ番号を出す。2026-10-13 司令塔の決定）。この行は、番号に加えて SNS や地元の窓口を探せる文部科学省の案内ページへつなぐ。"
+        },
+        {
+          "id": "classroom",
+          "kind": "classroom",
+          "title": "授業や話し合いで使う",
+          "summary": "禁止支持側・反対側の理由3つずつ、確かめる資料、問いの例",
+          "intro": "現行ページの授業の節と同じ設定から、理由と資料、問いの例を並べました。リンクの先は、その理由に近い論点の投稿です。",
+          "sources_label": "確かめる一次資料",
+          "questions_label": "問いの例"
+        },
+        {
+          "id": "unverified",
+          "kind": "unverified",
+          "title": "まだ確かめていないこと",
+          "summary": "判例の名前、始まった理由の根拠、導入校の数、9月21日以降の投稿",
+          "lead": "このページを作った時点で、資料から確かめられていない点です。",
+          "items": [
+            {
+              "text": "校則の合理性について生徒指導提要が触れる判例の名前と年月日。公的資料からは特定できていません。"
+            },
+            {
+              "text": "冒頭の「なぜ始まったの？」で挙げた理由（嫌な呼び方やからかいを防ぐことなど）の根拠。国の資料と事務連絡には書かれておらず、個別の学校の説明は確かめていません。"
+            },
+            {
+              "text": "あだ名を禁止している学校の数や割合。国のいじめの調査に、呼び方を尋ねる項目はありません。"
+            },
+            {
+              "text": "{after}以降の投稿。検索が急に増えた時期の投稿はまだ集めておらず、次回の収集予定は{next_collect}です。"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

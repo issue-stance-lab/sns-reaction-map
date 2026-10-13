@@ -10,10 +10,13 @@ from scripts.refresh_adapters.constitutional import vote_fingerprint
 from scripts.verify_theme_page import _arena_points
 
 ROOT = Path(__file__).resolve().parents[1]
+# 新デザイン公開後は、旧形式の元HTML（data/page-sources）を検査する（scripts/constitutional_layout.py）
+from scripts.constitutional_layout import source_for_refresh  # noqa: E402
+SOURCE = source_for_refresh(ROOT)
 
 class ConstitutionalPlanetRefreshTests(unittest.TestCase):
     def test_refresh_preserves_vote_contract_and_is_idempotent(self):
-        page = (ROOT / 'docs/constitutional-amendment-reaction-map.html').read_text()
+        page = SOURCE.read_text()
         updated = apply_public_counts(page)
         self.assertEqual(vote_fingerprint(updated), vote_fingerprint(page))
         self.assertEqual(vote_fingerprint(updated)[3], 24)
@@ -23,7 +26,7 @@ class ConstitutionalPlanetRefreshTests(unittest.TestCase):
         self.assertNotIn('id="claim-audit"', updated)
 
     def test_failed_reread_gate_stops_refresh(self):
-        page = (ROOT / 'docs/constitutional-amendment-reaction-map.html').read_text()
+        page = SOURCE.read_text()
         with patch('scripts.build_planet_page_preview.bpd.independence_gate', return_value=['unreviewed record']):
             with self.assertRaisesRegex(IssueCountError, 'unreviewed record'):
                 apply_public_counts(page)
@@ -43,7 +46,7 @@ class ConstitutionalPlanetRefreshTests(unittest.TestCase):
             src, out = Path(tmp) / 'candidate.json', Path(tmp) / 'page.html'
             src.write_text(json.dumps(candidate, ensure_ascii=False))
             with self.assertRaisesRegex(IssueCountError, '全レコード'):
-                build(input_path=src, html_template=ROOT / 'docs/constitutional-amendment-reaction-map.html', output_html=out)
+                build(input_path=src, html_template=SOURCE, output_html=out)
             self.assertFalse(out.exists())
 
     def test_candidate_body_edit_with_same_counts_is_rejected(self):
@@ -53,5 +56,5 @@ class ConstitutionalPlanetRefreshTests(unittest.TestCase):
             src, out = Path(tmp) / 'candidate.json', Path(tmp) / 'page.html'
             src.write_text(json.dumps(candidate, ensure_ascii=False))
             with self.assertRaisesRegex(IssueCountError, '全レコード'):
-                build(input_path=src, html_template=ROOT / 'docs/constitutional-amendment-reaction-map.html', output_html=out)
+                build(input_path=src, html_template=SOURCE, output_html=out)
             self.assertFalse(out.exists())

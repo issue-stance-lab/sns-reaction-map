@@ -12,6 +12,10 @@ from scripts.elderly_connected import START as ELDERLY_CONNECTED_START
 
 
 def verified_selectors(source: str, root: Path) -> dict[str, str]:
+    if 'name="elderly-layout"' in source:
+        # 新デザイン（scripts/elderly_layout.py）の件数は、論点の欄ごとに数え直す
+        from scripts.elderly_redesign_provenance import verified_selectors as redesign
+        return redesign(source, root)
     if ELDERLY_CONNECTED_START not in source:
         return {}
     soup = BeautifulSoup(source, "html.parser")

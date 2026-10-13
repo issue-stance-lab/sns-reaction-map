@@ -1230,6 +1230,20 @@ def main() -> int:
     parser.add_argument("--output-html", type=Path, help="書き出し先（既定は読み込んだHTML）")
     parser.add_argument("--public-counts-only", action="store_true")
     args = parser.parse_args()
+    published = ROOT / "docs" / f"{THEME}-reaction-map.html"
+    if 'name="koshitsu-layout"' in published.read_text(encoding="utf-8") and not (
+            args.input or args.html_template or args.output_html):
+        # 新デザイン公開後の単独実行：元HTMLを作り直し、新デザインを掛け直す（koshitsu_layout.py）
+        if str(ROOT) not in sys.path:
+            sys.path.insert(0, str(ROOT))
+        from scripts.koshitsu_layout import rebuild
+        try:
+            changed = rebuild(ROOT, check=args.check)
+        except ValueError as exc:
+            print(f"ERROR: {exc}", file=sys.stderr)
+            return 1
+        print("UPDATE" if changed else "OK    ")
+        return 1 if args.check and changed else 0
     target=args.output_html or ROOT / "docs" / f"{THEME}-reaction-map.html"
     if args.public_counts_only and '<!-- PLANET_SECTION_START -->' in target.read_text():
         before = target.read_text(encoding="utf-8")

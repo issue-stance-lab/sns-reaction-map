@@ -118,7 +118,10 @@ def _current_wave_model(stage: Path) -> str | None:
 def build(root: Path, stage: Path, current_date: str) -> dict[Path, Path]:
     """候補を2回生成し、2回目に差分がない場合だけ公開対象を返す。"""
     candidate = stage / "cumulative-candidate.json"
-    current_page = root / PAGE
+    # 新デザイン公開後も、旧形式の生成器（連動表示・意見の推移の貼り直しを含む）は元HTML（data/page-sources）を入力にする
+    # （ai_copyright_layout.py）。推移の画像（trend_support.build_images）も同じ累積候補から作る
+    from scripts.ai_copyright_layout import source_for_refresh
+    current_page = source_for_refresh(root)
     first_page = stage / "page-candidate.html"
     first_data = stage / "arena-data-candidate.js"
     second_page = stage / "idempotence" / "page-candidate.html"

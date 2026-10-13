@@ -178,7 +178,12 @@ def finalize(root: Path, current_date: str) -> None:
 def build(root: Path, stage: Path, current_date: str) -> dict[Path, Path]:
     """候補を2回生成し、2回目に差分がない場合だけ公開対象を返す。"""
     candidate = stage / "cumulative-candidate.json"
-    current_page = root / PAGE
+    # 新デザイン公開後も、旧形式の生成器（山なみ・潮目・連動表示）は元HTML（data/page-sources）を入力にする
+    # （constitutional_layout.py）。公開候補生成では、隔離コピーの finish がこの元HTMLから新デザインを組み直す
+    if str(root) not in sys.path:
+        sys.path.insert(0, str(root))
+    from scripts.constitutional_layout import source_for_refresh
+    current_page = source_for_refresh(root)
     current_wave = (
         root / "social-samples" / "updates" / TOPIC / current_date / "classified.json"
     )

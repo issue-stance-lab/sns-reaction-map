@@ -45,7 +45,15 @@ def finish(root):
     for slug in THEMES:
         p=root/'docs'/f'{slug}-reaction-map.html'
         if p.exists():
-            old=p.read_text(); new=transform(old,slug)
+            old=p.read_text()
+            if 'name="koshitsu-layout"' in old:continue  # 皇室典範の新デザインは独自の見た目（koshitsu_layout.py）
+            if 'name="fukushuto-layout"' in old:continue  # 副首都の新デザインも独自の見た目（fukushuto_layout.py）
+            if 'name="ai-copyright-layout"' in old:continue  # 生成AIと著作権の新デザインも独自の見た目（ai_copyright_layout.py）
+            if 'name="constitutional-layout"' in old:continue  # 憲法改正論議の新デザインも独自の見た目（constitutional_layout.py）
+            if 'name="bike-layout"' in old:continue  # 自転車の青切符の新デザインも独自の見た目（bike_layout.py）
+            if 'name="elderly-layout"' in old:continue  # 高齢者免許返納の新デザインも独自の見た目（elderly_layout.py）
+            if 'name="nickname-layout"' in old:continue  # 学校でのあだ名禁止の新デザインも独自の見た目（nickname_layout.py）
+            new=transform(old,slug)
             if old!=new:p.write_text(new)
             targets[p.relative_to(root)]=p
     return targets

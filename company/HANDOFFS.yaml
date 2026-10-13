@@ -1,5 +1,5 @@
 version: 1
-updated_at: "2026-10-07"
+updated_at: "2026-10-11"
 
 # 進行中業務の単一の引き継ぎ台帳。詳細な数値は各正典にだけ記録する。
 required_fields:
@@ -69,13 +69,13 @@ items:
 
   - id: theme-refresh-next-batch
     department: engineering-data
-    status: scheduled
-    current_state: "8/30に生成AI・憲法・副首都、8/31にあだ名・皇室典範・消費税減税、9/3に部活動・高齢者、9/7に自転車・辺野古が予定済み。"
-    next_action: "期日に最も近いテーマを一つずつ収集し、結果をTHEMES.yamlへ記録する。"
+    status: completed
+    current_state: "2026-10-11確認。8/30〜9/7の一括予定は現行運用へ移行済み。THEMES.yamlの10テーマすべてでcollect_atとrefresh_atが次回日程（10/12〜10/22）に設定され、pending_waveはない。"
+    next_action: "完了。以後の遅れ確認はGROWTH.yamlのrecurring.update-work-queueで行い、更新は期日が最も近いテーマから進める。"
     due_at: "2026-08-30"
     canonical_sources: ["THEMES.yaml", "DATA_REFRESH.md"]
     ceo_approval: "公開昇格のみ必要"
-    completion_evidence: ["THEMES.yaml", "data/verification/updates/"]
+    completion_evidence: ["THEMES.yaml（10テーマの次回collect_at / refresh_at設定、pending_waveなしを2026-10-11確認）", "GROWTH.yaml（recurring.update-work-queue）", "data/verification/updates/"]
 
   - id: x-daily-operation
     department: editorial

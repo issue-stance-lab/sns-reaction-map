@@ -11,7 +11,10 @@ from scripts.refresh_topic import identity
 
 
 ROOT = Path(__file__).resolve().parents[1]
-PAGE = ROOT / "docs/elderly-license-revocation-reaction-map.html"
+# 新デザイン公開後は、旧形式の元HTML（data/page-sources）を検査する（scripts/elderly_layout.py）
+from scripts.elderly_layout import source_for_refresh  # noqa: E402
+
+PAGE = source_for_refresh(ROOT)
 
 
 class ElderlyAdapterTests(unittest.TestCase):

@@ -2100,3 +2100,242 @@ items:
       - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/38063632733"
       - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/38064029420"
       - "https://sns-reaction-map.jp/"
+
+  - id: approval-20261011-002
+    department: engineering-data
+    action: website_publication
+    summary: "皇室典範改正ページを新デザイン（冒頭の短答・論点ごとの読書面・背景の開閉行）に切り替えて公開する"
+    reason: "オーナーが2026-10-11に、皇室典範改正の新デザインの残作業を片付けて公開するよう指示した（「残作業片付け公開」）"
+    risks:
+      - "URL・title・SEOメタ・Article JSON-LD・GA4・AdSense・投票（topic koshitsu-tenpakai-issue-stance-v2、24選択肢）は元ページから継承する。H1 は新デザインの見出しに変わるため configs/theme-seo.json に display_headline を足した"
+      - "引用ボタン・世論の潮目ウィジェット・読書進捗の帯は新デザインに移していない（別課題で判断）"
+      - "件数は変わらない（収集2,565件・意見2,016件、公開JSONの更新日2026-10-05）。語られていない争点の再検索の記録8文を読みやすく直した（意味・件数・日付は変えていない）"
+      - "施行日（2026-10-24）を過ぎても更新は止まらず、施行後の条文を編集部が確かめるまでは「施行される予定でした。施行後の条文は、まだ編集部で確かめていません」と表示する"
+      - "本番ホストでの GA4・AdSense の発火、投票の POST、X埋め込みの実表示は未確認（公開後に確認する）"
+    recommendation: approve
+    evidence:
+      - "quality/designs/2026-10-11-koshitsu-tenpakai-production-candidate.md"
+      - "quality/prototypes/koshitsu-tenpakai-release/evidence/"
+      - "configs/koshitsu-layout.json"
+    status: approved
+    requested_at: "2026-10-11"
+    decided_at: "2026-10-11"
+    decision_note: >-
+      オーナーが2026-10-11に「残作業を片付けて公開」と指示した（司令塔セッション経由で作業ツリーのセッションへ伝達）。
+      対象は作業ブランチ task/renew-koshitsu-tenpakai の新デザイン一式（公開切替・文体の修正8件・施行日以降の時制の設計変更・
+      DATA_REFRESH.md の追記）。main への統合と push は別途行う。
+  - id: approval-20261011-003
+    department: engineering-data
+    action: website_publication
+    summary: "副首都ページを新デザイン（冒頭の路線図と地図・論点ごとの読書面・背景の開閉行）に切り替えて公開する"
+    reason: "手順書23の手順7（更新と公開の検査）を皇室典範改正と同じ型で終え、作業ブランチ task/renew-fukushuto で公開切替まで準備した"
+    risks:
+      - "URL・title・SEOメタ・Article JSON-LD・GA4・AdSense・投票（topic fukushuto-issue-stance-v1、論点7×立場3＝21選択肢）・作り方・詳細データ・次に読むテーマは元ページから文字どおり継承する。H1 は新デザインの見出しに変わるため configs/theme-seo.json に display_headline を足した"
+      - "FAQ の構造化データは、旧ページの6問から、新デザインの背景に見えている4問に変わる"
+      - "進捗表示・編集部の横断整理（10/3時点の手入力の数字）・世論の潮目ウィジェットは新デザインに移していない"
+      - "件数は変わらない（収集2,860件・意見2,356件、公開JSONの更新日2026-10-10）。語られていない争点の再検索の記録など15文を読みやすく直した（意味・件数・日付は変えていない）"
+      - "有効な間は全テーマの公開候補生成の最後に副首都の新デザインが組み直され、副首都の照合（再読データの件数など）が合わないとその回の生成全体が止まる"
+      - "意見募集の締切（10/16）・施行予定日（10/30）を過ぎても更新は止まらず、結果・条文を編集部が確かめるまでは未確認と表示する"
+      - "本番ホストでの GA4・AdSense の発火、投票の POST、X埋め込みの実表示は未確認（公開後に確認する）"
+    recommendation: approve
+    evidence:
+      - "quality/designs/2026-10-11-fukushuto-production-candidate.md"
+      - "quality/prototypes/fukushuto-release/evidence/"
+      - "configs/fukushuto-layout.json"
+    status: approved
+    requested_at: "2026-10-11"
+    decided_at: "2026-10-11"
+    decision_note: >-
+      作業ブランチで公開切替（enabled: true・docs/ の置き換え）まで済ませ、検査をすべて通したうえで
+      オーナーが「副首都を公開」と承認（2026-10-11）。release スキルで main へ統合・push した。
+  - id: approval-20261011-ai-copyright
+    department: engineering-data
+    action: website_publication
+    summary: "生成AIと著作権ページを新デザイン（冒頭の2問と件数のものさし・論点ごとの読書面・背景の開閉行）に切り替えて公開する"
+    reason: "手順書23の手順7（更新と公開の検査）を副首都・皇室典範改正と同じ型で終え、作業ブランチ task/renew-ai-copyright で公開切替まで準備した"
+    risks:
+      - "URL・title・SEOメタ・Article JSON-LD・GA4・AdSense・共通ヘッダー・投票（topic ai-copyright-issue-stance-v1、論点7×立場3＝21選択肢、保存キーも同じ）・意見の推移（画像4枚と説明・埋め込みコード）・作り方・詳細データ・次に読むテーマは元ページから文字どおり継承する。H1 は新デザインの見出しに変わるため configs/theme-seo.json に display_headline を足した"
+      - "FAQ の構造化データを新たに載せる（背景に見えている4問）。旧ページの検索入口（3論点の切替と疑問ボタン）・進捗表示・編集部の横断整理（9/14時点の手入力の数字）・全体の立場の帯（「2.5倍」）は新デザインに移していない。論点ごとのX投稿は正典から選び直した14件に変わる"
+      - "件数は変わらない（収集5,175件・意見3,353件、公開JSONの更新日2026-10-06）。再読データの立場11件を正典に合わせ、資料にしかない話・共通する心配・照合・背景台帳の12文を読みやすく直し、授業の設定と作り方の「違法」「合法」を言い換えた（意味・件数・日付・判定は変えていない）"
+      - "有効な間は全テーマの公開候補生成の最後に生成AIの新デザインが組み直され、生成AIの照合（5論点の再読データの件数・立場など）が合わないとその回の生成全体が止まる。旧ページと違い「まだ読み直していない分」を残せないので、毎回の収集で5論点の再読を同じ回に済ませる必要がある"
+      - "プリンシプル・コードの届出開始日（10/26）を過ぎても更新は止まらず、開始を編集部が確かめるまでは未確認と表示する"
+      - "本番ホストでの GA4・AdSense の発火、投票の POST、X埋め込みの実表示は未確認（公開後に確認する）"
+    recommendation: approve
+    evidence:
+      - "quality/designs/2026-10-11-ai-copyright-production-candidate.md"
+      - "quality/prototypes/ai-copyright-release/evidence/"
+      - "configs/ai-copyright-layout.json"
+    status: approved
+    requested_at: "2026-10-11"
+    decided_at: "2026-10-11"
+    decision_note: >-
+      検査をすべて通したうえでオーナーが「生成AIを公開」と承認（2026-10-11）。release スキルで main へ統合・push した。
+
+  - id: approval-20261011-001
+    title: 2026-10-11のX投稿5本の記録と計測の本番反映
+    scope: website
+    kind: release
+    requester: AI（X日次セッション）
+    evidence:
+      - content/x/posts.md
+      - THEMES.yaml
+      - docs/index.html
+    status: completed
+    requested_at: "2026-10-11"
+    decided_at: "2026-10-11"
+    decision_note: >-
+      10-11の朝枠2本（@4d3082f29a18457宛の免許更新、@osaka_ishin9宛の自転車の通行区分）、
+      昼枠2本（@KanalocoLocal宛の部活の費用負担、@asahicom宛の外食の税率差）、
+      夕方枠1本（@chitose_yr宛の文化部の楽器整備）の記録と、
+      10-10の2本の計測（朝720・会話フォロー28）、10-10の論点ポスト8表示と昼枠221表示の計測を提示し、
+      オーナーが「反映して」と指示した。
+      **夕方枠はこの日5本目で、1日の目安（朝・昼・夕・夜の4回）を1本超えている。**
+      提示時に「5本目になります。出すかどうかはご判断ください」と明記し、オーナーが投稿を指示した。
+    completed_at: "2026-10-11"
+    result_note: >-
+      main 9f6f08aa（task/x-20261011 のマージ）と a1aa5adc（x_posted_at の更新とトップ同期）で反映。衝突なし。
+      全テスト1,777件OK、公開用検査OK、全テーマ検査NG 0件、数字の出所検査NG 0件、
+      **トップページ検査もNG 0件**（前回あった「collect_at 期限超過: consumption-tax-cut」は、
+      別セッションが収集を済ませたため解消していた）。
+      GitHub Actionsの公開ファイルの検査とPages配信はいずれも成功。
+      公開サイトのトップで自転車テーマの xpost が2026-10-11になっていることをcurlで確認した。
+      x_posted_at は bike-blue-ticket / elderly-license-revocation / consumption-tax-cut を2026-10-11へ更新
+      （bukatsu-chiiki は前日の反映で既に2026-10-11）。
+      非公開正典の差分は時刻だけで内容の違いはなく、移動は不要だった。
+    result_evidence:
+      - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/38125822569"
+      - "https://sns-reaction-map.jp/"
+
+  - id: approval-20261012-constitutional-amendment
+    department: engineering-data
+    action: website_publication
+    summary: "憲法改正論議ページを新デザイン（冒頭の決まり方と争点・対話式の山なみ・論点ごとの読書面・背景の開閉行）に切り替えて公開する"
+    reason: "手順書23の手順7（更新と公開の検査）を生成AIと著作権と同じ型（対話式の山なみを元HTMLから写す＋部活動型の圧縮）で終え、作業ブランチ task/renew-constitutional-amendment で公開切替まで準備した"
+    risks:
+      - "URL・title・SEOメタ・Article JSON-LD・GA4・AdSense・投票（topic constitutional-amendment-issue-stance-v1、論点6×立場4＝24選択肢、保存キーも同じ）・調査条件・PLANET_DATA・前回の収集との比較（潮目のカード）・作り方・詳細データ・次に読むテーマとクリック計測・フッターは元ページから文字どおり継承する。H1 は新デザインの見出し「憲法改正はどう決まり、何が争点か」に変わるため configs/theme-seo.json に display_headline を足した"
+      - "FAQ の構造化データを新たに載せる（冒頭の4問と背景の4問、画面に出ている問いと同じ）。旧ページの検索入口（4つの切替）・読了カウンタ・立場の帯の見出し（「7割近く」）・一次資料クイズ・予想・編集部の整理（9/12時点）は新デザインに移していない。論点ごとのX投稿は正典から選び直した13件に変わる"
+      - "件数は変わらない（収集2,228件・意見1,963件、公開JSONの更新日2026-10-04）。語られていない争点の検索記録3文を区切り、背景台帳の確認日を2026-10-12に進めて年表の2文を直した（数字・出典・判定は変えていない）"
+      - "有効な間は全テーマの公開候補生成の最後に憲法の新デザインが組み直され、憲法の照合（再読データの明細と論点の件数、立場の対応表と公開JSONの立場）が合わないとその回の生成全体が止まる。次回 10/13 の収集で新しい意見が入ったら、同じ回に追い読み（理由区分）と立場の対応表の作り直しを済ませる必要がある"
+      - "国民投票法の改正の施行日（10/31）を過ぎても更新は止まらず、施行後の条文を編集部が確かめるまでは未確認と表示する。ただし静的な表示なので、10/31 をまたいで次の更新が無いと「施行される予定です」の文が残る"
+      - "375pxで論点の欄の高さは 1,978〜2,718px（7論点中4論点が目安の2,500pxを超える）。ページ全体は 12,602px で目安13,000px以下"
+      - "本番ホストでの GA4・AdSense の発火、投票の POST、X埋め込みの実表示は未確認（公開後に確認する）"
+    recommendation: approve
+    evidence:
+      - "quality/designs/2026-10-11-constitutional-amendment-production-candidate.md"
+      - "quality/prototypes/constitutional-amendment-release/evidence/"
+      - "configs/constitutional-layout.json"
+    status: approved
+    requested_at: "2026-10-12"
+    decided_at: "2026-10-12"
+    decision_note: >-
+      検査をすべて通したうえでオーナーが「公開して」と承認（2026-10-12）。release スキルで main へ統合・push した。
+
+  - id: approval-20261012-001
+    title: 2026-10-12のX投稿6本と、消費税減税の一次資料（法律案本体・新聞の根拠）の本番反映
+    scope: website
+    kind: release
+    requester: AI（X日次セッション）
+    evidence:
+      - content/x/posts.md
+      - quality/research/consumption-tax-cut-primary-sources.md
+      - .claude/skills/x-daily/SKILL.md
+      - GROWTH.yaml
+      - THEMES.yaml
+      - docs/index.html
+    status: completed
+    requested_at: "2026-10-12"
+    decided_at: "2026-10-12"
+    decision_note: >-
+      10-12のリプライ6本（朝2本・昼2本・夕方1本・夜1本）の記録、10-11の3本の計測、
+      および**オーナー指示による消費税減税の一次資料の取り直し**を提示し、オーナーが「反映して」と指示した。
+      **この日は6本で、1日の目安（朝・昼・夕・夜の4回）を2本超えている。**いずれも提示時に本数を明示している。
+      一次資料は2件に分けて登録した。(1)資料W〜W-3＝2026-10-09に閣議決定され第222回国会に提出された
+      法律案の本体（概要・要綱・法律案）。(2)資料X〜X-4＝新聞を軽減税率の対象にした根拠（消費税法別表第一
+      第二号、平成28年の答弁書2本、平成24年法律第68号第7条第1号ロ）。
+      あわせてオーナー指示2点を SKILL.md・GROWTH.yaml へ反映した。
+      (a)**投稿文の誤りは、こちらから訂正ポストを出さない。指摘の返信が付いたときにその返信で訂正する。**
+      (b)**閣議決定・国会提出があった日は、法案本体を取りに行ってから書く。**
+    completed_at: "2026-10-12"
+    result_note: >-
+      main 13c3919c（task/x-20261012 のマージ）と 10b3f63f（x_posted_at の更新とトップ同期）で反映。衝突なし。
+      全テスト1,927件OK、公開用検査OK、全テーマ検査NG 0件、数字の出所検査NG 0件、トップページ検査NG 0件。
+      GitHub Actionsの公開ファイルの検査とPages配信はいずれも成功。
+      公開サイトのトップで消費税テーマの xpost が2026-10-12になっていることをcurlで確認した。
+      x_posted_at は bukatsu-chiiki と consumption-tax-cut を2026-10-12へ更新。
+      非公開正典の差分は時刻だけで内容の違いはなく、移動は不要だった。
+      **この反映で記録に残した重要な事実**: 一次資料の取り直しにより、10-11昼の@asahicom宛の投稿に
+      「定期購読の新聞も1%になる」と読める誤りがあったことが判明した（実際は新聞は8%据え置き）。
+      オーナーの判断により訂正ポストは出さず、指摘があったときに返信で訂正する。訂正文案は記録に残してある。
+      また、提示段階で条文番号の誤り（別表第一の二→別表第一 第二号）をオーナーの指摘で発見し、
+      投稿前に修正した。未確認の範囲（国会会議録、国税庁Q&A本文、電子版の判断文）も記録に明記した。
+    result_evidence:
+      - "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/38239495862"
+      - "https://sns-reaction-map.jp/"
+  - id: approval-20261012-bike-blue-ticket
+    department: engineering-data
+    action: website_publication
+    summary: "自転車の青切符ページを新デザイン（冒頭の「何歳から・いくら？」の短答・対話式の山なみ・論点ごとの読書面・背景の開閉行）に切り替えて公開する"
+    reason: "手順書23の手順7（更新と公開の検査）を憲法改正論議と同じ型（対話式の山なみを元HTMLから写す＋部活動型の圧縮）で終え、作業ブランチ task/renew-bike-blue-ticket で公開切替まで準備した"
+    risks:
+      - "URL・title・SEOメタ・Article JSON-LD・GA4・AdSense・投票（topic bike-blue-ticket-issue-stance-v1、論点6×立場3＝18選択肢、保存キーも同じ）・調査条件・PLANET_DATA・前回の収集との比較（潮目のカード）・作り方・次はこのテーマとクリック計測・フッターは元ページから文字どおり継承する。H1 は新デザインの見出し「自転車の青切符、何歳から・いくら？」に変わるため configs/theme-seo.json に display_headline を足した"
+      - "投票の前置きの1文だけ、元ページの「2024年に…導入されます」（未来形）を「2026年4月から…使われています」に差し替えた（投票の定義・保存キーは変えていない）。詳細データのうち旧体系の3表（旧177件の分類別件数・カテゴリ×検索クエリ・カテゴリ×スタンス）は載せず、「注意」だけ残した"
+      - "FAQ の構造化データを新たに載せる（冒頭の短答4問と背景の4問、画面に出ている問いと同じ）。旧ページの検索入口・進み具合の帯・立場の帯・一次資料クイズ・予想・編集部の横断整理・アリーナの点・論点ごとのX投稿12件は新デザインに移していない（投稿例は正典から選び直した12件、開いたときに読み込む）"
+      - "件数は変わらない（収集682件・意見469件、公開JSONの更新日2026-10-11）。手順7の前に、検索入口の反則金の誤り（並進禁止・乗車積載方法違反 3,000円 → 政令別表第六どおりの3行）と背景台帳の「子乗せ自転車は歩道を通行できる」（警察庁FAQどおりに）を直し、資料にしかない話の3文を区切った（数字・出典・判定は変えていない）"
+      - "有効な間は全テーマの公開候補生成の最後に自転車の新デザインが組み直され、自転車の照合（再読データの明細と論点の件数、立場の対応表と公開JSONの立場）が合わないとその回の生成全体が止まる。自転車の定期更新では adapter が累積候補から再読データと立場の対応表を作り直す（10/11 回の再生で確認）"
+      - "375pxでページ全体は 13,983px で目安13,000px以下を約1,000px超える（うち冒頭が5,733px）。論点の欄は 2,180〜2,598px で6論点中2論点が目安2,500pxを超える"
+      - "本番ホストでの GA4・AdSense の発火、投票の POST、X埋め込みの実表示は未確認（公開後に確認する）"
+    recommendation: approve
+    evidence:
+      - "quality/designs/2026-10-11-bike-blue-ticket-production-candidate.md"
+      - "quality/prototypes/bike-blue-ticket-release/evidence/"
+      - "configs/bike-layout.json"
+    status: approved
+    requested_at: "2026-10-12"
+    decided_at: "2026-10-12"
+    decision_note: >-
+      検査をすべて通したうえでオーナーが「公開して」と承認（2026-10-12）。release スキルで main へ統合・push した。
+  - id: approval-20261012-elderly-license-revocation
+    department: engineering-data
+    action: website_publication
+    summary: "高齢者免許返納ページを新デザイン（冒頭の「何歳から」の短答と年齢のものさし・対話式の山なみ・論点ごとの読書面・背景の開閉行）に切り替えて公開する"
+    reason: "手順書23の手順7（更新と公開の検査）を自転車の青切符と同じ型（対話式の山なみを元HTMLから写す＋部活動型の圧縮）で終え、作業ブランチ task/renew-elderly-license-revocation で公開切替まで準備した"
+    risks:
+      - "URL・title・SEOメタ・Article JSON-LD・GA4・AdSense・投票（topic elderly-license-revocation-issue-stance-v1、論点6×立場3＝18選択肢、保存キー・前置きの文も同じ）・調査条件・PLANET_DATA・前の収集回との比較（潮目のカード）・作り方・詳細データの3表・次に見るテーマとクリック計測・フッターは元ページから文字どおり継承する。H1 は新デザインの見出し「免許返納は何歳から、どう切り出すか」に変わるため configs/theme-seo.json に display_headline を足した"
+      - "title・description・Article の見出しには「メリットとデメリット」が残るが、新ページにはメリット・デメリットの節を載せていない（司令塔の決定。中身は論点と背景の返納の手続きの行に分かれて出る）。現行ページの「家族で話す前の確認」4項目は背景の1行に移した"
+      - "FAQ の構造化データを新たに載せる（冒頭の「よく検索される疑問」6問と背景の3問、画面に出ている問いと同じ）。旧ページの検索入口・進み具合の帯・立場の帯・一次資料クイズ・予想・編集部の横断整理・論点カード・アリーナの点は新デザインに移していない（投稿例は正典から選び直した12件、開いたときに読み込む）"
+      - "件数は変わらない（収集662件・意見455件、公開JSONの更新日2026-09-30）。手順7の前に、資料にしかない話の3文と照合1件の文を区切った（数字・出典・判定は変えていない）。照合「高齢ドライバーの事故は増えている」は判定を変えず令和8年上半期の統計の注記を付けたまま公開し、10/14 の定期更新で照合をやり直す"
+      - "理由区分があるのは2論点（322件）だけで、残り4論点（133件）は「理由は未公開」と表示する。有効な間は全テーマの公開候補生成の最後に高齢者の新デザインが組み直され、高齢者の照合（再読データの明細と論点の件数）が合わないとその回の生成全体が止まる。10/14 の回で新しい意見が入ったら、その回のうちに2論点の新しい意見を追い読みする必要がある（新規0件の 10/14 は隔離コピーで模擬して通ることを確認）"
+      - "375pxでページ全体は 12,782px（目安13,000px以下）、論点の欄は 1,113〜2,496px（6論点とも目安2,500px以下）"
+      - "本番ホストでの GA4・AdSense の発火、投票の POST、X埋め込みの実表示は未確認（公開後に確認する）"
+    recommendation: approve
+    evidence:
+      - "quality/designs/2026-10-11-elderly-license-revocation-production-candidate.md"
+      - "quality/prototypes/elderly-license-revocation-release/evidence/"
+      - "configs/elderly-layout.json"
+    status: approved
+    requested_at: "2026-10-12"
+    decided_at: "2026-10-12"
+    decision_note: >-
+      検査をすべて通したうえでオーナーが「公開して」と事前承認（2026-10-12）。release スキルで main へ統合・push した。
+  - id: approval-20261013-school-nickname-ban
+    department: engineering-data
+    action: website_publication
+    summary: "学校でのあだ名禁止ページを新デザイン（冒頭の「本当に禁止なの？」「なぜ始まったの？」の短答と止める呼び方の範囲・対話式の山なみ・論点ごとの読書面・背景の開閉行）に切り替えて公開する"
+    reason: "手順書23の手順7（更新と公開の検査）を高齢者免許返納と同じ型（対話式の山なみを元HTMLから写す＋部活動型の圧縮）で終え、作業ブランチ task/renew-school-nickname-ban で公開切替まで準備した"
+    risks:
+      - "URL・title・SEOメタ・Article JSON-LD・GA4・AdSense・投票（topic school-nickname-ban-issue-stance-v1、論点6×立場3＝18選択肢、論点と立場の定義・保存キー・前置きの文も同じ）・調査条件・PLANET_DATA・前の収集回との比較（潮目のカード）・作り方・調査上の注意・次に読むテーマとクリック計測・フッターは元ページから文字どおり継承する。投票の後に旧ページにも無い #issue-arena-section へ移ろうとして止まる1文だけを外した。H1 は新デザインの見出しに変わるため configs/theme-seo.json に display_headline を足した"
+      - "FAQ の構造化データを画面に出ている6問（冒頭の短答2問と背景の4問）で作り直す（旧FAQ10問の構造化データは使わない）。旧ページの検索入口・進み具合の帯・立場の帯・確認リスト・一次資料クイズ・予想・編集部の横断整理・論点カード・アリーナの点・ヒーロー写真は新デザインに移していない（投稿例は正典から選び直した11件、開いたときに読み込む。10/13 に11件とも残っていることを確認）"
+      - "件数は変わらない（収集483件・意見100件、公開JSONの更新日2026-09-20）。手順7の前に、重なる心配・照合1件・資料にしかない話の文を区切った（数字・出典・判定は変えていない）。24時間こどもSOSダイヤルの番号を冒頭の「今、嫌な呼び方でつらい場合」にも出した"
+      - "有効な間は全テーマの公開候補生成の最後にあだ名禁止の新デザインが組み直され、照合（再読データの明細・立場の対応表・論点の件数）が合わないとその回の生成全体が止まる。10/18 の定期更新で新しい意見が入ったら、その回のうちに新しい意見を追い読みする必要がある（立場の対応表は更新経路が作り直す。新規0件相当の 10/18 は隔離コピーで模擬して通ることを確認）"
+      - "375pxでページ全体は 11,788px（目安13,000px以下）、論点の欄は 1,962〜2,488px（6論点とも目安2,500px以下）"
+      - "本番ホストでの GA4・AdSense の発火、投票の POST、X埋め込みの実表示、実機での電話番号のリンクは未確認（公開後に確認する）"
+    recommendation: approve
+    evidence:
+      - "quality/designs/2026-10-11-school-nickname-ban-production-candidate.md"
+      - "quality/prototypes/school-nickname-ban-release/evidence/"
+      - "configs/nickname-layout.json"
+    status: approved
+    requested_at: "2026-10-13"
+    decided_at: "2026-10-13"
+    decision_note: >-
+      検査をすべて通したうえでオーナーが「公開して」と承認（2026-10-13）。release スキルで main へ統合・push した。

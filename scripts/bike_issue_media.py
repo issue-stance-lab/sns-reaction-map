@@ -143,6 +143,10 @@ def main() -> int:
     if args.write_html:
         page_path = args.page or DEFAULT_PAGE
         original = page_path.read_text(encoding="utf-8")
+        if 'name="bike-layout"' in original:
+            # 新デザイン（scripts/bike_layout.py）は投稿例を読書面に持つ。旧形式の節を差し込まない
+            # （元HTML data/page-sources/bike-blue-ticket.html には build_bike_arena.py の単独実行・定期更新で掛かる）
+            raise SystemExit("新デザインのページには書き込みません。元HTMLは build_bike_arena.py（単独実行）か定期更新で作り直されます。")
         updated = inject(original, section_html)
         if updated != original:
             page_path.write_text(updated, encoding="utf-8")

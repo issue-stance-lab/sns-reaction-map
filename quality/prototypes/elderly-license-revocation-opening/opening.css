@@ -1,0 +1,149 @@
+/* 高齢者免許返納 冒頭試作（正本。scripts/elderly_opening.py が試作フォルダーへ写す。2026-10-12に試作フォルダーから正本を移した）。
+   色は「標識の青（制度・手続き）」「柿色（年齢の節目・強調）」「路面の墨（ものさし）」の3つ。
+   立場の色は configs/planet/elderly-license-revocation.yaml から行内で受け取る。 */
+:root {
+  --paper: #f4f1ea;
+  --card: #fffdf9;
+  --ink: #1f2429;
+  --muted: #59616b;
+  --line: #dcd5c8;
+  --sign: #1d4f91;      /* 標識の青 */
+  --sign-soft: #e4ecf7;
+  --kaki: #c95a22;      /* 柿色 */
+  --kaki-soft: #f8e6da;
+  --road: #2e3338;      /* 路面 */
+  --gray: #9aa1ab;
+  --radius: 14px;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--paper); color: var(--ink); font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", "Yu Gothic", sans-serif; line-height: 1.7; -webkit-text-size-adjust: 100%; }
+a { color: var(--sign); }
+.elo-page { max-width: 1180px; margin: 0 auto; padding: 32px 24px 48px; }
+.elo-picto { width: 26px; height: 26px; flex: none; }
+
+/* 上段：題名と短答（左）、図（右）。狭い画面では 題名→短答→図 の順 */
+.elo-hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); grid-template-areas: "copy figure" "answers figure"; gap: 24px 32px; align-items: start; }
+.elo-hero__copy { grid-area: copy; }
+.elo-answers { grid-area: answers; }
+.elo-figure { grid-area: figure; display: grid; gap: 16px; }
+.elo-crumb { margin: 0 0 14px; font-size: 13px; font-weight: 700; color: var(--sign); letter-spacing: .04em; border-left: 4px solid var(--kaki); padding-left: 10px; }
+.elo-title { margin: 0; font-size: clamp(32px, 4.6vw, 56px); line-height: 1.2; font-weight: 800; }
+.elo-phrase { display: inline-block; }
+.elo-accent { color: var(--kaki); }
+.elo-sub { display: block; margin-top: 14px; font-size: clamp(16px, 1.8vw, 20px); line-height: 1.5; font-weight: 700; color: var(--sign); }
+.elo-lead { margin: 14px 0 0; font-size: 15px; color: var(--muted); }
+
+/* 短答3つ */
+.elo-answers { display: grid; gap: 12px; }
+.elo-answer { background: var(--card); border: 1px solid var(--line); border-left: 6px solid var(--sign); border-radius: var(--radius); padding: 14px 18px 14px; }
+.elo-answer--age { border-left-color: var(--kaki); }
+.elo-answer__kind { font-size: 12px; font-weight: 700; color: var(--muted); }
+.elo-answer h2 { display: flex; align-items: center; gap: 8px; margin: 2px 0 4px; font-size: 19px; line-height: 1.4; }
+.elo-answer h2 .elo-picto { color: var(--sign); }
+.elo-answer--age h2 .elo-picto { color: var(--kaki); }
+.elo-answer__short { margin: 0 0 4px; font-size: 17px; font-weight: 800; }
+.elo-answer p { margin: 0 0 6px; font-size: 14.5px; }
+.elo-answer a { font-size: 14px; font-weight: 700; }
+
+/* 図の共通 */
+.elo-ages, .elo-steps { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px 20px; }
+.elo-pill { display: inline-block; margin: 0 0 6px; font-size: 13px; font-weight: 800; color: #fff; background: var(--sign); border-radius: 999px; padding: 2px 12px; }
+.elo-ages__text { margin: 0 0 14px; font-size: 16px; font-weight: 700; line-height: 1.6; }
+
+/* 年齢のものさし：路面の上に、年齢から始まる手続きを帯で重ねる */
+.elo-ruler { background: var(--road); border-radius: 10px; padding: 12px 14px 8px; color: #fff; }
+.elo-ruler__bands { display: grid; grid-template-rows: repeat(3, 26px); row-gap: 6px; position: relative; }
+.elo-band { grid-row: var(--row); margin-left: var(--x); border-radius: 6px 13px 13px 6px; display: flex; align-items: center; padding: 0 10px; font-size: 12.5px; font-weight: 800; white-space: nowrap; overflow: hidden; }
+.elo-band--any { background: repeating-linear-gradient(90deg, rgba(255,255,255,.18) 0 18px, rgba(255,255,255,.08) 18px 30px); color: #fff; border: 1px dashed rgba(255,255,255,.55); }
+.elo-band--70 { background: var(--kaki-soft); color: #7a3210; }
+.elo-band--75 { background: var(--kaki); color: #fff; }
+.elo-ruler__scale { position: relative; height: 30px; margin-top: 8px; border-top: 2px solid rgba(255,255,255,.85); }
+.elo-tick { position: absolute; left: var(--x); top: 0; width: 0; }
+.elo-tick::before { content: ""; position: absolute; left: -1px; top: 0; width: 2px; height: 7px; background: rgba(255,255,255,.85); }
+.elo-tick i { position: absolute; top: 8px; transform: translateX(-50%); font-style: normal; font-size: 12px; font-weight: 700; color: rgba(255,255,255,.8); }
+.elo-tick--mark::before { height: 11px; background: #ffb48a; }
+.elo-tick--mark i { color: #ffb48a; font-size: 13px; }
+.elo-tick:first-child i { transform: none; }
+.elo-tick:last-child i { transform: translateX(-100%); }
+
+.elo-marks { list-style: none; margin: 14px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.elo-mark { border-top: 3px solid var(--line); padding-top: 8px; }
+.elo-mark .elo-picto { color: var(--sign); display: block; margin-bottom: 2px; }
+.elo-mark--70 { border-top-color: #e9b394; }
+.elo-mark--75 { border-top-color: var(--kaki); }
+.elo-mark--70 .elo-picto, .elo-mark--75 .elo-picto { color: var(--kaki); }
+.elo-mark__badge { display: block; font-size: 12px; font-weight: 800; color: var(--muted); }
+.elo-mark strong { display: block; font-size: 15px; line-height: 1.4; }
+.elo-mark p { margin: 4px 0 0; font-size: 13px; line-height: 1.6; color: var(--muted); }
+
+/* 返納したあとの流れ */
+.elo-steps__list { list-style: none; margin: 4px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; counter-reset: s; }
+.elo-step { position: relative; background: var(--sign-soft); border-radius: 10px; padding: 10px 12px 12px; }
+.elo-step:not(:last-child)::after { content: ""; position: absolute; right: -10px; top: 22px; border: 6px solid transparent; border-left: 8px solid var(--sign); }
+.elo-step .elo-picto { color: var(--sign); }
+.elo-step__num { position: absolute; top: 8px; right: 10px; font-size: 12px; font-weight: 800; color: var(--sign); }
+.elo-step strong { display: block; margin-top: 2px; font-size: 14.5px; line-height: 1.45; }
+.elo-step p { margin: 4px 0 0; font-size: 13px; line-height: 1.6; color: #3e4752; }
+.elo-stat { margin: 12px 0 0; font-size: 14px; font-weight: 700; }
+.elo-stat small { display: block; margin-top: 2px; font-size: 12px; font-weight: 400; color: var(--muted); }
+.elo-stat small a { margin-left: 6px; }
+
+/* よく検索される疑問 */
+.elo-faq { margin-top: 28px; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px 22px; }
+.elo-faq h2 { margin: 0 0 6px; font-size: 18px; }
+.elo-faq__item { border-top: 1px solid var(--line); }
+.elo-faq__item summary { cursor: pointer; padding: 10px 0; font-weight: 700; font-size: 15px; }
+.elo-faq__item p { margin: 0 0 12px; font-size: 14.5px; }
+.elo-faq__note { margin: 8px 0 0; font-size: 13px; color: var(--muted); }
+
+/* SNSの意見（件数） */
+.elo-count { margin-top: 28px; display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: 28px; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 22px 24px; }
+.elo-count h2 { margin: 0; font-size: 15px; color: var(--sign); }
+.elo-count h3 { margin: 16px 0 8px; font-size: 15px; }
+.elo-count__issues h3 { margin-top: 0; }
+.elo-count__num { margin: 0; line-height: 1; }
+.elo-count__num strong { font-size: clamp(54px, 7vw, 76px); font-weight: 800; letter-spacing: -.02em; }
+.elo-count__num span { font-size: 20px; font-weight: 700; margin-left: 4px; }
+.elo-count__caption { margin: 8px 0 0; font-size: 14px; color: var(--muted); }
+.elo-count__poll { margin: 10px 0 0; font-size: 13px; font-weight: 700; color: #7a3210; background: var(--kaki-soft); border-radius: 8px; padding: 6px 10px; }
+.elo-stance { display: flex; height: 18px; border-radius: 9px; overflow: hidden; }
+.elo-stance__seg { width: var(--w); background: var(--c); }
+.elo-stance__list { list-style: none; margin: 10px 0 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px 14px; font-size: 13.5px; }
+.elo-stance__list li { display: flex; align-items: baseline; gap: 6px; }
+.elo-stance__list b { margin-left: auto; }
+.elo-stance__list small { color: var(--muted); min-width: 3.6em; text-align: right; }
+.elo-key { display: inline-block; width: 10px; height: 10px; border-radius: 3px; background: var(--c); flex: none; }
+.elo-count__lead { margin: -4px 0 10px; font-size: 13px; color: var(--muted); }
+.elo-issues { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.elo-issue { display: grid; grid-template-columns: 9.5em minmax(0, 1fr) 4.2em; align-items: center; gap: 10px; }
+.elo-issue__name { font-size: 14px; font-weight: 700; line-height: 1.35; }
+.elo-tag { display: block; font-style: normal; font-size: 11.5px; font-weight: 700; color: var(--kaki); }
+.elo-issue__bar { height: 14px; border-radius: 0 7px 7px 0; background: linear-gradient(90deg, var(--sign) 0 var(--w), transparent var(--w)); border-left: 2px solid var(--sign); }
+.elo-issue--other .elo-issue__bar { background: linear-gradient(90deg, var(--gray) 0 var(--w), transparent var(--w)); border-left-color: var(--gray); }
+.elo-issue--other .elo-issue__name { color: var(--muted); }
+.elo-issue b { text-align: right; font-size: 17px; }
+.elo-issue b small { font-size: 12px; font-weight: 400; margin-left: 1px; }
+.elo-count__note, .elo-count__updated { margin: 10px 0 0; font-size: 12.5px; color: var(--muted); }
+
+.elo-sources { margin: 18px 0 0; font-size: 13px; display: flex; flex-wrap: wrap; gap: 4px 16px; }
+.elo-sources span { font-weight: 700; color: var(--muted); }
+
+@media (max-width: 860px) {
+  .elo-page { padding: 20px 16px 36px; }
+  .elo-hero { grid-template-columns: minmax(0, 1fr); grid-template-areas: "copy" "answers" "figure"; gap: 18px; }
+  .elo-count { grid-template-columns: minmax(0, 1fr); gap: 18px; padding: 18px 16px; }
+  .elo-faq { padding: 14px 16px; }
+}
+@media (max-width: 560px) {
+  .elo-ages, .elo-steps { padding: 14px 14px; }
+  .elo-ruler { padding: 10px 10px 6px; }
+  .elo-band { font-size: 11.5px; padding: 0 7px; }
+  .elo-marks, .elo-steps__list { grid-template-columns: minmax(0, 1fr); }
+  .elo-mark { display: grid; grid-template-columns: 28px minmax(0, 1fr); column-gap: 10px; }
+  .elo-mark .elo-picto { grid-row: span 3; }
+  .elo-step { padding-left: 46px; }
+  .elo-step .elo-picto { position: absolute; left: 12px; top: 12px; }
+  .elo-step:not(:last-child)::after { right: auto; left: 22px; top: auto; bottom: -11px; border: 6px solid transparent; border-top: 7px solid var(--sign); }
+  .elo-issue { grid-template-columns: 7.6em minmax(0, 1fr) 3.8em; gap: 8px; }
+  .elo-stance__list { grid-template-columns: minmax(0, 1fr); }
+}

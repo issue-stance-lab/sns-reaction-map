@@ -1,0 +1,308 @@
+{
+  "theme_id": "bike-blue-ticket",
+  "note": "自転車の青切符ページの冒頭の文言。件数・論点・立場は公開JSONから読むので、ここには書かない。制度の記述は quality/research/bike-blue-ticket-primary-sources.md の資料記号（A〜T）と確認日に対応させる。年齢・反則金・FAQの文は課題97で2026-09-28に公開した検索入口と同文（評価日2026-10-28まで中身を変えない）。2026-10-12に一次資料を再確認し、確認日を checked_on に集めた。",
+  "inputs": {
+    "public_json": "docs/data/themes/bike-blue-ticket.json",
+    "planet_config": "configs/planet/bike-blue-ticket.yaml",
+    "reread": "data/bike-blue-ticket_issues-reread.json",
+    "themes_registry": "THEMES.yaml"
+  },
+  "checked_on": "2026-10-12",
+  "_checked_on": "制度の記述を一次資料で確かめた日（1か所だけ）。冒頭の出典の注記・運用実績の「◯月◯日時点」・背景の「◯月◯日時点」はここから作る。各出典の checked_on はこの日より後にできない（生成器が止める）。2026-10-12の再確認は quality/research/bike-blue-ticket-primary-sources.md【2026-10-12追記】。",
+  "crumb": "交通ルール・日常論争 ／ 自転車の青切符",
+  "title": {
+    "lead": "自転車の青切符、",
+    "accent": "何歳から",
+    "tail": "・いくら？",
+    "sub": [
+      "切られた後の払い方と、",
+      "SNSで意見が分かれる理由"
+    ]
+  },
+  "lead": "制度の要点を先に確かめてから、SNSの意見を論点ごとに読みます。",
+  "ticket": {
+    "label": "自転車の青切符",
+    "caption": "図は説明用のイメージで、実際の書式ではありません。",
+    "fields": [
+      {
+        "key": "施行日",
+        "value": "2026年4月1日",
+        "source": "egov_law"
+      },
+      {
+        "key": "対象",
+        "value": "16歳以上",
+        "source": "npa_system"
+      },
+      {
+        "key": "反則金",
+        "value_from": "fines_range",
+        "note": "主な例",
+        "source": "egov_order"
+      },
+      {
+        "key": "免許の点数",
+        "value": "付かない",
+        "source": "npa_faq"
+      }
+    ],
+    "stub": "違反を見つけても、基本は指導警告"
+  },
+  "answers_heading": "検索で多い疑問に、先に答えます",
+  "age": {
+    "kind": "対象年齢",
+    "question": "何歳から？",
+    "short": "16歳以上が対象です。",
+    "hint": "対象年齢と、歩道を通れる年齢は別のルールです。",
+    "default": "16plus",
+    "options": [
+      {
+        "id": "under13",
+        "label": "13歳未満",
+        "title": "13歳未満は青切符制度の対象外です",
+        "body": "歩道を通行できます。歩道では歩行者を優先し、車道寄りを徐行してください。"
+      },
+      {
+        "id": "13to15",
+        "label": "13〜15歳",
+        "title": "13〜15歳は青切符制度の対象外です",
+        "body": "交通ルールがなくなるわけではありません。歩道通行の年齢例外は13歳未満で、この区分とは異なります。"
+      },
+      {
+        "id": "16plus",
+        "label": "16歳以上",
+        "title": "16歳以上は制度の対象です",
+        "body": "一定の反則行為で検挙された場合に手続きの対象となります。通常は指導警告が基本です。免許の有無は対象年齢に関係しません。"
+      }
+    ],
+    "sources": [
+      "npa_system"
+    ]
+  },
+  "fines": {
+    "kind": "主な反則金",
+    "question": "いくら？",
+    "short_template": "主な例で{min}円から{max}円です。",
+    "search_label": "違反名または金額",
+    "placeholder": "例：スマホ、一時停止、6,000円",
+    "caveat": "金額は主な例です。反則行為の全件一覧ではなく、違反があれば必ず即交付されるという意味でもありません。",
+    "empty": "近い違反例が見つかりません。別の呼び方を試すか、「すべて」に戻してください。",
+    "items": [
+      {
+        "name": "携帯電話使用等（保持）",
+        "amount": 12000,
+        "keywords": "スマートフォン 携帯電話 ながらスマホ 通話 注視",
+        "source": "npa_control"
+      },
+      {
+        "name": "遮断踏切立入り",
+        "amount": 7000,
+        "keywords": "遮断踏切 しゃ断機 踏切",
+        "source": "npa_control"
+      },
+      {
+        "name": "信号無視（赤色等）",
+        "amount": 6000,
+        "keywords": "信号無視 赤信号",
+        "source": "npa_control"
+      },
+      {
+        "name": "横断歩行者等妨害",
+        "amount": 6000,
+        "keywords": "横断歩行者 妨害 横断歩道",
+        "source": "tokyo"
+      },
+      {
+        "name": "指定場所一時不停止",
+        "amount": 5000,
+        "keywords": "一時停止 とまれ 指定場所",
+        "source": "npa_control"
+      },
+      {
+        "name": "無灯火",
+        "amount": 5000,
+        "keywords": "無灯火 ライト 夜",
+        "source": "tokyo"
+      },
+      {
+        "name": "合図不履行（手信号など）",
+        "amount": 5000,
+        "keywords": "合図不履行 手信号 ハンドサイン",
+        "source": "egov_order"
+      },
+      {
+        "name": "自転車制動装置不良",
+        "amount": 5000,
+        "keywords": "ブレーキ 制動装置 不良",
+        "source": "egov_order"
+      },
+      {
+        "name": "歩道徐行等義務違反",
+        "amount": 3000,
+        "keywords": "歩道 徐行 義務 徐行しない",
+        "source": "egov_order"
+      },
+      {
+        "name": "並進禁止違反",
+        "amount": 3000,
+        "keywords": "並進 横並び",
+        "source": "egov_order"
+      },
+      {
+        "name": "乗車積載方法違反",
+        "amount": 5000,
+        "keywords": "積載 乗車方法 荷物",
+        "source": "egov_order"
+      },
+      {
+        "name": "軽車両乗車積載制限違反（二人乗りなど）",
+        "amount": 3000,
+        "keywords": "二人乗り 2人乗り",
+        "source": "egov_order"
+      }
+    ]
+  },
+  "after": {
+    "kind": "切られた後",
+    "question": "切られたら、どうする？",
+    "short": "納付書で、金融機関に納めます。",
+    "steps": [
+      {
+        "title": "青切符を受け取る",
+        "body": "悪質・危険な違反で検挙されたときに交付されます。",
+        "source": "npa_control"
+      },
+      {
+        "title": "納付書で納める",
+        "body": "取締りの翌日から原則7日以内に、銀行や郵便局などで納めます。現場で現金は渡しません。",
+        "source": "npa_system"
+      },
+      {
+        "title": "刑事手続に進まない",
+        "body": "期限内に納めれば起訴されず、前科も付きません。納めないと刑事手続に移ります。",
+        "source": "npa_system"
+      }
+    ],
+    "license": "運転免許の点数は付きません。ただし重大な事故や飲酒運転など特に悪質な場合は、免許停止になることがあります。",
+    "license_source": "npa_faq"
+  },
+  "warning": {
+    "kind": "運用の実際",
+    "question": "違反したら、必ず切られる？",
+    "short": "基本は、その場での指導警告です。",
+    "tickets": 2147,
+    "warnings": 135855,
+    "period": "導入から1か月（暫定値）",
+    "body_template": "{period}で、青切符は{tickets}件、指導警告票は{warnings}件でした。",
+    "picto_label": "青切符1件に対し、指導警告票は約{ratio}件",
+    "note": "酒酔い運転など特に重大な違反は、赤切符（刑事手続）の対象です。",
+    "sources": [
+      "npa_release",
+      "npa_control"
+    ],
+    "latest_note_template": "{checked}時点で、警察庁はこれより新しい運用状況を公表していません。"
+  },
+  "faq": {
+    "kind": "よく検索される疑問",
+    "heading": "歩道・手信号・支払いの短答",
+    "items": [
+      {
+        "id": "sidewalk",
+        "q": "大人は歩道を走れる？",
+        "a": "歩道通行は原則できませんが、標識がある場合や、車道通行が危険な具体的状況などの例外があります。歩道では歩行者を優先し、徐行します。単に歩道を通行しただけなら、基本は指導警告です。",
+        "source": "npa_faq",
+        "link_text": "警察庁の説明"
+      },
+      {
+        "id": "signal",
+        "q": "手信号は2026年からの新ルール？",
+        "a": "合図をする決まり自体は以前からあり、2026年4月に始まったのは青切符制度の適用です。具体的な取締り運用は警察庁の案内で確認できます。",
+        "source": "npa_control",
+        "link_text": "取締りの基本"
+      },
+      {
+        "id": "payment",
+        "q": "反則金はどこで支払う？",
+        "a": "交付される納付書で、銀行や郵便局などの金融機関で支払います。警察官が取締りの現場で現金を受け取ることはありません。",
+        "source": "npa_faq",
+        "link_text": "警察庁の説明"
+      },
+      {
+        "id": "fraud",
+        "q": "現場で現金を求められたら？",
+        "a": "その場では支払わず、警察へ通報してください。青切符制度を悪用した詐欺への注意喚起が出ています。",
+        "source": "npa_fraud",
+        "link_text": "警察庁の注意喚起"
+      }
+    ]
+  },
+  "count": {
+    "heading": "SNSの意見",
+    "caption_template": "{start}〜{end}に{source}で拾った公開投稿{collected}件から、賛否や理由が読み取れるものだけを数えました",
+    "poll_note": "SNSの公開投稿を分類して数えたもので、世論調査の結果とは違います。",
+    "issues_heading": "論点ごとの件数",
+    "other_label": "その他",
+    "other_sub": "5つの論点のどれにも入らないもの",
+    "other_lead_template": "最も多いのは「その他」です。その{share}%は「{top}」でした。",
+    "other_top_n": 3,
+    "no_reason_tag": "理由は未公開",
+    "updated_template": "最終更新 {updated}・次回の収集予定 {next}"
+  },
+  "checked_note_template": "制度の記述は、{checked}に一次資料で確かめました。",
+  "sources": {
+    "npa_system": {
+      "label": "警察庁｜自転車の新しい制度",
+      "url": "https://www.npa.go.jp/bureau/traffic/bicycle/portal/system.html",
+      "memo": "資料A・J",
+      "checked_on": "2026-10-12"
+    },
+    "npa_control": {
+      "label": "警察庁｜取締りについて",
+      "url": "https://www.npa.go.jp/bureau/traffic/bicycle/portal/control.html",
+      "memo": "資料B・M",
+      "checked_on": "2026-10-12"
+    },
+    "npa_faq": {
+      "label": "警察庁｜よくある質問",
+      "url": "https://www.npa.go.jp/bureau/traffic/bicycle/portal/faq.html",
+      "memo": "資料C・F・K",
+      "checked_on": "2026-10-12"
+    },
+    "egov_law": {
+      "label": "e-Gov｜道路交通法",
+      "url": "https://laws.e-gov.go.jp/law/335AC0000000105",
+      "memo": "資料N",
+      "checked_on": "2026-10-12"
+    },
+    "npa_release": {
+      "label": "警察庁｜導入後1月間の運用状況",
+      "url": "https://www.npa.go.jp/news/release/2026/20260514.pdf",
+      "memo": "資料P",
+      "checked_on": "2026-10-12"
+    },
+    "osaka": {
+      "label": "大阪府｜青切符導入について",
+      "url": "https://www.pref.osaka.lg.jp/o130080/kotsukeikaku/anzentaisaku/jitennsyanhenokoutuuhannsokutukokuseidodounyuu.html",
+      "memo": "資料Q・一次資料メモ【2026-10-12追記】8",
+      "checked_on": "2026-10-12"
+    },
+    "egov_order": {
+      "label": "e-Gov｜道路交通法施行令",
+      "url": "https://laws.e-gov.go.jp/law/335CO0000000270",
+      "memo": "資料T（別表第六）",
+      "checked_on": "2026-10-12"
+    },
+    "tokyo": {
+      "label": "東京都｜自転車の青切符",
+      "url": "https://www.tomin-anzen.metro.tokyo.lg.jp/kotsu/topics-k/blue_ticket_system",
+      "memo": "一次資料メモ【2026-10-12追記】9（原文で確認）",
+      "checked_on": "2026-10-12"
+    },
+    "npa_fraud": {
+      "label": "警察庁｜詐欺への注意喚起",
+      "url": "https://www.npa.go.jp/bureau/traffic/shidou/fraud-alert.html",
+      "memo": "資料V・一次資料メモ【2026-10-12追記】6",
+      "checked_on": "2026-10-12"
+    }
+  }
+}

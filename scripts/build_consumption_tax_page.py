@@ -528,7 +528,7 @@ CLAIM_END = "<!-- CLAIM_AUDIT_END -->"
 # 起承転結の再構成（課題69、fukushutoのFACT_CHECKと同型）で、山なみ図を
 # 読んだ直後に置くよう変更した（以前は最後尾に近い「スタンス集計」の手前だった）。
 CLAIM_ANCHOR = "<!-- PLANET_SECTION_END -->"
-CHECKED_ON = "2026年10月3日"
+CHECKED_ON = "2026年10月11日"
 
 # 判定の呼び名。他テーマと同じ言い方にしないこと（verify_page_originality.py が見る）。
 VERDICT_LABEL = {
@@ -1757,7 +1757,9 @@ def build(
     from consumption_tax_connected import apply as connect_page, enabled as is_connected
     if connected_layout or is_connected(html):
         from refresh_planet_section import refresh
-        _, html, failures = refresh("consumption-tax-cut", source=html)
+        # 候補（--input）で作るときは候補を母数にする（正典はまだ古い）。
+        _, html, failures = refresh("consumption-tax-cut", source=html,
+                                    canonical=rows if classified is not None else None)
         if failures:
             raise ValueError("連動表示の再生成検査: " + "; ".join(failures))
     html = connect_page(html, activate=connected_layout)

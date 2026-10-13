@@ -6,7 +6,9 @@ from scripts.build_fukushuto_arena import apply_public_counts
 
 
 ROOT = Path(__file__).resolve().parents[1]
-PAGE = ROOT / "docs/fukushuto-reaction-map.html"
+PUBLISHED = ROOT / "docs/fukushuto-reaction-map.html"
+# 新デザイン公開後は、旧形式の元HTML（data/page-sources）を検査する（scripts/fukushuto_layout.py）
+PAGE = ROOT / "data/page-sources/fukushuto.html" if 'name="fukushuto-layout"' in PUBLISHED.read_text(encoding="utf-8") else PUBLISHED
 PUBLIC = ROOT / "data/public/themes/fukushuto.json"
 
 
