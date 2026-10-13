@@ -1,0 +1,13 @@
+# 読み手（伏せ読み）への説明。scripts/wave_review/wave_review.py batches が指示文に差し込む。
+title: 自転車の青切符（反則金）導入の是非
+opinion_guide: 投稿者自身の青切符制度（自転車の取締り・反則金）への評価・感情・主張が本文から読めるなら true。自動車の青切符や一般の交通安全だけの話は別テーマ。
+issue_guide: 取締り強化賛成＝取締りを支持しマナー改善を期待／インフラ整備優先＝レーン・道路整備が先／車道走行への不安＝車道は怖い・危ない／免許制要求＝免許制・講習など更なる厳格化／ルール曖昧・不信＝ルールが曖昧・警察の運用や点数稼ぎへの不信・理由を示さない反対／その他＝上記に当てはまらないが青切符に関する意見。
+stance_guide: 賛成（取締り強化支持）＝制度・取締りに肯定的／反対（インフラ・制度優先）＝制度に否定的、または整備や別の対策が先だと主張／どちらでもない＝意見だが賛否が読めない、または意見でない。立場が「反対」の投稿は、必ず反対5区分（strict 青切符では足りない／scope 対象と順番に異議／place 走る場所がない／distrust 警察の運用への不信／abolish 制度そのものに反対）の中から bucket を選ぶ。
+new_issue_examples: 「歩道通行の是非」「LUUPとの比較」「自動車との取締り格差」
+extra_instructions: |
+  8-2. intensity（is_opinion true のみ）: 表現の強さ。high＝強い断定・怒り・「強く反対」など／medium＝はっきりした主張／low＝控えめ・疑問形・軽い感想。false のときは null。
+extra_fields: ',"intensity"'
+notes: |
+  自転車は本文確認記録の形式が独自（data/bike-blue-ticket_editorial-updates/YYYYMMDD.json）。
+  compare/decide のあとは wave_review.py apply ではなく bike_plan.py で review-plan.json を作り、
+  build_bike_refresh_candidate.py を通す。署名の定型文（change.org）は「その他／abolish」、代表投稿に使わない。

@@ -1,0 +1,12 @@
+title: 憲法改正論議（改憲の是非、9条・自衛隊、緊急事態条項、国民投票のルール、政党の発議手続き、情報・議論の質）
+opinion_guide: 投稿者自身の、憲法改正（改憲の是非・内容・手続き・議論のあり方）についての評価・感情・主張が本文から読めるなら true。集会・配信の告知だけ、他国の憲法、憲法と無関係な政治話題は意見外。
+issue_guide: 改憲全般＝改憲そのものの是非・総論／9条・自衛隊＝9条、自衛隊明記、防衛／緊急事態条項＝緊急事態条項、任期延長、権限集中／国民投票・広告＝国民投票法、最低投票率、広告規制、投票の公平さ／政党・発議手続き＝政党の姿勢・議席・審査会・発議の手続き／情報・議論の質＝報道、デマ、決めつけ、議論の仕方／その他＝上記以外の憲法改正の話題（家族・皇室・居住など）。
+stance_guide: 改正推進＝改正に賛成・進めるべき／慎重・反対＝改正に反対・慎重／手続き重視＝賛否より手続き・ルール・議論の進め方を重視／中立＝意見だが賛否が読めない、または意見でない。
+new_issue_examples: 「皇室・家族条項」「首相公選制・大統領制」「地方自治」
+notes: |
+  7論点すべてに理由区分あり。専用ファイルは post_key 形式。再読共通台帳あり（register が要る）。
+  新デザインは立場の対応表 data/constitutional-amendment_reread-stances.json を照合するので、候補コピーの中で
+  scripts/constitutional_reread_stances.py --made-on 日付 を回して root へコピーする。
+  主張の該当投稿は data/constitutional-amendment_claim_posts.json（claims[].tweet_ids）に足し、
+  build_constitutional_process_sections.py --input 候補 --verification-dest data/verification で写しを作り直す。
+  同文の連投（年賀状型）は1件1意見で数え、監査に明記する。
