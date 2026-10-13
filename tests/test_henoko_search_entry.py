@@ -24,7 +24,7 @@ class HenokoSearchEntryTest(unittest.TestCase):
         self.assertIn("辺野古沖転覆事故", self.soup.title.string)
         self.assertIn("原因・報告書・安全管理", self.soup.title.string)
         description = self.soup.select_one('meta[name="description"]')["content"]
-        for phrase in ("同志社国際高校", "確認済み", "未決定事項", "SNS上の意見"):
+        for phrase in ("高校の研修旅行", "確認済み", "未決定事項", "SNS上の意見"):
             self.assertIn(phrase, description)
         self.assertIn("辺野古沖転覆事故", self.soup.select_one("h1").get_text())
 
