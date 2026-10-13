@@ -1,0 +1,179 @@
+/* 学校でのあだ名禁止 冒頭試作。
+   色は「黒板の緑」「チョークの黄」「方眼ノートの紙」。図柄は名札と国の資料3枚。
+   立場の色は configs/planet/school-nickname-ban.yaml から行内（--c）で受け取る。 */
+:root {
+  --paper: #f7f6f0;
+  --grid: rgba(35, 74, 62, .07);
+  --card: #fffefa;
+  --ink: #1d2a26;
+  --muted: #56645f;
+  --line: #d8d9cf;
+  --board: #234a3e;      /* 黒板 */
+  --board-2: #2e5c4e;
+  --chalk: #f6f3e6;      /* チョークの白 */
+  --yellow: #f2c230;     /* チョークの黄 */
+  --yellow-soft: #fbefc4;
+  --ng: #b5562f;         /* 確認できないこと */
+  --radius: 14px;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; color: var(--ink); line-height: 1.7; -webkit-text-size-adjust: 100%;
+  font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", "Yu Gothic", sans-serif;
+  background-color: var(--paper);
+  background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+a { color: var(--board); }
+.nop-page { max-width: 1120px; margin: 0 auto; padding: 32px 24px 48px; }
+.nop-icon { width: 1.25em; height: 1.25em; flex: none; vertical-align: -0.25em; }
+
+/* 題名 */
+.nop-hero { margin-bottom: 22px; }
+.nop-crumb { margin: 0 0 12px; font-size: 13px; font-weight: 700; color: var(--board); letter-spacing: .04em; }
+.nop-title { margin: 0; font-size: clamp(30px, 4.6vw, 52px); line-height: 1.22; font-weight: 800; }
+.nop-phrase { display: inline-block; }
+.nop-accent { background: linear-gradient(transparent 62%, var(--yellow) 62% 92%, transparent 92%); }
+.nop-sub { display: block; margin-top: 12px; font-size: clamp(16px, 1.8vw, 20px); line-height: 1.5; font-weight: 700; color: var(--board); }
+.nop-lead { margin: 12px 0 0; font-size: 15px; color: var(--muted); max-width: 46em; }
+
+/* 短答2つ */
+.nop-answers { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr); gap: 20px; align-items: start; }
+.nop-answer { position: relative; border-radius: var(--radius); padding: 22px 22px 18px; background: var(--card); border: 1px solid var(--line); }
+.nop-answer--rule { background: var(--board); color: var(--chalk); border-color: var(--board); box-shadow: inset 0 0 0 6px var(--board-2); }
+.nop-answer__num { margin: 0; font-size: 13px; font-weight: 800; letter-spacing: .08em; color: var(--muted); }
+.nop-answer--rule .nop-answer__num { color: var(--yellow); }
+.nop-answer__q { margin: 2px 0 6px; font-size: 22px; line-height: 1.4; }
+.nop-answer__short { margin: 0 0 14px; font-size: 19px; font-weight: 800; line-height: 1.55; }
+.nop-answer--rule .nop-answer__short { color: var(--yellow); }
+
+/* 国の資料3枚の図 */
+.nop-docs { margin: 0 0 16px; padding: 14px 14px 12px; border: 1.5px dashed rgba(246, 243, 230, .45); border-radius: 12px; }
+.nop-docs__title { font-size: 13px; font-weight: 700; opacity: .85; }
+.nop-docs__result { margin: 2px 0 10px; font-size: 16px; font-weight: 800; }
+.nop-docs__result small { display: inline-block; white-space: nowrap; margin-left: 8px; font-size: 12px; font-weight: 600; opacity: .8; }
+.nop-docs__list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.nop-doc { display: grid; grid-template-columns: 34px minmax(0, 1fr); grid-template-rows: auto auto auto; column-gap: 8px; align-items: start; background: var(--chalk); color: var(--ink); border-radius: 10px; padding: 10px; }
+.nop-doc__paper { grid-row: 1 / 3; width: 34px; height: 40px; color: var(--board); }
+.nop-doc__kind { font-size: 12px; font-weight: 800; color: var(--board); }
+.nop-doc__name { font-size: 12.5px; line-height: 1.45; font-weight: 700; }
+.nop-doc__name a { color: var(--ink); }
+.nop-doc__hit { grid-column: 1 / 3; display: flex; align-items: center; gap: 6px; margin-top: 8px; padding-top: 6px; border-top: 1px dashed var(--line); color: var(--board); }
+.nop-doc__hit b { font-size: 22px; line-height: 1; }
+.nop-docs__school { display: flex; align-items: center; gap: 10px; margin-top: 10px; padding: 8px 12px; border-radius: 10px; background: rgba(242, 194, 48, .16); color: var(--chalk); }
+.nop-docs__school .nop-icon { width: 30px; height: 30px; color: var(--yellow); }
+.nop-docs__school p { margin: 0; display: flex; flex-wrap: wrap; column-gap: 12px; font-size: 14px; }
+.nop-docs__school span { font-size: 12.5px; opacity: .85; }
+
+/* 確認できたこと／できないこと */
+.nop-split { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 10px; }
+.nop-split > div { border-radius: 10px; padding: 10px 12px; background: rgba(35, 74, 62, .06); }
+.nop-answer--rule .nop-split > div { background: rgba(246, 243, 230, .1); }
+.nop-split h3 { margin: 0 0 4px; font-size: 13px; display: flex; align-items: center; gap: 6px; }
+.nop-split__ok h3::before { content: "✓"; display: inline-grid; place-items: center; width: 18px; height: 18px; border-radius: 50%; background: var(--board); color: var(--chalk); font-size: 11px; }
+.nop-answer--rule .nop-split__ok h3::before { background: var(--yellow); color: var(--board); }
+.nop-split__ng h3::before { content: "?"; display: inline-grid; place-items: center; width: 18px; height: 18px; border-radius: 50%; border: 2px dashed var(--ng); color: var(--ng); font-size: 11px; font-weight: 800; }
+.nop-answer--rule .nop-split__ng h3::before { border-color: #f0b49a; color: #f0b49a; }
+.nop-split ul { margin: 0; padding-left: 1.1em; font-size: 14px; line-height: 1.6; }
+.nop-split li + li { margin-top: 4px; }
+
+/* SNS上の意見（事実と分ける） */
+.nop-voices { margin-top: 12px; padding-top: 10px; border-top: 1px dashed var(--line); font-size: 13.5px; }
+.nop-answer--rule .nop-voices { border-top-color: rgba(246, 243, 230, .35); }
+.nop-voices p { margin: 0 0 4px; }
+.nop-voices__label { font-size: 12px; font-weight: 700; color: var(--muted); }
+.nop-answer--rule .nop-voices__label { color: rgba(246, 243, 230, .75); }
+.nop-voices span { display: inline-block; min-width: 3em; margin-right: 6px; padding: 0 6px; border-radius: 4px; font-size: 12px; font-weight: 800; text-align: center; background: var(--yellow-soft); color: var(--ink); }
+
+/* 呼び方の範囲（名札の表） */
+.nop-scope { margin-top: 20px; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px 22px 16px; }
+.nop-scope h2 { margin: 0 0 12px; font-size: 18px; }
+.nop-scope__wrap { overflow-x: auto; }
+.nop-scope__table { width: 100%; border-collapse: separate; border-spacing: 6px; table-layout: fixed; }
+.nop-scope__table thead td:first-child { width: 120px; }
+.nop-scope__table th[scope="row"] { text-align: left; font-size: 14px; }
+.nop-scope__table td, .nop-scope__table th[scope="col"] { text-align: center; }
+.nop-tag { display: inline-flex; flex-direction: column; align-items: center; gap: 2px; color: var(--board); }
+.nop-tag .nop-icon { width: 26px; height: 26px; }
+.nop-tag b { font-size: 14px; color: var(--ink); line-height: 1.3; word-break: keep-all; }
+.nop-cell--stop, .nop-cell--keep { border-radius: 8px; padding: 6px 2px; font-size: 13px; font-weight: 700; }
+.nop-cell--stop { background: var(--board); color: var(--chalk); }
+.nop-cell--keep { border: 1.5px dashed var(--line); color: var(--muted); font-weight: 500; }
+.nop-scope__note { margin: 8px 0 0; font-size: 14px; color: var(--muted); }
+
+/* 件数 */
+.nop-count { margin-top: 20px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); gap: 28px; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 22px; }
+.nop-count h2 { margin: 0; font-size: 15px; color: var(--muted); }
+.nop-count__num { margin: 0; line-height: 1; }
+.nop-count__num strong { font-size: 64px; font-weight: 800; color: var(--board); letter-spacing: -.02em; }
+.nop-count__num span { margin-left: 4px; font-size: 20px; font-weight: 800; }
+.nop-count__caption { margin: 8px 0 4px; font-size: 13px; color: var(--muted); }
+.nop-count__poll { display: inline-block; margin: 0 0 14px; padding: 2px 10px; border-radius: 6px; background: var(--yellow-soft); font-size: 13px; font-weight: 700; }
+.nop-count__sub { margin: 0 0 8px; font-size: 14px; }
+.nop-stance { display: flex; height: 14px; border-radius: 7px; overflow: hidden; background: var(--line); }
+.nop-stance__seg { width: var(--w); background: var(--c); }
+.nop-stance__list { list-style: none; margin: 8px 0 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px 14px; font-size: 13px; }
+.nop-stance__list li { display: flex; align-items: center; gap: 6px; }
+.nop-stance__list b { margin-left: auto; font-size: 15px; }
+.nop-stance__list small, .nop-issue small { font-size: 11px; font-weight: 600; margin-left: 1px; }
+.nop-key { width: 12px; height: 12px; border-radius: 3px; background: var(--c); flex: none; }
+.nop-issues { list-style: none; margin: 0; padding: 0; }
+.nop-issue { display: grid; grid-template-columns: 10.5em minmax(0, 1fr) 3.6em; align-items: center; gap: 10px; padding: 5px 0; border-bottom: 1px dashed var(--line); font-size: 14px; }
+.nop-issue__name { line-height: 1.35; font-weight: 700; }
+.nop-issue__bar { height: 10px; border-radius: 5px; background: rgba(35, 74, 62, .08); }
+.nop-issue__bar i { display: block; height: 100%; width: var(--w); border-radius: 5px; background: var(--board); }
+.nop-issue b { text-align: right; font-size: 16px; }
+.nop-flag { display: inline-block; margin-left: 6px; padding: 0 6px; border-radius: 4px; border: 1px solid var(--ng); color: var(--ng); font-size: 11px; font-style: normal; font-weight: 700; vertical-align: 1px; }
+.nop-flag--muted { border-color: var(--muted); color: var(--muted); }
+.nop-count__note, .nop-count__after, .nop-count__updated { margin: 8px 0 0; font-size: 12.5px; color: var(--muted); }
+.nop-count__after { color: var(--ink); font-weight: 700; }
+
+/* つらい場合・リンク・出典 */
+.nop-safety { margin-top: 20px; padding: 14px 18px; border-left: 5px solid var(--yellow); background: var(--card); border-radius: 0 10px 10px 0; font-size: 14px; }
+.nop-safety p { margin: 4px 0 0; }
+.nop-phone { display: flex; flex-wrap: wrap; gap: 2px 12px; align-items: baseline; }
+.nop-phone span { font-weight: 800; font-size: 13px; }
+.nop-phone a { font-size: 22px; font-weight: 800; color: var(--ink); font-variant-numeric: tabular-nums; }
+.nop-links { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+.nop-link { display: inline-block; padding: 10px 16px; border-radius: 999px; background: var(--board); color: var(--chalk); font-weight: 700; font-size: 14px; text-decoration: none; }
+.nop-link + .nop-link { background: var(--card); color: var(--board); border: 1.5px solid var(--board); }
+.nop-sources { margin-top: 16px; font-size: 12.5px; color: var(--muted); }
+.nop-sources p { margin: 0; }
+.nop-sources ul { margin: 4px 0 0; padding-left: 1.1em; }
+
+/* FAQ */
+.nop-faq { margin-top: 28px; }
+.nop-faq h2 { margin: 0 0 10px; font-size: 20px; }
+.nop-faq h2 small { margin-left: 8px; font-size: 13px; color: var(--muted); }
+.nop-faq__item { background: var(--card); border: 1px solid var(--line); border-radius: 10px; margin-bottom: 8px; }
+.nop-faq__item summary { cursor: pointer; padding: 12px 16px; font-weight: 700; font-size: 15px; }
+.nop-faq__item p { margin: 0; padding: 0 16px 14px; font-size: 14px; }
+
+/* 狭い画面 */
+@media (max-width: 860px) {
+  .nop-answers, .nop-count { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 560px) {
+  .nop-page { padding: 20px 16px 36px; }
+  .nop-answer { padding: 18px 14px 14px; }
+  .nop-answer__q { font-size: 20px; }
+  .nop-answer__short { font-size: 17px; }
+  .nop-docs { padding: 12px 10px 10px; }
+  .nop-docs__list { grid-template-columns: minmax(0, 1fr); gap: 6px; }
+  .nop-doc { grid-template-columns: 26px minmax(0, 1fr) auto; grid-template-rows: auto auto; padding: 8px 10px; }
+  .nop-doc__paper { width: 26px; height: 32px; }
+  .nop-doc__hit { grid-column: 3; grid-row: 1 / 3; margin: 0; padding: 0 0 0 8px; border-top: 0; border-left: 1px dashed var(--line); }
+  .nop-doc__hit b { font-size: 18px; }
+  .nop-scope { padding: 16px 10px 12px; }
+  .nop-scope h2 { font-size: 16px; padding: 0 4px; }
+  .nop-scope__table { border-spacing: 3px; }
+  .nop-scope__table thead td:first-child { width: 78px; }
+  .nop-scope__table th[scope="row"] { font-size: 11.5px; line-height: 1.35; white-space: nowrap; }
+  .nop-tag .nop-icon { width: 20px; height: 20px; }
+  .nop-tag b { font-size: 11.5px; }
+  .nop-cell--stop, .nop-cell--keep { font-size: 11px; padding: 5px 0; }
+  .nop-count { padding: 18px 14px; gap: 18px; }
+  .nop-count__num strong { font-size: 54px; }
+  .nop-issue { grid-template-columns: 8.2em minmax(0, 1fr) 3.2em; gap: 8px; font-size: 13px; }
+  .nop-stance__list { grid-template-columns: minmax(0, 1fr); }
+}

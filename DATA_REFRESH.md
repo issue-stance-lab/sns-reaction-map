@@ -394,6 +394,9 @@ python3 scripts/promote_multi_topics.py --date 2026-09-21 \
 
 ### 学校あだ名は公開承認以外を自動化（人が読む工程なし）
 
+**2026-10-13 から新デザインで公開する間は、新しい意見の追い読み（人が読む工程）が1つ要る**（下の「学校でのあだ名禁止の定期更新（新デザインを維持する）」の節）。
+この節の内容は、元HTML（`data/page-sources/school-nickname-ban.html`）を作り直す旧形式の部分についての説明として残す。
+
 `school-nickname-ban` の adapter は正典だけを読んで、件数を出している場所を毎回
 すべて作り直す（リード文・調査条件・注目ポイント4枚・論点カードの内訳文・投票の件数・
 論点ナビ・論点ブロック6つ・詳細データ表・アリーナの点）。代表投稿も
@@ -1298,6 +1301,80 @@ mainへ取り込む前に、**「合格した」という報告を鵜呑みに�
   読む日や基準日による文の切り替えは無い
 - 新デザインのページには、テーマ共通の見た目（`apply_theme_design.py`）・授業節の単独適用・信頼情報の単独適用・
   山なみの単独更新（`refresh_planet_section.py`）・潮目の単独差し込み（`inject_tide_widget.py`）・論点ごとのX投稿の単独差し込み（`elderly_issue_media.py`）を
+  掛けない（各スクリプトが skipped／SKIP／停止と出す）。更新経路では元HTMLに掛かる
+
+### 学校でのあだ名禁止の定期更新（新デザインを維持する、2026-10-13〜）
+
+学校でのあだ名禁止のページは2026-10-13から新デザイン（冒頭の「本当に禁止なの？」「なぜ始まったの？」の短答と止める呼び方の範囲・対話式の山なみ・
+論点ごとの読書面・背景の開閉行）で公開する（公開切替はオーナー承認待ち。`company/APPROVALS.yaml` の `approval-20261013-school-nickname-ban`）。
+高齢者免許返納（上の節）と同じ型で、**旧形式の生成器はこれまでどおり「元HTML」に掛け、全生成の最後に新デザインを組み直す。**
+設計と検査の記録: [quality/designs/2026-10-11-school-nickname-ban-production-candidate.md](quality/designs/2026-10-11-school-nickname-ban-production-candidate.md)
+
+次回の定期更新は **2026-10-18**（THEMES.yaml の `refresh_at`）。9月21日以降の投稿（話題が急に増えた分）はまだ集めていない。この回で次を必ず確かめる。
+
+- **新しい意見が入った回は、追い読みしないと全テーマの公開候補生成が止まる**: 新デザインの読書面は、6論点すべての意見を理由区分に分けた
+  再読データ（`data/school-nickname-ban_issues-reread.json` の `items` と `buckets`）から作る。新しい意見が明細に無いと、更新経路の adapter
+  （`refresh_adapters/nickname.py` の `build_reread_stances`）が「正典の意見のうち N 件が再読データの明細にありません（追い読みが要ります）」で止まる。
+  複数テーマをまとめて作る回（`prepare_public_candidate_bundle_multi`）にあだ名禁止が入っていれば、**その回の全テーマの公開候補生成が止まる**。
+  また、どのテーマの公開候補生成でも最後に `nickname_layout.finish` が再読データ・立場の対応表・公開JSONの件数を照合するので、
+  手で正典や再読データを動かして食い違ったままだと、他テーマの回も止まる（旧ページの「人が読む工程なし」は新デザインでは成り立たない）。10/18 の回で新しい意見があれば、
+  その回のうちに新しい意見を1件ずつ読み、明細（`post_key`＝tweet_id の sha256・`main_issue`・`bucket`）を足し、`buckets` の件数を足す。
+  新しい理由区分を作ったら `configs/school-nickname-ban-reading.json` の `issues.{論点ID}.reasons` に区分ごとの `voice` を書く。
+  **立場の対応表（`data/school-nickname-ban_reread-stances.json`）は更新経路の adapter が累積候補から作り直して公開対象に含める**ので、
+  定期更新の中では手で作らない（自転車の青切符と同じ）。新規0件の回は公開候補を作らないので止まらない
+  （2026-10-13 に、切替後の作業ツリーの隔離コピーで新規0件相当の 10/18 の回を adapter から公開候補生成まで通し、新デザインのまま通ることを確かめた）
+- **「その他」に件数が出たら**: 「その他」が0件のあいだは、読書面のタブも欄も出さない。公開JSONで1件以上になれば自動で最後に出る
+  （理由区分が無ければ「理由は未公開」と出る。理由区分を足すには、`configs/planet/school-nickname-ban.yaml` の `sub_issues` に「その他」を足し、
+  再読データの `buckets` に論点を足す）
+- **理由区分が4を超える論点が出たら**: 「ほかの理由を読む（残りN分類）」の折りたたみが自動で出る（上位4つを一覧に出す。`compact.top_reasons`）
+
+その他の項目（高齢者の節と同じ並び）:
+
+- **`configs/nickname-layout.json` の `enabled`**: `true` の間、`refresh_topic.py` の公開候補生成（単一・複数テーマ）は
+  隔離コピーで元HTMLを `docs/` に戻し（`nickname_layout.materialize`）、旧形式の全処理（adapter のアリーナの点・潮目・立場の対応表、finalize、
+  SEO・信頼情報・授業節・テーマ共通の見た目・他テーマの新デザイン）のあとに `nickname_layout.finish` で元HTMLを保存し直してから
+  新デザインのページを `docs/` に書く。`false` に戻すと、公開ページが新デザインのまま「更新設定が無効」で止まる。戻すときは旧形式のページ
+  （`data/page-sources/school-nickname-ban.html`）を先に `docs/` へ戻すこと
+- **元HTMLの場所**: `data/page-sources/school-nickname-ban.html`（Git管理）。`refresh_adapters/nickname.py`（山なみの件数・潮目・連動表示・アリーナの点）・
+  `build_nickname_arena.py`（引数なし）はこれを入力にする。手で編集しない。`docs/school-nickname-ban-reaction-map.html` を旧形式の生成器に
+  直接渡すと拒否される（`nickname_issue_media.py --write-html` も新デザインのページには書かない）。旧ページの検索入口（SCHOOL_NICKNAME_SEARCH_ENTRY）・
+  連動表示（`school_nickname_connected*.py`・`docs/school-nickname-connected*`）・立場の帯（STANCE_GLANCE）・論点カード（NICKNAME_ISSUE_MEDIA）・
+  旧FAQ（SCHOOL_NICKNAME_FAQ）は元HTMLの中でだけ更新され、新デザインには載せない。**アリーナの点（`docs/school-nickname-ban-arena-data.js`）は
+  新デザインでは読み込まないが、更新経路と `build_nickname_arena.py` で引き続き生成され、公開対象に入る**（元HTMLの旧形式の部品が読む）。
+  新デザインの FAQ の構造化データは、画面に出ている問い（冒頭の短答2問と背景の「よくある質問」4問）から毎回作り直す
+- **新デザインが元HTMLから文字どおり引き継ぐもの**: SEOメタ・Article の構造化データ・GA4・AdSense・投票
+  （`school-nickname-ban-issue-stance-v1`、論点6×立場3。論点と立場の定義・前置きの文も元のまま。投票の後に旧ページにも無い `#issue-arena-section` へ
+  移ろうとして止まる1文だけを外す。元HTMLのこの1文が変わると生成が止まる）・調査条件（`#caution`）・PLANET_DATA・
+  **前の収集回との比較（潮目のカード。adapter の `_apply_tide` が元HTMLに貼る）**・「このページの作り方」・「調査上の注意」（`#detail-data`。表は無い）・
+  「次に読むテーマ」とクリック計測・フッター。数字が古いときは元HTML側（adapter・`apply_theme_trust.py`）で直る
+- **「意見の全体像」の山なみ**: 元HTMLの対話式の山なみ（`PLANET_SECTION` の `#planet-block`・PLANET_DATA・山なみのスクリプト）を
+  `build_nickname_redesign.py` が毎回そのまま写し、論点タブの上に置く。手で直す所は無い。写すときに変えるのは、連動表示の橋渡し
+  （SCHOOL_NICKNAME_CONNECTED_BRIDGE の `initialLand`）の「読み込み時に件数最多の論点へ自動で着地する」処理だけ（読書面の既定の論点を、
+  ハッシュ・履歴に触れずに選ぶ処理に置き換える。元HTMLの該当箇所が変わると生成が止まる）。山を押すと読書面へ移る橋渡しは `scripts/nickname_redesign/planet.js`。
+  意見が100件と少ないので、細すぎて押せない山を広げた注記が出る（2026-10-13：すべて＝本人意思・柔軟運用、一律禁止に反対＝いじめ・心理的安全と学校運用・現場体験、
+  中立・情報＝一律禁止の実効性とさん付け・ジェンダー配慮）。山なみの生成器が自動で出す注記なので、件数が変われば変わる
+- **折りたたみ（部活動型の圧縮）**: 読書面の理由一覧（上位4件＋「ほかの理由を読む」）・選んだ理由だけの説明・立場ごとの件数と割合・投稿の例・
+  資料に照らす・論点の説明の2段落目（「くわしく」）・累計の表、前の収集回との比較（「折れ線で、立場と論点の動きを確かめる」）、
+  作り方と調査上の注意（「このページの作り方と、調査上の注意」）の `<details>` は、`nickname_reading.py`・`build_nickname_redesign.py` が毎回作る
+  （見出しの文言は `configs/school-nickname-ban-reading.json` の `compact`）
+- **単独で作り直すとき**（データは変えずに見た目や文言だけ直したとき）:
+  `python3 scripts/build_nickname_arena.py`（新デザイン公開中は、元HTMLに旧形式の生成（山なみの件数・連動表示・アリーナの点）と公開JSONの集計を掛けてから
+  公開ページを作り直す）。成功の形: もう一度 `python3 scripts/build_nickname_arena.py --check` を実行して `OK: 差分なし` と出ること。
+  公開候補を別フォルダに作って見るだけなら
+  `python3 scripts/build_nickname_redesign.py --mode release --output-dir quality/prototypes/school-nickname-ban-release`
+  （成功の形: `Built 1 file (release, as_of …); no deployment performed.`。docs/ は変わらない）
+- **再読データ（理由区分）を追記したとき**（定期更新の外の追い読み・判定し直しも同じ）:
+  1. 明細（`items`）と `buckets` の件数を足す
+  2. `python3 scripts/nickname_reread_stances.py --made-on YYYY-MM-DD`（定期更新の外では立場の対応表を手で作り直す。成功の形: `wrote data/school-nickname-ban_reread-stances.json（N件）` か `変更なし`）
+  3. `python3 scripts/build_public_registry.py --topic school-nickname-ban`
+  4. 単独なら `python3 scripts/build_nickname_arena.py`
+  5. `python3 scripts/verify_number_provenance.py school-nickname-ban`（新デザインの理由区分・区分ごとの立場を明細と対応表から数え直す。成功の形: `NG 0件`）
+- **相談窓口の電話番号**: 24時間こどもSOSダイヤルの番号は冒頭の設定 `safety.phone` の1か所。冒頭の「今、嫌な呼び方でつらい場合」と背景の相談先の行の両方に出る。
+  番号を確かめ直したら、一次資料メモに追記して `checked_on` を進める
+- **確認日 `checked_on`**: 冒頭・読書面・背景の「◯月◯日時点」は `configs/school-nickname-ban-opening.json` の `checked_on`（国の資料を確かめた日）1か所から出る。
+  背景台帳の確認日より古い日付は入れられない。期限付きの制度イベントは無いので、読む日や基準日による文の切り替えは無い
+- 新デザインのページには、テーマ共通の見た目（`apply_theme_design.py`）・授業節の単独適用・信頼情報の単独適用・
+  山なみの単独更新（`refresh_planet_section.py`）・潮目の単独差し込み（`inject_tide_widget.py`）・論点カードの単独差し込み（`nickname_issue_media.py`）を
   掛けない（各スクリプトが skipped／SKIP／停止と出す）。更新経路では元HTMLに掛かる
 
 ### 読み込み確認のやり方（質と速さの両立）

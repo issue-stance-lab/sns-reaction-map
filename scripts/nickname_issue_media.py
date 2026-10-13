@@ -157,6 +157,9 @@ def main() -> int:
     if args.write_html:
         page_path = args.page or DEFAULT_PAGE
         original = page_path.read_text(encoding="utf-8")
+        if 'name="nickname-layout"' in original:
+            # 新デザイン（scripts/nickname_layout.py）は投稿例を読書面に持つ。旧形式の節を投票の前に差し込まない
+            raise SystemExit(f"{page_path} は新デザインのページです。旧形式の論点カードは書き込みません（新デザインは読書面に投稿例を持ちます）。")
         updated = inject(original, section_html)
         if updated != original:
             page_path.write_text(updated, encoding="utf-8")
