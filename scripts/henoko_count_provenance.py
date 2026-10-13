@@ -11,6 +11,10 @@ from scripts.henoko_connected import START, content_index, planet_data
 
 
 def verified_selectors(source: str, root: Path) -> dict[str, str]:
+    if 'name="henoko-layout"' in source:
+        # 新デザイン（scripts/henoko_layout.py）は連動表示を持たない。論点の欄ごとに数え直す照合へ渡す
+        from scripts.henoko_redesign_provenance import verified_selectors as redesign
+        return redesign(source, root)
     if START not in source:
         return {}
     soup = BeautifulSoup(source, "html.parser")

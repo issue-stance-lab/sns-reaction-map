@@ -1,0 +1,270 @@
+{
+  "theme_id": "henoko-student-accident",
+  "_about": "辺野古高校生死亡事故ページの「背景として開く内容」（開閉行）。scripts/henoko_background.py が読む。SNSの件数・日付は書かない（「◯月◯日時点」は冒頭の設定 checked_on から作る）。年表・未公表欄・FAQの文は冒頭の設定 configs/henoko-student-accident-opening.json が正本で、ここには置かない。作り方・詳細データ・次に読むテーマ・推移（潮目）は手順7で現行ページから継承するので、ここには入れない。被害者への配慮は読書面と同じ（氏名・性別・学校名・船名・遺族への言及を書かない）。",
+  "inputs": {
+    "themes_yaml": "THEMES.yaml",
+    "background_ledger": "data/verification/henoko-student-accident-background.json",
+    "classroom": "configs/classroom/henoko-student-accident.json"
+  },
+  "section": {
+    "eyebrow": "背景を開いて読む",
+    "title": "公表された記録と、調べるための手がかり",
+    "lead": "見出しを押すと開き、最初はどれも閉じた状態です。"
+  },
+  "groups": [
+    {
+      "id": "records",
+      "label": "公的機関の記録",
+      "rows": [
+        {
+          "id": "timeline",
+          "kind": "timeline",
+          "title": "経緯の年表",
+          "summary": "事故から県議会の調査まで、公的機関の記録だけで並べています（{checked}時点）",
+          "issue_ids": [
+            "henoko-student-accident-safety",
+            "henoko-student-accident-public-response"
+          ]
+        },
+        {
+          "id": "official",
+          "kind": "official",
+          "title": "公的機関の公表と、まだ出ていないもの",
+          "summary": "{report_short}（{checked}時点）",
+          "_summary": "報告書の段階（冒頭の設定 report）で文が変わる。",
+          "lead": "公表された資料に書かれていることと、まだ出ていないものを分けました。資料は{checked}に取り直して確かめています。",
+          "points": [
+            {
+              "label": "文部科学省の見解（5月22日）",
+              "text": "学校の安全管理として、事前の下見をしていなかったこと、転覆したとき引率の教員が同行していなかったこと、当日の波浪注意報を確かめていなかったことを挙げ、改善を求めました。学習の内容については、抗議船での見学などを総合して、教育基本法第14条第2項に反するものだったと判断しています。",
+              "sources": [
+                {
+                  "name": "文部科学省：研修旅行等についての見解（2026年5月22日、PDF）",
+                  "url": "https://www.mext.go.jp/content/202600525-ope_dev02-000050128_1.pdf"
+                }
+              ]
+            },
+            {
+              "label": "文部科学省の通知（4月7日）",
+              "text": "全国の学校の設置者に、校外活動の安全と内容をあらためて確かめ、必要なら見直すよう求めました。旅客を運ぶ事業者の登録や保険を前もって確かめること、意見の分かれる事柄では様々な見解を示すことも挙げています。",
+              "sources": [
+                {
+                  "name": "文部科学省：校外活動の安全確保の徹底等について（2026年4月7日）",
+                  "url": "https://www.mext.go.jp/a_menu/kenko/anzen/1417343_00052.htm"
+                }
+              ]
+            },
+            {
+              "label": "国土交通省の告発（5月22日）",
+              "text": "2隻による運送が海上運送法の事業登録を受けていなかったと説明し、転覆した船のうち1隻の船長について、登録を受けずに運送したとして海上保安庁へ告発しました。事故の原因を認定する手続きではありません。",
+              "sources": [
+                {
+                  "name": "国土交通省：海上運送法違反についての発表（2026年5月22日）",
+                  "url": "https://www.mlit.go.jp/report/press/kaiji03_hh_000224.html"
+                },
+                {
+                  "name": "国会会議録：衆議院国土交通委員会（2026年4月15日、国土交通省の答弁）",
+                  "url": "https://kokkai.ndl.go.jp/txt/122104319X00520260415/15"
+                }
+              ]
+            },
+            {
+              "label": "国会での文部科学省の答弁（7月14日）",
+              "text": "見解は事実を積み上げて総合的に判断したもので、辺野古の移設工事を学習で扱うこと自体を政治的中立に反するとしたのではない、と説明しました。報道で使われた「教育内容の政治的中立性違反」という表現は使っていない、とも答えています。",
+              "sources": [
+                {
+                  "name": "国会会議録：参議院総務委員会（2026年7月14日、文部科学省の答弁）",
+                  "url": "https://kokkai.ndl.go.jp/txt/122114601X01320260714/115"
+                },
+                {
+                  "name": "国会会議録：参議院総務委員会（2026年7月14日、表現についての答弁）",
+                  "url": "https://kokkai.ndl.go.jp/txt/122114601X01320260714/113"
+                }
+              ]
+            },
+            {
+              "label": "海上保安庁の捜査",
+              "text": "国会で、業務上過失致死などの容疑で捜査していると答弁しています。捜査の結論は公表されていません。",
+              "sources": [
+                {
+                  "name": "国会会議録：衆議院国土交通委員会（2026年4月15日、海上保安庁の答弁）",
+                  "url": "https://kokkai.ndl.go.jp/txt/122104319X00520260415/57"
+                }
+              ]
+            }
+          ],
+          "not_decided": "ここに挙げた資料だけでは、事故の直接の原因、誰にどんな刑事責任があるか、全国の平和学習への影響の大きさは判断できません。",
+          "issue_ids": [
+            "henoko-student-accident-safety",
+            "henoko-student-accident-neutrality",
+            "henoko-student-accident-peace-education"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "lookup",
+      "label": "調べるときに",
+      "rows": [
+        {
+          "id": "faq",
+          "kind": "faq",
+          "anchor": "henoko-faq",
+          "title": "よくある質問",
+          "summary": "引率の教員、無登録の運送、別の事故との区別など4問",
+          "from_opening": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "_from_opening": "冒頭の設定 faq.items の番号。現行ページのFAQ6問のうち「何があった？」「原因は確定した？」は冒頭の短答と同じなので外した（冒頭の設定に入っていない）。「ダンプカーと警備員の事故とは別？」は公的資料が無いので、答えに「報道で伝えられた別の出来事」と書き、出典リンクを付けていない。アンカー #henoko-faq は現行ページを引き継ぐ。",
+          "note": "公的機関の資料は{checked}に確かめました。"
+        },
+        {
+          "id": "terms",
+          "kind": "terms",
+          "title": "ことばの説明",
+          "summary": "教育基本法第14条、政治的中立、事業登録、運輸安全委員会など",
+          "items": [
+            {
+              "term": "教育基本法第14条",
+              "text": "第1項は、良識ある公民として必要な政治的教養を教育で尊重するよう定めています。第2項は、法律に定める学校が特定の政党を支持したり反対したりするための政治教育や政治的活動をしてはならないと定めています。文部科学省の見解は第2項に照らした判断です。",
+              "sources": [
+                {
+                  "name": "e-Gov法令検索：教育基本法",
+                  "url": "https://laws.e-gov.go.jp/law/418AC0000000120"
+                },
+                {
+                  "name": "文部科学省：研修旅行等についての見解（2026年5月22日、PDF）",
+                  "url": "https://www.mext.go.jp/content/202600525-ope_dev02-000050128_1.pdf"
+                }
+              ]
+            },
+            {
+              "term": "政治的中立",
+              "text": "学校が意見の分かれる事柄を扱うときに、一方の見方に偏らず、生徒が自分で考えられるよう様々な見解を示すことです。文部科学省は平成27年の通知でこの考え方を示し、4月7日の通知でもあらためて挙げました。",
+              "sources": [
+                {
+                  "name": "文部科学省：校外活動の安全確保の徹底等について（2026年4月7日）",
+                  "url": "https://www.mext.go.jp/a_menu/kenko/anzen/1417343_00052.htm"
+                }
+              ]
+            },
+            {
+              "term": "海上運送法の事業登録",
+              "text": "人を運ぶことを事業として行うには、海上運送法の登録などが必要です。国土交通省は、他人の求めに応じて繰り返し運んでいたかなどから、登録が必要な事業に当たるかを判断すると説明しています。",
+              "sources": [
+                {
+                  "name": "国会会議録：衆議院国土交通委員会（2026年4月15日、国土交通省の答弁）",
+                  "url": "https://kokkai.ndl.go.jp/txt/122104319X00520260415/15"
+                },
+                {
+                  "name": "国土交通省：海上運送法違反についての発表（2026年5月22日）",
+                  "url": "https://www.mlit.go.jp/report/press/kaiji03_hh_000224.html"
+                }
+              ]
+            },
+            {
+              "term": "運輸安全委員会",
+              "text": "船や航空機、鉄道の事故の原因を調べ、再発を防ぐために勧告や意見を出す国の機関です。この事故も調査中の案件に載っています。",
+              "sources": [
+                {
+                  "name": "運輸安全委員会：業務の紹介",
+                  "url": "https://jtsb.mlit.go.jp/gyoumu.html"
+                },
+                {
+                  "name": "運輸安全委員会：本件の調査状況",
+                  "url": "https://jtsb.mlit.go.jp/jtsb/ship/detail2.php?id=17113"
+                }
+              ]
+            },
+            {
+              "term": "業務上過失致死傷",
+              "text": "仕事の上で必要な注意を怠って人を死傷させた疑いを調べるときの罪名です。海上保安庁はこの容疑で捜査していると答弁しています。",
+              "sources": [
+                {
+                  "name": "国会会議録：衆議院国土交通委員会（2026年4月15日、海上保安庁の答弁）",
+                  "url": "https://kokkai.ndl.go.jp/txt/122104319X00520260415/57"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "why",
+          "kind": "ledger_text",
+          "title": "なぜ議論が分かれるのか",
+          "summary": "事故を防ぐ責任と、教育に国がどこまで関わるか",
+          "sources": [
+            {
+              "name": "文部科学省：研修旅行等についての見解（2026年5月22日、PDF）",
+              "url": "https://www.mext.go.jp/content/202600525-ope_dev02-000050128_1.pdf"
+            },
+            {
+              "name": "沖縄県：定例記者会見録（2026年5月29日）",
+              "url": "https://www.pref.okinawa.lg.jp/_res/projects/default_project/_page_/001/039/477/260529_kaiken.pdf"
+            }
+          ],
+          "issue_ids": [
+            "henoko-student-accident-neutrality",
+            "henoko-student-accident-peace-education",
+            "henoko-student-accident-base-politics"
+          ],
+          "cause_paragraphs": [
+            0
+          ],
+          "_cause_paragraphs": "背景台帳 cause の何段落目を出すか。2段落目（このページの書き方の説明）は、読書面の「照らし合わせの方法」と背景の公表の行の「判断できないこと」と重なるので出さない。"
+        }
+      ]
+    },
+    {
+      "id": "study",
+      "label": "授業と、まだ分からないこと",
+      "rows": [
+        {
+          "id": "classroom",
+          "kind": "classroom",
+          "title": "授業や話し合いで使う",
+          "summary": "文部科学省の判断への賛否の理由と、確かめる資料・問い",
+          "intro": "賛否それぞれの理由を3つずつ、確かめる資料と問いの例とあわせて並べました。どちらかの結論へ導くためのものではありません。",
+          "sources_label": "確かめる資料",
+          "questions_label": "問いの例",
+          "note": "この行の文は、現行ページの授業向けの部品と同じ設定から読んでいます。"
+        },
+        {
+          "id": "unverified",
+          "kind": "unverified",
+          "title": "まだ確かめていないこと",
+          "summary": "報告書の中身、全国調査の結果、{after}以降の投稿など",
+          "lead": "以下は、編集部がまだ裏付けを取れていない点です。",
+          "items": [
+            {
+              "text": "{report_status}",
+              "hide_when_report": [
+                "published_checked"
+              ],
+              "_hide_when_report": "報告書の内容を編集部が確かめたら、この項目は消える。"
+            },
+            {
+              "text": "文部科学省が6月26日に始めた全国の学校への取組調査の結果は、{checked}時点で公表を見つけられていません。"
+            },
+            {
+              "text": "沖縄県議会の調査特別委員会の結論は出ていません。7月13日の初回の委員会記録は、まだ読んでいません。"
+            },
+            {
+              "text": "授業向けの理由にある6月8日の被爆者団体などの抗議は、国会での議員の発言で確かめた範囲です。団体の抗議文そのものは読んでいません。"
+            },
+            {
+              "text": "2024年に安和桟橋付近で起きた事故が別の出来事であることは、報道で確かめた範囲です。公的機関の資料は見つかっていません。"
+            },
+            {
+              "text": "{after}以降の投稿は、まだ集めていません。次の収集は{next_collect}の予定です。"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "dates_line": "一次資料の確認 {checked}・背景台帳の確認 {ledger_checked_on}・件数の締め {updated_on}・次の収集 {next_collect}"
+}

@@ -144,7 +144,7 @@ python3 scripts/build_admin_dashboard.py
 
 | 作業 | 頻度 | 期日の決まり方 | 正典 |
 |---|---|---|---|
-| **データ更新**（収集→Kimi分類→再読・採否・必要な理由分類・記録→正典反映→公開を**1セッションで**） | テーマごと（`collect_at`超過順）・1日1テーマまで。公開直前にオーナー承認。遅れの確認だけ毎日22時に自動報告 | `THEMES.yaml` の `collect_at`（=`refresh_at`）と `pending_wave` / `GROWTH.yaml` の `recurring.update-work-queue` | `DATA_REFRESH.md`「収集と公開は同じセッションで」 / 課題86 |
+| **データ更新**（収集→Kimi分類→再読・採否・必要な理由分類・記録→正典反映→公開を**1セッションで**） | テーマごと（`collect_at`超過順）・1日1テーマまで。公開直前にオーナー承認。遅れの確認だけ毎日22時に自動報告 | `THEMES.yaml` の `collect_at`（=`refresh_at`）と `pending_wave` / `GROWTH.yaml` の `recurring.update-work-queue` | `.claude/skills/theme-refresh/SKILL.md`（通し手順）/ `DATA_REFRESH.md`「収集と公開は同じセッションで」「新ルールの本文確認工程と新論点チェック」 / 課題86 |
 | **X日次運用** | 毎日（候補0件なら見送り可） | 毎日 | `.claude/skills/x-daily/SKILL.md` |
 | **X投稿の計測**（表示・反応） | 毎日20:05頃 | 定期タスク `x-daily-measure` が自動実行 | `.claude/skills/x-daily/references/measurement.md` |
 | **X週次レビュー** | 日曜20:32頃 | 定期タスク `x-weekly-review` が自動実行 | `.claude/skills/x-daily/SKILL.md` §週次レビュー |

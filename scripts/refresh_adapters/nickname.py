@@ -14,6 +14,10 @@ from pathlib import Path
 TOPIC = "school-nickname-ban"
 PAGE = Path("docs/school-nickname-ban-reaction-map.html")
 ARENA_DATA = Path("docs/school-nickname-ban-arena-data.js")
+# 新デザイン（scripts/nickname_layout.py）の読書面は、再読データの明細ごとの立場をこの対応表から読む（明細は立場を持たない）。
+# 自転車の青切符と同じく、更新経路で累積候補から作り直し、公開対象に含めて同じ回で揃える
+REREAD = Path("data/school-nickname-ban_issues-reread.json")
+REREAD_STANCES = Path("data/school-nickname-ban_reread-stances.json")
 # 更新回どうしの比較を始める前の回。social-samples/updates/ に前回が無いときだけ使う。
 LEGACY_PREVIOUS_WAVE = Path("social-samples/school-nickname-ban_hermes_cur_20260726.json")
 LEGACY_PREVIOUS_DATE = "2026-07-26"
@@ -30,6 +34,43 @@ PROTECTED = (
 
 def _digest(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def build_reread_stances(root: Path, candidate_path: Path, output_path: Path, current_date: str) -> dict:
+    """累積候補と再読データ（理由区分の明細）から、立場の対応表を作る（scripts/nickname_reread_stances.py と同じ表）。
+
+    正典はまだ古い（昇格前）ので、立場は累積候補の分類から写し、論点×立場も累積候補で数えて照合する（自転車の
+    refresh_adapters/bike.py の build_reread_stances と同じ考え方）。新しい意見を追い読みして再読データの明細に足していないと、
+    「正典の意見のうち N 件が再読データの明細にありません」で止まる（新デザインの読書面の生成が止まる前に、ここで止める）。
+    """
+    import yaml
+
+    from scripts.nickname_reread_stances import table, text_of
+
+    rows = json.loads(candidate_path.read_text(encoding="utf-8"))
+    reread_path = root / REREAD
+    reread = json.loads(reread_path.read_text(encoding="utf-8"))
+    counts: dict[str, dict[str, int]] = {}
+    for row in rows:
+        c = row.get("classification") or {}
+        if c.get("is_opinion") is not True:
+            continue
+        by = counts.setdefault(str(c.get("main_issue")), {})
+        by[str(c.get("stance"))] = by.get(str(c.get("stance")), 0) + 1
+    tallied = {
+        "updated_on": current_date,
+        "issues": [{"label": label, "stances": [{"label": st, "count": n} for st, n in sorted(by.items())]}
+                   for label, by in sorted(counts.items())],
+    }
+    canonical = str(yaml.safe_load((root / "THEMES.yaml").read_text(encoding="utf-8"))["themes"][TOPIC]["sample_file"])
+    try:
+        # 累積候補は昇格すると正典そのものになる（canonical_sha256 も昇格後の正典と同じ値）
+        data = table(rows, reread, tallied, current_date, canonical, _digest(candidate_path), _digest(reread_path))
+    except SystemExit as exc:
+        raise ValueError(f"学校でのあだ名禁止の立場の対応表を作れません: {exc}。"
+                         "新しい意見を追い読みして data/school-nickname-ban_issues-reread.json の明細に足してください（DATA_REFRESH.md）") from None
+    output_path.write_text(text_of(data), encoding="utf-8")
+    return data
 
 
 def vote_fingerprint(html: str) -> tuple[str, tuple[str, ...], tuple[str, ...], int]:
@@ -151,7 +192,12 @@ def finalize(root: Path, current_date: str) -> None:
 def build(root: Path, stage: Path, current_date: str) -> dict[Path, Path]:
     """候補を2回生成し、2回目に差分がない場合だけ公開対象を返す。"""
     candidate = stage / "cumulative-candidate.json"
-    current_page = root / PAGE
+    # 新デザイン公開後も、旧形式の生成器（山なみの件数・潮目・連動表示・アリーナの点）は元HTML（data/page-sources）を入力にする
+    # （nickname_layout.py）。公開候補生成では、隔離コピーの finish がこの元HTMLから新デザインを組み直す
+    if str(root) not in sys.path:
+        sys.path.insert(0, str(root))
+    from scripts.nickname_layout import source_for_refresh
+    current_page = source_for_refresh(root)
     current_wave = root / "social-samples" / "updates" / TOPIC / current_date / "classified.json"
     first = stage
     second = stage / "idempotence"
@@ -161,10 +207,11 @@ def build(root: Path, stage: Path, current_date: str) -> dict[Path, Path]:
     for template, destination in ((current_page, first), (first / "page-candidate.html", second)):
         _run_builder(root, candidate, template, destination / "page-candidate.html")
         _apply_tide(root, destination / "page-candidate.html", current_wave, current_date)
+        build_reread_stances(root, candidate, destination / REREAD_STANCES.name, current_date)
 
     # ページとアリーナの点、両方を突き合わせる。ページだけ見ると、点の側の揺れを見逃す
-    # （数字は新しいのに点だけ古いページになる）。
-    for name in ("page-candidate.html", ARENA_DATA.name):
+    # （数字は新しいのに点だけ古いページになる）。立場の対応表も同じ候補から2回作って比べる。
+    for name in ("page-candidate.html", ARENA_DATA.name, REREAD_STANCES.name):
         if _digest(first / name) != _digest(second / name):
             raise ValueError(f"学校あだ名adapterは同じ候補の2回目実行で差分が出ました: {name}")
 
@@ -184,4 +231,5 @@ def build(root: Path, stage: Path, current_date: str) -> dict[Path, Path]:
     return {
         PAGE: first / "page-candidate.html",
         ARENA_DATA: first / ARENA_DATA.name,
+        REREAD_STANCES: first / REREAD_STANCES.name,
     }

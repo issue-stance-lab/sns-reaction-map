@@ -73,7 +73,7 @@ class CiteAnchorReceptorTests(unittest.TestCase):
             with self.subTest(page=page.name):
                 text = page.read_text(encoding="utf-8")
                 has_landing_anchor = 'class="issue-anchor"' in text
-                if any(f'name="{n}-layout"' in text for n in ("koshitsu", "fukushuto", "ai-copyright", "constitutional", "bike", "elderly")):
+                if any(f'name="{n}-layout"' in text for n in ("koshitsu", "fukushuto", "ai-copyright", "constitutional", "bike", "elderly", "nickname", "henoko")):
                     # 皇室典範・副首都・生成AI・憲法改正論議の新デザインは論点の欄そのものが #issue-{id} を持つ（引用ボタンは移していない）
                     has_landing_anchor = re.search(r'<section(?=[^>]*\bid="issue-)(?=[^>]*data-issue-panel)[^>]*>', text) is not None
                 has_issue_cards = re.search(r'<article class="ic" id="issue-', text) is not None

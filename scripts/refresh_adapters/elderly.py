@@ -29,6 +29,59 @@ PROTECTED = (
 )
 
 
+def review_records_path(root: Path, current_date: str) -> Path:
+    """収集回ごとの本文確認記録（data/verification/elderly-license-revocation-wave-review-YYYYMMDD.json）。"""
+    return root / "data" / "verification" / f"elderly-license-revocation-wave-review-{current_date.replace('-', '')}.json"
+
+
+def review_candidate(root: Path, stage: Path, current_date: str, report: dict) -> None:
+    """保存回は不変のまま、本文確認結果を公開候補だけへ適用する（refresh_adapters/fukushuto.py と同じ形式）。
+
+    10/9の新ルール: 今回分は全件本文確認し、採否・論点・立場の補正をこの記録で候補へ適用する。
+    記録が無い回は補正なし。今回分の読了証拠そのものは refresh_completion.py が別に検査する。
+    """
+    records_path = review_records_path(root, current_date)
+    if not records_path.is_file():
+        return
+    review = json.loads(records_path.read_text(encoding="utf-8"))
+    wave_path = stage / "classified-wave.json"
+    if review["source_sha256"] != _digest(wave_path):
+        raise ValueError("高齢者免許返納の本文確認元と保存回が一致しません")
+    wave = json.loads(wave_path.read_text(encoding="utf-8"))
+    ids = [str(row["tweet_id"]) for row in wave]
+    ids_sha = hashlib.sha256("\n".join(ids).encode("utf-8")).hexdigest()
+    if review["ids_sha256"] != ids_sha or review["reviewed_count"] != len(wave):
+        raise ValueError("高齢者免許返納の本文確認対象が保存回と一致しません")
+    by_id = {str(row["tweet_id"]): row for row in wave}
+    if len(by_id) != len(wave):
+        raise ValueError("高齢者免許返納の保存回にID重複があります")
+    changes = review["overrides"]
+    if len({item["tweet_id"] for item in changes}) != len(changes):
+        raise ValueError("高齢者免許返納の本文確認結果にID重複があります")
+    allowed = {"is_opinion", "main_issue", "stance", "article_usable", "risk", "summary", "reason"}
+    for item in changes:
+        tweet_id = item["tweet_id"]
+        if tweet_id not in by_id or not item.get("review_reason"):
+            raise ValueError(f"高齢者免許返納の本文確認結果が不正です: {tweet_id}")
+        values = item["classification"]
+        if not values or set(values) - allowed:
+            raise ValueError(f"高齢者免許返納の本文確認項目が不正です: {tweet_id}")
+        by_id[tweet_id]["classification"].update(values)
+    cumulative_path = stage / "cumulative-candidate.json"
+    cumulative = json.loads(cumulative_path.read_text(encoding="utf-8"))
+    cumulative_by_id = {str(row["tweet_id"]): row for row in cumulative}
+    if not set(by_id).issubset(cumulative_by_id):
+        raise ValueError("高齢者免許返納の本文確認対象が累積候補にありません")
+    for tweet_id, row in by_id.items():
+        cumulative_by_id[tweet_id]["classification"] = row["classification"]
+    (stage / "reviewed-wave.json").write_text(json.dumps(wave, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    cumulative_path.write_text(json.dumps(cumulative, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    report["automated_opinions"] = report["opinions"]
+    report["opinions"] = sum(row["classification"]["is_opinion"] is True for row in wave)
+    report["body_review"] = str(records_path.relative_to(root))
+    report["body_review_changes"] = len(changes)
+
+
 def check_reread_stances(root: Path) -> int:
     """再読データの明細がすべて立場（stance）を持ち、それが planet 設定の立場かを確かめる。明細の数を返す。
 
@@ -152,6 +205,14 @@ def finalize(root: Path, current_date: str) -> None:
             "--output-html",
             str(root / PAGE),
         ],
+        cwd=root,
+        check=True,
+    )
+    # 山なみ（PLANET_DATA・冒頭・調査条件・連動表示）を候補の正典から作り直す（自転車の finalize と同じ）。
+    # 新デザイン（elderly_layout）の最終生成は PLANET_DATA の意見数を公開JSONと照合するため、
+    # ここで作り直しておかないと「元HTMLの更新を先に済ませてください」で止まる（2026-10-13）。
+    subprocess.run(
+        [sys.executable, str(root / "scripts" / "refresh_planet_section.py"), "--topic", TOPIC, "--for-docs"],
         cwd=root,
         check=True,
     )

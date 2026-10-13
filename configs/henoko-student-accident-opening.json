@@ -1,0 +1,287 @@
+{
+  "theme_id": "henoko-student-accident",
+  "inputs": {
+    "public_json": "docs/data/themes/henoko-student-accident.json",
+    "reread_json": "data/henoko-student-accident_issues-reread.json",
+    "planet_config": "configs/planet/henoko-student-accident.yaml",
+    "themes_registry": "THEMES.yaml"
+  },
+  "checked_on": "2026-10-13",
+  "_checked_on": "一次資料の本文を確かめた日（1か所だけ）。冒頭の「◯月◯日時点」、未公表欄、背景の行はここから作る。2026-10-13 に運輸安全委員会の調査状況・文科省の見解と通知・国交省の発表・国会会議録（API）・県議会の委員会記録を取り直した（quality/research/henoko-student-accident-primary-sources.md【2026-10-13追記】）。背景台帳 data/verification/henoko-student-accident-background.json の checked_on より古いと生成が止まる。",
+  "report": {
+    "_about": "運輸安全委員会の事故調査報告書。published_on が null の間は「未公表（checked_on 時点）」と出す。公表されたら published_on に公表日を入れる（内容を編集部が読むまでは「確認中」、読んだら content_checked_on に読んだ日を入れる）。published_on は checked_on より後にできず、content_checked_on は published_on 以後・checked_on 以前でないと生成が止まる。副首都の law.enforcement_confirmed_on と同じ考え方。冒頭の短答・未公表欄と背景の両方がここを読む。",
+    "url": "https://jtsb.mlit.go.jp/jtsb/ship/detail2.php?id=17113",
+    "published_on": null,
+    "content_checked_on": null,
+    "texts": {
+      "unpublished": {
+        "short": "事故の調査報告書は、まだ公表されていません。",
+        "status": "運輸安全委員会は{checked}時点で調査中で、経過報告も出ていません。",
+        "badge": "未公表"
+      },
+      "published_unchecked": {
+        "short": "事故の調査報告書は{published}に公表されました。",
+        "status": "運輸安全委員会の報告書は{published}に公表されました。内容は編集部で確認しているところです。",
+        "badge": "公表済み"
+      },
+      "published_checked": {
+        "short": "事故の調査報告書は{published}に公表されました。",
+        "status": "運輸安全委員会の報告書は{published}に公表され、{content_checked}に編集部が内容を確かめました。",
+        "badge": "公表済み"
+      }
+    }
+  },
+  "checked_note": "年表と短答の事実は、公的機関の資料を{checked}に取り直して確かめた範囲です。",
+  "crumb": [
+    "教育・事故",
+    "辺野古沖の船舶転覆事故"
+  ],
+  "title": {
+    "phrases": [
+      {
+        "text": "辺野古の転覆事故、",
+        "tone": "plain"
+      },
+      {
+        "text": "何が分かっていて",
+        "tone": "fact"
+      },
+      {
+        "text": "何が争点か",
+        "tone": "voice"
+      }
+    ],
+    "sub": "公表された事実、まだ分からないこと、SNSの意見を分けて整理します"
+  },
+  "lead": "年表は、国や県などの公的機関が公表した記録だけで作りました。SNSの意見は、別の欄に件数と理由で示します。",
+  "timeline": {
+    "title": "経緯の年表",
+    "placement": "background",
+    "_placement": "オーナー指示（2026-10-11）で年表は開閉式。手順6で背景の開閉行「経緯の年表」（#bg-timeline）と「公的機関の公表と、まだ出ていないもの」（#bg-official）に移した。年表の正本はここ（背景の行と冒頭の短答はここを読む）。公開側の data/verification/henoko-student-accident-background.json の timeline は、手順7まで現行ページ（元HTML）だけが読む。\"opening\" に戻すと冒頭の2欄に年表が出る（open_count 件だけ開き、残りは折りたたみ）。",
+    "open_count": 3,
+    "more_label_template": "続きを見る（{n}件）",
+    "kind_label": "公的機関の公表",
+    "note": "公的機関が公表した日付と内容を並べています。捜査と調査の結論は出ておらず、この年表は個人の責任を判断するものではありません。",
+    "entries": [
+      {
+        "date": "2026-03-16",
+        "actor": "事故",
+        "title": "辺野古沖で船2隻が転覆",
+        "text": "研修旅行中の高校生らが乗っていました。運輸安全委員会の記録では、亡くなった方は2人です。",
+        "source": {
+          "label": "運輸安全委員会の調査状況",
+          "url": "https://jtsb.mlit.go.jp/jtsb/ship/detail2.php?id=17113"
+        }
+      },
+      {
+        "date": "2026-04-07",
+        "actor": "文部科学省",
+        "title": "全国の学校へ通知",
+        "text": "校外活動の安全確保と、教育活動で様々な見解を示すことを求めました。",
+        "source": {
+          "label": "文部科学省の通知",
+          "url": "https://www.mext.go.jp/a_menu/kenko/anzen/1417343_00052.htm"
+        }
+      },
+      {
+        "date": "2026-04-15",
+        "actor": "国会",
+        "title": "事業登録が無かったと答弁",
+        "text": "国土交通省は、2隻による運送に海上運送法の事業登録が無かったと説明しました。海上保安庁は、業務上過失致死などの容疑で捜査していると述べました。",
+        "sources": [
+          {
+            "label": "国会会議録（国土交通省）",
+            "url": "https://kokkai.ndl.go.jp/txt/122104319X00520260415/15"
+          },
+          {
+            "label": "国会会議録（海上保安庁）",
+            "url": "https://kokkai.ndl.go.jp/txt/122104319X00520260415/57"
+          }
+        ]
+      },
+      {
+        "date": "2026-05-22",
+        "actor": "文部科学省",
+        "title": "学校への見解を公表",
+        "text": "学校の安全管理と教育活動に問題があったとして、学校法人に改善を求めました。",
+        "source": {
+          "label": "文部科学省の見解",
+          "url": "https://www.mext.go.jp/a_menu/shotou/seitoshidou/1302902_00005.htm"
+        }
+      },
+      {
+        "date": "2026-05-22",
+        "actor": "国土交通省",
+        "title": "海上運送法違反で告発",
+        "text": "転覆した船のうち1隻の船長について、事業登録を受けずに運送したとして、海上保安庁へ告発しました。",
+        "source": {
+          "label": "国土交通省の発表",
+          "url": "https://www.mlit.go.jp/report/press/kaiji03_hh_000224.html"
+        }
+      },
+      {
+        "date": "2026-05-29",
+        "actor": "沖縄県知事",
+        "title": "事故と平和教育は分けるべきと発言",
+        "text": "定例会見で、事故には厳正に対応し、平和教育は平和教育として行うべきだと述べました。",
+        "source": {
+          "label": "沖縄県の会見録",
+          "url": "https://www.pref.okinawa.lg.jp/_res/projects/default_project/_page_/001/039/477/260529_kaiken.pdf"
+        }
+      },
+      {
+        "date": "2026-06-30",
+        "actor": "文部科学省",
+        "title": "船を使う前の確認を周知",
+        "text": "校外活動で船を使うときは、事業者の登録や保険加入を確かめるよう学校へ伝えました。",
+        "source": {
+          "label": "文部科学省の事務連絡",
+          "url": "https://www.mext.go.jp/a_menu/kenko/anzen/1417343_00062.htm"
+        }
+      },
+      {
+        "date": "2026-07-14",
+        "actor": "国会",
+        "title": "判断の範囲を文科省が説明",
+        "text": "抗議船での見学などを総合して、教育基本法第14条第2項に反すると判断したと説明しました。辺野古の移設工事を扱うこと自体を、政治的中立に反するとしたのではないとも答弁しています。",
+        "source": {
+          "label": "国会会議録",
+          "url": "https://kokkai.ndl.go.jp/txt/122114601X01320260714/115"
+        }
+      },
+      {
+        "date": "2026-07-14",
+        "actor": "国会",
+        "title": "NHKが報道の中身を説明",
+        "text": "報道の表現を問われたNHKの副会長が、文部科学省の見解と会見をもとに報じ、教育の自由を心配する専門家の見方なども伝えたと説明しました。",
+        "source": {
+          "label": "国会会議録",
+          "url": "https://kokkai.ndl.go.jp/txt/122114601X01320260714/119"
+        }
+      },
+      {
+        "date": "2026-08-19",
+        "actor": "沖縄県議会",
+        "title": "調査特別委員会を開催",
+        "text": "視察・調査と、委員会の進め方を議題に話し合いました。",
+        "source": {
+          "label": "沖縄県議会の委員会記録",
+          "url": "https://www.pref.okinawa.lg.jp/_res/projects/default_project/_page_/001/041/124/2gou.r80819henoko.pdf"
+        }
+      }
+    ],
+    "pending_title": "まだ公表されていないもの",
+    "pending": [
+      {
+        "key": "report",
+        "actor": "運輸安全委員会",
+        "title": "事故の調査報告書",
+        "source": {
+          "label": "運輸安全委員会の調査状況",
+          "url": "https://jtsb.mlit.go.jp/jtsb/ship/detail2.php?id=17113"
+        },
+        "_text": "文は report.texts の status から作る（公表の有無で変わる）。"
+      },
+      {
+        "actor": "文部科学省",
+        "title": "全国の学校への取組調査の結果",
+        "text": "7月末を回答期限とし、集計後に公表すると答弁しています。結果の公表は見つかっていません。",
+        "source": {
+          "label": "国会会議録（7月14日の答弁）",
+          "url": "https://kokkai.ndl.go.jp/txt/122115104X01220260714/51"
+        }
+      }
+    ],
+    "pending_note_template": "{checked}に確かめた時点の状況です。"
+  },
+  "answers": [
+    {
+      "key": "what",
+      "zone": "fact",
+      "kind_label": "公的機関の公表",
+      "question": "何があった？",
+      "short": "研修旅行中の高校生らが乗った船2隻が、辺野古沖で転覆しました。",
+      "body_template": "{accident_date}のことです。生徒1名と船長1名の計2名が亡くなりました。",
+      "link": {
+        "href": "#bg-timeline",
+        "text": "経緯を年表で見る"
+      }
+    },
+    {
+      "key": "cause",
+      "zone": "fact",
+      "kind_label": "公的機関の公表",
+      "question": "原因は分かった？",
+      "body_template": "{report_status}海上保安庁は、業務上過失致死傷などの容疑で捜査していると国会で答弁しています。文部科学省の見解は学校の安全管理と教育活動への指摘で、事故原因を調べた報告書とは別のものです。",
+      "link": {
+        "href": "#bg-official",
+        "text": "まだ公表されていないものを見る"
+      },
+      "_short": "短答は report.texts の short から作る。"
+    },
+    {
+      "key": "issues",
+      "zone": "voice",
+      "kind_label": "SNSの意見",
+      "question": "何が争点？",
+      "short": "SNSでは、安全管理の責任と、事故を政治と結びつける語り方が多く論じられています。",
+      "body_template": "多い順に{top_issues}です。文部科学省の判断への賛否を書いた意見は{decided}件で、残りの多くは賛否を示さずに別の問題を語っています。",
+      "link": {
+        "href": "#hop-count",
+        "text": "論点と理由の内訳を見る"
+      }
+    }
+  ],
+  "count": {
+    "label": "SNSの意見",
+    "caption_template": "意見を含む投稿の数（{start}〜{end}の間に{source}で集めた{collected}件から）",
+    "issues_title": "論点と、そう語る理由",
+    "issues_hint": "帯の区切りは理由の区分です。開くと、論点ごとの理由と件数を読めます。",
+    "top_reason_label": "最も多い理由",
+    "reason_note": "理由の区分は、AIが投稿の本文を1件ずつ読んで分けました。",
+    "stance_template": "文部科学省の判断を支持する意見は{support}件、反発する意見は{oppose}件です。{distinguish_pct}%（{distinguish}件）は賛否を示さず、事故や報道など別の問題を語る「{distinguish_label}」に分類しました。",
+    "not_poll": "公開されたSNS投稿を分けて数えた結果で、無作為に選んだ人への調査ではありません。",
+    "updated_template": "{updated}に更新・次は{next}に更新予定",
+    "reason_label_overrides": {
+      "media-response": "会見や関係者の発信への受け止め",
+      "dignity-mourning": "命を悼み、関係者の立場を考える"
+    },
+    "_reason_label_overrides": "再読データの区分名のうち「遺族」を含む2つは、遺族への言及を避けるため表示名だけ言い換える（区分と件数は変えない）。冒頭の理由一覧と読書面（scripts/henoko_reading.py）の両方がここを読む。再読データに無い区分を書くと止まる。"
+  },
+  "faq": {
+    "title": "ほかによく調べられている疑問",
+    "items": [
+      {
+        "q": "文部科学省の見解では、何が指摘された？",
+        "a": "事前の下見をしていなかったこと、当日の波浪注意報を確認していなかったことなど、学校の安全管理が指摘されました。刑事責任については海上保安庁が捜査していて、この見解とは別の手続きです。",
+        "source": {
+          "label": "文部科学省の見解（PDF）",
+          "url": "https://www.mext.go.jp/content/202600525-ope_dev02-000050128_1.pdf"
+        }
+      },
+      {
+        "q": "引率の教員は船に乗っていた？",
+        "a": "文部科学省の見解には、転覆時に引率教員は同行していなかったと書かれています。2隻の船に対し、配置された引率教員は1名でした。",
+        "source": {
+          "label": "文部科学省の見解（PDF）",
+          "url": "https://www.mext.go.jp/content/202600525-ope_dev02-000050128_1.pdf"
+        }
+      },
+      {
+        "q": "無登録の運送とは何のこと？",
+        "a": "人を運ぶ事業として行う場合は、海上運送法の事業登録が必要です。国土交通省は、転覆した船のうち1隻の船長について判断しました。学校の依頼で繰り返し生徒らを運び、謝礼を受けていたことから、登録を受けずに運送したとしています。事故原因の認定とは別の手続きです。",
+        "source": {
+          "label": "国土交通省の発表",
+          "url": "https://www.mlit.go.jp/report/press/kaiji03_hh_000224.html"
+        }
+      },
+      {
+        "q": "ダンプカーと警備員の事故とは別？",
+        "a": "別の事故です。このページは2026年3月16日の辺野古沖の船舶転覆事故を扱います。2024年に名護市の安和桟橋付近で起きた事故は報道で伝えられた別の出来事で、このページでは公的機関の資料を確かめていません。",
+        "_source": "公的機関の資料は見つかっていない（2026-10-11 の出典照合 F4）。報道で別の事故と伝えられていることだけを書き、出典リンクは付けない。"
+      }
+    ],
+    "placement": "background",
+    "_placement": "FAQは背景の行「よくある質問」（#henoko-faq、現行ページのアンカーを引き継ぐ）が番号で読む。現行FAQ6問のうち「何があった？」「原因は確定した？」は冒頭の短答と重なるので、ここには置いていない。"
+  }
+}

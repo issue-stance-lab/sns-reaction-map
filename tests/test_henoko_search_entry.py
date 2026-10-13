@@ -8,7 +8,10 @@ from scripts.build_henoko_arena import apply_search_entry_counts
 
 
 ROOT = Path(__file__).resolve().parent.parent
-PAGE = ROOT / "docs" / "henoko-student-accident-reaction-map.html"
+# 新デザイン公開後は、旧形式の元HTML（data/page-sources）を検査する（scripts/henoko_layout.py）
+from scripts.henoko_layout import source_for_refresh  # noqa: E402
+
+PAGE = source_for_refresh(ROOT)
 
 
 class HenokoSearchEntryTest(unittest.TestCase):
@@ -21,7 +24,7 @@ class HenokoSearchEntryTest(unittest.TestCase):
         self.assertIn("辺野古沖転覆事故", self.soup.title.string)
         self.assertIn("原因・報告書・安全管理", self.soup.title.string)
         description = self.soup.select_one('meta[name="description"]')["content"]
-        for phrase in ("同志社国際高校", "確認済み", "未決定事項", "SNS上の意見"):
+        for phrase in ("高校の研修旅行", "確認済み", "未決定事項", "SNS上の意見"):
             self.assertIn(phrase, description)
         self.assertIn("辺野古沖転覆事故", self.soup.select_one("h1").get_text())
 

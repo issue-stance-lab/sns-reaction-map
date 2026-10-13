@@ -1,0 +1,150 @@
+/* 辺野古の転覆事故 冒頭試作。事故のテーマなので、彩度を落とした墨・灰青・砂色だけで組む。
+   公的機関の公表＝灰青（--fact）、SNSの意見＝砂色の地に焦げ茶（--voice）で、欄ごと色を分ける。 */
+:root {
+  --paper: #f7f6f3;
+  --card: #ffffff;
+  --ink: #232b31;
+  --muted: #5d666c;
+  --line: #d8d9d6;
+  --fact: #3e5666;
+  --fact-soft: #eaeef0;
+  --voice: #6f5a47;
+  --voice-soft: #f2ede6;
+  --pending: #7d8388;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", "Yu Gothic", sans-serif;
+  line-height: 1.75;
+  -webkit-text-size-adjust: 100%;
+}
+a { color: var(--fact); }
+a:focus-visible, summary:focus-visible { outline: 2px solid var(--fact); outline-offset: 2px; }
+
+.hop-page { max-width: 1180px; margin: 0 auto; padding: 40px 32px 56px; }
+.hop { display: grid; gap: 28px; }
+
+/* 題名 */
+.hop-crumb { margin: 0 0 10px; font-size: 13px; color: var(--muted); letter-spacing: .04em; }
+.hop-title { margin: 0; font-size: 40px; line-height: 1.35; font-weight: 700; letter-spacing: .01em; }
+.hop-phrase { display: inline-block; }
+.hop-tone--fact { color: var(--fact); }
+.hop-tone--voice { color: var(--voice); }
+.hop-sub { display: block; margin-top: 12px; font-size: 17px; font-weight: 500; color: var(--muted); }
+.hop-lead { max-width: 46em; margin: 14px 0 0; font-size: 15px; }
+
+/* 欄の見出しの小札 */
+.hop-kind { display: inline-flex; align-items: center; gap: 6px; margin: 0; font-size: 12.5px; font-weight: 600; letter-spacing: .04em; }
+.hop-picto { width: 18px; height: 18px; flex: none; }
+.hop-zone--fact .hop-kind { color: var(--fact); }
+.hop-zone--voice .hop-kind { color: var(--voice); }
+
+/* 短答 */
+.hop-answers { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.hop-answer { display: flex; flex-direction: column; padding: 20px 22px; background: var(--card); border: 1px solid var(--line); border-top: 3px solid var(--fact); border-radius: 8px; }
+.hop-answer.hop-zone--voice { border-top-color: var(--voice); background: var(--voice-soft); }
+.hop-answer h2 { margin: 8px 0 6px; font-size: 19px; }
+.hop-answer__short { margin: 0 0 8px; font-size: 16px; font-weight: 600; line-height: 1.6; }
+.hop-answer__body { margin: 0 0 12px; font-size: 14px; color: var(--ink); }
+.hop-more { margin-top: auto; font-size: 13.5px; }
+
+/* 左右の2欄（PC）。左＝公表、右＝SNS */
+.hop-split { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 20px; align-items: start; }
+/* 年表を背景の行へ移したとき（timeline.placement "background"）は、SNSの欄だけを全幅に置き、論点を2列に並べる */
+.hop-split--count { grid-template-columns: minmax(0, 1fr); }
+.hop-split--count .hop-issues { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 28px; }
+.hop-timeline, .hop-count { padding: 24px 26px; border-radius: 8px; border: 1px solid var(--line); }
+.hop-timeline { background: var(--card); }
+.hop-count { background: var(--voice-soft); }
+.hop-panel__head h2 { margin: 4px 0 14px; font-size: 22px; }
+.hop-panel__head h2 small { margin-left: 8px; font-size: 13px; font-weight: 500; color: var(--muted); }
+
+/* 年表 */
+.hop-events { list-style: none; margin: 0; padding: 0; position: relative; }
+.hop-events::before { content: ""; position: absolute; left: 4.6em; top: 6px; bottom: 6px; width: 1px; background: var(--line); }
+.hop-event { display: grid; grid-template-columns: 4.2em minmax(0, 1fr); gap: 0 1.4em; padding: 0 0 14px; position: relative; }
+.hop-event::before { content: ""; position: absolute; left: calc(4.6em - 4px); top: .55em; width: 9px; height: 9px; border-radius: 50%; background: var(--fact); }
+.hop-event--same::before { background: var(--card); border: 2px solid var(--fact); }
+.hop-event time, .hop-when-pending { font-size: 13px; font-weight: 600; color: var(--fact); text-align: right; white-space: nowrap; }
+.hop-event--same time { color: var(--muted); font-weight: 500; }
+.hop-event__head { margin: 0; display: flex; flex-wrap: wrap; gap: 2px 10px; align-items: baseline; }
+.hop-actor { font-size: 12px; color: var(--muted); border: 1px solid var(--line); border-radius: 3px; padding: 0 6px; line-height: 1.6; }
+.hop-event__head strong { font-size: 15px; }
+.hop-event__text { margin: 2px 0 0; font-size: 13.5px; color: var(--ink); }
+.hop-src { margin-left: 6px; font-size: 12.5px; white-space: nowrap; }
+
+.hop-more-events { margin: 0 0 10px; }
+.hop-more-events > summary { cursor: pointer; padding: 8px 0 8px 5.6em; font-size: 14px; font-weight: 600; color: var(--fact); }
+.hop-more-events[open] > summary { padding-bottom: 12px; }
+.hop-events--rest { padding-top: 4px; }
+.hop-pending { margin-top: 6px; padding: 14px 16px 6px; border: 1px dashed var(--pending); border-radius: 6px; }
+.hop-pending h3 { display: flex; align-items: center; gap: 6px; margin: 0 0 10px; font-size: 14.5px; color: var(--pending); }
+.hop-pending .hop-events::before { background: none; border-left: 1px dashed var(--pending); }
+.hop-event--pending::before { background: var(--card); border: 1.5px dashed var(--pending); }
+.hop-when-pending { color: var(--pending); }
+.hop-pending__note { margin: 0 0 8px; font-size: 12.5px; color: var(--muted); }
+.hop-panel__note { margin: 14px 0 4px; font-size: 13px; color: var(--ink); }
+.hop-checked { margin: 0; font-size: 12.5px; color: var(--muted); }
+
+/* SNSの件数 */
+.hop-count__num { display: flex; align-items: baseline; gap: 4px; margin: 2px 0 4px; }
+.hop-count__num strong { font-size: 48px; line-height: 1.1; font-weight: 700; color: var(--voice); font-variant-numeric: tabular-nums; }
+.hop-count__num span { font-size: 16px; }
+.hop-count__caption { margin: 0; font-size: 13px; color: var(--muted); }
+.hop-count__poll { margin: 6px 0 0; font-size: 13px; font-weight: 600; color: var(--voice); }
+.hop-count__issues-title { margin: 20px 0 2px; font-size: 16px; }
+.hop-count__hint { margin: 0 0 10px; font-size: 12.5px; color: var(--muted); }
+.hop-issues { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+.hop-issue { padding-bottom: 10px; border-bottom: 1px solid #e3dbd0; }
+.hop-issue__head { display: flex; justify-content: space-between; gap: 8px; margin: 0 0 4px; }
+.hop-issue__head strong { font-size: 14.5px; }
+.hop-issue__head b { font-size: 16px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.hop-issue__head small { font-size: 12px; font-weight: 500; margin-left: 1px; }
+.hop-issue__track { height: 12px; background: #e7e0d6; border-radius: 2px; overflow: hidden; }
+.hop-issue__bar { display: flex; width: var(--w); height: 100%; gap: 1px; }
+.hop-issue__bar span { width: var(--w); background: var(--c); }
+.hop-issue__top { margin: 5px 0 0; font-size: 13px; }
+.hop-issue__top span { margin-right: 6px; font-size: 11.5px; color: var(--muted); }
+.hop-reasons summary { margin-top: 2px; font-size: 12.5px; color: var(--voice); cursor: pointer; }
+.hop-reasons ul { list-style: none; margin: 6px 0 0; padding: 0; display: grid; gap: 3px; }
+.hop-reasons li { display: grid; grid-template-columns: 10px minmax(0, 1fr) auto; gap: 8px; align-items: center; font-size: 13px; }
+.hop-reasons li b { font-weight: 600; font-variant-numeric: tabular-nums; }
+.hop-swatch { width: 10px; height: 10px; background: var(--c); border-radius: 2px; }
+.hop-count__note, .hop-count__stance, .hop-count__updated { margin: 12px 0 0; font-size: 13px; }
+.hop-count__note, .hop-count__updated { color: var(--muted); font-size: 12.5px; }
+
+/* よくある疑問 */
+.hop-faq { padding: 4px 0 0; }
+.hop-faq h2 { margin: 0 0 8px; font-size: 18px; }
+.hop-faq__item { border-top: 1px solid var(--line); padding: 10px 2px; }
+.hop-faq__item:last-child { border-bottom: 1px solid var(--line); }
+.hop-faq__item summary { font-size: 15px; font-weight: 600; cursor: pointer; }
+.hop-faq__item p { margin: 8px 0 2px; font-size: 14px; max-width: 52em; }
+
+/* スマートフォン */
+@media (max-width: 860px) {
+  .hop-page { padding: 24px 16px 40px; }
+  .hop { gap: 20px; }
+  .hop-title { font-size: 27px; }
+  .hop-sub { font-size: 15px; }
+  .hop-lead { font-size: 14px; }
+  .hop-answers, .hop-split, .hop-split--count .hop-issues { grid-template-columns: minmax(0, 1fr); }
+  .hop-answers { gap: 12px; }
+  .hop-answer { padding: 16px 16px; }
+  .hop-answer h2 { font-size: 17px; }
+  .hop-answer__short { font-size: 15px; }
+  .hop-timeline, .hop-count { padding: 18px 16px; }
+  .hop-events::before { left: 4.4em; }
+  .hop-event { grid-template-columns: 3.9em minmax(0, 1fr); gap: 0 1.1em; }
+  .hop-event::before { left: calc(4.4em - 4px); }
+  .hop-event time, .hop-when-pending { font-size: 12px; }
+  .hop-event__head strong { font-size: 14.5px; }
+  .hop-src { white-space: normal; }
+  .hop-pending { padding: 12px 10px 4px; }
+  .hop-more-events > summary { padding-left: 5.5em; }
+  .hop-count__num strong { font-size: 40px; }
+}

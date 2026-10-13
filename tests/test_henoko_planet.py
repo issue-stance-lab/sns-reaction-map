@@ -17,7 +17,9 @@ class HenokoPlanetTests(unittest.TestCase):
         self.assertEqual(_arena_points(ROOT, 'const HENOKO_ARENA_RAW=[{"i":0},{"i":1}];', TOPIC), 2)
 
     def test_refresh_preserves_votes_and_does_not_restore_old_map(self):
-        page = (ROOT / 'docs' / (TOPIC + '-reaction-map.html')).read_text()
+        # 新デザイン公開後は、旧形式の元HTML（data/page-sources）を検査する（scripts/henoko_layout.py）
+        from scripts.henoko_layout import source_for_refresh
+        page = source_for_refresh(ROOT).read_text()
         if (ROOT / 'social-samples/henoko/henoko_hermes_arena_classified.json').exists():
             records, opinions = load_records(None)
             self.assertEqual(build_page(page, records, opinions), fix_henoko_vote_scroll(page))
