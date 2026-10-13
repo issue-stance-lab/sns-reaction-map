@@ -11,6 +11,11 @@
   opening-fragment.html  冒頭の部品（マーカー付き）
   index.html             確認用の単独ページ（opening.css を読む）
 
+見た目の正本は scripts/henoko_redesign/opening.css（試作フォルダーへ写す）。
+一次資料を確かめた日は設定の checked_on 1か所。運輸安全委員会の報告書の公表は設定の report（published_on が null の間は
+「未公表」）で、短答・未公表欄と背景（scripts/henoko_background.py）が同じ文を読む。読書面（scripts/henoko_reading.py）は
+fragment_for() でこの冒頭の下に読書面をつなぐ。
+
 時刻や乱数は使わないので、同じ入力なら何度実行しても同じ出力になる。
 件数の合計が合わないときは、表示を作らずに止める。
 """
@@ -21,6 +26,7 @@ import argparse
 import datetime as dt
 import html
 import json
+import shutil
 from pathlib import Path
 
 import yaml
@@ -28,6 +34,8 @@ import yaml
 ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_CONFIG = ROOT / "configs" / "henoko-student-accident-opening.json"
 DEFAULT_OUT = ROOT / "quality" / "prototypes" / "henoko-student-accident-opening"
+ASSETS = ROOT / "scripts" / "henoko_redesign"
+REPORT_PHASES = ("unpublished", "published_unchecked", "published_checked")
 START = "<!-- HENOKO_OPENING_START -->"
 END = "<!-- HENOKO_OPENING_END -->"
 
@@ -48,6 +56,39 @@ def link(src: dict | None) -> str:
     if not src or not src.get("url"):
         return ""
     return f'<a class="hop-src" href="{esc(src["url"])}" target="_blank" rel="noopener noreferrer">{esc(src["label"])}</a>'
+
+
+def links(item: dict) -> str:
+    """出典は source（1件）か sources（複数）。"""
+    return "".join(link(s) for s in item.get("sources") or [item.get("source")])
+
+
+def report_phase(config: dict) -> str:
+    """運輸安全委員会の報告書の段階。日付のありえない組み合わせは止める（基準日では切り替えない）。"""
+    r = config["report"]
+    checked = dt.date.fromisoformat(config["checked_on"])
+    pub, read = r.get("published_on"), r.get("content_checked_on")
+    if set(r["texts"]) != set(REPORT_PHASES):
+        raise SystemExit("report.texts に3段階の文がそろっていません")
+    if pub is None:
+        if read is not None:
+            raise SystemExit("報告書の公表日が無いのに、内容を確かめた日 content_checked_on があります")
+        return "unpublished"
+    if dt.date.fromisoformat(pub) > checked:
+        raise SystemExit("報告書の公表日 published_on が、資料を確かめた日 checked_on より後です")
+    if read is None:
+        return "published_unchecked"
+    if not dt.date.fromisoformat(pub) <= dt.date.fromisoformat(read) <= checked:
+        raise SystemExit("報告書の内容を確かめた日 content_checked_on は、公表日以後・checked_on 以前にしてください")
+    return "published_checked"
+
+
+def report_text(config: dict, key: str) -> str:
+    r = config["report"]
+    values = {"checked": jp_date(config["checked_on"]),
+              "published": jp_date(r["published_on"]) if r.get("published_on") else "",
+              "content_checked": jp_date(r["content_checked_on"]) if r.get("content_checked_on") else ""}
+    return r["texts"][report_phase(config)][key].format(**values)
 
 
 def icon(key: str) -> str:
@@ -84,6 +125,20 @@ def load_inputs(config_path: Path) -> dict:
     next_collect, source = read_registry(paths["themes_registry"], config["theme_id"])
     if public.get("theme_id") != config["theme_id"]:
         raise SystemExit("公開JSONのテーマIDが設定と一致しません")
+    if "checked" in config:
+        raise SystemExit("確認日は checked_on 1か所に持つ")
+    checked = dt.date.fromisoformat(config["checked_on"])
+    if checked < dt.date.fromisoformat(public["claim_verification"]["checked_on"]):
+        raise SystemExit("一次資料を確かめた日 checked_on が、主張の照合日より古くなっています")
+    for e in config["timeline"]["entries"]:
+        if dt.date.fromisoformat(e["date"]) > checked:
+            raise SystemExit(f"年表の {e['date']} が、資料を確かめた日 checked_on より後です")
+        if not (e.get("source") or e.get("sources")):
+            raise SystemExit(f"年表の {e['date']} {e['title']} に出典がありません")
+    report_phase(config)
+    known = {k for b in reread.get("buckets", {}).values() for k in b}
+    if set(config["count"].get("reason_label_overrides", {})) - known:
+        raise SystemExit("reason_label_overrides に再読データに無い区分があります")
     return {
         "config": config,
         "public": public,
@@ -109,7 +164,7 @@ def stance_totals(public: dict, planet: dict) -> list[dict]:
     return [{"id": sid, "label": label[sid], "count": totals[sid]} for sid in order]
 
 
-def issue_reasons(public: dict, reread: dict) -> list[dict]:
+def issue_reasons(public: dict, reread: dict, overrides: dict | None = None) -> list[dict]:
     """論点ごとに理由の区分を多い順に並べる。区分の合計が論点の件数と違えば止める。"""
     buckets = reread.get("buckets", {})
     rows = []
@@ -117,7 +172,8 @@ def issue_reasons(public: dict, reread: dict) -> list[dict]:
         if issue.get("kind") == "other" and issue["count"] == 0:
             continue
         reasons = sorted(
-            ({"key": k, "label": v["label"], "count": v["count"]} for k, v in buckets.get(issue["label"], {}).items()),
+            ({"key": k, "label": (overrides or {}).get(k, v["label"]), "count": v["count"]}
+             for k, v in buckets.get(issue["label"], {}).items()),
             key=lambda r: (-r["count"], r["key"]),
         )
         if reasons and sum(r["count"] for r in reasons) != issue["count"]:
@@ -142,6 +198,7 @@ def render_answers(config: dict, public: dict, issues: list[dict], stances: list
     values = {
         "accident_date": jp_date(entries[0]["date"]),
         "checked": jp_date(config["checked_on"]),
+        "report_status": report_text(config, "status"),
         "top_issues": "、".join(f"{i['label']}（{i['count']:,}件）" for i in named[:3]),
         "decided": f"{decided:,}",
     }
@@ -151,7 +208,7 @@ def render_answers(config: dict, public: dict, issues: list[dict], stances: list
             f'<article class="hop-answer hop-zone--{esc(a["zone"])}">'
             f'<p class="hop-kind">{icon(a["zone"])}{esc(a["kind_label"])}</p>'
             f'<h2>{esc(a["question"])}</h2>'
-            f'<p class="hop-answer__short">{esc(a["short"])}</p>'
+            f'<p class="hop-answer__short">{esc(a["short"] if "short" in a else report_text(config, "short"))}</p>'
             f'<p class="hop-answer__body">{esc(a["body_template"].format(**values))}</p>'
             f'<a class="hop-more" href="{esc(a["link"]["href"])}">{esc(a["link"]["text"])}</a></article>'
         )
@@ -171,7 +228,7 @@ def render_timeline(config: dict) -> str:
             f'<time datetime="{esc(e["date"])}">{esc(when)}</time>'
             f'<div class="hop-event__body"><p class="hop-event__head"><span class="hop-actor">{esc(e["actor"])}</span>'
             f'<strong>{esc(e["title"])}</strong></p>'
-            f'<p class="hop-event__text">{esc(e["text"])}{link(e.get("source"))}</p></div></li>'
+            f'<p class="hop-event__text">{esc(e["text"])}{links(e)}</p></div></li>'
         )
     head_n = tl["open_count"]
     events_html = f'<ol class="hop-events">{"".join(items[:head_n])}</ol>'
@@ -181,14 +238,10 @@ def render_timeline(config: dict) -> str:
             f'<details class="hop-more-events"><summary>{esc(label)}</summary>'
             f'<ol class="hop-events hop-events--rest">{"".join(items[head_n:])}</ol></details>'
         )
-    pending = "".join(
-        f'<li class="hop-event hop-event--pending"><span class="hop-when-pending">未公表</span>'
-        f'<div class="hop-event__body"><p class="hop-event__head"><span class="hop-actor">{esc(p["actor"])}</span>'
-        f'<strong>{esc(p["title"])}</strong></p><p class="hop-event__text">{esc(p["text"])}{link(p.get("source"))}</p></div></li>'
-        for p in tl["pending"]
-    )
+    pending = render_pending_items(config)
     year = dt.date.fromisoformat(tl["entries"][0]["date"]).year
     pending_note = tl["pending_note_template"].format(checked=jp_date(config["checked_on"]))
+    checked_note = config["checked_note"].format(checked=jp_date(config["checked_on"]))
     return (
         f'<section class="hop-timeline hop-zone--fact" id="hop-timeline" aria-labelledby="hop-timeline-title">'
         f'<header class="hop-panel__head"><p class="hop-kind">{icon("fact")}{esc(tl["kind_label"])}</p>'
@@ -197,9 +250,26 @@ def render_timeline(config: dict) -> str:
         f'<div class="hop-pending" id="hop-pending"><h3>{icon("pending")}{esc(tl["pending_title"])}</h3>'
         f'<ol class="hop-events">{pending}</ol><p class="hop-pending__note">{esc(pending_note)}</p></div>'
         f'<p class="hop-panel__note">{esc(tl["note"])}</p>'
-        f'<p class="hop-checked">{esc(config["checked_note"])}</p>'
+        f'<p class="hop-checked" data-checked-on="{esc(config["checked_on"])}">{esc(checked_note)}</p>'
         f"</section>"
     )
+
+
+def render_pending_items(config: dict) -> str:
+    """まだ公表されていないもの。報告書（key "report"）の文と札は report の段階から作る。"""
+    out = []
+    for p in config["timeline"]["pending"]:
+        if p.get("key") == "report":
+            text, badge = report_text(config, "status"), report_text(config, "badge")
+            phase = report_phase(config)
+        else:
+            text, badge, phase = p["text"], "未公表", "unpublished"
+        out.append(
+            f'<li class="hop-event hop-event--pending" data-report-phase="{phase}"><span class="hop-when-pending">{esc(badge)}</span>'
+            f'<div class="hop-event__body"><p class="hop-event__head"><span class="hop-actor">{esc(p["actor"])}</span>'
+            f'<strong>{esc(p["title"])}</strong></p><p class="hop-event__text">{esc(text)}{links(p)}</p></div></li>'
+        )
+    return "".join(out)
 
 
 def render_count(config: dict, public: dict, issues: list[dict], stances: list[dict], source: str, next_collect: str) -> str:
@@ -280,7 +350,7 @@ def render_faq(config: dict) -> str:
 def render_fragment(data: dict) -> str:
     config, public = data["config"], data["public"]
     stances = stance_totals(public, data["planet"])
-    issues = issue_reasons(public, data["reread"])
+    issues = issue_reasons(public, data["reread"], config["count"].get("reason_label_overrides"))
     crumb = " ／ ".join(esc(c) for c in config["crumb"])
     return "\n".join(
         [
@@ -318,6 +388,11 @@ def render_page(fragment: str) -> str:
 """
 
 
+def fragment_for(config_path: Path = DEFAULT_CONFIG) -> str:
+    """冒頭の部品（マーカー付き）。読書面の試作（scripts/henoko_reading.py）がこの下に読書面をつなぐ。"""
+    return render_fragment(load_inputs(config_path))
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--config", type=Path, default=DEFAULT_CONFIG)
@@ -328,6 +403,7 @@ def main() -> None:
     args.out_dir.mkdir(parents=True, exist_ok=True)
     (args.out_dir / "opening-fragment.html").write_text(fragment, encoding="utf-8")
     (args.out_dir / "index.html").write_text(render_page(fragment), encoding="utf-8")
+    shutil.copyfile(ASSETS / "opening.css", args.out_dir / "opening.css")
     print(f"wrote {args.out_dir / 'opening-fragment.html'}")
     print(f"wrote {args.out_dir / 'index.html'}")
 

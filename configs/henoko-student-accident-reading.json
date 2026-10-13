@@ -1,0 +1,201 @@
+{
+  "theme_id": "henoko-student-accident",
+  "_about": "辺野古高校生死亡事故ページの「論点ごとの読書面」の手書き文言。scripts/henoko_reading.py が読む。件数・割合・日付・判定はここに書かず、公開JSON・再読データ・立場の対応表・照合データ・背景台帳から読む（非公開の正典は読まない）。学校でのあだ名禁止（configs/school-nickname-ban-reading.json）の部活動型の圧縮済みの型と同じキー構成。山なみは手順7で元HTMLの対話式の図を写すので、静的な山なみの文言は置かない。人が亡くなった事故のテーマなので、亡くなった方の氏名・性別・学年、学校名、船名、船長の氏名、事故の生々しい描写、遺族への言及を書かない（冒頭の設計記録「被害者への配慮で避けた表現」と同じ）。",
+  "opening_config": "configs/henoko-student-accident-opening.json",
+  "public_json": "docs/data/themes/henoko-student-accident.json",
+  "reread_json": "data/henoko-student-accident_issues-reread.json",
+  "reread_stances_json": "data/henoko-student-accident_reread-stances.json",
+  "_reread_json": "論点ごとの理由区分は buckets[論点名]、明細は全論点を含む平坦な items（post_key＝tweet_id の sha256・main_issue・bucket）。立場は scripts/henoko_reread_stances.py が正典から写した対応表から読む（2026-10-13 に495件すべて正典と一致、論点×立場の食い違い0件）。6論点・25区分。",
+  "claim_posts_json": "data/henoko-student-accident_claim_posts.json",
+  "background_json": "data/verification/henoko-student-accident-background.json",
+  "other_issue_id": "henoko-student-accident-other",
+  "_other_issue_id": "「その他」はいま0件なので、タブも欄も出さない。",
+  "small": {
+    "threshold": 10,
+    "tag": "少数",
+    "_about": "件数がこの数に届かない論点に「少数」の印を付ける。いまは該当なし（最少は平和教育の萎縮の25件）。"
+  },
+  "section": {
+    "eyebrow": "論点ごとに読む",
+    "title": "同じ事故について、投稿は何を問題にしている？",
+    "lead": "論点を選ぶと、下の欄だけが入れ替わり、読んでいる場所はそのままです。",
+    "note": "集計に入っているのは{after}より前の投稿です。次の収集は{next}の予定です。"
+  },
+  "trend": {
+    "public_json_key": "trends",
+    "_public_json_key": "公開JSONにこのキーが現れたら生成器は止まる。前回と今回の収集の比較は、手順7で元HTMLの潮目のカード（inject_tide_widget.py の henoko-tide-widget）を折りたたみの中へ写す。",
+    "title": "意見全体の中で、この論点はどのくらいか",
+    "row_label": "{period_start}〜{period_end}の累計",
+    "note": "表の数は最新の累計です。回による違いは、ページの下の方にある比較で見られます。",
+    "widget_id": "henoko-tide-widget"
+  },
+  "stance_common": {
+    "title": "文部科学省の判断への立場",
+    "lead": "文部科学省が学校に示した判断への向きで、この論点の{count}件を4つに分けています。",
+    "note": "「論点を切り分ける」は、判断への賛否を書かずに、事故の責任や報道など別の問題を語る投稿の区分です。どの立場に入るかは投稿全体の向きで決めたもので、論点の分け方とは独立しています。",
+    "head": "文部科学省の判断への立場では、{stances}。",
+    "head_all": "この論点の投稿は、すべて「{top}」に入ります（文部科学省の判断への賛否を書いていない投稿です）。",
+    "caveat": "数えたのはSNSで集めた投稿で、世の中の割合を示す調査とは違います。"
+  },
+  "reasons_common": {
+    "title": "投稿が挙げている理由",
+    "lead": "この{count}件は、編集部の下読み（AI）が本文を1件ずつ読み、中心の理由ごとに1つの区分へ分けました。",
+    "note": "割合の分母はこの{count}件で、区分ごとの立場も1件ずつの分類を足し上げた数です。",
+    "unpublished": "この論点の投稿は、まだ理由ごとに分けていません。件数と立場だけを先に載せています。",
+    "voice_label": "どんな声か",
+    "stance_label": "立場"
+  },
+  "sources_common": {
+    "title": "照らし合わせの方法",
+    "lead": "文部科学省の見解と通知、国土交通省の発表、国会会議録を物差しにしました。対象にしたのは、SNSで何度も見かける主張に限ります。投稿の当否を1件ずつ判定したり、責任の所在を決めたりはしていません。",
+    "check_eyebrow": "学校の説明で確かめること",
+    "claim_eyebrow": "主張の照合",
+    "matched": "この主張に当たる投稿 {n}件",
+    "checked": "照合日 {checked_on}",
+    "ledger_checked": "確認日 {checked_on}",
+    "sources_label": "出典をひらく",
+    "empty": "この論点に結びつく公的機関の資料は、まだ照らし合わせていません。",
+    "official": "報告書が出たかどうかと、公的機関がこれまでに公表したことは、背景にまとめました",
+    "official_href": "#bg-official",
+    "_official": "報告書の公表の有無を論点ごとに繰り返さず、背景の行へのリンクにする（手順6で背景に #bg-official を作る。背景を出すときに無いと生成が止まる）。"
+  },
+  "verdict_labels": {
+    "fact": "資料どおり",
+    "gap": "少しずれる",
+    "miss": "裏が取れない",
+    "_about": "現行ページの判定ラベルと同じ言い換え。知らない判定が来たら生成を止める。"
+  },
+  "claim_finding_overrides": {
+    "unregistered-service": {
+      "finding": "国土交通省は、2隻による運送が事業登録を受けていなかったと公表しました。転覆した船のうち1隻の船長について、必要な登録を欠く違反と判断し、告発すると発表しています。事故の原因や刑事裁判の結論とは別の確認です。",
+      "public_finding": "国交省は両船による運送が事業登録を受けていなかったと公表。不屈の船長については必要な登録を欠く違反と判断し、告発すると発表しました。事故の原因や刑事裁判の結論とは別の確認です。",
+      "_reason": "公開JSONの文は船名を含む。冒頭と同じく船名を出さないため、読書面だけ言い換える（意味は変えない）。public_finding が公開JSONの文と違えば生成が止まる。手順7で台帳 data/verification/henoko-student-accident-claims.json の文を直せば外せる。"
+    }
+  },
+  "sunk_common": {
+    "title": "資料には書かれているのに、投稿ではほぼ見かけない備え",
+    "count": "この備えに触れた投稿：意見{base}件中{n}件（{checked_on}に確認）。",
+    "note_label": "調べた範囲を見る",
+    "recheck": "{when}の再確認：{text}。"
+  },
+  "sunk_issue_overrides": {},
+  "veins_common": {
+    "title": "立場が違っても重なる心配",
+    "shared_label": "重なる心配",
+    "diverging_label": "分かれるところ",
+    "sides": "読んだ投稿：{sides}（確認日 {checked_on}）"
+  },
+  "posts_common": {
+    "title": "もとの投稿を読む",
+    "lead_two": "立場の違う投稿を2件選び、編集部が要約しました。2件の組み合わせは、この論点の立場の比率とは関係ありません。",
+    "lead_same": "この論点は立場が1つに偏るため、例の2件も同じ立場です。なぜこの2件かを下に記し、要約は編集部がまとめました。",
+    "lead_one": "この論点で例に挙げた投稿は1件です。なぜ1件かを下に記し、要約は編集部がまとめました。",
+    "none": "この論点の投稿の例は、まだ選んでいません。",
+    "summary": "X（旧Twitter）で元の投稿を開く（{n}件）",
+    "bucket_label": "理由の区分",
+    "stance_label": "立場",
+    "_selection_rule": "正典 social-samples/henoko/henoko_hermes_arena_classified.json（THEMES.yaml の sample_file）の意見（classification.is_opinion=true、495件＝公開JSONの opinion_count）から選ぶ。あだ名禁止と同じ方法に、人が亡くなった事故のテーマとしての配慮を足した。基準: ①その論点の意見で、理由区分を代表する（最大の区分と、別の見方を示す区分から1件ずつを基本） ②2件で立場や論調が偏らない ③削除されていない（tweet_id と URL が一致し、cdn.syndication.twimg.com/tweet-result で本文が返る） ④個人・団体・政党への攻撃や差別、罵倒、名指しの批判を含まない ⑤亡くなった方や関係者の実名・性別・学校名・船名など特定につながる情報、遺族への言及、事故の生々しい描写を含まない ⑥政治的に煽る言い方を含まない ⑦正典の分類で article_usable が true、risk が low ⑧正典に同じ文面が無い ⑨強い言い方（intensity=high）を選ばない ⑩自動応答のアカウント（grok）と当サイト自身の投稿は選ばない。生成器は非公開の正典を読まないので、公開できる入力で確かめられる条件（再読データでその論点に入っていること・URLとIDの一致・立場の違い・論点をまたいだ重複）だけを検査して止める。①②⑦〜⑩の機械で確かめられる部分は tests/test_henoko_redesign.py が正典で確かめる（正典が無い環境ではスキップ）。③は選んだ日に確かめた（selection_basis に日付）。④〜⑥は本文を読んで決めた。現行ページの代表投稿（henoko_connected*.py）は参考にしただけで、選び直した。"
+  },
+  "see_also_common": {
+    "title": "あわせて確かめる"
+  },
+  "footer": "件数はすべて{updated_on}時点の集計です。照らし合わせた資料の日付は、項目ごとに添えています。",
+  "compact": {
+    "_about": "部活動型の圧縮の見出し・折りたたみの名前（あだ名禁止の compact と同じキー。文言はこのテーマ用に書いた）。",
+    "top_reasons": 4,
+    "tabs_label": "論点を切り替える",
+    "back": "論点の一覧へ戻る ↑",
+    "desc_more": "くわしく",
+    "reasons_index_title": "理由の区分（{k}つ）",
+    "reasons_more": "ほかの理由を読む（残り{k}分類）",
+    "reason_eyebrow": "選んだ理由",
+    "reason_next": "この論点の別の理由",
+    "stance_fold": "立場ごとの件数と割合",
+    "posts_fold": "投稿の例（{n}件）",
+    "evidence_title": "公的機関の資料に照らす",
+    "glance_eyebrow": "前の回との違い",
+    "glance_note": "前の収集回との比較は、「論点を切り分ける」以外の立場の意見を比べるため、件数がごく少なくなります。集めた投稿の中での比較なので、社会全体の意見が動いたかどうかまでは読み取れません。",
+    "glance_link": "回ごとの比較へ ↓",
+    "count_caption": "意見{total}件に占める割合は{pct}%。",
+    "rank_first": "いちばん多い論点です。",
+    "rank_other": "{k}論点のうち{rank}番目に多い論点です。",
+    "small_note": "件数が{threshold}件に届かない少数の論点で、数件の違いでも割合が大きく動きます。",
+    "sunk_fold": "{title}（{n}件）"
+  },
+  "issues": {
+    "henoko-student-accident-safety": {
+      "name": "安全管理と、事故の責任",
+      "status": "complete",
+      "description": [
+        "事故を防げなかった原因と、その責任を誰がどう負うのかを問う意見です。学校の準備、船の運航の判断、調査と説明のあり方が主に語られています。",
+        "最も多いのは、責任の所在をはっきりさせ、調査の結果と説明を求める投稿です。下見や引率など学校の準備を問う投稿、波浪注意報の中での出航や船の登録を問う投稿が続きます。再発防止を先にという声や、活動の目的より安全を優先すべきだったという声もあります。"
+      ],
+      "_description": "2段落目は再読データの区分の件数順（safety-accountability・safety-school・safety-transport・safety-prevention・safety-ideology）。件数は書かない。2026-10-13 に132件の本文を正典で全件読んで書いた。",
+      "reason_sort": "count_desc",
+      "reasons": {
+        "safety-accountability": {
+          "voice": "誰が責任を負うのかをはっきりさせ、調査の結果と説明を求める声です。過去の観光船事故で刑事責任が問われた例と比べる投稿や、事故を風化させないよう求める投稿があります。政党や団体、県知事に謝罪や説明を迫る投稿も多く見られます。"
+        },
+        "safety-school": {
+          "voice": "学校の計画と引率を問う声です。事前の下見をしていなかったこと、転覆したとき引率の教員が同行していなかったこと、どんな船に乗るのかが生徒に伝わっていたかが挙がります。政治の問題とは切り離し、学校が運航者の資格や安全体制を確かめたかを問うべきだという投稿もあります。"
+        },
+        "safety-transport": {
+          "voice": "船の選び方と、出航の判断を問う声です。波浪注意報が出ていた中での出航、事業登録の無い船だったこと、謝礼や契約の関係が挙がります。当日の救助の難しさに触れる投稿もあります。"
+        },
+        "safety-prevention": {
+          "voice": "責任を問うより先に、同じ事故を繰り返さない仕組みを求める声です。同じ時期に起きた部活動のバス事故など、学校行事の移動中の事故と並べて、安全確認の徹底を訴える投稿が目立ちます。"
+        },
+        "safety-ideology": {
+          "voice": "活動の目的や理念より、生徒の安全を先に考えるべきだったという声です。大人の考えを学校行事に持ち込み、子どもが巻き込まれたと受け止める投稿があります。"
+        }
+      },
+      "_reasons": "区分名は再読データの label をそのまま使う。voice は 2026-10-13 に区分ごとに本文を正典で全件読んで書いた（56・31・18・15・12件）。",
+      "checks": [
+        "briefing"
+      ],
+      "_checks": "背景台帳 checklist のうち、この論点で開くもの。運送の手配（operator）と中止できる準備（alternative）は「資料には書かれているのに、投稿ではほぼ見かけない備え」の2件と中身が重なるので開かない。",
+      "see_also": [],
+      "posts": {
+        "selection_basis": "この論点の132件はすべて「論点を切り分ける」なので、立場ではなく理由の区分で2件を対にした（same_stance_reason）。最大の区分「責任の所在・調査と説明を求める」から、過去の観光船事故の判決と比べて責任の行方を問う1件、2番目の区分「学校の計画・引率・生徒への説明」から、政治の問題と分けて学校の確認と判断を問うべきだという1件。最大の区分は政党・団体・個人を名指しで責める投稿と、亡くなった方の性別や氏名に触れる投稿が多いので外した。2件とも正典で article_usable=true・risk=low・intensity=medium、正典に同じ文面は無い。2026-10-13 に cdn.syndication.twimg.com で2件とも本文が返った。",
+        "same_stance_reason": "132件すべてが「論点を切り分ける」に入るので、理由の区分が違う2件を組み合わせました。",
+        "items": [
+          {
+            "id": "2067370091952603327",
+            "url": "https://x.com/lucky_75757/status/2067370091952603327",
+            "label": "過去の事故と比べて責任を問う",
+            "summary": "観光船の沈没事故で運航会社の社長に実刑判決が出たことに触れ、この事故では責任がどう問われるのかを問いかけた投稿です。"
+          },
+          {
+            "id": "2099810911917940774",
+            "url": "https://x.com/Michaelwhite_s/status/2099810911917940774",
+            "label": "政治と分けて学校の判断を問う",
+            "summary": "基地問題への賛否と切り離し、学校が運航者の資格や安全体制を確かめたか、引率と出航の判断が適切だったかを問うべきだと書いた投稿です。"
+          }
+        ]
+      },
+      "_see_also": "冒頭の論点と理由の内訳への戻りは、見出しの「論点の一覧へ戻る」と重なるので置かない。"
+    },
+    "henoko-student-accident-base-politics": {
+      "name": "事故と、政治や基地問題の結びつけ",
+      "status": "pending"
+    },
+    "henoko-student-accident-public-response": {
+      "name": "報道と行政の伝え方",
+      "status": "pending"
+    },
+    "henoko-student-accident-victim-dignity": {
+      "name": "亡くなった方への配慮と追悼",
+      "status": "pending"
+    },
+    "henoko-student-accident-neutrality": {
+      "name": "学校の学習と、政治的中立",
+      "status": "pending"
+    },
+    "henoko-student-accident-peace-education": {
+      "name": "平和学習は萎縮するのか",
+      "status": "pending"
+    },
+    "henoko-student-accident-other": {}
+  },
+  "pending_note": "この論点の説明と投稿の例は、まだ用意していません。"
+}
