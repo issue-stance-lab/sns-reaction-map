@@ -64,7 +64,7 @@ SECTION_ID = "consumption-tax-cut-reading"
 READING_START = "<!-- CONSUMPTION_TAX_READING_START -->"
 READING_END = "<!-- CONSUMPTION_TAX_READING_END -->"
 DATE_RE = re.compile(r"確認日[:：]\s*(\d{4}-\d{2}-\d{2})")
-ADDENDUM_RE = re.compile(r"【(\d{4}-\d{2}-\d{2})追記】")
+ADDENDUM_RE = re.compile(r"【(\d{4}-\d{2}-\d{2})追記】|（(\d{4}-\d{2}-\d{2})）")
 POST_URL = re.compile(r"^https://x\.com/[A-Za-z0-9_]+/status/(\d+)$")
 # 読書面の手書きの文に入れない政党名（0%案と各党の案は背景でだけ扱う）
 PARTY_WORDS = ("自民", "立憲", "維新", "国民民主", "参政", "共産", "れいわ", "公明", "社民", "保守党")
@@ -123,9 +123,9 @@ class Memo:
         return "\n".join(self.lines[start:end])
 
     def checked_on(self, heading: str) -> str:
-        """節の「確認日」の最新。確認日の行が無い【YYYY-MM-DD追記】の節は、見出しの日付を使う。"""
+        """節の「確認日」の最新。確認日の行が無い【YYYY-MM-DD追記】・（YYYY-MM-DD）の節は、見出しの日付を使う。"""
         body = self.section(heading)
-        dates = DATE_RE.findall(body) + ADDENDUM_RE.findall(body.splitlines()[0])
+        dates = DATE_RE.findall(body) + [a or b for a, b in ADDENDUM_RE.findall(body.splitlines()[0])]
         if not dates:
             raise SystemExit(f"一次資料メモの「{heading}」に確認日がありません")
         return max(dates)
@@ -250,7 +250,7 @@ def written_texts(cfg: dict) -> list[str]:
             out += [r.get("voice", ""), r.get("label_override", "")]
         out += list(icfg.get("claim_notes", {}).values())
         for mc in icfg.get("memo_checks", []):
-            out += [mc["ask"], mc["found"], mc.get("label", "")]
+            out += [mc["ask"], mc.get("found", ""), mc.get("label", "")] + list(mc.get("found_by_phase", {}).values())
         posts = icfg.get("posts", {})
         out += [posts.get("same_stance_reason", ""), posts.get("one_reason", "")]
         for p in posts.get("items", []):
@@ -369,6 +369,15 @@ def check_all(d: dict) -> None:
                                  "（法律案で確かめ直した節を指してください）")
             if not mc.get("sources"):
                 raise SystemExit(f"{iid}: 制度の確認 {mc['id']} に出典がありません")
+            if bool(mc.get("found")) == bool(mc.get("found_by_phase")):
+                raise SystemExit(f"{iid}: 制度の確認 {mc['id']} は found か found_by_phase のどちらか1つを書きます")
+            if mc.get("found_by_phase"):
+                missing = set(opening.PHASES) - set(mc["found_by_phase"])
+                if missing:
+                    raise SystemExit(f"{iid}: 制度の確認 {mc['id']} の found_by_phase に段階 {sorted(missing)} の文がありません")
+                enacted = d["ocfg"]["law"].get("enacted_on")
+                if enacted and when < date.fromisoformat(enacted):
+                    raise SystemExit(f"{iid}: 制度の確認 {mc['id']} の節は成立日より前に確かめたものです（成立を確かめた節を指してください）")
         for link in icfg.get("see_also", []):
             if not link["href"].startswith("#"):
                 raise SystemExit(f"{iid}: あわせて確かめるのリンクはページ内（#…）だけです")
@@ -642,7 +651,13 @@ def render_evidence(d: dict, issue: dict, icfg: dict) -> str:
         out.append(f'<p class="fr-side-label is-gov">{esc(s["gov_label"])}</p>')
     if sunk:
         sk = d["cfg"]["sunk_common"]
-        out.append(f'<div class="fr-sunk"><p class="fr-eyebrow">{esc(sk["title"])}</p>')
+        # 2件以上あるときは、見出しごと1つの折りたたみにまとめる（辺野古と同じ。375pxの欄を短くする）
+        grouped = len(sunk) >= int(sk["group_from"])
+        if grouped:
+            out.append(f'<div class="fr-sunk"><details class="fr-fold fr-sunk-group"><summary><span class="fr-sum-text">'
+                       f'{esc(sk["group_summary"].format(n=len(sunk)))}</span></summary>')
+        else:
+            out.append(f'<div class="fr-sunk"><p class="fr-eyebrow">{esc(sk["title"])}</p>')
         for x in sunk:
             srcs = [{"name": s2["name"], "url": s2["url"], "location": s2.get("location")} for s2 in x["sources"]]
             body = (f'<p>{esc(x["life_impact"])}</p>'
@@ -651,7 +666,7 @@ def render_evidence(d: dict, issue: dict, icfg: dict) -> str:
                     + details_sources(srcs, s["sources_label"]))
             out.append(fold("fr-sunk-item", f'<span class="fr-sum-text">{esc(x["topic"])}</span>', body,
                             f' data-sunk="{esc(x["id"])}"'))
-        out.append("</div>")
+        out.append("</details></div>" if grouped else "</div>")
     if not claims and not sunk and not veins and not checks:
         out.append(f'<p class="fr-empty">{esc(s["empty"])}</p>')
     out.append(checks)
@@ -676,6 +691,12 @@ def sns_note_html(sk: dict, note: str) -> str:
     return out
 
 
+def check_text_by_phase(d: dict, mc: dict) -> str:
+    """法律の段階で文が変わる制度の確認（found_by_phase）。段階の判定は冒頭と同じ関数（opening.phase_of）で、基準日 d["as_of"]。"""
+    phase = opening.phase_of(d["ocfg"], d["as_of"])
+    return opening.by_phase(mc["found_by_phase"], phase).format(**opening.values_for(d["ocfg"], d["as_of"]))
+
+
 def render_checks(d: dict, issue: dict, icfg: dict) -> str:
     """制度の確認（設定 memo_checks。中身は一次資料メモの節、確認日はその節の「確認日」）。問いだけを見せる折りたたみ。
     法律案（2026-10-09 提出）の後に確かめた節だけを指せる（check_all が止める）。"""
@@ -686,8 +707,9 @@ def render_checks(d: dict, issue: dict, icfg: dict) -> str:
     out = [f'<div class="fr-checks"><p class="fr-eyebrow">{esc(s["check_eyebrow"])}</p>']
     for mc in items:
         when = d["memo"].checked_on(mc["memo_section"])
+        found = mc.get("found") or check_text_by_phase(d, mc)
         body = (f'<p class="fr-eyebrow">{esc(mc["label"])}<span>{esc(s["memo_checked"].format(checked_on=jp_date(when)))}</span></p>'
-                f'<p>{esc(mc["found"])}</p>' + details_sources(mc["sources"], s["sources_label"]))
+                f'<p>{esc(found)}</p>' + details_sources(mc["sources"], s["sources_label"]))
         out.append(fold("fr-check fr-memo-check", f'<span class="fr-sum-text">{esc(mc["ask"])}</span>',
                         body, f' data-check="{esc(mc["id"])}"'))
     out.append("</div>")
@@ -801,6 +823,7 @@ def default_as_of(d: dict) -> str:
 
 
 def render_page(d: dict, as_of: str) -> str:
+    d["as_of"] = as_of
     fragment = opening.fragment_for(ROOT / d["cfg"]["opening_config"], as_of)
     reading = render_reading(d)
     bg = ""

@@ -370,5 +370,129 @@ class ReadingPageTests(unittest.TestCase):
             self.assertEqual(len(node.select(".fr-rechecks li")), n, sc["id"])
 
 
+class AllIssuesAndBackgroundTests(unittest.TestCase):
+    """手順6：全論点の完成と背景の開閉行。時制は冒頭の law と同じ判定で切り替わる。"""
+
+    @classmethod
+    def setUpClass(cls):
+        from scripts import consumption_tax_reading as reading
+        import consumption_tax_background as background  # 読書面の生成器と同じモジュール（scripts/ を import 経路に足した後）
+
+        cls.reading, cls.background = reading, background
+        cls.tmp = tempfile.TemporaryDirectory()
+        cls.html = reading.build(Path(cls.tmp.name) / "a").read_text(encoding="utf-8")
+        cls.s = soup_of(cls.html)
+        cls.d = reading.load()
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.tmp.cleanup()
+
+    def bg_at(self, as_of, enacted=None):
+        d = copy.deepcopy(self.d)
+        if enacted:
+            d["ocfg"]["law"]["enacted_on"] = enacted
+            d["ocfg"]["checked_on"] = enacted
+        return soup_of(self.background.render(d, as_of, []))
+
+    def test_all_issues_complete_with_two_posts(self):
+        for issue in PUBLIC["issues"]:
+            icfg = self.d["cfg"]["issues"][issue["id"]]
+            self.assertEqual(icfg["status"], "complete", issue["id"])
+            self.assertEqual(len(icfg["posts"]["items"]), 2, issue["id"])
+            self.assertTrue(icfg["posts"]["selection_basis"])
+        ids = [p["id"] for c in self.d["cfg"]["issues"].values() for p in c["posts"]["items"]]
+        self.assertEqual(len(ids), 14)
+        self.assertEqual(len(set(ids)), 14)
+
+    def test_unpublished_only_where_reread_is_missing(self):
+        for issue in PUBLIC["issues"]:
+            node = self.s.find(id="issue-" + issue["id"]).select_one("[data-unpublished]")
+            self.assertEqual(node is None, issue["label"] in WITH_REASONS, issue["label"])
+
+    def test_rows_are_closed_details_and_links_resolve(self):
+        rows = self.s.select("#consumption-tax-cut-background details.fb-row")
+        self.assertEqual(len(rows), 8)
+        self.assertEqual([r for r in rows if r.has_attr("open")], [])
+        tide = "#" + self.d["cfg"]["trend"]["widget_id"]  # 潮目のカードは手順7で元HTMLから写す（試作には無い）
+        for a in self.s.select('a[href^="#"]:not([href="#"])'):  # "#" はサイトの簡易ヘッダーのロゴ
+            if a["href"] != tide:
+                self.assertIsNotNone(self.s.find(id=a["href"][1:]), a["href"])
+
+    def test_old_faq_anchor_and_no_overlap_with_opening(self):
+        faq = self.s.find(id="tax-faq")
+        self.assertIsNotNone(faq)
+        qs = [dt.get_text() for dt in faq.select("dt")]
+        self.assertIn("財源は決まっていますか？", qs)
+        opening_qs = {a["question"] for a in self.d["ocfg"]["answers"]}
+        self.assertEqual(set(qs) & opening_qs, set())
+
+    def test_party_names_only_in_background(self):
+        reading_text = self.s.select_one("#consumption-tax-cut-reading")
+        for node in reading_text.select(".fr-desc, .fr-voice, .fr-post, .fr-check"):
+            for w in PARTIES:
+                self.assertNotIn(w, node.get_text())
+        parties = self.s.find(id="bg-parties").get_text()
+        self.assertIn("立憲民主党", parties)
+        self.assertIn("0%", self.s.find(id="bg-parties").summary.get_text())
+
+    def test_rates_come_from_opening_config(self):
+        text = self.s.find(id="bg-rate").get_text()
+        r = self.d["ocfg"]["rates"]["special"]
+        self.assertIn(f'国税{r["national"]}%と地方消費税{r["local"]}%', text)
+
+    def test_tense_switches_with_law_phase(self):
+        bill = self.bg_at(PUBLIC["updated_on"])
+        self.assertEqual(bill.section["data-phase"], "bill")
+        self.assertIn("まだ成立していません", bill.find(id="bg-status").h4.get_text())
+        self.assertIn("国会の審議日程", bill.find(id="bg-unverified").get_text())
+        overdue = self.bg_at("2027-05-01")
+        self.assertEqual(overdue.section["data-phase"], "overdue")
+        self.assertIn("成立したかどうかは未確認", overdue.find(id="bg-status").h4.get_text())
+        states = [li["data-state"] for li in overdue.select("ol.fb-timeline > li[data-step]")]
+        self.assertIn("unconfirmed", states)
+        for as_of, phase in (("2026-12-01", "enacted"), ("2028-01-01", "in_effect"), ("2029-04-02", "ended")):
+            s = self.bg_at(as_of, enacted="2026-11-20")
+            self.assertEqual(s.section["data-phase"], phase)
+            self.assertIn("法律で決まったこと", s.find(id="bg-status").h4.get_text())
+            self.assertNotIn("国会の審議日程", s.find(id="bg-unverified").get_text())
+            self.assertNotIn("法律案", s.find(id="bg-status").h4.get_text())
+
+    def test_timeline_uses_opening_steps(self):
+        steps = [li["data-step"] for li in self.s.select("#bg-timeline ol.fb-timeline > li[data-step]")]
+        self.assertEqual(steps, [st["key"] for st in self.d["ocfg"]["steps"]["items"]])
+        states = [li["data-state"] for li in self.s.select("#bg-timeline ol.fb-timeline > li[data-step]")]
+        self.assertEqual(states, self.reading.opening.step_states(self.d["ocfg"], PUBLIC["updated_on"]))
+
+    def test_trust_check_follows_phase_and_requires_new_memo_after_enactment(self):
+        node = self.s.select_one('[data-check="trust-status"]').get_text()
+        self.assertIn("成立していません", node)
+        d = copy.deepcopy(self.d)
+        d["ocfg"]["law"]["enacted_on"] = "2026-11-20"
+        d["ocfg"]["checked_on"] = "2026-11-20"
+        with self.assertRaises(SystemExit):  # 成立を確かめた一次資料メモの節を指していない
+            self.reading.check_all(d)
+
+    def test_background_memo_sections_after_bill(self):
+        d = copy.deepcopy(self.d)
+        d["bg"]["cfg"]["groups"][0]["rows"][0]["items"][0]["memo_section"] = "資料N（"
+        with self.assertRaises(SystemExit):
+            self.background.check(d)
+
+    def test_classroom_is_read_from_shared_config(self):
+        cr = json.loads((ROOT / "configs/classroom/consumption-tax-cut.json").read_text(encoding="utf-8"))
+        text = self.s.find(id="bg-classroom").get_text()
+        for q in cr["questions"]:
+            self.assertIn(q, text)
+
+    def test_panel_height_budget_inputs(self):
+        """375pxの高さは Playwright で測る（設計記録）。ここでは理由の名前が長すぎないことだけ見る（3行に折り返すと欄が伸びる）。"""
+        for iid, icfg in self.d["cfg"]["issues"].items():
+            issue = next(i for i in PUBLIC["issues"] if i["id"] == iid)
+            rr = self.d["reread"].get(issue["label"])
+            for bid, b in (rr["buckets"].items() if rr else []):
+                self.assertLessEqual(len(self.reading.reason_label(self.d, icfg, bid, b)), 34, (iid, bid))
+
+
 if __name__ == "__main__":
     unittest.main()
