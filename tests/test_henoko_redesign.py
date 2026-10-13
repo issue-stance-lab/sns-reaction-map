@@ -298,8 +298,10 @@ class ReadingPageTests(unittest.TestCase):
         node = self.panel(FIRST).select_one('.fr-claim[data-claim="unregistered-service"]')
         self.assertNotIn("不屈", node.get_text())
         self.assertIn("1隻の船長", node.get_text())
+        # 正本の文から船名を外したので言い換えは要らない。言い換えを置くときは、公開JSONの文が変わると止まる
+        self.assertEqual(self.d["cfg"]["claim_finding_overrides"], {})
         d = copy.deepcopy(self.d)
-        d["cfg"]["claim_finding_overrides"]["unregistered-service"]["public_finding"] = "別の文"
+        d["cfg"]["claim_finding_overrides"] = {"unregistered-service": {"finding": "言い換え", "public_finding": "別の文"}}
         with self.assertRaises(SystemExit):
             self.reading.check_all(d)
 
@@ -529,6 +531,10 @@ class AllIssuesAndBackgroundTests(unittest.TestCase):
         bg = self.render_bg(d)
         text = bg.get_text()
         self.assertIn("2026年11月20日", text)
+        # 冒頭の確認日（checked_on）だけが動く。背景台帳の確認日（台帳の checked_on、2026-10-13）は台帳から別に出る
+        ledger = self.reading.jp_date(self.d["background"]["checked_on"])
+        for label in ("背景台帳の確認日 ", "背景台帳の確認 "):
+            text = text.replace(label + ledger, "")
         self.assertNotIn("10月13日", text)
 
     def test_unverified_mentions_uncollected_and_next(self):

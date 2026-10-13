@@ -65,13 +65,8 @@
     "miss": "裏が取れない",
     "_about": "現行ページの判定ラベルと同じ言い換え。知らない判定が来たら生成を止める。"
   },
-  "claim_finding_overrides": {
-    "unregistered-service": {
-      "finding": "国土交通省は、2隻による運送が事業登録を受けていなかったと公表しました。転覆した船のうち1隻の船長について、必要な登録を欠く違反と判断し、告発すると発表しています。事故の原因や刑事裁判の結論とは別の確認です。",
-      "public_finding": "国交省は両船による運送が事業登録を受けていなかったと公表。不屈の船長については必要な登録を欠く違反と判断し、告発すると発表しました。事故の原因や刑事裁判の結論とは別の確認です。",
-      "_reason": "公開JSONの文は船名を含む。冒頭と同じく船名を出さないため、読書面だけ言い換える（意味は変えない）。public_finding が公開JSONの文と違えば生成が止まる。手順7で台帳 data/verification/henoko-student-accident-claims.json の文を直せば外せる。"
-    }
-  },
+  "claim_finding_overrides": {},
+  "_claim_finding_overrides": "公開JSONの照合文を読書面だけ言い換えるときに使う（{主張ID: {finding, public_finding}}）。public_finding が公開JSONの文と違えば生成が止まる。2026-10-13 に正本（scripts/build_henoko_process_sections.py）の文から船名を外したので空。",
   "sunk_common": {
     "title": "資料には書かれているのに、投稿ではほぼ見かけない備え",
     "count": "この備えに触れた投稿：意見{base}件中{n}件（{checked_on}に確認）。",
@@ -367,13 +362,7 @@
             "summary": "生徒が現地の様子を知ることで中立が保たれるのではないかと問い、政府の側の説明しか認めないのかと判断に疑問を示した投稿です。"
           }
         ]
-      },
-      "check_overrides": {
-        "views": {
-          "found": "通知の別添が重視するのは、結論を押しつけず、異なる意見を理解して自分の考えも検討する過程です。"
-        }
-      },
-      "_check_overrides": "台帳の found は直前の照合文（公開JSON）と並ぶと「ます」が3回続くので、読書面だけ文末を変えた（意味は同じ）。手順7で台帳の文を直せば外せる。"
+      }
     },
     "henoko-student-accident-peace-education": {
       "name": "平和学習は萎縮するのか",
@@ -419,13 +408,7 @@
             "summary": "学校の安全管理は是正すべきだとしたうえで、学習の内容を教育基本法違反として指導したのは教育への不当な介入だと書いた投稿です。"
           }
         ]
-      },
-      "check_overrides": {
-        "views": {
-          "found": "通知の別添が重視するのは、結論を押しつけず、異なる意見を理解して自分の考えも検討する過程です。"
-        }
-      },
-      "_check_overrides": "台帳の found は直前の照合文（公開JSON）と並ぶと「ます」が3回続くので、読書面だけ文末を変えた（意味は同じ）。手順7で台帳の文を直せば外せる。"
+      }
     },
     "henoko-student-accident-other": {}
   },
