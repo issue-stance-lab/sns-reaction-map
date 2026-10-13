@@ -1090,6 +1090,7 @@ class LayoutTests(unittest.TestCase):
             self.assertEqual(before, (root / layout.PAGE).read_bytes())
             self.assertFalse((root / layout.SOURCE).exists())
 
+    @unittest.skipUnless(CANON.is_file(), "非公開の正典が無い環境では、元HTMLの旧形式の生成（legacy_refresh）を動かせない")
     def test_rebuild_runs_planet_guard_on_source(self):
         """公開後の単独実行（build_henoko_arena.py → rebuild）でも、元HTMLに旧形式の生成を掛ける途中で
         山なみの入力の版の守り（henoko_planet_guard.verify_inputs）が働く。守りが止めたら何も書かない。"""
