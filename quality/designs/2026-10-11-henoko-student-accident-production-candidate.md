@@ -204,19 +204,22 @@ python3 scripts/build_henoko_redesign.py --mode release --output-dir quality/pro
 
 | 検査 | 公開候補（enabled=false） | 切替後（9節） |
 |---|---|---|
-| 生成器の内蔵照合（件数・理由区分・区分ごとの立場・資料・日付・潮目の日付・詳細データの表の合計） | 合格 | 9-2 |
-| `verify_theme_page.py henoko-student-accident`（候補は `--html`） | NG 0（現行ページも NG 0） | 9-2 |
-| `verify_number_provenance.py` | 候補 335/335・NG 0（`henoko_redesign_provenance` で冒頭の件数欄・短答・6論点の欄を照合）。現行ページ NG 0 | 9-2 |
-| `verify_top_page.py` | 終了0 | 9-2 |
-| `build_henoko_arena.py --check` | unchanged（差分なし） | 9-2 |
-| `verify_builder_rebuildability.py` | 10テーマ NG 0 | 9-2 |
-| `verify_ocean_layer.py` | 直す前と出力が完全に同じ（既存の指摘。終了1） | 9-2 |
-| `python3 -m unittest discover tests` | 2,208件 OK（skip 4） | 9-2 |
-| `run_public_checks.py` | 終了0 | 9-2 |
-| `seo/validate_theme_seo.py` | OK（themes=10） | 9-2 |
-| `tests/test_henoko_redesign.py` | 76件 OK（手順7分30件：同じ入力で同じ出力・docs出力と新ページ再入力の拒否・保護対象（共通CSS/JSの版を含む）・GA/AdSense・投票定義と保存キー・adapter の指紋・FAQ と画面の一致・継承部品・詳細データの4立場と注意・潮目の継承と折りたたみ・論点ごとの折れ線と飛び先・作り方の折りたたみ・初期状態・「その他」0件で出さない・授業節・配慮の語・旧アンカー（サイト内リンクを含む）・山なみの写し・元HTMLの更新への追随と自動着地／保存キーの変化で停止・旧部品なし・報告書の公表日で文面が切り替わる・出所検査の改ざん検知3種、レイアウト8件：無効時・状態の一貫・元HTML無し・往復・照合不一致で書かない・rebuild で planet_guard が働く・adapter の対応表の作り直しと追い読み不足で停止・更新経路の配線） | 9-2 |
-| 2回生成 | md5 一致（`PYTHONHASHSEED` 0・1・999・random。9-2 に最終の値） | 9-2 |
-| よみやす（`--strict`） | 候補 90/100・完成を止める指摘 0件・PASS（平均34.4字、最長74字）。最初は要約の注記で「ます」3連続が1件→直した | 9-2 |
+| 生成器の内蔵照合（件数・理由区分・区分ごとの立場・資料・日付・潮目の日付・詳細データの表の合計） | 合格 | 合格 |
+| `verify_theme_page.py henoko-student-accident`（候補は `--html`） | NG 0（現行ページも NG 0） | NG 0、全10テーマ NG 0 |
+| `verify_number_provenance.py` | 候補 335/335・NG 0（`henoko_redesign_provenance` で冒頭の件数欄・短答・6論点の欄を照合）。現行ページ NG 0 | 辺野古 335/335・10テーマ NG 0 |
+| `verify_top_page.py` | 終了0 | 終了0 |
+| `build_henoko_arena.py --check` | unchanged（差分なし） | OK: 差分なし（公開後の経路＝元HTMLと新ページ・アリーナの点を作り直して比較） |
+| `verify_builder_rebuildability.py` | 10テーマ NG 0 | 10テーマ NG 0 |
+| `verify_ocean_layer.py` | 直す前と出力が完全に同じ（既存の指摘。終了1） | 同じ |
+| `python3 -m unittest discover tests` | 2,208件 OK（skip 4） | 2,208件 OK（skip 4。共有テストを直す前は失敗14・エラー8） |
+| `run_public_checks.py` | 終了0 | 終了0 |
+| `seo/validate_theme_seo.py` | OK（themes=10） | OK（themes=10。H1 が変わるので `display_headline` を足した） |
+| `tests/test_henoko_redesign.py` | 76件 OK（手順7分30件：同じ入力で同じ出力・docs出力と新ページ再入力の拒否・保護対象（共通CSS/JSの版を含む）・GA/AdSense・投票定義と保存キー・adapter の指紋・FAQ と画面の一致・継承部品・詳細データの4立場と注意・潮目の継承と折りたたみ・論点ごとの折れ線と飛び先・作り方の折りたたみ・初期状態・「その他」0件で出さない・授業節・配慮の語・旧アンカー（サイト内リンクを含む）・山なみの写し・元HTMLの更新への追随と自動着地／保存キーの変化で停止・旧部品なし・報告書の公表日で文面が切り替わる・出所検査の改ざん検知3種、レイアウト8件：無効時・状態の一貫・元HTML無し・往復・照合不一致で書かない・rebuild で planet_guard が働く・adapter の対応表の作り直しと追い読み不足で停止・更新経路の配線） | 同じ（76件 OK） |
+| 2回生成 | md5 一致（`PYTHONHASHSEED` 0・1・999・random） | md5 `d2fd1592…`（4通りとも一致、docs のページとも一致） |
+| よみやす（`--strict`） | 候補 90/100・完成を止める指摘 0件・PASS（平均34.4字、最長74字）。最初は要約の注記で「ます」3連続が1件→直した | 同じ |
+| 使い回し（`verify_page_originality.py`） | — | 「10ページに、使い回された見出し・文はありません」（最初は読書面の前置きがあだ名と0.73で似ていた→書き直した） |
+| AI臭（`verify_ai_tone.py`） | — | 問題なし（公開ページ10本） |
+| 採用台帳（`build_adoption_registry.py --check`）・`build_data_sheet.py --check` | — | 一致・最新 |
 | 代表投稿の生存（cdn.syndication.twimg.com） | 12件とも本文あり（2026-10-13） | — |
 
 操作（Playwright、`tests/test_henoko_redesign_browser.cjs`、x.com・platform.twitter.com・twimg.com を遮断、docs/ の写しを 127.0.0.1 で配信）:
@@ -238,7 +241,7 @@ python3 scripts/build_henoko_redesign.py --mode release --output-dir quality/pro
 | | 現行ページ（元HTML） | 新デザイン | 目標 |
 |---|---|---|---|
 | ページ全体の高さ（初期表示） | 24,388px | **11,051px** | 13,000px以下 ✓ |
-| ページ全体の表示中の文字数 | 9,848字（body） | 3,885字（main） | — |
+| ページ全体の表示中の文字数 | 9,848字（body） | 3,891字（main） | — |
 | うち冒頭 | — | 2,652px | — |
 | 山なみ（選択パネル込み） | — | 2,058px | — |
 | 1280px のページ全体 | 14,916px | 7,127px | — |
@@ -271,3 +274,56 @@ python3 scripts/build_henoko_redesign.py --mode release --output-dir quality/pro
 - X埋め込みが実際に表示されるか（遮断時の表示だけ確認。12件の投稿が残っていることは 10/13 に確認済み）。
 - 実機（iPhone Safari など）。Playwright の Chromium だけ。スクリーンリーダーの読み上げ。印刷ボタンの結果。
 - 実際の新しい収集回（新規の意見あり）を adapter に通した結果。今回は新規0件相当の模擬（9-4）と、明細不足で止まる単体テストだけ。
+
+## 9. 2026-10-13 公開切替
+
+### 9-1. 変えたファイル
+
+| ファイル | 変更 |
+|---|---|
+| `configs/henoko-layout.json` | `enabled: true` |
+| `configs/theme-seo.json` | henoko-student-accident に `display_headline`（新しい H1 の文字列そのまま） |
+| `configs/henoko-student-accident-reading.json` | 読書面の前置き（`section.lead`）を書き直した（使い回し検査であだ名の前置きと0.73で似ていた） |
+| `data/page-sources/henoko-student-accident.html`（新規） | 旧形式の元HTML（切替直前の docs/ のページとバイト一致。授業向けの設定を直した分だけ、切替の直前に元HTMLの授業節を `apply_classroom_section` の関数で作り直した） |
+| `docs/henoko-student-accident-reaction-map.html` | 新デザイン（`henoko_layout.finish`。公開候補とバイト一致、md5 `d2fd1592…`） |
+| `scripts/build_henoko_arena.py` | 公開後に `--input` などだけを渡したときの土台を元HTMLにし、`--output-html` が無ければ止める。`--public-counts-only` に新デザインのページを渡すと止める（新ページを旧形式で上書きしない） |
+| `company/APPROVALS.yaml` | 末尾に `approval-20261013-henoko-student-accident`（`status: pending`、`decided_at: null`）。既存の記録は動かしていない |
+| `DATA_REFRESH.md` | 「辺野古高校生死亡事故の定期更新（新デザインを維持する、2026-10-13〜）」の節と、旧「辺野古の定期更新」の節への注記 |
+| `themes/henoko-student-accident.md` | 作業記録 |
+| 共有テスト | 9-3 |
+
+DATA_SHEET.md は `--check` で最新（全テーマで意見＝論点＝賛否＝マップの点）。
+
+### 9-2. 切替後の検査（作業ツリー）
+
+6節の「切替後」の列。切替後の docs/ のページは公開候補とバイト一致なので、Playwright の確認画面（`evidence/`）は切替後のページで撮り直した。
+単独スクリプトは隔離コピーで確かめた：`refresh_planet_section.py --for-docs` は停止、`inject_tide_widget.py`（SKIP）・`apply_classroom_section.py`・
+`apply_theme_trust.py --theme henoko-student-accident`（skipped）・`apply_theme_design.finish`（対象外）・`build_henoko_arena.py`（引数なし・`--public-counts-only` とも「OK: 差分なし」）・
+`sync_issue_counts.py` を流しても、新デザインのページ・元HTML・アリーナの点はバイト不変。
+（参考：`apply_theme_trust.py` を全テーマで流すと部活動のページで「missing SEO metadata block」と止まり、`apply_classroom_section.py --check` は部活動のページを
+「would update」と出す。どちらも切替前の作業ツリー（変更を退避した状態）でも同じで、辺野古の変更とは関係ない既存の動き）
+
+### 9-3. 切替に合わせて直した共有テスト
+
+切替直後の全テストは失敗14・エラー8（2,194件中）。あだ名の切替（同じ記録の9-3）と同じ直し方で、検査の基準は緩めていない。
+
+| テスト | 変更 | 理由 |
+|---|---|---|
+| `tests/test_henoko_connected.py`・`test_henoko_planet.py`・`test_henoko_public_counts.py`・`test_henoko_search_entry.py`・`test_henoko_verified_refresh.py` | 読むページを「公開後は元HTML（`source_for_refresh`）」に | 旧形式の連動表示・山なみの件数・検索入口・公開集計・山なみの入力の版の検査。公開後も元HTMLに同じ構造で残る（あだ名と同じ扱い） |
+| `tests/test_cite_button.py` | 辺野古の新デザインも論点欄の `id="issue-…"` を受け皿とみなす | 受け皿の形が変わった |
+| `tests/test_theme_design.py` | 辺野古の新デザインを飛ばす | 共通の見た目を掛けない設計 |
+| `tests/test_theme_hero_assets.py` | 辺野古の新デザインではヒーロー写真の出現回数を数えない（OGP・GA・AdSense の確認はそのまま） | 新デザインはヒーロー写真を載せない（部活動と同じ扱い） |
+| `tests/test_page_originality.py`（直していない） | 前置きを書き直して通した | 9-1 |
+
+### 9-4. 10/22 の定期更新の模擬（切替後の作業ツリーの隔離コピー、完了記録の検査だけ外した）
+
+実際の定期更新では新規0件なら公開候補を作らず予定日だけ進む。ここでは、より多くの経路を通すため、前回（10/8）の回と同じ投稿を
+10/22 の回として置き、正典をそのまま累積候補にして **adapter の `build`（元HTMLから候補ページ・潮目・アリーナの点・立場の対応表を2回作って一致）→
+`prepare_public_candidate_bundle`（公開JSON・finalize・SEO・授業節・他テーマの新デザイン・`henoko_layout.finish`）** を通した。**最後まで通った**。
+- 候補の docs/ は新デザイン（最終更新日 2026-10-22、次の収集予定 11月5日）、元HTMLは旧形式（潮目は 10月8日 → 10月22日）、立場の対応表は立場の中身が同じで `made_on`・`public_updated_on` だけ 2026-10-22
+- 公開対象（73ファイル）に元HTML・アリーナの点・立場の対応表が入る。他の新デザイン9ページ（部活動・皇室・副首都・生成AI・憲法・自転車・高齢者・あだ名・消費税）は変わらず
+- 候補の中で `verify_theme_page.py` 全10テーマ NG 0、`verify_number_provenance.py` 10テーマ NG 0、`build_henoko_arena.py --check` OK、
+  `verify_builder_rebuildability.py` 10テーマ NG 0、`validate_theme_seo.py` OK、よみやす PASS（完成を止める指摘0）
+- 新しい意見がある回（明細が足りない回）で止まることは、`tests/test_henoko_redesign.py` の `test_count_mismatch_stops_before_writing`（finish）と
+  `test_adapter_rebuilds_stance_table_and_stops_without_reread`（adapter）で確かめた
+- 模擬に使った隔離コピーは消した（作業ツリーには何も書いていない）

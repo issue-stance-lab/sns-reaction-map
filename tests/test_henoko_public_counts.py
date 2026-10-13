@@ -7,7 +7,10 @@ from scripts.verify_theme_page import verify_theme_page
 
 
 ROOT = Path(__file__).resolve().parents[1]
-PAGE = ROOT / "docs/henoko-student-accident-reaction-map.html"
+# 新デザイン公開後は、旧形式の元HTML（data/page-sources）を検査する（scripts/henoko_layout.py）
+from scripts.henoko_layout import source_for_refresh  # noqa: E402
+
+PAGE = source_for_refresh(ROOT)
 PUBLIC = ROOT / "data/public/themes/henoko-student-accident.json"
 
 
