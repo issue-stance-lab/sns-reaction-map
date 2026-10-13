@@ -59,33 +59,39 @@ class OpeningTests(unittest.TestCase):
         ctx["config"] = config or self.config
         return opening.render_fragment(ctx)
 
+    def frag_with_timeline(self, config=None):
+        """年表と未公表欄を冒頭に置く形（timeline.placement "opening"）。いまの設定は背景に置くので、文の作り方の確認に使う。"""
+        cfg = copy.deepcopy(config or self.config)
+        cfg["timeline"]["placement"] = "opening"
+        return self.frag(cfg)
+
     def load_with(self, cfg):
         with tempfile.TemporaryDirectory() as tmp:
             return opening.load_inputs(write_json(tmp, "c.json", cfg))
 
     def test_checked_on_single_source(self):
         when = opening.jp_date(self.config["checked_on"])
-        frag = self.frag()
+        frag = self.frag_with_timeline()
         self.assertIn(f'data-checked-on="{self.config["checked_on"]}"', frag)
         self.assertIn(f"{when}時点で調査中", frag)
         self.assertNotIn("checked", self.config)
         cfg = copy.deepcopy(self.config)
         cfg["checked_on"] = "2026-12-01"
-        self.assertIn("2026年12月1日時点で調査中", self.frag(cfg))
+        self.assertIn("2026年12月1日時点で調査中", self.frag_with_timeline(cfg))
 
     def test_report_phases(self):
-        frag = self.frag()
+        frag = self.frag_with_timeline()
         self.assertIn('data-report-phase="unpublished"', frag)
         self.assertIn("事故の調査報告書は、まだ公表されていません。", frag)
         cfg = copy.deepcopy(self.config)
         cfg["report"]["published_on"] = "2026-10-10"
-        frag = self.frag(cfg)
+        frag = self.frag_with_timeline(cfg)
         self.assertIn('data-report-phase="published_unchecked"', frag)
         self.assertIn("2026年10月10日に公表されました", frag)
         self.assertIn("確認しているところです", frag)
         self.assertNotIn("まだ公表されていません", frag)
         cfg["report"]["content_checked_on"] = "2026-10-12"
-        frag = self.frag(cfg)
+        frag = self.frag_with_timeline(cfg)
         self.assertIn('data-report-phase="published_checked"', frag)
         self.assertIn("2026年10月12日に編集部が内容を確かめました", frag)
 
@@ -179,7 +185,11 @@ class ReadingPageTests(unittest.TestCase):
         self.assertEqual(first.name, "nav")
 
     def test_victim_care_words_absent(self):
-        text = self.reading_text() + json.dumps(self.d["cfg"]["issues"], ensure_ascii=False)
+        shown = [self.reading_text()]
+        for icfg in self.d["cfg"]["issues"].values():
+            shown += icfg.get("description", []) + [r.get("voice", "") for r in icfg.get("reasons", {}).values()]
+            shown += [p["label"] + p["summary"] for p in icfg.get("posts", {}).get("items", [])]
+        text = "".join(shown)
         for word in AVOID:
             self.assertNotIn(word, text, word)
 
@@ -422,6 +432,153 @@ class ReadingPageTests(unittest.TestCase):
     def test_check_dates_come_from_ledger(self):
         node = self.panel(FIRST).select_one('.fr-check[data-check="briefing"]')
         self.assertIn(f'確認日 {self.reading.jp_date(self.d["background"]["checked_on"])}', node.get_text())
+
+
+
+class AllIssuesAndBackgroundTests(unittest.TestCase):
+    """手順6：残りの論点と背景の開閉行。年表の正本は冒頭の設定。"""
+
+    @classmethod
+    def setUpClass(cls):
+        from scripts import henoko_reading as reading
+        from scripts import henoko_background as background
+
+        cls.reading = reading
+        cls.background = background
+        cls.tmp = tempfile.TemporaryDirectory()
+        cls.html = reading.build(Path(cls.tmp.name) / "a").read_text(encoding="utf-8")
+        cls.s = soup_of(cls.html)
+        cls.d = reading.load()
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.tmp.cleanup()
+
+    def render_bg(self, d):
+        return soup_of(self.background.render(d, PUBLIC["updated_on"], self.reading.ordered_issues(d)))
+
+    def test_all_shown_issues_complete(self):
+        for issue in self.reading.ordered_issues(self.d):
+            panel = self.s.find(id="issue-" + issue["id"])
+            self.assertIn("is-complete", panel["class"], issue["id"])
+            self.assertEqual(len(panel.select(".fr-voice")), len(REREAD["buckets"][issue["label"]]), issue["id"])
+            self.assertEqual(len(panel.select(".fr-post")), 2, issue["id"])
+
+    def test_posts_not_reused_across_issues(self):
+        ids = [p["id"] for c in self.d["cfg"]["issues"].values() for p in c.get("posts", {}).get("items", [])]
+        self.assertEqual(len(ids), len(set(ids)))
+        self.assertEqual(len(ids), 12)
+
+    def test_in_page_links_resolve(self):
+        for a in self.s.select('a[href^="#"]'):
+            href = a["href"]
+            if href in ("#", "#planet-block", "#henoko-tide-widget"):
+                continue  # 山なみと潮目は手順7で写す
+            self.assertIsNotNone(self.s.find(id=href[1:]), href)
+
+    def test_rows_are_closed_details(self):
+        rows = self.s.select("#henoko-student-accident-background details.fb-row")
+        self.assertGreaterEqual(len(rows), 6)
+        for row in rows:
+            self.assertFalse(row.has_attr("open"), row["id"])
+
+    def test_timeline_single_source_in_background(self):
+        """年表は冒頭の設定が正本。冒頭には出さず、背景の行にだけ出す。背景台帳の年表は読まない。"""
+        cfg = self.d["ocfg"]
+        self.assertEqual(cfg["timeline"]["placement"], "background")
+        self.assertIsNone(self.s.select_one(".hop .hop-timeline"))
+        row = self.s.find(id="bg-timeline")
+        events = row.select(".hop-event")
+        self.assertEqual(len(events), len(cfg["timeline"]["entries"]))
+        for e in cfg["timeline"]["entries"]:
+            self.assertIn(e["title"], row.get_text())
+        for t in self.d["background"]["timeline"]:
+            self.assertNotIn(t["text"], self.html)
+        # 冒頭の短答の「経緯を年表で見る」は背景の行へ飛ぶ
+        hrefs = [a["href"] for a in self.s.select(".hop-answer .hop-more")]
+        self.assertIn("#bg-timeline", hrefs)
+        self.assertIn("#bg-official", hrefs)
+
+    def test_timeline_in_both_places_stops(self):
+        d = copy.deepcopy(self.d)
+        d["ocfg"]["timeline"]["placement"] = "opening"
+        with self.assertRaises(SystemExit):
+            self.background.check(d)
+        d = copy.deepcopy(self.d)
+        d["ocfg"]["faq"]["placement"] = "opening"
+        with self.assertRaises(SystemExit):
+            self.background.check(d)
+
+    def test_report_phase_reaches_background(self):
+        row = self.s.find(id="bg-official")
+        self.assertIn("まだ公表されていません", row.summary.get_text())
+        self.assertIn('data-report-phase="unpublished"', str(row))
+        d = copy.deepcopy(self.d)
+        d["ocfg"]["report"]["published_on"] = "2026-10-12"
+        bg = self.render_bg(d)
+        self.assertIn("2026年10月12日に公表されました", bg.find(id="bg-official").get_text())
+        self.assertIn("確認しているところです", bg.find(id="bg-unverified").get_text())
+        d["ocfg"]["report"]["content_checked_on"] = "2026-10-13"
+        bg = self.render_bg(d)
+        self.assertIn("編集部が内容を確かめました", bg.find(id="bg-official").get_text())
+        self.assertNotIn("運輸安全委員会", bg.find(id="bg-unverified").get_text())
+
+    def test_checked_on_drives_time_wording(self):
+        d = copy.deepcopy(self.d)
+        d["ocfg"]["checked_on"] = "2026-11-20"
+        bg = self.render_bg(d)
+        text = bg.get_text()
+        self.assertIn("2026年11月20日", text)
+        self.assertNotIn("10月13日", text)
+
+    def test_unverified_mentions_uncollected_and_next(self):
+        text = self.s.find(id="bg-unverified").get_text()
+        self.assertIn("10月8日以降の投稿", text)
+        self.assertIn("10月22日", text)
+        self.assertIn("404", (ROOT / "quality/research/henoko-student-accident-primary-sources.md").read_text(encoding="utf-8"))
+
+    def test_faq_moved_from_opening_without_overlap(self):
+        self.assertIsNone(self.s.select_one(".hop-faq"))
+        row = self.s.find(id="henoko-faq")
+        qs = [dt.get_text() for dt in row.select(".fb-faq dt")]
+        self.assertEqual(qs, [i["q"] for i in self.d["ocfg"]["faq"]["items"]])
+        self.assertFalse(set(qs) & {a["question"] for a in self.d["ocfg"]["answers"]})
+        dump = next(dd for dt, dd in zip(row.select(".fb-faq dt"), row.select(".fb-faq dd")) if "ダンプカー" in dt.get_text())
+        self.assertIn("報道", dump.get_text())
+        self.assertIsNone(dump.select_one("a"))
+
+    def test_terms_and_official_points_have_sources(self):
+        for sel in ("#bg-terms .fb-terms > div", "#bg-official .fb-official > div"):
+            items = self.s.select(sel)
+            self.assertTrue(items, sel)
+            for item in items:
+                self.assertTrue(item.select("a[href^='https://']"), item.dt.get_text())
+
+    def test_classroom_is_read_from_shared_config(self):
+        cr = json.loads((ROOT / "configs/classroom/henoko-student-accident.json").read_text(encoding="utf-8"))
+        text = self.s.find(id="bg-classroom").get_text()
+        for q in cr["questions"]:
+            self.assertIn(q, text)
+
+    def test_missing_link_target_stops(self):
+        d = copy.deepcopy(self.d)
+        d["cfg"]["sources_common"]["official_href"] = "#bg-nothing"
+        with self.assertRaises(SystemExit):
+            self.background.check(d)
+
+    def test_themes_yaml_mismatch_stops(self):
+        d = copy.deepcopy(self.d)
+        d["bg"]["theme"]["updated_at"] = "2026-01-01"
+        with self.assertRaises(SystemExit):
+            self.background.check(d)
+
+    def test_victim_care_words_absent_in_background(self):
+        text = self.s.find(id="henoko-student-accident-background").get_text()
+        for word in AVOID:
+            if word == "同志社":
+                continue  # 授業向けの共有設定の出典名・国会会議録の題には出ない。下で個別に確かめる
+            self.assertNotIn(word, text, word)
+        self.assertNotIn("同志社", text)
 
 
 if __name__ == "__main__":

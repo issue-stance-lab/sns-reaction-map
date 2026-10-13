@@ -215,7 +215,8 @@ def render_answers(config: dict, public: dict, issues: list[dict], stances: list
     return f'<section class="hop-answers" aria-label="検索で多い疑問に短く答える">{"".join(cards)}</section>'
 
 
-def render_timeline(config: dict) -> str:
+def event_items(config: dict) -> list[str]:
+    """年表の1件ずつ（同じ日の2件目は「同じ日」）。冒頭の年表と背景の年表の行（scripts/henoko_background.py）が使う。"""
     tl = config["timeline"]
     items = []
     prev = None
@@ -230,6 +231,13 @@ def render_timeline(config: dict) -> str:
             f'<strong>{esc(e["title"])}</strong></p>'
             f'<p class="hop-event__text">{esc(e["text"])}{links(e)}</p></div></li>'
         )
+    return items
+
+
+def render_timeline(config: dict) -> str:
+    """冒頭に年表を置くとき（timeline.placement が "opening"）だけ使う。"background" のときは背景の行が描く。"""
+    tl = config["timeline"]
+    items = event_items(config)
     head_n = tl["open_count"]
     events_html = f'<ol class="hop-events">{"".join(items[:head_n])}</ol>'
     if len(items) > head_n:
@@ -339,12 +347,23 @@ def render_count(config: dict, public: dict, issues: list[dict], stances: list[d
 
 
 def render_faq(config: dict) -> str:
+    """FAQ。faq.placement が "background" のときは冒頭に出さない（背景の「よくある質問」の行が読む）。"""
     f = config["faq"]
+    if f.get("placement") == "background":
+        return ""
     items = "".join(
         f'<details class="hop-faq__item"><summary>{esc(i["q"])}</summary><p>{esc(i["a"])}{link(i.get("source"))}</p></details>'
         for i in f["items"]
     )
     return f'<section class="hop-faq" aria-labelledby="hop-faq-title"><h2 id="hop-faq-title">{esc(f["title"])}</h2>{items}</section>'
+
+
+def timeline_here(config: dict) -> bool:
+    """年表と未公表欄を冒頭に置くか（"opening"）、背景の開閉行に置くか（"background"）。"""
+    place = config["timeline"].get("placement", "opening")
+    if place not in ("opening", "background"):
+        raise SystemExit(f"timeline.placement {place} を知りません")
+    return place == "opening"
 
 
 def render_fragment(data: dict) -> str:
@@ -358,8 +377,7 @@ def render_fragment(data: dict) -> str:
             '<section class="hop" aria-label="辺野古の転覆事故の冒頭">',
             f'<header class="hop-hero"><p class="hop-crumb">{crumb}</p>{render_title(config)}<p class="hop-lead">{esc(config["lead"])}</p></header>',
             render_answers(config, public, issues, stances),
-            '<div class="hop-split">',
-            render_timeline(config),
+            ('<div class="hop-split">' + render_timeline(config) if timeline_here(config) else '<div class="hop-split hop-split--count">'),
             render_count(config, public, issues, stances, data["source"], data["next_collect"]),
             "</div>",
             render_faq(config),

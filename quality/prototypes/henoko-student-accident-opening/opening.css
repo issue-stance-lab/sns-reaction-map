@@ -54,6 +54,9 @@ a:focus-visible, summary:focus-visible { outline: 2px solid var(--fact); outline
 
 /* 左右の2欄（PC）。左＝公表、右＝SNS */
 .hop-split { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 20px; align-items: start; }
+/* 年表を背景の行へ移したとき（timeline.placement "background"）は、SNSの欄だけを全幅に置き、論点を2列に並べる */
+.hop-split--count { grid-template-columns: minmax(0, 1fr); }
+.hop-split--count .hop-issues { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 28px; }
 .hop-timeline, .hop-count { padding: 24px 26px; border-radius: 8px; border: 1px solid var(--line); }
 .hop-timeline { background: var(--card); }
 .hop-count { background: var(--voice-soft); }
@@ -129,7 +132,7 @@ a:focus-visible, summary:focus-visible { outline: 2px solid var(--fact); outline
   .hop-title { font-size: 27px; }
   .hop-sub { font-size: 15px; }
   .hop-lead { font-size: 14px; }
-  .hop-answers, .hop-split { grid-template-columns: minmax(0, 1fr); }
+  .hop-answers, .hop-split, .hop-split--count .hop-issues { grid-template-columns: minmax(0, 1fr); }
   .hop-answers { gap: 12px; }
   .hop-answer { padding: 16px 16px; }
   .hop-answer h2 { font-size: 17px; }

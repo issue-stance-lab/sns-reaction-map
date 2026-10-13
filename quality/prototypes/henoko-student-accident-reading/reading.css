@@ -310,3 +310,12 @@ span.fr-reason-pick{cursor:default}
 .fr-rechecks{margin:4px 0 0;padding-left:18px;font-size:12.5px;color:var(--muted)}
 .fr-rechecks li{margin:0 0 4px}
 .fr-head-stance{grid-column:1/-1;margin:6px 0 0!important;font-size:13px;color:var(--muted);line-height:1.7}
+/* 背景：公的機関の公表は灰青の線、まだ出ていないものは冒頭と同じ点線の枠。言葉の説明は辞書の形 */
+.fb-official,.fb-terms{margin:10px 0 0}
+.fb-official>div,.fb-terms>div{padding:8px 0 8px 12px;border-left:3px solid var(--fact);margin:0 0 8px}
+.fb-official dt,.fb-terms dt{font-weight:800;font-size:14.5px;color:var(--fact)}
+.fb-official dd,.fb-terms dd{margin:2px 0 0}
+.fb .hop-pending{margin:12px 0}
+.fb .hop-pending h4{margin:0 0 10px;font-size:14.5px;color:var(--pending)}
+.fb-unconfirmed{padding:6px 12px;border-left:4px dotted var(--pending);background:var(--paper)}
+.fb .hop-events{margin-top:10px}
