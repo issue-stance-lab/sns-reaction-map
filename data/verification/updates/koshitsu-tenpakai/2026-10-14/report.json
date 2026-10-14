@@ -1,0 +1,56 @@
+{
+  "checks": {
+    "raw_equals_duplicates_plus_new": true,
+    "new_equals_classified": true,
+    "candidate_count": true,
+    "candidate_unique": true
+  },
+  "raw": 339,
+  "duplicates": 41,
+  "new": 298,
+  "relevant": 297,
+  "opinions": 255,
+  "opinion_flag_available": true,
+  "candidate": 2863,
+  "classification_errors": 0,
+  "status": "validated",
+  "topic": "koshitsu-tenpakai",
+  "date": "2026-10-14",
+  "run_id": "20261014_225230",
+  "taxonomy": {
+    "compatible": true,
+    "canonical_without_main_issue": false,
+    "unknown_issues": [],
+    "unknown_stances": []
+  },
+  "timings": {
+    "smoke_seconds": 7.69,
+    "fetch_seconds": 50.13,
+    "classify_seconds": 4982.17
+  },
+  "provenance": {
+    "schema_version": 1,
+    "classifier": {
+      "script": "scripts/classify_koshitsu_arena_hermes.py",
+      "script_sha256": "4ab2c3a815e1908edc273b33b09fc5e5619d9a39c1f17ad7654e38fde045eb19",
+      "taxonomy_sha256": "1cb7d3f5be310fb4501e7349f09e9bcb323dd5e8beffd99c3f4e7da26c14fd01"
+    },
+    "input": {
+      "raw_sha256": "69f251c01c418a862e97f7577d792a71d925a33eb834265fd208da69eacbd8ea",
+      "raw_records": 339,
+      "new_sha256": "69f2c1e3f54903870e3eb00d1e8418421b65f03567d6c6e297118f2a18a52ef9"
+    },
+    "sources": {
+      "yahoo_realtime": 339
+    },
+    "model": {
+      "name": "kimi-k2.7-code",
+      "provider": "opencode-go",
+      "config_source": "config.yaml:model.default"
+    },
+    "output": {
+      "classified_sha256": "079a797dae16a2c7d9d4154cd4db5aafcf535eb0fcd44e8e59ce82794f80962b"
+    }
+  },
+  "next_collect_at": "2026-10-25"
+}
