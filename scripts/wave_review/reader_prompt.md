@@ -10,7 +10,7 @@
 2. is_opinion: {OPINION_GUIDE} ニュース見出しやURL共有だけ、告知だけ、別テーマ、本文だけでは判断できない、は false。
    false のときは exclude_kind を "not_opinion_candidate"（情報共有・告知・感想なし）/ "possibly_off_topic"（別テーマ・無関係）/ "undecidable"（本文だけでは判断できない）のどれかにする。
 3. main_issue: issues から1つ。{ISSUE_GUIDE} 意見でない投稿にも main_issue は付ける（多くは「その他」）。
-4. stance: {STANCE_GUIDE}
+4. stance: {STANCE_GUIDE} 値は入力の stances にある文字列をそのまま書く（「未表明」のように略すと突き合わせで全件が食い違い扱いになる）。
 5. bucket（is_opinion true で、その main_issue に bucket_definitions があるときだけ）: その論点の bucket_definitions から1つ。本文だけでは理由を特定できない投稿は、その論点にある「趣旨不明」「本文だけでは理由を特定できない」「賛否の表明」に相当する区分へ。それ以外は null。
 6. summary: 本文を読んで自分の言葉で書いた40字以内の日本語要約。投稿ごとに固有の文（同文の連投は末尾に(一)(二)などで区別）。意見でない投稿にも書く。
 7. new_issue_candidate: 【新論点チェック】その投稿の主な論点が、既存の論点（{NAMED_ISSUES}）のどれにも素直に収まらないと感じたら、その話題を10字以内の短い論点名で書く（例: {NEW_ISSUE_EXAMPLES}）。収まるなら空文字。「その他」に入れた意見には必ず検討する。
