@@ -494,7 +494,25 @@ def apply_public_counts(page: str, public_theme: Path = PUBLIC_THEME) -> str:
     return page
 
 
-def refresh_verified_planet(page: str) -> str:
+def _planet_data(records: list[dict[str, Any]] | None = None) -> dict[str, Any]:
+    """山なみの表示データ。候補（累積候補の全行）を渡したときは、その候補を母数にする。
+
+    定期更新の --prepare-promotion では、再読共通台帳に今回分を登録したあとで候補ページを作る。
+    正典から作ると、台帳にある今回分が正典に無く「対象集合が変わりました」で止まる
+    （2026-10-14、高齢者と同じ型。副首都・高齢者の生成器と同じく候補を母数にする）。
+    """
+    if __package__:
+        from .build_planet_page_preview import bpd
+        from .public_registry_common import build_theme_json
+    else:
+        from build_planet_page_preview import bpd  # type: ignore[no-redef]
+        from public_registry_common import build_theme_json  # type: ignore[no-redef]
+    if records is None:
+        return bpd.build(THEME)
+    return bpd.build(THEME, canonical=records, public=build_theme_json(THEME, records))
+
+
+def refresh_verified_planet(page: str, records: list[dict[str, Any]] | None = None) -> str:
     """山なみ形式に切り替わったあとは、正典から図全体を作り直すだけでよい。
 
     旧2D形式の各セクション（SM_RAW・ISSUES・6論点とXの声 等）はbuild_planet_page_preview.py
@@ -510,7 +528,7 @@ def refresh_verified_planet(page: str) -> str:
     else:
         from build_planet_page_preview import bpd, build_section, render_planet, split_prototype
 
-    data = bpd.build(THEME)
+    data = _planet_data(records)
     cfg = bpd.yaml.safe_load((ROOT / "configs/planet" / f"{THEME}.yaml").read_text())
     failures = bpd.independence_gate(data, cfg)
     if failures:
@@ -977,7 +995,7 @@ def stance_glance(stances: list[dict[str, Any]], opinions: int) -> str:
 {STANCE_GLANCE_END}"""
 
 
-def apply_koshitsu_stance_glance(page: str) -> str:
+def apply_koshitsu_stance_glance(page: str, records: list[dict[str, Any]] | None = None) -> str:
     """山なみ再生成後、ヒーロー直後に「今回案全体への評価」の内訳を貼り直す。
 
     RESEARCH_CONDITIONS_STARTより前はrefresh_verified_planet()の対象外だが、
@@ -990,7 +1008,7 @@ def apply_koshitsu_stance_glance(page: str) -> str:
     else:  # python3 scripts/build_koshitsu_arena.py
         from build_planet_page_preview import bpd  # type: ignore[no-redef]
 
-    data = bpd.build(THEME)
+    data = _planet_data(records)
     opinions = int(data["totals"]["opinions"])
     stances = data["stances"]
 
@@ -1035,8 +1053,10 @@ def build(
     page_path = Path(template) if template else ROOT / "docs" / f"{THEME}-reaction-map.html"
     before = page_path.read_text(encoding="utf-8")
     if '<!-- PLANET_SECTION_START -->' in before:
+        # 候補（累積候補の全行）を渡したときは、山なみと立場の内訳を候補から作る（_planet_data）
+        records = json.loads(Path(source).read_text(encoding="utf-8")) if source is not None else None
         page = apply_koshitsu_connected(
-            apply_koshitsu_stance_glance(apply_koshitsu_extras(refresh_verified_planet(before)))
+            apply_koshitsu_stance_glance(apply_koshitsu_extras(refresh_verified_planet(before, records)), records)
         )
         if not check and (page != before or output is not None):
             target = Path(output) if output else page_path

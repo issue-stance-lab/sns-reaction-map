@@ -71,7 +71,6 @@ class Theme:
         self.cfg = yaml.safe_load((ROOT / "configs/planet" / f"{topic}.yaml").read_text(encoding="utf-8"))
         self.issues = [i["key"] for i in self.cfg["issues"]]
         self.stances = [s["key"] for s in self.cfg["stances"]]
-        self.neutral = next((s for s in self.stances if "中立" in s or "どちらでもない" in s), self.stances[-1])
         self.sub = self.cfg.get("sub_issues") or {}
         # 専用再読ファイル（論点ごとに別ファイルのテーマもある）
         self.files: dict[str, dict] = {}
@@ -82,6 +81,11 @@ class Theme:
         self.reread = self.files[next(iter(self.files))] if len(self.files) == 1 else None
         guide = ROOT / "configs/wave_review" / f"{topic}.yaml"
         self.guide = yaml.safe_load(guide.read_text(encoding="utf-8")) if guide.exists() else {}
+        # 意見外の投稿に付ける立場。設定（neutral_stance）が無ければ「中立」系、無ければ最後の立場
+        self.neutral = self.guide.get("neutral_stance") or next(
+            (s for s in self.stances if "中立" in s or "どちらでもない" in s), self.stances[-1])
+        if self.neutral not in self.stances:
+            raise SystemExit(f"neutral_stance {self.neutral} が configs/planet/{topic}.yaml の立場にありません")
         themes = yaml.safe_load((ROOT / "THEMES.yaml").read_text(encoding="utf-8"))["themes"]
         self.sample_file = ROOT / themes[topic]["sample_file"]
 
