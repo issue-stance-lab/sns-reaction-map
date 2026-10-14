@@ -105,7 +105,9 @@ class ThemeHeroAssetTests(unittest.TestCase):
     def test_bukatsu_page_uses_the_canonical_hero_and_keeps_protected_features(self):
         html = BUKATSU_PAGE.read_text(encoding="utf-8")
 
-        if 'name="bukatsu-layout"' in html:
+        if '<meta name="bukatsu-layout" content="redesign-v2">' in html:
+            self.assertIn('class="bko-poster"', html)  # 最新の型：黄色い斜めの件数札（冒頭の設定から）
+        elif 'name="bukatsu-layout"' in html:
             self.assertIn('class="hero-count',html)
             self.assertIn('name="bukatsu-layout"',html)
         else:

@@ -1,0 +1,539 @@
+{
+ "theme_id": "consumption-tax-cut",
+ "_about": "消費税減税ページの「背景として開く内容」（開閉行）の手書き文言。scripts/consumption_tax_background.py が読む（scripts/consumption_tax_reading.py から呼ぶ）。SNSの件数は書かない。日付は冒頭の設定（law・checked_on）と THEMES.yaml・公開JSONから作る。文の値が {\"bill\":…, \"enacted\":…, \"all\":…} のような辞書なら、冒頭と同じ段階の判定（consumption_tax_opening.phase_of）で文を選ぶ。hide_in に書いた段階では、その項目を出さない。memo_section は一次資料メモの節で、制度の行は法律案の提出日より後に確かめた節だけを指せる。現行ページの背景（configs/consumption-tax-background.json、確認日2026-09-27）は元HTML側に残すので、ここでは読まない。",
+ "inputs": {
+  "themes_yaml": "THEMES.yaml",
+  "classroom": "configs/classroom/consumption-tax-cut.json"
+ },
+ "section": {
+  "eyebrow": "背景を開いて読む",
+  "title": "制度の中身と、決まるまでの流れ",
+  "lead": "見出しを押すと開く形にしました。制度の説明は法律案と政府の資料にもとづき、SNSの意見とは分けて書いています。"
+ },
+ "checked_line": "制度の確認日 {checked}（一次資料を開き直した日）。段階は{as_of}時点のものです。",
+ "dates_line": "制度の記述の確認日は{checked}、SNSの件数の集計は{updated_on}までです。次の収集は{next_collect}に予定しています。",
+ "groups": [
+  {
+   "id": "system",
+   "label": "制度のしくみ",
+   "rows": [
+    {
+     "id": "rate",
+     "kind": "system",
+     "title": "1%の仕組みと、対象になる品目",
+     "summary": {
+      "bill": "税率の内訳、対象品目、予約販売の扱い、値札の特例（法律案）",
+      "overdue": "税率の内訳、対象品目、予約販売の扱い、値札の特例（法律案）",
+      "all": "税率の内訳、対象品目、予約販売の扱い、値札の特例"
+     },
+     "items": [
+      {
+       "label": "税率の内訳",
+       "text": "飲食料品の特例税率は{special_total}%で、国税{special_national}%と地方消費税{special_local}%を合わせた率です。標準税率{standard_total}%（国税{standard_national}%・地方{standard_local}%）と軽減税率{reduced_total}%（国税{reduced_national}%・地方{reduced_local}%）は変わりません。地方消費税が減る分は、地方特例交付金で補います。",
+       "memo_section": "資料W（",
+       "sources": [
+        {
+         "name": "法律案の概要（内閣官房・財務省）",
+         "url": "https://www.cas.go.jp/jp/seisaku/shouhizei_zeigakukoujo/pdf/sankou15.pdf"
+        },
+        {
+         "name": "軽減税率制度の概要（国税庁）",
+         "url": "https://www.nta.go.jp/taxes/shiraberu/zeimokubetsu/shohi/keigenzeiritsu/01.htm"
+        }
+       ]
+      },
+      {
+       "label": "対象になる品目",
+       "text": "引下げの対象は、今8%の軽減税率が当たっている飲食料品だけです。外食と酒類は{standard_total}%のまま、新聞の定期購読は{reduced_total}%のままです。{law_word}の要綱と本文に「新聞」の語は出てきません。",
+       "memo_section": "資料W-2（",
+       "sources": [
+        {
+         "name": "法律案の要綱（内閣官房・財務省）",
+         "url": "https://www.cas.go.jp/jp/seisaku/shouhizei_zeigakukoujo/pdf/sankou16.pdf"
+        }
+       ]
+      },
+      {
+       "label": "予約販売と通信販売",
+       "text": "{transition}より前に結んだ定期購入の契約で、{start}より前に代金を受け取ったものは、引下げの対象から外れて8%のままです。{transition}より前に条件を示した通信販売で、{start}より前に申込みを受けたものも同じです。",
+       "memo_section": "【2026-10-13追記】",
+       "sources": [
+        {
+         "name": "法律案（内閣官房・財務省）",
+         "url": "https://www.cas.go.jp/jp/seisaku/shouhizei_zeigakukoujo/pdf/sankou17.pdf"
+        }
+       ]
+      },
+      {
+       "label": "値札の特例（総額表示）",
+       "text": "値札を一度に替えにくい店のために、本来の税込価格と誤解されない工夫をすることを条件に、引下げ前の2か月間は1%の税込価格を、引下げ後の2か月間は8%の税込価格を表示してよいとしています。2年後に戻るときも前後2か月は同じです。消費税の免税事業者は、この特例の対象に入っていません。",
+       "memo_section": "資料W-4（",
+       "sources": [
+        {
+         "name": "法律案の要綱（内閣官房・財務省）2（5）第六条関係",
+         "url": "https://www.cas.go.jp/jp/seisaku/shouhizei_zeigakukoujo/pdf/sankou16.pdf"
+        }
+       ]
+      },
+      {
+       "label": "事業者向けの措置",
+       "text": "{law_word}が定める措置は5つです。本則課税に移るときの届出・食料品を売る事業者の簡易課税・中間申告・総額表示のそれぞれの特例と、予約販売と通信販売の税率の経過措置があります。",
+       "memo_section": "資料W（",
+       "sources": [
+        {
+         "name": "法律案の概要（内閣官房・財務省）",
+         "url": "https://www.cas.go.jp/jp/seisaku/shouhizei_zeigakukoujo/pdf/sankou15.pdf"
+        }
+       ]
+      }
+     ],
+     "issue_ids": [
+      "consumption-tax-cut-scope",
+      "consumption-tax-cut-business-burden"
+     ]
+    },
+    {
+     "id": "benefit",
+     "kind": "system",
+     "title": "給付付き税額控除と、就業者負担軽減支援金",
+     "summary": {
+      "all": "支援金を受け取れる人、受け取り方、給付付き税額控除との関係"
+     },
+     "items": [
+      {
+       "label": "支援金を受け取れる人",
+       "text": "4つの要件をすべて満たす人です。1つ目は勤労所得が政令で定める額を超えること、2つ目は合計所得金額が定める額以下であることです。3つ目は、税と社会保険料の負担から公的年金などを引いた額が定める額を超えること。4つ目は配偶者の所得が定める額以下であることで、2027・28年度の支給には問われません。金額は、前年の所得や子どもの数に応じて政令で決めます。",
+       "memo_section": "資料W（",
+       "sources": [
+        {
+         "name": "法律案の概要（内閣官房・財務省）",
+         "url": "https://www.cas.go.jp/jp/seisaku/shouhizei_zeigakukoujo/pdf/sankou15.pdf"
+        }
+       ]
+      },
+      {
+       "label": "受け取り方",
+       "text": "支給は毎年1回で、認定の日から2か月以内に支払われます。公金受取口座を登録していて受給資格と金額が明らかな人は、市町村長が申請を待たずに認定できます。認定を辞退することもできます。",
+       "memo_section": "資料W-4（",
+       "sources": [
+        {
+         "name": "法律案（内閣官房・財務省）第十二条・第十三条",
+         "url": "https://www.cas.go.jp/jp/seisaku/shouhizei_zeigakukoujo/pdf/sankou17.pdf"
+        }
+       ]
+      },
+      {
+       "label": "費用の負担",
+       "text": "支援金の費用は3分の2以上を国が負担し、残りを都道府県と市区町村が半分ずつ負担します。国の負担分は、特例公債（赤字国債）に頼らず、補助金や租税特別措置の見直しなどでまかなうとしています（第39条）。",
+       "memo_section": "資料W-4（",
+       "sources": [
+        {
+         "name": "法律案の概要（内閣官房・財務省）",
+         "url": "https://www.cas.go.jp/jp/seisaku/shouhizei_zeigakukoujo/pdf/sankou15.pdf"
+        },
+        {
+         "name": "法律案（内閣官房・財務省）第三十九条",
+         "url": "https://www.cas.go.jp/jp/seisaku/shouhizei_zeigakukoujo/pdf/sankou17.pdf"
+        }
+       ]
+      },
+      {
+       "label": "給付付き税額控除との関係",
+       "text": "政府は、引下げと支援金の組み合わせを「実質ゼロ化」と説明し、2029年度から給付付き税額控除として本格的に導入する方針です。{law_word}では、税額控除と給付を組み合わせる仕組みの導入を、検討規定（第36条第2項）で引き続き検討するとしています。",
+       "memo_section": "資料W-3（",
+       "sources": [
+        {
+         "name": "「飲食料品に係る消費税率の引下げ」及び「給付付き税額控除」について（内閣官房）",
+         "url": "https://www.cas.go.jp/jp/seisaku/shouhizei_zeigakukoujo/index.html"
+        },
+        {
+         "name": "法律案の要綱（内閣官房・財務省）4 検討等（第三十六条関係）",
+         "url": "https://www.cas.go.jp/jp/seisaku/shouhizei_zeigakukoujo/pdf/sankou16.pdf"
+        }
+       ]
+      }
+     ],
+     "issue_ids": [
+      "consumption-tax-cut-alternatives",
+      "consumption-tax-cut-finance-welfare"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "stage",
+   "label": "決まったことと、決まるまでの流れ",
+   "rows": [
+    {
+     "id": "status",
+     "kind": "status",
+     "title": "「決まったこと」と「まだのこと」",
+     "summary": {
+      "bill": "法律案に書かれていることと、まだ決まっていないこと（{checked}時点）",
+      "overdue": "法律案に書かれていることと、確かめていないこと",
+      "all": "法律で決まったことと、まだ決まっていないこと（{checked}時点）"
+     },
+     "decided_title": {
+      "bill": "法律案に書かれていること（{checked}の時点で、まだ成立していません）",
+      "overdue": "法律案に書かれていること（成立したかどうかは未確認）",
+      "all": "法律で決まったこと（{enacted}に成立）"
+     },
+     "pending_title": {
+      "all": "まだ決まっていないこと"
+     },
+     "decided": [
+      {
+       "text": "飲食料品の税率は、{start}から{end}まで{special_total}%。その翌日から{reduced_total}%に戻る。",
+       "memo_section": "資料W（",
+       "sources": [
+        {
+         "name": "法律案の概要（内閣官房・財務省）",
+         "url": "https://www.cas.go.jp/jp/seisaku/shouhizei_zeigakukoujo/pdf/sankou15.pdf"
+        }
+       ]
+      },
+      {
+       "text": "対象は今8%の飲食料品だけ。外食と酒類は{standard_total}%、新聞の定期購読は{reduced_total}%のまま。",
+       "memo_section": "資料W-2（",
+       "sources": [
+        {
+         "name": "法律案の要綱（内閣官房・財務省）",
+         "url": "https://www.cas.go.jp/jp/seisaku/shouhizei_zeigakukoujo/pdf/sankou16.pdf"
+        }
+       ]
+      },
+      {
+       "text": "4つの要件を満たす働く人に、就業者負担軽減支援金を毎年1回支給する。",
+       "memo_section": "資料W（",
+       "sources": [
+        {
+         "name": "法律案の概要（内閣官房・財務省）",
+         "url": "https://www.cas.go.jp/jp/seisaku/shouhizei_zeigakukoujo/pdf/sankou15.pdf"
+        }
+       ]
+      },
+      {
+       "text": "支援金の国の負担分は、特例公債に頼らずにまかなう。",
+       "memo_section": "資料W-4（",
+       "sources": [
+        {
+         "name": "法律案（内閣官房・財務省）第三十九条",
+         "url": "https://www.cas.go.jp/jp/seisaku/shouhizei_zeigakukoujo/pdf/sankou17.pdf"
+        }
+       ]
+      },
+      {
+       "text": "事業者向けの特例を5つ設ける（簡易課税・中間申告・総額表示など）。",
+       "memo_section": "資料W（",
+       "sources": [
+        {
+         "name": "法律案の概要（内閣官房・財務省）",
+         "url": "https://www.cas.go.jp/jp/seisaku/shouhizei_zeigakukoujo/pdf/sankou15.pdf"
+        }
+       ]
+      }
+     ],
+     "pending": [
+      {
+       "text": {
+        "bill": "国会で成立するかどうか。{checked}の時点で、衆議院の審議経過は「衆議院で審議中」で、付託された委員会の欄も空でした。",
+        "overdue": "法律が成立したかどうか（編集部でまだ確かめていません）。",
+        "all": ""
+       },
+       "hide_in": [
+        "enacted",
+        "in_effect",
+        "ended"
+       ],
+       "memo_section": "【2026-10-13追記】",
+       "sources": [
+        {
+         "name": "審議経過 閣法第222回国会1号（衆議院）",
+         "url": "https://www.shugiin.go.jp/internet/itdb_gian.nsf/html/gian/keika/1DE342E.htm"
+        }
+       ]
+      },
+      {
+       "text": "支援金の金額と、所得の線引きの額。政令で決めます。",
+       "memo_section": "資料W（",
+       "sources": [
+        {
+         "name": "法律案の概要（内閣官房・財務省）",
+         "url": "https://www.cas.go.jp/jp/seisaku/shouhizei_zeigakukoujo/pdf/sankou15.pdf"
+        }
+       ]
+      },
+      {
+       "text": "引下げで減る税収をどう埋めるかの金額。{law_word}の本文に金額は書かれていません。",
+       "memo_section": "資料W-4（",
+       "sources": [
+        {
+         "name": "法律案（内閣官房・財務省）",
+         "url": "https://www.cas.go.jp/jp/seisaku/shouhizei_zeigakukoujo/pdf/sankou17.pdf"
+        }
+       ]
+      },
+      {
+       "text": "給付付き税額控除の仕組み。検討規定で引き続き検討するとされています。",
+       "memo_section": "資料W-3（",
+       "sources": [
+        {
+         "name": "法律案の要綱（内閣官房・財務省）",
+         "url": "https://www.cas.go.jp/jp/seisaku/shouhizei_zeigakukoujo/pdf/sankou16.pdf"
+        }
+       ]
+      }
+     ],
+     "issue_ids": [
+      "consumption-tax-cut-political-trust"
+     ]
+    },
+    {
+     "id": "timeline",
+     "kind": "timeline",
+     "title": "決まるまでの年表",
+     "summary": {
+      "all": "7月の会見から、大綱、法律案、引下げの期間まで"
+     },
+     "before": [
+      {
+       "date": "2026-07-30",
+       "title": "首相が1%・2年間の考えを示す",
+       "text": "首相は会見で、選挙で「2年間に限った飲食料品の消費税率ゼロ」の検討を約束したと述べました。そのうえで、1%ならシステム改修の期間を短くでき2027年4月から実施できるとして、まず1%への引下げを2年間先行させる考えを示しました。",
+       "memo_section": "資料W-5（",
+       "sources": [
+        {
+         "name": "首相官邸「『飲食料品に係る消費税率の引下げ』及び『給付付き税額控除』についての会見」（令和8年7月30日）",
+         "url": "https://www.kantei.go.jp/jp/105/statement/2026/0730kaiken.html"
+        }
+       ]
+      },
+      {
+       "date": "2026-08-05",
+       "title": "給付付き税額控除の基本方針を閣議決定",
+       "text": "この日の臨時閣議の決定事項は、「給付付き税額控除」の制度導入の基本方針です。",
+       "memo_section": "資料W-5（",
+       "sources": [
+        {
+         "name": "首相官邸「令和8年8月5日（水）臨時閣議案件」",
+         "url": "https://www.kantei.go.jp/jp/kakugi/2026/kakugi-2026080501.html"
+        }
+       ]
+      }
+     ],
+     "_before": "年表の後半（大綱・法律案・成立・予約販売の区切り・引下げ開始・終わり）は、冒頭の設定 steps.items と law を読み、冒頭の段階図と同じ判定（consumption_tax_opening.step_states）で「済み・予定・法律案の日付・未定」を付ける。ここには書かない。",
+     "step_sources": {
+      "outline": [
+       {
+        "name": "大綱（内閣、令和8年9月15日閣議決定）",
+        "url": "https://www.cas.go.jp/jp/seisaku/shouhizei_zeigakukoujo/pdf/sankou4.pdf"
+       }
+      ],
+      "bill": [
+       {
+        "name": "「飲食料品に係る消費税率の引下げ」及び「給付付き税額控除」について（内閣官房）",
+        "url": "https://www.cas.go.jp/jp/seisaku/shouhizei_zeigakukoujo/index.html"
+       },
+       {
+        "name": "審議経過 閣法第222回国会1号（衆議院）",
+        "url": "https://www.shugiin.go.jp/internet/itdb_gian.nsf/html/gian/keika/1DE342E.htm"
+       }
+      ],
+      "enact": [
+       {
+        "name": "審議経過 閣法第222回国会1号（衆議院）",
+        "url": "https://www.shugiin.go.jp/internet/itdb_gian.nsf/html/gian/keika/1DE342E.htm"
+       }
+      ],
+      "transition": [
+       {
+        "name": "法律案（内閣官房・財務省）",
+        "url": "https://www.cas.go.jp/jp/seisaku/shouhizei_zeigakukoujo/pdf/sankou17.pdf"
+       }
+      ],
+      "start": [
+       {
+        "name": "法律案の概要（内閣官房・財務省）",
+        "url": "https://www.cas.go.jp/jp/seisaku/shouhizei_zeigakukoujo/pdf/sankou15.pdf"
+       }
+      ],
+      "end": [
+       {
+        "name": "法律案の概要（内閣官房・財務省）",
+        "url": "https://www.cas.go.jp/jp/seisaku/shouhizei_zeigakukoujo/pdf/sankou15.pdf"
+       }
+      ]
+     },
+     "issue_ids": [
+      "consumption-tax-cut-political-trust"
+     ]
+    },
+    {
+     "id": "parties",
+     "kind": "parties",
+     "title": "0%案と、各党の案",
+     "summary": {
+      "all": "政府案の1%と、ゼロ税率や一律の減税の案"
+     },
+     "lead": "食料品を0%にする案は、政府案とは別の案です。ここでは政府の説明と、各党が公表した案を並べます。どれがよいかの判断はしていません。",
+     "items": [
+      {
+       "label": "政府案（1%）",
+       "text": "首相は7月の会見で、選挙では「2年間に限った飲食料品の消費税率ゼロ」の検討を約束したと述べました。そのうえで、1%なら0%より事業者のシステム改修の期間を短くできるとして、1%を選んでいます。大綱と法律案も1%です。",
+       "memo_section": "資料W-5（",
+       "sources": [
+        {
+         "name": "首相官邸「『飲食料品に係る消費税率の引下げ』及び『給付付き税額控除』についての会見」（令和8年7月30日）",
+         "url": "https://www.kantei.go.jp/jp/105/statement/2026/0730kaiken.html"
+        },
+        {
+         "name": "法律案の概要（内閣官房・財務省）",
+         "url": "https://www.cas.go.jp/jp/seisaku/shouhizei_zeigakukoujo/pdf/sankou15.pdf"
+        }
+       ]
+      },
+      {
+       "label": "立憲民主党（食料品ゼロ税率）",
+       "text": "2025年5月の代表会見で、食料品の消費税を臨時・時限的にゼロにする案を示しました。軽減額は5兆円、国民1人あたり4万円と試算しています。",
+       "memo_section": "資料D",
+       "sources": [
+        {
+         "name": "立憲民主党【代表会見】「消費税負担の軽減策」骨格について表明（2025年5月）",
+         "url": "https://cdp-japan.jp/news/20250516_9237"
+        }
+       ]
+      },
+      {
+       "label": "国民民主党（一律5%）",
+       "text": "政策ページに、賃金の上昇率が物価＋2%で安定するまで消費税を一律5%に下げ、インボイスを廃止すると書いています。",
+       "memo_section": "資料C",
+       "sources": [
+        {
+         "name": "国民民主党 政策ページ「1.「もっと」手取りを増やす」",
+         "url": "https://new-kokumin.jp/policies/policy1"
+        }
+       ]
+      },
+      {
+       "label": "議員立法（第219回国会）",
+       "text": "食料品の税率をゼロにする臨時特例と給付付き税額控除の導入を定める法律案が、議員立法で出されました。審査未了で、今回の政府の法律案とは別のものです。",
+       "memo_section": "取得時の注意",
+       "sources": []
+      }
+     ],
+     "note": "各党の案は、会見と政策ページの記載です（{checked}に記載が残っていることを確かめました）。その後の変更は追っていません。",
+     "issue_ids": [
+      "consumption-tax-cut-political-trust",
+      "consumption-tax-cut-scope"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "more",
+   "label": "疑問と資料",
+   "rows": [
+    {
+     "id": "faq",
+     "anchor": "tax-faq",
+     "kind": "faq",
+     "title": "よくある質問",
+     "summary": {
+      "all": "財源、支援金の受け取り方、値札とレジの金額"
+     },
+     "items": [
+      {
+       "q": "財源は決まっていますか？",
+       "a": "考え方だけが{law_word}にあります。支援金のうち国が負担する費用は、特例公債（赤字国債）に頼らず、補助金や租税特別措置の見直しなどでまかない、恒久財源を確保することを旨とします。引下げで減る税収をどう埋めるかの金額は書かれていません。地方消費税が減る分は、地方特例交付金で補います。",
+       "memo_section": "資料W-4（",
+       "sources": [
+        {
+         "name": "法律案（内閣官房・財務省）第三十九条",
+         "url": "https://www.cas.go.jp/jp/seisaku/shouhizei_zeigakukoujo/pdf/sankou17.pdf"
+        },
+        {
+         "name": "法律案の概要（内閣官房・財務省）",
+         "url": "https://www.cas.go.jp/jp/seisaku/shouhizei_zeigakukoujo/pdf/sankou15.pdf"
+        }
+       ]
+      },
+      {
+       "q": "支援金は申請しないと受け取れない？",
+       "a": "公金受取口座を登録していて、受給資格と金額が明らかな人は、市町村長が申請を待たずに認定できると{law_word}は定めています。支払いは認定の日から2か月以内です。金額や所得の線引きは政令で決めるので、まだ分かりません。",
+       "memo_section": "資料W-4（",
+       "sources": [
+        {
+         "name": "法律案（内閣官房・財務省）第十二条・第十三条",
+         "url": "https://www.cas.go.jp/jp/seisaku/shouhizei_zeigakukoujo/pdf/sankou17.pdf"
+        }
+       ]
+      },
+      {
+       "q": "値札とレジの金額がずれることはある？",
+       "a": "あります。値札を一度に替えにくい店は、本来の税込価格と誤解されない工夫をすることを条件に、引下げの前後2か月ずつ、もう一方の税率の税込価格を表示してよいとされています。2年後に戻るときも同じです。",
+       "memo_section": "資料W-4（",
+       "sources": [
+        {
+         "name": "法律案の要綱（内閣官房・財務省）2（5）第六条関係",
+         "url": "https://www.cas.go.jp/jp/seisaku/shouhizei_zeigakukoujo/pdf/sankou16.pdf"
+        }
+       ]
+      }
+     ],
+     "note": "旧FAQの「いつから」「0%か1%か」「外食・酒・持ち帰り・新聞」「給付付き税額控除とは」は、ページ上部の短答にまとめました。",
+     "issue_ids": [
+      "consumption-tax-cut-finance-welfare",
+      "consumption-tax-cut-alternatives"
+     ]
+    },
+    {
+     "id": "classroom",
+     "kind": "classroom",
+     "title": "授業や話し合いで使う",
+     "summary": {
+      "all": "賛成・反対の理由、確かめる資料、問いの例"
+     },
+     "intro": "賛成と反対の理由を3つずつ、確かめる資料、話し合いの問いをまとめました。理由はSNSの投稿の言い分を整理したもので、どちらが正しいかは示していません。",
+     "sources_label": "確かめる一次資料",
+     "questions_label": "問いの例",
+     "note": "理由・資料・問いは、授業向けの設定をそのまま読んでいます。資料の説明には、その資料に書かれていることだけを書きました。"
+    },
+    {
+     "id": "unverified",
+     "kind": "unverified",
+     "title": "まだ確かめていないこと",
+     "summary": {
+      "all": "国会の日程、政令の中身、各党の案のその後など"
+     },
+     "lead": "編集部が一次資料でまだ確かめていないことです。確かめたら、この欄から外します。",
+     "items": [
+      {
+       "text": {
+        "bill": "国会の審議日程と、成立の見込み。{checked}の時点では委員会への付託も決まっていませんでした。",
+        "overdue": "法律が成立したかどうか。",
+        "all": ""
+       },
+       "hide_in": [
+        "enacted",
+        "in_effect",
+        "ended"
+       ]
+      },
+      {
+       "text": "支援金の金額と所得の線引きの額（政令で決めるため、まだ公表されていません）。"
+      },
+      {
+       "text": "事業者向けの5つの措置のうち、総額表示の特例以外の条文の細部。"
+      },
+      {
+       "text": "各党の案が、会見や政策ページの記載から変わっていないか。"
+      },
+      {
+       "text": "{after}以降の投稿。次の収集は{next_collect}の予定です。"
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

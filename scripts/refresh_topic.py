@@ -827,9 +827,11 @@ def promote(
     from scripts.elderly_layout import enabled as elderly_layout_enabled
     from scripts.nickname_layout import enabled as nickname_layout_enabled
     from scripts.henoko_layout import enabled as henoko_layout_enabled
+    from scripts.consumption_tax_layout import enabled as consumption_tax_layout_enabled
     if (enabled(root) or koshitsu_layout_enabled(root) or fukushuto_layout_enabled(root)
             or ai_copyright_layout_enabled(root) or constitutional_layout_enabled(root) or bike_layout_enabled(root)
-            or elderly_layout_enabled(root) or nickname_layout_enabled(root) or henoko_layout_enabled(root)):
+            or elderly_layout_enabled(root) or nickname_layout_enabled(root) or henoko_layout_enabled(root)
+            or consumption_tax_layout_enabled(root)):
         raise ValueError("新デザインの更新は公開候補manifestを使ってください。旧昇格経路は使用できません。")
     adapter_targets = completion_targets(root, topic, stage, adapter_targets)
     themes = parse_themes_yaml(root / "THEMES.yaml")
@@ -969,6 +971,8 @@ def _copy_candidate_tree(root: Path, stage: Path) -> Path:
     materialize_nickname(candidate_root)
     from scripts.henoko_layout import materialize as materialize_henoko
     materialize_henoko(candidate_root)
+    from scripts.consumption_tax_layout import materialize as materialize_consumption_tax
+    materialize_consumption_tax(candidate_root)
     return candidate_root
 
 
@@ -1060,6 +1064,9 @@ def prepare_public_candidate_bundle(
     # 辺野古高校生死亡事故の新デザインも同じ位置で適用する
     from scripts.henoko_layout import finish as finish_henoko_layout
     layout_targets.update(finish_henoko_layout(candidate_root))
+    # 消費税減税の新デザインも同じ位置で適用する
+    from scripts.consumption_tax_layout import finish as finish_consumption_tax_layout
+    layout_targets.update(finish_consumption_tax_layout(candidate_root))
 
     # 公開候補として変わり得るものをすべて固定する。全テーマJSONはcatalogの入力でもあるため含める。
     # docs/data/ と docs/llms.txt は課題77 案1: data/public/ の写し・AI向け要約で、
@@ -1308,6 +1315,8 @@ def prepare_public_candidate_bundle_multi(
     per_topic_targets.update(finish_nickname_layout(candidate_root))
     from scripts.henoko_layout import finish as finish_henoko_layout
     per_topic_targets.update(finish_henoko_layout(candidate_root))
+    from scripts.consumption_tax_layout import finish as finish_consumption_tax_layout
+    per_topic_targets.update(finish_consumption_tax_layout(candidate_root))
 
     # 課題77 案1のdocs/data・docs/llms.txtを含め、共有ファイルは全テーマ分を1回だけ固定する。
     shared_targets = [

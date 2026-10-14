@@ -231,3 +231,11 @@ ai-copyright・fukushutoの2テーマは`show_unreviewed_note`が既定のtrue�
 [適用・公開記録](../quality/reviews/2026-10-09-bukatsu-opinion4-application.md)。今回の読了は詳細理由のグループ登録とは別。
 
 2026-10-10、オーナー指示で過去の未反映分を8テーマ一括で追い読み。本テーマの未読258件を本文確認して理由区分へ接続し、全論点の未反映を0件にした。費用・受け皿の読み飛ばし10件と、採否確認・独立確認で読了済みだが区分の無かった123件も今回の区分付き記録へ更新。新規収集・正典の変更なし。公開ページ・公開JSONは作業ツリーで再生成、本番反映はオーナー承認待ち。[記録](../quality/reviews/2026-10-10-unread-backlog-catchup.md)・[証拠](../quality/reviews/2026-10-10-bukatsu-chiiki-catchup.json)。
+
+## 2026-10-14 新デザインを最新の型へ組み替え（手順書23の手順4〜7、公開はオーナー承認待ち）
+
+2026-10-10 に公開した初期型の新デザインを、消費税減税と同じ最新の型（冒頭・読書面・背景を設定JSONと公開JSON・再読データから作る）に組み替えた。
+初期型はデータが1件変わると `editorial-review.json` の指紋で止まったが、最新の型は指紋を持たず、照合が合えば作れる（`configs/bukatsu-layout.json` の `version: "redesign-v2"`）。
+公開中のページの投票注記「試作では…送信しません」とJSなし案内の「試作」の語も直した。件数は変えていない。
+次の定期更新（10/17）は、5論点に新しい意見が入ったらその回のうちに追い読みが要る（立場の対応表は更新経路が作り直す）。公開が10/17以降になったら初期型の指紋を更新して通す（DATA_REFRESH.md）。
+[公開候補と検査の記録](../quality/designs/2026-10-14-bukatsu-chiiki-production-candidate.md)・承認記録 `approval-20261014-bukatsu-chiiki-v2`。

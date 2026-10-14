@@ -573,6 +573,8 @@ collect_at を迎えたテーマにデータを追加した後、以下を順番
   - 各タブの見出し（H2）の末尾と右上のバッジの「○年○月○日時点」も、同じ呼び出しで最新の収集日になる（手では直さない）
   - グラフの縦線と「同じ期間にあった出来事」は、ページの年表（`configs/consumption-tax-background.json` の `timeline`）から作る。
     年表に出来事を足したら、次の更新で自動で入る。急ぐときは `python3 scripts/build_trend_section.py --topic consumption-tax-cut --apply`。
+    2026-10-13 の新デザイン公開後は、公開ページへの `--apply` は止まる。`--page data/page-sources/consumption-tax-cut.html` で元HTMLに貼ってから
+    `python3 scripts/build_consumption_tax_page.py`（下の「消費税減税の定期更新（新デザインを維持する）」の節）で公開ページを作り直す。
     日付は「2026年9月15日」の形で書く（月までしか書けない行は、グラフに出せず数字検査が止める）。
     直前・直後の回の比較は事実だけを書き、原因は書かない。出来事の一次資料リンクは年表の `links` を使う
   - 「反対・慎重の理由」タブ（立場が「減税反対・慎重」の投稿の論点別の内訳）も、同じ呼び出しで貼り直される。
@@ -624,9 +626,9 @@ collect_at を迎えたテーマにデータを追加した後、以下を順番
     （立場は、それより前の回を同じAIで判定し直したため、切替の影響を受けない）
   - 論点の「その他」は割合から外す。立場・論点の並びは `scripts/bukatsu_taxonomy.py`（`inject_tide_widget.THEMES` には無いテーマ）。
     ラベルを変えるときは `TREND_THEMES.short_labels` も合わせて直す
-  - **新デザインの「意見の全体像」（2026-10-11〜）**: 元HTMLの対話式の山なみ（`PLANET_SECTION`）を `build_bukatsu_redesign.py` が毎回そのまま写す
-    （app.js が描いていた図の代わり）。手で直す所は無い。山を押すと読書面へ移る橋渡しは `scripts/bukatsu_redesign/planet.js`、見た目は同じ場所の `planet.css`
-    （設計記録 `quality/designs/2026-10-10-bukatsu-production-candidate.md` の「山なみを対話式に戻す」）
+  - **新デザイン**: 2026-10-14 から最新の型（`configs/bukatsu-layout.json` の `version: "redesign-v2"`、`scripts/build_bukatsu_redesign_v2.py`）。
+    更新時に確かめることは、下の「部活動の地域移行の定期更新（新デザインを維持する、最新の型）」の節。初期型（`build_bukatsu_redesign.py`、
+    planet.js・planet.css）は `version` を外したときだけ使う
 
 - [ ] 生成AIと著作権だけ: **潮目カードは出さない**（2026-10-08に外した。`ai-copyright-tide-widget` が戻ると数字検査が止める）。
   外枠（`<section class="update-dashboard">`）の中の「意見の推移」（立場・論点の2タブ。理由タブと年表の縦線は無い）と、
@@ -1491,6 +1493,175 @@ mainへ取り込む前に、**「合格した」という報告を鵜呑みに�
 - 新デザインのページには、テーマ共通の見た目（`apply_theme_design.py`）・授業節の単独適用・信頼情報の単独適用・
   山なみの単独更新（`refresh_planet_section.py`）・潮目の単独差し込み（`inject_tide_widget.py`）を
   掛けない（各スクリプトが skipped／SKIP／停止と出す）。更新経路では元HTMLに掛かる
+
+### 消費税減税の定期更新（新デザインを維持する、2026-10-13〜）
+
+消費税減税のページは2026-10-13から新デザイン（冒頭の「いつから・何%・いつまで？」「1%と給付付き税額控除とは？」「何が1%になる？」の短答・
+レシートの計算・段階図・SNSの意見の件数・対話式の山なみ・7論点の読書面・10回分の推移の要約・背景の開閉行）で公開する
+（公開切替はオーナー承認待ち。`company/APPROVALS.yaml` の `approval-20261013-consumption-tax-cut`）。
+辺野古（上の節）と同じ型で、**旧形式の生成器はこれまでどおり「元HTML」に掛け、全生成の最後に新デザインを組み直す。**
+収集・本文確認・`--prepare-promotion` の手順（`theme-refresh` スキル）は変わらない。
+設計と検査の記録: [quality/designs/2026-10-13-consumption-tax-cut-production-candidate.md](quality/designs/2026-10-13-consumption-tax-cut-production-candidate.md)
+
+次回の定期更新は **2026-10-20**（THEMES.yaml の `collect_at`）。10月10日以降の投稿はまだ集めていない。この回で次を必ず確かめる。
+
+- **新しい意見が4論点に入った回は、追い読みしないと全テーマの公開候補生成が止まる**: 新デザインの読書面は、理由区分のある4論点
+  （減税の対象範囲・減税の効果・給付など他策との比較・事業者の実務負担）の意見を、再読データ（`data/consumption-tax-cut_4issues-reread.json` の
+  論点ごとの `items`・`excluded_items`・`buckets`）から数える。新しい意見が明細に無いと、更新経路の adapter（`refresh_adapters/consumption_tax.py` の
+  `build_reread_stances`）が「正典の意見のうち N 件が再読データの明細にありません（追い読みが要ります）」で止まる。
+  複数テーマをまとめて作る回に消費税減税が入っていれば、**その回の全テーマの公開候補生成が止まる**。また、どのテーマの公開候補生成でも最後に
+  `consumption_tax_layout.finish` が再読データ・立場の対応表・公開JSONの件数を照合するので、手で正典や再読データを動かして食い違ったままだと、他テーマの回も止まる。
+  10/20 の回で4論点に新しい意見があれば、その回のうちに1件ずつ読み、明細（`tweet_id`・`bucket`。どの区分にも当てはまらなければ `excluded_items`）と
+  `buckets` の件数を足す（10/11 の回と同じ。`themes/consumption-tax-cut.md` の 10/11 の節）。新しい理由区分を作ったら
+  `configs/consumption-tax-cut-reading.json` の `issues.{論点ID}.reasons` に区分ごとの `voice` を書く（書くまで生成が止まる）。
+  **立場の対応表（`data/consumption-tax-cut_reread-stances.json`）は更新経路の adapter が累積候補から作り直して公開対象に含める**ので、
+  定期更新の中では手で作らない（明細の `stance` は読み直したときの記録で、正典と違うものがある。読書面は対応表の立場だけを使う）。
+  新規0件の回は公開候補を作らないので止まらない（2026-10-13 に、切替後の作業ツリーの隔離コピーで新規0件相当の 10/20 の回を adapter から
+  公開候補生成まで通し、新デザインのまま通ることを確かめた。公開ページは最終更新日 10月20日・次の更新予定 10月27日、他テーマの新デザイン9ページは変わらず、
+  候補の中で検査はすべて合格）
+- **「理由は未公開」の3論点**（選挙の約束・財源と社会保障・その他）: 再読データと `configs/planet/consumption-tax-cut.yaml` の `sub_issues` に
+  論点を足して追い読みすれば、冒頭の件数欄の「理由は未公開」と読書面の「未公開」の表示は自動で消え、理由の一覧に変わる
+  （区分ごとの `voice` を書くまで生成は止まる）
+- **分類AIが変わった回**: 推移の注意書きの記録（`scripts/build_trend_section.py` の `TREND_THEMES["consumption-tax-cut"]["model_breaks"]`。
+  2026-10-03 の kimi-k2.7-code への切替を立場・論点とも登録済み）に日付を足すまで adapter が止まる。足すと推移のカードと、ひと目の要約の注記に出る
+- **主張の照合の該当投稿数**が変わったら `data/consumption-tax-cut_claim_posts.json` との照合で止まる（読書面の生成器）。照合日は
+  `build_consumption_tax_page.py` の `CHECKED_ON`（公開JSON `claim_verification.checked_on` の元。ここだけが正）
+
+その他の項目（辺野古の節と同じ並び）:
+
+- **`configs/consumption-tax-layout.json` の `enabled`**: `true` の間、`refresh_topic.py` の公開候補生成（単一・複数テーマ）は
+  隔離コピーで元HTMLを `docs/` に戻し（`consumption_tax_layout.materialize`）、旧形式の全処理（adapter のページ生成・意見の推移・立場の対応表・推移の画像、
+  finalize、SEO・信頼情報・授業節・テーマ共通の見た目・他テーマの新デザイン）のあとに `consumption_tax_layout.finish` で元HTMLを保存し直してから
+  新デザインのページを `docs/` に書く。`false` に戻すと、公開ページが新デザインのまま「更新設定が無効」で止まる。戻すときは旧形式のページ
+  （`data/page-sources/consumption-tax-cut.html`）を先に `docs/` へ戻すこと
+- **元HTMLの場所**: `data/page-sources/consumption-tax-cut.html`（Git管理）。`refresh_adapters/consumption_tax.py`・`build_consumption_tax_page.py`（引数なし）は
+  これを入力にする。手で編集しない。`docs/consumption-tax-cut-reaction-map.html` を旧形式の生成器に渡すと拒否される（部分更新の `--conditions-only` など、
+  `build_trend_section.py --apply` も止まる）。旧ページの検索入口（TAX_SEARCH_ENTRY・`docs/consumption-tax-search-entry.*`。税率を直書きした計算部品）・
+  連動表示（`consumption_tax_connected*.py`・`docs/consumption-tax-connected*`）・立場の帯・論点カード・主張の照合の一覧・背景パネル・旧FAQ は元HTMLの中でだけ
+  更新され、新デザインには載せない。**新デザインのレシートの税率と注記は冒頭の設定 `rates`・`calc` だけが正**。新デザインの FAQ の構造化データは、
+  画面に出ている問い（冒頭の短答3問と背景の「よくある質問」）から毎回作る
+- **新デザインが元HTMLから文字どおり引き継ぐもの**: title・meta description（課題96の判定 10/27 まで変えない）・SEOメタ・Article の構造化データ・GA4・AdSense・投票
+  （`consumption-tax-cut-issue-stance-v1`、論点7×立場4。VOTE_ISSUES・STANCES・CHOICES と前置きの文は元のまま。保存キーは本番ホストだけ既存キー。
+  元HTMLの保存キーか choiceIdx の計算が変わると生成が止まる）・調査条件（`#caution`）・PLANET_DATA・**意見の推移（TREND_CARD。adapter の `_apply_trend` が
+  元HTMLに貼る。外部の埋め込みコードが指す `#consumption-tax-cut-trend-panel-stance`・`-issue` を含む。id が変わると生成が止まる）**・「このページの作り方」・
+  詳細データ（表の件数が公開JSONと違うと止まる）・「次に読むテーマ」とクリック計測・フッター。数字が古いときは元HTML側（adapter・`apply_theme_trust.py`）で直る
+- **「論点ごとに読む」の山なみ**: 元HTMLの対話式の山なみ（`PLANET_SECTION` の `#planet-block`・PLANET_DATA・山なみのスクリプト）を
+  `build_consumption_tax_redesign.py` が毎回そのまま写し、論点タブの上に置く。写すときに変えるのは、初期化の「URL の論点へ着地する」処理の後ろに
+  「ハッシュが無いときは読書面の既定の論点（件数1位）を、ハッシュ・履歴に触れずに選ぶ」処理を足すことだけ（元HTMLの該当箇所が変わると生成が止まる）。
+  連動表示の本体は読み込まないので、橋渡し（TAX_CONNECTED_BRIDGE）は旧来の動きのまま。山を押すと読書面へ移る橋渡しは `scripts/consumption_tax_redesign/planet.js`
+- **推移の要約**: 10回分の推移のカードを折りたたみ（「N回分の折れ線と表を開く」）に1文字も変えずに入れ、上に立場4本の小さな折れ線・前回から今回への1行・
+  注記1行（1回あたりの件数とぶれ・古い投稿の混入・分類AIの切替。数字と日付は推移の注意書きから写す）を置く。各論点の「回ごとの動き」も同じ数字から描く
+- **折りたたみ（部活動型の圧縮）**: 読書面の理由一覧（上位4件＋「ほかの理由を読む」）・選んだ理由だけの説明・立場ごとの件数と割合・投稿の例・資料に照らす・
+  論点の説明の2段落目・累計の表、推移、作り方と詳細データ（「集め方と分類、全部の集計表」）の `<details>` は、`consumption_tax_reading.py`・
+  `build_consumption_tax_redesign.py` が毎回作る（見出しの文言は `configs/consumption-tax-cut-reading.json` の `compact`）
+- **単独で作り直すとき**（データは変えずに見た目や文言だけ直したとき）:
+  `python3 scripts/build_consumption_tax_page.py`（新デザイン公開中は、元HTMLに旧形式の生成（ページ生成・意見の推移・調査条件・公開JSONの集計と山なみ・
+  テーマ共通の見た目）を掛けてから公開ページを作り直す。非公開の正典が要る）。成功の形: もう一度
+  `python3 scripts/build_consumption_tax_page.py --check` を実行して `OK: 差分なし` と出ること。公開候補を別フォルダに作って見るだけなら
+  `python3 scripts/build_consumption_tax_redesign.py --mode release --output-dir quality/prototypes/consumption-tax-cut-release`
+  （成功の形: `Built 1 file (release, as_of …); no deployment performed.`。docs/ は変わらない）
+- **再読データ（理由区分）を追記したとき**（定期更新の外の追い読み・判定し直しも同じ）:
+  1. 明細（`items`・`excluded_items`）と `buckets` の件数を足す
+  2. `python3 scripts/consumption_tax_reread_stances.py --made-on YYYY-MM-DD`（定期更新の外では立場の対応表を手で作り直す。成功の形: `wrote data/consumption-tax-cut_reread-stances.json（N件）` か `変更なし`）
+  3. `python3 scripts/build_public_registry.py --topic consumption-tax-cut`
+  4. 単独なら `python3 scripts/build_consumption_tax_page.py`
+  5. `python3 scripts/verify_number_provenance.py consumption-tax-cut`（新デザインの理由区分・区分ごとの立場を明細と対応表から数え直す。成功の形: `NG 0件`）
+- **確認日 `checked_on`**: 冒頭・読書面・背景の「◯月◯日の時点」と制度の確認日は `configs/consumption-tax-cut-opening.json` の `checked_on` 1か所から出る。
+  一次資料メモの節の確認日より新しく、法律案の提出日（`law.bill_on`）より後の節だけを読書面の制度の確認に使える（外れると生成が止まる）
+- **法律の段階 `law`**: 国会で成立したら、衆議院の審議経過で確かめて `law.enacted_on`（成立日）・`law.promulgated_on`（公布日）・`checked_on` を入れ、
+  一次資料メモに成立を確かめた節を足して、読書面の `issues.consumption-tax-cut-political-trust.memo_checks[trust-status].memo_section` をその節にする
+  （しないと生成が止まる）。冒頭の段階・短答・レシートの見出し・段階図・背景の「決まったこと」・年表・まだ確かめていないこと・制度の確認の文がまとめて切り替わる
+  （成立後・引下げ中・終了・成立未確認の4段階を `--as-of` で確かめるテストあり）。title・description は課題96の判定（10/27）まで変えない
+- **年表**: 新デザインの年表は冒頭の設定 `steps`・`law` と背景の設定 `configs/consumption-tax-cut-background.json` から作る。旧ページの年表
+  （`configs/consumption-tax-background.json`）は元HTMLと推移のグラフの縦線（出来事）が読む。10/9 の法律案は旧ページ側には足していない
+- **構造化データの更新日**: Article の `dateModified` は `configs/theme-seo.json` の `dateModified`（更新経路の `update_seo_date` が書く）1か所から出る
+  （`build_consumption_tax_page.py` の手入力の `MODIFIED_AT` は 2026-10-13 に外した）
+- 新デザインのページには、テーマ共通の見た目（`apply_theme_design.py`）・授業節の単独適用・信頼情報の単独適用・
+  山なみの単独更新（`refresh_planet_section.py`）・推移の単独差し込み（`build_trend_section.py --apply`）を
+  掛けない（各スクリプトが skipped／停止と出す）。更新経路では元HTMLに掛かる
+
+### 部活動の地域移行の定期更新（新デザインを維持する、最新の型、2026-10-14〜）
+
+部活動のページは2026-10-10に初期型の新デザインで公開し、2026-10-14に最新の型（冒頭の「いつから？」「費用はいくら？」「何が問題？」の短答・
+改革の期間と段の一覧・SNSの意見の件数・対話式の山なみ・7論点の読書面・13回分の推移の要約・背景の開閉行7行）に組み替えた
+（公開切替はオーナー承認待ち。`company/APPROVALS.yaml` の `approval-20261014-bukatsu-chiiki-v2`）。
+消費税減税（上の節）と同じ型で、**旧形式の生成器はこれまでどおり「元HTML」に掛け、全生成の最後に新デザインを組み直す。**
+収集・本文確認・`--prepare-promotion` の手順（`theme-refresh` スキル）は変わらない。
+設計と検査の記録: [quality/designs/2026-10-14-bukatsu-chiiki-production-candidate.md](quality/designs/2026-10-14-bukatsu-chiiki-production-candidate.md)
+
+次回の定期更新は **2026-10-17**（THEMES.yaml の `collect_at`）。この回で次を必ず確かめる。
+
+- **初期型の指紋は使わない**: 初期型（2026-10-10〜10-14）は、元HTMLの集計が1件でも変わると `scripts/bukatsu_redesign/editorial-review.json` の
+  指紋で止まった。最新の型は指紋を持たず、下の照合が合えば作れる（`editorial-review.json`・`editorial-source.html`・`template.html`・`parity.*`・
+  `refresh_inputs.py`・`build.py`・`app.js` は初期型の経路にだけ残し、最新の型は読まない）
+- **新しい意見が5論点に入った回は、追い読みしないと全テーマの公開候補生成が止まる**: 新デザインの読書面は、理由区分のある5論点
+  （教員の働き方・制度・移行プロセス・教育的意義・機会・受け皿・指導者・費用・家庭負担）の意見を、再読データ3ファイル
+  （`data/bukatsu-chiiki_teacher-reread.json`・`data/bukatsu-chiiki_cost-receiver-reread.json`・`data/verification/bukatsu-chiiki-plan-child-subissues.json`。
+  どこにあるかは `configs/planet/bukatsu-chiiki.yaml` の `sub_issues`）の明細から数える。新しい意見が明細に無いと、更新経路の adapter
+  （`refresh_adapters/bukatsu.py` の `build_reread_stances`）が「正典の意見のうち N 件が再読データの明細にありません（追い読みが要ります）」で止まる。
+  10/17 の回で5論点に新しい意見があれば、その回のうちに1件ずつ読み、明細（`tweet_id`・`bucket`。どの区分にも当てはまらなければ
+  `configs/bukatsu-chiiki-reading.json` の `excluded_buckets` に書いた区分）と `buckets` の件数を足す（10/10 の追い読みと同じ）。
+  **件数の上位4件の理由が入れ替わったら**、新しく上位に入った区分の `voice`（どんな声か）と `reasons_read`（読んだ件数）を
+  `configs/bukatsu-chiiki-reading.json` の `issues.{論点ID}.reasons` に書くまで生成が止まる。新しい理由区分を作ったときも同じ。
+  **立場の対応表（`data/bukatsu-chiiki_reread-stances.json`）は更新経路の adapter が累積候補から作り直して公開対象に含める**ので、
+  定期更新の中では手で作らない（明細の `stance` は読み直したときの記録で、308件が正典と違う。読書面は対応表の立場だけを使う）。
+  新規0件の回は公開候補を作らないので止まらない（2026-10-14 に、切替後の作業ツリーの隔離コピーで新規0件相当の 10/17 の回を adapter から
+  公開候補生成まで通し、新デザインのまま通ることを確かめた。公開ページの基準日は 10月17日、他テーマの新デザイン9ページは変わらず、候補の中で検査はすべて合格）
+- **「理由は未公開」の2論点**（住む地域で差が出る・その他）: 再読データと `configs/planet/bukatsu-chiiki.yaml` の `sub_issues` に論点を足して
+  追い読みすれば、冒頭の件数欄の「理由は未公開」と読書面の「未公開」の表示は自動で消え、理由の一覧に変わる（`voice` を書くまで生成は止まる）
+- **分類AIが変わった回**: 推移の注意書きの記録（`scripts/build_trend_section.py` の `TREND_THEMES["bukatsu-chiiki"]["model_breaks"]`。
+  2026-10-01 の切替は論点だけに登録済み）に日付を足すまで adapter が止まる。立場の推移に記録があれば、ひと目の要約の注記にも出る
+- **主張の照合の該当投稿数**が変わったら `data/bukatsu-chiiki_claim_posts.json` との照合で止まる（読書面の生成器）
+- **資料にしかない話の母数**（`data/verification/bukatsu-chiiki-sunk-continents.json` の `sns_base`）が意見数と違うと止まる。
+  増えた分を検索し直して再確認の記録を足し、`sns_base` を直す（これまでの各回と同じ）
+
+その他の項目（消費税減税の節と同じ並び）:
+
+- **`configs/bukatsu-layout.json`**: `enabled: true` かつ `version: "redesign-v2"` の間、`refresh_topic.py` の公開候補生成（単一・複数テーマ）は
+  隔離コピーで元HTMLを `docs/` に戻し（`bukatsu_layout.materialize`）、旧形式の全処理（adapter のページ生成・意見の推移・立場の対応表・推移の画像、
+  finalize の `refresh_planet_section.py`・`build_bukatsu_arena.py`、SEO・信頼情報・授業節）のあとに `bukatsu_layout.finish` で元HTMLを保存し直してから、
+  新デザインのページと全文・印刷版（`docs/bukatsu-chiiki-full.html`）を `docs/` に書く。`version` を外すと初期型に戻る（下の「初期型に戻すとき」）
+- **元HTMLの場所**: `data/page-sources/bukatsu-chiiki.html`（Git管理）。adapter・`build_bukatsu_arena.py`（引数なし）はこれを入力にする。手で編集しない。
+  旧形式の連動表示（`bukatsu_connected*.py`・`docs/bukatsu-connected*`）・立場の帯・検索入口・旧FAQ（`SEARCH_FAQ_JSONLD`）・編集部の横断整理は
+  元HTMLの中でだけ更新され、新デザインには載せない。新デザインの FAQ の構造化データは背景の「よくある質問」と同じ設定の items から作り、画面と違えば止まる
+- **新デザインが元HTMLから文字どおり引き継ぐもの**: title・meta description・SEOメタ・Article の構造化データ・GA4・AdSense・投票
+  （`bukatsu-chiiki-issue-stance-v1`、論点7×立場3。VOTE_ISSUES・V2I・STANCES・前置きと保存の注記の文は元のまま。保存キーは本番ホストだけ既存キー。
+  元HTMLの保存キーか choiceIdx の計算か保存の注記が変わると生成が止まる）・調査条件（`#caution`）・PLANET_DATA・**意見の推移（TREND_CARD。外部の
+  埋め込みコードが指す `#bukatsu-chiiki-trend-panel-stance`・`-issue` を含む。id が変わると生成が止まる）**・「このページの作り方」・詳細データ
+  （表の件数が公開JSONと違うと止まる）・「次に読むテーマ」とクリック計測・フッター
+- **「論点ごとに読む」の山なみ**: 元HTMLの対話式の山なみを `build_bukatsu_redesign_v2.py` が毎回写し、論点タブの上に置く。写すときに変えるのは
+  山なみのスクリプトの3か所（URL を素の論点IDに書き換えない・読み込み時の画面を動かす着地を外す・画面を動かさない着地でフォーカスを残す。
+  `PLANET_PATCHES`。元HTMLの該当箇所が変わると生成が止まる）だけ。山を押すと読書面へ移る橋渡しは `scripts/bukatsu_redesign/planet_v2.js`
+- **推移の要約**: 13回分の推移のカードを折りたたみに1文字も変えずに入れ、上に立場4本の小さな折れ線・最初と最新の回で最も多かった立場の1行・
+  注記1行（1回あたりの件数とぶれ・古い投稿の混入。数字は推移の立場の注意書きから写す）を置く。論点ごとの「ひと目で見る、この論点の推移」は
+  同じ元HTMLの推移から `glance_chart.py` で描く
+- **単独で作り直すとき**（データは変えずに見た目や文言だけ直したとき）: `python3 scripts/build_bukatsu_arena.py`（新デザイン公開中は、
+  元HTMLに旧形式の生成を掛けてから公開ページと全文・印刷版を作り直す。非公開の正典が要る）。成功の形: もう一度
+  `python3 scripts/build_bukatsu_arena.py --check` を実行して `OK` と出ること。公開候補を別フォルダに作って見るだけなら
+  `python3 scripts/build_bukatsu_redesign_v2.py --mode release --output-dir quality/prototypes/bukatsu-chiiki-release-v2`
+  （成功の形: `Built 2 files (release, as_of …); no deployment performed.`。docs/ は変わらない）
+- **再読データ（理由区分）を追記したとき**（定期更新の外の追い読みも同じ）:
+  1. 明細（`items`）と `buckets` の件数を足す
+  2. `python3 scripts/bukatsu_reread_stances.py --made-on YYYY-MM-DD`（定期更新の外では立場の対応表を手で作り直す。成功の形: `wrote data/bukatsu-chiiki_reread-stances.json（N件）` か `変更なし`）
+  3. 単独なら `python3 scripts/build_bukatsu_arena.py`
+  4. `python3 scripts/verify_number_provenance.py bukatsu-chiiki`（新デザインの理由区分・区分ごとの立場を明細と対応表から数え直す。成功の形: `NG 0件`）
+- **確認日 `checked_on`・改革実行期間の段階**: 冒頭・読書面・背景の「◯月◯日の時点」と制度の確認日は `configs/bukatsu-chiiki-opening.json` の
+  `checked_on` 1か所から出る。段階（推進期間・前期・後期・期間の後）は `period` と基準日（公開JSONの更新日）で切り替わる。
+  中間評価を確かめたら `period.midterm_checked_on` と `checked_on` を直し、一次資料メモに節を足す（`--as-of 2029-04-01` で後期の文に切り替わるテストあり）
+- **自治体の一覧**は `quality/research/bukatsu-chiiki-municipal-plans.md` の「一覧」の表を生成時に読む（2026-09-23 確認のまま。直すとページの表も変わる）
+- 新デザインのページには、授業節の単独適用・信頼情報の単独適用（skipped）・山なみの単独更新（`refresh_planet_section.py`。停止）・
+  推移の単独差し込み（`build_trend_section.py --apply`。停止）を掛けない。更新経路では元HTMLに掛かる
+
+**初期型に戻すとき・最新の型の公開が 10/17 の回に間に合わなかったとき**（初期型の経路で 10/17 の回を通す手順）:
+初期型は、元HTMLの論点別・理由別の件数や詳細データが1件でも変わると `build_bukatsu_redesign.py` が「参照本文か理由分類が変わりました」、
+`refresh_inputs.py` が「データが変わりました」で止まる（新規0件の回は、それより先に「集計と推移の最終日が一致しません」で止まるので公開候補を作らない）。
+止まったら、公開候補の隔離コピー（`.staging/…/public-candidate`）の `docs/bukatsu-chiiki-reaction-map.html`（更新済みの元HTML）を入力に、
+7論点の説明・教員の4理由の説明・投稿例・制度の確認日（`evidence/refresh-check.json` の `review_items` の4項目）がまだ正しいことを読んで確かめ、
+作業ツリーで `scripts/bukatsu_redesign/editorial-review.json` の `data_sha256` と `editorial_sha256` を次の2つの値に書き換え、`reviewed_on` と `note` に確認の記録を足してから
+`--prepare-promotion` をやり直す。値は `python3 -c "import sys,json;sys.path[:0]=['.','scripts/bukatsu_redesign'];from pathlib import Path;from refresh_inputs import parse_page,digest;from scripts.build_bukatsu_redesign import fingerprint;s=Path(sys.argv[1]).read_text();print(digest(json.dumps(parse_page(s)[0],ensure_ascii=False,sort_keys=True)),fingerprint(s))" <隔離コピーの docs/bukatsu-chiiki-reaction-map.html>`
+で出る（1つ目が `data_sha256`、2つ目が `editorial_sha256`。今の元HTMLで実行すると、いまの `editorial-review.json` と同じ2つの値になることを 2026-10-14 に確かめた）。
+初期型に戻すときは `configs/bukatsu-layout.json` の `version` を消してから `python3 scripts/build_bukatsu_arena.py` を実行する
+（2026-10-14 に初期型の投票注記「試作では…送信しません」とJSなし案内の「試作」は直したので、戻しても出ない）
 
 ### 読み込み確認のやり方（質と速さの両立）
 

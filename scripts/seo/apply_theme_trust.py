@@ -402,7 +402,9 @@ def main() -> int:
         if not path.is_file():
             raise FileNotFoundError(path)
         source = path.read_text(encoding="utf-8")
-        layout = next((name for name in ("koshitsu-layout", "fukushuto-layout", "ai-copyright-layout", "constitutional-layout", "bike-layout", "elderly-layout", "nickname-layout", "henoko-layout") if f'name="{name}"' in source), None)
+        layout = next((name for name in ("koshitsu-layout", "fukushuto-layout", "ai-copyright-layout", "constitutional-layout", "bike-layout", "elderly-layout", "nickname-layout", "henoko-layout", "consumption-tax-layout") if f'name="{name}"' in source), None)
+        if layout is None and '<meta name="bukatsu-layout" content="redesign-v2">' in source:
+            layout = "bukatsu-layout redesign-v2"  # 部活動の最新の型（build_bukatsu_redesign_v2.py）。初期型 redesign-v1 はこれまでどおり掛ける
         if layout:
             # 新デザインはSEOメタ・作り方を元HTMLから引き継ぐ（更新経路では元HTMLにこの処理を掛けてから適用する）
             print(f"skipped {path.relative_to(PROJECT_ROOT)} ({layout})")

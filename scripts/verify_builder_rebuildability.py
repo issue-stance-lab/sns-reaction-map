@@ -49,6 +49,8 @@ def _copy_fixture(target: Path) -> None:
     materialize_nickname(target)
     from scripts.henoko_layout import materialize as materialize_henoko
     materialize_henoko(target)
+    from scripts.consumption_tax_layout import materialize as materialize_consumption_tax
+    materialize_consumption_tax(target)
     # 山なみの直接生成にも、正規テンプレートが必要。
     template = Path("quality/prototypes/planet-prototype.template.html")
     (target / template.parent).mkdir(parents=True, exist_ok=True)

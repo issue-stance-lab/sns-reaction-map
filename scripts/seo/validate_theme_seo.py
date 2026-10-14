@@ -142,7 +142,8 @@ def validate_article(
         errors.append(f"{path.name}: duplicate legacy collection-method block remains")
 
     tokens=REQUIRED_PAGE_TOKENS
-    if soup.select_one('meta[name="bukatsu-layout"]'):
+    # 部活動の初期型（redesign-v1）だけは共通CSSを読まず独自の .site-chrome を持つ。最新の型（redesign-v2）は他テーマと同じ
+    if soup.select_one('meta[name="bukatsu-layout"]') and soup.select_one('meta[name="bukatsu-layout"]').get("content") != "redesign-v2":
         tokens=tuple(t for t in tokens if t!="topic-modern.css?v=")+(".site-chrome", ".issue-panel")
     for token in tokens:
         if token not in source:

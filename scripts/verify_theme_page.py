@@ -324,9 +324,19 @@ def verify_planet_breakdowns(theme: str, page: str, data: dict[str, Any]) -> tup
     fukushuto_redesign = fukushuto_redesign or (theme == "school-nickname-ban" and 'name="nickname-layout"' in page)
     # 辺野古高校生死亡事故の新デザインも同じ形（scripts/henoko_layout.py）。旧ページの連動表示とは別に、論点の欄の中で照合する
     fukushuto_redesign = fukushuto_redesign or (theme == "henoko-student-accident" and 'name="henoko-layout"' in page)
+    # 消費税減税の新デザインも同じ形（scripts/consumption_tax_layout.py）。旧ページの連動表示とは別に、論点の欄の中で照合する
+    fukushuto_redesign = fukushuto_redesign or (theme == "consumption-tax-cut" and 'name="consumption-tax-layout"' in page)
+    # 部活動の地域移行の最新の型（scripts/build_bukatsu_redesign_v2.py。2026-10-10 公開の初期型 redesign-v1 とは別）も同じ形。
+    # 理由の一覧に入れない区分（configs/bukatsu-chiiki-reading.json の excluded_buckets）は、数え方の注記（data-excluded）の合計と照合する
+    bukatsu_v2 = theme == "bukatsu-chiiki" and '<meta name="bukatsu-layout" content="redesign-v2">' in page
+    fukushuto_redesign = fukushuto_redesign or bukatsu_v2
+    bukatsu_excluded: dict[str, set[str]] = {}
+    if bukatsu_v2:
+        bukatsu_excluded = {k: set(v) for k, v in json.loads(
+            (ROOT / "configs" / "bukatsu-chiiki-reading.json").read_text(encoding="utf-8")).get("excluded_buckets", {}).items()}
     redesign_prefix = "fr" if fukushuto_redesign else "kr"
     koshitsu_redesign = koshitsu_redesign or fukushuto_redesign
-    if ('id="public-data"' in page and theme == "bukatsu-chiiki") or koshitsu_redesign:
+    if ('id="public-data"' in page and theme == "bukatsu-chiiki" and not bukatsu_v2) or koshitsu_redesign:
         from bs4 import BeautifulSoup
         redesign = BeautifulSoup(page, "html.parser")
     for issue in data.get("issues", []):
@@ -350,7 +360,22 @@ def verify_planet_breakdowns(theme: str, page: str, data: dict[str, Any]) -> tup
             if redesign is not None and koshitsu_redesign:
                 panel = redesign.find(id="issue-" + issue_id)
                 mismatched = []
+                excluded_ids = bukatsu_excluded.get(issue.get("label"), set())
+                if excluded_ids:
+                    node = panel.select_one("[data-excluded]") if panel else None
+                    want = sum(int(i["count"]) for i in items if i["id"] in excluded_ids)
+                    if node is None or node.get("data-excluded") != str(want):
+                        mismatched.append("区分に当てはまらない明細の件数")
                 for item in items:
+                    if item["id"] in excluded_ids:
+                        continue
+                    if item["id"] == "__excluded__":
+                        # 読み直してどの区分にも当てはまらないとして除いた明細（消費税減税）。理由の一覧には入れず、
+                        # 数え方の注記（data-excluded に件数）に出す。件数が合うかだけを見る
+                        node = panel.select_one("[data-excluded]") if panel else None
+                        if node is None or node.get("data-excluded") != str(int(item["count"])):
+                            mismatched.append(item["label"])
+                        continue
                     node = panel.select_one(
                         f'li.{redesign_prefix}-reason[data-reason="{item["id"]}"] .{redesign_prefix}-reason-n b'
                     ) if panel else None

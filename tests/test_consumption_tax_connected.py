@@ -21,7 +21,9 @@ from consumption_tax_count_provenance import verified_selectors
 class ConnectedContentTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.original = (ROOT / "docs/consumption-tax-cut-reaction-map.html").read_text()
+        # 新デザイン公開後は、旧形式の元HTML（data/page-sources）を検査する（scripts/consumption_tax_layout.py）
+        from scripts.consumption_tax_layout import source_for_refresh
+        cls.original = source_for_refresh(ROOT).read_text()
         # 本文なしの公開検査用記録だけで資料欄を生成する。
         rows = json.loads((ROOT / "data/verification/consumption-tax-cut-claims.json").read_text())
         source = re.sub(re.escape(builder.CLAIM_START) + r".*?" + re.escape(builder.CLAIM_END),
