@@ -1,0 +1,253 @@
+{
+ "theme_id": "bukatsu-chiiki",
+ "_about": "部活動の地域移行ページの「論点ごとの読書面」の手書き文言。scripts/bukatsu_reading.py が読む。件数・割合・日付・判定はここに書かず、公開JSON・再読データ・立場の対応表・照合データ・一次資料メモから読む（非公開の正典は読まない）。消費税減税の reading 設定と同じキー。理由の説明（voice）は各論点の件数上位 compact.top_reasons 件にだけ書く（2026-10-14 司令塔の判断）。公開中のページの build.py の copy 辞書（教員の働き方の4理由）は voice の元にした。",
+ "opening_config": "configs/bukatsu-chiiki-opening.json",
+ "public_json": "docs/data/themes/bukatsu-chiiki.json",
+ "reread_stances_json": "data/bukatsu-chiiki_reread-stances.json",
+ "_reread_stances_json": "明細ごとの立場（正典から写した対応表。scripts/bukatsu_reread_stances.py）。再読データの明細の stance は 2026-10-14 に正典と比べて308件違い（教員160・受け皿81・費用67）、制度・教育の628件には立場が無かったので、読書面はこちらを使う。",
+ "claim_posts_json": "data/bukatsu-chiiki_claim_posts.json",
+ "primary_memo": "quality/research/bukatsu-chiiki-primary-sources.md",
+ "trend_source": "data/page-sources/bukatsu-chiiki.html",
+ "_trend_source": "元HTMLの推移（TREND_CARD の const panels）。公開中のページの public_trends.py と同じデータで、論点ごとの「ひと目で見る」の折れ線を作る。",
+ "other_issue_id": "bukatsu-chiiki-sonota",
+ "excluded_buckets": {
+  "教員の働き方": [
+   "F",
+   "N"
+  ],
+  "制度・移行プロセス": [
+   "other"
+  ],
+  "教育的意義・機会": [
+   "other"
+  ],
+  "受け皿・指導者": [
+   "R6"
+  ],
+  "費用・家庭負担": [
+   "P6"
+  ]
+ },
+ "_excluded_buckets": "「その他」「上のどれにも当てはまらない」の区分。理由の一覧に入れず、数え方の注記に件数だけ出す（消費税の excluded_items と同じ扱い）。再読データの区分そのものは変えない。",
+ "sunk_issue_overrides": {
+  "bukatsu-chiiki-sc-2": "bukatsu-chiiki-hiyo",
+  "bukatsu-chiiki-sc-3": "bukatsu-chiiki-ukezara",
+  "bukatsu-chiiki-sc-4": "bukatsu-chiiki-ukezara"
+ },
+ "_sunk_issue_overrides": "公開JSONで論点（nearest_issue_id）が空の「資料にしかない話」の置き場。施設整備費は費用・家庭負担、部活動指導員の任期と経験年数は受け皿・指導者。",
+ "section": {
+  "eyebrow": "論点ごとに読む",
+  "title": "部活動の地域移行をめぐる投稿は、論点ごとにどんな理由を挙げている？",
+  "lead": "論点を選ぶと、この下の欄が選んだ論点に切り替わります。ページの位置は動きません。"
+ },
+ "trend": {
+  "public_json_key": "trends",
+  "_public_json_key": "公開JSONにこのキーが現れたら止まる（推移は元HTMLの TREND_CARD から読んでいる。黙って二重にしない）。",
+  "title": "最新の累計で見た件数と割合",
+  "row_label": "{period_start}〜{period_end}の累計",
+  "note": "回ごとの数字は上の折れ線にあります。表は収集を通しての合計です。"
+ },
+ "stance_common": {
+  "title": "地域移行に対する立場",
+  "lead": "この論点に分類した{count}件を、地域移行への立場ごとに分けた内訳です。",
+  "note": "立場は投稿全体の論調から判定したもので、どの論点に入れるかとは独立しています。「条件付き・改善要求」は、移行そのものより進め方や条件の手直しを求める投稿です。賛否を書かずに制度や地元の動きを紹介する投稿は「中立・情報」に入れています。",
+  "caveat": "集めた公開投稿の中の割合で、地域全体の賛否を表す数字ではありません。"
+ },
+ "reasons_common": {
+  "title": "投稿に書かれている理由",
+  "lead": "ここに入れた{count}件は、編集部が投稿を一つずつ開いて、書き手が挙げた理由で区分しました。複数の理由が書かれていたら、最も強調された理由で数えています。",
+  "note": "割合は{count}件に対する値です。各理由に付けた立場の色も、その区分の投稿の判定から作りました。",
+  "excluded": "「その他」や、どの理由にも分けにくかった{n}件は、この一覧に入れていません。",
+  "unpublished": "部活動の地域移行をめぐるこの欄は、投稿を理由で区分する作業の途中です。件数、立場の内訳、投稿の例を先に出しています。",
+  "voice_label": "どんな声か",
+  "voice_missing": "この理由の説明文はまだ書いていません。件数と立場の内訳を先に載せています。",
+  "stance_label": "立場の内訳"
+ },
+ "sources_common": {
+  "title": "資料に照らすときの決まり",
+  "lead": "使った資料は、スポーツ庁・文化庁のガイドラインと国の予算資料・調査のほか、法令と自治体の募集要項です。対象はSNSに何度も出てくる言い分に限っています。個々の投稿に正誤の判定は付けず、地域移行の是非にも結論を出していません。",
+  "sns_label": "SNSの言い分を、資料と照らす",
+  "gov_label": "国の資料で確かめる",
+  "check_eyebrow": "制度の確認",
+  "claim_eyebrow": "主張の照合",
+  "matched": "この言い分に当たる投稿は{n}件でした。",
+  "checked": "照合した日 {checked_on}",
+  "sources_label": "出典を見る",
+  "empty": "この論点に当てる資料は、まだ用意していません。",
+  "memo_checked": "資料を確かめた日 {checked_on}"
+ },
+ "verdict_labels": {
+  "fact": "資料と合う",
+  "gap": "少しずれる",
+  "miss": "大事な点が抜けている",
+  "_about": "公開JSON claim_verification.claims[].verdict の言い換え。miss は「資料の数字は合うが、投稿が見落としている点がある」の判定（club-cost-survey）。知らない判定が来たら止まる。"
+ },
+ "sunk_common": {
+  "title": "国や自治体の資料にあって、SNSではほとんど語られない話",
+  "count": "{base}件の意見を調べたところ、この話に触れていたのは{n}件でした（{checked_on}時点）。",
+  "note_label": "どう調べたか",
+  "recheck": "{when}に調べ直した結果：{text}。",
+  "group_from": 2,
+  "group_summary": "資料にあって、SNSではほとんど語られない話（{n}件）"
+ },
+ "veins_common": {
+  "title": "立場が違っても共通する心配",
+  "shared_label": "共通する心配",
+  "diverging_label": "結論が分かれるところ",
+  "sides": "比べたのは{sides}の投稿です。{checked_on}時点で整理しました。"
+ },
+ "posts_common": {
+  "title": "元の投稿",
+  "lead_two": "載せた2件は立場が異なる投稿で、要約は編集部の文です。件数の多い立場を代表させたわけではありません。",
+  "lead_same": "この論点の2件は同じ立場の投稿です。そうした理由を下に書きました。要約は編集部が書いています。",
+  "lead_one": "この論点に載せた投稿は1件です。理由を下に書きました。要約は編集部が書いています。",
+  "none": "この論点の投稿の例は、まだ選んでいません。",
+  "summary": "X（旧Twitter）で元の投稿を読む（{n}件）",
+  "bucket_label": "理由",
+  "stance_label": "立場",
+  "_selection_rule": "正典 social-samples/bukatsu-chiiki_hermes_classified.json（THEMES.yaml の sample_file）の意見（classification.is_opinion=true、1,578件＝公開JSONの opinion_count）から選び直した。公開中のページの代表投稿（scripts/bukatsu_redesign/build.py が理由ごとに先頭2件を取る方式、editorial-source.html の post-link 14個）は使い回さない。基準（消費税と同じ）: ①その論点の意見で、理由区分を代表する（件数の多い区分から、別の見方の2件を基本） ②2件で立場が偏らない ③削除されていない（cdn.syndication.twimg.com/tweet-result で本文が返る） ④個人・集団への攻撃や差別、罵倒、個人や学校を特定できる書き方を含まない ⑤強い言い方を避ける（classification.intensity=high を選ばない） ⑥classification.article_usable=true かつ risk=low ⑦正典に同じ文面が無い ⑧自動応答（grok）と当サイト自身の投稿を選ばない。区分に当てはまらない明細（excluded_buckets）からは選ばない。①②④⑤は本文を読んで決めた。機械で確かめられる部分は tests/test_bukatsu_redesign_v2.py が正典で確かめる（正典が無い環境ではスキップ）。"
+ },
+ "see_also_common": {
+  "title": "あわせて読む"
+ },
+ "pending_note": "この論点の説明・資料との照合・投稿の例は、次の工程で書き足します。",
+ "footer": "SNSの件数は{updated_on}時点の集計です。一次資料をいつ開いて確かめたかは、各項目の中に記しました。",
+ "compact": {
+  "_about": "部活動型の圧縮の見出し・折りたたみの名前（消費税と同じキー。文言はこのテーマ用に書いた）。理由一覧に出すのは件数の多い順の上位 top_reasons 件、残りは折りたたみ。選んだ理由1つだけを展開する（JavaScriptが無いときは全理由が並ぶ）。",
+  "top_reasons": 4,
+  "tabs_label": "読む論点を選ぶ",
+  "back": "論点の一覧へ戻る ↑",
+  "desc_more": "続きを読む",
+  "reasons_index_title": "理由の分け方（{k}区分）",
+  "reasons_more": "残りの理由も見る（{k}区分）",
+  "reason_eyebrow": "選んだ理由",
+  "reason_next": "同じ論点の次の理由",
+  "stance_fold": "立場ごとの件数と割合",
+  "posts_fold": "元の投稿を読む（{n}件）",
+  "evidence_title": "資料に照らす：SNSの言い分と国の資料",
+  "glance_eyebrow": "ひと目で見る、この論点の推移",
+  "glance_caption": "{rounds}回の収集で、{first_date}は{first}%、{last_date}は{last}%でした。",
+  "glance_note": "折れ線は、「その他」を除く意見のうちこの論点に入った投稿の比率を、収集した日ごとに結んだものです。どんな投稿が集まったかで上下するため、部活動をめぐる世論の動きとは分けて読みます。",
+  "glance_missing": "「その他」は推移の集計に入っていないため、回ごとの割合はありません。",
+  "count_caption": "SNSの意見{total}件の{pct}%。",
+  "rank_first": "7つの論点で最も多い件数です。",
+  "rank_other": "7つの論点のうち{rank}番目に多い件数です。"
+ },
+ "issues": {
+  "bukatsu-chiiki-kyoin": {
+   "name": "教員の働き方はどうなる",
+   "status": "complete",
+   "description": [
+    "国は、少子化と学校の働き方改革を理由に、部活動の地域展開を進めています。この論点には、部活動の指導が教員の負担になっていることをめぐる投稿が集まりました。",
+    "最も多いのは、地域に移すより先に、給特法や残業代、勤務時間の扱いを直すべきだという声です。外部の指導者に任せたい声、部活動そのものをやめたい声、教員のただ働きを問題にする声が続きます。立場は移行支持が最も多く、条件付き・改善要求と中立・情報が続きます。"
+   ],
+   "_description": "1段落目はスポーツ庁の部活動改革ポータルの冒頭（資料G、2026-10-14 に再取得して同じ文を確認）。2段落目は再読データの区分の件数順（B・G・L・J）と公開JSONの立場の内訳（移行支持200・中立・情報123・条件付き106・慎重・反対37）に基づく。件数は書かない。",
+   "reasons_read": {
+    "B": 30,
+    "G": 30,
+    "L": 45,
+    "J": 43
+   },
+   "_reasons_read": "voice を書くときに読んだ明細の数（再読データの summary）。L・J は全件、B・G は先頭から30件ずつ。H・A は公開中のページの build.py の説明文を引き継いだ（新たには読んでいない）。投稿の候補を探すときに、B・G の本文を正典で読んだ（各20件ほど）。",
+   "reasons": {
+    "B": {
+     "label_override": "まず制度と待遇を直すべき",
+     "voice": "地域に移すかどうかより先に、教員の給与や勤務時間の決まりを直すべきだという声です。給特法をやめる、残業代や手当を払う、部活動を勤務時間の中に収める、といった具体的な直し方が挙がります。それができないなら部活動をやめるしかない、と続ける投稿もあります。"
+    },
+    "G": {
+     "label_override": "外部の指導者に任せたい",
+     "voice": "部活動の指導を学校の外の人に任せたいという声です。教員は授業に専念できるうえ、その競技に詳しい人から教わる方が生徒のためになる、という理由が多く挙がります。公費の使い方や費用の分け方も合わせて話し合うべきだという投稿もあります。"
+    },
+    "L": {
+     "label_override": "部活動ごと廃止したい",
+     "voice": "地域に移すだけでなく、学校の部活動そのものをやめるべきだという声です。顧問を断れない、休日も休めないといった教員の働き方を理由に挙げる投稿がほとんどです。続けたい生徒は学校の外で習えばよい、という考えも見られます。"
+    },
+    "J": {
+     "label_override": "ただ働きと違法性を問う",
+     "voice": "教員が手当の少ない休日の指導を担ってきた仕組みを、ただ働きや法律違反に近いと問題にする声です。部活動は本来の職務ではないのに断れない、といった指摘が並びます。地域移行は、その負担を教員に押しつけてきた形を改めることだと受け止める投稿が多く見られます。"
+    },
+    "H": {
+     "voice": "部活動にかかる教員の負担を減らし、本来の仕事や私生活の時間を取り戻したいという意見です。",
+     "label_override": "教員の時間を取り戻したい"
+    },
+    "A": {
+     "voice": "地域に移しても教員の負担は減らず、むしろ増えるのではないかという意見です。",
+     "label_override": "移しても負担は減らない"
+    }
+   },
+   "memo_checks": [
+    {
+     "id": "kyoin-hours",
+     "label": "教員勤務実態調査（令和4年度）",
+     "ask": "部活動にかかる教員の時間は、国の調査でどのくらい？",
+     "found": "中学校の教諭が土日1日に部活動へ使う時間は、2016年度の2時間9分から2022年度の1時間29分に減りました。平日は41分から37分です。ただし2022年度の調査は改革推進期間より前のもので、移行が進んだ後の数字はまだありません。",
+     "memo_section": "資料G-2（",
+     "sources": [
+      {
+       "name": "教員勤務実態調査（令和4年度）の集計（確定値）について（文部科学省）",
+       "url": "https://www.mext.go.jp/content/20240404-mxt_zaimu01-100003067-2.pdf"
+      }
+     ]
+    },
+    {
+     "id": "kyoin-kenshoku",
+     "label": "総合的なガイドライン（令和7年12月）",
+     "ask": "教員が地域クラブで指導することはできる？",
+     "found": "できます。希望する教員は、兼職兼業の許可を受けて地域クラブ活動に関われます。国はガイドラインと一緒に、許可の要綱のひな型も示しました。",
+     "memo_section": "資料B",
+     "sources": [
+      {
+       "name": "部活動改革及び地域クラブ活動の推進等に関する総合的なガイドライン（スポーツ庁の報道発表）",
+       "url": "https://www.mext.go.jp/sports/b_menu/houdou/jsa_00220.html"
+      }
+     ]
+    }
+   ],
+   "posts": {
+    "selection_basis": "最大の区分「制度と待遇」から条件付き・改善要求の1件、2番目の区分「外部委託・専門の指導者に期待」から移行支持の1件を選び、学校の中で待遇を直したい声と、学校の外へ任せたい声を対にした。正典で条件を満たす候補（B・G の2区分で86件）のうち、理由と代わりの案を書いた投稿に絞った。2件とも article_usable=true・risk=low・intensity=medium、正典に同じ文面は無い。2026-10-14 に cdn.syndication.twimg.com で本文が返ることを確かめた。",
+    "items": [
+     {
+      "id": "2074862816310501576",
+      "url": "https://x.com/badedu3/status/2074862816310501576",
+      "label": "振替か手当か、持ち時間を減らすか",
+      "summary": "部活動を指導する教員に、勤務の振替、時間外の手当、授業の持ち時間を減らすことのどれかがあればよいとした投稿です。それが無いなら廃止するしかない、と書いています。",
+      "reason": "区分B（制度と待遇）を代表し、待遇の直し方を3つ具体的に挙げている。攻撃的な言い方が無い。"
+     },
+     {
+      "id": "2060361575635255788",
+      "url": "https://x.com/Rx0073LT/status/2060361575635255788",
+      "label": "負担を減らすなら外部委託を",
+      "summary": "部活動に公的な支援を求めることには疑問を示しつつ、教員の負担を減らすには外部委託をするべきだとした投稿です。専門家から教わる方が生徒のためになる、とも書いています。",
+      "reason": "区分G（外部委託・専門の指導者）を代表し、費用の考え方に留保を付けたうえで理由を書いている。"
+     }
+    ]
+   },
+   "_see_also": "375pxで欄が2,500pxを超えたので、背景へのリンクは置かない（背景のよくある質問から、この論点へ戻るリンクがある）。",
+   "_label_override": "区分名は375pxで2行に折り返して欄が長くなるので短くした。元の区分名は再読データの label（例：B「直すべきは移行ではなく制度と待遇（給特法・残業代・勤務時間の線引き）」）。H・A は公開中のページの見出しを引き継いだ。"
+  },
+  "bukatsu-chiiki-seido": {
+   "name": "制度と移行の進め方",
+   "status": "pending"
+  },
+  "bukatsu-chiiki-kyoiku": {
+   "name": "子どもの機会と部活動の意義",
+   "status": "pending"
+  },
+  "bukatsu-chiiki-ukezara": {
+   "name": "受け皿と指導者は足りるか",
+   "status": "pending"
+  },
+  "bukatsu-chiiki-hiyo": {
+   "name": "費用と家庭の負担",
+   "status": "pending"
+  },
+  "bukatsu-chiiki-kakusa": {
+   "name": "住む地域で差が出る",
+   "status": "pending"
+  },
+  "bukatsu-chiiki-sonota": {
+   "name": "その他",
+   "status": "pending"
+  }
+ }
+}
