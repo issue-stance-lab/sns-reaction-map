@@ -1,4 +1,5 @@
 {
   "enabled": true,
-  "note": "公開切替時に有効化する。元HTMLをdata/page-sourcesへ保存し、更新候補の全生成処理の最後に新デザインを適用する。"
+  "version": "redesign-v2",
+  "note": "部活動の新デザイン（scripts/bukatsu_layout.py）。true の間は元HTMLを data/page-sources/bukatsu-chiiki.html に保存し、更新候補の全生成処理の最後に新デザインを適用する。version が redesign-v2 なら最新の型（scripts/build_bukatsu_redesign_v2.py。2026-10-14〜）、消すと初期型（scripts/build_bukatsu_redesign.py。指紋で止まる）。新しい収集回で5論点に意見が入った回は、新しい意見を追い読みして再読データ3ファイルの明細に足さないと、立場の対応表（更新経路の adapter が作り直す）と明細・件数が合わず生成が止まる（DATA_REFRESH.md）。"
 }

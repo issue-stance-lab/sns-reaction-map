@@ -164,7 +164,8 @@ python3 scripts/build_bukatsu_redesign_v2.py --mode release --output-dir quality
 - 候補の docs/ は最新の型（`redesign-v2`、基準日 2026-10-17、次の収集予定 10月31日）、元HTMLは旧形式、立場の対応表は立場の中身が同じで `made_on`・`public_updated_on` だけ 2026-10-17
 - 他テーマの新デザイン9ページは変わらず（変わったのは部活動のページだけ）
 - 候補の中で `verify_theme_page.py` 全10テーマ NG 0、`verify_number_provenance.py` 10テーマ NG 0、`verify_builder_rebuildability.py` 10テーマ NG 0、`validate_theme_seo.py` OK、使い回し 0件。
-  よみやすは最初「同じ文末『ます』の3連続」が1件（基準日が変わって前後の文が並んだ）→読書面の最後の1文と全文・印刷版の案内の文末を直して 0件
+  よみやすは最初「同じ文末『ます』の3連続」が1件（基準日が変わって前後の文が並んだ）→読書面の最後の1文と全文・印刷版の案内の文末を直して 0件。
+  全文・印刷版でも、推移の注記の2文目と背景の前置きが並んで同じことが起きたので、注記の2文目の文末を直した（9-1）
 - 新しい意見がある回（明細が足りない回）で止まることは、`tests/test_bukatsu_redesign_v2.py` の `test_count_mismatch_stops_before_writing`（finish）と
   `test_adapter_rebuilds_stance_table_and_stops_without_reread`（adapter）で確かめた
 - 模擬に使った隔離コピーは作業ツリーの外（セッションの作業用フォルダー）で、作業ツリーには何も書いていない
@@ -209,7 +210,7 @@ python3 scripts/build_bukatsu_redesign_v2.py --mode release --output-dir quality
 | 生成器の内蔵照合（件数・理由区分・除いた明細・区分ごとの立場・資料・日付・推移の時点と件数の幅・詳細データの表・FAQ と画面） | 合格 |
 | `verify_theme_page.py bukatsu-chiiki --html <候補>` | NG 0（現行ページも全10テーマ NG 0） |
 | `verify_number_provenance.py` | 候補の照合関数で9領域（冒頭の件数欄・7論点・推移の注記）＋折れ線。隔離コピーで切り替えた状態で 部活動 815/815。現行ページ 10テーマ NG 0 |
-| 2回生成 | md5 一致（ページ `732898f2…`・全文・印刷版 `02b231bc…`、`PYTHONHASHSEED` 0・1・999・random） |
+| 2回生成 | md5 一致（`PYTHONHASHSEED` 0・1・999・random。最終はページ `f16fdd21…`・全文・印刷版 `f72a067f…`。9-2） |
 | `--as-of 2029-04-01` | 冒頭・背景が後期（中間評価は未確認）の文に切り替わり、生成は止まらない（テストあり） |
 | よみやす（`--strict`） | 完成を止める指摘 0件・PASS（平均33.5字、最長79字） |
 | 使い回し（`verify_page_originality.py`、隔離コピーで切替後） | 「10ページに、使い回された見出し・文はありません」（最初は4件→3節、もう1件→直した） |
@@ -235,30 +236,30 @@ python3 scripts/build_bukatsu_redesign_v2.py --mode release --output-dir quality
 
 | | 公開中のページ（初期型） | 最新の型 | 目標 |
 |---|---|---|---|
-| ページ全体の高さ（初期表示） | 11,169px | **12,943px** | 13,000px以下 ✓ |
-| ページ全体の表示中の文字数（main） | 2,962字 | 4,745字 | — |
+| ページ全体の高さ（初期表示） | 11,169px | **12,945px** | 13,000px以下 ✓ |
+| ページ全体の表示中の文字数（main） | 2,962字 | 4,744字 | — |
 | うち冒頭 | — | 4,393px | — |
 | 山なみ（選択パネル込み） | — | 1,787px | — |
-| 推移の要約 | — | 492px | — |
+| 推移の要約 | — | 466px | — |
 | 背景（7行、閉じた状態） | — | 1,377px | — |
 | 1280px のページ全体 | 7,658px | 8,175px | — |
 
 | 論点の欄（`.fr-panel[data-selected]`） | 375px 高さ | 表示文字 | 1280px 高さ |
 |---|---|---|---|
 | 教員の働き方はどうなる | 2,443px（公開中のページは 2,846px・819字） | 812字 | 1,458px |
-| 制度と移行の進め方 | 2,448px | 818字 | 1,432px |
-| 子どもの機会と部活動の意義 | 2,393px | 750字 | 1,458px |
-| 受け皿と指導者は足りるか | 2,444px | 791字 | 1,458px |
-| 費用と家庭の負担 | 2,425px | 807字 | 1,432px |
-| 住む地域で差が出る | 1,932px | 551字 | 1,067px |
-| その他 | 1,450px | 488字 | 874px |
+| 制度と移行の進め方 | 2,448px | 817字 | 1,432px |
+| 子どもの機会と部活動の意義 | 2,393px | 749字 | 1,458px |
+| 受け皿と指導者は足りるか | 2,444px | 790字 | 1,458px |
+| 費用と家庭の負担 | 2,425px | 806字 | 1,432px |
+| 住む地域で差が出る | 1,932px | 550字 | 1,067px |
+| その他 | 1,450px | 487字 | 874px |
 
-7論点とも目標（2,500px以下）を満たす。ページ全体は公開中のページより約1,800px長い（冒頭の段の一覧・件数欄、推移の要約、背景7行を新たに出したため）。目標までの余裕は57pxしかない。
+7論点とも目標（2,500px以下）を満たす。ページ全体は公開中のページより約1,800px長い（冒頭の段の一覧・件数欄、推移の要約、背景7行を新たに出したため）。目標までの余裕は55pxしかない。
 
 ## 7. 公開前の残作業・判断待ち
 
 1. 本番反映（release スキル。main 取り込み・push は司令塔が行う）。
-2. **ページ全体の高さの余裕が小さい**（375pxで 12,943px、目標 13,000px）。データが増えて冒頭の件数欄や理由の行が1行ずつ増えると超える。超えたら冒頭の段の一覧を折りたたむのが一番効く。
+2. **ページ全体の高さの余裕が小さい**（375pxで 12,945px、目標 13,000px）。データが増えて冒頭の件数欄や理由の行が1行ずつ増えると超える。超えたら冒頭の段の一覧を折りたたむのが一番効く。
 3. **載せなかったもの**：編集部の横断整理（「論点をまたいで分かること」）、論点ごとの図解画像、比較欄、目次。他の新デザインと同じ判断。授業用の印刷画面（`bukatsu-chiiki-classroom.html`）は作り直さない
    （docs のまま。授業の設定を変えたら初期型の生成器でしか作り直せない）。
 4. **投票ボタンの論点の絵文字**：初期型は外していたが、元HTMLの投票スクリプトをそのまま写すので戻った（消費税と同じ）。選択肢と送信内容は同じ。
@@ -271,3 +272,37 @@ python3 scripts/build_bukatsu_redesign_v2.py --mode release --output-dir quality
 - 実機（iPhone Safari など）。Playwright の Chromium だけ。スクリーンリーダーの読み上げ。印刷ボタンと実際の紙・PDF への印刷結果（印刷の見た目の画面検査だけ）。
 - 他サイトに貼られた推移の埋め込みコードの実在（id は残したので、貼られていても飛び先はある）。
 - 実際の新しい収集回（新規の意見あり）を adapter に通した結果。今回は新規0件相当の模擬（4-2）と、明細不足で止まる単体テストだけ。初期型の経路で新規の意見がある回を最後まで通す模擬もしていない（4-3）。
+
+## 9. 2026-10-14 公開切替
+
+### 9-1. 変えたファイル
+
+| ファイル | 変更 |
+|---|---|
+| `configs/bukatsu-layout.json` | `"version": "redesign-v2"` を足した（`enabled` は前から true） |
+| `docs/bukatsu-chiiki-reaction-map.html`・`docs/bukatsu-chiiki-full.html` | 最新の型（`python3 scripts/build_bukatsu_arena.py` の rebuild で作り直し。公開候補とバイト一致、md5 ページ `f16fdd21…`・全文・印刷版 `f72a067f…`） |
+| `data/page-sources/bukatsu-chiiki.html` | 変更なし（旧形式の元HTMLのまま。rebuild の旧形式の生成を掛けてもバイト不変で、新しい作りで読めることを確かめた） |
+| `configs/bukatsu-chiiki-reading.json` | 全文・印刷版で推移の注記と背景の前置きが並び、同じ文末「ます」が3つ続いたので、注記の2文目の文末を直した |
+| `company/APPROVALS.yaml` | 末尾に `approval-20261014-bukatsu-chiiki-v2`（`status: pending`、`decided_at: null`）。既存の記録は動かしていない |
+| `themes/bukatsu-chiiki.md` | 作業記録 |
+| `docs/bukatsu-chiiki-classroom.html`・論点の図解画像 | 変更なし（7節の3） |
+
+### 9-2. 切替後の検査（作業ツリー）
+
+| 検査 | 結果 |
+|---|---|
+| `verify_theme_page.py`（全テーマ） | 全10テーマ NG 0 |
+| `verify_number_provenance.py` | 部活動 815/815、10テーマ NG 0 |
+| `verify_top_page.py` | 終了0 |
+| `build_bukatsu_arena.py --check` | OK（公開後の経路＝元HTMLに旧形式の生成を掛けてから新ページを作り直して比較。元HTMLはバイト不変） |
+| `verify_builder_rebuildability.py` | 10テーマ NG 0 |
+| `verify_ocean_layer.py` | 直す前と出力が完全に同じ（他テーマの既存の指摘で終了1。部活動の指摘は無い） |
+| `seo/validate_theme_seo.py` | OK（themes=10） |
+| `python3 -m unittest discover tests` | 2,352件 OK（skip 9。増えた1件は `test_posts_not_reused_from_current_page`。5節） |
+| `run_public_checks.py` | 終了0 |
+| よみやす（`--strict`、ページ・全文・印刷版・読書面の試作） | 3つとも完成を止める指摘 0件・PASS（平均33.5字、最長79字） |
+| 使い回し（`verify_page_originality.py`） | 「10ページに、使い回された見出し・文はありません」 |
+| AI臭（`verify_ai_tone.py`） | 問題なし（公開ページ10本。ペルソナ検査は飛ばした） |
+| 採用台帳（`build_adoption_registry.py --check`）・`build_data_sheet.py --check` | 一致・最新 |
+| Playwright（docs/ を配信して `tests/test_bukatsu_redesign_v2_browser.cjs`） | すべて合格（6節の項目）。確認画面は切替後のページで撮り直した（`evidence/` 23枚） |
+| 2回生成 | md5 一致（`PYTHONHASHSEED` 0・7、docs のページとも一致） |
