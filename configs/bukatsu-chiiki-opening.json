@@ -1,0 +1,263 @@
+{
+  "_note": "部活動の地域移行ページ冒頭の文言設定。手で直す場所はここだけ。件数・論点別件数・立場・更新日は公開JSONから、立場の色と理由の内訳がある論点は planet 設定から、収集元と次回の更新予定は THEMES.yaml から読むので、ここには書かない。制度の記述は checked_on の日に一次資料を開き直して確かめた範囲だけ（一次資料メモ quality/research/bukatsu-chiiki-primary-sources.md の資料S-2【2026-10-14追記】）。段階（改革推進期間・改革実行期間の前期・後期・終了）は「今日」ではなく基準日で決める。基準日の既定は公開JSONの updated_on で、--as-of で上書きできる。中間評価の結果と平日の新しい取組方針を一次資料で確かめたら period.midterm_checked_on に日付を入れ、checked_on を直す。",
+  "theme_id": "bukatsu-chiiki",
+  "inputs": {
+    "public_json": "docs/data/themes/bukatsu-chiiki.json",
+    "planet_config": "configs/planet/bukatsu-chiiki.yaml",
+    "themes_registry": "THEMES.yaml",
+    "primary_memo": "quality/research/bukatsu-chiiki-primary-sources.md",
+    "theme_seo": "configs/theme-seo.json"
+  },
+  "checked_on": "2026-10-14",
+  "_checked_on": "2026-10-14 にスポーツ庁の報道発表ページ（jsa_00220）、ガイドラインの本文・概要、策定の通知（7ス庁第1839号）、ガイドラインのFAQ（令和8年3月31日時点）、部活動改革ポータルサイトを curl で取り直して確かめた。ガイドラインの改定は無く、令和7年12月の版が現行。",
+  "memo_section": "資料S-2（",
+  "_memo_section": "制度の記述の根拠になる一次資料メモの節。節の「確認日」が checked_on と違うと生成が止まる（確認し直したら、メモに節を足してここを直す）。",
+  "period": {
+    "guideline_on": "2025-12-22",
+    "_guideline_on": "新ガイドラインの策定の通知の日付。このガイドライン本文で「地域移行」の名称を「地域展開」に変えた。",
+    "suishin_from": "2023-04-01",
+    "suishin_to": "2026-03-31",
+    "zenki_from": "2026-04-01",
+    "zenki_to": "2029-03-31",
+    "kouki_from": "2029-04-01",
+    "kouki_to": "2032-03-31",
+    "_years": "改革推進期間＝令和5〜7年度、改革実行期間の前期＝令和8〜10年度、後期＝令和11〜13年度（ガイドライン本文 Ⅰ-3（2））。年度の境目は4月1日。順番が崩れると生成が止まる。",
+    "certification_transition_to": "2027-03-31",
+    "_certification_transition_to": "認定制度の経過措置の終わり（原則として令和8年度末。ガイドラインの概要）。",
+    "midterm_checked_on": null,
+    "_midterm_checked_on": "前期の終わりに行う中間評価と、平日の新しい取組方針を一次資料で確かめた日。null のまま後期に入ると「中間評価の結果は未確認」と出す。checked_on より後の日付は入れられない。"
+  },
+  "phase_text": {
+    "status": {
+      "suishin": "{as_of}の時点は、国が重点的に支援する「改革推進期間」にあたります。",
+      "zenki": "{as_of}の時点は、改革実行期間の前期（{zenki_span}）の{year_in_zenki}年目です。前期の終わりに、国が中間評価をします。",
+      "kouki": "{as_of}の時点は、改革実行期間の後期（{kouki_span}）です。中間評価で決めた方針で、平日の改革も進めます。",
+      "kouki_unchecked": "{as_of}の時点は、改革実行期間の後期（{kouki_span}）です。前期の中間評価の結果は、編集部でまだ確かめていません。",
+      "ended": "改革実行期間は{kouki_end}で終わりました。その後の国の方針は、編集部でまだ確かめていません。"
+    },
+    "status_label": {
+      "suishin": "改革推進期間",
+      "zenki": "改革実行期間・前期",
+      "kouki": "改革実行期間・後期",
+      "kouki_unchecked": "後期・中間評価は未確認",
+      "ended": "改革実行期間の後"
+    },
+    "state_labels": {
+      "done": "済み",
+      "current": "{as_of}の時点",
+      "planned": "予定",
+      "target": "目安",
+      "unconfirmed": "時期を過ぎた・結果は未確認"
+    },
+    "checked_line": "国の資料を開き直して確かめた日は{checked}です。前期・後期のどこにいるかは、集計の更新日（{as_of}）を基準にしました。"
+  },
+  "crumb": [
+    "教育・子ども",
+    "部活動の地域展開"
+  ],
+  "crumb_checked": "制度の確認 {checked_dot}",
+  "title": {
+    "phrases": [
+      "部活動の",
+      "地域移行は",
+      "いつから？"
+    ],
+    "accent_indices": [
+      2
+    ],
+    "sub": [
+      "費用・問題点と、",
+      "意見が分かれる理由"
+    ],
+    "_title": "configs/theme-seo.json の display_headline（題名＋副題をつないだ文字列）と一致しないと生成が止まる。title・meta description は手順7の保護対象で、ここでは変えない。"
+  },
+  "lead": "国の方針と費用の目安を確かめ、部活動をめぐるSNSの声を論点ごとに読み解きます。",
+  "name_note": "国は{guideline_ym}のガイドラインで、呼び方を「地域移行」から「地域展開」に変えました。このページでは、検索で多く使われる「地域移行」も使います。",
+  "count_poster": {
+    "label": "SNSの意見",
+    "caption": "意見と判定した投稿の数",
+    "_caption": "現行ページの「収集・分類した投稿数」は、収集した全件（collected_count）と取り違えやすいので、意見の件数だと分かる言い方にした。"
+  },
+  "answers": [
+    {
+      "key": "when",
+      "question": "いつから？",
+      "kind": "system",
+      "kind_label": "制度の情報",
+      "short": {
+        "suishin": "国の改革実行期間は2026〜2031年度です。",
+        "zenki": "国の改革実行期間は2026〜2031年度です。",
+        "kouki": "国の改革実行期間は2026〜2031年度です。",
+        "kouki_unchecked": "国の改革実行期間は2026〜2031年度です。",
+        "ended": "国の改革実行期間は2031年度で終わりました。"
+      },
+      "body": {
+        "suishin": "2026年度からは、前期3年・後期3年に分けた改革実行期間に入る予定です。実施時期は地域ごとに異なります。",
+        "zenki": "いまは前期の{year_in_zenki}年目にあたります。休日は、期間内に原則すべての学校部活動で地域展開することが国の目標です。実施時期は地域ごとに異なります。",
+        "kouki": "いまは後期に入っています。休日は、期間内に原則すべての学校部活動で地域展開することが国の目標です。実施時期は地域ごとに異なります。",
+        "kouki_unchecked": "いまは後期に入っています。休日は、期間内に原則すべての学校部活動で地域展開することが国の目標です。実施時期は地域ごとに異なります。",
+        "ended": "期間の後の国の方針は、編集部でまだ確かめていません。実施の状況は地域ごとに異なります。"
+      },
+      "link": {
+        "href": "#bko-steps",
+        "text": "休日・平日の違いと、次の節目を見る"
+      }
+    },
+    {
+      "key": "cost",
+      "question": "費用はいくら？",
+      "kind": "system",
+      "kind_label": "制度の情報",
+      "short": {
+        "all": "会費は地域や活動によって異なります。"
+      },
+      "body": {
+        "all": "国は、休日に月4日ほど活動する場合の参加費のイメージを、月額1,000〜3,000円程度と示しています。保険・用具・送迎の負担も、あわせて確かめておきたい点です。"
+      },
+      "link": {
+        "href": "#issue-bukatsu-chiiki-hiyo",
+        "text": "費用の資料と意見を読む"
+      }
+    },
+    {
+      "key": "issues",
+      "question": "何が問題？",
+      "kind": "voice",
+      "kind_label": "SNSの意見",
+      "short": {
+        "all": "費用・指導者・教員の負担など。"
+      },
+      "body": {
+        "all": "SNSの意見で最も多い論点は「{top_issue}」の{top_count}件でした。何を期待し、何を心配するかで見方が分かれます。"
+      },
+      "link": {
+        "href": "#bukatsu-chiiki-reading",
+        "text": "論点ごとの理由を読む"
+      }
+    }
+  ],
+  "steps": {
+    "label": "改革の期間と、次の節目",
+    "policy": [
+      {
+        "key": "holiday",
+        "label": "休日",
+        "text": "改革実行期間内に、原則すべての学校部活動で地域展開を目指します。まだ始めていない自治体も、前期の間に着手します。中山間地域や離島などで難しい場合は、当面は部活動指導員の配置などを進めます。"
+      },
+      {
+        "key": "weekday",
+        "label": "平日",
+        "text": "課題を解決しながら改革を進めます。国は前期の間に、実現できる活動のあり方を検証します。そのうえで、中間評価の段階で取組方針を改めて決めます。"
+      }
+    ],
+    "target_note": "主な対象は公立中学校等です。全国の学校が同じ日に切り替わる制度ではないので、開始時期は学校や自治体の案内で確かめてください。",
+    "axis": {
+      "from": "2023-04-01",
+      "to": "2032-03-31"
+    },
+    "bands": [
+      {
+        "key": "suishin",
+        "label": "改革推進期間",
+        "from": "period.suishin_from",
+        "to": "period.suishin_to"
+      },
+      {
+        "key": "zenki",
+        "label": "前期",
+        "from": "period.zenki_from",
+        "to": "period.zenki_to"
+      },
+      {
+        "key": "kouki",
+        "label": "後期",
+        "from": "period.kouki_from",
+        "to": "period.kouki_to"
+      }
+    ],
+    "items": [
+      {
+        "key": "suishin",
+        "title": "改革推進期間が始まる",
+        "date_from": "period.suishin_from",
+        "note": "2023〜2025年度。国が重点的に支援する期間で、全国の移行を終える期限ではない"
+      },
+      {
+        "key": "guideline",
+        "title": "新しいガイドライン。呼び方は「地域展開」に",
+        "date_from": "period.guideline_on",
+        "note": "改革実行期間の進め方と、地域クラブ活動の認定制度を示した"
+      },
+      {
+        "key": "zenki",
+        "title": "改革実行期間（前期）が始まる",
+        "date_from": "period.zenki_from",
+        "note": "2026〜2028年度。休日の地域展開に、まだの自治体も着手する"
+      },
+      {
+        "key": "certification",
+        "title": "認定制度の経過措置の終わり（原則）",
+        "date_from": "period.certification_transition_to",
+        "note": "地域クラブ活動の認定要件を満たす準備の期間。特別な事情があれば前期の終わりまで"
+      },
+      {
+        "key": "midterm",
+        "title": "前期の終わりに中間評価",
+        "date_from": "period.zenki_to",
+        "target": true,
+        "note": "平日の取組方針を改めて決める。具体的な日付は示されていない"
+      },
+      {
+        "key": "kouki",
+        "title": "後期が始まる",
+        "date_from": "period.kouki_from",
+        "note": "2029〜2031年度。中間評価を踏まえて改革を進める"
+      },
+      {
+        "key": "end",
+        "title": "改革実行期間の終わり",
+        "date_from": "period.kouki_to",
+        "note": "休日は、この時までに原則すべての学校部活動で地域展開を目指す"
+      }
+    ],
+    "sources": [
+      {
+        "label": "総合的なガイドラインの概要（2ページ・PDF）",
+        "url": "https://www.mext.go.jp/sports/content/20251226-spt_oripara-000046627_001.pdf"
+      },
+      {
+        "label": "ガイドラインの本文（PDF）",
+        "url": "https://www.mext.go.jp/sports/content/20251222-spt_oripara-000046180_00234.pdf"
+      }
+    ]
+  },
+  "count": {
+    "label": "SNSの意見",
+    "caption_template": "{source}で集めた{start}〜{end}の公開投稿は{collected}件で、上の数はそのうち意見を含むと判定した投稿です。",
+    "not_poll": "部活動の地域移行に触れた公開投稿を数えたもので、世論調査で聞いた賛否の割合とは性質が違います。",
+    "stance_title": "立場の内訳",
+    "issues_title_template": "論点別の件数（{n}つ）",
+    "no_reason_tag": "理由は未公開",
+    "no_reason_note_template": "{labels}の欄は、投稿を一件ずつ読んで理由に分ける作業が済んでいないため、理由の内訳を載せていません。",
+    "updated_template": "集計の更新は{updated}。次の更新予定は{next}です。"
+  },
+  "sources_title": "確かめた一次資料",
+  "sources": [
+    {
+      "label": "部活動改革及び地域クラブ活動の推進等に関する総合的なガイドライン（スポーツ庁の報道発表）",
+      "url": "https://www.mext.go.jp/sports/b_menu/houdou/jsa_00220.html"
+    },
+    {
+      "label": "ガイドラインの策定についての通知（PDF）",
+      "url": "https://www.mext.go.jp/sports/content/20251226-spt_oripara-000046627_005.pdf"
+    },
+    {
+      "label": "ガイドラインのFAQ（令和8年3月31日時点・PDF）",
+      "url": "https://www.mext.go.jp/sports/content/20260409-spt_oripara-000028261_1.pdf"
+    },
+    {
+      "label": "部活動改革ポータルサイト（スポーツ庁）",
+      "url": "https://www.mext.go.jp/sports/b_menu/sports/mcatetop01/list/1372413_00003.htm"
+    }
+  ]
+}
