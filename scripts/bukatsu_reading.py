@@ -476,13 +476,16 @@ def render_glance(d: dict, issue: dict) -> str:
         first, last = rounds[0], rounds[-1]
         caption = c["glance_caption"].format(rounds=len(rounds), first_date=jp_date(first["d"], False),
                                              last_date=jp_date(last["d"], False), first=first["v"][j], last=last["v"][j])
-        chart_html = f'<div class="fr-glance-chart">{chart}</div><p class="fr-fine fr-glance-caption">{esc(caption)}</p>'
+        # 数字は折れ線の中に出るので、文の要約は折りたたみの中に置く（375pxの欄を短くする）
+        chart_html = f'<div class="fr-glance-chart">{chart}</div>'
+        caption_html = f'<p class="fr-fine fr-glance-caption">{esc(caption)}</p>'
     else:
         chart_html = f'<p class="fr-fine">{esc(c["glance_missing"])}</p>'
+        caption_html = ""
     return (f'<section class="fr-block fr-glance fr-trend" data-glance="{esc(issue["label"])}">'
             f'<p class="fr-eyebrow fr-glance-head">{esc(c["glance_eyebrow"])}</p>'
             + chart_html
-            + fold("fr-glance-table", esc(t["title"]), f'<p class="fr-fine fr-glance-note">{esc(c["glance_note"])}</p>' + table)
+            + fold("fr-glance-table", esc(t["title"]), caption_html + f'<p class="fr-fine fr-glance-note">{esc(c["glance_note"])}</p>' + table)
             + "</section>")
 
 
@@ -655,14 +658,20 @@ def render_evidence(d: dict, issue: dict, icfg: dict) -> str:
                         body, f' data-claim="{esc(c["id"])}"'))
     if veins:
         vc = d["cfg"]["veins_common"]
-        out.append(f'<div class="fr-veins"><p class="fr-eyebrow">{esc(vc["title"])}</p>')
+        # 2件以上あるときは、見出しごと1つの折りたたみにまとめる（資料にしかない話と同じ。375pxの欄を短くする）
+        vgroup = len(veins) >= int(vc.get("group_from", 99))
+        if vgroup:
+            out.append(f'<div class="fr-veins"><details class="fr-fold fr-vein-group"><summary><span class="fr-sum-text">'
+                       f'{esc(vc["group_summary"].format(n=len(veins)))}</span></summary>')
+        else:
+            out.append(f'<div class="fr-veins"><p class="fr-eyebrow">{esc(vc["title"])}</p>')
         for v in veins:
             sides = "・".join(f'{x["stance_label"]}{fmt(x["post_count"])}件' for x in v["sides"])
             body = (f'<p><b>{esc(vc["diverging_label"])}</b>{esc(v["diverging_reason"])}</p>'
                     f'<p class="fr-fine">{esc(vc["sides"].format(sides=sides, checked_on=jp_date(v["checked_on"])))}</p>')
             out.append(fold("fr-vein", f'<span class="fr-sum-text"><b>{esc(vc["shared_label"])}</b>{esc(v["shared_concern"])}</span>',
                             body, f' data-vein="{esc(v["id"])}"'))
-        out.append("</div>")
+        out.append("</details></div>" if vgroup else "</div>")
     if sunk or checks:
         out.append(f'<p class="fr-side-label is-gov">{esc(s["gov_label"])}</p>')
     if sunk:

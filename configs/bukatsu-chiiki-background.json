@@ -1,0 +1,480 @@
+{
+ "theme_id": "bukatsu-chiiki",
+ "_about": "部活動の地域移行ページの「背景として開く内容」（開閉行）の手書き文言。scripts/bukatsu_background.py が読む（scripts/bukatsu_reading.py から呼ぶ）。SNSの件数は書かない。日付は冒頭の設定（period・checked_on）と THEMES.yaml・公開JSON・一次資料メモから作る。文の値が {\"zenki\":…, \"all\":…} のような辞書なら、冒頭と同じ段階の判定（bukatsu_opening.phase_of）で文を選ぶ。hide_in に書いた段階では、その項目を出さない。memo_section は一次資料メモの節で、制度の行は現行のガイドライン（2025-12-22）より後に確かめた節だけを指せる。文は公開中のページの背景（scripts/bukatsu_redesign/editorial-source.html の複写、元HTML）の文を元に、一次資料で確かめ直して書き直した。凍結した editorial-source.html は読まない（手順7で外す）。",
+ "inputs": {
+  "themes_yaml": "THEMES.yaml",
+  "classroom": "configs/classroom/bukatsu-chiiki.json",
+  "municipal": "quality/research/bukatsu-chiiki-municipal-plans.md"
+ },
+ "section": {
+  "eyebrow": "背景を開いて読む",
+  "title": "部活動の地域展開の仕組みと、これまでの流れ",
+  "lead": "見出しを押すと中身が開きます。制度の説明は国の資料で確かめた範囲に限り、SNSの意見とは分けて書きました。"
+ },
+ "checked_line": "この欄の制度の説明は、{checked}に国の資料を開き直して書いたものです。前期・後期の段階は{as_of}を基準にしています。",
+ "dates_line": "制度の説明は{checked}に確かめたもので、SNSの件数のほうは{updated_on}までを数えています。次の収集は{next_collect}の予定です。",
+ "groups": [
+  {
+   "id": "system",
+   "label": "制度のしくみ",
+   "rows": [
+    {
+     "id": "system",
+     "anchor": "bg-system",
+     "kind": "system",
+     "title": "地域展開とは何か、認定とお金の仕組み",
+     "summary": {
+      "all": "呼び方の変更、対象、認定制度、国の補助、参加費の目安、保険"
+     },
+     "items": [
+      {
+       "label": "呼び方と中身",
+       "text": "国は{guideline_ym}のガイドラインで、「地域移行」を「地域展開」と呼び替えました。学校の中だけで担ってきた活動を地域に開き、地域全体で支えるという考えを表すためです。学校に部活動指導員を置いたり合同部活動をしたりする形は「地域連携」と呼び、2つを合わせて「地域展開等」と言います。",
+       "memo_section": "資料S-2（",
+       "sources": [
+        {
+         "name": "部活動改革及び地域クラブ活動の推進等に関する総合的なガイドライン（本文・PDF）",
+         "url": "https://www.mext.go.jp/sports/content/20251222-spt_oripara-000046180_00234.pdf"
+        },
+        {
+         "name": "総合的なガイドライン（スポーツ庁の報道発表）",
+         "url": "https://www.mext.go.jp/sports/b_menu/houdou/jsa_00220.html"
+        }
+       ]
+      },
+      {
+       "label": "対象",
+       "text": "主な対象は公立の中学校等です。国立・私立の中学校や高校の部活動については、ガイドラインのうち学校部活動のあり方の章だけが当てはまります。高校は、ガイドラインを参考に学校の実情に応じて進めることが望ましいとされています。",
+       "memo_section": "資料S-2（",
+       "sources": [
+        {
+         "name": "部活動改革及び地域クラブ活動の推進等に関する総合的なガイドライン（本文・PDF）",
+         "url": "https://www.mext.go.jp/sports/content/20251222-spt_oripara-000046180_00234.pdf"
+        },
+        {
+         "name": "総合的なガイドラインFAQ（令和8年3月31日時点・PDF）",
+         "url": "https://www.mext.go.jp/sports/content/20260409-spt_oripara-000028261_1.pdf"
+        }
+       ]
+      },
+      {
+       "label": "地域クラブ活動の認定",
+       "text": "市区町村などが、国の示す7つの要件に沿って地域クラブ活動を認定します。選抜をしない、活動時間と休養日を守る、参加費をできるだけ安くする、登録した指導者が教える、といった要件です。認定されると、公的な支援や学校施設の優先利用、大会への参加のしやすさにつながります。",
+       "memo_section": "資料S（",
+       "sources": [
+        {
+         "name": "部活動改革及び地域クラブ活動の推進等に関する総合的なガイドライン（本文・PDF）",
+         "url": "https://www.mext.go.jp/sports/content/20251222-spt_oripara-000046180_00234.pdf"
+        },
+        {
+         "name": "総合的なガイドラインの概要（2ページ・PDF）",
+         "url": "https://www.mext.go.jp/sports/content/20251226-spt_oripara-000046627_001.pdf"
+        }
+       ]
+      },
+      {
+       "label": "国の補助",
+       "text": "休日の地域クラブ活動の費用は、国・都道府県・市区町村などが3分の1ずつ補助する形です。経済的に困っている世帯の参加費の支援は、国が2分の1を出します。体育館やグラウンドの整備費は補助の対象外です。資料は令和8年度予算の検討段階のものです。",
+       "memo_section": "資料D-3（",
+       "sources": [
+        {
+         "name": "「部活動の地域展開等推進事業」補助金交付要綱・概要資料（PDF）",
+         "url": "https://www.mext.go.jp/sports/content/20251225-spt_oripara-000028257-004.pdf"
+        }
+       ]
+      },
+      {
+       "label": "参加費の目安",
+       "text": "国は、休日に週1日・月4日ほど活動する場合の参加費のイメージを、月額1,000〜3,000円程度と示しています。月額数百円や4,000円程度などの設定もありうるとし、参加費を取らずに公費で運営する形もありうるとしています。",
+       "memo_section": "資料S-2（",
+       "sources": [
+        {
+         "name": "総合的なガイドラインFAQ（令和8年3月31日時点・PDF）",
+         "url": "https://www.mext.go.jp/sports/content/20260409-spt_oripara-000028261_1.pdf"
+        }
+       ]
+      },
+      {
+       "label": "けがと保険",
+       "text": "学校の部活動のけがは、学校の管理下の災害として災害共済給付の対象です。地域クラブ活動は学校の管理下の外になるため、スポーツ安全保険などで備えます。中学生の区分の死亡の補償額は、令和8年度に3,000万円へ引き上げられました。",
+       "memo_section": "資料W（",
+       "sources": [
+        {
+         "name": "スポーツ安全保険 令和8年度の補償額（スポーツ安全協会・PDF）",
+         "url": "https://www.sportsanzen.org/Info/2025/ak1t2o00000001y5-att/R8_kaitei.pdf"
+        },
+        {
+         "name": "日本スポーツ振興センター法（e-Gov法令検索）",
+         "url": "https://laws.e-gov.go.jp/api/2/law_data/414AC0000000162"
+        }
+       ]
+      }
+     ],
+     "issue_ids": [
+      "bukatsu-chiiki-ukezara",
+      "bukatsu-chiiki-hiyo",
+      "bukatsu-chiiki-seido"
+     ]
+    },
+    {
+     "id": "status",
+     "anchor": "bg-status",
+     "kind": "status",
+     "title": "決まっていることと、まだ決まっていないこと",
+     "summary": {
+      "all": "国の方針として決まっていることと、これから決まること（{checked}時点）"
+     },
+     "decided_title": {
+      "all": "国の方針として決まっていること"
+     },
+     "pending_title": {
+      "all": "まだ決まっていないこと"
+     },
+     "decided": [
+      {
+       "text": "改革実行期間は2026〜2031年度。休日は、期間内に原則すべての学校部活動で地域展開を目指す。",
+       "memo_section": "資料S-2（",
+       "sources": [
+        {
+         "name": "部活動改革及び地域クラブ活動の推進等に関する総合的なガイドライン（本文・PDF）",
+         "url": "https://www.mext.go.jp/sports/content/20251222-spt_oripara-000046180_00234.pdf"
+        }
+       ]
+      },
+      {
+       "text": "地域クラブ活動の認定の要件は7つ。認定の経過措置は、原則として{transition_end}まで。",
+       "memo_section": "資料S-2（",
+       "sources": [
+        {
+         "name": "総合的なガイドラインの概要（2ページ・PDF）",
+         "url": "https://www.mext.go.jp/sports/content/20251226-spt_oripara-000046627_001.pdf"
+        }
+       ]
+      },
+      {
+       "text": "法律（スポーツ基本法第17条の2）は、自治体にも国にも「努める」ことを求める努力義務にとどまる。",
+       "memo_section": "資料R（",
+       "sources": [
+        {
+         "name": "スポーツ基本法（e-Gov法令検索）",
+         "url": "https://laws.e-gov.go.jp/api/2/law_data/423AC1000000078"
+        }
+       ]
+      }
+     ],
+     "pending": [
+      {
+       "text": "平日の部活動の取組方針。国は前期の間に検証し、中間評価の段階で改めて決める。",
+       "hide_in": [
+        "kouki",
+        "ended"
+       ],
+       "memo_section": "資料S-2（",
+       "sources": [
+        {
+         "name": "部活動改革及び地域クラブ活動の推進等に関する総合的なガイドライン（本文・PDF）",
+         "url": "https://www.mext.go.jp/sports/content/20251222-spt_oripara-000046180_00234.pdf"
+        }
+       ]
+      },
+      {
+       "text": "それぞれの自治体での開始時期、会費、活動場所、送迎の方法。自治体ごとに決める。",
+       "memo_section": "資料S-2（",
+       "sources": [
+        {
+         "name": "部活動改革及び地域クラブ活動の推進等に関する総合的なガイドライン（本文・PDF）",
+         "url": "https://www.mext.go.jp/sports/content/20251222-spt_oripara-000046180_00234.pdf"
+        }
+       ]
+      },
+      {
+       "text": "補助の確定額。国の補助の資料は令和8年度予算の検討段階のもので、確定額ではない。",
+       "memo_section": "資料D-3（",
+       "sources": [
+        {
+         "name": "「部活動の地域展開等推進事業」補助金交付要綱・概要資料（PDF）",
+         "url": "https://www.mext.go.jp/sports/content/20251225-spt_oripara-000028257-004.pdf"
+        }
+       ]
+      }
+     ],
+     "issue_ids": [
+      "bukatsu-chiiki-seido"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "stage",
+   "label": "これまでの流れ",
+   "rows": [
+    {
+     "id": "timeline",
+     "anchor": "bg-timeline",
+     "kind": "timeline",
+     "title": "これまでの経緯と、これからの節目",
+     "summary": {
+      "all": "2017年の部活動指導員の制度化から、2031年度の改革実行期間の終わりまで"
+     },
+     "before": [
+      {
+       "date": "2017-04-01",
+       "title": "部活動指導員の制度ができる",
+       "text": "学校教育法施行規則に部活動指導員の条文が置かれ、技術指導に加えて大会の引率も担えるようになりました。",
+       "sources": [
+        {
+         "name": "学校教育法施行規則 第七十八条の二（e-Gov法令検索）",
+         "url": "https://laws.e-gov.go.jp/law/322M40000080011"
+        }
+       ]
+      },
+      {
+       "date": "2022-12-27",
+       "title": "前のガイドライン",
+       "text": "学校部活動と新しい地域クラブ活動のあり方をまとめ、2023〜2025年度を改革推進期間としました。この期間は重点的に支援する期間で、全国の移行を終える期限としては書かれていません。",
+       "sources": [
+        {
+         "name": "学校部活動及び新たな地域クラブ活動の在り方等に関する総合的なガイドライン（令和4年12月・PDF）",
+         "url": "https://www.mext.go.jp/sports/content/20221227-spt_oripara-000026750_2.pdf"
+        }
+       ]
+      },
+      {
+       "date": "2025-09-01",
+       "title": "改正スポーツ基本法の施行",
+       "text": "第17条の2で、中学生が地域でスポーツに親しむ機会を確保する施策を、自治体の努力義務としました。",
+       "sources": [
+        {
+         "name": "スポーツ基本法（e-Gov法令検索）",
+         "url": "https://laws.e-gov.go.jp/api/2/law_data/423AC1000000078"
+        }
+       ]
+      }
+     ],
+     "step_sources": {
+      "suishin": [
+       {
+        "name": "学校部活動及び新たな地域クラブ活動の在り方等に関する総合的なガイドライン（令和4年12月・PDF）",
+        "url": "https://www.mext.go.jp/sports/content/20221227-spt_oripara-000026750_2.pdf"
+       }
+      ],
+      "guideline": [
+       {
+        "name": "総合的なガイドライン（スポーツ庁の報道発表）",
+        "url": "https://www.mext.go.jp/sports/b_menu/houdou/jsa_00220.html"
+       }
+      ],
+      "zenki": [
+       {
+        "name": "部活動改革及び地域クラブ活動の推進等に関する総合的なガイドライン（本文・PDF）",
+        "url": "https://www.mext.go.jp/sports/content/20251222-spt_oripara-000046180_00234.pdf"
+       }
+      ],
+      "certification": [
+       {
+        "name": "総合的なガイドラインの概要（2ページ・PDF）",
+        "url": "https://www.mext.go.jp/sports/content/20251226-spt_oripara-000046627_001.pdf"
+       }
+      ],
+      "midterm": [
+       {
+        "name": "部活動改革及び地域クラブ活動の推進等に関する総合的なガイドライン（本文・PDF）",
+        "url": "https://www.mext.go.jp/sports/content/20251222-spt_oripara-000046180_00234.pdf"
+       }
+      ],
+      "kouki": [
+       {
+        "name": "部活動改革及び地域クラブ活動の推進等に関する総合的なガイドライン（本文・PDF）",
+        "url": "https://www.mext.go.jp/sports/content/20251222-spt_oripara-000046180_00234.pdf"
+       }
+      ],
+      "end": [
+       {
+        "name": "部活動改革及び地域クラブ活動の推進等に関する総合的なガイドライン（本文・PDF）",
+        "url": "https://www.mext.go.jp/sports/content/20251222-spt_oripara-000046180_00234.pdf"
+       }
+      ]
+     },
+     "issue_ids": [
+      "bukatsu-chiiki-seido"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "local",
+   "label": "自分の住む地域では",
+   "rows": [
+    {
+     "id": "municipal",
+     "anchor": "bg-municipal",
+     "kind": "municipal",
+     "title": "自分の自治体は？ 計画と、確かめたいこと",
+     "summary": {
+      "all": "{n}自治体の計画・方針の一覧と、学校や自治体に確かめる6つのこと"
+     },
+     "lead": "開始時期や会費は、自治体ごとに違います。編集部が公式の資料で確かめた{n}自治体の計画・方針を、公表日と段階、原本へのリンクと並べました。全国の市区町村を網羅したものではありません。",
+     "filter_label": "自治体名で絞り込む",
+     "filter_placeholder": "例：神戸市",
+     "columns": [
+      "自治体",
+      "公表日・対象期間",
+      "段階"
+     ],
+     "note": "一覧は{muni_checked}時点で確かめた内容です。その後の変更は、各自治体の原本で確かめてください。",
+     "ask_title": "学校や自治体に確かめる6つのこと",
+     "asks": [
+      "何年度から始まり、土曜・日曜・平日のどの活動が対象になるか",
+      "月会費、保険料、大会参加費、用具代はいくらで、減免や補助はあるか",
+      "活動場所と活動時間、雨の日の場所と施設を管理する団体",
+      "活動場所までの移動方法、保護者の送迎の要否、帰宅時刻と安全対策",
+      "運営団体と指導者は誰か、研修や資格の条件、けがや事故のときの連絡先",
+      "参加できる大会と、学校の部活動との掛け持ちや登録の制限"
+     ],
+     "issue_ids": [
+      "bukatsu-chiiki-kakusa",
+      "bukatsu-chiiki-seido"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "questions",
+   "label": "疑問と資料",
+   "rows": [
+    {
+     "id": "faq",
+     "anchor": "bg-faq",
+     "kind": "faq",
+     "title": "よくある質問",
+     "summary": {
+      "all": "部活は廃止されるか、呼び方の違い、高校・私立、月謝、送迎、教員の指導"
+     },
+     "_items": "画面のよくある質問と、手順7で作る FAQPage の構造化データは、この items の1か所から作る（bukatsu_background.faq_jsonld）。公開中のページの build_bukatsu_arena.py の SEARCH_FAQ_JSONLD（6問）は手順7で外す。冒頭の短答と同じ問いは置けない（止まる）。",
+     "items": [
+      {
+       "q": "2026年度から全国の中学校で部活が廃止されますか？",
+       "a": "いいえ。国は公立中学校等を主な対象に、2026〜2031年度の改革実行期間で休日の地域展開を進める方針です。開始時期や進め方は自治体ごとに違います。",
+       "memo_section": "資料S-2（",
+       "sources": [
+        {
+         "name": "部活動改革及び地域クラブ活動の推進等に関する総合的なガイドライン（本文・PDF）",
+         "url": "https://www.mext.go.jp/sports/content/20251222-spt_oripara-000046180_00234.pdf"
+        }
+       ]
+      },
+      {
+       "q": "「地域移行」と「地域展開」は同じですか？",
+       "a": "同じ改革を指す呼び方です。国は{guideline_ym}のガイドラインで、地域全体で支えるという考えを表すため、名称を「地域展開」に変えました。",
+       "memo_section": "資料S-2（",
+       "sources": [
+        {
+         "name": "部活動改革及び地域クラブ活動の推進等に関する総合的なガイドライン（本文・PDF）",
+         "url": "https://www.mext.go.jp/sports/content/20251222-spt_oripara-000046180_00234.pdf"
+        }
+       ]
+      },
+      {
+       "q": "高校や私立中学校も同じ時期に変わりますか？",
+       "a": "全国的な地域展開の主な対象は公立中学校等です。高校は、ガイドラインを参考に学校の実情に応じて進めることが望ましいとされています。学校や設置者の案内を確かめてください。",
+       "memo_section": "資料S-2（",
+       "sources": [
+        {
+         "name": "総合的なガイドラインFAQ（令和8年3月31日時点・PDF）",
+         "url": "https://www.mext.go.jp/sports/content/20260409-spt_oripara-000028261_1.pdf"
+        }
+       ]
+      },
+      {
+       "q": "地域クラブの月謝はいくらですか？",
+       "a": "全国一律の金額はありません。国は、休日に月4日ほど活動する場合のイメージとして月額1,000〜3,000円程度を示しています。実際の会費は、公費と家庭の負担の組み合わせで自治体やクラブごとに決まります。",
+       "memo_section": "資料S-2（",
+       "sources": [
+        {
+         "name": "総合的なガイドラインFAQ（令和8年3月31日時点・PDF）",
+         "url": "https://www.mext.go.jp/sports/content/20260409-spt_oripara-000028261_1.pdf"
+        }
+       ]
+      },
+      {
+       "q": "送迎は保護者が必ず担当しますか？",
+       "a": "全国共通の決まりはありません。活動場所への移動手段の確保は、国がガイドラインで挙げる課題の1つです。自治体や運営団体の案内を確かめてください。",
+       "memo_section": "資料S-2（",
+       "sources": [
+        {
+         "name": "部活動改革及び地域クラブ活動の推進等に関する総合的なガイドライン（本文・PDF）",
+         "url": "https://www.mext.go.jp/sports/content/20251222-spt_oripara-000046180_00234.pdf"
+        }
+       ]
+      },
+      {
+       "q": "教員は地域クラブで指導できますか？",
+       "a": "できます。希望する教員が、兼職兼業の許可を受けて関わる仕組みです。国は許可の要綱のひな型を示しています。勤務条件や報酬は自治体などで異なります。",
+       "memo_section": "資料B",
+       "sources": [
+        {
+         "name": "総合的なガイドライン（スポーツ庁の報道発表）",
+         "url": "https://www.mext.go.jp/sports/b_menu/houdou/jsa_00220.html"
+        }
+       ]
+      }
+     ],
+     "note": "答えは国の資料で確かめた範囲です。自分の地域の決まりは、学校や自治体の案内で確かめてください。",
+     "issue_ids": [
+      "bukatsu-chiiki-hiyo",
+      "bukatsu-chiiki-kyoin"
+     ]
+    },
+    {
+     "id": "classroom",
+     "anchor": "bg-classroom",
+     "kind": "classroom",
+     "title": "授業や話し合いで使う",
+     "summary": {
+      "all": "移行支持・慎重の理由を3つずつ、確かめる資料、問いの例"
+     },
+     "intro": "授業や話し合いの材料として、立場ごとの理由と確かめる資料を並べました。読む前に、地域移行についての自分の考えをメモしておくと違いが見えます。",
+     "sources_label": "確かめる資料",
+     "questions_label": "問いの例",
+     "note": "理由の文は、授業向けの設定（configs/classroom/bukatsu-chiiki.json）から読んでいます。"
+    },
+    {
+     "id": "unverified",
+     "anchor": "bg-unverified",
+     "kind": "unverified",
+     "title": "まだ確かめていないこと",
+     "summary": {
+      "all": "このページで確かめきれていない点"
+     },
+     "lead": "次の点は、編集部でまだ確かめていません。",
+     "items": [
+      {
+       "text": "中間評価の時期と結果。ガイドラインは「前期の終了時」とだけ書いており、具体的な日付は示していない。",
+       "hide_in": [
+        "kouki",
+        "ended"
+       ]
+      },
+      {
+       "text": "中間評価の結果と、平日の新しい取組方針の中身。",
+       "hide_in": [
+        "suishin",
+        "zenki",
+        "kouki"
+       ]
+      },
+      {
+       "text": "自治体の一覧（{muni_checked}時点）の、その後の変更。"
+      },
+      {
+       "text": "移行が進んだ後の教員の勤務時間。国の勤務実態調査の最新は2022年度で、改革推進期間より前の数字。"
+      },
+      {
+       "text": "次回のSNSの収集（{next_collect}予定）で、論点や理由の件数がどう変わるか。"
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

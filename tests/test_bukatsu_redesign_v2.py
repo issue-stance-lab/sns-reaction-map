@@ -274,5 +274,95 @@ class ReadingTests(unittest.TestCase):
         self.assertNotIn("試作", self.soup.select_one("#bukatsu-chiiki-reading").get_text())
 
 
+class AllIssuesAndBackgroundTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        from scripts import bukatsu_background as bg
+        cls.bg = bg
+        cls.d = reading.load()
+        reading.check_all(cls.d)
+        cls.html = reading.render_page(cls.d, reading.default_as_of(cls.d))
+        cls.soup = BeautifulSoup(cls.html, "html.parser")
+
+    def test_all_issues_complete_with_two_posts_of_different_stances(self):
+        for iid, icfg in self.d["cfg"]["issues"].items():
+            self.assertEqual(icfg["status"], "complete", iid)
+            posts = icfg["posts"]["items"]
+            self.assertEqual(len(posts), 2, iid)
+            issue = next(i for i in PUBLIC["issues"] if i["id"] == iid)
+            self.assertEqual(len({reading.post_stance(self.d, issue, p) for p in posts}), 2, iid)
+
+    def test_new_voices_and_read_counts(self):
+        new = 0
+        for iid, icfg in self.d["cfg"]["issues"].items():
+            issue = next(i for i in PUBLIC["issues"] if i["id"] == iid)
+            top = reading.top_reason_ids(self.d, issue, icfg)
+            for bid in top:
+                self.assertIn(bid, icfg["reasons_read"], (iid, bid))
+                self.assertGreater(icfg["reasons_read"][bid], 0)
+            new += len(top)
+        self.assertEqual(new, 20)
+
+    def test_unpublished_only_where_reread_is_missing(self):
+        un = {p["data-issue-panel"] for p in self.soup.select("[data-issue-panel]") if p.select_one("[data-unpublished]")}
+        self.assertEqual(un, {"bukatsu-chiiki-kakusa", "bukatsu-chiiki-sonota"})
+
+    def test_rows_are_closed_details_and_links_resolve(self):
+        rows = self.soup.select("#bukatsu-chiiki-background details.fb-row")
+        self.assertGreaterEqual(len(rows), 6)
+        self.assertTrue(all(not r.has_attr("open") for r in rows))
+        ids = {e["id"] for e in self.soup.select("[id]")}
+        for a in self.soup.select('a[href^="#"]'):
+            if a["href"] != "#":
+                self.assertIn(a["href"][1:], ids, a["href"])
+
+    def test_faq_jsonld_matches_visible_faq_and_not_opening(self):
+        ld = self.bg.faq_jsonld(self.d, reading.default_as_of(self.d))
+        visible = [(dt.get_text(), dd.find(string=True)) for dt, dd in
+                   zip(self.soup.select("#bg-faq .fb-faq dt"), self.soup.select("#bg-faq .fb-faq dd"))]
+        self.assertEqual([(q["name"], q["acceptedAnswer"]["text"]) for q in ld["mainEntity"]], visible)
+        opening_q = {a["question"] for a in self.d["ocfg"]["answers"]}
+        self.assertFalse(opening_q & {q for q, _ in visible})
+
+    def test_municipal_rows_come_from_catalog(self):
+        rows = self.soup.select("#bg-municipal [data-muni-row]")
+        self.assertEqual(len(rows), len(self.d["bg"]["municipal"]["rows"]))
+        self.assertGreaterEqual(len(rows), 50)
+        self.assertEqual(self.d["bg"]["municipal"]["checked_on"], "2026-09-23")
+        self.assertTrue(self.soup.select_one("[data-muni-filter]").has_attr("hidden"))
+
+    def test_timeline_uses_opening_steps(self):
+        steps = [li["data-step"] for li in self.soup.select("#bg-timeline [data-step]")]
+        self.assertEqual(steps, [s["key"] for s in self.d["ocfg"]["steps"]["items"]])
+
+    def test_tense_switches_in_background(self):
+        late = BeautifulSoup(reading.render_page(reading.load(), "2029-06-01"), "html.parser")
+        self.assertEqual(late.select_one("#bukatsu-chiiki-background")["data-phase"], "kouki_unchecked")
+        self.assertIn("中間評価の結果", late.select_one("#bg-unverified").get_text())
+        # 中間評価の結果を確かめるまでは、平日の取組方針は「まだ決まっていないこと」に残る
+        self.assertIn("平日の部活動の取組方針", late.select_one("#bg-status").get_text())
+        self.assertEqual(len(late.select("#bg-timeline [data-state=unconfirmed]")), 1)
+
+    def test_classroom_is_read_from_shared_config(self):
+        cr = json.loads((ROOT / "configs/classroom/bukatsu-chiiki.json").read_text(encoding="utf-8"))
+        text = self.soup.select_one("#bg-classroom").get_text()
+        for r in cr["reasons_pro"] + cr["reasons_con"]:
+            self.assertIn(r["text"], text)
+
+    def test_background_memo_sections_after_guideline(self):
+        for g in self.d["bg"]["cfg"]["groups"]:
+            for row in g["rows"]:
+                if row["kind"] == "timeline":
+                    continue
+                for item in self.bg.memo_items(row):
+                    self.assertGreaterEqual(self.d["memo"].checked_on(item["memo_section"]), "2025-12-22")
+
+    def test_does_not_read_frozen_editorial_source(self):
+        for name in ("bukatsu_reading.py", "bukatsu_background.py", "bukatsu_opening.py"):
+            src = (ROOT / "scripts" / name).read_text(encoding="utf-8")
+            self.assertNotIn("editorial-source.html", src.split('"""', 2)[-1])
+            self.assertNotIn("editorial-review.json", src.split('"""', 2)[-1])
+
+
 if __name__ == "__main__":
     unittest.main()
