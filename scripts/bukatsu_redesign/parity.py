@@ -65,7 +65,8 @@ def add_parity(markup,root,source_html,main,data):
  s.main.append(related)
  # Existing vote identifiers and choice ordering stay unchanged.
  vote=clone(src.select_one('#vote-section'));vote['class']=['parity-vote']
- vote.select_one('.vote-storage-note').string='試作では、この端末に選択内容を保存します。本番の投票集計には送信しません。'
+ # 保存の注記は元HTMLの文のまま（本番ホスト sns-reaction-map.jp では既存の保存キーと vote-config.js で集計へ送信される。
+ # 2026-10-14 まで「試作では…送信しません」に書き換えていたのは事実と合わないので外した）
  s.select_one('.deep-read').insert_before(vote)
  assets=root/'assets';assets.mkdir(exist_ok=True)
  shutil.copy2(main/'docs/vote-store.js',assets/'vote-store.js')
