@@ -21,6 +21,13 @@ def private_verified_selectors(source: str, root: Path, *, sample_file: Path | N
 
 
 def verified_selectors(source: str, root: Path) -> dict[str, str]:
+    if 'name="consumption-tax-layout"' in source:
+        # 新デザイン（scripts/consumption_tax_layout.py）は連動表示を持たない。論点の欄ごとに数え直す照合へ渡す
+        try:
+            from scripts.consumption_tax_redesign_provenance import verified_selectors as redesign
+        except ImportError:
+            from consumption_tax_redesign_provenance import verified_selectors as redesign  # type: ignore[no-redef]
+        return redesign(source, root)
     if '<!-- TAX_CONNECTED_START -->' not in source:
         return {}
     soup = BeautifulSoup(source, 'html.parser')

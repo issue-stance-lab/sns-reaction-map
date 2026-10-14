@@ -1,6 +1,7 @@
 """消費税減税の候補ページを生成し、投票互換性と冪等性を検査する。
 
-ページ本体は scripts/build_consumption_tax_page.py が累積候補から作る。
+ページ本体は scripts/build_consumption_tax_page.py が累積候補から作る。新デザイン公開後（scripts/consumption_tax_layout.py）は、
+入力は元HTML（data/page-sources/consumption-tax-cut.html）で、新デザインは公開候補生成の最後に finish が組む。
 ここは refresh_topic.py --promote から呼ばれ、候補を2回作って差分がないこと、
 投票の選択肢（論点7×立場4＝28通り）と保護タグが変わらないことだけを見る。
 
@@ -25,6 +26,11 @@ PAGE = Path("docs/consumption-tax-cut-reaction-map.html")
 # 「意見の推移」を数え直す既定の元データ。THEMES.yaml の sample_file と同じファイル。
 # adapter.build は昇格前の累積候補を渡す。渡されないとき（部分更新など）は正典から作る。
 CANONICAL = Path("social-samples/consumption-tax-cut_hermes_arena_classified.json")
+# 新デザインの読書面は、再読データの明細ごとの立場をこの対応表から読む（明細の立場は読み直したときの記録で、
+# その後の分類のやり直しを反映していない。2026-10-13 時点で102件が正典と違った）。辺野古・あだ名・自転車と同じく、
+# 更新経路で累積候補から作り直し、公開対象に含めて同じ回で揃える（共有の再読データは変えない）
+REREAD = Path("data/consumption-tax-cut_4issues-reread.json")
+REREAD_STANCES = Path("data/consumption-tax-cut_reread-stances.json")
 VOTE_TOPIC = "consumption-tax-cut-issue-stance-v1"
 VOTE_CHOICES = 28
 PROTECTED = (
@@ -92,6 +98,68 @@ def review_candidate(root: Path, stage: Path, current_date: str, report: dict) -
     report["opinions"] = sum(row["classification"]["is_opinion"] is True for row in wave)
     report["body_review"] = str(records_path.relative_to(root))
     report["body_review_changes"] = len(changes)
+
+def build_reread_stances(root: Path, candidate_path: Path, output_path: Path, current_date: str) -> dict:
+    """累積候補と再読データ（4論点の理由区分の明細）から、立場の対応表を作る（scripts/consumption_tax_reread_stances.py と同じ表）。
+
+    正典はまだ古い（昇格前）ので、立場は累積候補の分類から写し、論点×立場も累積候補で数えて照合する（辺野古の
+    refresh_adapters/henoko.py の build_reread_stances と同じ考え方）。新しい意見を追い読みして再読データの明細に足していないと、
+    「正典の意見のうち N 件が再読データの明細にありません」で止まる（新デザインの読書面の生成が止まる前に、ここで止める）。
+    """
+    import yaml
+
+    if str(root) not in sys.path:
+        sys.path.insert(0, str(root))
+    from scripts.consumption_tax_reread_stances import table, text_of
+
+    rows = json.loads(candidate_path.read_text(encoding="utf-8"))
+    reread_path = root / REREAD
+    reread = json.loads(reread_path.read_text(encoding="utf-8"))
+    planet = yaml.safe_load((root / "configs" / "planet" / f"{TOPIC}.yaml").read_text(encoding="utf-8"))
+    counts: dict[str, dict[str, int]] = {}
+    for row in rows:
+        c = row.get("classification") or {}
+        if c.get("is_opinion") is not True:
+            continue
+        by = counts.setdefault(str(c.get("main_issue")), {})
+        by[str(c.get("stance"))] = by.get(str(c.get("stance")), 0) + 1
+    tallied = {
+        "updated_on": current_date,
+        "issues": [{"label": label, "stances": [{"label": st, "count": n} for st, n in sorted(by.items())]}
+                   for label, by in sorted(counts.items())],
+    }
+    canonical = str(yaml.safe_load((root / "THEMES.yaml").read_text(encoding="utf-8"))["themes"][TOPIC]["sample_file"])
+    try:
+        # 累積候補は昇格すると正典そのものになる（canonical_sha256 も昇格後の正典と同じ値）
+        data = table(rows, reread, planet, tallied, current_date, canonical, _digest(candidate_path), _digest(reread_path))
+    except SystemExit as exc:
+        raise ValueError(f"消費税減税の立場の対応表を作れません: {exc}。"
+                         "新しい意見を追い読みして data/consumption-tax-cut_4issues-reread.json の明細に足してください（DATA_REFRESH.md）") from None
+    output_path.write_text(text_of(data), encoding="utf-8")
+    return data
+
+
+def _previous_wave_model(root: Path, current_date: str) -> str | None:
+    """前回の更新回（収集日が今回より前で一番新しく、分類モデルの記録がある保存回）の分類モデル。記録が無ければ None。"""
+    updates = root / "social-samples" / "updates" / TOPIC
+    dates = sorted(path.name for path in updates.iterdir() if path.is_dir() and path.name < current_date) if updates.is_dir() else []
+    for date in reversed(dates):
+        report = updates / date / "report.json"
+        if report.exists():
+            data = json.loads(report.read_text(encoding="utf-8"))
+            name = ((data.get("provenance") or {}).get("model") or {}).get("name")
+            if name:
+                return name
+    return None
+
+
+def _current_wave_model(stage: Path) -> str | None:
+    report = stage / "report.json"
+    if not report.exists():
+        return None
+    data = json.loads(report.read_text(encoding="utf-8"))
+    return ((data.get("provenance") or {}).get("model") or {}).get("name")
+
 
 def vote_fingerprint(html: str) -> tuple[str, tuple[str, ...], tuple[str, ...], int]:
     topic = re.search(r"var TOPIC='([^']+)'", html)
@@ -170,18 +238,33 @@ def _build_images(stage: Path, candidate: Path) -> dict[Path, Path]:
 def build(root: Path, stage: Path, current_date: str) -> dict[Path, Path]:
     """候補を2回生成し、2回目に差分がない場合だけ公開対象を返す。"""
     candidate = stage / "cumulative-candidate.json"
-    current_page = root / PAGE
+    # 新デザイン公開後も、旧形式の生成器（ページ生成器・意見の推移・連動表示・検索入口・計算部品）は元HTML（data/page-sources）を
+    # 入力にする（consumption_tax_layout.py）。公開候補生成では、隔離コピーの finish がこの元HTMLから新デザインを組み直す
+    if str(root) not in sys.path:
+        sys.path.insert(0, str(root))
+    from scripts.consumption_tax_layout import source_for_refresh
+    current_page = source_for_refresh(root)
     first_page = stage / "page-candidate.html"
     second_page = stage / "idempotence" / "page-candidate.html"
     second_page.parent.mkdir(parents=True, exist_ok=True)
 
+    # 分類に使うAIが前回から変わった回は、推移の注意書きに記録が要る（無ければここで止まる）。
+    trend_support.check_model_break(
+        root, TOPIC, current_date, _previous_wave_model(root, current_date), _current_wave_model(stage)
+    )
+
     before_vote = vote_fingerprint(current_page.read_text(encoding="utf-8"))
+    first_stances = stage / REREAD_STANCES.name
+    second_stances = stage / "idempotence" / REREAD_STANCES.name
     _run_builder(root, candidate, current_page, first_page)
     _apply_trend(root, first_page, candidate)
+    build_reread_stances(root, candidate, first_stances, current_date)
     _run_builder(root, candidate, first_page, second_page)
     _apply_trend(root, second_page, candidate)
+    build_reread_stances(root, candidate, second_stances, current_date)
 
-    if _digest(first_page) != _digest(second_page):
+    # ページと立場の対応表を同じ候補から2回作って比べる
+    if (_digest(first_page), _digest(first_stances)) != (_digest(second_page), _digest(second_stances)):
         raise ValueError("消費税減税adapterは同じ候補の2回目実行で差分が出ました")
 
     current_html = current_page.read_text(encoding="utf-8")
@@ -196,4 +279,4 @@ def build(root: Path, stage: Path, current_date: str) -> dict[Path, Path]:
         raise ValueError("保護タグの個数が変わりました: " + ", ".join(changed))
 
     # ページと同じ累積候補から、推移の画像も作って一緒に公開する（ページの <img> がこの画像を指す）。
-    return {PAGE: first_page, **_build_images(stage, candidate)}
+    return {PAGE: first_page, REREAD_STANCES: first_stances, **_build_images(stage, candidate)}

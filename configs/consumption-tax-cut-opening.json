@@ -1,0 +1,264 @@
+{
+  "_note": "消費税減税ページ冒頭の文言設定。手で直す場所はここだけ。件数・論点別件数・立場・更新日は公開JSONから、立場の色と理由の内訳がある論点は planet 設定から、収集元と次回の更新予定は THEMES.yaml から読むので、ここには書かない。制度の記述は checked_on の日に一次資料を開き直して確かめた範囲だけ（一次資料メモ quality/research/consumption-tax-cut-primary-sources.md の資料G・H-2・L-3・N・P・W・W-2 と【2026-10-13追記】）。段階（審議中か、成立したか、引下げ中か）は「今日」ではなく基準日で決める。基準日の既定は公開JSONの updated_on で、--as-of で上書きできる。成立したら law.enacted_on と law.promulgated_on を入れ、checked_on を直す。",
+  "theme_id": "consumption-tax-cut",
+  "inputs": {
+    "public_json": "docs/data/themes/consumption-tax-cut.json",
+    "planet_config": "configs/planet/consumption-tax-cut.yaml",
+    "themes_registry": "THEMES.yaml"
+  },
+  "checked_on": "2026-10-13",
+  "_checked_on": "2026-10-13 に内閣官房の案内ページ、法律案の概要・要綱・本文（sankou15〜17）、衆議院の議案一覧と審議経過（閣法第222回1号）、国税庁「軽減税率制度の概要」、財務省「軽減税率制度の対象品目」を curl で取り直して確かめた。法律は未成立（衆議院で審議中、付託前）。",
+  "law": {
+    "outline_on": "2026-09-15",
+    "bill_on": "2026-10-09",
+    "diet_session": 222,
+    "enacted_on": null,
+    "_enacted_on": "国会で成立した日。衆議院の審議経過ページで参議院の審議結果（可決）を確かめてから入れる。null の間は「国会で審議中」と出す。checked_on より後の日付は入れられない（生成が止まる）。",
+    "promulgated_on": null,
+    "_promulgated_on": "公布の日。審議経過ページの「公布年月日」欄で確かめて入れる。成立日より前の日付は入れられない。",
+    "transition_on": "2027-01-01",
+    "_transition_on": "法律案本文の「指定日」。この日より前に結んだ定期供給契約（4月1日より前に代金を受け取ったもの）と、この日より前に条件を示した通信販売（4月1日より前に申込みを受けたもの）は、特例税率の対象から外れ旧税率のまま。",
+    "start_on": "2027-04-01",
+    "end_on": "2029-03-31"
+  },
+  "rates": {
+    "standard": {"total": "10", "national": "7.8", "local": "2.2", "label": "標準税率"},
+    "reduced": {"total": "8", "national": "6.24", "local": "1.76", "label": "軽減税率"},
+    "special": {"total": "1", "national": "0.78", "local": "0.22", "label": "飲食料品の特例税率"},
+    "_rates": "標準・軽減の内訳は国税庁「軽減税率制度の概要」、特例税率は法律案の概要（0.78%、地方消費税と合わせて1%）と大綱（国税0.78%＋地方消費税0.22%）。国税と地方の合計が total と合わないと生成が止まる。"
+  },
+  "phase_text": {
+    "status": {
+      "bill": "法律案は国会で審議中です。{checked}の時点で、まだ成立していません。",
+      "enacted": "法律は{enacted}に成立しました。引下げは{start}から始まります。",
+      "in_effect": "食料品の1%への引下げは{end}まで続きます。",
+      "ended": "食料品の1%への引下げは{end}で終わりました。",
+      "overdue": "引下げ開始の予定日を過ぎました。法律が成立したかどうかは、編集部でまだ確かめていません。"
+    },
+    "status_label": {
+      "bill": "国会で審議中",
+      "enacted": "成立・引下げ前",
+      "in_effect": "引下げ中",
+      "ended": "引下げ終了",
+      "overdue": "成立は未確認"
+    },
+    "law_word": {
+      "bill": "法律案",
+      "enacted": "法律",
+      "in_effect": "法律",
+      "ended": "法律",
+      "overdue": "法律案"
+    },
+    "state_labels": {
+      "done": "済み",
+      "current": "{as_of}の時点",
+      "planned": "予定",
+      "planned_bill": "法律案の日付",
+      "undecided": "未定",
+      "unconfirmed": "日付を過ぎた・成立は未確認"
+    },
+    "checked_line": "制度の確認日 {checked}（一次資料を開き直した日）。段階は{as_of}時点のものです。"
+  },
+  "crumb": [
+    "税・財政",
+    "消費税減税（食料品1%）"
+  ],
+  "title": {
+    "phrases": [
+      "消費税減税は",
+      "いつから、",
+      "何%？"
+    ],
+    "accent_indices": [1, 2],
+    "sub": [
+      "食料品1%・給付付き税額控除の中身と、",
+      "SNSで割れる賛否"
+    ],
+    "_title": "title・meta description は課題96の計測（10/27判定）のため変えない。H1 だけをこの見出しにする。本番では configs/theme-seo.json の display_headline にこのH1の文字列（題名＋副題）を入れて検査を通す（手順7）。"
+  },
+  "lead": "税率・期間・対象品目を一次資料で確かめてから、SNSで意見が割れている点を論点ごとに読みます。",
+  "answers": [
+    {
+      "key": "when",
+      "question": "いつから・何%・いつまで？",
+      "kind_label": "法律案の日付と税率",
+      "short": {
+        "bill": "法律案では、2027年4月1日から2年間、食料品が1%になります。",
+        "enacted": "2027年4月1日から2年間、食料品は1%になります。",
+        "in_effect": "食料品は2029年3月31日まで1%です。",
+        "ended": "食料品の1%は、2029年3月31日で終わりました。",
+        "overdue": "法律案では、2027年4月1日から食料品が1%になる予定でした。"
+      },
+      "body": {
+        "bill": "法律案は{bill}に閣議決定され、同じ日に国会へ提出されました。引下げは{end}までで、その翌日から食料品は8%に戻ります。",
+        "enacted": "法律は{enacted}に成立しました。引下げは{end}までで、その翌日から食料品は8%に戻ります。",
+        "in_effect": "{start}に今の8%から1%へ下がりました。{end}の翌日から8%に戻ります。",
+        "ended": "{end}の翌日から、食料品の税率は8%に戻っています。",
+        "overdue": "法律案は{bill}に国会へ提出されました。その後の成立と施行は、編集部でまだ確かめていません。"
+      },
+      "link": {"href": "#cto-steps", "text": "決まるまでの段階を見る"}
+    },
+    {
+      "key": "mechanism",
+      "question": "1%と給付付き税額控除とは？",
+      "kind_label": "政府の説明と、0%案との違い",
+      "short": {
+        "all": "食料品の税率を1%に下げ、1%分の範囲で所得に応じた給付を組み合わせる仕組みです。"
+      },
+      "body": {
+        "all": "政府はこの組み合わせを「実質ゼロ化」と説明しています。給付は2027年度に先に始め、2029年度から「給付付き税額控除」として本格的に導入する方針を示しています。食料品の税率を0%にする案は、野党が示した別の案です。"
+      },
+      "link": {"href": "#cto-count", "text": "給付をめぐる意見の件数を見る"}
+    },
+    {
+      "key": "items",
+      "question": "何が1%になる？",
+      "kind_label": "対象品目",
+      "short": {
+        "all": "対象は、今8%の飲食料品です。外食と酒は10%のまま変わりません。"
+      },
+      "body": {
+        "all": "持ち帰りは今と同じく引下げの対象です。新聞の定期購読は今8%ですが、{law_word}の対象に入っていないので8%のままです。引下げの間、税率は10%・8%・1%の3段階になります。"
+      },
+      "link": {"href": "#cto-calc", "text": "買い方ごとの税込額を比べる"}
+    }
+  ],
+  "calc": {
+    "title": {
+      "bill": "自分の買い物は、何%になる案？",
+      "enacted": "自分の買い物は、何%になる？",
+      "in_effect": "自分の買い物は、いま何%？",
+      "ended": "引下げ中は、何%だった？",
+      "overdue": "自分の買い物は、何%になる案？"
+    },
+    "intro": "買い方を選ぶと、税抜{base}円の買い物の税込額が切り替わります。",
+    "base_price": 1000,
+    "before_label": {
+      "bill": "今",
+      "enacted": "今",
+      "in_effect": "引下げ前",
+      "ended": "引下げ前",
+      "overdue": "今"
+    },
+    "after_label": {
+      "bill": "法律案の税率",
+      "enacted": "{start_ym}から",
+      "in_effect": "{end_ym}まで",
+      "ended": "引下げ中",
+      "overdue": "法律案の税率"
+    },
+    "items": [
+      {
+        "key": "food",
+        "label": "スーパーの食品",
+        "tag": "1%の対象",
+        "before": "reduced",
+        "after": "special",
+        "note": "スーパーで買う食品など、今8%の飲食料品が1%の対象です。"
+      },
+      {
+        "key": "takeout",
+        "label": "持ち帰り",
+        "tag": "1%の対象",
+        "before": "reduced",
+        "after": "special",
+        "note": "テイクアウトや宅配は今も8%の扱いで、1%への引下げにも入ります。"
+      },
+      {
+        "key": "eatin",
+        "label": "店内での飲食",
+        "tag": "変わらない",
+        "before": "standard",
+        "after": "standard",
+        "note": "お店の席で食べると外食の扱いになり、10%のまま変わりません。"
+      },
+      {
+        "key": "alcohol",
+        "label": "お酒",
+        "tag": "変わらない",
+        "before": "standard",
+        "after": "standard",
+        "note": "酒類は今も10%で、引下げの対象に入っていません。"
+      }
+    ],
+    "static_caption": "買い方ごとの税率と、税抜{base}円の税込額",
+    "rate_note": "1%は、国税{national}%と地方消費税{local}%を合わせた税率です。",
+    "caution": "税率だけを当てはめた計算で、店頭の値段を約束するものではありません。"
+  },
+  "steps": {
+    "label": "決まり方と時期",
+    "text": {
+      "bill": "国会で法律が成立すれば、2027年4月1日から2年間だけ食料品の税率が下がります。",
+      "overdue": "国会で法律が成立すれば、2027年4月1日から2年間だけ食料品の税率が下がる予定でした。",
+      "all": "成立した法律により、2027年4月1日から2年間だけ食料品の税率が下がります。"
+    },
+    "axis": {"from": "2026-09-01", "to": "2029-06-30"},
+    "band_label": "1%の期間（2年間）",
+    "items": [
+      {
+        "key": "outline",
+        "title": "大綱を閣議決定",
+        "date_from": "law.outline_on",
+        "law_dependent": false,
+        "note": "税率1%・2年間などの中身を政府が決めた"
+      },
+      {
+        "key": "bill",
+        "title": "法律案を閣議決定・国会に提出",
+        "date_from": "law.bill_on",
+        "law_dependent": false,
+        "note": "第{diet}回国会。衆議院が受理した",
+        "source": {"label": "衆議院の審議経過", "url": "https://www.shugiin.go.jp/internet/itdb_gian.nsf/html/gian/keika/1DE342E.htm"}
+      },
+      {
+        "key": "enact",
+        "title": "国会で成立",
+        "date_from": "law.enacted_on",
+        "law_dependent": false,
+        "note_undecided": "成立の日はまだ決まっていない",
+        "note_done": "成立した法律が公布されると、施行日が確定する",
+        "note_promulgated": "{promulgated}に公布"
+      },
+      {
+        "key": "transition",
+        "title": "予約販売の区切りの日",
+        "date_from": "law.transition_on",
+        "law_dependent": true,
+        "note": "この日より前に結んだ定期購入などの一部は、4月以降も8%"
+      },
+      {
+        "key": "start",
+        "title": "1%への引下げ開始",
+        "date_from": "law.start_on",
+        "law_dependent": true,
+        "note": "施行日。飲食料品が8%から1%に"
+      },
+      {
+        "key": "end",
+        "title": "引下げ期間の終わり",
+        "date_from": "law.end_on",
+        "law_dependent": true,
+        "note": "翌日から飲食料品は8%に戻る"
+      }
+    ]
+  },
+  "count": {
+    "label": "SNSの意見",
+    "caption_template": "集計の元は{source}の公開投稿{collected}件（{start}〜{end}）。そのうち意見を含むと判定した数です。",
+    "not_poll": "SNSに公開された投稿を分類して数えた件数で、世論調査の賛否とは別に読む数字です。",
+    "stance_title": "立場の内訳",
+    "issues_title_template": "論点別の件数（{n}つ）",
+    "no_reason_tag": "理由は未公開",
+    "no_reason_note_template": "{labels}は、投稿を理由ごとに読み分けた結果をまだ公開していません。",
+    "updated_template": "集計の更新は{updated}。次の更新予定は{next}です。"
+  },
+  "sources_title": "確かめた一次資料",
+  "sources": [
+    {"label": "「飲食料品に係る消費税率の引下げ」及び「給付付き税額控除」について（内閣官房）", "url": "https://www.cas.go.jp/jp/seisaku/shouhizei_zeigakukoujo/index.html"},
+    {"label": "法律案の概要（内閣官房・財務省）", "url": "https://www.cas.go.jp/jp/seisaku/shouhizei_zeigakukoujo/pdf/sankou15.pdf"},
+    {"label": "法律案の要綱（内閣官房・財務省）", "url": "https://www.cas.go.jp/jp/seisaku/shouhizei_zeigakukoujo/pdf/sankou16.pdf"},
+    {"label": "審議経過（衆議院）", "url": "https://www.shugiin.go.jp/internet/itdb_gian.nsf/html/gian/keika/1DE342E.htm"},
+    {"label": "軽減税率制度の概要（国税庁）", "url": "https://www.nta.go.jp/taxes/shiraberu/zeimokubetsu/shohi/keigenzeiritsu/01.htm"},
+    {"label": "軽減税率制度の対象品目（財務省）", "url": "https://www.mof.go.jp/tax_policy/summary/consumption/keigen_02.pdf"}
+  ]
+}

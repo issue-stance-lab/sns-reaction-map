@@ -233,3 +233,13 @@ Kimiと食い違った289件を編集担当が本文で確定（候補への補�
 論点別割合の前回差は最大1.4ポイントでnote更新なし。独立監査 `ready_for_ceo`（指摘2点を修正）。オーナー承認（10/11「公開して」）で本番反映。
 生成器は山なみを候補を母数に作る経路へ（`refresh_planet_section.refresh(canonical=)`）。[公開前確認](../quality/reviews/2026-10-11-consumption-tax-cut-refresh-review.md)。次回収集予定2026-10-20。
 
+
+## 2026-10-13 — 新デザインの公開候補と公開切替（手順書23の手順7）
+
+辺野古と同じ型（対話式の山なみを元HTMLから写す＋部活動型の圧縮）で、冒頭・7論点の読書面・背景に、元HTMLの山なみ・10回分の意見の推移（折りたたみ）・
+投票・作り方・詳細データを継承した新デザインを組み、`configs/consumption-tax-layout.json` を `enabled: true` にして docs/ に適用した（オーナー承認待ち、
+`approval-20261013-consumption-tax-cut`。main 統合・push はしていない）。title・meta description は課題96の判定（10/27）まで変えていない。
+手順7の前に、よみやすの残り13件（重なる心配・資料にしかない話の長い文）を区切り、授業向けの資料を法律案の概要に差し替え、推移に分類AIの切替（10/3）を登録した。
+立場の対応表は更新経路が毎回作り直す。元HTMLは `data/page-sources/consumption-tax-cut.html`。新規0件相当の 10/20 の回を隔離コピーで模擬し、新デザインのまま通ることを確認。
+375px でページ全体 12,190px（現行 18,518px）、論点の欄は最大 2,489px。
+記録: [公開候補と検査](../quality/designs/2026-10-13-consumption-tax-cut-production-candidate.md)、定期更新の手順は DATA_REFRESH.md「消費税減税の定期更新（新デザインを維持する）」。

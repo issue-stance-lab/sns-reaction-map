@@ -54,6 +54,7 @@ def finish(root):
             if 'name="elderly-layout"' in old:continue  # 高齢者免許返納の新デザインも独自の見た目（elderly_layout.py）
             if 'name="nickname-layout"' in old:continue  # 学校でのあだ名禁止の新デザインも独自の見た目（nickname_layout.py）
             if 'name="henoko-layout"' in old:continue  # 辺野古高校生死亡事故の新デザインも独自の見た目（henoko_layout.py）
+            if 'name="consumption-tax-layout"' in old:continue  # 消費税減税の新デザインも独自の見た目（consumption_tax_layout.py）
             new=transform(old,slug)
             if old!=new:p.write_text(new)
             targets[p.relative_to(root)]=p

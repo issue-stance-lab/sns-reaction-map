@@ -846,7 +846,8 @@ def refresh(topic: str, *, source: str | None = None,
             topic == "bike-blue-ticket" and 'name="bike-layout"' in html) or (
             topic == "elderly-license-revocation" and 'name="elderly-layout"' in html) or (
             topic == "school-nickname-ban" and 'name="nickname-layout"' in html) or (
-            topic == "henoko-student-accident" and 'name="henoko-layout"' in html):
+            topic == "henoko-student-accident" and 'name="henoko-layout"' in html) or (
+            topic == "consumption-tax-cut" and 'name="consumption-tax-layout"' in html):
         raise SystemExit("新デザインにはrefresh_topicの公開候補生成を使ってください。旧形式で上書きしないため停止しました。")
     if START not in html or END not in html:
         raise SystemExit(

@@ -26,7 +26,9 @@ class ConnectedRefreshTests(unittest.TestCase):
         cls.temp = tempfile.TemporaryDirectory(prefix="tax-connected-test-")
         cls.stage = Path(cls.temp.name)
         cls.first = cls.stage / "first.html"
-        cls.run_builder("--html-template", str(ROOT / "docs/consumption-tax-cut-reaction-map.html"),
+        # 新デザイン公開後は、旧形式の元HTML（data/page-sources）を土台にする（scripts/consumption_tax_layout.py）
+        from scripts.consumption_tax_layout import source_for_refresh
+        cls.run_builder("--html-template", str(source_for_refresh(ROOT)),
                         "--output-html", str(cls.first), "--connected-layout")
         cls.source = cls.first.read_text()
 
@@ -50,7 +52,8 @@ class ConnectedRefreshTests(unittest.TestCase):
         self.run_builder("--html-template", str(first), "--output-html", str(second))
         adapter._apply_trend(ROOT, second)
         self.assertEqual(first.read_bytes(), second.read_bytes())
-        before = (ROOT / "docs/consumption-tax-cut-reaction-map.html").read_text()
+        from scripts.consumption_tax_layout import source_for_refresh
+        before = source_for_refresh(ROOT).read_text()
         self.assertEqual(adapter.vote_fingerprint(before), adapter.vote_fingerprint(second.read_text()))
         for token in adapter.PROTECTED:
             self.assertEqual(before.count(token), second.read_text().count(token))

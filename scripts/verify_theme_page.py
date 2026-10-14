@@ -324,6 +324,8 @@ def verify_planet_breakdowns(theme: str, page: str, data: dict[str, Any]) -> tup
     fukushuto_redesign = fukushuto_redesign or (theme == "school-nickname-ban" and 'name="nickname-layout"' in page)
     # 辺野古高校生死亡事故の新デザインも同じ形（scripts/henoko_layout.py）。旧ページの連動表示とは別に、論点の欄の中で照合する
     fukushuto_redesign = fukushuto_redesign or (theme == "henoko-student-accident" and 'name="henoko-layout"' in page)
+    # 消費税減税の新デザインも同じ形（scripts/consumption_tax_layout.py）。旧ページの連動表示とは別に、論点の欄の中で照合する
+    fukushuto_redesign = fukushuto_redesign or (theme == "consumption-tax-cut" and 'name="consumption-tax-layout"' in page)
     redesign_prefix = "fr" if fukushuto_redesign else "kr"
     koshitsu_redesign = koshitsu_redesign or fukushuto_redesign
     if ('id="public-data"' in page and theme == "bukatsu-chiiki") or koshitsu_redesign:
@@ -351,6 +353,13 @@ def verify_planet_breakdowns(theme: str, page: str, data: dict[str, Any]) -> tup
                 panel = redesign.find(id="issue-" + issue_id)
                 mismatched = []
                 for item in items:
+                    if item["id"] == "__excluded__":
+                        # 読み直してどの区分にも当てはまらないとして除いた明細（消費税減税）。理由の一覧には入れず、
+                        # 数え方の注記（data-excluded に件数）に出す。件数が合うかだけを見る
+                        node = panel.select_one("[data-excluded]") if panel else None
+                        if node is None or node.get("data-excluded") != str(int(item["count"])):
+                            mismatched.append(item["label"])
+                        continue
                     node = panel.select_one(
                         f'li.{redesign_prefix}-reason[data-reason="{item["id"]}"] .{redesign_prefix}-reason-n b'
                     ) if panel else None
