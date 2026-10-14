@@ -73,7 +73,8 @@ class CiteAnchorReceptorTests(unittest.TestCase):
             with self.subTest(page=page.name):
                 text = page.read_text(encoding="utf-8")
                 has_landing_anchor = 'class="issue-anchor"' in text
-                if any(f'name="{n}-layout"' in text for n in ("koshitsu", "fukushuto", "ai-copyright", "constitutional", "bike", "elderly", "nickname", "henoko", "consumption-tax")):
+                if any(f'name="{n}-layout"' in text for n in ("koshitsu", "fukushuto", "ai-copyright", "constitutional", "bike", "elderly", "nickname", "henoko", "consumption-tax")) \
+                        or '<meta name="bukatsu-layout" content="redesign-v2">' in text:  # 部活動の最新の型も同じ
                     # 皇室典範・副首都・生成AI・憲法改正論議の新デザインは論点の欄そのものが #issue-{id} を持つ（引用ボタンは移していない）
                     has_landing_anchor = re.search(r'<section(?=[^>]*\bid="issue-)(?=[^>]*data-issue-panel)[^>]*>', text) is not None
                 has_issue_cards = re.search(r'<article class="ic" id="issue-', text) is not None
@@ -89,7 +90,7 @@ class CiteAnchorReceptorTests(unittest.TestCase):
             self.skipTest("data/public/themes/ が未生成（build_public_registry.py --all を先に実行する）")
         for page in pages:
             text = page.read_text(encoding="utf-8")
-            if 'name="bukatsu-layout"' in text:
+            if 'name="bukatsu-layout"' in text and 'content="redesign-v2"' not in text:  # 部活動の初期型だけ
                 self.assertIn('id="reading"',text)
                 self.assertIn('class="issue-panel',text)
                 continue

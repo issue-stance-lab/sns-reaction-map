@@ -84,3 +84,96 @@ def readable(markup, page):
     for a in s.select('a[href^="#"]'):
         if a['href'][1:] not in ids:a['href']=page+a['href']
     return str(s)
+
+
+# ---------------------------------------------------------------- 最新の型（scripts/build_bukatsu_redesign_v2.py）
+
+CSS_V2 = '''
+.static-guide{width:min(1180px,calc(100% - 32px));margin:24px auto;padding:20px;background:#edf5ff;border-radius:12px;box-sizing:border-box}
+.static-guide nav{display:flex;flex-wrap:wrap;gap:8px 20px}.static-guide p{margin:8px 0}
+.fr-panel{display:block!important;margin-bottom:40px}
+.fr-reason-detail{display:block!important}
+.full-section>h3,.full-section>h4{margin:18px 0 8px;font-size:16px}
+[data-trend-panel]{display:block!important}
+@media print{
+ @page{size:A4;margin:15mm}
+ html{scroll-padding:0}body{font-size:10pt;line-height:1.6}
+ .modern-site-header,.static-guide,.site-footer,footer,.cap-related{display:none!important}
+ .fr-panel{break-before:page}.fr-panel-head h3,.fr-reason-detail h5{break-after:avoid}
+ .glance-chart-mobile{display:none!important}.glance-chart-desktop{display:block!important}
+ .trend-table-wrap{overflow:visible!important}.trend-table{min-width:0!important;width:100%!important;font-size:8pt!important}
+ table{border-collapse:collapse}thead{display:table-header-group}tr,img,svg{break-inside:avoid}
+ img{max-width:100%!important}a{overflow-wrap:anywhere}
+}
+'''
+
+
+def readable_v2(markup, page):
+    """新デザイン（最新の型）のページから、スクリプトを使わない全文・印刷版を作る（同じ生成結果から作るので内容は同じ）。
+
+    7論点の欄・全理由の説明・資料・背景の開閉行・推移の表と画像・作り方・詳細データを、開いた形で続けて並べる。
+    山なみ（スクリプトが要る）・投票・論点タブ・X投稿の埋め込みの案内は外す（元の投稿へのリンクは残す）。調査条件は山なみの位置に残す。
+    """
+    s = BeautifulSoup(markup, 'html.parser')
+    for panel in s.select('[data-trend-panel]'):
+        image = panel.select_one('.trend-share-item[data-variant="detail"] img')
+        stage = panel.select_one('.trend-stage')
+        if image and stage:
+            image['style'] = 'width:100%;height:auto;break-inside:avoid'
+            stage.replace_with(image.extract())
+    # 対話式の山なみ（スクリプトが無いと動かない）は外し、調査条件だけを同じ位置に残す
+    for planet in s.select('section.planet-panel'):
+        research = planet.select_one('#research-conditions')
+        if research is not None:
+            planet.insert_before(Comment(' RESEARCH_CONDITIONS_START '))
+            planet.insert_before(research.extract())
+            planet.insert_before(Comment(' RESEARCH_CONDITIONS_END '))
+        planet.decompose()
+    for node in s.select('script,noscript,iframe,#progress,.fr-tabs,.fr-live,.fr-back,.cap-full,.x-embed-status,'
+                         '.trend-controls,.trend-tabs,.trend-share,#vote-section,.cap-vote,.classroom-print-btn,'
+                         'input[data-muni-filter],[data-muni-count]'):
+        node.decompose()
+    for node in s.select('[hidden]'):
+        del node['hidden']
+    for node in s.select('details'):
+        node.name = 'section'
+        node.attrs.pop('open', None)
+        node['class'] = list(node.get('class') or []) + ['full-section']
+        summary = node.find('summary', recursive=False)
+        if summary:
+            summary.name = 'h3'
+    for node in s.select('[onclick]'):
+        del node['onclick']
+    for node in s.select('img[loading]'):
+        node['loading'] = 'eager'
+    for node in s.select('meta[name="robots"]'):
+        node.decompose()
+    s.head.append(s.new_tag('meta', attrs={'name': 'robots', 'content': 'noindex,follow'}))
+    s.title.string = '部活動の地域移行：全文・印刷版｜SNS反応まっぷ'
+    style = s.new_tag('style', id='readable-layout')
+    style.string = CSS_V2
+    s.head.append(style)
+    guide = s.new_tag('div', attrs={'class': 'static-guide'})
+    p = s.new_tag('p')
+    p.string = '全文・印刷版。すべての論点と理由、資料を続けて読めます。'
+    guide.append(p)
+    p = s.new_tag('p')
+    p.string = '印刷には、ブラウザの印刷メニューをご利用ください。'
+    guide.append(p)
+    back = s.new_tag('a', href=page)
+    back.string = '通常のページに戻る'
+    guide.append(back)
+    nav = s.new_tag('nav', attrs={'aria-label': '論点の目次'})
+    for panel in s.select('.fr-panel[id]'):
+        heading = panel.select_one('.fr-panel-head h3')
+        a = s.new_tag('a', href='#' + panel['id'])
+        a.string = heading.get_text(' ', strip=True) if heading else panel['id']
+        nav.append(a)
+    guide.append(nav)
+    main = s.select_one('main')
+    (main or s.body).insert(0, guide)
+    ids = {node['id'] for node in s.select('[id]')}
+    for a in s.select('a[href^="#"]'):
+        if a['href'][1:] not in ids:
+            a['href'] = page + a['href']
+    return str(s)

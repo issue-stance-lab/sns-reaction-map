@@ -19,6 +19,10 @@ from scripts.refresh_bukatsu_pilot import (
 )
 
 TOPIC = "bukatsu-chiiki"
+# 新デザインの読書面（scripts/bukatsu_reading.py）は、再読データの明細ごとの立場をこの対応表から読む（明細の立場は読み直したときの記録で、
+# 2026-10-06 の賛否の判定し直しを反映していない。2026-10-14 時点で308件が正典と違い、制度・教育の明細には立場が無い）。
+# 消費税減税・辺野古と同じく、更新経路で累積候補から作り直して公開対象に含め、同じ回で揃える（共有の再読データは変えない）。
+REREAD_STANCES = Path("data/bukatsu-chiiki_reread-stances.json")
 
 
 def _digest(path: Path) -> str:
@@ -115,6 +119,45 @@ def _build_once(
     output.write_text(text, encoding="utf-8")
 
 
+def build_reread_stances(root: Path, candidate_path: Path, output_path: Path, current_date: str) -> dict:
+    """累積候補と再読データ（5論点の理由区分の明細、3ファイル）から、立場の対応表を作る（scripts/bukatsu_reread_stances.py と同じ表）。
+
+    正典はまだ古い（昇格前）ので、立場は累積候補の分類から写し、論点×立場も累積候補で数えて照合する（消費税減税の
+    refresh_adapters/consumption_tax.py の build_reread_stances と同じ考え方）。新しい意見を追い読みして再読データの明細に足していないと、
+    「正典の意見のうち N 件が再読データの明細にありません」で止まる（新デザインの読書面の生成が止まる前に、ここで止める）。
+    """
+    import yaml
+
+    if str(root) not in sys.path:
+        sys.path.insert(0, str(root))
+    from scripts.bukatsu_reread_stances import table, text_of
+
+    rows = json.loads(candidate_path.read_text(encoding="utf-8"))
+    planet = yaml.safe_load((root / "configs" / "planet" / f"{TOPIC}.yaml").read_text(encoding="utf-8"))
+    counts: dict[str, dict[str, int]] = {}
+    for row in rows:
+        c = row.get("classification") or {}
+        if c.get("is_opinion") is not True:
+            continue
+        by = counts.setdefault(str(c.get("main_issue")), {})
+        by[str(c.get("stance"))] = by.get(str(c.get("stance")), 0) + 1
+    tallied = {
+        "updated_on": current_date,
+        "issues": [{"label": label, "stances": [{"label": st, "count": n} for st, n in sorted(by.items())]}
+                   for label, by in sorted(counts.items())],
+    }
+    canonical = str(yaml.safe_load((root / "THEMES.yaml").read_text(encoding="utf-8"))["themes"][TOPIC]["sample_file"])
+    try:
+        # 累積候補は昇格すると正典そのものになる（canonical_sha256 も昇格後の正典と同じ値）
+        data = table(rows, planet, tallied, current_date, canonical, _digest(candidate_path), root=root)
+    except SystemExit as exc:
+        raise ValueError(f"部活動の立場の対応表を作れません: {exc}。新しい意見を追い読みして再読データ"
+                         "（data/bukatsu-chiiki_teacher-reread.json・bukatsu-chiiki_cost-receiver-reread.json・"
+                         "data/verification/bukatsu-chiiki-plan-child-subissues.json）の明細に足してください（DATA_REFRESH.md）") from None
+    output_path.write_text(text_of(data), encoding="utf-8")
+    return data
+
+
 def build(root: Path, stage: Path, current_date: str) -> dict[Path, Path]:
     current = read_rows(root / "social-samples" / "bukatsu-chiiki_hermes_classified.json")
     _, previous = previous_wave(current, current_date)
@@ -133,6 +176,13 @@ def build(root: Path, stage: Path, current_date: str) -> dict[Path, Path]:
     _build_once(root, stage, current_date, first, second)
     if _digest(first) != _digest(second):
         raise ValueError("部活動adapterは同じ候補の2回目実行で差分が出ました")
+    # 立場の対応表も同じ候補から2回作って比べる
+    first_stances = stage / REREAD_STANCES.name
+    second_stances = stage / "idempotence" / REREAD_STANCES.name
+    build_reread_stances(root, stage / "cumulative-candidate.json", first_stances, current_date)
+    build_reread_stances(root, stage / "cumulative-candidate.json", second_stances, current_date)
+    if _digest(first_stances) != _digest(second_stances):
+        raise ValueError("部活動adapterは立場の対応表の2回目の作成で差分が出ました")
 
     raw = read_rows(stage / "raw.json")
     new = read_rows(stage / "new-only.json")
@@ -142,6 +192,7 @@ def build(root: Path, stage: Path, current_date: str) -> dict[Path, Path]:
     # ページと同じ累積候補から、推移の画像も作って一緒に公開する（ページの <img> がこの画像を指す）。
     return {
         PAGE.relative_to(root): first,
+        REREAD_STANCES: first_stances,
         **trend_support.build_images(root, TOPIC, stage, stage / "cumulative-candidate.json"),
     }
 

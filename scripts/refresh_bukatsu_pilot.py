@@ -170,6 +170,10 @@ def validate_candidate(current: list[dict[str, Any]], raw: list[dict[str, Any]],
     classified_ids = {identity(row) for row in classified}
     candidate_ids = [identity(row) for row in candidate]
     duplicates = len(raw_ids & current_ids)
+    # 候補は旧形式のページ（元HTML）から作るので、保護タグの数も旧形式の入力と比べる。新デザイン公開中の docs/ のページ
+    # （scripts/bukatsu_layout.py。保護タグの写し方が違う）と比べると、データが正しくても数が合わず止まる
+    from scripts.bukatsu_layout import source_for_refresh
+    base = source_for_refresh(ROOT).read_text(encoding="utf-8")
     checks = {
         "raw_equals_duplicates_plus_new": len(raw_ids) == duplicates + len(new_ids),
         "new_equals_classified": new_ids == classified_ids,
@@ -177,7 +181,7 @@ def validate_candidate(current: list[dict[str, Any]], raw: list[dict[str, Any]],
         "candidate_unique": len(candidate_ids) == len(set(candidate_ids)),
         "topic_v1": f"var TOPIC='{TOPIC_ID}'" in page,
         "vote_choices_21": len(VOTE_ISSUES) * len(VOTE_STANCES) == 21,
-        "protected_tokens": all(page.count(token) == PAGE.read_text(encoding="utf-8").count(token) for token in PROTECTED),
+        "protected_tokens": all(page.count(token) == base.count(token) for token in PROTECTED),
     }
     failed = [name for name, passed in checks.items() if not passed]
     if failed:
