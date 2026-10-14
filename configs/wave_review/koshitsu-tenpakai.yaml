@@ -7,9 +7,12 @@ new_issue_examples: 「皇室制度の存廃」「皇族の人権・自由」「
 notes: |
   6論点すべてに理由区分あり。専用ファイル data/koshitsu-tenpakai_issues-reread.json は平坦な items（post_key 形式）で、
   items の件数が公開JSONの意見数と一致しないと新デザイン（koshitsu_layout）の生成が止まる＝全テーマの候補生成が止まる。
-  apply のあと DATA_REFRESH.md「皇室典範改正の定期更新」の順で、再読共通台帳の resync-source →
-  data/verification/koshitsu-tenpakai-issues-reread.json（items の写し）→ build_public_registry.py --topic koshitsu-tenpakai。
-  再読共通台帳あり（register が要る）。
+  再読共通台帳あり。apply のあと、候補生成（--prepare-promotion）の前に register を回す（専用ファイルの指紋も register が合わせる。
+  register 前に候補生成すると「再読台帳の出所が変更されています」で止まる）。
+  data/verification/koshitsu-tenpakai-issues-reread.json（items の写し）は候補生成が作り直す。
+  CHECKED_AT（主張の照合日）を進めたら、同じ日付の節を quality/research/koshitsu-tenpakai-primary-sources.md に追記する
+  （新デザインの照合「主張照合の照合日 … が一次資料メモにありません」で止まる。e-Gov API を再取得して確認した事実を書く）。
+  生成器は候補を母数にする（build_koshitsu_arena._planet_data、process_sections --input。2026-10-14に対応済み）。
   立場は「今回案全体」への評価。個別論点（女性天皇容認など）から全体賛否を作らないのが2026-09-13以来の基準。
   主張の該当投稿は data/koshitsu-tenpakai_claim_posts.json（<claim>.tweet_ids）。
   build_koshitsu_process_sections.py の CHECKED_AT を今回の日付にし、-claims.json の写しを作り直す。
