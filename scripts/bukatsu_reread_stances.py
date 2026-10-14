@@ -57,13 +57,14 @@ def items_path(sub: dict) -> list[str]:
     return path[:-1] + ["items"]
 
 
-def reread_rows(planet: dict) -> tuple[list[tuple[str, dict]], dict[str, str]]:
-    """(論点名, 明細) の一覧と、読んだファイルの sha256。"""
+def reread_rows(planet: dict, root: Path | None = None) -> tuple[list[tuple[str, dict]], dict[str, str]]:
+    """(論点名, 明細) の一覧と、読んだファイルの sha256。root は再読データを読む場所（更新経路の adapter は作業ツリーを渡す）。"""
+    root = Path(root) if root is not None else ROOT
     rows, shas, cache = [], {}, {}
     for label, sub in (planet.get("sub_issues") or {}).items():
         f = sub["file"]
         if f not in cache:
-            p = ROOT / f
+            p = root / f
             cache[f] = json.loads(p.read_text(encoding="utf-8"))
             shas[f] = hashlib.sha256(p.read_bytes()).hexdigest()
         node = cache[f]
@@ -73,13 +74,14 @@ def reread_rows(planet: dict) -> tuple[list[tuple[str, dict]], dict[str, str]]:
     return rows, shas
 
 
-def table(canon: list, planet: dict, public: dict, made_on: str, canonical: str, canonical_sha256: str) -> dict:
+def table(canon: list, planet: dict, public: dict, made_on: str, canonical: str, canonical_sha256: str,
+          root: Path | None = None) -> dict:
     by_id = {str(r["tweet_id"]): r for r in canon}
     stances: dict[str, str] = {}
     issue_of: dict[str, str] = {}
     differs: Counter = Counter()
     unset: Counter = Counter()
-    rows, shas = reread_rows(planet)
+    rows, shas = reread_rows(planet, root)
     for label, item in rows:
         tid = str(item["tweet_id"])
         key = post_key(tid)

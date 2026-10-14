@@ -18,13 +18,21 @@ def private_verified_selectors(source: str, root: Path, *, sample_file: Path | N
     """推移の節の表の行と「N〜M件」を、非公開正典の数え直しと照合する（本体は trend_count_provenance）。"""
     from scripts import trend_count_provenance
     result = trend_count_provenance.private_verified_selectors('bukatsu-chiiki', source, root, sample_file=sample_file)
-    if 'name="bukatsu-layout"' in source:
+    if '<meta name="bukatsu-layout" content="redesign-v2">' in source:
+        # 最新の型（scripts/build_bukatsu_redesign_v2.py）の論点ごとの折れ線
+        from scripts.bukatsu_redesign_provenance import verify_glance_v2
+        result.update(verify_glance_v2(source, root, sample_file=sample_file))
+    elif 'name="bukatsu-layout"' in source:
         from scripts.bukatsu_redesign_provenance import verify_glance
         result.update(verify_glance(source, root, sample_file=sample_file))
     return result
 
 
 def verified_selectors(source: str, root: Path) -> dict[str, str]:
+    if '<meta name="bukatsu-layout" content="redesign-v2">' in source:
+        # 最新の型は論点の欄ごとに数え直す（消費税減税と同じ照合）
+        from scripts.bukatsu_redesign_provenance import verified_selectors_v2
+        return verified_selectors_v2(source, root)
     if 'name="bukatsu-layout"' in source:
         from scripts.bukatsu_redesign_provenance import verify_counts
         return verify_counts(source, root)
