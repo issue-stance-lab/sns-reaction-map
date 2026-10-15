@@ -67,12 +67,28 @@ def _topic_grid_metadata(html: str) -> dict[str, dict[str, str]]:
 
 
 def _question_line(root: Path, href: str) -> str:
+    """問いの文言。テーマページの <p class="question-line"> があればそれを、無ければ
+    configs/top-page.json の entries（検索語から作った疑問文。2026-10-15 のトップ刷新で
+    10テーマの冒頭から question-line が無くなったため）を正典にする。"""
     page_path = root / "docs" / href
     text = page_path.read_text(encoding="utf-8")
     match = re.search(r'<p class="question-line">([^<]*)</p>', text)
-    if not match:
-        raise PortalStatsError(f"{href}: question-line が見つかりません")
-    return match.group(1)
+    if match:
+        return match.group(1)
+    config_path = root / "configs" / "top-page.json"
+    if config_path.is_file():
+        import json
+
+        themes_by_href = {
+            Path(theme["html"]).name: name
+            for name, theme in parse_themes_yaml(root / "THEMES.yaml").items()
+            if theme.get("html")
+        }
+        theme_id = themes_by_href.get(href)
+        for entry in json.loads(config_path.read_text(encoding="utf-8")).get("entries", []):
+            if entry.get("theme_id") == theme_id and entry.get("question"):
+                return str(entry["question"])
+    raise PortalStatsError(f"{href}: question-line も configs/top-page.json の entries も見つかりません")
 
 
 def build_card_data(

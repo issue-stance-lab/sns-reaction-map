@@ -1,0 +1,662 @@
+{
+  "_about": "トップページ（docs/index.html）の手書き文言。scripts/build_top_page.py がこの設定と THEMES.yaml・公開データcatalog・GROWTH.yaml から index.html を生成する。件数・更新日・注目枠はここに書かない（生成時に正典から埋める）。検索の根拠は UIデザイン調査フォルダー61（2026-10-15）。",
+  "checked_on": "2026-10-15",
+  "_checked_on": "entries の answer と phase の事実を、各テーマの configs/{テーマ}-opening.json と公開ページで確かめた日。",
+  "head": {
+    "title": "SNS反応まっぷ｜意見が分かれる社会の話題を、検索した疑問から読む",
+    "description": "消費税減税はいつから？免許返納は何歳から？いま意見が分かれている10の話題を、制度で決まっていることと、SNSで割れている理由に分けて整理します。公開投稿のサンプルで、世論調査ではありません。",
+    "og_title": "SNS反応まっぷ — 意見が分かれる話題を、検索した疑問から読む",
+    "og_description": "制度で決まっていることと、SNSで意見が割れている理由を、10の話題ごとに整理します。",
+    "twitter_description": "制度の答えと、SNSで意見が割れる理由を、話題ごとに整理します。"
+  },
+  "nav": [
+    {
+      "href": "#entries",
+      "label": "疑問から選ぶ"
+    },
+    {
+      "href": "#topics",
+      "label": "テーマ一覧"
+    },
+    {
+      "href": "about.html#method",
+      "label": "運営者情報・調査方法"
+    },
+    {
+      "href": "usage.html",
+      "label": "使い方"
+    },
+    {
+      "href": "usage.html#faq",
+      "label": "よくある質問"
+    }
+  ],
+  "hero": {
+    "eyebrow": "制度の答え × SNSで割れる理由",
+    "h1_lines": [
+      "意見が分かれている話題を、",
+      "検索した疑問から読む。"
+    ],
+    "accent_line": 1,
+    "lead": "決まっていることを先に確かめ、そのうえでSNSで意見が割れている理由を論点ごとに読めます。",
+    "disclaimer": "掲載内容はSNS公開投稿のサンプルを整理したものであり、社会全体の世論調査ではありません。",
+    "cta": {
+      "href": "#entries",
+      "label": "疑問から選ぶ"
+    },
+    "map_label": "論点整理のイメージ",
+    "map_aria": "論点整理のイメージ。実データの可視化ではありません",
+    "map_legend": [
+      "賛成寄りの意見",
+      "反対寄りの意見",
+      "条件付きの意見",
+      "中立・保留"
+    ]
+  },
+  "stats": {
+    "posts_label": "収集した投稿",
+    "opinions_label": "分析対象の意見",
+    "themes_label": "公開中のテーマ",
+    "method": {
+      "href": "about.html",
+      "small": "調査方法を公開",
+      "strong": "データの集め方",
+      "em": "検索条件・AI分類・注意点を見る ›"
+    }
+  },
+  "entries_section": {
+    "kicker": "検索した疑問から選ぶ",
+    "title": "その疑問、どのテーマ？",
+    "lead": "見出しは、Googleでよく検索される言葉から作った疑問です。答えの1行は制度で決まっていること、その先のページでSNSの意見が読めます。",
+    "filter_placeholder": "例：いつから、何歳から、どこ、財源",
+    "filter_label": "言葉で絞り込む",
+    "filter_chips": [
+      "いつから",
+      "何歳から",
+      "どこ",
+      "メリット・デメリット",
+      "財源",
+      "子ども・学校"
+    ],
+    "filter_empty": "当てはまるテーマがありません。別の言葉で探してください。",
+    "filter_all": "すべて表示",
+    "card_cta": "制度の答えとSNSの意見を読む",
+    "phase_label": "いまの段階",
+    "terms_label": "よく一緒に検索される言葉"
+  },
+  "_entries": "並び順は検索需要（Trends直近週・プランナー・節目）。節目が来たら order を入れ替える。answer は各ページ冒頭の短答と同じ事実だけを書く（新しい主張を書かない）。phase は static か rule。rule は build_top_page.py が各テーマの opening.json の日付から今日の状態を計算する。",
+  "entries": [
+    {
+      "theme_id": "consumption-tax-cut",
+      "order_reason": "Trends直近週の基準。10/9に法律案提出、審議中。プランナー「消費税 減税」1万〜10万",
+      "question": "消費税減税はいつから、何％？",
+      "answer": "食料品を8％から1％へ下げる法律案が国会で審議中です。始まるのは2027年4月の予定です。",
+      "answer_source": "configs/consumption-tax-cut-opening.json law.bill_on / law.enacted_on / law.start_on / rates",
+      "phase": {
+        "rule": "consumption-tax-cut"
+      },
+      "search_terms": [
+        "いつから",
+        "何%",
+        "財源",
+        "デメリット",
+        "給付付き税額控除"
+      ],
+      "keywords": "消費税 減税 いつから 何％ 財源 デメリット 反対 理由 給付 食料品 1％ 8％ 税"
+    },
+    {
+      "theme_id": "elderly-license-revocation",
+      "order_reason": "Trends定常型で直近週は消費税より高い。プランナー「運転経歴証明書」1万〜10万、「免許返納 年齢」1,000〜1万",
+      "question": "免許返納は何歳から、どう切り出すか",
+      "answer": "全国一律の返納年齢はありません。70歳と75歳は、更新時の講習や検査が変わる節目です。",
+      "answer_source": "configs/elderly-license-revocation-opening.json ages.text / answers[age]",
+      "phase": {
+        "static": "制度は現行どおり。義務化は決まっていません"
+      },
+      "search_terms": [
+        "何歳から",
+        "説得",
+        "特典",
+        "運転経歴証明書"
+      ],
+      "keywords": "免許返納 何歳から 高齢者 説得 家族 親 特典 運転経歴証明書 義務化 メリット デメリット 田舎"
+    },
+    {
+      "theme_id": "constitutional-amendment",
+      "order_reason": "Search Consoleの表示が最多（25）。Trendsは低位安定",
+      "question": "憲法改正はどう決まり、何が争点か",
+      "answer": "国会の発議と国民投票の過半数で決まります。1947年の施行以来、改正は0回です。",
+      "answer_source": "configs/constitutional-amendment-opening.json short_answer / faq[改正0回]",
+      "phase": {
+        "rule": "constitutional-amendment"
+      },
+      "search_terms": [
+        "国民投票",
+        "9条",
+        "緊急事態条項",
+        "手続き"
+      ],
+      "keywords": "憲法改正 国民投票 発議 手続き 9条 緊急事態条項 世論調査 いつ 内容 反対 賛成"
+    },
+    {
+      "theme_id": "koshitsu-tenpakai",
+      "order_reason": "10/24施行で再燃見込み。プランナー「女性天皇」10万〜100万",
+      "question": "皇室典範改正、何が変わる？愛子さまは？",
+      "answer": "女性皇族は結婚後も皇族の身分を保ちます。女性天皇・女系天皇は、どちらも今回の改正では認めていません。",
+      "answer_source": "configs/koshitsu-tenpakai-opening.json short_answer / questions[what-changes]",
+      "phase": {
+        "rule": "koshitsu-tenpakai"
+      },
+      "search_terms": [
+        "何が変わる",
+        "愛子さま",
+        "女性天皇",
+        "女系天皇"
+      ],
+      "keywords": "皇室典範 改正 内容 わかりやすく 愛子さま 女性天皇 女系天皇 養子 旧宮家 いつ 問題点"
+    },
+    {
+      "theme_id": "fukushuto",
+      "order_reason": "10/30施行予定で再燃見込み。プランナー「副首都」1万〜10万、「いつ決まる」急騰",
+      "question": "副首都はどこに、いつ決まる？",
+      "answer": "法律は成立済み。国が要件を定め、道府県の申出を受けて指定します。指定の時期はまだ決まっていません。",
+      "answer_source": "configs/fukushuto-opening.json law / decision.text",
+      "phase": {
+        "rule": "fukushuto"
+      },
+      "search_terms": [
+        "どこ",
+        "候補地",
+        "いつ決まる",
+        "メリット・デメリット"
+      ],
+      "keywords": "副首都 どこ 候補地 いつ決まる 法案 構想 とは メリット デメリット 大阪 福岡 広島 群馬"
+    },
+    {
+      "theme_id": "ai-copyright",
+      "order_reason": "定常型。プランナー「生成ai 著作権」1,000〜1万",
+      "question": "生成AIと著作権、何が侵害になる？",
+      "answer": "既存の作品に似ていること（類似性）と、その作品をもとにしたこと（依拠性）の両方があるとき。文化庁の考え方に沿った整理です。",
+      "answer_source": "configs/ai-copyright-opening.json entry_questions[infringement]",
+      "phase": {
+        "static": "文化庁の考え方が基準。AI生成物の確定判例は確認できていません"
+      },
+      "search_terms": [
+        "侵害事例",
+        "どこまでOK",
+        "文化庁",
+        "依拠性"
+      ],
+      "keywords": "生成AI 著作権 侵害 事例 ガイドライン 文化庁 考え方 判例 依拠性 類似性 絵柄 画像 音楽 イラスト"
+    },
+    {
+      "theme_id": "henoko-student-accident",
+      "order_reason": "節目で再燃（9/13週に23）。検索は事実確認型",
+      "question": "辺野古の転覆事故、何が分かっていて何が争点か",
+      "answer": "研修旅行中の船2隻が転覆し、2名が亡くなりました。公的機関の公表と、SNSの意見を分けて整理しています。",
+      "answer_source": "configs/henoko-student-accident-opening.json report / timeline",
+      "phase": {
+        "rule": "henoko-student-accident"
+      },
+      "search_terms": [
+        "転覆",
+        "何が分かっている",
+        "報告書"
+      ],
+      "keywords": "辺野古 事故 転覆 高校生 死亡 沖縄 研修旅行 報告書 安全 追悼"
+    },
+    {
+      "theme_id": "bukatsu-chiiki",
+      "order_reason": "検索の山はないが定常（プランナー5,000／月）。サイトでは閲覧最多",
+      "question": "部活動の地域移行はいつから？",
+      "answer": "2026年4月からの3年間が改革実行期間の前期です。学校と地域ごとに、段階的に進みます。",
+      "answer_source": "configs/bukatsu-chiiki-opening.json period.zenki_from / phase_text",
+      "phase": {
+        "rule": "bukatsu-chiiki"
+      },
+      "search_terms": [
+        "いつから",
+        "費用",
+        "問題点",
+        "親の負担"
+      ],
+      "keywords": "部活動 地域移行 地域展開 いつから 費用 問題点 メリット デメリット 親の負担 指導者 子ども 学校 中学校"
+    },
+    {
+      "theme_id": "bike-blue-ticket",
+      "order_reason": "需要の山（3/29）は過ぎた。「何歳から」「いくら」が定常",
+      "question": "自転車の青切符、何歳から・いくら？",
+      "answer": "16歳以上が対象です。主な例で3,000円から12,000円。切られたら納付書で納めます。",
+      "answer_source": "configs/bike-blue-ticket-opening.json age.short / fines",
+      "phase": {
+        "static": "2026年4月に制度が始まっています"
+      },
+      "search_terms": [
+        "何歳から",
+        "いくら",
+        "一覧",
+        "払い方"
+      ],
+      "keywords": "自転車 青切符 何歳から いくら 金額 一覧 払い方 ヘルメット いつから 赤切符 違い 子ども"
+    },
+    {
+      "theme_id": "school-nickname-ban",
+      "order_reason": "9/27週の急騰後は0。需要は小さい",
+      "question": "学校のあだ名禁止、全国一律の決まりはあるのか",
+      "answer": "国の定めは確認できません。学校ごとの運用です。",
+      "answer_source": "configs/school-nickname-ban-opening.json answers[rule].short",
+      "phase": {
+        "static": "国の法律・方針に「あだ名禁止」の定めは見つかっていません"
+      },
+      "search_terms": [
+        "なぜ",
+        "おかしい",
+        "文部科学省",
+        "さん付け"
+      ],
+      "keywords": "あだ名 禁止 学校 小学校 なぜ おかしい 文部科学省 校則 法律 さん付け いじめ 子ども"
+    }
+  ],
+  "recent_section": {
+    "title": "最近データを更新したテーマ",
+    "note": "直近に新しい投稿を取り込んだ順に、5テーマを並べています。",
+    "more_label": "テーマ一覧へ ›",
+    "questions_title": "続けて更新した4テーマ",
+    "questions_link": "理由から考える"
+  },
+  "topics_section": {
+    "title": "話題のテーマ",
+    "filters": [
+      {
+        "key": "all",
+        "label": "すべて"
+      },
+      {
+        "key": "politics",
+        "label": "政治・法律"
+      },
+      {
+        "key": "life",
+        "label": "生活・教育"
+      }
+    ],
+    "landscape_alt": "",
+    "_cards": "画像・カテゴリ・alt は scripts/refresh_featured_slots.py がこの一覧（生成後のHTML）を正典として読む。順番は entries の並びに合わせて生成する。",
+    "cards": {
+      "consumption-tax-cut": {
+        "category": "税・財政",
+        "data_category": "politics",
+        "title": "消費税減税",
+        "img": "images/topics/consumption-tax-cut/consumption-tax-cut-hero.webp",
+        "alt": "消費税減税"
+      },
+      "elderly-license-revocation": {
+        "category": "交通・福祉",
+        "data_category": "life",
+        "title": "高齢者の運転免許返納",
+        "img": "images/topics/elderly-license-revocation/elderly-license-revocation-hero.webp",
+        "alt": "高齢者の運転"
+      },
+      "constitutional-amendment": {
+        "category": "政治・法律",
+        "data_category": "politics",
+        "title": "憲法改正論議",
+        "img": "images/topics/constitutional-amendment/constitutional-hero.webp",
+        "alt": "国会議事堂"
+      },
+      "koshitsu-tenpakai": {
+        "category": "政治・皇室",
+        "data_category": "politics",
+        "title": "皇室典範改正",
+        "img": "images/topics/koshitsu-tenpakai/koshitsu-hero.webp",
+        "alt": "皇室典範改正"
+      },
+      "fukushuto": {
+        "category": "政治・統治機構",
+        "data_category": "politics",
+        "title": "副首都法案・副首都構想",
+        "img": "images/topics/fukushuto/fukushuto-hero.webp",
+        "alt": "副首都法案"
+      },
+      "ai-copyright": {
+        "category": "テクノロジー",
+        "data_category": "life",
+        "title": "生成AIと著作権問題",
+        "img": "images/topics/ai-copyright/ai-copyright-hero.webp",
+        "alt": "AIのイメージ"
+      },
+      "henoko-student-accident": {
+        "category": "教育・基地問題",
+        "data_category": "politics",
+        "title": "辺野古高校生死亡事故",
+        "img": "images/topics/henoko-student-accident/henoko-hero.webp",
+        "alt": "辺野古と教育問題"
+      },
+      "bukatsu-chiiki": {
+        "category": "教育・子ども",
+        "data_category": "life",
+        "title": "部活動の地域移行",
+        "img": "images/topics/bukatsu-chiiki/bukatsu-hero.webp",
+        "alt": "部活動の地域移行"
+      },
+      "bike-blue-ticket": {
+        "category": "交通・安全",
+        "data_category": "life",
+        "title": "自転車の青切符導入",
+        "img": "images/topics/bike-blue-ticket/bike-blue-ticket-hero.webp",
+        "alt": "自転車と青切符"
+      },
+      "school-nickname-ban": {
+        "category": "教育・子ども",
+        "data_category": "life",
+        "title": "学校でのあだ名禁止",
+        "img": "images/topics/school-nickname-ban/school-nickname-hero.webp",
+        "alt": "学校の教室"
+      }
+    },
+    "format_label": "SNS反応マップ"
+  },
+  "atlas_section": {
+    "summary": "10テーマの論点アトラス（テーマごとの論点を一覧）",
+    "title": "10テーマの論点アトラス",
+    "lead": "テーマごとの論点を一覧できます。色は各テーマ内での立場を表し、論点の位置そのものは意味を持たせていません。",
+    "legend": [
+      {
+        "key": "protect",
+        "label": "保護・規制寄り"
+      },
+      {
+        "key": "neutral",
+        "label": "中立・確認"
+      },
+      {
+        "key": "promote",
+        "label": "活用・推進寄り"
+      }
+    ],
+    "rows": {
+      "ai-copyright": {
+        "label": "生成AIと著作権",
+        "issues": [
+          [
+            "protect",
+            "学習データ"
+          ],
+          [
+            "neutral",
+            "法制度"
+          ],
+          [
+            "promote",
+            "技術競争"
+          ],
+          [
+            "protect",
+            "創作者保護"
+          ]
+        ]
+      },
+      "bike-blue-ticket": {
+        "label": "自転車の青切符導入",
+        "issues": [
+          [
+            "protect",
+            "取締り"
+          ],
+          [
+            "neutral",
+            "インフラ"
+          ],
+          [
+            "promote",
+            "ルール"
+          ]
+        ]
+      },
+      "bukatsu-chiiki": {
+        "label": "部活動の地域移行",
+        "issues": [
+          [
+            "protect",
+            "教員負担"
+          ],
+          [
+            "neutral",
+            "受け皿"
+          ],
+          [
+            "promote",
+            "地域格差"
+          ]
+        ]
+      },
+      "constitutional-amendment": {
+        "label": "憲法改正論議",
+        "issues": [
+          [
+            "protect",
+            "緊急事態"
+          ],
+          [
+            "neutral",
+            "国民投票"
+          ],
+          [
+            "promote",
+            "改正"
+          ]
+        ]
+      },
+      "elderly-license-revocation": {
+        "label": "高齢者免許返納",
+        "issues": [
+          [
+            "protect",
+            "義務化"
+          ],
+          [
+            "neutral",
+            "地方交通"
+          ],
+          [
+            "promote",
+            "代替手段"
+          ]
+        ]
+      },
+      "school-nickname-ban": {
+        "label": "学校のあだ名禁止",
+        "issues": [
+          [
+            "protect",
+            "いじめ"
+          ],
+          [
+            "neutral",
+            "親しさ"
+          ],
+          [
+            "promote",
+            "運用"
+          ]
+        ]
+      },
+      "henoko-student-accident": {
+        "label": "辺野古高校生事故",
+        "issues": [
+          [
+            "protect",
+            "安全"
+          ],
+          [
+            "neutral",
+            "追悼"
+          ],
+          [
+            "promote",
+            "政治利用"
+          ]
+        ]
+      },
+      "fukushuto": {
+        "label": "副首都法案",
+        "issues": [
+          [
+            "protect",
+            "財源"
+          ],
+          [
+            "neutral",
+            "分権"
+          ],
+          [
+            "promote",
+            "災害"
+          ]
+        ]
+      },
+      "koshitsu-tenpakai": {
+        "label": "皇室典範改正",
+        "issues": [
+          [
+            "protect",
+            "女性皇族"
+          ],
+          [
+            "neutral",
+            "養子"
+          ],
+          [
+            "promote",
+            "継承"
+          ]
+        ]
+      },
+      "consumption-tax-cut": {
+        "label": "消費税減税",
+        "issues": [
+          [
+            "protect",
+            "物価"
+          ],
+          [
+            "neutral",
+            "財源"
+          ],
+          [
+            "promote",
+            "給付"
+          ]
+        ]
+      }
+    },
+    "more_label": "テーマカードでも詳しく見る →"
+  },
+  "story_section": {
+    "summary": "このサイトの作り方と読み方（4ステップ）",
+    "kicker": "HOW IT WORKS",
+    "title": "たくさんの声から、見えてくるものがある。",
+    "lead": "SNSにあふれるさまざまな意見を集め、AIと人の目で論点ごとに整理。賛成と反対だけでは見えない、考え方の広がりを可視化します。",
+    "steps": [
+      {
+        "number": "01",
+        "kicker": "COLLECT VOICES",
+        "title": "社会のあちこちにある声を集める。",
+        "text": "ニュースやSNSで交わされている公開投稿を、テーマごとに集めます。特定の立場に偏らないよう、さまざまな言葉と視点から声を探すのが決まりです。",
+        "img": "images/site-v2/voices-map.svg",
+        "alt": "異なる4つの視点から中央の問いへ声が集まる図"
+      },
+      {
+        "number": "02",
+        "kicker": "ORGANIZE WITH AI",
+        "title": "AIと人の目で、論点をほどく。",
+        "text": "集めた投稿をAIが分類し、人が内容を確かめます。ポジティブ・ネガティブの二分ではなく、「何について、どう考えているか」の整理です。",
+        "img": "images/site-v2/organize-map.svg",
+        "alt": "多数の投稿を整理し、論点ごとのまとまりに分ける図"
+      },
+      {
+        "number": "03",
+        "kicker": "MAP THE STANCES",
+        "title": "賛否の間にある、考え方まで見える。",
+        "text": "意見を4つの立場に分けて表示。数字だけでなく、代表的な主張と背景にある論点も一緒に読めます。",
+        "img": "images/site-v2/perspectives-map.svg",
+        "alt": "中央の問いを4つの視点から読み比べる図",
+        "chips": [
+          "賛成・推進",
+          "反対・慎重",
+          "条件付き",
+          "中立・保留"
+        ]
+      },
+      {
+        "number": "04",
+        "kicker": "JOIN THE MAP",
+        "title": "あなたの考えも、地図のひとつに。",
+        "text": "テーマを読んだら、あなたの考えに近い選択肢へ投票できます。誰かを言い負かすためではなく、考え方の広がりを一緒に見つけるための投票です。",
+        "img": "images/site-v2/vote-map.svg",
+        "alt": "中央の問いから自分に近い立場を選ぶ投票の図"
+      }
+    ],
+    "reading_guide": {
+      "title": "このサイトの読み方",
+      "steps": [
+        "疑問に近いテーマを選ぶ",
+        "制度で決まっていることを確かめる",
+        "賛成・反対それぞれの理由を読む",
+        "自分と遠い意見も1つ読んで、一次情報を確認する"
+      ],
+      "link": {
+        "href": "about.html",
+        "label": "データの集め方を確認 ›"
+      }
+    },
+    "divider_img": "images/site-v2/divider-routes.svg",
+    "landscape_img": "images/site-v2/topics-landscape.svg"
+  },
+  "notes": {
+    "title": "データの見方",
+    "text": "掲載内容は収集したSNS公開投稿のサンプルを整理したものであり、社会全体の世論調査ではありません。AI分類は論点整理の補助として使用しています。"
+  },
+  "footer": {
+    "about": "SNSの公開投稿サンプルから、意見が割れる理由と論点を整理する独立メディアプロジェクトです。",
+    "theme_links": [
+      "consumption-tax-cut",
+      "elderly-license-revocation",
+      "constitutional-amendment"
+    ],
+    "site_links": [
+      {
+        "href": "/",
+        "label": "Issue Stance Labについて"
+      },
+      {
+        "href": "about.html#operator",
+        "label": "運営者情報"
+      },
+      {
+        "href": "about.html#method",
+        "label": "調査・編集方法"
+      },
+      {
+        "href": "https://docs.google.com/forms/d/e/1FAIpQLSdySbMYxEsLOYmI4jsqjIkSGl6WHF78qLlypOmXAg9tVDy2FQ/viewform",
+        "label": "お問い合わせ・訂正依頼",
+        "external": true
+      },
+      {
+        "href": "privacy.html",
+        "label": "プライバシーポリシー"
+      },
+      {
+        "href": "disclaimer.html",
+        "label": "免責事項"
+      },
+      {
+        "href": "image-policy.html",
+        "label": "画像制作方針"
+      }
+    ],
+    "copyright": "&copy; 2025–2026 SNS反応まっぷ",
+    "tagline": "公開投稿のサンプルをAIで論点整理",
+    "landscape_img": "images/site-v2/footer-map.svg"
+  }
+}
