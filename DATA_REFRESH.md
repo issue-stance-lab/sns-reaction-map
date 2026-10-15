@@ -668,17 +668,16 @@ collect_at を迎えたテーマにデータを追加した後、以下を順番
 - [ ] lead文の件数
 - [ ] `data-method` テキスト（データの集め方）
 
-### 5. index.html（ポータル）
+### 5. index.html（トップページ）
 
-- [ ] `rank-card` スタンス比率バー（`rank-dist` + `rank-track` の4項目）
-- [ ] 割れ度スコア（`split-score` の meter 幅 + 数値）
-- [ ] スコアが変動した場合: `rank-num` 順位番号 + カードの DOM 順序を更新
-- [ ] `topic-card` スタンス比率バー（`topic-percent` + `topic-bar` の各項目）
-- [ ] `topic-card` 件数（`topic-meta` 内の「投稿 XX件」）
-- [ ] `topic-card` 更新バッジ（`.topic-fresh` テキストと日付）
-- [ ] badge data `B` 変数（`upd` → 今日の日付、`delta` → 今回追加件数）
-- [ ] `hero-total-samples` → 全テーマ topic-card 件数の合計に更新
-- [ ] `hero-total-samples` の横の更新日テキスト（例: `7/26更新`）
+トップページは手で直さない。`configs/top-page.json`（手書き文言）と正典から `scripts/build_top_page.py` が生成する（2026-10-15、課題106）。
+
+- [ ] `python3 scripts/build_top_page.py` を実行する（件数・更新日・注目枠・「いまの段階」を正典から埋め直す）
+- [ ] `updated_at` が動いた回は `python3 scripts/refresh_featured_slots.py` も実行する（GROWTH.yaml の featured を同期。index.html は変わらない）
+- [ ] `python3 scripts/build_top_page.py --check` と `python3 scripts/verify_top_page.py` が exit 0
+- [ ] 文言を変えるときは `configs/top-page.json` を直して再生成し、`python3 scripts/review_with_yomiyasu.py docs/index.html --medium website --strict` を通す
+- [ ] 法律の施行・成立・報告書の公表があったら、各テーマの `configs/{テーマ}-opening.json` の日付（`enforcement_confirmed_on` など）を直してから再生成する。「いまの段階」の文はそこから計算している
+- [ ] 検索需要が変わったら `entries` の並び順を入れ替える（根拠は UIデザイン調査フォルダー61 の取り方で取り直す）
 
 ### 6. sitemap.xml
 

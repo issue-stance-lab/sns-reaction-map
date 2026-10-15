@@ -2570,7 +2570,6 @@ items:
     decided_at: "2026-10-14"
     decision_note: >-
       検査をすべて通したうえでオーナーが「公開して」と承認（2026-10-14）。release スキルで main へ統合・push した。
-    decision_note: null
   - id: approval-20261014-bukatsu-chiiki-v2
     department: engineering-data
     action: website_publication
@@ -2595,4 +2594,24 @@ items:
     decided_at: "2026-10-14"
     decision_note: >-
       検査をすべて通したうえでオーナーが「公開して」と承認（2026-10-14）。release スキルで main へ統合・push した。
+  - id: approval-20261015-top-page-renewal
+    category: publication
+    requested_by: Claude Fable 5.1
+    summary: "トップページ（docs/index.html）を、10テーマの入口を「検索した疑問→1行の答え→いまの段階」で並べる型に作り直して公開する。title・meta description も「意見が分かれる社会の話題を、検索した疑問から読む」に変える"
+    reason: "10テーマのページを検索した疑問から入る型にそろえたあと、トップだけが理念説明の長いページのままだった。検索の根拠（UIデザイン調査フォルダー61）では、サイトの考え方そのものへの検索需要は無く、トップに来るのは直接入力・X・ChatGPT経由。来た人を検索した疑問のテーマへ最短で送る構成にし、375pxの高さを9,840pxから5,677pxへ減らす"
+    risks:
+      - "GA4・AdSense・OGP・favicon・ナビ・フッターのリンク・10テーマへのリンク・数字の生成（sync_portal_stats / refresh_featured_slots / verify_top_page の目印）は継承。構造化データ（WebSite）の description は新しい説明文"
+      - "手書き文言は configs/top-page.json へ移し、scripts/build_top_page.py で生成する。手でHTMLを直すと検査（build_top_page.py --check）で止まる"
+      - "疑問10本の1行の答えは各テーマの冒頭の短答と同じ事実だけを書いた（新しい主張なし）。「いまの段階」は各テーマの設定の日付から自動で切り替わる（皇室10/24・副首都10/30の施行後は『条文は未確認』の表示になるので、確認して設定を入れる必要がある）"
+      - "「作り方」の4場面と論点アトラスは折りたたみに入れた（画像・文言は残す）。スクロール連動の視差効果は外した"
+      - "refresh_featured_slots.py が10テーマの刷新で止まっていた（question-line が無い）。configs/top-page.json の疑問文を代わりの正典にした"
+      - "本番ホストでの GA4・AdSense の発火、実機（iPhone）の表示は未確認。検索結果の title の切り替わりには日数がかかる"
+    recommendation: approve
+    evidence:
+      - "quality/designs/2026-10-15-top-page-renewal.md"
+      - "configs/top-page.json"
+      - "tests/test_top_page_build.py"
+    status: pending
+    requested_at: "2026-10-15"
+    decided_at: null
     decision_note: null
