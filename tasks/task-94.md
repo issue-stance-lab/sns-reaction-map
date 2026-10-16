@@ -397,9 +397,4 @@ SNS件数は更新で変わるため、descriptionへ入れる場合は正典か
 - 上記の条件で採用／改善継続／判定不能／差し戻し候補を決める
 - 結果と次の1手を本ファイルと`TASK_BOARD.md`へ反映する
 
-## 計測期間中の題名・説明文の変更（2026-10-16/17）
-
-30日計測の途中で、`constitutional-amendment` の title と meta description を変えた（オーナー判断。流入がほぼ変わっていないため、判定を待たずに変更）。
-題名は2026-10-16、説明文は2026-10-17に本番反映し、どちらもSearch Consoleでインデックス登録をリクエストした。
-判定では、入口UIの効果と題名・説明文の変更の効果を分けられない。10/16以降の検索語は題名変更の影響として読む。
-根拠と変更内容: `content/website/research/rakko-keyword-suggest-2026-10-16.md`
+2026-10-16に題名、10-17に説明文を計測途中で変更（オーナー判断）。判定では入口UIの効果と分けられない（[記録](../quality/reviews/2026-10-17-title-description-change-during-measurement.md)）。
