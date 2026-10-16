@@ -590,7 +590,10 @@ class RedesignCandidateTests(unittest.TestCase):
                 redesign.build(page, Path(temp) / "out", "release", as_of=AS_OF)
 
     def test_title_description_seo_and_article_are_inherited_verbatim(self):
-        """課題96（10/27判定）の計測のため、title と meta description は元HTMLと1文字も変えない。"""
+        """title と meta description は元HTMLと1文字も変えない（ビルドで崩さない）。
+
+        2026-10-16/17、オーナー判断で題名・説明文を変更した。課題96の10/27判定に混ざる（tasks/task-96.md）。
+        """
         for name in ("SEO_META", "ARTICLE_JSON_LD", "ARTICLE_TRUST"):
             self.assertEqual(self.release.count(protected(self.source, name)), 1, name)
         self.assertEqual(self.s.head.title.get_text(), self.src.head.title.get_text())
