@@ -122,9 +122,4 @@
 - `scripts/ai_copyright_connected.py`のテーマ固有接続処理で生成後も補正し、`tests/test_ai_copyright_connected.py`へ再生成後の復元防止・計測ブロック不変・表示検証を追加した。ローカルのみ。公開・デプロイは行っていない。
 - 通常の全文再生成は、前項のとおり分類済みサンプル欠落により未実行。今回、実際のテーマ接続生成手順（`_apply_connected_display`）と既存ページ貼り直し手順を検査した。
 
-## 計測期間中の題名・説明文の変更（2026-10-16/17）
-
-30日計測の途中で、`ai-copyright` の title と meta description を変えた（オーナー判断。流入がほぼ変わっていないため、判定を待たずに変更）。
-題名は2026-10-16、説明文は2026-10-17に本番反映し、どちらもSearch Consoleでインデックス登録をリクエストした。
-判定では、入口UIの効果と題名・説明文の変更の効果を分けられない。10/16以降の検索語は題名変更の影響として読む。
-根拠と変更内容: `content/website/research/rakko-keyword-suggest-2026-10-16.md`
+2026-10-16に題名、10-17に説明文を計測途中で変更（オーナー判断）。判定では入口UIの効果と分けられない（[記録](../quality/reviews/2026-10-17-title-description-change-during-measurement.md)）。

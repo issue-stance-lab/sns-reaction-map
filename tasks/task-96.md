@@ -39,7 +39,7 @@
 オーナーの「良いです、公開作業開始」という承認後、`main` の `c57f0cbb` までを反映した。公開検査
 36308898702とPages配信36308898707が成功し、本番のページ・CSS・JSのHTTP 200と固有表示を確認した。
 D0は下記の実測値を使い、2026-10-27に表示回数・クリック・CTR・検索語を比較する。
-2026-10-05に本文へ「意見の推移」の節（立場・論点の2タブ）を追加して公開した。title・descriptionは不変。10/27の判定では検索語を節の効果と分けて読む（[記録](../quality/reviews/2026-10-05-task96-trend-section-publication.md)）。
+2026-10-05に本文へ「意見の推移」の節（立場・論点の2タブ）を追加して公開した。title・descriptionは10/5時点では不変。2026-10-16に題名、10-17に説明文を計測途中で変更（オーナー判断）。判定では入口UIの効果と分けられない（[記録](../quality/reviews/2026-10-17-title-description-change-during-measurement.md)）。10/27の判定では検索語を節の効果と分けて読む（[記録](../quality/reviews/2026-10-05-task96-trend-section-publication.md)）。
 
 ## 出発点の実測値
 
@@ -398,10 +398,3 @@ GA4、AdSense、Supabase、OGP画像、投票番号、論点順、既存の資�
 ## 関連課題
 
 課題15（AdSense再申請）、51（新URLの前提）、55（Search Console登録）、77（全テーマの集客施策）。
-
-## 計測期間中の題名・説明文の変更（2026-10-16/17）
-
-30日計測の途中で、`consumption-tax-cut` の title と meta description を変えた（オーナー判断。流入がほぼ変わっていないため、判定を待たずに変更）。
-題名は2026-10-16、説明文は2026-10-17に本番反映し、どちらもSearch Consoleでインデックス登録をリクエストした。
-判定では、入口UIの効果と題名・説明文の変更の効果を分けられない。10/16以降の検索語は題名変更の影響として読む。
-根拠と変更内容: `content/website/research/rakko-keyword-suggest-2026-10-16.md`
