@@ -234,7 +234,7 @@ def apply(source: str, *, activate: bool = False, topic: str = TOPIC) -> str:
     )
     source = re.sub(
         r'(<!-- ARTICLE_JSON_LD_START -->.*?"description": ")[^"]*',
-        r'\1学校のあだ名禁止は全国一律の決まり？文科省・法律資料で根拠を確認し、さん付け指導との違い、いじめ防止への期待と懸念、賛成・反対の理由をSNS意見から整理します。',
+        r'\1いじめ防止の法律や文部科学省の資料に、あだ名を禁止する記述は見つかりませんでした。呼び方のルールは、各学校が校則などで決めています。学校のあだ名禁止はなぜ始まったのか、おかしいという声を含む賛成・反対の理由をSNSの意見から整理します。',
         source,
         count=1,
         flags=re.S,

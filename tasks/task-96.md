@@ -398,3 +398,10 @@ GA4、AdSense、Supabase、OGP画像、投票番号、論点順、既存の資�
 ## 関連課題
 
 課題15（AdSense再申請）、51（新URLの前提）、55（Search Console登録）、77（全テーマの集客施策）。
+
+## 計測期間中の題名・説明文の変更（2026-10-16/17）
+
+30日計測の途中で、`consumption-tax-cut` の title と meta description を変えた（オーナー判断。流入がほぼ変わっていないため、判定を待たずに変更）。
+題名は2026-10-16、説明文は2026-10-17に本番反映し、どちらもSearch Consoleでインデックス登録をリクエストした。
+判定では、入口UIの効果と題名・説明文の変更の効果を分けられない。10/16以降の検索語は題名変更の影響として読む。
+根拠と変更内容: `content/website/research/rakko-keyword-suggest-2026-10-16.md`
