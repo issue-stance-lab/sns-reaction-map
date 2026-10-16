@@ -589,7 +589,17 @@ def stance_glance(stances: list[dict], opinions: int) -> str:
 {STANCE_GLANCE_END}"""
 
 
-def apply_ai_copyright_stance_glance(page: str) -> str:
+def candidate_public_theme(records: list[dict[str, Any]]) -> dict[str, Any]:
+    """累積候補から公開JSONを作る（正典も登録済みの公開JSONも書き換えない）。build_fukushuto_arena と同じ。"""
+    from public_registry_common import RegistryError, build_theme_json  # noqa: E402
+
+    try:
+        return build_theme_json(THEME, records)
+    except RegistryError as exc:
+        raise BuildError(f"入力候補から公開JSONを作れません: {exc}") from exc
+
+
+def apply_ai_copyright_stance_glance(page: str, records: list[dict[str, Any]] | None = None) -> str:
     """ヒーロー直後に、立場の内訳＋「まず、あなたは？」を貼り直す。
 
     このページの定例更新経路(build()のPLANET_SECTION分岐、apply_background()のみ
@@ -602,7 +612,13 @@ def apply_ai_copyright_stance_glance(page: str) -> str:
     else:  # python3 scripts/build_ai_copyright_arena.py
         from build_planet_page_preview import bpd  # type: ignore[no-redef]
 
-    data = bpd.build("ai-copyright")
+    if records is None:
+        data = bpd.build("ai-copyright")
+    else:
+        # 定期更新の --prepare-promotion では正典がまだ古い。副首都（2026-10-10）と同じく、
+        # 候補と候補から作った公開JSONを母数にする（今回分の理由区分を専用ファイルへ先に足すため、
+        # 正典を母数にすると「現行の対象意見ではないID」で止まる。2026-10-15に発生）。
+        data = bpd.build("ai-copyright", canonical=records, public=candidate_public_theme(records))
     opinions = int(data["totals"]["opinions"])
     stances = data["stances"]
 
@@ -679,7 +695,7 @@ def build(
     # （apply_background）で毎回貼り直す（山なみ本体の再生成では消えない）。
     if "<!-- PLANET_SECTION_START -->" in before:
         page = apply_background(page)
-        page = apply_ai_copyright_stance_glance(page)
+        page = apply_ai_copyright_stance_glance(page, records if source else None)
         changed_page = page != before
         changed_arena = arena_text != arena_before
         if not check:
