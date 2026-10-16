@@ -52,7 +52,7 @@ HERO_IMAGE = "url('images/topics/consumption-tax-cut/consumption-tax-cut-hero.we
 
 # SEO_META / ARTICLE_JSON_LD の中身。テーマを configs/theme-seo.json に登録したあとは
 # scripts/seo/apply_theme_trust.py が同じブロックを上書き管理するので、値を揃えておく。
-HEADLINE = "消費税減税はいつから？食料品1％と給付・財源の現在地"
+HEADLINE = "消費税減税はいつから？食料品1％・財源と賛成・反対の理由"
 DESCRIPTION = (
     "消費税減税は2027年4月から2年間、食料品を8％から1％へ下げる政府大綱が閣議決定済みです。"
     "法律成立前という現在地、対象品目、財源、給付付き税額控除、メリット・デメリットとSNS上の論点を整理します。"

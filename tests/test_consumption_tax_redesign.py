@@ -594,7 +594,7 @@ class RedesignCandidateTests(unittest.TestCase):
         for name in ("SEO_META", "ARTICLE_JSON_LD", "ARTICLE_TRUST"):
             self.assertEqual(self.release.count(protected(self.source, name)), 1, name)
         self.assertEqual(self.s.head.title.get_text(), self.src.head.title.get_text())
-        self.assertEqual(self.s.head.title.get_text(), "消費税減税はいつから？食料品1％と給付・財源の現在地｜SNS反応まっぷ")
+        self.assertEqual(self.s.head.title.get_text(), "消費税減税はいつから？食料品1％・財源と賛成・反対の理由｜SNS反応まっぷ")
         self.assertEqual(self.s.select_one('meta[name="description"]')["content"],
                          self.src.select_one('meta[name="description"]')["content"])
         seo = json.loads((ROOT / "configs/theme-seo.json").read_text(encoding="utf-8"))
