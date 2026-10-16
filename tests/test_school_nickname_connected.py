@@ -100,10 +100,10 @@ class SchoolNicknameConnectedTests(unittest.TestCase):
         faq = next(item for item in payloads if item.get("@type") == "FAQPage")
         article = next(item for item in payloads if item.get("@type") == "Article")
         self.assertEqual(len(faq["mainEntity"]), 10)
-        self.assertEqual(article["headline"], "学校のあだ名禁止はなぜ？さん付け・いじめとの関係と賛否")
+        self.assertEqual(article["headline"], "学校のあだ名禁止はおかしい？なぜ禁止か、文部科学省の資料と賛否")
         self.assertEqual(
             soup.select_one("title").get_text(strip=True),
-            "学校のあだ名禁止はなぜ？さん付け・いじめとの関係と賛否｜SNS反応まっぷ",
+            "学校のあだ名禁止はおかしい？なぜ禁止か、文部科学省の資料と賛否｜SNS反応まっぷ",
         )
 
     def test_progress_label_describes_recorded_actions_not_reading(self):
