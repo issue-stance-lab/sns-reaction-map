@@ -13,6 +13,11 @@ PUBLISHED = ROOT / "docs" / "ai-copyright-reaction-map.html"
 PAGE = ROOT / "data/page-sources/ai-copyright.html" if 'name="ai-copyright-layout"' in PUBLISHED.read_text(encoding="utf-8") else PUBLISHED
 
 
+def strip_stance_glance(html: str) -> str:
+    import re
+    return re.sub(r"<!-- STANCE_GLANCE_START -->.*?<!-- STANCE_GLANCE_END -->", "", html, flags=re.S)
+
+
 def digest(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
@@ -139,7 +144,12 @@ class AiCopyrightAdapterTests(unittest.TestCase):
             ]
             subprocess.run(command, cwd=ROOT, check=True, capture_output=True)
             first = (digest(page_path), digest(data_path))
-            self.assertEqual(page_path.read_text(encoding="utf-8"), source_html)
+            # 冒頭の立場の内訳だけは入力候補から数え直す（2026-10-15〜、候補を母数にする）。
+            # それ以外の本文は入力のまま変わらない。
+            self.assertEqual(
+                strip_stance_glance(page_path.read_text(encoding="utf-8")),
+                strip_stance_glance(source_html),
+            )
 
             command[command.index("--html-template") + 1] = str(page_path)
             subprocess.run(command, cwd=ROOT, check=True, capture_output=True)
