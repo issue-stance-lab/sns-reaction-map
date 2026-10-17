@@ -2669,3 +2669,28 @@ items:
     decided_at: "2026-10-15"
     decision_note: >-
       試作（375px 5,677px・検査すべて通過）を確認したうえでオーナーが「公開して」と承認（2026-10-15）。release スキルで main へ統合・push する。
+  - id: approval-20261017-x-posts-1016-1017
+    category: publication
+    requested_by: Claude Opus 5
+    summary: "2026-10-16（10本）と2026-10-17（10本）のX投稿実績・計測・一次資料を公開リポジトリへ反映し、THEMES.yaml の x_posted_at を消費税減税・部活動の地域移行・自転車の青切符・副首都の4テーマで 2026-10-17 に更新する"
+    reason: "1日8本の試行（2026-10-15〜10-28、判定日10-29）の2日分がたまっていた。投稿そのものはオーナーが実施済みで、台帳と一次資料メモ、トップページの更新表示を公開版にそろえる"
+    risks:
+      - "content/x/posts.md の衝突を1か所で解消した。10-15分8本の表示回数が、別セッションの 2026-10-16 21:59 計測とこちらの 2026-10-17 07:27 計測で並んだため、後から測った 10-17 07:27 の値（投稿から36〜48時間後）を残した"
+      - "資料W-3（道交法第63条の4第2項）を登録したことで一次資料メモの確認日が 2026-10-17 になり、自転車ページのフッターが正典と一致しなくなった。build_bike_arena.py と sync_portal_stats.py を回し直して解消した（tests/test_bike_adapter.py が検出）"
+      - "投稿文の根拠は一次資料だが、消費税の「農林漁業者へ売上の5％程度」「支援金2,000万人・平均年3万円・年収おおむね100万〜350万円」は報道のみで、政府の公表資料は未取得。投稿文では「報道の」と書いて区別している"
+      - "仙台市教委の中間案本体、副首都法の政令案本文、自転車の方向指示器の保安基準は未取得のまま"
+    recommendation: approve
+    evidence:
+      - "content/x/posts.md（2026-10-16・2026-10-17 の各枠と会話フォロー）"
+      - "quality/research/bike-blue-ticket-primary-sources.md（資料W・W-2・W-3）"
+      - "quality/research/bukatsu-chiiki-primary-sources.md（資料F-3・S-3）"
+      - "quality/research/consumption-tax-cut-primary-sources.md（資料H-3追記・W-6）"
+      - "quality/research/fukushuto-primary-sources.md（資料V）"
+    status: approved
+    requested_at: "2026-10-17"
+    decided_at: "2026-10-17"
+    decision_note: >-
+      オーナーが「反映して」と承認（2026-10-17）。release スキルの手順で main へ統合し、
+      テスト2,376件・公開ファイルの検査・ページ検査3種をすべて通してから push、
+      GitHub Actions の2ワークフロー（Deploy to GitHub Pages / 公開ファイルの検査）の成功と
+      公開サイトの表示まで確認した。
