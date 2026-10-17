@@ -66,3 +66,5 @@
 2026-10-29にSearch Consoleで表示回数・クリック・CTR・検索語を確認し、公開前の表示1・クリック0からの変化を判定する。
 
 2026-10-16に題名、10-17に説明文を計測途中で変更（オーナー判断）。判定では入口UIの効果と分けられない（[記録](../quality/reviews/2026-10-17-title-description-change-during-measurement.md)）。
+
+2026-10-17に免許返納ページへ記事5本へのリンクを追加（オーナー判断）。判定では記事URLの検索の数字をテーマページと分けて数える（[記録](../quality/reviews/2026-10-17-title-description-change-during-measurement.md)）。

@@ -315,18 +315,10 @@ def _band(src: BeautifulSoup, selector: str, what: str, cls: str) -> BeautifulSo
 
 
 def _articles_band(root: Path) -> str:
-    """記事で詳しく読む：content/articles/bukatsu-chiiki の記事への入口（並びは原稿の order）。
-    記事が無ければ何も出さない（記事側の生成は scripts/build_articles.py）。"""
+    """記事で詳しく読む：content/articles/bukatsu-chiiki の記事への入口（scripts/build_articles.py の theme_entry_band）。"""
     sys.path.insert(0, str(ROOT / "scripts"))
-    from build_articles import entry_articles, entry_script  # noqa: PLC0415
-    articles = entry_articles("bukatsu-chiiki", root)
-    if not articles:
-        return ""
-    items = "".join(f'<li><a href="{escape(a.url)}" data-article-entry="theme">{escape(a.title)}</a></li>' for a in articles)
-    return ('<section class="panel cap-band cap-articles" id="theme-articles"><div class="panel-title"><h2>記事で詳しく読む</h2>'
-            '<span>費用・問題点・賛否の理由・市ごとの違いを、1本ずつまとめました</span></div>'
-            f'<ul>{items}</ul><p class="cap-articles-all"><a href="articles/index.html" data-article-entry="theme">記事の一覧へ</a></p>'
-            "</section>\n" + entry_script("bukatsu-chiiki") + "\n")
+    from build_articles import theme_entry_band  # noqa: PLC0415
+    return theme_entry_band("bukatsu-chiiki", "費用・問題点・賛否の理由・市ごとの違いを、1本ずつまとめました", root)
 
 
 def _detail(src: BeautifulSoup, d: dict) -> str:

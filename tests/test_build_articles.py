@@ -89,8 +89,7 @@ class ArticleBuildTest(unittest.TestCase):
     def test_chart_lists_every_stance_with_counts(self) -> None:
         self.write("a-test", "本文。\n\n[[chart:費用・家庭負担]]\n")
         page = self.build_one("a-test")
-        for stance, _cls in build_articles.STANCE_ORDER:
-            self.assertIn(f"<li><i", page)
+        for stance in ("移行支持", "条件付き・改善要求", "中立・情報", "慎重・反対"):
             self.assertIn(stance, page)
         self.assertIn(f"慎重・反対 {CAUTIOUS}件", page)
         self.assertIn("社会全体の世論調査ではありません", page)
@@ -132,6 +131,17 @@ class ArticleBuildTest(unittest.TestCase):
             build_articles.build()
 
 
+class StanceLabelTest(unittest.TestCase):
+    def test_every_public_theme_maps_stances_to_colors(self) -> None:
+        """記事を書くテーマで、立場の表示名が公開データから取れ、色が s1〜s4 に決まること。
+        記事を書くテーマを増やすときは、ここに足して STANCE_ROLES を確かめる。"""
+        for theme_id in ("bukatsu-chiiki", "elderly-license-revocation", "bike-blue-ticket"):
+            theme = build_articles.load_theme(theme_id)
+            self.assertTrue(theme.stances, theme_id)
+            self.assertEqual(len({label for label, _ in theme.stances}), len(theme.stances), theme_id)
+            self.assertEqual([c for _, c in theme.stances], sorted(c for _, c in theme.stances), theme_id)
+
+
 class PublishedArticlesTest(unittest.TestCase):
     def test_docs_articles_match_sources(self) -> None:
         """公開中の記事が、原稿と公開データから作り直した結果と一致すること。"""
@@ -147,8 +157,8 @@ class PublishedArticlesTest(unittest.TestCase):
         docs = ROOT / "docs"
         pages = {"index.html": build_articles.entry_articles()}
         for article in build_articles.entry_articles():
-            if article.theme == "bukatsu-chiiki":
-                pages.setdefault("bukatsu-chiiki-reaction-map.html", build_articles.entry_articles("bukatsu-chiiki"))
+            page = build_articles.load_theme(article.theme).url
+            pages.setdefault(page, build_articles.entry_articles(article.theme))
         for name, articles in pages.items():
             text = (docs / name).read_text(encoding="utf-8")
             linked = re.findall(r'<a href="(articles/[a-z0-9-]+\.html)" data-article-entry=', text)

@@ -158,7 +158,7 @@ def render_head(cfg: dict[str, Any]) -> str:
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
   <link rel="stylesheet" href="site-tokens.css">
   <link rel="stylesheet" href="home-story.css">
-  <link rel="stylesheet" href="top-page.css?v=2">
+  <link rel="stylesheet" href="top-page.css?v=3">
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2542211932832864" crossorigin="anonymous"></script>
   <script type="application/ld+json">{json.dumps({"@context": "https://schema.org", "@type": "WebSite", "name": "SNS反応まっぷ", "url": "https://sns-reaction-map.jp/", "description": h["description"]}, ensure_ascii=False)}</script>
 <!-- GA_TAG_START -->
@@ -272,14 +272,23 @@ def render_articles(cfg: dict[str, Any]) -> str:
     articles = entry_articles(root=ROOT)
     if not articles:
         return ""
+    # テーマごとにまとめる（並びは entry_articles と同じ。テーマ名はトップのテーマカードの表示名）
+    cards = cfg["topics_section"]["cards"]
+    groups: dict[str, list[Any]] = {}
+    for article in articles:
+        groups.setdefault(article.theme, []).append(article)
     items = "".join(
-        f'<li><a href="{e(a.url)}" data-article-entry="top">{e(a.title)}</a></li>' for a in articles
+        f'<h3 class="top-articles-theme">{e(cards[theme]["title"])}</h3>'
+        '<ul class="top-articles-list">'
+        + "".join(f'<li><a href="{e(a.url)}" data-article-entry="top">{e(a.title)}</a></li>' for a in group)
+        + "</ul>"
+        for theme, group in groups.items()
     )
     return (
         '<section class="section top-articles reveal" id="articles" aria-labelledby="articles-title">'
         f'<div class="section-head section-head--stack"><span class="story-kicker">{e(sec["kicker"])}</span>'
         f'<h2 class="section-title" id="articles-title">{e(sec["title"])}</h2><p class="section-lead">{e(sec["lead"])}</p></div>'
-        f'<ul class="top-articles-list">{items}</ul>'
+        f'{items}'
         f'<p class="top-articles-all"><a href="articles/index.html" data-article-entry="top">{e(sec["all_label"])} ›</a></p>'
         "</section>\n" + entry_script("top") + "\n"
     )
