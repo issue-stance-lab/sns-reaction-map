@@ -7,6 +7,7 @@ import argparse
 import html
 import json
 import re
+import sys
 import xml.etree.ElementTree as ET
 from pathlib import Path
 from typing import Any
@@ -23,6 +24,16 @@ REQUIRED_PAGE_TOKENS = (
     "topic-modern.css?v=",
     "topic-modern.js",
 )
+
+
+def article_pages() -> list[tuple[str, str]]:
+    """サイト内記事の (パス, lastmod)。generate_seo_assets.py と同じ一覧（scripts/build_articles.py）を使う。"""
+    sys.path.insert(0, str(PROJECT_ROOT / "scripts"))
+    try:
+        from build_articles import article_pages as pages
+    finally:
+        sys.path.pop(0)
+    return pages()
 
 
 def load_json(path: Path) -> dict[str, Any]:
@@ -247,7 +258,8 @@ def main() -> int:
     for url_node in tree.findall("sm:url", namespace):
         loc_node = url_node.find("sm:loc", namespace)
         lastmod_node = url_node.find("sm:lastmod", namespace)
-        page = Path(urlparse(loc_node.text or "").path).name if loc_node is not None else ""
+        # docs/ からの相対パスで比べる（記事は articles/ の下にあるため、ファイル名だけだと取り違える）
+        page = urlparse(loc_node.text or "").path.lstrip("/") if loc_node is not None else ""
         page = page or "index.html"  # トップは正規URL（/）で載せている
         sitemap_dates[page] = lastmod_node.text if lastmod_node is not None else None
     sitemap_paths = set(sitemap_dates)
@@ -255,6 +267,7 @@ def main() -> int:
         page["url"]: page.get("lastmod")
         for page in site_cases.get("site_pages") or []
     }
+    fixed_pages.update(article_pages())
     fixed_urls = set(fixed_pages)
     expected_sitemap = theme_urls | fixed_urls
     if sitemap_paths != expected_sitemap:

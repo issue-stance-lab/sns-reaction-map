@@ -158,7 +158,7 @@ def render_head(cfg: dict[str, Any]) -> str:
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
   <link rel="stylesheet" href="site-tokens.css">
   <link rel="stylesheet" href="home-story.css">
-  <link rel="stylesheet" href="top-page.css?v=1">
+  <link rel="stylesheet" href="top-page.css?v=2">
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2542211932832864" crossorigin="anonymous"></script>
   <script type="application/ld+json">{json.dumps({"@context": "https://schema.org", "@type": "WebSite", "name": "SNS反応まっぷ", "url": "https://sns-reaction-map.jp/", "description": h["description"]}, ensure_ascii=False)}</script>
 <!-- GA_TAG_START -->
@@ -261,6 +261,27 @@ def render_entries(cfg: dict[str, Any], themes: dict[str, dict[str, Any]], today
         f'<div class="entry-grid">{"".join(items)}</div>'
         f'<p class="entry-empty" hidden>{e(sec["filter_empty"])}</p>'
         "</section>\n"
+    )
+
+
+def render_articles(cfg: dict[str, Any]) -> str:
+    """疑問ごとの解説記事（content/articles。scripts/build_articles.py の entry_articles）への入口。記事が無ければ出さない。"""
+    from build_articles import entry_articles, entry_script  # noqa: PLC0415
+
+    sec = cfg["articles_section"]
+    articles = entry_articles(root=ROOT)
+    if not articles:
+        return ""
+    items = "".join(
+        f'<li><a href="{e(a.url)}" data-article-entry="top">{e(a.title)}</a></li>' for a in articles
+    )
+    return (
+        '<section class="section top-articles reveal" id="articles" aria-labelledby="articles-title">'
+        f'<div class="section-head section-head--stack"><span class="story-kicker">{e(sec["kicker"])}</span>'
+        f'<h2 class="section-title" id="articles-title">{e(sec["title"])}</h2><p class="section-lead">{e(sec["lead"])}</p></div>'
+        f'<ul class="top-articles-list">{items}</ul>'
+        f'<p class="top-articles-all"><a href="articles/index.html" data-article-entry="top">{e(sec["all_label"])} ›</a></p>'
+        "</section>\n" + entry_script("top") + "\n"
     )
 
 
@@ -500,6 +521,7 @@ def build_html(cfg: dict[str, Any], *, today: date | None = None) -> str:
         render_hero(cfg, stats),
         '<main class="shell">\n',
         render_entries(cfg, themes, today),
+        render_articles(cfg),
         render_update_bar(stats),
         recent_html,
         render_topics(cfg, themes, stats),

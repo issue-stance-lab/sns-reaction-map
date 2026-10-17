@@ -775,6 +775,12 @@ body.bukatsu-layout .panel-title h2,body.bukatsu-layout .article-trust-heading h
   .bko-step p{grid-column:2 / -1;grid-row:3}
   .bko-step p{line-height:1.6}
 }
+/* 記事で詳しく読む（content/articles の部活動の記事。scripts/build_articles.py の entry_articles） */
+.cap-articles ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.cap-articles li a{display:block;height:100%;padding:12px 14px;border:1px solid var(--line);border-left:4px solid #2f6fdf;border-radius:10px;background:#fff;color:var(--ink);font-weight:700;line-height:1.55;text-decoration:none;box-sizing:border-box}
+.cap-articles li a:hover{border-color:#2f6fdf}
+.cap-articles .cap-articles-all{margin:12px 0 0;font-size:14px}
+@media(max-width:760px){.cap-articles ul{grid-template-columns:1fr}.cap-articles li a{font-size:14.5px}}
 
 /* TREND_CARD_START */
 .update-dashboard{padding:18px min(4vw,40px) 34px;background:var(--bg)}
@@ -2919,6 +2925,18 @@ SNS上の意見の推移（2026年10月8日時点）。世論調査ではあり�
 </div>
 <p class="fr-footer">制度の説明は2026年10月14日に確かめたもので、SNSの件数のほうは2026年10月8日までを数えています。次の収集は10月17日の予定です。</p>
 </section>
+<section class="panel cap-band cap-articles" id="theme-articles"><div class="panel-title"><h2>記事で詳しく読む</h2><span>費用・問題点・賛否の理由・市ごとの違いを、1本ずつまとめました</span></div><ul><li><a href="articles/bukatsu-chiiki-cost.html" data-article-entry="theme">部活動の地域移行で親の費用負担はいくら？会費・送迎・保険</a></li><li><a href="articles/bukatsu-chiiki-problems.html" data-article-entry="theme">部活動の地域移行の問題点は？進まない理由を国の調査で確認</a></li><li><a href="articles/bukatsu-chiiki-opinions.html" data-article-entry="theme">部活動の地域移行に反対・賛成する理由は？SNSの意見を論点別に</a></li><li><a href="articles/bukatsu-chiiki-cities.html" data-article-entry="theme">部活動の地域移行は市でどう違う？政令市20市の時期と進み方</a></li><li><a href="articles/kobe-katsu.html" data-article-entry="theme">コベカツとは？神戸市の部活動地域移行の会費・仕組みと反応</a></li></ul><p class="cap-articles-all"><a href="articles/index.html" data-article-entry="theme">記事の一覧へ</a></p></section>
+<script id="article-entry-tracking">
+document.addEventListener("click", function (event) {
+  var link = event.target.closest && event.target.closest("a[data-article-entry]");
+  if (!link || typeof window.gtag !== "function") return;
+  window.gtag("event", "article_link_click", {
+    article: "bukatsu-chiiki",
+    link_type: "entry",
+    link_url: link.getAttribute("href")
+  });
+});
+</script>
 <details class="cap-band cap-fold cap-method" id="cap-method"><summary>集め方・分類のしかたと、全体の件数表</summary><div class="cap-trust"><!-- ARTICLE_TRUST_START -->
 <aside class="article-trust" aria-labelledby="article-trust-title">
   <div class="article-trust-heading">

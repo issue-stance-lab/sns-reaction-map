@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import html
 import json
+import sys
 from datetime import date
 from pathlib import Path
 from typing import Any
@@ -13,6 +14,16 @@ from urllib.parse import urljoin
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
+
+
+def article_pages() -> list[tuple[str, str]]:
+    """サイト内記事（docs/articles/）の (パス, lastmod)。一覧の正典は scripts/build_articles.py。"""
+    sys.path.insert(0, str(PROJECT_ROOT / "scripts"))
+    try:
+        from build_articles import article_pages as pages
+    finally:
+        sys.path.pop(0)
+    return pages()
 
 
 def resolve(path: str) -> Path:
@@ -59,6 +70,7 @@ def page_entries(
             f"theme_seo_only={sorted(set(seo_dates) - case_urls)}"
         )
     entries.update(seo_dates)
+    entries.update(dict(article_pages()))
 
     missing = sorted(page for page in entries if not (output_dir / page).is_file())
     if missing:

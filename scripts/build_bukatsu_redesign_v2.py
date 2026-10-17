@@ -314,6 +314,21 @@ def _band(src: BeautifulSoup, selector: str, what: str, cls: str) -> BeautifulSo
     return node
 
 
+def _articles_band(root: Path) -> str:
+    """記事で詳しく読む：content/articles/bukatsu-chiiki の記事への入口（並びは原稿の order）。
+    記事が無ければ何も出さない（記事側の生成は scripts/build_articles.py）。"""
+    sys.path.insert(0, str(ROOT / "scripts"))
+    from build_articles import entry_articles, entry_script  # noqa: PLC0415
+    articles = entry_articles("bukatsu-chiiki", root)
+    if not articles:
+        return ""
+    items = "".join(f'<li><a href="{escape(a.url)}" data-article-entry="theme">{escape(a.title)}</a></li>' for a in articles)
+    return ('<section class="panel cap-band cap-articles" id="theme-articles"><div class="panel-title"><h2>記事で詳しく読む</h2>'
+            '<span>費用・問題点・賛否の理由・市ごとの違いを、1本ずつまとめました</span></div>'
+            f'<ul>{items}</ul><p class="cap-articles-all"><a href="articles/index.html" data-article-entry="theme">記事の一覧へ</a></p>'
+            "</section>\n" + entry_script("bukatsu-chiiki") + "\n")
+
+
 def _detail(src: BeautifulSoup, d: dict) -> str:
     """詳細データ（#detail-data）：元HTMLの表（収集・分類件数・論点別・スタンス別・注意）をそのまま写す。
     表の数字が公開JSONと合わなければ止める。折りたたみは最初どれも閉じる。"""
@@ -639,6 +654,7 @@ def compose(source: str, root: Path, mode: str, as_of: str | None = None) -> str
     page += _header() + "\n<main>\n"
     page += (body_html[:background_at] + _trend_band(trend, panels, compact) + "\n"
              + _vote_section(src) + "\n" + body_html[background_at:])
+    page += _articles_band(root)
     # 作り方と詳細データは、他の新デザインと同じく1つの折りたたみに入れる
     page += (f'<details class="cap-band cap-fold cap-method" id="cap-method"><summary>{escape(compact["method_fold"])}</summary>'
              '<div class="cap-trust">' + trust + "</div>\n" + _detail(src, d) + "</details>\n")
