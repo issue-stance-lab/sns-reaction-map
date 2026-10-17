@@ -68,7 +68,7 @@ LEDGER_FILES = [
 # これから公開するもの。禁止フレーズまで含めて全部見る。
 DRAFT_DIRS = [
     Path("content/note/drafts"),
-    Path("content/articles/drafts"),
+    Path("content/articles"),  # 下書き（drafts/）とサイト内記事の原稿（{テーマ}/）の両方
     Path("content/x/research"),
 ]
 
