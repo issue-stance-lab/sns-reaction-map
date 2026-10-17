@@ -103,3 +103,5 @@ Googleサジェスト、Google Trends、Google広告キーワードプランナ�
 ## 作業履歴
 
 - 2026-09-27: 課題を登録し、Googleサジェスト・キーワードプランナー・Trends・通常検索・知恵袋・一次資料の需要調査と非公開UI試作を完了。サイト実装・公開・広告配信は行っていない。
+
+2026-10-16に題名、10-17に説明文を計測途中で変更（オーナー判断）。判定では入口UIの効果と分けられない（[記録](../quality/reviews/2026-10-17-title-description-change-during-measurement.md)）。

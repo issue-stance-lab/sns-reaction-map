@@ -20,7 +20,9 @@ class FukushutoSearchEntryTest(unittest.TestCase):
         cls.soup = BeautifulSoup(cls.source, "html.parser")
 
     def test_search_intent_is_visible_in_title_and_description(self) -> None:
-        self.assertIn("いつ・どこに決まる", self.soup.title.string)
+        # 2026-10-16: ラッコキーワードの上位サジェスト（副首都構想・候補地）に合わせて題名を変更
+        self.assertIn("副首都構想とは", self.soup.title.string)
+        self.assertIn("候補地", self.soup.title.string)
         self.assertIn("法案の問題点", self.soup.title.string)
         description = self.soup.select_one('meta[name="description"]')["content"]
         for phrase in ("指定状況", "大阪", "問題点", "費用"):

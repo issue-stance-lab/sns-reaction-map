@@ -684,6 +684,12 @@ collect_at を迎えたテーマにデータを追加した後、以下を順番
 - [ ] 該当テーマの `lastmod` → 今日の日付
 - [ ] `python3 scripts/seo/validate_theme_seo.py` が exit 0（ここを飛ばすとpush後のCI「公開ファイルの検査」で初めて発覚する。2026-09-15のbukatsu-chiiki更新で実際に発生）
 
+### 6-2. サイト内記事（そのテーマに記事がある場合。`content/articles/{テーマ}/` を見る）
+
+- [ ] `python3 scripts/build_articles.py` を実行する。記事のSNSの件数は公開データから差し込んでいるので、更新のたびに作り直す（課題51）
+- [ ] 「本文の言い切りがデータと合わなくなりました」で止まったら、件数の大小が入れ替わっている。原稿の該当文と `asserts` を直してから流し直す（数字だけ通すために asserts を消さない）
+- [ ] `python3 scripts/build_articles.py --check` が exit 0（CI「公開ファイルの検査」にも入っている）
+
 ### 7. 論点カードの件数
 
 - [ ] `python3 scripts/sync_issue_counts.py {theme}` を実行（件数は分類結果から生成する。HTMLに直接書かない）

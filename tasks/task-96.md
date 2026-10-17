@@ -39,7 +39,7 @@
 オーナーの「良いです、公開作業開始」という承認後、`main` の `c57f0cbb` までを反映した。公開検査
 36308898702とPages配信36308898707が成功し、本番のページ・CSS・JSのHTTP 200と固有表示を確認した。
 D0は下記の実測値を使い、2026-10-27に表示回数・クリック・CTR・検索語を比較する。
-2026-10-05に本文へ「意見の推移」の節（立場・論点の2タブ）を追加して公開した。title・descriptionは不変。10/27の判定では検索語を節の効果と分けて読む（[記録](../quality/reviews/2026-10-05-task96-trend-section-publication.md)）。
+2026-10-05に本文へ「意見の推移」の節（立場・論点の2タブ）を追加して公開した。title・descriptionは10/5時点では不変。2026-10-16に題名、10-17に説明文を計測途中で変更（オーナー判断）。判定では入口UIの効果と分けられない（[記録](../quality/reviews/2026-10-17-title-description-change-during-measurement.md)）。10/27の判定では検索語を節の効果と分けて読む（[記録](../quality/reviews/2026-10-05-task96-trend-section-publication.md)）。
 
 ## 出発点の実測値
 

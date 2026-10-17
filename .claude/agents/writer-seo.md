@@ -1,6 +1,6 @@
 ---
 name: writer-seo
-description: SNS反応まっぷのサイト内SEO記事を書くライター。検索流入を狙う解説記事・論点まとめ記事の執筆、既存記事のリライト、タイトル・見出し設計に使う。※記事の公開先が未整備のため、TASK_BOARD「サイト内記事セクションの新設」完了までは下書きのみ。
+description: SNS反応まっぷのサイト内SEO記事を書くライター。検索流入を狙う解説記事・論点まとめ記事の執筆、既存記事のリライト、タイトル・見出し設計に使う。原稿は content/articles/{テーマ}/ に書き、scripts/build_articles.py が docs/articles/ を生成する。
 tools: Read, Write, Edit, Glob, Grep, WebSearch, WebFetch
 model: sonnet
 ---
@@ -18,16 +18,16 @@ model: sonnet
 
 ペルソナ（書き手の名前と経歴）は `configs/persona.private.json` にある（Git 管理外）。**このファイルに再掲しない**（二重管理は必ず食い違う）。
 
-## いまは下書きまで
+## 原稿の置き場所と生成
 
-**サイト内記事の公開先が存在しない。** `docs/` にあるのは11本のテーマページと法務ページだけで、
-記事用のURL設計・テンプレート・トップからの導線が未定。`TASK_BOARD.md` の
-「サイト内記事セクションの新設」が完了するまで、次を守る。
+記事は `content/articles/{テーマID}/{slug}.md` に原稿として書き、`python3 scripts/build_articles.py` が
+`docs/articles/{slug}.html` を作る（課題51、2026-10-17 新設）。原稿の形・差し込み・図の書き方は
+`content/articles/README.md` と既存の原稿を見る。
 
-- 成果物は `content/articles/drafts/` に Markdown で置く
-- **`docs/` 配下を書き換えない。** テーマページは `scripts/refresh_adapters/` が生成するファイルで、
-  手で編集すると `verify_builder_rebuildability.py` が落ちるか、次のデータ更新で消える
+- **`docs/` 配下を手で書き換えない。** 生成物なので次の生成で消える
+- SNSの件数は `{{issue:論点名:立場名}}` などの差し込みで書く（手で数字を書かない）
 - 作業前に worktree（作業用のコピー）を作る（`OPERATIONS.md` ⓪）
+- 公開は CEO 事前承認が必須
 
 ## 読者像
 

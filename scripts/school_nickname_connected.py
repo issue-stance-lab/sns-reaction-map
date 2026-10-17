@@ -219,22 +219,22 @@ def apply(source: str, *, activate: bool = False, topic: str = TOPIC) -> str:
         '<span class="how">論点を選ぶなど、このページで記録対象の操作をすると増えます</span>',
         1,
     )
-    source = re.sub(r"<title>.*?</title>", "<title>学校のあだ名禁止はなぜ？さん付け・いじめとの関係と賛否｜SNS反応まっぷ</title>", source, count=1, flags=re.S)
+    source = re.sub(r"<title>.*?</title>", "<title>学校のあだ名禁止はおかしい？なぜ禁止か、文部科学省の資料と賛否｜SNS反応まっぷ</title>", source, count=1, flags=re.S)
     # description系metaは configs/theme-seo.json と apply_theme_trust.py が正典。
     # ここで書き換えると、公開昇格順（builder→trust）の後にbuilderを再実行した際、
     # 信頼情報の文面を巻き戻してしまうため触らない。
-    source = re.sub(r'<meta property="og:title" content="[^"]*">', '<meta property="og:title" content="学校のあだ名禁止はなぜ？さん付け・いじめとの関係と賛否">', source, count=1)
-    source = re.sub(r'<meta name="twitter:title" content="[^"]*">', '<meta name="twitter:title" content="学校のあだ名禁止はなぜ？さん付け・いじめとの関係と賛否">', source, count=1)
+    source = re.sub(r'<meta property="og:title" content="[^"]*">', '<meta property="og:title" content="学校のあだ名禁止はおかしい？なぜ禁止か、文部科学省の資料と賛否">', source, count=1)
+    source = re.sub(r'<meta name="twitter:title" content="[^"]*">', '<meta name="twitter:title" content="学校のあだ名禁止はおかしい？なぜ禁止か、文部科学省の資料と賛否">', source, count=1)
     source = re.sub(
         r'(<!-- ARTICLE_JSON_LD_START -->.*?"headline": ")[^"]*',
-        r'\1学校のあだ名禁止はなぜ？さん付け・いじめとの関係と賛否',
+        r'\1学校のあだ名禁止はおかしい？なぜ禁止か、文部科学省の資料と賛否',
         source,
         count=1,
         flags=re.S,
     )
     source = re.sub(
         r'(<!-- ARTICLE_JSON_LD_START -->.*?"description": ")[^"]*',
-        r'\1学校のあだ名禁止は全国一律の決まり？文科省・法律資料で根拠を確認し、さん付け指導との違い、いじめ防止への期待と懸念、賛成・反対の理由をSNS意見から整理します。',
+        r'\1いじめ防止の法律や文部科学省の資料に、あだ名を禁止する記述は見つかりませんでした。呼び方のルールは、各学校が校則などで決めています。学校のあだ名禁止はなぜ始まったのか、おかしいという声を含む賛成・反対の理由をSNSの意見から整理します。',
         source,
         count=1,
         flags=re.S,

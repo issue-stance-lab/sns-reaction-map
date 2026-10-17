@@ -314,6 +314,13 @@ def _band(src: BeautifulSoup, selector: str, what: str, cls: str) -> BeautifulSo
     return node
 
 
+def _articles_band(root: Path) -> str:
+    """記事で詳しく読む：content/articles/bukatsu-chiiki の記事への入口（scripts/build_articles.py の theme_entry_band）。"""
+    sys.path.insert(0, str(ROOT / "scripts"))
+    from build_articles import theme_entry_band  # noqa: PLC0415
+    return theme_entry_band("bukatsu-chiiki", "費用・問題点・賛否の理由・市ごとの違いを、1本ずつまとめました", root)
+
+
 def _detail(src: BeautifulSoup, d: dict) -> str:
     """詳細データ（#detail-data）：元HTMLの表（収集・分類件数・論点別・スタンス別・注意）をそのまま写す。
     表の数字が公開JSONと合わなければ止める。折りたたみは最初どれも閉じる。"""
@@ -639,6 +646,7 @@ def compose(source: str, root: Path, mode: str, as_of: str | None = None) -> str
     page += _header() + "\n<main>\n"
     page += (body_html[:background_at] + _trend_band(trend, panels, compact) + "\n"
              + _vote_section(src) + "\n" + body_html[background_at:])
+    page += _articles_band(root)
     # 作り方と詳細データは、他の新デザインと同じく1つの折りたたみに入れる
     page += (f'<details class="cap-band cap-fold cap-method" id="cap-method"><summary>{escape(compact["method_fold"])}</summary>'
              '<div class="cap-trust">' + trust + "</div>\n" + _detail(src, d) + "</details>\n")

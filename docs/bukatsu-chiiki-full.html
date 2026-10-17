@@ -6,17 +6,17 @@
 <meta content="width=device-width, initial-scale=1" name="viewport"/>
 <title>部活動の地域移行：全文・印刷版｜SNS反応まっぷ</title>
 <!-- SEO_META_START -->
-<meta content="部活動の地域展開（旧・地域移行）はいつから始まり、誰が対象？2026年度からの予定、費用・送迎・指導者などの問題点を一次資料とSNS反応1,578件で整理します。" name="description"/>
+<meta content="部活動の地域移行（今の呼び方は地域展開）は、国のガイドラインで2026年度から6年間かけて進めることになっています。主な対象は公立中学校で、いつから始まるかは地域ごとに違います。高校の扱いや平日と休日の違い、費用・送迎などの課題と賛否を、一次資料とSNS反応1,578件で整理します。" name="description"/>
 <link href="https://sns-reaction-map.jp/bukatsu-chiiki-reaction-map.html" rel="canonical"/>
 <meta content="article" property="og:type"/>
 <meta content="SNS反応まっぷ" property="og:site_name"/>
-<meta content="部活動の地域展開（地域移行）はいつから？費用・問題点・賛否を整理" property="og:title"/>
-<meta content="部活動の地域展開（旧・地域移行）はいつから始まり、誰が対象？2026年度からの予定、費用・送迎・指導者などの問題点を一次資料とSNS反応1,578件で整理します。" property="og:description"/>
+<meta content="部活動の地域移行はいつから？地域展開との違い・費用・課題と賛否" property="og:title"/>
+<meta content="部活動の地域移行（今の呼び方は地域展開）は、国のガイドラインで2026年度から6年間かけて進めることになっています。主な対象は公立中学校で、いつから始まるかは地域ごとに違います。高校の扱いや平日と休日の違い、費用・送迎などの課題と賛否を、一次資料とSNS反応1,578件で整理します。" property="og:description"/>
 <meta content="https://sns-reaction-map.jp/bukatsu-chiiki-reaction-map.html" property="og:url"/>
 <meta content="https://sns-reaction-map.jp/ogp/bukatsu-chiiki.png" property="og:image"/>
 <meta content="summary_large_image" name="twitter:card"/>
-<meta content="部活動の地域展開（地域移行）はいつから？費用・問題点・賛否を整理" name="twitter:title"/>
-<meta content="部活動の地域展開（旧・地域移行）はいつから始まり、誰が対象？2026年度からの予定、費用・送迎・指導者などの問題点を一次資料とSNS反応1,578件で整理します。" name="twitter:description"/>
+<meta content="部活動の地域移行はいつから？地域展開との違い・費用・課題と賛否" name="twitter:title"/>
+<meta content="部活動の地域移行（今の呼び方は地域展開）は、国のガイドラインで2026年度から6年間かけて進めることになっています。主な対象は公立中学校で、いつから始まるかは地域ごとに違います。高校の扱いや平日と休日の違い、費用・送迎などの課題と賛否を、一次資料とSNS反応1,578件で整理します。" name="twitter:description"/>
 <meta content="https://sns-reaction-map.jp/ogp/bukatsu-chiiki.png" name="twitter:image"/>
 <!-- SEO_META_END -->
 <!-- ARTICLE_JSON_LD_START -->
@@ -750,6 +750,12 @@ body.bukatsu-layout .panel-title h2,body.bukatsu-layout .article-trust-heading h
   .bko-step p{grid-column:2 / -1;grid-row:3}
   .bko-step p{line-height:1.6}
 }
+/* 記事で詳しく読む（content/articles の部活動の記事。scripts/build_articles.py の entry_articles） */
+.cap-articles ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.cap-articles li a{display:block;height:100%;padding:12px 14px;border:1px solid var(--line);border-left:4px solid #2f6fdf;border-radius:10px;background:#fff;color:var(--ink);font-weight:700;line-height:1.55;text-decoration:none;box-sizing:border-box}
+.cap-articles li a:hover{border-color:#2f6fdf}
+.cap-articles .cap-articles-all{margin:12px 0 0;font-size:14px}
+@media(max-width:760px){.cap-articles ul{grid-template-columns:1fr}.cap-articles li a{font-size:14.5px}}
 
 /* TREND_CARD_START */
 .update-dashboard{padding:18px min(4vw,40px) 34px;background:var(--bg)}
@@ -991,6 +997,8 @@ body.bukatsu-layout .panel-title h2,body.bukatsu-layout .article-trust-heading h
 </div>
 <p class="fr-footer">制度の説明は2026年10月14日に確かめたもので、SNSの件数のほうは2026年10月8日までを数えています。次の収集は10月17日の予定です。</p>
 </section>
+<section class="panel cap-band cap-articles" id="theme-articles"><div class="panel-title"><h2>記事で詳しく読む</h2><span>費用・問題点・賛否の理由・市ごとの違いを、1本ずつまとめました</span></div><ul><li><a data-article-entry="theme" href="articles/bukatsu-chiiki-cost.html">部活動の地域移行で親の費用負担はいくら？会費・送迎・保険</a></li><li><a data-article-entry="theme" href="articles/bukatsu-chiiki-problems.html">部活動の地域移行の問題点は？進まない理由を国の調査で確認</a></li><li><a data-article-entry="theme" href="articles/bukatsu-chiiki-opinions.html">部活動の地域移行に反対・賛成する理由は？SNSの意見を論点別に</a></li><li><a data-article-entry="theme" href="articles/bukatsu-chiiki-cities.html">部活動の地域移行は市でどう違う？政令市20市の時期と進み方</a></li><li><a data-article-entry="theme" href="articles/kobe-katsu.html">コベカツとは？神戸市の部活動地域移行の会費・仕組みと反応</a></li></ul><p class="cap-articles-all"><a data-article-entry="theme" href="articles/index.html">記事の一覧へ</a></p></section>
+
 <section class="cap-band cap-fold cap-method full-section" id="cap-method"><h3>集め方・分類のしかたと、全体の件数表</h3><div class="cap-trust"><!-- ARTICLE_TRUST_START -->
 <aside aria-labelledby="article-trust-title" class="article-trust">
 <div class="article-trust-heading">

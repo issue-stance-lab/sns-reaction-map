@@ -396,3 +396,5 @@ SNS件数は更新で変わるため、descriptionへ入れる場合は正典か
 - Search Consoleで登録済みを確認し、実装日から30日分を記録
 - 上記の条件で採用／改善継続／判定不能／差し戻し候補を決める
 - 結果と次の1手を本ファイルと`TASK_BOARD.md`へ反映する
+
+2026-10-16に題名、10-17に説明文を計測途中で変更（オーナー判断）。判定では入口UIの効果と分けられない（[記録](../quality/reviews/2026-10-17-title-description-change-during-measurement.md)）。

@@ -34,6 +34,8 @@ CHECKS: tuple[tuple[str, list[str]], ...] = (
     ("SEO台帳（更新日・JSON-LD・sitemap）", ["scripts/seo/validate_theme_seo.py"]),
     ("収集期間の記録", ["scripts/verify_sample_periods.py"]),
     ("ページ文の使い回し", ["scripts/verify_page_originality.py"]),
+    # 課題51。記事の件数は公開データから差し込むので、データ更新のあと作り直し忘れると止まる。
+    ("サイト内記事の再生成（原稿・公開データとの一致）", ["scripts/build_articles.py", "--check"]),
     # 課題84。旧LOOP.mdが毎回のループで目視確認していたチャート・画像の存在確認を、
     # 運用ループ廃止後に引き継ぐ場所が無かった。公開ファイルだけで完結する検査なのでここに置く。
     ("ページ構造（チャートのデータ・画像/スクリプト参照）", ["scripts/verify_page_structure.py"]),

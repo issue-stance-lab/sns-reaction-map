@@ -180,3 +180,9 @@ body.elderly-layout .panel-title h2,body.elderly-layout .article-trust-heading h
 @media(max-width:760px){
   .cap-planet #planet-block h3.sec:has(+ #meta),.cap-planet #planet-block #meta{display:none}
 }
+/* 記事で詳しく読む（scripts/build_articles.py の theme_entry_band） */
+.cap-articles ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.cap-articles li a{display:block;height:100%;padding:12px 14px;border:1px solid var(--line);border-left:4px solid #2f6fdf;border-radius:10px;background:#fff;color:var(--ink);font-weight:700;line-height:1.55;text-decoration:none;box-sizing:border-box}
+.cap-articles li a:hover{border-color:#2f6fdf}
+.cap-articles .cap-articles-all{margin:12px 0 0;font-size:14px}
+@media(max-width:760px){.cap-articles ul{grid-template-columns:1fr}.cap-articles li a{font-size:14.5px}}

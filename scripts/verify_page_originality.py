@@ -221,6 +221,16 @@ def main() -> int:
         headings[theme] = page_headings
         leads[theme] = page_leads
         body[theme] = sentences(paragraphs)
+    # サイト内記事（課題51）も同じ物差しで比べる。テーマページの文を記事へ写したり、
+    # 記事どうしで同じ見出しを使い回したりすると、検索から見て同じ内容のページが増えるだけになる。
+    for path in sorted((ROOT / "docs" / "articles").glob("*.html")):
+        if path.name == "index.html":
+            continue
+        key = f"articles/{path.stem}"
+        page_headings, page_leads, paragraphs = visible_parts(path, shared)
+        headings[key] = page_headings
+        leads[key] = page_leads
+        body[key] = sentences(paragraphs)
 
     headings = drop_allowed(headings, allow)
     leads = drop_allowed(leads, allow)
