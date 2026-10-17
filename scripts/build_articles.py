@@ -43,11 +43,14 @@ sys.path.insert(0, str(ROOT / "scripts" / "seo"))
 from unify_site_chrome import CONTACT_URL, FOOTER_LINKS  # noqa: E402  フッターのリンクは全ページで1か所が正典
 
 # 立場の並び順と色。色だけで区別させないため、凡例には必ず名前と件数を出す。
-STANCE_ORDER: tuple[tuple[str, str], ...] = (
-    ("移行支持", "s1"),
-    ("条件付き・改善要求", "s2"),
-    ("中立・情報", "s3"),
-    ("慎重・反対", "s4"),
+# 立場IDの末尾 → 図の色。並びも s1〜s4 の順（賛成側・条件付き・中立・反対側）。表示名は公開データの label を使う
+STANCE_ROLES: tuple[tuple[str, str], ...] = (
+    ("-support", "s1"),        # bukatsu transition-support / elderly mandate-support / bike enforcement-support
+    ("-conditional", "s2"),
+    ("-neutral", "s3"),
+    ("-cautious", "s4"),
+    ("-oppose", "s4"),         # elderly mandate-oppose
+    ("-infrastructure-first", "s4"),  # bike（反対：インフラ・制度優先）
 )
 
 PLACEHOLDER_RE = re.compile(r"\{\{\s*([^{}]+?)\s*\}\}")
@@ -80,24 +83,19 @@ class ThemeData:
     period_end: date
     updated_on: date
     issues: dict[str, dict[str, int]]  # 論点名 -> {"_total": n, 立場名: n}
+    stances: list[tuple[str, str]]  # (立場名, 図の色クラス)。s1〜s4 の順
 
     @property
     def named_issues(self) -> list[str]:
         return [label for label in self.issues if label != "その他"]
 
 
-def _stance_label(stance_id: str) -> str:
-    """公開データの立場ID（bukatsu-chiiki-cautious など）を表示名に直す。"""
-    suffix = stance_id.rsplit("-", 1)[-1]
-    names = {
-        "support": "移行支持",
-        "cautious": "慎重・反対",
-        "conditional": "条件付き・改善要求",
-        "neutral": "中立・情報",
-    }
-    if suffix not in names:
-        raise BuildError(f"知らない立場IDです: {stance_id}（build_articles.py の対応表に足す）")
-    return names[suffix]
+def _stance_class(stance_id: str) -> str:
+    """公開データの立場ID（bukatsu-chiiki-cautious など）を図の色クラスに直す。"""
+    for suffix, cls in STANCE_ROLES:
+        if stance_id.endswith(suffix):
+            return cls
+    raise BuildError(f"知らない立場IDです: {stance_id}（build_articles.py の STANCE_ROLES に足す）")
 
 
 def load_theme(theme_id: str) -> ThemeData:
@@ -109,11 +107,14 @@ def load_theme(theme_id: str) -> ThemeData:
     if theme_id not in seo:
         raise BuildError(f"configs/theme-seo.json に {theme_id} がありません")
     issues: dict[str, dict[str, int]] = {}
+    classes: dict[str, str] = {}
     for issue in data["issues"]:
         row = {"_total": int(issue["count"])}
         for stance in issue.get("stances") or []:
-            row[_stance_label(stance["id"])] = int(stance["count"])
+            row[stance["label"]] = int(stance["count"])
+            classes[stance["label"]] = _stance_class(stance["id"])
         issues[issue["label"]] = row
+    stances = sorted(classes.items(), key=lambda item: item[1])
     period = data["collection_period"]
     return ThemeData(
         theme_id=theme_id,
@@ -126,6 +127,7 @@ def load_theme(theme_id: str) -> ThemeData:
         period_end=date.fromisoformat(period["end"]),
         updated_on=date.fromisoformat(data["updated_on"]),
         issues=issues,
+        stances=stances,
     )
 
 
@@ -156,7 +158,7 @@ def resolve_placeholder(key: str, theme: ThemeData) -> str:
         return theme.issues[label]
 
     def stance_count(row: dict[str, int], stance: str) -> int:
-        if stance not in dict(STANCE_ORDER):
+        if stance not in dict(theme.stances):
             raise BuildError(f"立場名が違います: 「{stance}」")
         return row.get(stance, 0)
 
@@ -410,28 +412,28 @@ def render_table(rows: list[str], article: Article) -> str:
 
 # ---------------------------------------------------------------- 図
 
-def _bar(row: dict[str, int]) -> str:
+def _bar(row: dict[str, int], theme: ThemeData) -> str:
     total = row["_total"]
     segs = []
-    for stance, cls in STANCE_ORDER:
+    for stance, cls in theme.stances:
         n = row.get(stance, 0)
         if n:
             segs.append(f'<span class="seg {cls}" style="width:{n / total * 100:.2f}%"></span>')
     return "".join(segs)
 
 
-def _legend(row: dict[str, int]) -> str:
+def _legend(row: dict[str, int], theme: ThemeData) -> str:
     total = row["_total"]
     items = []
-    for stance, cls in STANCE_ORDER:
+    for stance, cls in theme.stances:
         n = row.get(stance, 0)
         items.append(f'<li><i class="{cls}"></i>{stance} {n:,}件（{pct(n, total)}）</li>')
     return "".join(items)
 
 
-def _aria(label: str, row: dict[str, int]) -> str:
+def _aria(label: str, row: dict[str, int], theme: ThemeData) -> str:
     total = row["_total"]
-    parts = [f"{stance}{row.get(stance, 0):,}件（{pct(row.get(stance, 0), total)}）" for stance, _ in STANCE_ORDER]
+    parts = [f"{stance}{row.get(stance, 0):,}件（{pct(row.get(stance, 0), total)}）" for stance, _ in theme.stances]
     return f"{label}の意見{total:,}件の内訳: " + "、".join(parts)
 
 
@@ -444,10 +446,10 @@ def render_chart(target: str, theme: ThemeData, article: Article) -> str:
             rows.append(
                 '<div class="chart-row">'
                 f'<div class="chart-label">{html.escape(label)}<span>{row["_total"]:,}件</span></div>'
-                f'<div class="bar" role="img" aria-label="{html.escape(_aria(label, row))}">{_bar(row)}</div>'
+                f'<div class="bar" role="img" aria-label="{html.escape(_aria(label, row, theme))}">{_bar(row, theme)}</div>'
                 "</div>"
             )
-        legend = "".join(f'<li><i class="{cls}"></i>{stance}</li>' for stance, cls in STANCE_ORDER)
+        legend = "".join(f'<li><i class="{cls}"></i>{stance}</li>' for stance, cls in theme.stances)
         return (
             '<figure class="stance-chart article-chrome">'
             f'<figcaption>論点ごとの立場の内訳（意見{theme.opinions:,}件、{period}）</figcaption>'
@@ -462,8 +464,8 @@ def render_chart(target: str, theme: ThemeData, article: Article) -> str:
     return (
         '<figure class="stance-chart article-chrome">'
         f'<figcaption>「{html.escape(target)}」の意見{row["_total"]:,}件の立場（{period}）</figcaption>'
-        f'<div class="bar" role="img" aria-label="{html.escape(_aria(target, row))}">{_bar(row)}</div>'
-        f'<ul class="legend">{_legend(row)}</ul>'
+        f'<div class="bar" role="img" aria-label="{html.escape(_aria(target, row, theme))}">{_bar(row, theme)}</div>'
+        f'<ul class="legend">{_legend(row, theme)}</ul>'
         '<p class="chart-note">Xの公開投稿のサンプルを分類した件数です。社会全体の世論調査ではありません。</p>'
         "</figure>"
     )
@@ -781,6 +783,29 @@ document.addEventListener("click", function (event) {{
   }});
 }});
 </script>"""
+
+
+THEME_BAND_CSS = """/* 記事で詳しく読む（scripts/build_articles.py の theme_entry_band） */
+.cap-articles ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.cap-articles li a{display:block;height:100%;padding:12px 14px;border:1px solid var(--line);border-left:4px solid #2f6fdf;border-radius:10px;background:#fff;color:var(--ink);font-weight:700;line-height:1.55;text-decoration:none;box-sizing:border-box}
+.cap-articles li a:hover{border-color:#2f6fdf}
+.cap-articles .cap-articles-all{margin:12px 0 0;font-size:14px}
+@media(max-width:760px){.cap-articles ul{grid-template-columns:1fr}.cap-articles li a{font-size:14.5px}}"""
+
+
+def theme_entry_band(theme: str, lead: str, root: Path | None = None) -> str:
+    """新デザインのテーマページに置く「記事で詳しく読む」の欄と、そのクリック計測。記事が無ければ空文字。
+    見た目は THEME_BAND_CSS（各テーマの production.css に同じものを置く）。"""
+    articles = entry_articles(theme, root)
+    if not articles:
+        return ""
+    items = "".join(
+        f'<li><a href="{html.escape(a.url)}" data-article-entry="theme">{html.escape(a.title)}</a></li>' for a in articles
+    )
+    return ('<section class="panel cap-band cap-articles" id="theme-articles"><div class="panel-title"><h2>記事で詳しく読む</h2>'
+            f'<span>{html.escape(lead)}</span></div>'
+            f'<ul>{items}</ul><p class="cap-articles-all"><a href="articles/index.html" data-article-entry="theme">記事の一覧へ</a></p>'
+            "</section>\n" + entry_script(theme) + "\n")
 
 
 def build() -> dict[Path, str]:

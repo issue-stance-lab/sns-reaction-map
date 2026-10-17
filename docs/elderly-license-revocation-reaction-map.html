@@ -691,6 +691,12 @@ body.elderly-layout .panel-title h2,body.elderly-layout .article-trust-heading h
 @media(max-width:760px){
   .cap-planet #planet-block h3.sec:has(+ #meta),.cap-planet #planet-block #meta{display:none}
 }
+/* 記事で詳しく読む（scripts/build_articles.py の theme_entry_band） */
+.cap-articles ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.cap-articles li a{display:block;height:100%;padding:12px 14px;border:1px solid var(--line);border-left:4px solid #2f6fdf;border-radius:10px;background:#fff;color:var(--ink);font-weight:700;line-height:1.55;text-decoration:none;box-sizing:border-box}
+.cap-articles li a:hover{border-color:#2f6fdf}
+.cap-articles .cap-articles-all{margin:12px 0 0;font-size:14px}
+@media(max-width:760px){.cap-articles ul{grid-template-columns:1fr}.cap-articles li a{font-size:14.5px}}
 
 /* TIDE_CARD_START */
 .update-dashboard{padding:18px min(4vw,40px) 34px;background:var(--bg)}
@@ -2420,6 +2426,18 @@ try {
 </div>
 <p class="fr-footer">制度は2026年10月13日に条文と警察庁の案内で確かめました（背景台帳 2026年9月11日、一次資料メモ 2026年10月13日）。SNSの件数は2026年10月13日までの集計です。</p>
 </section>
+<section class="panel cap-band cap-articles" id="theme-articles"><div class="panel-title"><h2>記事で詳しく読む</h2><span>義務化の賛否・親が拒むとき・運転経歴証明書・地方の移動手段などを、1本ずつまとめました</span></div><ul><li><a href="articles/elderly-license-mandate.html" data-article-entry="theme">高齢者の免許返納は義務化すべき？賛成・反対の理由をSNSから</a></li><li><a href="articles/elderly-license-refuse.html" data-article-entry="theme">親が免許返納を拒否するときは？嫌がる理由と相談先</a></li><li><a href="articles/driving-history-certificate.html" data-article-entry="theme">運転経歴証明書とは？申請方法・手数料と返納後の特典</a></li><li><a href="articles/elderly-license-inaka.html" data-article-entry="theme">免許返納後の田舎の移動手段は？地方で返納できない理由</a></li><li><a href="articles/support-car-license.html" data-article-entry="theme">サポカー限定免許とは？返納の前にできることと運転技能検査</a></li></ul><p class="cap-articles-all"><a href="articles/index.html" data-article-entry="theme">記事の一覧へ</a></p></section>
+<script id="article-entry-tracking">
+document.addEventListener("click", function (event) {
+  var link = event.target.closest && event.target.closest("a[data-article-entry]");
+  if (!link || typeof window.gtag !== "function") return;
+  window.gtag("event", "article_link_click", {
+    article: "elderly-license-revocation",
+    link_type: "entry",
+    link_url: link.getAttribute("href")
+  });
+});
+</script>
 <details class="cap-band cap-fold cap-method" id="cap-method"><summary>このページの作り方と詳細データ</summary><div class="cap-trust"><!-- ARTICLE_TRUST_START -->
 <aside class="article-trust" aria-labelledby="article-trust-title">
   <div class="article-trust-heading">

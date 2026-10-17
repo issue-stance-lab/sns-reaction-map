@@ -439,6 +439,13 @@ def _alias_script() -> str:
             "addEventListener('hashchange',()=>{resolve();openRow();});resolve();openRow();})();</script>")
 
 
+def _articles_band(root: Path) -> str:
+    """記事で詳しく読む：content/articles/elderly-license-revocation の記事への入口（scripts/build_articles.py の theme_entry_band）。"""
+    sys.path.insert(0, str(ROOT / "scripts"))
+    from build_articles import theme_entry_band  # noqa: PLC0415
+    return theme_entry_band("elderly-license-revocation", "義務化の賛否・親が拒むとき・運転経歴証明書・地方の移動手段などを、1本ずつまとめました", root)
+
+
 def compose(source: str, root: Path, mode: str, as_of: str | None = None) -> str:
     if MARKER in source:
         raise ValueError("新デザインのページは入力にできません。data/page-sources の元HTMLを渡してください。")
@@ -538,6 +545,7 @@ def compose(source: str, root: Path, mode: str, as_of: str | None = None) -> str
     page += (body_html[:background_at] + _tide_band(tide_html, tide, d, compact) + "\n"
              + _vote_section(src) + "\n" + body_html[background_at:])
     # 作り方と詳細データは、部活動・生成AI・憲法と同じく1つの折りたたみに入れる（作り方は元HTMLのまま）
+    page += _articles_band(root)
     page += (f'<details class="cap-band cap-fold cap-method" id="cap-method"><summary>{escape(compact["method_fold"])}</summary>'
              '<div class="cap-trust">' + trust + "</div>\n" + _detail(src) + "</details>\n")
     page += str(_band(src, "#related-topics", "次に読むテーマ", "cap-related")) + "\n</main>\n"
