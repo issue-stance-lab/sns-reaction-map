@@ -153,8 +153,8 @@ class ReadingPageTests(unittest.TestCase):
     def test_note_says_few_and_uncollected(self):
         note = self.s.select_one(".fr-note").get_text()
         self.assertIn(f'{PUBLIC["opinion_count"]}件と少なめ', note)
-        self.assertIn("9月21日以降の投稿はまだ集めていません", note)
-        self.assertIn("10月18日", note)
+        self.assertIn("10月19日以降の投稿はまだ集めていません", note)
+        self.assertIn("11月15日", note)
 
     def test_counts_and_stances_match_public_json(self):
         order = [s["id"] for s in self.reading.stance_order(self.d)]
@@ -447,8 +447,8 @@ class AllIssuesAndBackgroundTests(unittest.TestCase):
 
     def test_unverified_mentions_uncollected_and_next(self):
         text = self.s.select_one("#bg-unverified").get_text()
-        self.assertIn("9月21日以降の投稿", text)
-        self.assertIn("10月18日", text)
+        self.assertIn("10月19日以降の投稿", text)
+        self.assertIn("11月15日", text)
         self.assertIn("判例", text)
 
     def test_faq_moved_from_opening_without_overlap(self):
