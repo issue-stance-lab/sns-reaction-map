@@ -158,7 +158,7 @@ def render_head(cfg: dict[str, Any]) -> str:
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
   <link rel="stylesheet" href="site-tokens.css">
   <link rel="stylesheet" href="home-story.css">
-  <link rel="stylesheet" href="top-page.css?v=5">
+  <link rel="stylesheet" href="top-page.css?v=9">
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2542211932832864" crossorigin="anonymous"></script>
   <script type="application/ld+json">{json.dumps({"@context": "https://schema.org", "@type": "WebSite", "name": "SNS反応まっぷ", "url": "https://sns-reaction-map.jp/", "description": h["description"]}, ensure_ascii=False)}</script>
 <!-- GA_TAG_START -->
@@ -243,12 +243,17 @@ def render_entries(cfg: dict[str, Any], themes: dict[str, dict[str, Any]], today
         keywords = " ".join([entry["keywords"], entry["question"], entry["answer"], phase, cards[tid]["category"]])
         items.append(
             f'<a class="entry-card" data-theme="{tid}" data-keywords="{e(keywords)}" href="{e(href)}">'
+            f'<img class="entry-backdrop" src="{e(cards[tid]["img"])}" alt="" aria-hidden="true" loading="lazy" decoding="async">'
+            '<div class="entry-heading">'
+            f'<img class="entry-pictogram" src="images/pictograms/{e(tid)}.svg" alt="" aria-hidden="true" width="56" height="56">'
             f'<span class="entry-category">{e(cards[tid]["category"])}</span>'
             f'<h3>{e(entry["question"])}</h3>'
+            f'<span class="entry-cta">{e(sec["card_cta"])}</span></div>'
+            '<div class="entry-detail">'
             f'<p class="entry-answer">{e(entry["answer"])}</p>'
             f'<p class="entry-phase"><span class="entry-phase-label">{e(sec["phase_label"])}</span>{e(phase)}</p>'
-            f'<p class="entry-terms"><span class="entry-terms-label">{e(sec["terms_label"])}</span>{terms}</p>'
-            f'<span class="entry-cta">{e(sec["card_cta"])} →</span></a>'
+            f'<p class="entry-terms"><span class="entry-terms-label">{e(sec["terms_label"])}</span>{terms}</p></div>'
+            '<span class="entry-arrow" aria-hidden="true">→</span></a>'
         )
     return (
         '<section class="section entries reveal" id="entries" aria-labelledby="entries-title">'
@@ -512,6 +517,9 @@ def validate_config(cfg: dict[str, Any], themes: dict[str, dict[str, Any]]) -> N
     if missing_rows:
         raise TopPageError(f"atlas_section.rows に無いテーマ: {missing_rows}")
     for entry in cfg["entries"]:
+        pictogram = ROOT / "docs" / "images" / "pictograms" / f"{entry['theme_id']}.svg"
+        if not pictogram.is_file():
+            raise TopPageError(f"{entry['theme_id']}: ピクトグラムが無い {pictogram.name}")
         text = entry["question"] + entry["answer"] + entry["keywords"] + " ".join(entry["search_terms"])
         if re.search(r"\d[\d,]*\s*件", text):
             raise TopPageError(f"{entry['theme_id']}: 疑問・答えに「○件」を書かない（件数は正典から生成する）")

@@ -2732,3 +2732,23 @@ items:
     requested_at: "2026-10-18"
     decided_at: "2026-10-18"
     decision_note: "オーナーが「公開して」と承認（2026-10-18）。承認時点の候補（収集507件・意見110件）から、データ内容は変えていない。"
+
+  - id: approval-20261018-topic-list-design
+    category: publication
+    requested_by: Codex
+    summary: "トップのテーマ入口を一覧表示にし、テーマ別ピクトグラム10点と薄いヒーロー背景を公開する"
+    reason: "オーナーが各段階のプレビューを確認し、背景の濃さを調整した最終候補を公開するため"
+    risks:
+      - "文章・リンク・検索語は維持。件数は最新mainの正典から再生成し、当日公開したあだ名禁止テーマの更新も維持する"
+      - "背景はPC20%・スマホ16%。見出し側を白く残し、補足文は濃くして可読性を保つ"
+      - "GA4・AdSense・OGP・投票の機能は変更しない"
+    recommendation: approve
+    evidence:
+      - "tasks/task-106.md"
+      - "docs/top-page.css"
+      - "scripts/build_top_page.py"
+      - "docs/images/pictograms/"
+    status: approved
+    requested_at: "2026-10-18"
+    decided_at: "2026-10-18"
+    decision_note: "プレビューを確認・調整後、オーナーがこのチャットで『公開して』と承認。releaseスキルで公開する。"
