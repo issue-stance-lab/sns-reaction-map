@@ -2712,3 +2712,23 @@ items:
       テスト2,376件・公開ファイルの検査・ページ検査3種をすべて通してから push、
       GitHub Actions の2ワークフロー（Deploy to GitHub Pages / 公開ファイルの検査）の成功と
       公開サイトの表示まで確認した。
+  - id: approval-20261018-school-nickname-ban-refresh
+    department: engineering-data
+    action: website_publication
+    summary: "学校でのあだ名禁止テーマの2026-10-18更新回を一般公開する"
+    reason: "collect_at（10/18）の定期収集を実施。新規24件（意見10件）を、読み手2名の伏せ読みとKimiの突き合わせで全件本文確認し、収集507件・意見110件としてページの集計・論点表示・取得期間・潮目・語られていない争点の母数を更新するため"
+    risks:
+      - "SNS上の公開投稿サンプルであり、社会全体の世論を示すものではない。意見110件の小標本で、傾向は参考程度"
+      - "潮目（前回との比較）は保存回の自動分類が基準のため、ページ上は『前回11件／今回8件』と出る。編集担当が確定した意見10件とは数え方が違う（従来の仕組みで、参考程度と注記済み）"
+      - "Kimi（自動分類）のAPIキーが期限切れで当日一時停止した。キーを差し替えて復旧し、分類は全件Kimi（kimi-k2.7-code）で行った。代用モデルは使っていない"
+      - "公開候補の再生成で、別セッションが同日手直しした消費税・皇室・副首都のページが古い基準日に戻ったため、この3ページは公開対象から外して元のまま残した"
+    recommendation: approve
+    evidence:
+      - "quality/reviews/2026-10-18-school-nickname-ban-refresh-review.md"
+      - "quality/reviews/2026-10-18-school-nickname-ban-wave-reading.json"
+      - "data/verification/updates/school-nickname-ban/2026-10-18/report.json"
+      - ".staging/refresh/school-nickname-ban/20261018_163742/promotion-manifest.json"
+    status: approved
+    requested_at: "2026-10-18"
+    decided_at: "2026-10-18"
+    decision_note: "オーナーが「公開して」と承認（2026-10-18）。承認時点の候補（収集507件・意見110件）から、データ内容は変えていない。"
