@@ -29,6 +29,8 @@ title: テスト用の記事
 description: 費用の論点の意見は{{{{issue:費用・家庭負担}}}}件です。
 published_on: 2026-10-17
 updated_on: 2026-10-17
+link_label: テストの問い？
+link_answer: テストの答えです
 sources:
   - name: テスト資料
     url: https://www.mext.go.jp/
@@ -123,6 +125,12 @@ class ArticleBuildTest(unittest.TestCase):
         pages = dict(build_articles.article_pages())
         self.assertEqual(pages["articles/a-test.html"], "2026-10-17")
         self.assertEqual(pages["articles/index.html"], "2026-10-17")
+
+    def test_link_label_is_required_and_short(self) -> None:
+        text = "---\n" + BASE_META.format(slug="a-test").replace("link_label: テストの問い？", "link_label: " + "長" * 19) + "---\n本文。\n"
+        (self.src / THEME / "a-test.md").write_text(text, encoding="utf-8")
+        with self.assertRaises(build_articles.BuildError):
+            build_articles.build()
 
     def test_slug_must_match_file_name(self) -> None:
         text = "---\n" + BASE_META.format(slug="other") + "---\n本文。\n"
