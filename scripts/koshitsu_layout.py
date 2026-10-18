@@ -79,6 +79,8 @@ def finish(root, as_of: str | None = None) -> dict:
 def rebuild(root, check: bool = False, as_of: str | None = None) -> bool:
     """新デザイン公開後に build_koshitsu_arena.py を単独で動かしたとき用。元HTMLと公開ページの両方を作り直す。"""
     root = Path(root)
+    if as_of is None:
+        as_of = json.loads((root / "configs/koshitsu-tenpakai-opening.json").read_text(encoding="utf-8"))["as_of"]
     from scripts.build_koshitsu_arena import build as legacy_build
 
     source = source_for_refresh(root)
