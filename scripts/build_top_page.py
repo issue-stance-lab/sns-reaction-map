@@ -158,7 +158,7 @@ def render_head(cfg: dict[str, Any]) -> str:
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
   <link rel="stylesheet" href="site-tokens.css">
   <link rel="stylesheet" href="home-story.css">
-  <link rel="stylesheet" href="top-page.css?v=3">
+  <link rel="stylesheet" href="top-page.css?v=4">
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2542211932832864" crossorigin="anonymous"></script>
   <script type="application/ld+json">{json.dumps({"@context": "https://schema.org", "@type": "WebSite", "name": "SNS反応まっぷ", "url": "https://sns-reaction-map.jp/", "description": h["description"]}, ensure_ascii=False)}</script>
 <!-- GA_TAG_START -->
