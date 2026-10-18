@@ -32,6 +32,23 @@ rules:
 #   decided_at: null
 #   decision_note: null
 items:
+  - id: approval-20261018-source-site-consistency
+    department: engineering-data
+    action: website_publication
+    summary: "消費税減税・皇室典範改正の2ページを、2026-10-18の一次資料照合に合わせて訂正する"
+    reason: "法律案第39条の財源対象と、皇室典範第38条第4項・第6項の照合状況・子孫の扱いについて、公開表示との食い違いを解消するため"
+    risks:
+      - "SNSの集計件数は今回更新しない。確認日が異なる資料は、ページ内で日付を分けて示す"
+    recommendation: approve
+    evidence:
+      - "quality/research/consumption-tax-cut-primary-sources.md"
+      - "quality/research/koshitsu-tenpakai-primary-sources.md"
+      - "docs/consumption-tax-cut-reaction-map.html"
+      - "docs/koshitsu-tenpakai-reaction-map.html"
+    status: approved
+    requested_at: "2026-10-18"
+    decided_at: "2026-10-18"
+    decision_note: "表示との照合結果と2ページの具体的な修正内容を提示後、オーナーが本対話で『反映して』と明示した。"
   - id: approval-20261010-note4
     department: editorial
     action: note_post
