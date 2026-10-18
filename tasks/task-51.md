@@ -33,7 +33,7 @@
 1. URL: `docs/articles/{slug}.html`、一覧は `docs/articles/index.html`
 2. テンプレート: 生成器 `scripts/build_articles.py` に内蔵（固定ページと同じ `site-tokens.css`、保護タグはそのまま）
 3. 導線: サイトマップには生成器の一覧から自動で載る（`generate_seo_assets.py` / `validate_theme_seo.py` が同じ関数を使う）。
-   トップ（「疑問ごとの解説記事」、テーマごとにまとめる）とテーマページ（「記事で詳しく読む」。部活動・免許返納）から張る。テーマページの欄は `build_articles.theme_entry_band` を各テーマの生成器が呼ぶ。並びは原稿の `order`、生成は `build_top_page.py`・`build_bukatsu_redesign_v2.py` が `build_articles.entry_articles` を読む。課題98の計測中だがオーナー判断で入れた（`quality/reviews/2026-10-17-title-description-change-during-measurement.md`）
+   トップ（「疑問ごとの解説記事」、テーマごとにまとめる）とテーマページ（「記事で詳しく読む」。部活動・免許返納・青切符）から張る。テーマページの欄は `build_articles.theme_entry_band` を各テーマの生成器が呼ぶ。並びは原稿の `order`、生成は `build_top_page.py`・`build_bukatsu_redesign_v2.py` が `build_articles.entry_articles` を読む。課題98の計測中だがオーナー判断で入れた（`quality/reviews/2026-10-17-title-description-change-during-measurement.md`）
 4. 記事→テーマページ: 末尾にテーマページ（投票あり）への案内を自動で付ける。クリックは GA4 イベント `article_link_click`
 5. 生成: 原稿 `content/articles/{テーマ}/{slug}.md` → `python3 scripts/build_articles.py`。SNSの件数は `{{issue:論点:立場}}` で
    公開データから差し込み、件数の大小を言い切った文は `asserts` で守る（更新で入れ替わると生成が止まる）。CIに `--check` を追加
@@ -42,5 +42,5 @@
 
 **残り**:
 - オーナー確認のうえ公開（release スキル）
-- 免許返納の記事5本（2026-10-17）。次は自転車の青切符5本
+- 免許返納・自転車の青切符の記事各5本（2026-10-17）。ほかのテーマは build_articles の STANCE_ROLES と test の対象テーマを足してから
 - 公開後4週間で、記事の Search Console 表示回数・クリックと、`article_link_click` を確認する

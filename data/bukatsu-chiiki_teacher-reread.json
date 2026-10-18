@@ -10,12 +10,12 @@
     "再読済み_累計": 438,
     "再読対象_追い読み_2026-10-08回": 115
   },
-  "read_at": "2026-08-24 / 2026-09-06（追記） / 2026-10-01（追記） / 2026-10-10（追い読み）",
+  "read_at": "2026-08-24 / 2026-09-06（追記） / 2026-10-01（追記） / 2026-10-10（追い読み） / 2026-10-18（定期収集分）",
   "method": "編集部が本文を1件ずつ読み、6区分へ再分類した。キーワード抽出による件数は使っていない（3〜4割多く出るため）。2026-09-06: 上記と同じ方法（本文を1件ずつ読み、キーワード抽出は使わない）で、移行支持182件を新しい区分（G〜P）に分類した。既存のA〜Fは移行支持以外専用の区分のため、移行支持側には流用せず新規に区分を立てた。Pは「顧問拒否の方法」という定型フォーマットを繰り返し投稿しているシリーズ（10件）で、他の意見投稿とは性質が異なるため独立区分にした。同日時点で残っていた移行支持以外54件も本文を読み、既存のA〜Fへ追加した。 追い読み（課題69、2026-10-08の定期収集時）: 上記115件を5つのAIサブエージェントが1件ずつ本文を読んで既存の区分（A〜F・G〜P）へ分類した。キーワード抽出は使っていない。24件を別のAIが区分を伏せて読み直し、一致は20件（83%）。食い違った4件は編集担当が読み直して2件を変更した。記録は quality/reviews/2026-10-08-bukatsu-teacher-catchup.json。",
   "buckets": {
     "A": {
       "label": "移しても教員の負担は減らない・むしろ増える",
-      "count": 29
+      "count": 32
     },
     "B": {
       "label": "直すべきは移行ではなく制度と待遇（給特法・残業代・勤務時間の線引き）",
@@ -23,11 +23,11 @@
     },
     "C": {
       "label": "やりたい先生だけが担えばよい（移行ではなく任意化）",
-      "count": 18
+      "count": 20
     },
     "D": {
       "label": "移行ではなく部活そのものを廃止すべき",
-      "count": 9
+      "count": 10
     },
     "E": {
       "label": "移行や廃止で失われるものへの不安",
@@ -35,23 +35,23 @@
     },
     "F": {
       "label": "その他（実態の訴え・分類が難しいもの）",
-      "count": 65
+      "count": 67
     },
     "G": {
       "label": "外部委託・専門指導者への期待（指導の質向上を含む）",
-      "count": 55
+      "count": 61
     },
     "H": {
       "label": "教員の負担軽減・本来業務や私生活の時間の回復への期待",
-      "count": 35
+      "count": 41
     },
     "I": {
       "label": "少子化・人手不足による構造的必然性（このままでは持続不可能という認識）",
-      "count": 24
+      "count": 29
     },
     "J": {
       "label": "無償労働・給特法・違法性の問題視（現行制度の労働搾取・違法性批判）",
-      "count": 43
+      "count": 49
     },
     "K": {
       "label": "移行に反対する教員への批判（既得権益・自己満足という指摘）",
@@ -59,7 +59,7 @@
     },
     "L": {
       "label": "地域移行にとどまらない部活動そのものの完全廃止を求める声",
-      "count": 45
+      "count": 56
     },
     "M": {
       "label": "実際に移行・外部委託が進んだ現場からの肯定的な体験談・報告",
@@ -4278,11 +4278,436 @@
       "bucket_label": "その他（実態の訴え・分類が難しいもの）",
       "summary": "私学の部活廃止は不公平で、負担の大きい部を先に廃止せよという不満",
       "risk": "low"
+    },
+    {
+      "tweet_id": "2111775127507755130",
+      "url": "https://x.com/774nyannyan/status/2111775127507755130",
+      "stance": "移行支持",
+      "bucket": "H",
+      "bucket_label": "教員の負担軽減・本来業務や私生活の時間の回復への期待",
+      "summary": "部活存続派は負担の押し付け先の話ばかりで縮小・移行は必然",
+      "risk": "low",
+      "text_sha256": "5184e2beb1a1d246d18965c76bb288ce359220c06a75817967087bd3ffe1f19e"
+    },
+    {
+      "tweet_id": "2111374112916668761",
+      "url": "https://x.com/m727243023/status/2111374112916668761",
+      "stance": "移行支持",
+      "bucket": "C",
+      "bucket_label": "やりたい先生だけが担えばよい（移行ではなく任意化）",
+      "summary": "移行先で副業申請すればよいと教員の追加要望を退ける",
+      "risk": "low",
+      "text_sha256": "1e9554252f99e30793b6581dd1f3fe82d65adb0fb4ca3d5017711e068eefb87e"
+    },
+    {
+      "tweet_id": "2111245721831936344",
+      "url": "https://x.com/MIF5NrhaxfPRlAz/status/2111245721831936344",
+      "stance": "移行支持",
+      "bucket": "H",
+      "bucket_label": "教員の負担軽減・本来業務や私生活の時間の回復への期待",
+      "summary": "土日の部活禁止を宣言し、保護者に指導を担わせたい",
+      "risk": "medium",
+      "text_sha256": "9b2d20cfb55b5562890183f8cfd76e66a812f38fb83c87214e39c173e8222f61"
+    },
+    {
+      "tweet_id": "2111196963010212304",
+      "url": "https://x.com/kodosemi/status/2111196963010212304",
+      "stance": "条件付き・改善要求",
+      "bucket": "A",
+      "bucket_label": "移しても教員の負担は減らない・むしろ増える",
+      "summary": "平日が従来通りだと教員の負担は残るのではという疑問",
+      "risk": "low",
+      "text_sha256": "5c01e35277b201b7439fcf105bcf3d0befed0b7f9622de064ee94826e839f361"
+    },
+    {
+      "tweet_id": "2111192346373369971",
+      "url": "https://x.com/gounJBOY/status/2111192346373369971",
+      "stance": "中立・情報",
+      "bucket": "I",
+      "bucket_label": "少子化・人手不足による構造的必然性（このままでは持続不可能という認識）",
+      "summary": "子供神輿のように維持できず消える、移行は必然と見る",
+      "risk": "low",
+      "text_sha256": "9d8f598dc081e8060a020f4162757385a0d53d3f1f16f01cb4a0e6b8f06530ab"
+    },
+    {
+      "tweet_id": "2111122817869885494",
+      "url": "https://x.com/opanponmokuden/status/2111122817869885494",
+      "stance": "移行支持",
+      "bucket": "H",
+      "bucket_label": "教員の負担軽減・本来業務や私生活の時間の回復への期待",
+      "summary": "休日部活は顧問負担が大きく仕方ない、平日はまだよい",
+      "risk": "low",
+      "text_sha256": "0d3bf985e440cdf424f8eb15fd49963240fc41184e7639e6b83dcd83ce690e6b"
+    },
+    {
+      "tweet_id": "2108708009400779214",
+      "url": "https://x.com/sugiyama2023/status/2108708009400779214",
+      "stance": "移行支持",
+      "bucket": "J",
+      "bucket_label": "無償労働・給特法・違法性の問題視（現行制度の労働搾取・違法性批判）",
+      "summary": "違法労働につながる部活を削除し速やかに地域移行すべき",
+      "risk": "low",
+      "text_sha256": "5f978fea015bc29ccc6a26bb7e29087b3f4fb3ddc6fa40bbf425bb1193c16c40"
+    },
+    {
+      "tweet_id": "2109404293514326340",
+      "url": "https://x.com/n6RQi5vIdC78775/status/2109404293514326340",
+      "stance": "移行支持",
+      "bucket": "D",
+      "bucket_label": "移行ではなく部活そのものを廃止すべき",
+      "summary": "地域移行より違法状態の廃止を求める",
+      "risk": "low",
+      "text_sha256": "d4ffa07c928fd0ebb57136b307597100da8da2af848fba6856474a84a1188ee5"
+    },
+    {
+      "tweet_id": "2108836441220579728",
+      "url": "https://x.com/Tsehikef/status/2108836441220579728",
+      "stance": "条件付き・改善要求",
+      "bucket": "J",
+      "bucket_label": "無償労働・給特法・違法性の問題視（現行制度の労働搾取・違法性批判）",
+      "summary": "安く働かせた末の地域移行は虫が良すぎる",
+      "risk": "low",
+      "text_sha256": "a880d522b9fb30bb799da3c45206fe6f748102306dd30279c9846f38c523e4d3"
+    },
+    {
+      "tweet_id": "2108741828510122416",
+      "url": "https://x.com/sugiyama2023/status/2108741828510122416",
+      "stance": "移行支持",
+      "bucket": "J",
+      "bucket_label": "無償労働・給特法・違法性の問題視（現行制度の労働搾取・違法性批判）",
+      "summary": "無給ボランティア状態を地域移行で是正せよ",
+      "risk": "low",
+      "text_sha256": "62be0205e5f5403cd2d2af779706890b45a567885f947ade5b0a53fd868e087f"
+    },
+    {
+      "tweet_id": "2111288436623913450",
+      "url": "https://x.com/XgIKIs3OdHb8m1i/status/2111288436623913450",
+      "stance": "移行支持",
+      "bucket": "G",
+      "bucket_label": "外部委託・専門指導者への期待（指導の質向上を含む）",
+      "summary": "土日の部活は禁止か希望制、外部委託へ",
+      "risk": "low",
+      "text_sha256": "4e17faafd2180baf00beb6ef59d8e8c5c7434804dba56353fd6d712431c0bc54"
+    },
+    {
+      "tweet_id": "2109203369319641366",
+      "url": "https://x.com/frozenworkerxyz/status/2109203369319641366",
+      "stance": "移行支持",
+      "bucket": "G",
+      "bucket_label": "外部委託・専門指導者への期待（指導の質向上を含む）",
+      "summary": "部活も授業も外部委託、教師は不要",
+      "risk": "low",
+      "text_sha256": "7151bf1518dcd863aa7cbd84d5f1205cb6f30ccf06007fe528464ebee3133c60"
+    },
+    {
+      "tweet_id": "2108237768770072708",
+      "url": "https://x.com/berwick451/status/2108237768770072708",
+      "stance": "移行支持",
+      "bucket": "G",
+      "bucket_label": "外部委託・専門指導者への期待（指導の質向上を含む）",
+      "summary": "負担減には部活外部委託と入試簡素化を",
+      "risk": "low",
+      "text_sha256": "c7142231db425657e56c5462aace183dbc712f9cd1630d6467dbe11a6f43d22d"
+    },
+    {
+      "tweet_id": "2111682476934574100",
+      "url": "https://x.com/mamedaiFuku8739/status/2111682476934574100",
+      "stance": "中立・情報",
+      "bucket": "F",
+      "bucket_label": "その他（実態の訴え・分類が難しいもの）",
+      "summary": "顧問の負担で教員を辞める例が身近にある",
+      "risk": "low",
+      "text_sha256": "1b347a0ff0511d844114650d6d2c476d4e15bb3cd339a982c369c1cddcfa9d49"
+    },
+    {
+      "tweet_id": "2111585629956137424",
+      "url": "https://x.com/ptptin/status/2111585629956137424",
+      "stance": "条件付き・改善要求",
+      "bucket": "J",
+      "bucket_label": "無償労働・給特法・違法性の問題視（現行制度の労働搾取・違法性批判）",
+      "summary": "全中の競技数削減、教員任せの構造は異常",
+      "risk": "low",
+      "text_sha256": "bf82dd8f0cedea83f1589232ca9ed6546404230e4057904a01d2ee648bb839a7"
+    },
+    {
+      "tweet_id": "2111466233778618624",
+      "url": "https://x.com/isotaku503_2/status/2111466233778618624",
+      "stance": "条件付き・改善要求",
+      "bucket": "F",
+      "bucket_label": "その他（実態の訴え・分類が難しいもの）",
+      "summary": "重複指導は賃金も二重、教員不足の原因に言及",
+      "risk": "medium",
+      "text_sha256": "c51c7b5f284112f38b1c205baf3a62dd33065c6aeddf7e7bfb9727489e70aaee"
+    },
+    {
+      "tweet_id": "2111243332139819516",
+      "url": "https://x.com/homoludens496/status/2111243332139819516",
+      "stance": "移行支持",
+      "bucket": "J",
+      "bucket_label": "無償労働・給特法・違法性の問題視（現行制度の労働搾取・違法性批判）",
+      "summary": "教員負担を理由に部活をなくそうと発信",
+      "risk": "medium",
+      "text_sha256": "ef47bd4ce04432d3d7a48d2bbbb9387093073aaa1dcb802685ba9feee2a91364"
+    },
+    {
+      "tweet_id": "2111046929752698940",
+      "url": "https://x.com/yoda2160/status/2111046929752698940",
+      "stance": "慎重・反対",
+      "bucket": "A",
+      "bucket_label": "移しても教員の負担は減らない・むしろ増える",
+      "summary": "休日だけ地域では大会運営が残り負担は増える",
+      "risk": "high",
+      "text_sha256": "af53f8ee38a4dd9be05b8593390d890f505abde5eb44664ed6a2923aab30c8f4"
+    },
+    {
+      "tweet_id": "2111026399368884352",
+      "url": "https://x.com/Ashish96226725/status/2111026399368884352",
+      "stance": "移行支持",
+      "bucket": "I",
+      "bucket_label": "少子化・人手不足による構造的必然性（このままでは持続不可能という認識）",
+      "summary": "教員不足で学校の部活は無理、地域移行へ(一)",
+      "risk": "high",
+      "text_sha256": "790e5248bbded5821e48ac935ed7998ce7b8a1d59f0f20edf127e845bd216835"
+    },
+    {
+      "tweet_id": "2109958915156803799",
+      "url": "https://x.com/icema07/status/2109958915156803799",
+      "stance": "移行支持",
+      "bucket": "G",
+      "bucket_label": "外部委託・専門指導者への期待（指導の質向上を含む）",
+      "summary": "実習後の学生が指導、将来の負担軽減に期待",
+      "risk": "low",
+      "text_sha256": "ffabfd14af5874ca659f3aa6e7852cd330b536f768757a60330472eb5c90bbed"
+    },
+    {
+      "tweet_id": "2109954941075046435",
+      "url": "https://x.com/asahi819daisuke/status/2109954941075046435",
+      "stance": "条件付き・改善要求",
+      "bucket": "G",
+      "bucket_label": "外部委託・専門指導者への期待（指導の質向上を含む）",
+      "summary": "学校に部活専任職員の採用枠を作れないか",
+      "risk": "low",
+      "text_sha256": "fa3086d9a1b7762326c8fab62724c222e7445d71d6918c0dbb625a983c41166e"
+    },
+    {
+      "tweet_id": "2109622677959061593",
+      "url": "https://x.com/n6RQi5vIdC78775/status/2109622677959061593",
+      "stance": "条件付き・改善要求",
+      "bucket": "H",
+      "bucket_label": "教員の負担軽減・本来業務や私生活の時間の回復への期待",
+      "summary": "部活の話は廃止を受け入れ負担ゼロ案を示せ",
+      "risk": "low",
+      "text_sha256": "5c5dd87c71ec92d74addc7ebbbb9b2239b4b5ef6c5d71721d5b861940dda0bf1"
+    },
+    {
+      "tweet_id": "2109149743633125724",
+      "url": "https://x.com/hEFfOyGIAr99742/status/2109149743633125724",
+      "stance": "移行支持",
+      "bucket": "G",
+      "bucket_label": "外部委託・専門指導者への期待（指導の質向上を含む）",
+      "summary": "部活は免許不要、外部委託か専任で負担減",
+      "risk": "low",
+      "text_sha256": "38c09e0ad1ccd518c3f02258070a7eaa27c6850456f09ada2da655dfce070705"
+    },
+    {
+      "tweet_id": "2108601393921589344",
+      "url": "https://x.com/yousef_dwekat/status/2108601393921589344",
+      "stance": "移行支持",
+      "bucket": "I",
+      "bucket_label": "少子化・人手不足による構造的必然性（このままでは持続不可能という認識）",
+      "summary": "教員不足で地域移行は因果応報(二)",
+      "risk": "high",
+      "text_sha256": "ab9411e77943b22c5dedd8bcb412207fd27df5cbd95cb483402c43fc5c2a47fc"
+    },
+    {
+      "tweet_id": "2108567647038345364",
+      "url": "https://x.com/qiyou580/status/2108567647038345364",
+      "stance": "移行支持",
+      "bucket": "J",
+      "bucket_label": "無償労働・給特法・違法性の問題視（現行制度の労働搾取・違法性批判）",
+      "summary": "完全移行の報道に残業が当たり前の感覚を疑問視",
+      "risk": "low",
+      "text_sha256": "f5103e437cf9841aeb286cf7174c15e1854da2e2b06498e9c10fc3512fb08d69"
+    },
+    {
+      "tweet_id": "2108557292010606961",
+      "url": "https://x.com/774nyannyan/status/2108557292010606961",
+      "stance": "移行支持",
+      "bucket": "I",
+      "bucket_label": "少子化・人手不足による構造的必然性（このままでは持続不可能という認識）",
+      "summary": "教員不足で地域移行は因果応報(三)",
+      "risk": "high",
+      "text_sha256": "c48b109ca5eb3b6b396fd73071cee8bb26749a6f24b493041b2426379b55a689"
+    },
+    {
+      "tweet_id": "2111557376625221648",
+      "url": "https://x.com/FNR4aFS4sTLVNkp/status/2111557376625221648",
+      "stance": "中立・情報",
+      "bucket": "I",
+      "bucket_label": "少子化・人手不足による構造的必然性（このままでは持続不可能という認識）",
+      "summary": "廃止希望の教員が8割、志望者の倍率も急落",
+      "risk": "low",
+      "text_sha256": "7e1850a35dc474a15fc40f2e72924c37be09b2ee899e690236d817b501181966"
+    },
+    {
+      "tweet_id": "2111438288389366196",
+      "url": "https://x.com/6Wdway4aMu56316/status/2111438288389366196",
+      "stance": "移行支持",
+      "bucket": "L",
+      "bucket_label": "地域移行にとどまらない部活動そのものの完全廃止を求める声",
+      "summary": "部活廃止でいい(一)",
+      "risk": "low",
+      "text_sha256": "a41a10bbd38df3e506d654d0b99ba5bf9b2346c66939dfcd1fbb948e1fa2e004"
+    },
+    {
+      "tweet_id": "2111344477222875264",
+      "url": "https://x.com/6Wdway4aMu56316/status/2111344477222875264",
+      "stance": "移行支持",
+      "bucket": "L",
+      "bucket_label": "地域移行にとどまらない部活動そのものの完全廃止を求める声",
+      "summary": "部活廃止にすべき(一)",
+      "risk": "low",
+      "text_sha256": "40822bc069714ffa1fd1c3b952608aae24139cc1436e479e0b880d7cabcdd641"
+    },
+    {
+      "tweet_id": "2111339984276066633",
+      "url": "https://x.com/6Wdway4aMu56316/status/2111339984276066633",
+      "stance": "移行支持",
+      "bucket": "L",
+      "bucket_label": "地域移行にとどまらない部活動そのものの完全廃止を求める声",
+      "summary": "部活廃止でいい(二)",
+      "risk": "low",
+      "text_sha256": "a41a10bbd38df3e506d654d0b99ba5bf9b2346c66939dfcd1fbb948e1fa2e004"
+    },
+    {
+      "tweet_id": "2111336425497256323",
+      "url": "https://x.com/FNR4aFS4sTLVNkp/status/2111336425497256323",
+      "stance": "移行支持",
+      "bucket": "L",
+      "bucket_label": "地域移行にとどまらない部活動そのものの完全廃止を求める声",
+      "summary": "部活の廃止を求める一言",
+      "risk": "low",
+      "text_sha256": "9d163c8bd181403bbb5b22ecec1cc1f01660c1251de93d105a81c8704f25b5a4"
+    },
+    {
+      "tweet_id": "2111335254984364539",
+      "url": "https://x.com/6Wdway4aMu56316/status/2111335254984364539",
+      "stance": "移行支持",
+      "bucket": "L",
+      "bucket_label": "地域移行にとどまらない部活動そのものの完全廃止を求める声",
+      "summary": "部活廃止にすべき(二)",
+      "risk": "low",
+      "text_sha256": "32d4f959ec4186b1f73647ac20b63aa0a23fb95ee2f1f3c10e9c906f9beed023"
+    },
+    {
+      "tweet_id": "2111331625380536584",
+      "url": "https://x.com/6Wdway4aMu56316/status/2111331625380536584",
+      "stance": "移行支持",
+      "bucket": "L",
+      "bucket_label": "地域移行にとどまらない部活動そのものの完全廃止を求める声",
+      "summary": "部活は廃止にすべきだと一言で主張",
+      "risk": "low",
+      "text_sha256": "3827c39c89173f6ff6f7bdde544104270ae8605854e1e4b44dc6a3c5951a1294"
+    },
+    {
+      "tweet_id": "2111302226602070145",
+      "url": "https://x.com/Nijiiro_Ongaku/status/2111302226602070145",
+      "stance": "慎重・反対",
+      "bucket": "C",
+      "bucket_label": "やりたい先生だけが担えばよい（移行ではなく任意化）",
+      "summary": "やりたい先生がやっている部活の廃止は身勝手と批判",
+      "risk": "low",
+      "text_sha256": "9e12d1503f86fe41fdfbdf27e7a30570881c1cb995ebfddbb8a7bc41fa44d49e"
+    },
+    {
+      "tweet_id": "2111275483786875027",
+      "url": "https://x.com/6Wdway4aMu56316/status/2111275483786875027",
+      "stance": "移行支持",
+      "bucket": "L",
+      "bucket_label": "地域移行にとどまらない部活動そのものの完全廃止を求める声",
+      "summary": "部活も廃止でよいと短く述べる",
+      "risk": "low",
+      "text_sha256": "f2ef1b316daa144ad67316d302ff05bef0ea1f78eab0d728d9c988f922afc8fe"
+    },
+    {
+      "tweet_id": "2111101312662381054",
+      "url": "https://x.com/sanurai_tonbi_3/status/2111101312662381054",
+      "stance": "移行支持",
+      "bucket": "L",
+      "bucket_label": "地域移行にとどまらない部活動そのものの完全廃止を求める声",
+      "summary": "部活は全廃し、本気の子だけのクラブチームにすべき",
+      "risk": "low",
+      "text_sha256": "ea3b4e5c577ed481b3de8b2fe0e8dd854fcda6999ce5410e60fa63eecfb0d4ee"
+    },
+    {
+      "tweet_id": "2110964616536932712",
+      "url": "https://x.com/HottoSaffron/status/2110964616536932712",
+      "stance": "移行支持",
+      "bucket": "H",
+      "bucket_label": "教員の負担軽減・本来業務や私生活の時間の回復への期待",
+      "summary": "中学の部活廃止は先生の負担が大きかったからと受け止める",
+      "risk": "low",
+      "text_sha256": "4bdc46e72fb405539acf76b283e36d626e885a577875a2d75e3e6f9d0e977a27"
+    },
+    {
+      "tweet_id": "2110945947056533935",
+      "url": "https://x.com/fouji420/status/2110945947056533935",
+      "stance": "移行支持",
+      "bucket": "L",
+      "bucket_label": "地域移行にとどまらない部活動そのものの完全廃止を求める声",
+      "summary": "吹奏楽部の闇深さを嘆き、真っ先に廃止し禁止せよと主張",
+      "risk": "medium",
+      "text_sha256": "de858438ea208c89bcb8cf61cc2fdb4204835ea8054e80a945bb427af232f389"
+    },
+    {
+      "tweet_id": "2110884200689889345",
+      "url": "https://x.com/KQchildrights/status/2110884200689889345",
+      "stance": "移行支持",
+      "bucket": "L",
+      "bucket_label": "地域移行にとどまらない部活動そのものの完全廃止を求める声",
+      "summary": "部活は廃止した方がよいと述べる",
+      "risk": "low",
+      "text_sha256": "cb29b6b3bdc15d0e04e58aa1a6fc7fb40c3d182812443623f623321c1f8c8c3e"
+    },
+    {
+      "tweet_id": "2110815684603392504",
+      "url": "https://x.com/T1yOuHbQPJ18178/status/2110815684603392504",
+      "stance": "移行支持",
+      "bucket": "L",
+      "bucket_label": "地域移行にとどまらない部活動そのものの完全廃止を求める声",
+      "summary": "給食廃止や午前授業とあわせ部活も廃止が現実的と提案",
+      "risk": "low",
+      "text_sha256": "16696709268573ea18b6f5f4f03eb064e537c87e362e20d319a7c28f16b139fe"
+    },
+    {
+      "tweet_id": "2109257563879686616",
+      "url": "https://x.com/surfe5/status/2109257563879686616",
+      "stance": "条件付き・改善要求",
+      "bucket": "A",
+      "bucket_label": "移しても教員の負担は減らない・むしろ増える",
+      "summary": "移行は教師の負担軽減が目的で、外部指導者は引率や事務を学校に求める",
+      "risk": "low",
+      "text_sha256": "1131dd1eb670abcfc735e2e06c16a39244e4c2367495ac34cf10e2f651c12655"
+    },
+    {
+      "tweet_id": "2108713036651675988",
+      "url": "https://x.com/eigo_senka/status/2108713036651675988",
+      "stance": "移行支持",
+      "bucket": "H",
+      "bucket_label": "教員の負担軽減・本来業務や私生活の時間の回復への期待",
+      "summary": "教員は放課後に部活につけず、地域移行以外の選択肢はあるのかと問う",
+      "risk": "low",
+      "text_sha256": "95e05bffe4d96605d25b21dc8c4ced5cb5e80471b934873a5e9b28a900faf46e"
     }
   ],
   "catchup_2026_10_10": {
     "added": 28,
     "evidence": "quality/reviews/2026-10-10-bukatsu-chiiki-catchup.json",
     "evidence_sha256": "7695dfb2b8c673a48190bec9fd6658d58cc6c4e179cf5b18aed472b735b4ba0b"
+  },
+  "wave_2026_10_18": {
+    "added": 42,
+    "evidence": "quality/reviews/2026-10-18-bukatsu-chiiki-wave-reading.json",
+    "evidence_sha256": "91b3d1e7c65fba2219c9f32fd88514fe7844003bf4f4c1fb975fbaa2eb0e5d2a"
   }
 }

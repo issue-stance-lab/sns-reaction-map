@@ -32,6 +32,24 @@ rules:
 #   decided_at: null
 #   decision_note: null
 items:
+  - id: approval-20261018-source-site-consistency
+    department: engineering-data
+    action: website_publication
+    summary: "消費税減税・皇室典範改正の2ページを、2026-10-18の一次資料照合に合わせて訂正する"
+    reason: "法律案第39条の財源対象と、皇室典範第38条第4項・第6項の照合状況・子孫の扱いについて、公開表示との食い違いを解消するため"
+    risks:
+      - "SNSの集計件数は今回更新しない。確認日が異なる資料は、ページ内で日付を分けて示す"
+      - "部活動テーマの収集予定日超過によりトップページ検査が失敗している。この2ページの本文・件数の検査とは別件"
+    recommendation: approve
+    evidence:
+      - "quality/research/consumption-tax-cut-primary-sources.md"
+      - "quality/research/koshitsu-tenpakai-primary-sources.md"
+      - "docs/consumption-tax-cut-reaction-map.html"
+      - "docs/koshitsu-tenpakai-reaction-map.html"
+    status: approved
+    requested_at: "2026-10-18"
+    decided_at: "2026-10-18"
+    decision_note: "表示との照合結果と2ページの具体的な修正内容を提示後、オーナーが本対話で『反映して』と明示した。部活動の期限超過でトップページ検査が止まることを追加説明し、今回に限って2ページを先に公開することも明示承認した。"
   - id: approval-20261010-note4
     department: editorial
     action: note_post
@@ -2694,3 +2712,63 @@ items:
       テスト2,376件・公開ファイルの検査・ページ検査3種をすべて通してから push、
       GitHub Actions の2ワークフロー（Deploy to GitHub Pages / 公開ファイルの検査）の成功と
       公開サイトの表示まで確認した。
+  - id: approval-20261018-school-nickname-ban-refresh
+    department: engineering-data
+    action: website_publication
+    summary: "学校でのあだ名禁止テーマの2026-10-18更新回を一般公開する"
+    reason: "collect_at（10/18）の定期収集を実施。新規24件（意見10件）を、読み手2名の伏せ読みとKimiの突き合わせで全件本文確認し、収集507件・意見110件としてページの集計・論点表示・取得期間・潮目・語られていない争点の母数を更新するため"
+    risks:
+      - "SNS上の公開投稿サンプルであり、社会全体の世論を示すものではない。意見110件の小標本で、傾向は参考程度"
+      - "潮目（前回との比較）は保存回の自動分類が基準のため、ページ上は『前回11件／今回8件』と出る。編集担当が確定した意見10件とは数え方が違う（従来の仕組みで、参考程度と注記済み）"
+      - "Kimi（自動分類）のAPIキーが期限切れで当日一時停止した。キーを差し替えて復旧し、分類は全件Kimi（kimi-k2.7-code）で行った。代用モデルは使っていない"
+      - "公開候補の再生成で、別セッションが同日手直しした消費税・皇室・副首都のページが古い基準日に戻ったため、この3ページは公開対象から外して元のまま残した"
+    recommendation: approve
+    evidence:
+      - "quality/reviews/2026-10-18-school-nickname-ban-refresh-review.md"
+      - "quality/reviews/2026-10-18-school-nickname-ban-wave-reading.json"
+      - "data/verification/updates/school-nickname-ban/2026-10-18/report.json"
+      - ".staging/refresh/school-nickname-ban/20261018_163742/promotion-manifest.json"
+    status: approved
+    requested_at: "2026-10-18"
+    decided_at: "2026-10-18"
+    decision_note: "オーナーが「公開して」と承認（2026-10-18）。承認時点の候補（収集507件・意見110件）から、データ内容は変えていない。"
+
+  - id: approval-20261018-topic-list-design
+    category: publication
+    requested_by: Codex
+    summary: "トップのテーマ入口を一覧表示にし、テーマ別ピクトグラム10点と薄いヒーロー背景を公開する"
+    reason: "オーナーが各段階のプレビューを確認し、背景の濃さを調整した最終候補を公開するため"
+    risks:
+      - "文章・リンク・検索語は維持。件数は最新mainの正典から再生成し、当日公開したあだ名禁止テーマの更新も維持する"
+      - "背景はPC20%・スマホ16%。見出し側を白く残し、補足文は濃くして可読性を保つ"
+      - "GA4・AdSense・OGP・投票の機能は変更しない"
+    recommendation: approve
+    evidence:
+      - "tasks/task-106.md"
+      - "docs/top-page.css"
+      - "scripts/build_top_page.py"
+      - "docs/images/pictograms/"
+    status: approved
+    requested_at: "2026-10-18"
+    decided_at: "2026-10-18"
+    decision_note: "プレビューを確認・調整後、オーナーがこのチャットで『公開して』と承認。releaseスキルで公開する。"
+  - id: approval-20261018-bukatsu-chiiki-refresh
+    department: engineering-data
+    action: website_publication
+    summary: "部活動の地域移行テーマの2026-10-18更新回を一般公開する"
+    reason: "collect_at（10/17）の定期収集を1日遅れで実施。新規143件（意見99件）を、読み手2名の伏せ読みとKimiの突き合わせで全件本文確認し、収集2,129件・意見1,677件としてページの集計・論点表示・取得期間・推移・資料にしかない話の母数を更新するため"
+    risks:
+      - "SNS上の公開投稿サンプルであり、社会全体の世論を示すものではない"
+      - "推移の立場に見かけの差が出る。ページには『中立・情報が31.8%から12.1%へ19.7ポイント下がりました。ぶれの範囲を超える差です』と出るが、今回の分だけ本文確認で確定した値で数え、前回までは自動分類のままのため、判定のしかたの違いが主因（Kimi自動分類のままなら36.5%）。オーナーはこの差を承知のうえで公開を承認した"
+      - "完全廃止を求める短文は、過去の扱い（区分Lの45件中40件が移行支持）に合わせて移行支持に揃えた。読み手によっては割れる"
+      - "運用ルールの『1日1テーマまで』を、同日のあだ名禁止の更新に続けて実施した（オーナーの指示）"
+    recommendation: approve
+    evidence:
+      - "quality/reviews/2026-10-18-bukatsu-chiiki-refresh-review.md"
+      - "quality/reviews/2026-10-18-bukatsu-chiiki-wave-reading.json"
+      - "data/verification/updates/bukatsu-chiiki/2026-10-18/report.json"
+      - ".staging/refresh/bukatsu-chiiki/20261018_202526/promotion-manifest.json"
+    status: approved
+    requested_at: "2026-10-18"
+    decided_at: "2026-10-18"
+    decision_note: "オーナーが「推移の見かけの差を承知のうえで公開して」と承認（2026-10-18）。承認時点の候補（収集2,129件・意見1,677件）から、データ内容は変えていない。"
