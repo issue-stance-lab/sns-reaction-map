@@ -227,6 +227,8 @@ class Article:
     sources: list[Source]
     path: Path
     order: int = 100
+    link_label: str = ""   # トップ・テーマページの一覧に出す短い問い（題名からテーマ名を外した形）
+    link_answer: str = ""  # その下に出す1行の答え
 
     @property
     def url(self) -> str:
@@ -240,6 +242,16 @@ def _as_date(value: Any, label: str, slug: str) -> date:
         return date.fromisoformat(str(value))
     except ValueError as exc:
         raise BuildError(f"{slug}: {label} が日付として読めません: {value!r}") from exc
+
+
+def _short(meta: dict[str, Any], key: str, limit: int, slug: str) -> str:
+    """一覧用の短い文。必須。長すぎると一覧で折り返して読みにくくなるので字数で止める。"""
+    value = str(meta.get(key) or "").strip()
+    if not value:
+        raise BuildError(f"{slug}: {key} がありません（トップ・テーマページの一覧に出す）")
+    if len(value) > limit:
+        raise BuildError(f"{slug}: {key} が{limit}字を超えています（{len(value)}字）")
+    return value
 
 
 def load_article(path: Path) -> Article:
@@ -283,6 +295,8 @@ def load_article(path: Path) -> Article:
         sources=sources,
         path=path,
         order=int(meta.get("order", 100)),
+        link_label=_short(meta, "link_label", 18, slug),
+        link_answer=_short(meta, "link_answer", 32, slug),
     )
 
 
