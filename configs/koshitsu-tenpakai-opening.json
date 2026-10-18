@@ -2,7 +2,7 @@
   "theme_id": "koshitsu-tenpakai",
   "_about": "皇室典範改正ページの冒頭（題名・短答・3つの問い・件数）の文言と日付。scripts/koshitsu_opening.py が読む。件数はここに書かず、public_json から読む。",
   "public_json": "docs/data/themes/koshitsu-tenpakai.json",
-  "as_of": "2026-10-11",
+  "as_of": "2026-10-18",
   "_as_of": "冒頭を生成する基準日。施行前か後かの時制と残り日数をこの日で決める。生成のたびに更新する（--as-of で上書き可）。",
   "kicker": "皇室・憲法 ／ 条文で確かめてから、SNSの意見を読む",
   "h1": [
@@ -18,8 +18,8 @@
     "_enforcement_confirmed_on": "施行後に e-Gov の現行版が改正後の条文に切り替わったことを確かめた日。確かめるまで null のまま（一次資料メモ 未解決7）。",
     "enacted_on": "2026-07-17",
     "_enacted_on": "2026-10-11 に衆議院の議案経過（一次資料メモ 資料K）で参議院可決＝成立日を確認。",
-    "checked_on": "2026-10-11",
-    "_checked_on": "2026-10-11 に e-Gov を再取得し第一条・附則第一条・第十五条・第三十八条と公布・施行日を再照合（照合表 quality/reviews/2026-10-11-koshitsu-tenpakai-opening-source-check.md）。前回は 2026-09-13。第一・九・十二・十五・三十八条と施行情報を e-Gov で照合した日（quality/research/koshitsu-tenpakai-primary-sources.md、data/verification/koshitsu-tenpakai-background.json）。"
+    "checked_on": "2026-10-18",
+    "_checked_on": "2026-10-11 に第一条・附則第一条・第十五条と公布・施行日を再確認。2026-10-18 に未施行版の第三十八条第四項・第六項を e-Gov API で逐語照合し、施行日と未施行状態も確認（quality/research/koshitsu-tenpakai-primary-sources.md 資料F）。その他の条文・会議録全体は今回再監査していない。"
   },
   "status": {
     "before": "改正法は{enacted}に成立し、{promulgated}に公布されました。主な規定は{enforcement}に施行されます。",
@@ -85,7 +85,7 @@
       "q": "何が変わるの？",
       "answer_before": "施行後は、女性皇族が結婚しても皇族の身分を保ちます。旧11宮家の男系男子を、条件付きで養子に迎えられるようになります。",
       "answer_after": "女性皇族は、結婚しても皇族の身分を保ちます。旧11宮家の男系男子を、条件付きで養子に迎えられます。",
-      "detail": "配偶者と子は皇族になりません。養子本人に皇位継承資格はなく、その子孫は資格を持ちます。",
+      "detail": "配偶者と子は皇族になりません。養子本人に皇位継承資格はなく、男系男子の子孫には継承順序の規定が適用されます。",
       "issue_id": "koshitsu-tenpakai-former-royal-adoption",
       "link_label": "養子をめぐる意見へ"
     },
@@ -173,5 +173,5 @@
       "koshitsu-tenpakai-package-unclear": "#B8ACA2"
     }
   },
-  "sources_line": "制度の確認日：{checked_on}。SNSの集計：{updated_on}まで。"
+  "sources_line": "第三十八条第四項・第六項の確認日：{checked_on}。SNSの集計：{updated_on}まで。"
 }
