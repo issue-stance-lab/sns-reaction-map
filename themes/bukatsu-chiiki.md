@@ -239,3 +239,7 @@ ai-copyright・fukushutoの2テーマは`show_unreviewed_note`が既定のtrue�
 公開中のページの投票注記「試作では…送信しません」とJSなし案内の「試作」の語も直した。件数は変えていない。
 次の定期更新（10/17）は、5論点に新しい意見が入ったらその回のうちに追い読みが要る（立場の対応表は更新経路が作り直す）。公開が10/17以降になったら初期型の指紋を更新して通す（DATA_REFRESH.md）。
 [公開候補と検査の記録](../quality/designs/2026-10-14-bukatsu-chiiki-production-candidate.md)・承認記録 `approval-20261014-bukatsu-chiiki-v2`。
+
+## 2026-10-18 定期収集（新ルール初回・承認待ち）
+
+collect_at（10/17）の定期収集を1日遅れで実施。Yahooリアルタイム検索で248件取得・重複105件・新規143件。新規143件を読み手2名（Sonnet）が自動分類を伏せて本文判定し、Kimi（kimi-k2.7-code）と突き合わせて編集担当が確定した。意見99件（Kimiは115件、補正83件）、累計は収集2,129件・意見1,677件（1,578→1,677）。新論点チェックは「その他」2件（2.0%）で提案なし。資料にしかない話の母数を1,578→1,677に更新（sc-4は2件ヒットしたが一般論で除外、該当0）。`refresh_adapters/bukatsu.py` に本文確認の補正を候補へ適用する `review_candidate` を追加し、読み手設定 `configs/wave_review/bukatsu-chiiki.yaml` を新設。推移の立場は、今回だけ本文確認の値で数えるため「中立・情報が31.8%→12.1%」と出るが、判定のしかたの変化が主因（Kimi自動分類のままなら36.5%）。次回収集予定2026-10-27。公開は未実施（オーナー承認待ち）。[監査](../quality/reviews/2026-10-18-bukatsu-chiiki-refresh-review.md)・[読了証拠](../quality/reviews/2026-10-18-bukatsu-chiiki-wave-reading.json)。

@@ -2752,3 +2752,23 @@ items:
     requested_at: "2026-10-18"
     decided_at: "2026-10-18"
     decision_note: "プレビューを確認・調整後、オーナーがこのチャットで『公開して』と承認。releaseスキルで公開する。"
+  - id: approval-20261018-bukatsu-chiiki-refresh
+    department: engineering-data
+    action: website_publication
+    summary: "部活動の地域移行テーマの2026-10-18更新回を一般公開する"
+    reason: "collect_at（10/17）の定期収集を1日遅れで実施。新規143件（意見99件）を、読み手2名の伏せ読みとKimiの突き合わせで全件本文確認し、収集2,129件・意見1,677件としてページの集計・論点表示・取得期間・推移・資料にしかない話の母数を更新するため"
+    risks:
+      - "SNS上の公開投稿サンプルであり、社会全体の世論を示すものではない"
+      - "推移の立場に見かけの差が出る。ページには『中立・情報が31.8%から12.1%へ19.7ポイント下がりました。ぶれの範囲を超える差です』と出るが、今回の分だけ本文確認で確定した値で数え、前回までは自動分類のままのため、判定のしかたの違いが主因（Kimi自動分類のままなら36.5%）。オーナーはこの差を承知のうえで公開を承認した"
+      - "完全廃止を求める短文は、過去の扱い（区分Lの45件中40件が移行支持）に合わせて移行支持に揃えた。読み手によっては割れる"
+      - "運用ルールの『1日1テーマまで』を、同日のあだ名禁止の更新に続けて実施した（オーナーの指示）"
+    recommendation: approve
+    evidence:
+      - "quality/reviews/2026-10-18-bukatsu-chiiki-refresh-review.md"
+      - "quality/reviews/2026-10-18-bukatsu-chiiki-wave-reading.json"
+      - "data/verification/updates/bukatsu-chiiki/2026-10-18/report.json"
+      - ".staging/refresh/bukatsu-chiiki/20261018_202526/promotion-manifest.json"
+    status: approved
+    requested_at: "2026-10-18"
+    decided_at: "2026-10-18"
+    decision_note: "オーナーが「推移の見かけの差を承知のうえで公開して」と承認（2026-10-18）。承認時点の候補（収集2,129件・意見1,677件）から、データ内容は変えていない。"
