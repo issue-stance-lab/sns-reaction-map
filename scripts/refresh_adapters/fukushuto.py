@@ -87,6 +87,7 @@ def review_candidate(root: Path, stage: Path, current_date: str, report: dict) -
     cumulative_path.write_text(json.dumps(cumulative, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     report["automated_opinions"] = report["opinions"]
     report["opinions"] = sum(row["classification"]["is_opinion"] is True for row in wave)
+    report["saved_wave_opinions"] = report["opinions"]
     report["body_review"] = str(records_path.relative_to(root))
     report["body_review_changes"] = len(changes)
 
