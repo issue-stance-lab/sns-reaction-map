@@ -1,8 +1,8 @@
 # 副首都ページ・10月19日更新回の公開前確認
 
 - 対象: `20261019_225306`、副首都ページの定期更新候補
-- 候補manifest: `.staging/refresh/fukushuto/20261019_225306/promotion-manifest.json`（manifest file SHA-256 `bd24b21304843c0d126238b70930786785a011dca911ea2162ffa4f6c7ca5937`、内部canonical SHA `dfd23f4860f3a5fe73ebc3cd528c66b11c6dae07cedad088f1e6424451cff8d5`）
-- 公開操作: 未実施（オーナー承認待ち）
+- 候補manifest: `.staging/refresh/fukushuto/20261019_225306/promotion-manifest.json`（manifest file SHA-256 `26c7f02c687449d489b7bedbcaa31f9e00852dbd44bedb989d7067651f858193`、内部canonical SHA `0d0d21f5a5312a24502d29cf811bee75c1d0578aa20a3e2eba8930ab8611b92e`）
+- 公開操作: 承認を受けて適用済み。最終検査・push・Pages確認を実施中
 - 候補状態: `prepared`
 
 ## 収集・分類
@@ -28,12 +28,12 @@
 - 候補内の数値由来検査は322/322合格、説明不能0件。候補生成と完了記録の検査は成功し、manifestは `prepared`。
 - `verify_ocean_layer.py` は正典未反映の候補を現在の正典と照合するため、この段階の実行結果を公開後検証として扱わない。正典反映後にrelease手順の検査を行う。
 - `sample_total_opinions` は現在の累積意見数2,566へ更新。各項目の`sns_base`と同じ現在母数を示す。
-- 独立監査（読み取り専用）: `ready_for_ceo`。56ファイルすべてが存在し、記載ハッシュと一致。manifestは`prepared`、manifest/reportの今回意見数210件、累計3,105投稿・意見2,566件、完了記録、制度説明、資料照合、サイバー対策候補の監視提案を確認済み。監査指摘により、承認用の意見数をKimi自動分類209件から編集確定210件へ同期して再生成した。
+- 初回の独立監査後、公開適用時に別テーマ2ページの日付が古い設定値へ戻ることを確認。現行公開内容を候補へ戻しmanifestを再計算した。副首都ページの内容・件数は変えていない。修正版manifestは独立監査で `ready_for_ceo`。候補56ファイルのSHA-256はmanifestと一致し、修正後も副首都の累計は3,105件・意見2,566件。
 
-## 公開前に残ること
+## 公開実施時の補足
 
-1. 独立監査の判定と指摘を反映する。
-2. オーナー承認後、候補manifestを適用し、release手順でmain・公開サイト・CIを確認する。
-3. 公開後にnote更新の要否とX投稿を確認する。
+- 適用後は正典と候補の基準SHAが候補版へ進むため、`refresh_completion.py check` を同じstageに対して再実行すると基準不一致になる。完了証拠内の候補SHAは公開正典と一致し、適用後の再実行失敗は適用前の確認結果を否定しない。
+- stageの `report.json` は先行適用したmanifestのSHAと自動分類209件を保持する履歴記録。今回承認した修正版manifestは本レビュー記載のraw SHA `26c7f02c…` / canonical SHA `0d0d21f5…`。mainでのrelease検査を通すため、日付切替後にトップページとDATA_SHEETを再生成し、公開候補とmanifestも同期した。監査済みの副首都内容・数値は変えていない。56ファイルの候補ハッシュを再計算し一致を確認した。人手確定210件は公開候補と今回manifestに反映済み。
+- mainでの公開前検査では、DATA_SHEET・トップページの生成差分と副首都の沈んだ大陸2件の機械検索記録を検出した。生成物を再生成し、検索記録を現行正典の結果に合わせた。
 
-`collect_at`、`refresh_at`、本番ページ・公開JSON、GitHub Pagesは未更新。
+副首都ページ・公開JSONは承認候補を適用済み。mainでページ・数値由来・トップページ・公開一括チェックが成功し、全テスト2,151件（5件スキップ）も通過。GitHub Pagesへのpush、CIと配信の確認を続行中。
