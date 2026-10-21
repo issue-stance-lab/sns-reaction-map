@@ -800,3 +800,9 @@
 3. **支援金の政令案**（金額が入るもの）。法案成立前のため未公表。
 4. **与党（自民党税制調査会等）が10月17日に受け取った資料。**jimin.jp を直接巡回しての確認はしていない。
 5. **関係府省庁連絡会議（第1回）の議事要旨。**ページ上でリンクがコメントアウトされており未公開。
+
+### 2026-10-21：政府法案と質問第12号の再確認
+
+- 衆議院の[第222回国会・議案一覧](https://www.shugiin.go.jp/internet/itdb_gian.nsf/html/gian/menu.htm)を確認。第222回・閣法第1号は引き続き「衆議院で審議中」。議案の経過は、引き続き[専用ページ](https://www.shugiin.go.jp/internet/itdb_gian.nsf/html/gian/keika/1DE342E.htm)で確認する。
+- 衆議院の[第222回国会・質問一覧](https://www.shugiin.go.jp/internet/itdb_shitsumon.nsf/html/shitsumon/kaiji222_l.htm)と[質問第12号の経過情報](https://www.shugiin.go.jp/internet/itdb_shitsumon.nsf/html/shitsumon/222012.htm)を確認。10月15日提出、経過状況は「質問受理」。内閣転送年月日・答弁受領年月日は空欄で、質問一覧にも質問・答弁本文へのリンクがない。
+- よって、質問本文の内容や政府答弁を推測しない。法案の成立・公布も確認できない。質問・答弁の掲載と法案の審議経過を次回も確認する。
