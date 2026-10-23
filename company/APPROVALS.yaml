@@ -2820,3 +2820,23 @@ items:
       オーナーが「反映して」と承認（2026-10-19）。release スキルの手順で main へ統合し、
       テスト2,377件・公開ファイルの検査・ページ検査3種をすべて通してから push、
       GitHub Actions の2ワークフローの成功と公開サイトの表示まで確認した。
+  - id: approval-20261023-bike-blue-ticket-refresh
+    department: engineering-data
+    action: website_publication
+    summary: "自転車の青切符導入テーマの2026-10-23更新回を一般公開する"
+    reason: "collect_at（10/21）の定期収集を2日遅れで実施。新規49件（意見26件）を、読み手2名の伏せ読みと編集担当の確定で全件本文確認し、収集731件・意見495件としてページの集計・論点表示・取得期間・推移を更新するため"
+    risks:
+      - "SNS上の公開投稿サンプルであり、社会全体の世論を示すものではない。今回の意見は26件の小標本で、前回との比較（賛成が12.9ポイント減少）は数件の違いで大きく動く（ページに注意書きあり）"
+      - "事実確認7主張の該当投稿に4件を追加したが、警察庁の資料は取り直していないため確認日（2026年10月11日）は据え置いた。オーナーはこの点を承知のうえで公開を承認した"
+      - "自転車の取得期間（owner_confirmed）は自動で伸びないため、THEMES.yaml の sample_period を手で 2026-10-23 に更新した"
+      - "bike_plan.py に、読み手の立場のコード名を表示名へ変換する処理を追加した"
+    recommendation: approve
+    evidence:
+      - "quality/reviews/2026-10-23-bike-blue-ticket-refresh-review.md"
+      - "quality/reviews/2026-10-23-bike-blue-ticket-wave-reading.json"
+      - "data/bike-blue-ticket_editorial-updates/20261023.json"
+      - ".staging/refresh/bike-blue-ticket/20261023_172526/promotion-manifest.json"
+    status: approved
+    requested_at: "2026-10-23"
+    decided_at: "2026-10-24"
+    decision_note: "オーナーが「公開して」と承認（2026-10-24。選択肢『このまま公開する』）。承認時点の候補（収集731件・意見495件）から、データ内容は変えていない。"

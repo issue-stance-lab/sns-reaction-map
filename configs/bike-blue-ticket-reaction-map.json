@@ -298,18 +298,18 @@
         "reason": "STEP2の「N件の投稿」。主張ごとに編集部が確定した該当投稿（data/bike-blue-ticket_claim_posts.json 由来）"
       },
       {
-        "path": "data/verification/updates/bike-blue-ticket/2026-09-28/classified.json",
-        "selectors": [
-          "tide-card"
-        ],
-        "reason": "「世論の潮目」前回側（2026-09-28収集分）の分類結果"
-      },
-      {
         "path": "data/verification/updates/bike-blue-ticket/2026-10-11/classified.json",
         "selectors": [
           "tide-card"
         ],
-        "reason": "「世論の潮目」今回側（2026-10-11収集分）の分類結果"
+        "reason": "「世論の潮目」前回側（2026-10-11収集分）の分類結果"
+      },
+      {
+        "path": "data/verification/updates/bike-blue-ticket/2026-10-23/classified.json",
+        "selectors": [
+          "tide-card"
+        ],
+        "reason": "「世論の潮目」今回側（2026-10-23収集分）の分類結果"
       }
     ],
     "regions": {
@@ -347,6 +347,14 @@
       {
         "value": 135855,
         "reason": "警察庁 制度導入後1か月間の指導警告票交付件数（この争点の背景・これまでの経緯より、一次情報）"
+      },
+      {
+        "value": 1,
+        "reason": "冒頭の「運用の実際」の絵の「青切符1件に対し、指導警告票は約63件」の1。比の基準（定義）で、件数ではない"
+      },
+      {
+        "value": 63,
+        "reason": "冒頭の「運用の実際」の絵の比。警察庁の指導警告票135,855件÷青切符2,147件≒63.3（configs/bike-blue-ticket-opening.json の warning から bike_opening.py が計算する。SNSの件数ではない）"
       }
     ],
     "exclude_selectors": [
