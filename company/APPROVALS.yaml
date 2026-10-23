@@ -2733,6 +2733,28 @@ items:
     decided_at: "2026-10-18"
     decision_note: "オーナーが「公開して」と承認（2026-10-18）。承認時点の候補（収集507件・意見110件）から、データ内容は変えていない。"
 
+  - id: approval-20261024-henoko-student-accident-refresh
+    department: engineering-data
+    action: website_publication
+    summary: "辺野古高校生死亡事故テーマの2026-10-24更新回を一般公開する"
+    reason: "collect_at（10/22）の定期収集を2日遅れで実施。新規22件（意見16件）を、読み手2名の伏せ読みとKimiの突き合わせで全件本文確認し、収集658件・意見511件としてページの集計・論点表示・取得期間・潮目・語られていない争点の母数を更新するため"
+    risks:
+      - "SNS上の公開投稿サンプルであり、社会全体の世論を示すものではない。今回の意見16件はすべて『論点を切り分ける』で、文科省判断への賛否を書いた投稿は無い"
+      - "潮目（前回との比較）は『論点を切り分ける』を除く前回7件／今回6件の小標本で、少数サンプルの注記が付く"
+      - "共産党や活動家への中傷的な表現を含む投稿5件は代表投稿に使わない扱いだが、意見の件数には入っている"
+      - "Kimi（自動分類）が利用上限（429）で止まった。上限が戻ってから同じ収集の続きで分類し、代用モデルは使っていない"
+      - "公開候補の再生成で、別セッションが手直しした皇室典範のページが古い基準日に戻るため、このページは公開対象から外して元のまま残す"
+    recommendation: approve
+    evidence:
+      - "quality/reviews/2026-10-24-henoko-student-accident-refresh-review.md"
+      - "quality/reviews/2026-10-24-henoko-student-accident-wave-reading.json"
+      - "data/verification/updates/henoko-student-accident/2026-10-24/report.json"
+      - ".staging/refresh/henoko-student-accident/20261024_004234/promotion-manifest.json"
+    status: approved
+    requested_at: "2026-10-24"
+    decided_at: "2026-10-24"
+    decision_note: "オーナーが「公開して」と承認（2026-10-24）。承認時点の候補（収集658件・意見511件）から、データ内容は変えていない。"
+
   - id: approval-20261018-topic-list-design
     category: publication
     requested_by: Codex

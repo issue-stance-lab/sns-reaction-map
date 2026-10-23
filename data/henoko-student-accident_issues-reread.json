@@ -1,5 +1,5 @@
 {
-  "read_at": "2026-10-10T21:42:33+09:00",
+  "read_at": "2026-10-24T08:31:04+09:00",
   "reviewer_type": "editorial_ai",
   "reviewer": "Codex (GPT-6)",
   "method": "480件の本文を20件ずつ個別に読み、投稿者の評価と引用・告知を区別し、発言理由を手作業で割り当てた。コードは保存と件数計算のみ。2026-09-13の独立監査に基づき、同文投稿の整合性、賛否の明示性、理由見出しと本文の対応を再確認して修正。独立監査の確認範囲・結果は quality/reviews/2026-09-13-henoko-fix-reaudit.md を参照。2026-09-13にオーナーの公開承認を受け正式採用。 2026-09-24: 2026-09-23収集分の新規39件（政治利用・基地問題）をClaude Sonnet 5が個別に読み、既存の区分へ追加。詳細はquality/reviews/2026-09-24-henoko-base-politics-reread.mdを参照。",
@@ -25,11 +25,11 @@
     "報道・行政対応": {
       "media-bias": {
         "label": "報道の量・取り上げ方への疑問",
-        "count": 56
+        "count": 58
       },
       "media-authority": {
         "label": "行政・政党の説明と調査",
-        "count": 37
+        "count": 38
       },
       "media-response": {
         "label": "会見や遺族の記録への受け止め",
@@ -61,7 +61,7 @@
     "安全管理・事故原因": {
       "safety-school": {
         "label": "学校の計画・引率・生徒への説明",
-        "count": 31
+        "count": 33
       },
       "safety-ideology": {
         "label": "活動の目的より安全を優先してほしい",
@@ -69,7 +69,7 @@
       },
       "safety-accountability": {
         "label": "責任の所在・調査と説明を求める",
-        "count": 56
+        "count": 59
       },
       "safety-prevention": {
         "label": "再発防止と安全確認を優先する",
@@ -91,7 +91,7 @@
       },
       "dignity-mourning": {
         "label": "命を悼み、遺族や生徒の立場を考える",
-        "count": 8
+        "count": 10
       },
       "dignity-ceremony": {
         "label": "慰霊の場と政治的抗議を分ける",
@@ -101,15 +101,15 @@
     "政治利用・基地問題": {
       "politics-links": {
         "label": "活動団体・政党・教育機関への批判と関係",
-        "count": 37
+        "count": 41
       },
       "politics-base": {
         "label": "基地政策・反対運動の是非",
-        "count": 7
+        "count": 8
       },
       "politics-double": {
         "label": "批判する側にも説明と反省を求める",
-        "count": 45
+        "count": 46
       },
       "politics-election": {
         "label": "事故対応を選挙や政治家の評価につなげる",
@@ -5562,11 +5562,192 @@
       "read_at": "2026-10-10T21:42:33+09:00",
       "reviewer": "Claude Fable 5.1（編集担当）＋Claude Sonnet 5.5 読み手サブエージェント",
       "post_key": "1d898645e370abda68c34ec8e7445de98727d658a34d68e66552be594fb5b296"
+    },
+    {
+      "post_key": "dc901d5f20d9c82053540c59acd72c854fcba2ee765ac122ff5d781057d6e6eb",
+      "main_issue": "政治利用・基地問題",
+      "bucket": "politics-base",
+      "body_reviewed": true,
+      "review_kind": "editorial_body_reread",
+      "read_at": "2026-10-24T08:31:04+09:00",
+      "reviewer": "Claude Fable 5.1（編集担当）＋Claude Sonnet 5.5 読み手2名（自動分類を伏せて本文判定）",
+      "text_sha256": "2af8e7ff4cfd5eac620861c4501e483559cbaa328c505da15079067bc66926c4",
+      "reason_sha256": "f69e393857cb9db026468dbf7e812fb4a9db4e28f526826de64f727b5495255b"
+    },
+    {
+      "post_key": "351ba955379d54dae3dc3cabdc92c7495213bc50d549f3ce0faf0b15c9ddaf2b",
+      "main_issue": "政治利用・基地問題",
+      "bucket": "politics-links",
+      "body_reviewed": true,
+      "review_kind": "editorial_body_reread",
+      "read_at": "2026-10-24T08:31:04+09:00",
+      "reviewer": "Claude Fable 5.1（編集担当）＋Claude Sonnet 5.5 読み手2名（自動分類を伏せて本文判定）",
+      "text_sha256": "3cda4c27d1e2439e43fc6aaebc66b0efa9e0cae273d3143d38b159b2ecb8e3a6",
+      "reason_sha256": "d0c8acba1d7d4fd5072ae6dcba979a1d480aef8ead3d46288a29d4839adc5810"
+    },
+    {
+      "post_key": "0d080f3ff71f382e3b791cfb742a247865b96785bfc4b6e1b24975b265ed96ec",
+      "main_issue": "安全管理・事故原因",
+      "bucket": "safety-accountability",
+      "body_reviewed": true,
+      "review_kind": "editorial_body_reread",
+      "read_at": "2026-10-24T08:31:04+09:00",
+      "reviewer": "Claude Fable 5.1（編集担当）＋Claude Sonnet 5.5 読み手2名（自動分類を伏せて本文判定）",
+      "text_sha256": "371cb289528c1fffe9d44b18c918455cc9f7ec201c7d5052dd6b2a07932f9d96",
+      "reason_sha256": "38ec27d38d70c91b881b96dbedc92d785e69b5d55f5206f04cf2328539e67fda"
+    },
+    {
+      "post_key": "59ba638887777a2f9c10152d31101e8184a76efd740a42b763749161a5810056",
+      "main_issue": "安全管理・事故原因",
+      "bucket": "safety-school",
+      "body_reviewed": true,
+      "review_kind": "editorial_body_reread",
+      "read_at": "2026-10-24T08:31:04+09:00",
+      "reviewer": "Claude Fable 5.1（編集担当）＋Claude Sonnet 5.5 読み手2名（自動分類を伏せて本文判定）",
+      "text_sha256": "9152c10e318a33ccebe904515d0225af8b66b541854b93b405ef8f5d060a6b6e",
+      "reason_sha256": "a9da6d95b86f314c1aa20190ea89e1ae2d94bc96802122f58c9b2fff3e0d3b75"
+    },
+    {
+      "post_key": "297bcee3a51ceef017dfa06db5a811cffb6a11cb216272e0913e2123f72286c1",
+      "main_issue": "政治利用・基地問題",
+      "bucket": "politics-links",
+      "body_reviewed": true,
+      "review_kind": "editorial_body_reread",
+      "read_at": "2026-10-24T08:31:04+09:00",
+      "reviewer": "Claude Fable 5.1（編集担当）＋Claude Sonnet 5.5 読み手2名（自動分類を伏せて本文判定）",
+      "text_sha256": "ccd44fdc2a993c733bd02788fe85b416901c3be1091989def4d22ab6515aa3ef",
+      "reason_sha256": "074a4ba40f3c6910323331aecfd47907726cfb475415cc4e836d4b5ba478a980"
+    },
+    {
+      "post_key": "33e5d4ec8eb6c3e8060c96c34aeb0fe408b4e0f7459524b17ebfdaa320aa6633",
+      "main_issue": "政治利用・基地問題",
+      "bucket": "politics-links",
+      "body_reviewed": true,
+      "review_kind": "editorial_body_reread",
+      "read_at": "2026-10-24T08:31:04+09:00",
+      "reviewer": "Claude Fable 5.1（編集担当）＋Claude Sonnet 5.5 読み手2名（自動分類を伏せて本文判定）",
+      "text_sha256": "eef08b7809a987f0e1738bf55a4d96caf656b64d01fe5614405b1644d1ea392e",
+      "reason_sha256": "40eac65b75840251db6dfbd54930095f2cd9ed02034572f216d8801f7345722e"
+    },
+    {
+      "post_key": "3ac57431a4f1ff66ce573fe789bd7488d43a6658a71fb56e91a807bf0a35fb0d",
+      "main_issue": "政治利用・基地問題",
+      "bucket": "politics-links",
+      "body_reviewed": true,
+      "review_kind": "editorial_body_reread",
+      "read_at": "2026-10-24T08:31:04+09:00",
+      "reviewer": "Claude Fable 5.1（編集担当）＋Claude Sonnet 5.5 読み手2名（自動分類を伏せて本文判定）",
+      "text_sha256": "216746762a950b156f42a68da8227963c37cb4c3ca5c3d3fc6151ea9b5aa5782",
+      "reason_sha256": "cb137ec08f00079c9a17f542811ac3090bd7c8ffced9e6d6974f4990f1d1e726"
+    },
+    {
+      "post_key": "fa099b36adc09e68267c2063da8d0d61c817d7c1702c68b75eaaea055640ccb4",
+      "main_issue": "報道・行政対応",
+      "bucket": "media-bias",
+      "body_reviewed": true,
+      "review_kind": "editorial_body_reread",
+      "read_at": "2026-10-24T08:31:04+09:00",
+      "reviewer": "Claude Fable 5.1（編集担当）＋Claude Sonnet 5.5 読み手2名（自動分類を伏せて本文判定）",
+      "text_sha256": "2cae302dccda07d721f7180659f3f9fcc8bb8398002570d45d849bc88bc23f71",
+      "reason_sha256": "52b9ba751d27d976238713c9078bd5a35f051efbdbb02f6e1aa5c745948f3699"
+    },
+    {
+      "post_key": "4f48853d17cf55e392e69b7126f9a7ca0f2502d62d4c068195228fbc12893acb",
+      "main_issue": "安全管理・事故原因",
+      "bucket": "safety-school",
+      "body_reviewed": true,
+      "review_kind": "editorial_body_reread",
+      "read_at": "2026-10-24T08:31:04+09:00",
+      "reviewer": "Claude Fable 5.1（編集担当）＋Claude Sonnet 5.5 読み手2名（自動分類を伏せて本文判定）",
+      "text_sha256": "d2c61a528ad113a02289ce11102b51aaeef1f56303ba0f47366b85279e1b4eb9",
+      "reason_sha256": "67de9044b3de48255de0ba3ae725294890095861eca648579112a81b2915e4d2"
+    },
+    {
+      "post_key": "be37d2b894ab811d0f7f0e8530308f5185052e30a6c4ecc3c558f1d6f85254f6",
+      "main_issue": "安全管理・事故原因",
+      "bucket": "safety-accountability",
+      "body_reviewed": true,
+      "review_kind": "editorial_body_reread",
+      "read_at": "2026-10-24T08:31:04+09:00",
+      "reviewer": "Claude Fable 5.1（編集担当）＋Claude Sonnet 5.5 読み手2名（自動分類を伏せて本文判定）",
+      "text_sha256": "8412488eb5ed1e17b2f703af1e2fbde41ebea6f972c7b2db5111ecb4347fd8a1",
+      "reason_sha256": "819d060497d88b9c1901fdea466cb87829fc8b353a6e189b3e17358e39ce0652"
+    },
+    {
+      "post_key": "ccdbd4dc7328f5d37c6bc98dad1e93ccacc1fdd9c1fa5b784e3f812815642ad1",
+      "main_issue": "安全管理・事故原因",
+      "bucket": "safety-accountability",
+      "body_reviewed": true,
+      "review_kind": "editorial_body_reread",
+      "read_at": "2026-10-24T08:31:04+09:00",
+      "reviewer": "Claude Fable 5.1（編集担当）＋Claude Sonnet 5.5 読み手2名（自動分類を伏せて本文判定）",
+      "text_sha256": "aa9d0f3353169e7b3b03df724dc4c3f8115a7bea093f959d61670392e039a3d0",
+      "reason_sha256": "d8d15bd74df9adbbf7ccbf14571bb48034080c7951e05901ba7c35726e0c56fd"
+    },
+    {
+      "post_key": "cc5b46f19458708b7c3bff2787a52f1a609c5dbc9a6986f88c46f6603373341c",
+      "main_issue": "報道・行政対応",
+      "bucket": "media-bias",
+      "body_reviewed": true,
+      "review_kind": "editorial_body_reread",
+      "read_at": "2026-10-24T08:31:04+09:00",
+      "reviewer": "Claude Fable 5.1（編集担当）＋Claude Sonnet 5.5 読み手2名（自動分類を伏せて本文判定）",
+      "text_sha256": "7396b3e407485bbb0fef6dd399a8d847f0561c421dee599724c75770c0d8f984",
+      "reason_sha256": "91477d1910b6f02fa8dc58b24a19dbf4d6bede8473709581ad0fb315e5d351b2"
+    },
+    {
+      "post_key": "60e58c3d75433db262fdc2d3543fde0cacbe9f63f35c404da70bb761800de57e",
+      "main_issue": "報道・行政対応",
+      "bucket": "media-authority",
+      "body_reviewed": true,
+      "review_kind": "editorial_body_reread",
+      "read_at": "2026-10-24T08:31:04+09:00",
+      "reviewer": "Claude Fable 5.1（編集担当）＋Claude Sonnet 5.5 読み手2名（自動分類を伏せて本文判定）",
+      "text_sha256": "313f55a2043ecd9ef141cca29e0ba6c338e0bdbc59846e1a7f2595963ce0db8d",
+      "reason_sha256": "2bdd5ddfe455bd66a227d5281fb4f24bb0e1373c1442092a51b095be8d1c71f5"
+    },
+    {
+      "post_key": "f791d5f7cf2b4ce645656fafe1dffb1a6b26d46dd12f77406d21a7f358496a77",
+      "main_issue": "政治利用・基地問題",
+      "bucket": "politics-double",
+      "body_reviewed": true,
+      "review_kind": "editorial_body_reread",
+      "read_at": "2026-10-24T08:31:04+09:00",
+      "reviewer": "Claude Fable 5.1（編集担当）＋Claude Sonnet 5.5 読み手2名（自動分類を伏せて本文判定）",
+      "text_sha256": "2ac8824e46cf1dbf63c82960a2142aa08ae25b82bef5b63b6d88f798afb557c2",
+      "reason_sha256": "3aa83fb80974e29a9dedf2a4dc64cfd94a992368fc70196e5408e27d7da0f6db"
+    },
+    {
+      "post_key": "b3fdb377f75357f63e47f40f47b2c9c75be6b6c43dd9fd7337e2d3a1dcad9fd1",
+      "main_issue": "追悼・被害者の尊厳",
+      "bucket": "dignity-mourning",
+      "body_reviewed": true,
+      "review_kind": "editorial_body_reread",
+      "read_at": "2026-10-24T08:31:04+09:00",
+      "reviewer": "Claude Fable 5.1（編集担当）＋Claude Sonnet 5.5 読み手2名（自動分類を伏せて本文判定）",
+      "text_sha256": "b4f32c2c5c357de7611ce0b78f552d0ea97cfe4672c768bfe5868f8ca1eda0d9",
+      "reason_sha256": "c45a32cd263a5be119813e467ff3d35a0169c47f7d495858cf8f0476968dff1a"
+    },
+    {
+      "post_key": "e6998b46616c29abd93a349bb87c58a803be299bc692d47a1bfaffd40fbc3bd7",
+      "main_issue": "追悼・被害者の尊厳",
+      "bucket": "dignity-mourning",
+      "body_reviewed": true,
+      "review_kind": "editorial_body_reread",
+      "read_at": "2026-10-24T08:31:04+09:00",
+      "reviewer": "Claude Fable 5.1（編集担当）＋Claude Sonnet 5.5 読み手2名（自動分類を伏せて本文判定）",
+      "text_sha256": "df410e800bd7f690d568470c38f4993c9b62b684826fb7a225519ccedf13af8f",
+      "reason_sha256": "f5b00d59ff9788a40e40154674afba1c747252724208cbf8897984a54bc3eccd"
     }
   ],
   "catchup_2026_10_10": {
     "added": 87,
     "evidence": "quality/reviews/2026-10-10-henoko-student-accident-catchup.json",
     "evidence_sha256": "0cf6462f0607bf3fd426ab11f6593594e8334691340e7f6bfa16f5251863bdb6"
+  },
+  "wave_2026_10_24": {
+    "added": 16,
+    "evidence": "quality/reviews/2026-10-24-henoko-student-accident-wave-reading.json",
+    "evidence_sha256": "5179b61efc89198210591d70f4a35050c8e9716a40069b4c82c13342ada88a93"
   }
 }
