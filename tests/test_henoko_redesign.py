@@ -209,8 +209,8 @@ class ReadingPageTests(unittest.TestCase):
 
     def test_note_says_uncollected_and_next(self):
         note = self.s.select_one(".fr-note").get_text()
-        self.assertIn("10月8日より前の投稿", note)
-        self.assertIn("10月22日", note)
+        self.assertIn("10月24日より前の投稿", note)
+        self.assertIn("11月7日", note)
 
     def test_counts_and_stances_match_public_json(self):
         order = [s["id"] for s in self.reading.stance_order(self.d)]
@@ -540,8 +540,8 @@ class AllIssuesAndBackgroundTests(unittest.TestCase):
 
     def test_unverified_mentions_uncollected_and_next(self):
         text = self.s.find(id="bg-unverified").get_text()
-        self.assertIn("10月8日以降の投稿", text)
-        self.assertIn("10月22日", text)
+        self.assertIn("10月24日以降の投稿", text)
+        self.assertIn("11月7日", text)
         self.assertIn("404", (ROOT / "quality/research/henoko-student-accident-primary-sources.md").read_text(encoding="utf-8"))
 
     def test_faq_moved_from_opening_without_overlap(self):

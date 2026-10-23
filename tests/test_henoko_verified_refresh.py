@@ -48,6 +48,8 @@ class VerifiedRefreshTests(unittest.TestCase):
         paths = [Path('THEMES.yaml'), Path(sample), Path('configs/planet') / (TOPIC + '.yaml')]
         paths += [p.relative_to(ROOT) for p in (ROOT / 'data').rglob('*')
                   if p.is_file() and TOPIC in p.name]
+        # 再読共通台帳が指す、収集回ごとの本文確認の証拠
+        paths += [p.relative_to(ROOT) for p in (ROOT / 'quality/reviews').glob('*' + TOPIC + '-wave-reading.json')]
         for path in paths:
             target = self.root / path
             target.parent.mkdir(parents=True, exist_ok=True)
