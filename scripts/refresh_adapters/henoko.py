@@ -204,6 +204,12 @@ def _apply_tide(root: Path, page: Path, current_wave: Path, current_date: str) -
     page.write_text(inject_into_html(page, tide, _load_tide_css()), encoding="utf-8")
 
 
+def _tide_wave(stage: Path) -> Path:
+    """潮目の今回分。本文確認で補正した回（reviewed-wave.json）があればそれを使い、無ければ保存回の分類を使う。"""
+    reviewed = stage / "reviewed-wave.json"
+    return reviewed if reviewed.is_file() else stage / "classified-wave.json"
+
+
 def _apply_connected_display(root: Path, page: Path) -> None:
     """辺野古の山なみを作り直した後も、課題77の読書面を再接続する。"""
     html = page.read_text(encoding="utf-8")
@@ -265,11 +271,11 @@ def build(root: Path, stage: Path, current_date: str) -> dict[Path, Path]:
     first_stances = stage / REREAD_STANCES.name
     second_stances = stage / "idempotence" / REREAD_STANCES.name
     _run_builder(root, candidate, current_page, first_page, first_data)
-    _apply_tide(root, first_page, stage / "classified-wave.json", current_date)
+    _apply_tide(root, first_page, _tide_wave(stage), current_date)
     _apply_connected_display(root, first_page)
     build_reread_stances(root, candidate, first_stances, current_date)
     _run_builder(root, candidate, first_page, second_page, second_data)
-    _apply_tide(root, second_page, stage / "classified-wave.json", current_date)
+    _apply_tide(root, second_page, _tide_wave(stage), current_date)
     _apply_connected_display(root, second_page)
     build_reread_stances(root, candidate, second_stances, current_date)
 

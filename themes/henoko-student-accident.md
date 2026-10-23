@@ -125,3 +125,7 @@
 ## 2026-10-13 新デザインの公開候補と公開切替（手順7、オーナー承認待ち）
 
 手順書23の手順7を学校でのあだ名禁止と同じ型で終えた。手順7の前に、よみやすの残り5件（重なる心配・照合 education-finding・資料にしかない話 lifejacket-training の文）を数字・出典・判定を変えずに区切り、照合文と背景台帳の年表から船名を外し、背景台帳の年表の食い違い（5/22 の告発の対象、7/14 答弁の趣旨）を冒頭の年表に合わせて直した（確認日 2026-10-13）。新デザインは元HTMLの対話式の山なみをそのまま写し（論点の絵文字は表示から外した）、保護対象（SEO・GA4・AdSense・投票18択・潮目のカード・作り方など）を文字どおり継承する。`configs/henoko-layout.json` を `enabled: true` にし、旧形式の元HTMLを `data/page-sources/henoko-student-accident.html` に保存した。以後の定期更新は元HTMLに旧形式の処理を掛けてから新デザインを組み直す。**10/22 の定期更新で新しい意見が入ったら、その回のうちに追い読みしないと公開候補生成が止まる**（立場の対応表は更新経路が作り直す）。新規0件相当の 10/22 は隔離コピーで模擬して通ることを確かめた。SEOメタの description に学校名が残る点と、投票の定義の「遺族への配慮」はオーナー判断待ち。承認は `approval-20261013-henoko-student-accident`（pending）。[設計と検査の記録](../quality/designs/2026-10-11-henoko-student-accident-production-candidate.md)・[DATA_REFRESH.md の節](../DATA_REFRESH.md)。
+
+## 2026-10-24 定期更新（2026-10-24収集分、10/22予定の2日遅れ）
+
+10/9の新ルール（読み手2名の伏せ読み＋Kimi突き合わせ＋新論点チェック）で初めて回した。45件取得・既存と重複23件・新規22件、意見16件（Kimiは18件）。累計636→658件・意見495→511件。取得期間は2026-06-14〜2026-10-23。次回は11/7。辺野古には読み手設定が無かったので `configs/wave_review/henoko-student-accident.yaml` を新規作成し、adapter に `review_candidate` を足した。潮目は本文確認で補正した回（`reviewed-wave.json`）を今回分に使うよう変えた。今回の意見はすべて「論点を切り分ける」。「語られていない争点」の母数は495→511。新論点の提案は無し。Kimiの利用上限（429）で分類が約8時間止まった。監査: [quality/reviews/2026-10-24-henoko-student-accident-refresh-review.md](../quality/reviews/2026-10-24-henoko-student-accident-refresh-review.md)。承認は `approval-20261024-henoko-student-accident-refresh`。
