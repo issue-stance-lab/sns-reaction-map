@@ -24,6 +24,8 @@ JST = timezone(timedelta(hours=9))
 TOPIC = "bike-blue-ticket"
 ISSUES = ["取締り強化賛成", "インフラ整備優先", "車道走行への不安", "免許制要求", "ルール曖昧・不信", "その他"]
 STANCES = ("賛成（取締り強化支持）", "反対（インフラ・制度優先）", "どちらでもない")
+# 読み手は configs/planet の立場キー（コード名）で出力する。計画ファイルには表示名を書く
+STANCE_BY_KEY = {"enforcement_support": STANCES[0], "infrastructure_first": STANCES[1], "neutral": STANCES[2]}
 OPP = {"strict", "scope", "place", "distrust", "abolish"}
 CONCERN = {"not_opinion_candidate": "not_opinion_candidate", "possibly_off_topic": "possibly_off_topic", "undecidable": "context_missing"}
 REASONS = {"not_opinion_candidate": "ニュースや告知・記事の共有、他者の発言の紹介で、投稿者自身の青切符制度への評価が本文から読み取れないため意見サンプルとして採用しない。",
@@ -51,6 +53,7 @@ def main():
     hits = defaultdict(list); adopt = []; groups = defaultdict(list); items = []
     for r in adj:
         row = wave[r["index"]]; text = str(row["text"]); tid = r["tweet_id"]
+        r["stance"] = STANCE_BY_KEY.get(r["stance"], r["stance"])
         if r["is_opinion"] is None:
             raise SystemExit(f"index {r['index']} が未確定です")
         if r["is_opinion"]:
