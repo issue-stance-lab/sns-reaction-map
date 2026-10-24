@@ -2733,6 +2733,26 @@ items:
     decided_at: "2026-10-18"
     decision_note: "オーナーが「公開して」と承認（2026-10-18）。承認時点の候補（収集507件・意見110件）から、データ内容は変えていない。"
 
+  - id: approval-20261024-constitutional-amendment-refresh
+    department: engineering-data
+    action: website_publication
+    summary: "憲法改正論議テーマの2026-10-24更新回を一般公開する"
+    reason: "collect_at（10/24）の定期収集を実施。新規225件（意見205件）を、読み手2名の伏せ読みとKimiの突き合わせで全件本文確認し、収集2,672件・意見2,357件としてページの集計・論点表示・取得期間・潮目・語られていない争点の母数を更新するため"
+    risks:
+      - "SNS上の公開投稿サンプルであり、社会全体の世論を示すものではない。今回の新規は改憲反対の呼びかけの連投が目立つ"
+      - "同文・定型文の連投を1件1意見で数える従来の基準のため、構成比が連投の量に左右される。潮目は保存回の自動分類が基準で、ページ上は『改正推進が16.1ポイント減少』（前回195件／今回204件）と出る。累計の構成比は前回とほぼ同じ"
+      - "国民投票の可決要件を事実と異なる形で述べた投稿が複数あり、意見としては数えている（事実確認の主張としては足していない）"
+      - "陰謀論的・中傷的な表現を含む投稿は意見に数え、代表投稿には使わない扱いにした"
+      - "公開候補の再生成で、別セッションが手直しした皇室典範のページが古い基準日に戻るため、このページは公開対象から外して元のまま残す"
+    recommendation: approve
+    evidence:
+      - "quality/reviews/2026-10-24-constitutional-amendment-refresh-review.md"
+      - "quality/reviews/2026-10-24-constitutional-amendment-wave-reading.json"
+      - "data/verification/updates/constitutional-amendment/2026-10-24/report.json"
+      - ".staging/refresh/constitutional-amendment/20261024_180946/promotion-manifest.json"
+    status: pending
+    requested_at: "2026-10-24"
+
   - id: approval-20261024-elderly-license-revocation-refresh
     department: engineering-data
     action: website_publication
