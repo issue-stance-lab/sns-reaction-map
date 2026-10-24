@@ -2733,6 +2733,28 @@ items:
     decided_at: "2026-10-18"
     decision_note: "オーナーが「公開して」と承認（2026-10-18）。承認時点の候補（収集507件・意見110件）から、データ内容は変えていない。"
 
+  - id: approval-20261024-elderly-license-revocation-refresh
+    department: engineering-data
+    action: website_publication
+    summary: "高齢者免許返納テーマの2026-10-24更新回を一般公開する"
+    reason: "collect_at（10/23）の定期収集を1日遅れで実施。新規81件（意見40件）を、読み手2名の伏せ読みとKimiの突き合わせで全件本文確認し、収集826件・意見521件としてページの集計・論点表示・取得期間・潮目・語られていない争点の母数を更新するため。あわせて、照合を10/13にやり直し済みなのに残っていた読書面の古い注記（次の定期更新で見直します）を外す"
+    risks:
+      - "SNS上の公開投稿サンプルであり、社会全体の世論を示すものではない。今回の意見は40件の小標本"
+      - "今回は『返納しろ』を危険運転への罵倒として使うだけの投稿27件を意見に数えなかった（Kimiは意見としていた）。過去回に同種が意見として残っている可能性が高く、累計の構成比に影響が残る。過去回は触っていない"
+      - "潮目（前回との比較）は保存回の自動分類が基準のため、ページ上は『義務化賛成が22.8ポイント減少』（前回38件／今回57件）と出る。編集担当が確定した意見40件とは数え方が違う"
+      - "暴言を含む投稿1件は意見に残し、代表投稿に使わない扱いにした"
+      - "公開候補の再生成で、別セッションが手直しした皇室典範のページが古い基準日に戻るため、このページは公開対象から外して元のまま残す"
+    recommendation: approve
+    evidence:
+      - "quality/reviews/2026-10-24-elderly-license-revocation-refresh-review.md"
+      - "quality/reviews/2026-10-24-elderly-license-revocation-wave-reading.json"
+      - "data/verification/updates/elderly-license-revocation/2026-10-24/report.json"
+      - ".staging/refresh/elderly-license-revocation/20261024_103030/promotion-manifest.json"
+    status: approved
+    requested_at: "2026-10-24"
+    decided_at: "2026-10-24"
+    decision_note: "オーナーが「公開して」と承認（2026-10-24）。意見数の減少（Kimi 67件から40件）と潮目の見かけの差を説明したうえでの承認。承認時点の候補（収集826件・意見521件）から、データ内容は変えていない。"
+
   - id: approval-20261024-henoko-student-accident-refresh
     department: engineering-data
     action: website_publication
