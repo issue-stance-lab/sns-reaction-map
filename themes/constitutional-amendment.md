@@ -105,3 +105,7 @@ build_constitutional_process_sections.py を新設し adapter 経由で CLAIM_AU
 2026-10-10、オーナー指示で過去の未反映分を8テーマ一括で追い読み。本テーマの未読594件を本文確認して理由区分へ接続し、全論点の未反映を0件にした。新規収集・正典の変更なし。公開ページ・公開JSONは作業ツリーで再生成、本番反映はオーナー承認待ち。[記録](../quality/reviews/2026-10-10-unread-backlog-catchup.md)・[証拠](../quality/reviews/2026-10-10-constitutional-amendment-catchup.json)。
 
 2026-10-13：定期収集で219件を取得（重複0）し、全件を10/9の新ルールで本文確認（読み手2名の伏せ読み→Kimi分類と突き合わせ→編集担当が確定）。意見189件・意見外30件、Kimi分類からの補正74件。累計2,447件・意見2,152件の候補を作成。同文の連投（年賀状23件・問いかけ8件）は1件1意見で数えた。新論点チェック（その他4件、候補「皇室・家族条項」3件・「首相公選制・大統領制」2件、新設なし）。事実確認の該当投稿に29件追加、照合日2026-10-13。「資料にしかない話」は新規一致なし（母数2,152）。adapterに本文確認記録の適用を追加。詳細は [監査](../quality/reviews/2026-10-13-constitutional-amendment-refresh-review.md)。公開はオーナー承認待ち。
+
+## 2026-10-24 定期更新（2026-10-24収集分）
+
+新ルール（読み手2名の伏せ読み＋Kimi突き合わせ＋新論点チェック）で2回目。225件取得・重複0・新規225件、意見205件（Kimiは204件、補正113件）。累計2,447→2,672件・意見2,152→2,357件。取得期間は2026-06-20〜2026-10-24。次回は11/1。同文の連投は1件1意見で数えた。`review_candidate` に `is_relevant` の修正を追加。「語られていない争点」の母数は2,152→2,357（機械の候補3件を本文で確認し、いずれも不一致）、新論点の提案は無し。監査: [quality/reviews/2026-10-24-constitutional-amendment-refresh-review.md](../quality/reviews/2026-10-24-constitutional-amendment-refresh-review.md)。承認は `approval-20261024-constitutional-amendment-refresh`。

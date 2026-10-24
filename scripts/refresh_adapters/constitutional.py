@@ -66,6 +66,9 @@ def review_candidate(root: Path, stage: Path, current_date: str, report: dict) -
         if not values or set(values) - allowed:
             raise ValueError(f"憲法改正論議の本文確認項目が不正です: {tweet_id}")
         by_id[tweet_id]["classification"].update(values)
+        if values.get("is_opinion") is True:
+            # Kimiが「無関係」とした投稿を本文確認で意見にした場合、公開集計（is_relevant 必須）から落ちないようにする
+            by_id[tweet_id]["classification"]["is_relevant"] = True
     cumulative_path = stage / "cumulative-candidate.json"
     cumulative = json.loads(cumulative_path.read_text(encoding="utf-8"))
     cumulative_by_id = {str(row["tweet_id"]): row for row in cumulative}
