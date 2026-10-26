@@ -2733,6 +2733,29 @@ items:
     decided_at: "2026-10-18"
     decision_note: "オーナーが「公開して」と承認（2026-10-18）。承認時点の候補（収集507件・意見110件）から、データ内容は変えていない。"
 
+  - id: approval-20261026-fukushuto-refresh
+    department: engineering-data
+    action: website_publication
+    summary: "副首都構想テーマの2026-10-26更新回を一般公開する"
+    reason: "collect_at（10/28）より2日早く、オーナーの指示で定期収集を実施。新規207件（意見133件）を、読み手2名の伏せ読みとKimiの突き合わせで全件本文確認し、収集3,312件・意見2,699件としてページの集計・論点表示・取得期間・潮目・語られていない争点の母数を更新するため"
+    risks:
+      - "SNS上の公開投稿サンプルであり、社会全体の世論を示すものではない"
+      - "副首都法案が引き合いに出されただけの投稿（定数削減の審議など）を意見に数えなかったため、意見がKimiの169件から133件に減った。過去回に同種が意見として残っている可能性がある。過去回は触っていない"
+      - "意見募集の結果と、法律の施行（予定10/30）後の条文は、確かめていない。ページは『結果は未確認』の文のまま"
+      - "『その他』が8.3%で目安の5%を超えたが、趣旨がばらばらで新論点の提案は無し"
+      - "陰謀論的・中傷的な表現を含む投稿は意見に数え、代表投稿には使わない扱いにした"
+      - "公開候補の再生成で、別セッションが手直しした皇室典範のページが古い基準日に戻るため、このページは公開対象から外して元のまま残す"
+    recommendation: approve
+    evidence:
+      - "quality/reviews/2026-10-26-fukushuto-refresh-review.md"
+      - "quality/reviews/2026-10-26-fukushuto-wave-reading.json"
+      - "data/verification/updates/fukushuto/2026-10-26/report.json"
+      - ".staging/refresh/fukushuto/20261026_213531/promotion-manifest.json"
+    status: approved
+    requested_at: "2026-10-26"
+    decided_at: "2026-10-26"
+    decision_note: "オーナーが「意見数の減少（Kimi 169件から133件）を承知のうえで公開して」と承認（2026-10-26）。承認時点の候補（収集3,312件・意見2,699件）から、データ内容は変えていない。"
+
   - id: approval-20261024-constitutional-amendment-refresh
     department: engineering-data
     action: website_publication
