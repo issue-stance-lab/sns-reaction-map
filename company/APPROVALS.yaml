@@ -2733,6 +2733,27 @@ items:
     decided_at: "2026-10-18"
     decision_note: "オーナーが「公開して」と承認（2026-10-18）。承認時点の候補（収集507件・意見110件）から、データ内容は変えていない。"
 
+  - id: approval-20261027-koshitsu-tenpakai-refresh
+    department: engineering-data
+    action: website_publication
+    summary: "皇室典範改正テーマの2026-10-27更新回を一般公開する（施行後の表示への切り替えを含む）"
+    reason: "collect_at（10/25）の定期収集を2日遅れで実施。新規310件（意見264件）を、読み手2名の伏せ読みとKimiの突き合わせで全件本文確認し、収集3,173件・意見2,518件としてページの集計・論点表示・取得期間・潮目・語られていない争点の母数を更新するため。あわせて、e-Gov法令APIで施行後の現行版（2026-10-24施行）を確かめ、冒頭・年表・よくある質問を『施行されました』へ切り替える"
+    risks:
+      - "SNS上の公開投稿サンプルであり、社会全体の世論を示すものではない。立場は今回案全体への評価だけで決めるため73.9%が『未表明』になる"
+      - "『その他』が14.8%で、同じ趣旨が20件以上の話題が2つ（違憲提訴・憲法適合性、特定団体の影響）ある。新論点の新設は提案にとどめ、今回の公開には入れていない（オーナー判断待ち）"
+      - "同文の連投（日本会議の記事12件以上、旧宮家養子に反対する署名の定型文12件ほか）を1件1意見で数えるため、構成比が連投の量に左右される。潮目は保存回の自動分類が基準で、数え方が違う"
+      - "施行後の現行版の確認は、e-Gov APIの改訂メタデータ（改訂ID、施行日、current_revision_status）で行った。条文本文の再照合（第九条・第三十八条ほか）は今回していない"
+      - "陰謀論的・中傷的な表現を含む投稿は意見に数え、代表投稿には使わない扱いにした"
+      - "公開候補の再生成で、別セッションが手直しした副首都のページが古い基準日に戻るため、このページは公開対象から外して元のまま残す"
+    recommendation: approve
+    evidence:
+      - "quality/reviews/2026-10-27-koshitsu-tenpakai-refresh-review.md"
+      - "quality/reviews/2026-10-27-koshitsu-tenpakai-wave-reading.json"
+      - "data/verification/updates/koshitsu-tenpakai/2026-10-27/report.json"
+      - ".staging/refresh/koshitsu-tenpakai/20261027_122121/promotion-manifest.json"
+    status: pending
+    requested_at: "2026-10-27"
+
   - id: approval-20261026-fukushuto-refresh
     department: engineering-data
     action: website_publication
