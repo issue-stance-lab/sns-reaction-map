@@ -15,6 +15,40 @@ from scripts import build_koshitsu_redesign as redesign
 from scripts.build_koshitsu_redesign import ALIASES, PAGE, ROOT, VOTE_TOPIC, build
 
 AS_OF = "2026-10-11"
+
+# 2026-10-27 から実設定の law.enforcement_confirmed_on に日付が入っている。このファイルの試験の多くは
+# 施行日より前・施行直後（未確認）の時制を調べるので、実設定の値のときだけ読み込み時に外す。
+# 試験の中で別の日付を設定した場合（施行後の確認済みの試験）は、そのまま使う。
+_REAL_CONFIRMED = json.loads((ROOT / "configs/koshitsu-tenpakai-opening.json").read_text(encoding="utf-8"))["law"].get("enforcement_confirmed_on")
+_patches: list = []
+
+
+def setUpModule():
+    import sys
+    from unittest import mock
+
+    sys.path.insert(0, str(ROOT / "scripts"))
+    import koshitsu_reading  # noqa: PLC0415
+
+    original = koshitsu_reading.load
+
+    def load_without_real_confirmation(path):
+        data = original(path)
+        law = data["ocfg"]["law"]
+        if _REAL_CONFIRMED and law.get("enforcement_confirmed_on") == _REAL_CONFIRMED:
+            law["enforcement_confirmed_on"] = None
+        return data
+
+    patcher = mock.patch.object(koshitsu_reading, "load", load_without_real_confirmation)
+    patcher.start()
+    _patches.append(patcher)
+
+
+def tearDownModule():
+    while _patches:
+        _patches.pop().stop()
+
+
 def soup_of(html: str) -> BeautifulSoup:
     return BeautifulSoup(html, "html.parser")
 
