@@ -2733,6 +2733,30 @@ items:
     decided_at: "2026-10-18"
     decision_note: "オーナーが「公開して」と承認（2026-10-18）。承認時点の候補（収集507件・意見110件）から、データ内容は変えていない。"
 
+  - id: approval-20261027-ai-copyright-refresh
+    department: engineering-data
+    action: website_publication
+    summary: "生成AIと著作権テーマの2026-10-27更新回を一般公開する"
+    reason: "collect_at（10/26）の定期収集を1日遅れで実施。新規451件（意見292件）を、読み手2名の伏せ読みとKimiの突き合わせで全件本文確認し、収集6,093件・意見3,975件としてページの集計・論点表示・取得期間・意見の推移・語られていない争点の母数を更新するため"
+    risks:
+      - "SNS上の公開投稿サンプルであり、社会全体の世論を示すものではない"
+      - "『その他』が30.1%で目安の5%を大きく超えた。話題がばらばらで同じ趣旨が20件に届かず、新論点は提案にとどめた（AI疑惑・冤罪系が約9件、前回と合わせて約20件）"
+      - "収集語が広く、著作権と無関係の投稿が多く混ざる。意見外にしているので数字は歪めていないが、過去回に同種が意見として残っている可能性がある。過去回は触っていない"
+      - "プリンシプル・コードの届出開始（予定10/26）は、内閣官房のページが404で確かめられていない。ページは『始まったかどうかは、まだ確かめていません』の文のまま"
+      - "意見の推移は保存回の自動分類が基準で、編集担当が確定した数とは数え方が違う"
+      - "陰謀論的・中傷的な表現を含む投稿は意見に数え、代表投稿には使わない扱いにした"
+      - "公開候補の再生成で、別セッションが手直しした副首都のページが古い基準日に戻るため、このページは公開対象から外して元のまま残す"
+    recommendation: approve
+    evidence:
+      - "quality/reviews/2026-10-27-ai-copyright-refresh-review.md"
+      - "quality/reviews/2026-10-27-ai-copyright-wave-reading.json"
+      - "data/verification/updates/ai-copyright/2026-10-27/report.json"
+      - ".staging/refresh/ai-copyright/20261027_212955/promotion-manifest.json"
+    status: approved
+    requested_at: "2026-10-27"
+    decided_at: "2026-10-28"
+    decision_note: "オーナーが「公開して」と承認（2026-10-28）。『その他』30.1%・新論点を今回は作らず提案にとどめること、届出開始が未確認のままであることを説明したうえでの承認。承認時点の候補（収集6,093件・意見3,975件）から、データ内容は変えていない。"
+
   - id: approval-20261027-koshitsu-tenpakai-refresh
     department: engineering-data
     action: website_publication
