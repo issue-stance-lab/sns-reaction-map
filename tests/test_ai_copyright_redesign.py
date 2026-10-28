@@ -314,7 +314,7 @@ class BackgroundTests(unittest.TestCase):
 
     def test_filing_phase_switches(self):
         start = self.d["ocfg"]["principle_code"]["filing_starts_on"]
-        before = self.render_bg(PUBLIC["updated_on"])
+        before = self.render_bg("2026-10-20")  # 届出開始日（2026-10-26）より前。公開JSONの更新日は開始日以降になった
         self.assertEqual(before["data-filing-phase"], "before")
         self.assertIn("始まる予定です", before.select_one("#bg-rules").get_text())
         after = self.render_bg(start)
