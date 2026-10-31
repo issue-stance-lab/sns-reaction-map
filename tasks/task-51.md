@@ -58,3 +58,8 @@
 次は、記事ごとの実際の公開日を履歴から確かめ、観測日と指標をそろえる。過去の未公開という記載だけを根拠に再公開や作り直しをしない。
 
 証拠: `/Volumes/M2-WorkSpace/Projects/副業/UIデザイン調査/2026-10-31_SNS反応まっぷ_全体点検/evidence/`の`gsc-28d-pages.json`、`ga4-28d-extra.json`、`sitemap-page-audit.json`、`browser-audit.json`。
+
+
+## 2026-10-31 公開日と次回観測を確定
+
+10/17の[公開時の変更記録](../quality/reviews/2026-10-17-title-description-change-during-measurement.md)で、部活動・免許返納・自転車の記事各5本、計15本が同日公開されたと確認した。次は11/17に10/18〜11/14の28日分の確定データと記事からテーマへの遷移を確認する。テーマ本体の8ページには未登録が出たが、記事の登録状態は今回未検査であり、全記事未登録とは扱わない。今回の検索観測は[10/31判定記録](../quality/reviews/2026-10-31-search-campaign-review.md)。
