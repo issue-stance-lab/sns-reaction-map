@@ -29,6 +29,9 @@ sources:
   - name: スポーツ庁 運動部活動の地域移行に関する検討会議「提言」（令和4年6月6日）第8章 保険の在り方
     url: https://www.mext.go.jp/sports/content/20220722-spt_oripara-000023182_2.pdf
     checked_on: 2026-09-07
+related_issues:
+  - bukatsu-chiiki-seido
+  - bukatsu-chiiki-ukezara
 ---
 
 コベカツ（KOBE◆KATSU）は、神戸市が部活動の地域移行で始めた地域クラブの活動です。市立中学校の部活動は2026年8月末で終わり、9月から平日も休日もコベカツに切り替わりました。

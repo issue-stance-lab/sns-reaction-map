@@ -23,6 +23,9 @@ sources:
   - name: 内閣府「令和6年交通安全白書」特集 第2章第2節（高齢運転者による交通事故防止のための取組）
     url: https://www8.cao.go.jp/koutu/taisaku/r06kou_haku/zenbun/genkyo/feature/feature_2_2.html
     checked_on: 2026-10-17
+related_issues:
+  - elderly-license-revocation-mobility-rights
+  - elderly-license-revocation-voluntary-return
 ---
 
 親が免許返納を嫌がるときは、嫌がる理由を先に知り、返納後の移動手段を一緒に決める順で考えると整理しやすくなります。家族だけで難しければ、警察の安全運転相談窓口（#8080）などに相談できます。この記事は、投稿から読める拒む理由と、公的な案内で確かめられる手順をまとめたものです。

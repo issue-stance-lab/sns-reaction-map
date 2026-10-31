@@ -36,6 +36,8 @@ sources:
   - name: 大阪府道路交通規則（大阪府例規集）
     url: https://www.pref.osaka.lg.jp/houbun/reiki/reiki_honbun/k201RG00001084.html
     checked_on: 2026-10-17
+related_issues:
+  - bike-blue-ticket-rule-ambiguity
 ---
 
 自転車のながらスマホは青切符の対象で、反則金は12,000円です。イヤホンと傘差しも青切符になりえますが、何が違反かを決めているのは都道府県の公安委員会の規則で、反則金は5,000円です。分かれ目は、イヤホンなら周りの音が聞こえない状態かどうか、傘差しなら視野や安定を妨げる持ち方かどうかにあります。

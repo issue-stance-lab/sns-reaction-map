@@ -23,7 +23,7 @@ import html
 import json
 import re
 import sys
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import date
 from pathlib import Path
 from typing import Any
@@ -85,6 +85,8 @@ class ThemeData:
     issues: dict[str, dict[str, int]]  # 論点名 -> {"_total": n, 立場名: n}
     stances: list[tuple[str, str]]  # (立場名, 図の色クラス)。s1〜s4 の順
 
+    issue_ids: dict[str, str] = field(default_factory=dict)  # 論点への直接リンク用 ID -> 表示名
+
     @property
     def named_issues(self) -> list[str]:
         return [label for label in self.issues if label != "その他"]
@@ -128,6 +130,7 @@ def load_theme(theme_id: str) -> ThemeData:
         updated_on=date.fromisoformat(data["updated_on"]),
         issues=issues,
         stances=stances,
+        issue_ids={issue["id"]: issue["label"] for issue in data["issues"]},
     )
 
 
@@ -230,6 +233,8 @@ class Article:
     link_label: str = ""   # トップ・テーマページの一覧に出す短い問い（題名からテーマ名を外した形）
     link_answer: str = ""  # その下に出す1行の答え
 
+    related_issues: list[str] = field(default_factory=list)
+
     @property
     def url(self) -> str:
         return f"{OUT_PREFIX}/{self.slug}.html"
@@ -283,6 +288,11 @@ def load_article(path: Path) -> Article:
         ))
     if not sources:
         raise BuildError(f"{slug}: sources（使った一次資料）がありません")
+    related_issues = meta.get("related_issues", [])
+    if (not isinstance(related_issues, list) or len(related_issues) > 3
+            or any(not isinstance(item, str) for item in related_issues)
+            or len(set(related_issues)) != len(related_issues)):
+        raise BuildError(f"{slug}: related_issues は重複のない論点IDのリスト（3件まで）にする")
     return Article(
         slug=slug,
         theme=str(meta["theme"]),
@@ -297,6 +307,7 @@ def load_article(path: Path) -> Article:
         order=int(meta.get("order", 100)),
         link_label=_short(meta, "link_label", 18, slug),
         link_answer=_short(meta, "link_answer", 32, slug),
+        related_issues=related_issues,
     )
 
 
@@ -534,6 +545,11 @@ tr:last-child td{border-bottom:0}
 .sources ul,.related ul{margin:0;padding-left:20px}
 .sources li{margin:0 0 6px}
 .sources small{color:var(--muted)}
+.issue-entry{margin:16px 0 24px;padding:12px 16px;border-left:4px solid var(--accent);background:var(--accent-soft);font-size:14px}
+.issue-entry p{margin:0 0 4px;font-weight:700}
+.issue-entry ul{list-style:none;margin:0;padding:0}
+.issue-entry a{display:inline-flex;align-items:center;min-height:44px;font-weight:700;line-height:1.6}
+.issue-entry a:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
 .cta{background:var(--accent-soft);border-color:#c7dcf8}
 .cta p{margin:0 0 10px}
 .cta a.button{display:inline-block;padding:10px 16px;border-radius:999px;background:var(--accent);color:#fff;font-weight:700;text-decoration:none}
@@ -691,6 +707,25 @@ def render_article(article: Article, theme: ThemeData, siblings: list[Article], 
             + "".join(f'<li><a href="#{anchor}">{inline(text)}</a></li>' for anchor, text in toc)
             + "</ol></nav>"
         )
+    if article.related_issues:
+        unknown = set(article.related_issues) - set(theme.issue_ids)
+        if unknown:
+            raise BuildError(f"{article.slug}: テーマに無い論点IDです: {sorted(unknown)}")
+        lead, end, remaining = body_html.partition("</p>")
+        if not body_html.startswith("<p>") or not end:
+            raise BuildError(f"{article.slug}: 関連論点の前に短い回答の段落が必要です")
+        links = "".join(
+            f'<li><a href="../{theme.url}#issue-{html.escape(issue_id)}" '
+            f'data-article-link="theme-issue">{html.escape(theme.issue_ids[issue_id])}の意見と理由を読む</a></li>'
+            for issue_id in article.related_issues
+        )
+        opening_links = (
+            '<nav class="issue-entry article-chrome" aria-label="この話題に関係する論点">'
+            '<p>この話題の意見と理由を読む</p><ul>' + links + '</ul></nav>'
+        )
+        # 本文の短い回答を目次より先に置き、直後に関連論点の入口を置く。
+        body_html = lead + end + opening_links + toc_html + remaining
+        toc_html = ""
     dates = f"公開 {jp_date(article.published_on)}"
     if article.updated_on != article.published_on:
         dates += f"・更新 {jp_date(article.updated_on)}"

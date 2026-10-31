@@ -62,6 +62,20 @@ class ArticleBuildTest(unittest.TestCase):
         outputs = build_articles.build()
         return outputs[self.out / f"{slug}.html"]
 
+    def test_related_issue_links_follow_answer_before_toc(self) -> None:
+        self.write("a-test", "最初の回答。\n\n## 見出し1\n\n本文。\n\n## 見出し2\n\n本文。\n\n## 見出し3\n\n本文。\n",
+                   "related_issues:\n  - bukatsu-chiiki-hiyo\n")
+        page = self.build_one("a-test")
+        self.assertLess(page.index("最初の回答。</p>"), page.index('class="issue-entry'))
+        self.assertLess(page.index('class="issue-entry'), page.index('class="toc'))
+        self.assertIn('href="../bukatsu-chiiki-reaction-map.html#issue-bukatsu-chiiki-hiyo"', page)
+        self.assertIn('data-article-link="theme-issue"', page)
+
+    def test_unknown_related_issue_stops_build(self) -> None:
+        self.write("a-test", "最初の回答。\n", "related_issues:\n  - another-theme-missing\n")
+        with self.assertRaisesRegex(build_articles.BuildError, "テーマに無い論点ID"):
+            self.build_one("a-test")
+
     def test_numbers_come_from_public_data(self) -> None:
         self.write("a-test", "リードです。\n\n## 見出し\n\n慎重・反対は{{issue:費用・家庭負担:慎重・反対}}件でした。\n")
         page = self.build_one("a-test")
