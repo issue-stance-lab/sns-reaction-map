@@ -1,15 +1,15 @@
 {
   "claim_verification": {
-    "checked_on": "2026-09-02",
+    "checked_on": "2026-10-31",
     "claims": [
       {
         "claim": "部活動の地域移行は、もともと2023〜2025年度（令和5〜7年度）で完了する計画だった",
-        "finding": "3年間という期間はそのとおりだが、資料はそれを「重点的に支援する期間」と書いており、全国の移行を終える期限としては書いていない。",
+        "finding": "2023〜2025年度は改革推進期間で、休日の段階的な移行を進める計画でした。全国の移行を一律に終える期限とは書かれていません。",
         "id": "original-deadline",
         "issue_ids": [
           "bukatsu-chiiki-seido"
         ],
-        "matched_post_count": 4,
+        "matched_post_count": 2,
         "sources": [
           {
             "name": "スポーツ庁・文化庁 学校部活動及び新たな地域クラブ活動の在り方等に関する総合的なガイドライン（令和4年12月・PDF）",
@@ -24,13 +24,13 @@
       },
       {
         "claim": "地域移行に国はほとんど金を出さず、あとは自治体と家庭任せだ",
-        "finding": "国費は付いており、額も公表されている。ただし補助の対象は運営経費側で、家庭が払う会費そのものを国が肩代わりする仕組みではないため、負担が残るという感覚のほうは資料と矛盾しない。",
+        "finding": "国費が付き、運営費のほか困窮世帯の参加費・保険料を支援する枠もあります。ただし、予算の存在だけでは、各地域や家庭への支援が十分かは分かりません。",
         "id": "national-funding",
         "issue_ids": [
           "bukatsu-chiiki-seido",
           "bukatsu-chiiki-hiyo"
         ],
-        "matched_post_count": 6,
+        "matched_post_count": 0,
         "sources": [
           {
             "name": "スポーツ庁 部活動の地域展開等の全国的な実施（令和8年度当初予算・PDF）",
@@ -45,23 +45,19 @@
       },
       {
         "claim": "地域移行後の指導者の報酬は最低賃金並みで、だから引き受け手がいない",
-        "finding": "最低賃金に届かない試算（熊本市の副顧問1,000円）は実在するが、公表されている時間額は1,000円台後半から2,000円台までひらきがある。全国どこでも最低賃金並み、という形にはなっていない。",
+        "finding": "熊本市素案の時給1,000円は、地域移行せず学校部活動を続ける案の試算です。移行先クラブの報酬と学校の指導員募集は分けて読む必要があります。全国の報酬水準や担い手不足の原因を、この額だけでは判断できません。",
         "id": "coach-pay",
         "issue_ids": [
           "bukatsu-chiiki-ukezara"
         ],
-        "matched_post_count": 10,
+        "matched_post_count": 1,
         "sources": [
           {
             "name": "熊本市教育委員会 熊本市立中学校における新しい学校部活動の在り方（素案）（PDF）",
             "url": "https://www.city.kumamoto.jp/kiji00354887/5_54887_419171_up_PHDXW6PS.pdf"
           },
           {
-            "name": "厚生労働省 令和7年度地域別最低賃金の審議結果・最低賃金額一覧（PDF）",
-            "url": "https://www.mhlw.go.jp/content/11201250/001687973.pdf#page=4"
-          },
-          {
-            "name": "熊本市 令和8年度 熊本市立中学校部活動指導員（会計年度任用職員）募集",
+            "name": "熊本市：令和8年度の学校部活動指導員募集",
             "url": "https://www.city.kumamoto.jp/kiji00370419/index.html"
           }
         ],
@@ -69,12 +65,12 @@
       },
       {
         "claim": "部活動指導員は顧問を任され大会の引率もできるが、外部指導者は技術指導しかできない",
-        "finding": "顧問を命じられること、大会の引率ができることは、どちらも資料に書いてある。ただし投稿が添える「会計年度任用の非常勤職員」という身分は国の資料には無く、身分や任用は学校の設置者が規則で定める（自治体ごとに違う）。",
+        "finding": "部活動指導員への顧問任命と大会引率は、制度説明に明記されています。一方、2025年ガイドラインは、校長が認める外部指導者等の大会引率も原則としています。外部指導者は技術指導しかできない、という一律の説明とは合いません。",
         "id": "shidoin-role",
         "issue_ids": [
           "bukatsu-chiiki-ukezara"
         ],
-        "matched_post_count": 4,
+        "matched_post_count": 0,
         "sources": [
           {
             "name": "スポーツ庁 部活動指導員の概要（PDF）",
@@ -83,40 +79,57 @@
           {
             "name": "e-Gov法令検索 学校教育法施行規則 第七十八条の二",
             "url": "https://laws.e-gov.go.jp/law/322M40000080011"
+          },
+          {
+            "name": "文部科学省：2025年ガイドライン・大会引率（本文30頁）",
+            "url": "https://www.mext.go.jp/sports/content/20251226-spt_oripara-000046627_00234.pdf#page=31"
           }
         ],
-        "verdict": "fact"
+        "verdict": "gap"
       },
       {
         "claim": "中体連の大会に地域クラブのチームが出られるようになっている",
-        "finding": "参加できるようになっているのはそのとおり。ただし細則を読むと、学校の部活動と地域クラブの掛け持ちで大会に出ることは認められておらず、生徒はどちらか一方を選ぶことになる。",
+        "finding": "地域クラブの中体連主催大会への参加は、国のガイドラインと2026年度の連盟規程で確認できます。参加には競技・大会ごとの登録等の条件があり、全クラブが無条件で参加できる制度ではありません。参加を考える場合は、該当年度・競技の最新要件を確認してください。",
         "id": "chutairen-entry",
         "issue_ids": [
           "bukatsu-chiiki-kyoiku"
         ],
-        "matched_post_count": 4,
+        "matched_post_count": 3,
         "sources": [
           {
-            "name": "日本中学校体育連盟 令和7年度全国中学校体育大会 地域クラブ活動の参加資格の特例競技部細則（令６日中体発第305号・PDF）",
-            "url": "https://www.fukui-jpa.com/data/saisoku061011.pdf"
+            "name": "文部科学省：2025年ガイドライン・認定地域クラブ活動への支援",
+            "url": "https://www.mext.go.jp/sports/content/20251226-spt_oripara-000046627_00234.pdf#page=42"
+          },
+          {
+            "name": "補足：日本中学校体育連盟・2026年度開催基準",
+            "url": "https://niigata-chutairen.jp/chiiki/21/1R8zenchukaisaikijun.pdf"
+          },
+          {
+            "name": "補足：日本中学校体育連盟・2026年度各競技部細則",
+            "url": "https://niigata-chutairen.jp/chiiki/21/2R8kyougibusaisoku.pdf"
           }
         ],
         "verdict": "fact"
       },
       {
         "claim": "運動部の費用は年平均8万4千円で、保護者の65%が負担を感じている",
-        "finding": "投稿が間違いという意味ではない。国や自治体が公表した統計としては裏が取れなかった、というだけ。数字の出どころは、規模と方法が公表されている民間のネット調査だった。",
+        "finding": "公的な統計としては、この数字を確認できませんでした。民間調査の原発表には、運動部の年平均費用8.4万円と、運動部の保護者の負担実感65％が載っています。全国の全家庭や、地域移行後だけの費用を表す数字ではありません。",
         "id": "club-cost-survey",
         "issue_ids": [
           "bukatsu-chiiki-hiyo"
         ],
         "matched_post_count": 3,
-        "sources": [],
+        "sources": [
+          {
+            "name": "補足：民間調査主体の原発表・調査結果③（公的統計ではありません）",
+            "url": "https://prtimes.jp/main/html/rd/p/000000399.000018536.html"
+          }
+        ],
         "verdict": "miss"
       },
       {
         "claim": "給特法は改正されたが、教職調整額は4%のままだ",
-        "finding": "この投稿が書かれた2026年8月の時点で、教職調整額はすでに5%へ上がっている。足りないという評価は評価として、4%のままという事実の部分は法律の条文と合わない。",
+        "finding": "一般の対象教員の教職調整額は、2026年1月から5％です。幼稚園の教員には4％の例外があります。個々の投稿の発言日は特定できないため、現在の制度との違いを示し、発言時点の正誤までは断定していません。",
         "id": "kyushokuchoseigaku",
         "issue_ids": [
           "bukatsu-chiiki-kyoin"
@@ -131,7 +144,7 @@
         "verdict": "gap"
       }
     ],
-    "reviewer_type": "editorial_review",
+    "reviewer_type": "ai_assisted",
     "status": "complete"
   },
   "collected_count": 2282,

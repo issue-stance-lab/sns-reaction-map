@@ -3032,3 +3032,25 @@ items:
     decision_note: >-
       オーナーがこのチャットで「この内容で公開して、本番でもスマホで2記事から理由比較への移動と計測を確認して、課題51・54を更新して」と承認。
       承認対象は3a9b64d4の2記事・人数計測と確認版の表示。公開文章は承認時点から変更しない。
+
+  - id: approval-20261031-three-theme-claim-audit
+    department: engineering-data
+    action: website_publication
+    summary: 辺野古・部活動・あだ名禁止の独立確認済み照合結果を公開する
+    reason: 現行意見の照合結果を正典対応表・公開データ・ページへ採用し、照合日と件数を揃える。
+    risks:
+    - 本文との対応件数であり、賛同者数や世論変化ではない
+    - 部活動の独立再確認は250件。全1,771件の独立再監査ではない
+    - あだ名の判例検索は保守によって一部未完了。確認できなかった判定を維持する
+    recommendation: approve
+    evidence:
+    - quality/reviews/2026-10-31-elderly-alignment-and-claim-preflight.md
+    - quality/reviews/2026-10-31-elderly-alignment-and-claim-preflight.json
+    - tasks/task-99.md
+    status: approved
+    requested_at: '2026-10-31'
+    decided_at: '2026-10-31'
+    decision_note: >-
+      オーナーがこのチャットで「この3テーマの検査済み候補を公開して、本番でもスマホで照合結果の件数・説明・出典リンクを確認し、課題99を更新して」と承認。
+      承認対象は public-candidate-preflight-fixed の38ファイル。候補manifest SHA-256 49a48194825fcd706bfaa34b838f8b16342eba997d2a03a1c8897d8c1a37c815。
+      全対象ファイルの元版・候補の指紋一致を確認して適用。公開文章・件数・判定・出典は検査版から変更しない。

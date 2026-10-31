@@ -126,8 +126,8 @@ def check_config(config: dict, public: dict, memo_text: str, display_headline: s
     checked = config["checked_on"]
     if checked < period["guideline_on"]:
         raise SystemExit("checked_on がガイドラインの策定日より前です")
-    if checked < public["claim_verification"]["checked_on"]:
-        raise SystemExit("制度の確認日 checked_on が、主張の照合日より古くなっています")
+    # 主張の照合と冒頭の確認は対象が異なる。各欄に実際の確認日を表示し、
+    # 投稿照合だけの更新で事故調査・制度全体の確認日を進めない。
     memo_on = memo_checked_on(memo_text, config["memo_section"])
     if memo_on != checked:
         raise SystemExit(f"一次資料メモの節「{config['memo_section']}」の確認日 {memo_on} が checked_on {checked} と違います"

@@ -100,12 +100,27 @@ def build_claim_verification(theme_id: str) -> dict[str, Any]:
     checks = _literal_from_python(script, checks_name)
     checked_on = _iso_date(_literal_from_python(script, checked_name))
     rows = json.loads((ROOT / "data" / "verification" / f"{theme_id}-claims.json").read_text(encoding="utf-8"))
-    counts: dict[str, int] = {}
+    # Empty associations are valid only when explicitly declared in the reviewed master.
+    master = json.loads((ROOT / "data" / f"{theme_id}_claim_posts.json").read_text(encoding="utf-8"))
+    declared = master.get("claims")
+    if isinstance(declared, dict):
+        expected = {key: len(ids) for key, ids in declared.items()}
+    elif isinstance(declared, list):
+        expected = {item["id"]: len(item["tweet_ids"]) for item in declared}
+    else:
+        expected = {key: len(item["tweet_ids"]) for key, item in master.items()
+                    if isinstance(item, dict) and "tweet_ids" in item}
+    if set(expected) != {check["key"] for check in checks}:
+        raise RegistryError(f"{theme_id}: 確定データと照合カードの主張IDが一致しません")
+    counts: dict[str, int] = dict.fromkeys(expected, 0)
     for row in rows:
         claim_id = row.get("claim")
         if not isinstance(claim_id, str):
             raise RegistryError(f"{theme_id}: 検証用投稿に claim がありません")
         counts[claim_id] = counts.get(claim_id, 0) + 1
+
+    if counts != expected:
+        raise RegistryError(f"{theme_id}: 検証用投稿の件数が確定データと一致しません")
 
     issue_defs = load_taxonomy()[theme_id]["issues"]
     issue_order = list(issue_defs)
@@ -153,7 +168,7 @@ def build_claim_verification(theme_id: str) -> dict[str, Any]:
     if set(counts) != {claim["id"] for claim in claims}:
         raise RegistryError(f"{theme_id}: 検証用投稿と照合カードの主張IDが一致しません")
     # The new ledger records an AI source review; do not present it as a human review.
-    reviewer_type = "ai_assisted" if theme_id == "henoko-student-accident" else "editorial_review"
+    reviewer_type = "ai_assisted" if theme_id in {"henoko-student-accident", "bukatsu-chiiki", "school-nickname-ban"} else "editorial_review"
     return {"status": "complete", "checked_on": checked_on, "reviewer_type": reviewer_type, "claims": claims}
 
 
