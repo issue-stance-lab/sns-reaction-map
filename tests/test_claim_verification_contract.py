@@ -36,12 +36,11 @@ class ClaimVerificationContractTest(unittest.TestCase):
                     self.assertIn(issue_id, known, f"{theme}/{claim['id']}")
                     self.assertNotIn(issue_id, other, f"{theme}/{claim['id']}")
 
-    def test_bukatsu_chiiki_is_verified_by_editorial_review(self) -> None:
-        # 課題54 段階3で照合済み。公開JSONを complete にできるのは人が確定した場合だけなので、
-        # 確認者種別が ai_assisted へ変わっていないことをここで固定する。
+    def test_bukatsu_chiiki_reports_ai_assisted_review(self) -> None:
+        # 課題99の現行照合は別コンテキストのAIによる独立確認。人間の監査と表示しない。
         done = prc.build_claim_verification("bukatsu-chiiki")
         self.assertEqual(done["status"], "complete")
-        self.assertEqual(done["reviewer_type"], "editorial_review")
+        self.assertEqual(done["reviewer_type"], "ai_assisted")
         self.assertEqual(len(done["claims"]), 7)
         self.assertEqual({item["verdict"] for item in done["claims"]}, {"fact", "gap", "miss"})
         self.assertNotIn("tweet_id", json.dumps(done, ensure_ascii=False))
@@ -71,3 +70,40 @@ class ClaimVerificationContractTest(unittest.TestCase):
         self.assertTrue(all(item["issue_ids"] for item in done["claims"]))
         self.assertTrue(all(item["sources"] for item in done["claims"]))
         self.assertNotIn("tweet_id", json.dumps(done, ensure_ascii=False))
+
+
+class EmptyClaimAssociationsTest(unittest.TestCase):
+    def test_explicitly_reviewed_zero_associations_are_published(self):
+        done = prc.build_claim_verification("bukatsu-chiiki")
+        counts = {c["id"]: c["matched_post_count"] for c in done["claims"]}
+        self.assertEqual(counts["national-funding"], 0)
+        self.assertEqual(counts["shidoin-role"], 0)
+        self.assertEqual(sum(counts.values()), 10)
+
+    def test_missing_positive_verification_rows_are_rejected(self):
+        from pathlib import Path
+        from unittest import mock
+        original = Path.read_text
+        target = prc.ROOT / "data/verification/bukatsu-chiiki-claims.json"
+        def read(path, *args, **kwargs):
+            text = original(path, *args, **kwargs)
+            return json.dumps(json.loads(text)[1:]) if path == target else text
+        with mock.patch.object(Path, "read_text", read):
+            with self.assertRaisesRegex(prc.RegistryError, "件数が確定データと一致しません"):
+                prc.build_claim_verification("bukatsu-chiiki")
+
+    def test_unknown_verification_claim_is_rejected(self):
+        from pathlib import Path
+        from unittest import mock
+        original = Path.read_text
+        target = prc.ROOT / "data/verification/bukatsu-chiiki-claims.json"
+        def read(path, *args, **kwargs):
+            text = original(path, *args, **kwargs)
+            if path == target:
+                rows = json.loads(text)
+                rows.append({"claim": "unknown"})
+                return json.dumps(rows)
+            return text
+        with mock.patch.object(Path, "read_text", read):
+            with self.assertRaises(prc.RegistryError):
+                prc.build_claim_verification("bukatsu-chiiki")

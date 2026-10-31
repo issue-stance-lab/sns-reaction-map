@@ -92,7 +92,9 @@ def audit_legacy_words() -> list[str]:
 
 def verification_claim_counts(theme: str) -> dict[str, int]:
     rows = json.loads((ROOT / "data" / "verification" / f"{theme}-claims.json").read_text(encoding="utf-8"))
-    return dict(Counter(row["claim"] for row in rows))
+    counts = dict.fromkeys(canonical_claim_counts(theme), 0)
+    counts.update(Counter(row["claim"] for row in rows))
+    return counts
 
 
 def public_path(theme: str) -> Path:
