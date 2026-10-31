@@ -140,13 +140,13 @@ class ConnectedRefreshTests(unittest.TestCase):
         data = connected.planet_data(self.source)
         finance = next(i for i in data['issues'] if i['id'].endswith('-finance-welfare'))
         iid = finance['id']; stance = next(s for s in data['stances'] if s['id'].endswith('-support'))
-        # 本文を変えず、集計後の検証入力に財源・推進1200件を加える。正典ファイルには書かない。
-        finance['count'] += 1200; finance['stances'][stance['key']] += 1200; finance['intensity']['low'] += 1200
-        finance['top_stance'] = stance['key']; stance['count'] += 1200
-        data['totals']['collected'] += 1200; data['totals']['opinions'] += 1200
+        # 本文を変えず、集計後の検証入力に財源・推進1500件を加える。正典ファイルには書かない。
+        finance['count'] += 1500; finance['stances'][stance['key']] += 1500; finance['intensity']['low'] += 1500
+        finance['top_stance'] = stance['key']; stance['count'] += 1500
+        data['totals']['collected'] += 1500; data['totals']['opinions'] += 1500
         for mode in data['modes']:
             if mode['id'] in ('all', stance['key']):
-                mode['counts'][iid] += 1200; mode['total'] += 1200
+                mode['counts'][iid] += 1500; mode['total'] += 1500
             for key, count in mode['counts'].items():
                 mode['width_pct'][key] = count / mode['total'] * 100
                 mode['high_pct'][key] = mode['high_counts'][key] / count * 100 if count else 0
@@ -157,11 +157,11 @@ class ConnectedRefreshTests(unittest.TestCase):
         with patch('refresh_planet_section.bpd.build', return_value=data):
             _, page, failures = refresh(connected.TOPIC, source=self.source)
         # 表示は追従しても、未再読の論点が増えすぎた候補は既存の公開ゲートで止める。
-        self.assertEqual(failures, ['編集部が読み直した論点が意見の44%しかない（50%以上必要）'])
+        self.assertEqual(failures, ['編集部が読み直した論点が意見の43%しかない（50%以上必要）'])
         soup = BeautifulSoup(page, 'html.parser')
-        self.assertIn('1959', soup.select_one('#fb-' + iid).get_text())
-        self.assertIn('7116', soup.select_one('#stance-glance').get_text())
-        self.assertIn('1959', soup.select_one('.thirty-summary').get_text())
+        self.assertIn('2341', soup.select_one('#fb-' + iid).get_text())
+        self.assertIn('7948', soup.select_one('#stance-glance').get_text())
+        self.assertIn('2341', soup.select_one('.thirty-summary').get_text())
         self.assertIn('減った分は誰が払うのか', soup.select_one('.thirty-summary').get_text())
         self.assertEqual(connected.content_index(connected.planet_data(page)), before)
         self.assertEqual(adapter.vote_fingerprint(page), adapter.vote_fingerprint(self.source))
