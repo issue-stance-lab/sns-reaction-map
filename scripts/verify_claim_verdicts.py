@@ -13,6 +13,8 @@ import json
 from collections import Counter
 from pathlib import Path
 
+from public_registry_common import CLAIM_AUDIT_SOURCES
+
 ROOT = Path(__file__).resolve().parents[1]
 ALLOWED = {"fact", "gap", "miss"}
 # この日数以上遅れたテーマは、次回の定期更新（DATA_REFRESH.md）に合わせて
@@ -23,16 +25,11 @@ LEGACY_CONSTITUTIONAL = {
     "原典とずれる": "gap",
     "原典にたどり着けず": "miss",
 }
+# 公開データ生成と監視で同じ登録を使う。別々の一覧では、後から追加された
+# 生成AIのように公開済みの主張が件数検査・照合遅れ警告の両方から漏れる（課題99）。
 SOURCES = {
-    "henoko-student-accident": ("scripts/build_henoko_process_sections.py", "FACT_CHECKS"),
-    "school-nickname-ban": ("scripts/build_nickname_process_sections.py", "FACT_CHECKS"),
-    "bike-blue-ticket": ("scripts/build_bike_process_sections.py", "FACT_CHECKS"),
-    "bukatsu-chiiki": ("scripts/build_bukatsu_process_sections.py", "FACT_CHECKS"),
-    "constitutional-amendment": ("scripts/build_constitutional_process_sections.py", "FACT_CHECKS"),
-    "consumption-tax-cut": ("scripts/build_consumption_tax_page.py", "CLAIM_AUDIT"),
-    "elderly-license-revocation": ("scripts/build_elderly_process_sections.py", "FACT_CHECKS"),
-    "fukushuto": ("scripts/build_fukushuto_process_sections.py", "FACT_CHECKS"),
-    "koshitsu-tenpakai": ("scripts/build_koshitsu_process_sections.py", "FACT_CHECKS"),
+    theme: (source[0], source[1])
+    for theme, source in CLAIM_AUDIT_SOURCES.items()
 }
 
 
