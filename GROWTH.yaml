@@ -566,7 +566,7 @@ recurring:
     procedure: fetch_gsc_index_status.pyで全URLの登録状態を保存し前回と比較。表示回数・CTRも確認して改善候補をexperimentsに起票
     needs_human: 自動取得が失敗した場合のみ、GSC管理画面の確認
     notes: >-
-      【2026-10-31登録調査】全32URLは登録2・クロール済み未登録25・未認識5。技術的制限は未検出。憲法改正の公開テスト正常。登録依頼は初回reCAPTCHA接続エラー後、再試行で受付済み。課題55とquality/reviews/2026-10-31-index-recovery-investigation.mdを参照。11/7に再検査する。
+      【2026-10-31登録調査】全32URLは登録2・クロール済み未登録25・未認識5。技術的制限は未検出。憲法改正の公開テスト正常。登録依頼は初回reCAPTCHA接続エラー後、再試行で受付済み。追加7件の依頼は自転車のみ受付済み、5件は日次上限、部活動は認証接続エラーで受付未確認。11/1以降に残り6件を再試行し11/7に登録状態を再検査。課題55とquality/reviews/2026-10-31-index-recovery-investigation.mdを参照。
       2026-07-26にOAuth再認証・自動取得確認。28日間で表示45・クリック2・CTR4.44%・平均掲載順位11.51。クリックは部活1（9表示・11.1%）と高齢者免許1（11表示・9.1%）。AI著作権は10表示・平均6.7位だがクリック0のためタイトル改善候補。
       【2026-09-21追記】課題83で発覚したlast_run 57日停滞を受けて`python3 scripts/fetch_gsc_metrics.py --days 90 --dimension page --json`で実データを確認。
       直近90日間で表示回数はサイト全体で2件のみ(bike-blue-ticket・constitutional-amendmentに各1件、クリック0)。
