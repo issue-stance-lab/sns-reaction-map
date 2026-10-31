@@ -32,6 +32,9 @@ sources:
   - name: 道路交通法（e-Gov法令検索）第91条の2・第101条の4
     url: https://laws.e-gov.go.jp/document?lawid=335AC0000000105
     checked_on: 2026-10-17
+related_issues:
+  - elderly-license-revocation-safety
+  - elderly-license-revocation-assessment
 ---
 
 サポカー限定免許は、衝突被害軽減ブレーキなどを備えた車だけを運転できる条件付きの免許です。本人が申請すると、いまの免許にその条件を付けられます。返納するか、今のまま乗り続けるかの二択ではなく、その間の選び方として用意された制度です。

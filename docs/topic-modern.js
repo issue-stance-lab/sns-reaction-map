@@ -247,6 +247,8 @@
      #issue-cards（画像＋X投稿。issue-cardsを持つ5テーマ）はplanet-liveと無関係に
      常時表示なので、ここでは何もしなくてよい（ブラウザ標準の遷移で届く）。 */
   function citeRestoreFromHash() {
+    // 自転車・免許返納の読書面では、旧地図のボタンで指定した論点を上書きしない。
+    if (document.querySelector('#bike-blue-ticket-reading.fr-js, #elderly-license-revocation-reading.fr-js')) return;
     var match = /^#issue-(.+)$/.exec(location.hash);
     if (!match) return;
     var liveButton = document.getElementById('btn-' + match[1]);

@@ -31,6 +31,9 @@ sources:
   - name: 国土交通省 近畿運輸局「地域公共交通のクロスセクター効果『地域公共交通 赤字＝廃止でいいの？』」（平成30年3月）
     url: https://wwwtb.mlit.go.jp/hokushin/content/000104020.pdf
     checked_on: 2026-10-17
+related_issues:
+  - elderly-license-revocation-mobility-rights
+  - elderly-license-revocation-alternative-transport
 ---
 
 地方では車に代わる足が乏しく、免許の返納が生活の問題になります。代わりの手段にはコミュニティバス、デマンド交通、乗合タクシー、自家用有償旅客運送などがあります。ただ、何がどこまであるかは自治体ごとに違うのが実情です。

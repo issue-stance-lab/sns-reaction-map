@@ -2634,6 +2634,22 @@ document.addEventListener("click", function (event) {
     return pickReason(panel, h.slice(('fr-r-' + id + '-').length), true);
   }
 
+  // 外の記事から指定された論点を覚え、旧地図の初期化後に読書面へ移る。
+  const initialIssue = fromHash();
+  function restoreInitialIssue() {
+    if (!initialIssue) return;
+    select(initialIssue, false);
+    history.replaceState(null, '', '#issue-' + initialIssue);
+    const target = document.getElementById('issue-' + initialIssue);
+    if (!target) return;
+    const heading = target.querySelector('h3');
+    if (heading) { heading.tabIndex = -1; heading.focus({ preventScroll: true }); }
+    target.scrollIntoView({ block: 'start', behavior: 'instant' });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', restoreInitialIssue, { once: true });
+  } else restoreInitialIssue();
+
   root.classList.add('fr-js');
   select(fromHash() || root.dataset.defaultIssue, false);
   reasonFromHash();

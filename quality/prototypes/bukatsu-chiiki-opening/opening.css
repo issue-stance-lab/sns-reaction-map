@@ -178,3 +178,8 @@ body{margin:0;background:#fff;color:var(--bk-ink);font:16px/1.85 var(--bk-sans)}
   .bko-stance__list{grid-template-columns:1fr}
 }
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+
+/* 短い答えの直後から、関連する論点の理由へ進む */
+.bko-issue-links{display:flex;flex-direction:column;align-items:flex-start;margin:0 0 10px;gap:2px}
+.bko .bko-issue-link{display:inline-flex;align-items:center;min-height:44px;font-size:13px;font-weight:700;line-height:1.6}
+.bko-issue-link:focus-visible{outline:3px solid var(--bk-blue);outline-offset:3px}

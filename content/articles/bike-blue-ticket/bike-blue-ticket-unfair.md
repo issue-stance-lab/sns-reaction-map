@@ -41,6 +41,9 @@ sources:
   - name: 国立国会図書館 国会会議録検索システム 参議院内閣委員会 第14号（令和6年5月16日）
     url: https://kokkai.ndl.go.jp/#/detail?minId=121314889X01420240516
     checked_on: 2026-10-17
+related_issues:
+  - bike-blue-ticket-infrastructure-first
+  - bike-blue-ticket-rule-ambiguity
 ---
 
 自転車の青切符を「おかしい」と感じる投稿でよく語られているのは、2点です。走れる道が整っていないのに罰だけ先に来たこと、そしてルールが分かりにくいこと。取締りそのものへの批判より、この2点が目に付きます。一方で、危険な運転が減るなら賛成という投稿もあります。

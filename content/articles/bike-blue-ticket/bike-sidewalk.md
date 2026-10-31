@@ -30,6 +30,9 @@ sources:
   - name: 国土交通省「自転車活用推進計画」（第3次、令和8年5月）本体 p.17-18
     url: https://www.mlit.go.jp/road/bicycleuse/good-cycle-japan/assets/pdf/3rd_plan.pdf
     checked_on: 2026-10-17
+related_issues:
+  - bike-blue-ticket-road-safety
+  - bike-blue-ticket-rule-ambiguity
 ---
 
 自転車で歩道を走っただけで、必ず青切符になるわけではありません。警察庁は、単に歩道を通ったという場合は原則として指導警告の対象だと案内しています。標識があるとき、13歳未満・70歳以上・身体の不自由な人が運転するとき、車道が危険なときは、歩道を走ってよい例外です。ただし歩道では歩行者が優先で、徐行が決まりになっています。
