@@ -53,3 +53,9 @@ python3 scripts/fetch_gsc_index_status.py --output quality/reviews/2026-11-07-in
 - [Googleに再クロールをリクエストする](https://developers.google.com/search/docs/crawling-indexing/ask-google-to-recrawl?hl=ja)：依頼は登録を保証せず、同じURLの反復依頼は処理を早めない。
 
 生のAPI応答・HTTP検査・サイトマップ応答・Google描画画像は、公開物と分離して `/Volumes/M2-WorkSpace/Projects/副業/UIデザイン調査/2026-10-31_SNS反応まっぷ_検索登録調査/evidence/` に保存。全32URLでGoogleの公開テストを行ったわけではなく、実施は憲法改正1URLのみ。
+
+## 同日追記：オーナー指示による残り7件の登録依頼
+
+上記調査時点では憲法改正1件のみだったが、その後オーナーから残り7件の依頼指示を受け実行した。自転車1件は受付済み。生成AI・消費税・高齢者免許・皇室・学校あだ名禁止の5件はGoogleの日次割り当て量超過で未受付。部活動はreCAPTCHA接続エラーで受付未確認。先行の憲法改正を含め8施策中2件の受付を確認した。登録回復を示すものではない。[URL別の結果](2026-10-31-index-request-results.json)と課題55の表を参照。
+
+初回の認証接続エラーに対し、未受付のページだけ画面を再読み込みして再試行した。生成AIの公開URLテストも正常だったが、依頼は日次上限で止まった。上限通知後の追加送信はしていない。11/1以降に残り6件を再試行し、11/7に実際の取得日と登録回復を確認する。自動再実行は設定していない。
