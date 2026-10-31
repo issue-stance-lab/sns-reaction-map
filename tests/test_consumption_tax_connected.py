@@ -219,13 +219,13 @@ class ConnectedContentTests(unittest.TestCase):
     def test_focus_follows_counts_by_id_without_changing_vote_order(self):
         data = connected.planet_data(self.page)
         finance = next(i for i in data['issues'] if i['id'].endswith('-finance-welfare'))
-        finance.update(count=2000, label='表示名を変えても同じID')
+        finance.update(count=2500, label='表示名を変えても同じID')
         next(i for i in data['issues'] if i['id'].endswith('-other'))['count'] = 3000
         data['issues'].reverse()
         source = connected.DATA_PATTERN.sub(lambda m: m[1] + json.dumps(data, ensure_ascii=False) + m[3], self.page)
         page = connected.apply(source)
         focus = BeautifulSoup(page, 'html.parser').select_one('.thirty-summary')
-        self.assertEqual(focus.select_one('b').get_text(), '2000')
+        self.assertEqual(focus.select_one('b').get_text(), '2500')
         self.assertEqual(focus.select_one('strong').get_text(), builder.ISSUE_META['財源と社会保障']['headline'])
         from refresh_adapters.consumption_tax import vote_fingerprint
         self.assertEqual(vote_fingerprint(page), vote_fingerprint(self.page))
@@ -250,8 +250,8 @@ class ConnectedContentTests(unittest.TestCase):
         self.assertEqual(verified_selectors(inactive, ROOT), {})
 
     def test_wrong_reason_count_fails_even_when_another_bucket_has_that_number(self):
-        broken = self.page.replace('tax-reason-count-consumption-tax-cut-scope-A">675',
-                                   'tax-reason-count-consumption-tax-cut-scope-A">194')
+        broken = self.page.replace('tax-reason-count-consumption-tax-cut-scope-A">728',
+                                   'tax-reason-count-consumption-tax-cut-scope-A">215')
         with self.assertRaisesRegex(ValueError, '数字が元記録'):
             verified_selectors(broken, ROOT)
 
