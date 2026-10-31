@@ -52,4 +52,6 @@
 
 候補一式はリポジトリ外の `UIデザイン調査/2026-10-31_主張照合_課題99/public-candidate/`。`payload/` が適用予定ファイル、`candidate.patch` が適用差分、`preview/` が確認用のサイト、`evidence/` が画面・検査ログ、`candidate-payload.tar.gz` が復元検査済みの圧縮ファイル。絶対パスと各指紋は[JSON記録](2026-10-31-claim-public-candidate.json)を参照する。SNS本文・生ID・投稿者名は追跡する監査記録へ転載していない。
 
+確認用ページ： [辺野古](</Volumes/M2-WorkSpace/Projects/副業/UIデザイン調査/2026-10-31_主張照合_課題99/public-candidate/preview/henoko-student-accident-reaction-map.html>)・[部活動](</Volumes/M2-WorkSpace/Projects/副業/UIデザイン調査/2026-10-31_主張照合_課題99/public-candidate/preview/bukatsu-chiiki-reaction-map.html>)・[あだ名禁止](</Volumes/M2-WorkSpace/Projects/副業/UIデザイン調査/2026-10-31_主張照合_課題99/public-candidate/preview/school-nickname-ban-reaction-map.html>)。375pxの照合カード画面： [辺野古](</Volumes/M2-WorkSpace/Projects/副業/UIデザイン調査/2026-10-31_主張照合_課題99/public-candidate/evidence/claim-candidate-henoko-student-accident-375.png>)・[部活動](</Volumes/M2-WorkSpace/Projects/副業/UIデザイン調査/2026-10-31_主張照合_課題99/public-candidate/evidence/claim-candidate-bukatsu-chiiki-375.png>)・[あだ名禁止](</Volumes/M2-WorkSpace/Projects/副業/UIデザイン調査/2026-10-31_主張照合_課題99/public-candidate/evidence/claim-candidate-school-nickname-ban-375.png>)。
+
 残るのは既存不一致の解消・公開前全体検査の再実行・公開承認と本番反映。あだ名禁止の判例再検索は11/1 13時JSTに別チャットで一度だけ予約済み。辺野古11/7・部活動11/8・あだ名11/15の将来の追加・修正意見は、今回の照合済み範囲に含めず、その回で同じ基準を適用する。課題99は進行中を維持する。
