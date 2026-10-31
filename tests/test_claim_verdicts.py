@@ -30,9 +30,45 @@ class ClaimVerdictTest(unittest.TestCase):
         self.assertEqual(set(counts), {
             "bike-blue-ticket", "bukatsu-chiiki", "constitutional-amendment", "consumption-tax-cut",
             "elderly-license-revocation", "fukushuto", "koshitsu-tenpakai", "school-nickname-ban",
-            "henoko-student-accident",
+            "henoko-student-accident", "ai-copyright",
         })
-        self.assertEqual(sum(counts.values()), 54)
+        self.assertEqual(sum(counts.values()), 60)
+
+    def test_every_published_claim_audit_is_monitored(self) -> None:
+        published = {
+            path.stem for path in (ROOT / "data/public/themes").glob("*.json")
+            if json.loads(path.read_text(encoding="utf-8")).get("claim_verification", {}).get("claims")
+        }
+        self.assertEqual(set(vcv.SOURCES), published)
+
+    def test_ai_coverage_threshold_and_dashboard_delivery(self) -> None:
+        # 実際の登録一覧を使う。生成AIを監視対象から落とすと必ず失敗する。
+        from admin_dashboard import actions, render
+        import datetime as dt
+
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            payload = {"claim_verification": {"checked_on": "2026-09-19"},
+                       "collection_period": {"end": "2026-09-19"}}
+            for theme in vcv.SOURCES:
+                (root / f"{theme}.json").write_text(json.dumps(payload), encoding="utf-8")
+            for end, expected_days in (("2026-10-18", None), ("2026-10-19", 30),
+                                       ("2026-10-27", 38), ("2026-09-19", None)):
+                payload["collection_period"]["end"] = end
+                (root / "ai-copyright.json").write_text(json.dumps(payload), encoding="utf-8")
+                with self.subTest(end=end), mock.patch.object(
+                    vcv, "public_path", lambda theme: root / f"{theme}.json"
+                ):
+                    findings = coverage_findings()
+                    self.assertEqual(len(findings), 0 if expected_days is None else 1)
+                    if expected_days is not None:
+                        title = f"ai-copyright: クレーム監査（主張の事実確認）が{expected_days}日遅れています"
+                        self.assertEqual(findings[0]["title"], title)
+                        self.assertIn("2026-09-19", findings[0]["detail"])
+                        self.assertIn(end, findings[0]["detail"])
+                        data = {"today": dt.date(2026, 10, 31), "themes": [], "x_posts": [],
+                                "data_updates": [], "live_cache": {}}
+                        self.assertIn(title, render._anomalies(actions.anomalies(data)))
 
     def test_post_counts_agree_across_all_three_files(self) -> None:
         # ページは data/{theme}_claim_posts.json、公開JSONは data/verification/ を読む。
