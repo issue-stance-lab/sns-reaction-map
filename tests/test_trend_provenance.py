@@ -28,7 +28,7 @@ from refresh_adapters import consumption_tax as adapter  # noqa: E402
 
 PAGE = ROOT / "docs/consumption-tax-cut-reaction-map.html"
 CANON = ROOT / "social-samples/consumption-tax-cut_hermes_arena_classified.json"
-NEW_DAY = "2026-10-28"
+NEW_DAY = "2026-11-09"
 
 
 class TrendProvenanceTest(unittest.TestCase):
@@ -140,11 +140,11 @@ class NextRoundTest(unittest.TestCase):
         html = self.rebuild()
         for kind in ("stance", "issue"):
             panel = re.search(rf'<div class="trend-panel" id="consumption-tax-cut-trend-panel-{kind}".*?</table>', html, re.S).group(0)
-            self.assertEqual(len(re.findall(r'<tr id="[^"]+-row-2026-', panel)), 12)
+            self.assertEqual(len(re.findall(r'<tr id="[^"]+-row-2026-', panel)), 13)
             self.assertIn(f"-row-{NEW_DAY}", panel)
-        self.assertIn("2026年10月28日時点", html)
+        self.assertIn("2026年11月9日時点", html)
         # 見出し（H2）の末尾の日付も、右上のバッジと同じく最新の収集日になる。
-        self.assertEqual(html.count('<span class="trend-h2-date">（2026年10月28日時点）</span>'), 3)  # 3つのタブ
+        self.assertEqual(html.count('<span class="trend-h2-date">（2026年11月9日時点）</span>'), 3)  # 3つのタブ
         self.assertNotIn("（2026年10月3日時点）", html)
         self.assertEqual(html.count("<!-- TREND_CARD_START -->"), 1)
 
@@ -342,7 +342,7 @@ class BukatsuTrendProvenanceTest(unittest.TestCase):
         stance_rows = [key for key in result if "-panel-stance-row-" in key]
         issue_rows = [key for key in result if "-panel-issue-row-" in key]
         # 立場は全回（見直し前の回も判定し直しずみ）、論点は検索語を増やした2026-07-23以降の回だけ。
-        self.assertEqual(len(stance_rows), 14)  # 2026-10-18の回が入って14回
+        self.assertEqual(len(stance_rows), 15)  # 2026-10-31の回が入って15回
         self.assertEqual(min(key.rsplit("-row-", 1)[1] for key in stance_rows), "2026-06-27")
         self.assertTrue(issue_rows and all(key.rsplit("-row-", 1)[1] >= "2026-07-23" for key in issue_rows))
         self.assertIn("#bukatsu-chiiki-trend-panel-stance-n-range", result)
@@ -447,14 +447,14 @@ class BukatsuBuildTest(unittest.TestCase):
 class BukatsuNextRoundTest(unittest.TestCase):
     """次の収集（2026-10-08）が入ったとき、推移が1回ぶん伸びて、数字検査も通ること。"""
 
-    NEW_DAY = "2026-10-27"
+    NEW_DAY = "2026-11-08"
 
     def setUp(self) -> None:
         self.temp = tempfile.TemporaryDirectory()
         self.stage = Path(self.temp.name)
         self.addCleanup(self.temp.cleanup)
         rows = json.loads(BUKATSU_CANON.read_text(encoding="utf-8"))
-        latest = [r for r in rows if r["fetched_at"].startswith("2026-10-18")]
+        latest = [r for r in rows if r["fetched_at"].startswith("2026-10-31")]
         fresh = []
         for index, source in enumerate(latest):
             row = copy.deepcopy(source)
@@ -470,14 +470,14 @@ class BukatsuNextRoundTest(unittest.TestCase):
     def test_both_tabs_get_one_more_round_and_the_date_moves(self) -> None:
         stance = re.findall(r'id="bukatsu-chiiki-trend-panel-stance-row-([\d-]+)"', self.html)
         issue = re.findall(r'id="bukatsu-chiiki-trend-panel-issue-row-([\d-]+)"', self.html)
-        self.assertEqual(len(stance), 15)  # 全14回 + 新しい回
+        self.assertEqual(len(stance), 16)  # 全15回 + 新しい回
         self.assertEqual(stance[0], "2026-06-27")
         self.assertEqual(stance[-1], self.NEW_DAY)
-        self.assertEqual(len(issue), 13)
+        self.assertEqual(len(issue), 14)
         self.assertEqual(issue[-1], self.NEW_DAY)
-        self.assertEqual(self.html.count('<span class="trend-h2-date">（2026年10月27日時点）</span>'), 2)
-        self.assertNotIn("（2026年10月18日時点）", self.html)
-        self.assertIn("前回（10月18日）から今回（10月27日）にかけて", self.html)
+        self.assertEqual(self.html.count('<span class="trend-h2-date">（2026年11月8日時点）</span>'), 2)
+        self.assertNotIn("（2026年10月31日時点）", self.html)
+        self.assertIn("前回（10月31日）から今回（11月8日）にかけて", self.html)
 
     def test_extended_page_passes_the_recount(self) -> None:
         result = bukatsu_provenance.private_verified_selectors(self.html, ROOT, sample_file=self.candidate)

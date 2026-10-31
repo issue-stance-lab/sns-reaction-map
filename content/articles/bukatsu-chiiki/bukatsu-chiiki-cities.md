@@ -95,6 +95,9 @@ sources:
   - name: スポーツ庁「地域クラブ活動における創設・運営ガイドブック」（令和8年3月25日公表）p.77
     url: https://www.mext.go.jp/sports/content/20260325-spt_oripara-000048484_001.pdf
     checked_on: 2026-08-31
+related_issues:
+  - bukatsu-chiiki-kakusa
+  - bukatsu-chiiki-seido
 ---
 
 国は2026〜2031年度の6年間を「改革実行期間」として部活動の地域移行を進めていますが、**始め方は市ごとに大きく違います**。神戸市は2026年9月に平日も休日も地域クラブへ切り替え、名古屋市は休日から先に移しました。札幌市は、2026年9月に確認した時点で方針をまだ策定していません。

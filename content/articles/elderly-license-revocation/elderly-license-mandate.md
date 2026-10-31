@@ -35,6 +35,9 @@ sources:
   - name: 警察庁交通局運転免許課 広報資料「運転技能検査の見直しに関する有識者検討会の報告書等について」と報告書本文（令和8年9月3日）
     url: https://www.npa.go.jp/news/release/2026/20260903_kouhou.pdf
     checked_on: 2026-10-17
+related_issues:
+  - elderly-license-revocation-safety
+  - elderly-license-revocation-mobility-rights
 ---
 
 高齢者の免許返納は、いまの日本では義務ではありません。返納は本人が申請する「自主返納」で、年齢だけを理由に免許を取り上げる仕組みもありません。そのうえで、義務化に賛成する人も反対する人も、論点によって言うことが変わります。

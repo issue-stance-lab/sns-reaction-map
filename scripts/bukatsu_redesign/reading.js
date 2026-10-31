@@ -129,3 +129,12 @@
     }
   });
 })();
+
+// 冒頭から論点へ進む案内。論点の表示とhash処理は既存の処理に任せる。
+document.addEventListener('click', function(event) {
+  var link = event.target.closest && event.target.closest('a[data-opening-issue]');
+  if (!link || typeof window.gtag !== 'function') return;
+  window.gtag('event', 'opening_issue_click', {
+    theme: 'bukatsu-chiiki', issue_id: link.getAttribute('data-opening-issue'), placement: 'short-answer'
+  });
+});

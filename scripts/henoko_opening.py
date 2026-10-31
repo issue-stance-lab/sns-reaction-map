@@ -128,8 +128,10 @@ def load_inputs(config_path: Path) -> dict:
     if "checked" in config:
         raise SystemExit("確認日は checked_on 1か所に持つ")
     checked = dt.date.fromisoformat(config["checked_on"])
-    if checked < dt.date.fromisoformat(public["claim_verification"]["checked_on"]):
-        raise SystemExit("一次資料を確かめた日 checked_on が、主張の照合日より古くなっています")
+    # 冒頭の対象は事故調査・制度の背景。投稿との照合日とは分けて確認する。
+    ledger = json.loads((ROOT / "data/verification/henoko-student-accident-background.json").read_text(encoding="utf-8"))
+    if checked < dt.date.fromisoformat(ledger["checked_on"]):
+        raise SystemExit("冒頭の確認日が背景台帳の確認日より古くなっています")
     for e in config["timeline"]["entries"]:
         if dt.date.fromisoformat(e["date"]) > checked:
             raise SystemExit(f"年表の {e['date']} が、資料を確かめた日 checked_on より後です")

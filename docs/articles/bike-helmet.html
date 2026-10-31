@@ -42,6 +42,8 @@ h1{margin:0 0 10px;font-size:clamp(23px,5.6vw,32px);line-height:1.45}
 .article-body h2{font-size:21px;line-height:1.5;margin:38px 0 12px;padding-bottom:8px;border-bottom:2px solid var(--accent-soft)}
 .article-body h3{font-size:17px;margin:26px 0 8px}
 .article-body p,.article-body li{color:#2b3445}
+/* 理由比較へのリンクは、折り返しの行間も押せる44px以上の面にする。 */
+.article-body p a[href*=".html#issue-"],.article-body td a[href*=".html#issue-"]{display:inline-block;max-width:100%;min-height:44px;padding:6px 0;vertical-align:middle}
 .article-body ul,.article-body ol{padding-left:22px}
 .table-wrap{overflow-x:auto;margin:14px 0 20px;border:1px solid var(--line);border-radius:var(--radius);background:var(--panel)}
 table{border-collapse:collapse;width:100%;font-size:14px;line-height:1.6}
@@ -66,6 +68,11 @@ tr:last-child td{border-bottom:0}
 .sources ul,.related ul{margin:0;padding-left:20px}
 .sources li{margin:0 0 6px}
 .sources small{color:var(--muted)}
+.issue-entry{margin:16px 0 24px;padding:12px 16px;border-left:4px solid var(--accent);background:var(--accent-soft);font-size:14px}
+.issue-entry p{margin:0 0 4px;font-weight:700}
+.issue-entry ul{list-style:none;margin:0;padding:0}
+.issue-entry a{display:inline-flex;align-items:center;min-height:44px;font-weight:700;line-height:1.6}
+.issue-entry a:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
 .cta{background:var(--accent-soft);border-color:#c7dcf8}
 .cta p{margin:0 0 10px}
 .cta a.button{display:inline-block;padding:10px 16px;border-radius:999px;background:var(--accent);color:#fff;font-weight:700;text-decoration:none}
@@ -160,9 +167,9 @@ tr:last-child td{border-bottom:0}
 <h1>自転車のヘルメットなしは青切符？努力義務との違いと反則金</h1>
 <p class="byline article-chrome">SNS反応まっぷ編集部・公開 2026年10月17日</p>
 </header>
-<nav class="toc article-chrome" aria-label="目次"><p>目次</p><ol><li><a href="#s1">自転車のヘルメットなしは青切符になる？条文と警察庁の原文</a></li><li><a href="#s2">努力義務とは？いつから？子どもは保護者がかぶらせる</a></li><li><a href="#s3">青切符の対象になる主な違反と反則金</a></li><li><a href="#s4">ヘルメットはSNSでどう語られた？ルールの食い違いに目が向く</a></li><li><a href="#s5">件数から分からないこと</a></li><li><a href="#s6">青切符の論争全体のSNSの反応を見る</a></li></ol></nav>
+
 <div class="article-body">
-<p>自転車のヘルメットは着用が努力義務で、かぶっていないことだけでは青切符（反則金）の対象になりません。道路交通法第63条の11は「かぶるよう努めなければならない」と定めるだけです。警察庁が青切符の対象として挙げる違反の一覧にも、ヘルメットは入っていません。</p>
+<p>自転車のヘルメットは着用が努力義務で、かぶっていないことだけでは青切符（反則金）の対象になりません。道路交通法第63条の11は「かぶるよう努めなければならない」と定めるだけです。警察庁が青切符の対象として挙げる違反の一覧にも、ヘルメットは入っていません。</p><nav class="issue-entry article-chrome" aria-label="この話題に関係する論点"><p>この話題の意見と理由を読む</p><ul><li><a href="../bike-blue-ticket-reaction-map.html#issue-bike-blue-ticket-rule-ambiguity" data-article-link="theme-issue">ルール曖昧・不信の意見と理由を読む</a></li></ul></nav><nav class="toc article-chrome" aria-label="目次"><p>目次</p><ol><li><a href="#s1">自転車のヘルメットなしは青切符になる？条文と警察庁の原文</a></li><li><a href="#s2">努力義務とは？いつから？子どもは保護者がかぶらせる</a></li><li><a href="#s3">青切符の対象になる主な違反と反則金</a></li><li><a href="#s4">ヘルメットはSNSでどう語られた？ルールの食い違いに目が向く</a></li><li><a href="#s5">件数から分からないこと</a></li><li><a href="#s6">青切符の論争全体のSNSの反応を見る</a></li></ol></nav>
 <h2 id="s1">自転車のヘルメットなしは青切符になる？条文と警察庁の原文</h2>
 <p>ヘルメットをかぶらずに自転車に乗っただけで、青切符を切られることはありません。根拠は、条文の書き方と、警察庁の取締りの案内の二つです。</p>
 <h3>道路交通法第63条の11は「努めなければならない」と書く</h3>
@@ -226,6 +233,7 @@ tr:last-child td{border-bottom:0}
 </article>
 <footer class="footer"><p>© 2026 SNS反応まっぷ — <a href="../">トップ</a> · <a href="../about.html#operator">運営者情報</a> · <a href="../about.html#method">調査・編集方法</a> · <a href="https://docs.google.com/forms/d/e/1FAIpQLSdySbMYxEsLOYmI4jsqjIkSGl6WHF78qLlypOmXAg9tVDy2FQ/viewform" target="_blank" rel="noopener">お問い合わせ・訂正依頼</a> · <a href="../privacy.html">プライバシーポリシー</a> · <a href="../disclaimer.html">免責事項</a> · <a href="../image-policy.html">画像制作方針</a></p></footer>
 </main>
+<script src="../article-reason-journey.js?v=1" defer></script>
 <script>
 document.addEventListener("click", function (event) {
   var link = event.target.closest && event.target.closest("a[data-article-link]");

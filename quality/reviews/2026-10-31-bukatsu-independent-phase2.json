@@ -1,0 +1,572 @@
+{
+  "reviewer": "bukatsu_blind_review",
+  "phase": 2,
+  "phase1_sha256": "e2b7054d24aed63b701614c1eb2c335c344fdd76ac96ad662fad7fcc9860d852",
+  "phase1_frozen": true,
+  "previous_selection_seen": false,
+  "previous_counts_seen": false,
+  "previous_record_reasons_seen": false,
+  "criteria_comparison": [
+    {
+      "id": "original-deadline",
+      "assessment": "おおむね一致。全体命題を要する基準だが、元のスケジュールの意味と年度の同定に注意が必要。",
+      "reason": "前回と独立基準はいずれも、国の当初計画、2023〜2025年度、期間内完了という要素を求め、改革推進期間だけ・別年度・独自提案を区別している。独立基準のpartialは関連する一部があるという記録であり、主張全体の採用件数には含めない。投稿日を示さない資料の今年、2026年、令和8年度などを一律に2025年度末へ換算してはいけない。",
+      "recommended_rule": "directは国の当初の地域移行が2023〜2025年度の3年間で完了する予定だったと本文が述べる場合。期間内に移行するとしていたという明瞭な言い換えも認める。期間だけ又は当初締切だけはpartial。異なる明示期限や相対年次で同定不能ならuncertainとして全体直接採用から除外し、特定自治体の別計画・自案はnone。",
+      "previous_rule": "国の当初の地域移行が2023〜2025年度の期間内に完了する予定だったと本文で述べる。単なる改革推進期間への言及、時期の異なる期限、独自の完了提案は分ける。",
+      "independent_rule_reference": "phase1.json criteria / original-deadline"
+    },
+    {
+      "id": "national-funding",
+      "assessment": "複合命題を中心部分だけで数える基準になっており、全体採用の基準としては不統一。対象範囲も広い。",
+      "reason": "表示された主張は国の支出の僅少、自治体への委任、家庭への費用転嫁を一緒に断定するが、前回基準は国・財務省の予算不足だけで足り、学校部活動一般の予算まで対象にする。一方で報酬や調査では複数要素を全て要求している。前回基準は国費不足という独立した小命題の採用基準なら妥当だが、それを現在の全文命題の全体支持件数として表示するのは過大になる。独立基準でも親の負担を金銭負担へ補った一部判定と、支出対象不明の判定は見直す必要がある。",
+      "recommended_rule": "全文を維持するなら、地域移行先への国費がゼロ又は極めて乏しいことと、残る費用・運営財政を自治体と家庭に委ねることを本文が示したものだけdirectとする。一部だけなら該当要素をpartialとして分ける。送迎・見守り・責任だけの負担を金銭へ変換しない。学校教員への手当だけはnone、学校内雇用か地域移行費か不明ならuncertain。国費不足だけを独立して数える場合は、見出し・命題・IDをその小命題に合わせ、全文の支持数とは併記しない。",
+      "previous_rule": "国・財務省が部活動や地域展開へ予算を付けない、又はほぼ金を出さないことを本文で述べる。教員の残業代だけ、自治体任せという評価だけ、増額提案、将来の補助終了の予想は分ける。",
+      "independent_rule_reference": "phase1.json criteria / national-funding"
+    },
+    {
+      "id": "coach-pay",
+      "assessment": "主要部分は一致。最低賃金比較と不足の因果を両方求める全体基準を維持できる。",
+      "reason": "前回基準は最低賃金程度の比較と担い手不足の結びつきを要求し、低待遇一般、具体額だけ、教員手当・参加費を区別している。この厳しさは全文命題に対応する。ただし低報酬が実際にあるという部分、報酬を仮定する政策論、学校内外注か地域クラブか不明なものを、まとめて関連候補と数えない方が判定の意味が明確になる。具体額から最低賃金を外挿しない点を明文化するべき。",
+      "recommended_rule": "directは地域移行先指導者について最低賃金程度と本文が比較し、その低報酬が引受拒否・不足の原因だと結びつける場合だけ。地域移行先の低報酬又は無償性が明示されるが比較や因果が欠けるならpartial。数字だけから最低賃金程度と認定しない。制度・対象が不明、待遇一般から金額を補う必要がある、仮定・将来警告だけならuncertain。学校教員の手当や裸の人材不足はnone。",
+      "previous_rule": "地域移行後の指導者報酬を最低賃金程度と比較し、担い手不足と結び付ける直接記述。低いという待遇評価・具体額だけ・教員の手当・生徒の参加費は関連部分として分ける。",
+      "independent_rule_reference": "phase1.json criteria / coach-pay"
+    },
+    {
+      "id": "shidoin-role",
+      "assessment": "顧問か単独引率のどちらかで足りる前回基準は、全文にある二つの権限を一部へ縮めている。独立基準にも補完が1件あった。",
+      "reason": "全文は部活動指導員の顧問任命と大会引率、外部指導者の技術指導限定の三部分を含む。前回基準のOR条件は三部分のうち一つを欠いても全体に採用できるため、報酬や調査の全要素基準と混在している。また独立基準で教員同様の活動を顧問相当とした1件は、括弧内で技術指導と大会引率だけを例示しており、顧問に任命できる権限まで述べたとは限らない。前回への追従ではなく、他命題でも未記載の主体・制度要素を補わない原則にそろえてpartialへ訂正する。自然な言い換え自体は認めるが、職務の同等性から別の法的地位を推論することは言い換えの範囲を超える。",
+      "recommended_rule": "全文を維持するなら、指導員は顧問を任されることができる又は責任者・管理顧問等を担えるとの明瞭な同義表現、大会引率可能、外部指導者は技術指導のみ、の三部分がそろった本文をdirectとする。顧問任命か大会引率の片方を欠けばpartial。教員と同様の活動という語だけから任命権限を補わない。中心となる権限差だけを数えるなら命題自体を短く書き換えた別の小命題として扱う。投稿上の表明と現在制度による裏づけは別欄に維持する。",
+      "previous_rule": "部活動指導員の顧問又は単独引率の権限と、外部指導者は技術指導のみという制約を対比して述べる。片側だけの体験談・立会い・重複指導の話は関連部分として分ける。",
+      "independent_rule_reference": "phase1.json criteria / shidoin-role"
+    },
+    {
+      "id": "chutairen-entry",
+      "assessment": "おおむね一致。単純命題の実質全体を確認する基準である。",
+      "reason": "前回基準も独立基準も、中体連又は全中でクラブが参加可能又は参加中という肯定を要求する。地域クラブの具体的参加例は制度全般の解説でなくても直接表明となる。一方でクラブのような名前、総体や新人戦という大会名だけ、クラブ所属の選手が中心というだけでは、大会主催や登録主体が同定できない。",
+      "recommended_rule": "中体連又は全中に地域クラブ・クラブチームが参加可能又は参加中と本文が述べればdirect。主催不明又は地域クラブ名義か不明ならuncertainとして直接採用しない。学校同士の合同チームや別大会はnone。細かな参加条件を全投稿に要求しないが、事実照合の説明では無条件の全クラブ参加でないと限定する。",
+      "previous_rule": "中体連・全中の大会に地域クラブが参加できる、又は参加していることを断定。名称からの疑問、学校合同チーム、全国大会一般は分ける。",
+      "independent_rule_reference": "phase1.json criteria / chutairen-entry"
+    },
+    {
+      "id": "club-cost-survey",
+      "assessment": "全体を要求する基準は一致。調査対象の限定は原発表の本文を優先すべき。",
+      "reason": "8万4千円と65％の組合せを必要とし、引用見出しも含めるという点は一致する。見出しが平均という語を省略していても、年額の調査値として二数値を正しく組み合わせていれば自然な要約と解せる。独立の資料判定では65％を回答保護者全体と誤記したが、原発表の詳細本文は運動部の保護者と明記するため訂正する。公的資料に限定した採用可否と、民間主体の原発表に数値が存在することは別に扱う。",
+      "recommended_rule": "directは運動部の年平均8万4千円と運動部保護者65％の費用負担実感という二つの数値を同じ調査として示す本文。本文に取り込まれた正確な引用見出しを含める。片方だけはpartial、別の対象・数値・調査はnone又は同定不能としてuncertain。全国全家庭の実測値や地域移行後だけの費用という限定を外から加えない。",
+      "previous_rule": "運動部の年平均8万4千円と保護者65％の負担という組み合わせを述べる。引用見出しも対象。別の費用・別調査・別母数は分ける。",
+      "independent_rule_reference": "phase1.json criteria / club-cost-survey"
+    },
+    {
+      "id": "kyushokuchoseigaku",
+      "assessment": "おおむね一致。ただし改正後という時系列の認識を本文が示すことと、現在法での真偽を分離する必要がある。",
+      "reason": "前回基準は改正後も4％を現状として扱う本文を求め、独立基準も改正と現状4％の関係を要求する。数字が4％であるだけ又は改正一般では不十分。文法が崩れていても改正に続いて現状4％の不足を訴える明瞭な趣旨は認めてよい。2026年現在の一般職員は5％だが、投稿時点が不明なので本文の表明判定と発言当時の正誤を同一にしない。",
+      "recommended_rule": "directは改正済みの給特法に触れながら教職調整額が現状4％のままという認識を述べる本文。両要素の一方だけはpartial、時系列を判読できない場合はuncertain、過去の4％や引上げ希望率・残業手当一般はnone。事実判定では対象職種と適用日を明記し、投稿日不明の記録を遡及して誤情報と断定しない。",
+      "previous_rule": "改正後の教職調整額について4％という現在の水準を前提に述べる。給特法一般、過去の4％、13％等の別の率、増額提案だけは分ける。",
+      "independent_rule_reference": "phase1.json criteria / kyushokuchoseigaku"
+    }
+  ],
+  "consistency_assessment": {
+    "finding": "前回基準では国費は中心部分のみ、指導員は二つの権限のOR条件、報酬・費用調査は複数要素のAND条件であり、全文命題の直接採用として並べると粒度が混在する。",
+    "recommendation": "全文命題のdirectは全実質要素を本文が伝える場合に統一する。部分的な主張はpartialの構成要素として別集計し、directへ足さない。中心部分だけを数えたい場合は、それに合わせた別の小命題と表示名を用意する。自然な言い換えは認めるが、本文の職務から別の法的地位を導くような補完は行わない。",
+    "independent_standard_correction": "独立基準も無謬とは扱わず、指導員の顧問権限を補った1件と、金銭性又は支出対象の不明確な3件をamendmentsに分離した。"
+  },
+  "amendments": [
+    {
+      "record_id_hash": "sha256:1781be9d3a62579f2501550caeae0066cb313841de7d2a13be062dbdd29e4655",
+      "text_sha256": "8c231372d15a7a285772567672a0d41b5d7e60e8c628e2abd0e4a2c9d22123d3",
+      "claim_id": "national-funding",
+      "before": "partial",
+      "after": "uncertain",
+      "before_classification": {
+        "direct_claims": [],
+        "partial_claims": [
+          "national-funding"
+        ],
+        "uncertain_claims": []
+      },
+      "after_classification": {
+        "direct_claims": [],
+        "partial_claims": [],
+        "uncertain_claims": [
+          "national-funding"
+        ]
+      },
+      "reason": "家庭への負担という語の具体例は送迎・見守りで、金銭負担は本文に明示されていない。金銭的な転嫁へ補ったPHASE 1のpartialを撤回し、対象を確定できない境界として記録する。",
+      "basis": "全要素の一貫した扱い及びPHASE 1の既存の本文限定原則の再点検。前回採否や件数は未参照。"
+    },
+    {
+      "record_id_hash": "sha256:685c1cad0bbf5c0369d196d233f3b8d5ef95a40a0bcde10b519f14b2aeb7ac26",
+      "text_sha256": "6fa8cee8ea491dd933abeee17c146fdb1e593eabd811b9140b9f4dcc91f8d390",
+      "claim_id": "national-funding",
+      "before": "partial",
+      "after": "uncertain",
+      "before_classification": {
+        "direct_claims": [],
+        "partial_claims": [
+          "national-funding"
+        ],
+        "uncertain_claims": []
+      },
+      "after_classification": {
+        "direct_claims": [],
+        "partial_claims": [],
+        "uncertain_claims": [
+          "national-funding"
+        ]
+      },
+      "reason": "地域クラブと保護者の負担が費用なのか運営責任なのか本文だけでは定まらない。国費・自治体負担もないため、家庭への実際の費用転嫁という部分へ確定できない。",
+      "basis": "全要素の一貫した扱い及びPHASE 1の既存の本文限定原則の再点検。前回採否や件数は未参照。"
+    },
+    {
+      "record_id_hash": "sha256:718d48e011aa501ec276258221090edfe4c4a3fe98416c0fbb08a5f6fd6e133d",
+      "text_sha256": "5297bf1da4888cb7d0f9f2700b576d8e8a46090c69499526b05c19edf666f69c",
+      "claim_id": "shidoin-role",
+      "before": "direct",
+      "after": "partial",
+      "before_classification": {
+        "direct_claims": [
+          "shidoin-role"
+        ],
+        "partial_claims": [],
+        "uncertain_claims": []
+      },
+      "after_classification": {
+        "direct_claims": [],
+        "partial_claims": [
+          "shidoin-role"
+        ],
+        "uncertain_claims": []
+      },
+      "reason": "教員同様の活動の例として技術指導と大会単独引率を示し、外部指導者の技術指導限定と対比している。しかし、顧問に任命される権限は示していない。職務の同等性から別の法的地位を推論せず、複合命題の一部として扱う。",
+      "basis": "全要素の一貫した扱い及びPHASE 1の既存の本文限定原則の再点検。前回採否や件数は未参照。"
+    },
+    {
+      "record_id_hash": "sha256:9fc848cd2f5d6cf481fd696a8b2fe5431508fce94ec6e7818da414d10b2d5a09",
+      "text_sha256": "1288f641f997aee1f690c756b27baa8617e3c52f07ae7a19023e2b48fec6b27a",
+      "claim_id": "national-funding",
+      "before": "partial",
+      "after": "uncertain",
+      "before_classification": {
+        "direct_claims": [],
+        "partial_claims": [
+          "national-funding"
+        ],
+        "uncertain_claims": [
+          "original-deadline"
+        ]
+      },
+      "after_classification": {
+        "direct_claims": [],
+        "partial_claims": [],
+        "uncertain_claims": [
+          "original-deadline",
+          "national-funding"
+        ]
+      },
+      "reason": "財政当局による不支出の対象が、学校内で非教員を雇う代替案なのか地域移行先の支援なのか、切断された本文では同定できない。地域移行費としてpartialとした範囲を狭める。",
+      "basis": "全要素の一貫した扱い及びPHASE 1の既存の本文限定原則の再点検。前回採否や件数は未参照。"
+    }
+  ],
+  "source_amendments": [
+    {
+      "claim_id": "club-cost-survey",
+      "field": "source_verdicts.reason",
+      "before": "65.0％を回答保護者全体と説明し、年間平均額と負担割合を別々の母集団・指標と説明した。",
+      "after": "調査結果③の詳細本文は、65.0％を運動部の保護者と明記している。年間平均8.4万円も運動部所属生徒にかかる保護者負担であり、両指標を異なる母集団と断定する説明を撤回する。費用額と負担感という指標の違いはあるが、それ自体は母集団差を意味しない。運動部保護者の実人数、欠測及び集計重みは本文から確定できないため補わない。",
+      "reason": "親から反証確認を求められ、許可された民間調査原発表の調査結果③の段落を再読して誤りを確認した。見出し・冒頭の省略表現より詳細本文を優先する。",
+      "verdict_before": "miss",
+      "verdict_after": "miss",
+      "verdict_reason": "公的資料限定の採用基準では、民間調査原発表の正確性を確認できても公的な採用根拠にはならない。この資料種別によるmissと数値・対象の一致は独立の判断。",
+      "sources": [
+        {
+          "url": "https://prtimes.jp/main/html/rd/p/000000399.000018536.html",
+          "pages_or_section": "調査結果③の費用内訳に続く段落。民間調査主体による2026年7月22日原発表の取得済みローカル原本を再確認。"
+        }
+      ]
+    }
+  ],
+  "uncertainty_policy": {
+    "meaning": "uncertainは追加の人手判断待ちを意味しない。今回の本文範囲だけではdirectに採用できないという確定した境界分類。",
+    "pending_additional_judgment_count": 0,
+    "boundary_excluded_pair_count": 39,
+    "new_information_rule": "原投稿の完全本文・投稿日・別の一次資料などが新たに提供された場合だけ、別版で判定を更新し得る。現在の件数に見込みで足さない。リンク先、画像、返信元を今回追加閲覧して埋めない。",
+    "records": [
+      {
+        "record_id_hash": "sha256:04da9f17d61e5c61715b62481d5dbb3d035bdf5651cf09412ec67443695a98aa",
+        "claim_id": "national-funding",
+        "status": "boundary_excluded_from_direct",
+        "pending_additional_judgment": false,
+        "reason": "提示された本文では必要な主体・対象・時期・制度・断定のいずれかが確定しない、又は仮定・疑問にとどまる。追加判断を保留したという意味ではなく、この入力範囲では直接採用しないという完了した判断。"
+      },
+      {
+        "record_id_hash": "sha256:05e13e8209c0b195b7a5445cf5c09a99d6043a2075d9874b84f09a3ebe243e7a",
+        "claim_id": "original-deadline",
+        "status": "boundary_excluded_from_direct",
+        "pending_additional_judgment": false,
+        "reason": "提示された本文では必要な主体・対象・時期・制度・断定のいずれかが確定しない、又は仮定・疑問にとどまる。追加判断を保留したという意味ではなく、この入力範囲では直接採用しないという完了した判断。"
+      },
+      {
+        "record_id_hash": "sha256:1781be9d3a62579f2501550caeae0066cb313841de7d2a13be062dbdd29e4655",
+        "claim_id": "national-funding",
+        "status": "boundary_excluded_from_direct",
+        "pending_additional_judgment": false,
+        "reason": "提示された本文では必要な主体・対象・時期・制度・断定のいずれかが確定しない、又は仮定・疑問にとどまる。追加判断を保留したという意味ではなく、この入力範囲では直接採用しないという完了した判断。"
+      },
+      {
+        "record_id_hash": "sha256:1d98d6a502bdcae103122c412937996507e50d4d00d744fd95d8ac00a865abe4",
+        "claim_id": "original-deadline",
+        "status": "boundary_excluded_from_direct",
+        "pending_additional_judgment": false,
+        "reason": "提示された本文では必要な主体・対象・時期・制度・断定のいずれかが確定しない、又は仮定・疑問にとどまる。追加判断を保留したという意味ではなく、この入力範囲では直接採用しないという完了した判断。"
+      },
+      {
+        "record_id_hash": "sha256:23dacd38452fe1125ccb82a4c242a5f712414fee20f639aac486702bf02021a0",
+        "claim_id": "coach-pay",
+        "status": "boundary_excluded_from_direct",
+        "pending_additional_judgment": false,
+        "reason": "提示された本文では必要な主体・対象・時期・制度・断定のいずれかが確定しない、又は仮定・疑問にとどまる。追加判断を保留したという意味ではなく、この入力範囲では直接採用しないという完了した判断。"
+      },
+      {
+        "record_id_hash": "sha256:2a23769405df0acca92c8ac40b41837359a7a040457fcca100011bc51c84b793",
+        "claim_id": "original-deadline",
+        "status": "boundary_excluded_from_direct",
+        "pending_additional_judgment": false,
+        "reason": "提示された本文では必要な主体・対象・時期・制度・断定のいずれかが確定しない、又は仮定・疑問にとどまる。追加判断を保留したという意味ではなく、この入力範囲では直接採用しないという完了した判断。"
+      },
+      {
+        "record_id_hash": "sha256:3d87a11ba850cdc74c913121e2367fced46c41f617f1a2f82e4d400a961fd8c7",
+        "claim_id": "coach-pay",
+        "status": "boundary_excluded_from_direct",
+        "pending_additional_judgment": false,
+        "reason": "提示された本文では必要な主体・対象・時期・制度・断定のいずれかが確定しない、又は仮定・疑問にとどまる。追加判断を保留したという意味ではなく、この入力範囲では直接採用しないという完了した判断。"
+      },
+      {
+        "record_id_hash": "sha256:42786c867b79b70caa455d92afb7955617e67079a1cb0a3851917e3be19661ad",
+        "claim_id": "national-funding",
+        "status": "boundary_excluded_from_direct",
+        "pending_additional_judgment": false,
+        "reason": "提示された本文では必要な主体・対象・時期・制度・断定のいずれかが確定しない、又は仮定・疑問にとどまる。追加判断を保留したという意味ではなく、この入力範囲では直接採用しないという完了した判断。"
+      },
+      {
+        "record_id_hash": "sha256:4be6a64a4e6949d2f9cad052c12b6d023af27c3abe03c01bef6294cda5c14a48",
+        "claim_id": "shidoin-role",
+        "status": "boundary_excluded_from_direct",
+        "pending_additional_judgment": false,
+        "reason": "提示された本文では必要な主体・対象・時期・制度・断定のいずれかが確定しない、又は仮定・疑問にとどまる。追加判断を保留したという意味ではなく、この入力範囲では直接採用しないという完了した判断。"
+      },
+      {
+        "record_id_hash": "sha256:4d1c59ff6f211b577d51a30b4c2169fda42e8e840e956add4a7250ff14a0303e",
+        "claim_id": "coach-pay",
+        "status": "boundary_excluded_from_direct",
+        "pending_additional_judgment": false,
+        "reason": "提示された本文では必要な主体・対象・時期・制度・断定のいずれかが確定しない、又は仮定・疑問にとどまる。追加判断を保留したという意味ではなく、この入力範囲では直接採用しないという完了した判断。"
+      },
+      {
+        "record_id_hash": "sha256:4d7a55e361e6def94ebae058fd082774f7b3ca3b9e0cf8e9d2aea4779b19fc73",
+        "claim_id": "coach-pay",
+        "status": "boundary_excluded_from_direct",
+        "pending_additional_judgment": false,
+        "reason": "提示された本文では必要な主体・対象・時期・制度・断定のいずれかが確定しない、又は仮定・疑問にとどまる。追加判断を保留したという意味ではなく、この入力範囲では直接採用しないという完了した判断。"
+      },
+      {
+        "record_id_hash": "sha256:4e4c6edc086b8cd22f479ad76e5e1af0ed25ea4a010f33abb2cb8797adb5d617",
+        "claim_id": "national-funding",
+        "status": "boundary_excluded_from_direct",
+        "pending_additional_judgment": false,
+        "reason": "提示された本文では必要な主体・対象・時期・制度・断定のいずれかが確定しない、又は仮定・疑問にとどまる。追加判断を保留したという意味ではなく、この入力範囲では直接採用しないという完了した判断。"
+      },
+      {
+        "record_id_hash": "sha256:5644849ed50fc87724f7d74cfec947104f296090bedc8c5bbd8c8a4798cb12d5",
+        "claim_id": "coach-pay",
+        "status": "boundary_excluded_from_direct",
+        "pending_additional_judgment": false,
+        "reason": "提示された本文では必要な主体・対象・時期・制度・断定のいずれかが確定しない、又は仮定・疑問にとどまる。追加判断を保留したという意味ではなく、この入力範囲では直接採用しないという完了した判断。"
+      },
+      {
+        "record_id_hash": "sha256:5901dbce1fc20d2e2b7af9186e8763e656b645c0bcf9e195c8866a42d999c8ef",
+        "claim_id": "coach-pay",
+        "status": "boundary_excluded_from_direct",
+        "pending_additional_judgment": false,
+        "reason": "提示された本文では必要な主体・対象・時期・制度・断定のいずれかが確定しない、又は仮定・疑問にとどまる。追加判断を保留したという意味ではなく、この入力範囲では直接採用しないという完了した判断。"
+      },
+      {
+        "record_id_hash": "sha256:621a5986493cfef16816fc2f1574a3bb4552cefe9e46c523a304570ff6c8e614",
+        "claim_id": "coach-pay",
+        "status": "boundary_excluded_from_direct",
+        "pending_additional_judgment": false,
+        "reason": "提示された本文では必要な主体・対象・時期・制度・断定のいずれかが確定しない、又は仮定・疑問にとどまる。追加判断を保留したという意味ではなく、この入力範囲では直接採用しないという完了した判断。"
+      },
+      {
+        "record_id_hash": "sha256:648819df5a07aea3795271163378d7c094dbc21976600b7a94eb8955e9df5212",
+        "claim_id": "coach-pay",
+        "status": "boundary_excluded_from_direct",
+        "pending_additional_judgment": false,
+        "reason": "提示された本文では必要な主体・対象・時期・制度・断定のいずれかが確定しない、又は仮定・疑問にとどまる。追加判断を保留したという意味ではなく、この入力範囲では直接採用しないという完了した判断。"
+      },
+      {
+        "record_id_hash": "sha256:685c1cad0bbf5c0369d196d233f3b8d5ef95a40a0bcde10b519f14b2aeb7ac26",
+        "claim_id": "national-funding",
+        "status": "boundary_excluded_from_direct",
+        "pending_additional_judgment": false,
+        "reason": "提示された本文では必要な主体・対象・時期・制度・断定のいずれかが確定しない、又は仮定・疑問にとどまる。追加判断を保留したという意味ではなく、この入力範囲では直接採用しないという完了した判断。"
+      },
+      {
+        "record_id_hash": "sha256:6f6c137ec238c2db33ee1589d80c7f6bb7c94937e20dd39b2f0ffb1e3eae15a9",
+        "claim_id": "coach-pay",
+        "status": "boundary_excluded_from_direct",
+        "pending_additional_judgment": false,
+        "reason": "提示された本文では必要な主体・対象・時期・制度・断定のいずれかが確定しない、又は仮定・疑問にとどまる。追加判断を保留したという意味ではなく、この入力範囲では直接採用しないという完了した判断。"
+      },
+      {
+        "record_id_hash": "sha256:74e4abbe2bc3e770a163f54b6fce951be222bdd06430be71e07aea3d19830876",
+        "claim_id": "coach-pay",
+        "status": "boundary_excluded_from_direct",
+        "pending_additional_judgment": false,
+        "reason": "提示された本文では必要な主体・対象・時期・制度・断定のいずれかが確定しない、又は仮定・疑問にとどまる。追加判断を保留したという意味ではなく、この入力範囲では直接採用しないという完了した判断。"
+      },
+      {
+        "record_id_hash": "sha256:833df57747d1f96208083ecbd1877d66a8bdcdc573f806376da09b6b33e35b2e",
+        "claim_id": "chutairen-entry",
+        "status": "boundary_excluded_from_direct",
+        "pending_additional_judgment": false,
+        "reason": "提示された本文では必要な主体・対象・時期・制度・断定のいずれかが確定しない、又は仮定・疑問にとどまる。追加判断を保留したという意味ではなく、この入力範囲では直接採用しないという完了した判断。"
+      },
+      {
+        "record_id_hash": "sha256:8e4a3fa740f89940870d40f4628098329254258c8e3752c773b0e8b6da963ed5",
+        "claim_id": "original-deadline",
+        "status": "boundary_excluded_from_direct",
+        "pending_additional_judgment": false,
+        "reason": "提示された本文では必要な主体・対象・時期・制度・断定のいずれかが確定しない、又は仮定・疑問にとどまる。追加判断を保留したという意味ではなく、この入力範囲では直接採用しないという完了した判断。"
+      },
+      {
+        "record_id_hash": "sha256:9c86a76c89b431ecef61164886a1d8c32809fc670748c74406110f6c7941ee1e",
+        "claim_id": "chutairen-entry",
+        "status": "boundary_excluded_from_direct",
+        "pending_additional_judgment": false,
+        "reason": "提示された本文では必要な主体・対象・時期・制度・断定のいずれかが確定しない、又は仮定・疑問にとどまる。追加判断を保留したという意味ではなく、この入力範囲では直接採用しないという完了した判断。"
+      },
+      {
+        "record_id_hash": "sha256:9fc848cd2f5d6cf481fd696a8b2fe5431508fce94ec6e7818da414d10b2d5a09",
+        "claim_id": "original-deadline",
+        "status": "boundary_excluded_from_direct",
+        "pending_additional_judgment": false,
+        "reason": "提示された本文では必要な主体・対象・時期・制度・断定のいずれかが確定しない、又は仮定・疑問にとどまる。追加判断を保留したという意味ではなく、この入力範囲では直接採用しないという完了した判断。"
+      },
+      {
+        "record_id_hash": "sha256:9fc848cd2f5d6cf481fd696a8b2fe5431508fce94ec6e7818da414d10b2d5a09",
+        "claim_id": "national-funding",
+        "status": "boundary_excluded_from_direct",
+        "pending_additional_judgment": false,
+        "reason": "提示された本文では必要な主体・対象・時期・制度・断定のいずれかが確定しない、又は仮定・疑問にとどまる。追加判断を保留したという意味ではなく、この入力範囲では直接採用しないという完了した判断。"
+      },
+      {
+        "record_id_hash": "sha256:a09aded462838f766e0baa75f6c9cdf827e688d8708b7644efcbecf52e34a599",
+        "claim_id": "coach-pay",
+        "status": "boundary_excluded_from_direct",
+        "pending_additional_judgment": false,
+        "reason": "提示された本文では必要な主体・対象・時期・制度・断定のいずれかが確定しない、又は仮定・疑問にとどまる。追加判断を保留したという意味ではなく、この入力範囲では直接採用しないという完了した判断。"
+      },
+      {
+        "record_id_hash": "sha256:a7c1391f608f65a7182ca5d1735f4fb89541e864dd209faffe3353c777f12e64",
+        "claim_id": "coach-pay",
+        "status": "boundary_excluded_from_direct",
+        "pending_additional_judgment": false,
+        "reason": "提示された本文では必要な主体・対象・時期・制度・断定のいずれかが確定しない、又は仮定・疑問にとどまる。追加判断を保留したという意味ではなく、この入力範囲では直接採用しないという完了した判断。"
+      },
+      {
+        "record_id_hash": "sha256:b037e31230f8b3101826a451a60e9daf627326429ea56278f65f9b317d58e9be",
+        "claim_id": "shidoin-role",
+        "status": "boundary_excluded_from_direct",
+        "pending_additional_judgment": false,
+        "reason": "提示された本文では必要な主体・対象・時期・制度・断定のいずれかが確定しない、又は仮定・疑問にとどまる。追加判断を保留したという意味ではなく、この入力範囲では直接採用しないという完了した判断。"
+      },
+      {
+        "record_id_hash": "sha256:b88843339bfbc031ae010af0e379c4f46b2c81988c3d73466f8481a97ab8fdeb",
+        "claim_id": "national-funding",
+        "status": "boundary_excluded_from_direct",
+        "pending_additional_judgment": false,
+        "reason": "提示された本文では必要な主体・対象・時期・制度・断定のいずれかが確定しない、又は仮定・疑問にとどまる。追加判断を保留したという意味ではなく、この入力範囲では直接採用しないという完了した判断。"
+      },
+      {
+        "record_id_hash": "sha256:c7ca34811945997d30c42fe300b1b77fe8415f7f246ce7c542388cc401dccd88",
+        "claim_id": "coach-pay",
+        "status": "boundary_excluded_from_direct",
+        "pending_additional_judgment": false,
+        "reason": "提示された本文では必要な主体・対象・時期・制度・断定のいずれかが確定しない、又は仮定・疑問にとどまる。追加判断を保留したという意味ではなく、この入力範囲では直接採用しないという完了した判断。"
+      },
+      {
+        "record_id_hash": "sha256:c8b4ff431f3d80e255cf23c59689d82265c060d2607eda8a5a4d98df36da0ca2",
+        "claim_id": "national-funding",
+        "status": "boundary_excluded_from_direct",
+        "pending_additional_judgment": false,
+        "reason": "提示された本文では必要な主体・対象・時期・制度・断定のいずれかが確定しない、又は仮定・疑問にとどまる。追加判断を保留したという意味ではなく、この入力範囲では直接採用しないという完了した判断。"
+      },
+      {
+        "record_id_hash": "sha256:c90f5d708d7b3952e6bd705017b89adb26dd37f736dd334c84ce6871b3bc02df",
+        "claim_id": "coach-pay",
+        "status": "boundary_excluded_from_direct",
+        "pending_additional_judgment": false,
+        "reason": "提示された本文では必要な主体・対象・時期・制度・断定のいずれかが確定しない、又は仮定・疑問にとどまる。追加判断を保留したという意味ではなく、この入力範囲では直接採用しないという完了した判断。"
+      },
+      {
+        "record_id_hash": "sha256:d65ee63983f4f2a8bbf83e8169715b54c106612b3312fb6daef76b1b5a705e33",
+        "claim_id": "national-funding",
+        "status": "boundary_excluded_from_direct",
+        "pending_additional_judgment": false,
+        "reason": "提示された本文では必要な主体・対象・時期・制度・断定のいずれかが確定しない、又は仮定・疑問にとどまる。追加判断を保留したという意味ではなく、この入力範囲では直接採用しないという完了した判断。"
+      },
+      {
+        "record_id_hash": "sha256:d65ee63983f4f2a8bbf83e8169715b54c106612b3312fb6daef76b1b5a705e33",
+        "claim_id": "coach-pay",
+        "status": "boundary_excluded_from_direct",
+        "pending_additional_judgment": false,
+        "reason": "提示された本文では必要な主体・対象・時期・制度・断定のいずれかが確定しない、又は仮定・疑問にとどまる。追加判断を保留したという意味ではなく、この入力範囲では直接採用しないという完了した判断。"
+      },
+      {
+        "record_id_hash": "sha256:d681af80b7c1efbdaf53a8a560d3361aeaf42ea0510f2b2ab959bb300ade5525",
+        "claim_id": "coach-pay",
+        "status": "boundary_excluded_from_direct",
+        "pending_additional_judgment": false,
+        "reason": "提示された本文では必要な主体・対象・時期・制度・断定のいずれかが確定しない、又は仮定・疑問にとどまる。追加判断を保留したという意味ではなく、この入力範囲では直接採用しないという完了した判断。"
+      },
+      {
+        "record_id_hash": "sha256:d85be23400c98b3ce6f7f8aa787e1c60f1271ed60a53f80974c043317081747f",
+        "claim_id": "shidoin-role",
+        "status": "boundary_excluded_from_direct",
+        "pending_additional_judgment": false,
+        "reason": "提示された本文では必要な主体・対象・時期・制度・断定のいずれかが確定しない、又は仮定・疑問にとどまる。追加判断を保留したという意味ではなく、この入力範囲では直接採用しないという完了した判断。"
+      },
+      {
+        "record_id_hash": "sha256:e1d9d5672426c8ec4acda0c3265f4fe9431e38b3e22d2125f93412bc0e2839d2",
+        "claim_id": "chutairen-entry",
+        "status": "boundary_excluded_from_direct",
+        "pending_additional_judgment": false,
+        "reason": "提示された本文では必要な主体・対象・時期・制度・断定のいずれかが確定しない、又は仮定・疑問にとどまる。追加判断を保留したという意味ではなく、この入力範囲では直接採用しないという完了した判断。"
+      },
+      {
+        "record_id_hash": "sha256:e484f5cab17671523afc708eb69ec629e1eb63e5c18f890df1f7a02975f6b953",
+        "claim_id": "coach-pay",
+        "status": "boundary_excluded_from_direct",
+        "pending_additional_judgment": false,
+        "reason": "提示された本文では必要な主体・対象・時期・制度・断定のいずれかが確定しない、又は仮定・疑問にとどまる。追加判断を保留したという意味ではなく、この入力範囲では直接採用しないという完了した判断。"
+      },
+      {
+        "record_id_hash": "sha256:e831a48d65892cf13f6d40c559aefec9e33b47c0c0fafee62420c79f9a6bc121",
+        "claim_id": "coach-pay",
+        "status": "boundary_excluded_from_direct",
+        "pending_additional_judgment": false,
+        "reason": "提示された本文では必要な主体・対象・時期・制度・断定のいずれかが確定しない、又は仮定・疑問にとどまる。追加判断を保留したという意味ではなく、この入力範囲では直接採用しないという完了した判断。"
+      },
+      {
+        "record_id_hash": "sha256:ea8133a2c541aae6b4f1ada1d82990de49aa6dec3b87acc625a5aeed90b3970e",
+        "claim_id": "coach-pay",
+        "status": "boundary_excluded_from_direct",
+        "pending_additional_judgment": false,
+        "reason": "提示された本文では必要な主体・対象・時期・制度・断定のいずれかが確定しない、又は仮定・疑問にとどまる。追加判断を保留したという意味ではなく、この入力範囲では直接採用しないという完了した判断。"
+      }
+    ]
+  },
+  "counts": {
+    "read_records": 250,
+    "compared_claims": 7,
+    "claim_record_pairs": 1750,
+    "amended_records": 4,
+    "amended_pairs": 4,
+    "source_amendments": 1,
+    "phase1": {
+      "original-deadline": {
+        "direct": 2,
+        "partial": 4,
+        "uncertain": 5,
+        "none": 239
+      },
+      "national-funding": {
+        "direct": 0,
+        "partial": 18,
+        "uncertain": 6,
+        "none": 226
+      },
+      "coach-pay": {
+        "direct": 1,
+        "partial": 19,
+        "uncertain": 19,
+        "none": 211
+      },
+      "shidoin-role": {
+        "direct": 1,
+        "partial": 8,
+        "uncertain": 3,
+        "none": 238
+      },
+      "chutairen-entry": {
+        "direct": 3,
+        "partial": 0,
+        "uncertain": 3,
+        "none": 244
+      },
+      "club-cost-survey": {
+        "direct": 3,
+        "partial": 0,
+        "uncertain": 0,
+        "none": 247
+      },
+      "kyushokuchoseigaku": {
+        "direct": 1,
+        "partial": 0,
+        "uncertain": 0,
+        "none": 249
+      }
+    },
+    "recommended_after_amendments": {
+      "original-deadline": {
+        "direct": 2,
+        "partial": 4,
+        "uncertain": 5,
+        "none": 239
+      },
+      "national-funding": {
+        "direct": 0,
+        "partial": 15,
+        "uncertain": 9,
+        "none": 226
+      },
+      "coach-pay": {
+        "direct": 1,
+        "partial": 19,
+        "uncertain": 19,
+        "none": 211
+      },
+      "shidoin-role": {
+        "direct": 0,
+        "partial": 9,
+        "uncertain": 3,
+        "none": 238
+      },
+      "chutairen-entry": {
+        "direct": 3,
+        "partial": 0,
+        "uncertain": 3,
+        "none": 244
+      },
+      "club-cost-survey": {
+        "direct": 3,
+        "partial": 0,
+        "uncertain": 0,
+        "none": 247
+      },
+      "kyushokuchoseigaku": {
+        "direct": 1,
+        "partial": 0,
+        "uncertain": 0,
+        "none": 249
+      }
+    }
+  },
+  "scope_and_limits": [
+    "PHASE 1のJSONは固定したまま、変更提案だけをこのJSONに保存した。",
+    "前回の採否、件数、個別理由は未参照。開示された前回基準だけを独立基準と比較した。",
+    "今回の推奨direct基準は全文命題の全実質要素を求める方針であり、新たに範囲を広げる提案ではない。",
+    "国費不足だけ、顧問又は引率の片方だけという小命題を別に作る場合、候補の対象は広がる。今回の250件外には未点検の投稿があるため、この250件の再集計を全候補の発見・全体網羅性・全体の件数とは言えない。新基準の総数を出すには250件外も同じ本文基準で改めて確認する必要がある。",
+    "partialは全文命題の証拠にはしないが、関連する具体的な部分を述べる記録として保持する。uncertainとpartialとnoneは同義ではない。",
+    "公的資料による事実照合の結論とSNS本文が何を述べるかの判定は別々に維持する。民間調査の詳細本文を踏まえた対象の訂正は資料種別の採否を変えない。"
+  ]
+}

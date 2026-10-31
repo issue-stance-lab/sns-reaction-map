@@ -27,6 +27,9 @@ sources:
   - name: 文部科学省（スポーツ庁・文化庁）「部活動改革及び地域クラブ活動の推進等に関する総合的なガイドライン」の概要（令和7年12月）
     url: https://www.mext.go.jp/sports/content/20251226-spt_oripara-000046627_001.pdf
     checked_on: 2026-10-17
+related_issues:
+  - bukatsu-chiiki-kyoin
+  - bukatsu-chiiki-kyoiku
 ---
 
 部活動の地域移行について当サイトが集めたXの投稿では、賛成する理由の中心は先生の働き方でした。慎重・反対の投稿が最も多く挙げたのは、子どもが部活動で得てきた機会や学びが減るという心配です。どの論点で語るかによって、慎重・反対の割合は大きく変わります。

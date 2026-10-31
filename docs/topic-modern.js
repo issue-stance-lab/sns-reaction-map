@@ -1,4 +1,10 @@
 (function () {
+  // 記事から来た読者が理由一覧まで進んだかを、共通の計測器で確認する。
+  var journeyScript = document.createElement('script');
+  journeyScript.src = new URL('article-reason-journey.js?v=1', document.currentScript.src).href;
+  journeyScript.defer = true;
+  document.head.appendChild(journeyScript);
+
   // ---- 共有URLの正典 ------------------------------------------------------
   // シェア導線（FAB / 投票後 / ビルダー生成分）は必ずここを通す。
   // UTMが無いとGA4では t.co / referral にまとまり、どの導線からの流入か区別できない。
@@ -247,6 +253,8 @@
      #issue-cards（画像＋X投稿。issue-cardsを持つ5テーマ）はplanet-liveと無関係に
      常時表示なので、ここでは何もしなくてよい（ブラウザ標準の遷移で届く）。 */
   function citeRestoreFromHash() {
+    // 自転車・免許返納の読書面では、旧地図のボタンで指定した論点を上書きしない。
+    if (document.querySelector('#bike-blue-ticket-reading.fr-js, #elderly-license-revocation-reading.fr-js')) return;
     var match = /^#issue-(.+)$/.exec(location.hash);
     if (!match) return;
     var liveButton = document.getElementById('btn-' + match[1]);

@@ -42,6 +42,8 @@ h1{margin:0 0 10px;font-size:clamp(23px,5.6vw,32px);line-height:1.45}
 .article-body h2{font-size:21px;line-height:1.5;margin:38px 0 12px;padding-bottom:8px;border-bottom:2px solid var(--accent-soft)}
 .article-body h3{font-size:17px;margin:26px 0 8px}
 .article-body p,.article-body li{color:#2b3445}
+/* 理由比較へのリンクは、折り返しの行間も押せる44px以上の面にする。 */
+.article-body p a[href*=".html#issue-"],.article-body td a[href*=".html#issue-"]{display:inline-block;max-width:100%;min-height:44px;padding:6px 0;vertical-align:middle}
 .article-body ul,.article-body ol{padding-left:22px}
 .table-wrap{overflow-x:auto;margin:14px 0 20px;border:1px solid var(--line);border-radius:var(--radius);background:var(--panel)}
 table{border-collapse:collapse;width:100%;font-size:14px;line-height:1.6}
@@ -66,6 +68,11 @@ tr:last-child td{border-bottom:0}
 .sources ul,.related ul{margin:0;padding-left:20px}
 .sources li{margin:0 0 6px}
 .sources small{color:var(--muted)}
+.issue-entry{margin:16px 0 24px;padding:12px 16px;border-left:4px solid var(--accent);background:var(--accent-soft);font-size:14px}
+.issue-entry p{margin:0 0 4px;font-weight:700}
+.issue-entry ul{list-style:none;margin:0;padding:0}
+.issue-entry a{display:inline-flex;align-items:center;min-height:44px;font-weight:700;line-height:1.6}
+.issue-entry a:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
 .cta{background:var(--accent-soft);border-color:#c7dcf8}
 .cta p{margin:0 0 10px}
 .cta a.button{display:inline-block;padding:10px 16px;border-radius:999px;background:var(--accent);color:#fff;font-weight:700;text-decoration:none}
@@ -160,9 +167,9 @@ tr:last-child td{border-bottom:0}
 <h1>自転車のスマホ・イヤホン・傘差しは青切符？反則金はいくら</h1>
 <p class="byline article-chrome">SNS反応まっぷ編集部・公開 2026年10月17日</p>
 </header>
-<nav class="toc article-chrome" aria-label="目次"><p>目次</p><ol><li><a href="#s1">自転車の青切符、スマホ・イヤホン・傘差しの反則金はいくら</a></li><li><a href="#s2">自転車のながらスマホは手に持つだけで青切符になるのか</a></li><li><a href="#s3">自転車のイヤホンは青切符？傘差しはどこから違反か</a></li><li><a href="#s4">「どこからが違反か分からない」SNSの声</a></li><li><a href="#s5">件数から分からないこと</a></li></ol></nav>
+
 <div class="article-body">
-<p>自転車のながらスマホは青切符の対象で、反則金は12,000円です。イヤホンと傘差しも青切符になりえますが、何が違反かを決めているのは都道府県の公安委員会の規則で、反則金は5,000円です。分かれ目は、イヤホンなら周りの音が聞こえない状態かどうか、傘差しなら視野や安定を妨げる持ち方かどうかにあります。</p>
+<p>自転車のながらスマホは青切符の対象で、反則金は12,000円です。イヤホンと傘差しも青切符になりえますが、何が違反かを決めているのは都道府県の公安委員会の規則で、反則金は5,000円です。分かれ目は、イヤホンなら周りの音が聞こえない状態かどうか、傘差しなら視野や安定を妨げる持ち方かどうかにあります。</p><nav class="issue-entry article-chrome" aria-label="この話題に関係する論点"><p>この話題の意見と理由を読む</p><ul><li><a href="../bike-blue-ticket-reaction-map.html#issue-bike-blue-ticket-rule-ambiguity" data-article-link="theme-issue">ルール曖昧・不信の意見と理由を読む</a></li></ul></nav><nav class="toc article-chrome" aria-label="目次"><p>目次</p><ol><li><a href="#s1">自転車の青切符、スマホ・イヤホン・傘差しの反則金はいくら</a></li><li><a href="#s2">自転車のながらスマホは手に持つだけで青切符になるのか</a></li><li><a href="#s3">自転車のイヤホンは青切符？傘差しはどこから違反か</a></li><li><a href="#s4">「どこからが違反か分からない」SNSの声</a></li><li><a href="#s5">件数から分からないこと</a></li></ol></nav>
 <h2 id="s1">自転車の青切符、スマホ・イヤホン・傘差しの反則金はいくら</h2>
 <p>反則金の額を定めているのは、道路交通法施行令の<a href="https://laws.e-gov.go.jp/law/335CO0000000270" target="_blank" rel="noopener">別表第六</a>です。表に「自転車」という欄はなく、自転車は軽車両なので「原付等」の欄を読みます。青切符の対象は16歳以上。16歳未満の違反は、原則として指導警告にとどまります。</p>
 <div class="table-wrap"><table><thead><tr><th scope="col">行為</th><th scope="col">処理</th><th scope="col">額・罰則</th></tr></thead><tbody><tr><td>手に持って通話する、手に持って画面を注視する（携帯電話使用等〈保持〉）</td><td>青切符</td><td>反則金12,000円</td></tr><tr><td>携帯電話を使って事故を起こす、交通の危険を生じさせる（携帯電話使用等〈交通の危険〉）</td><td>赤切符（刑事手続）</td><td>1年以下の拘禁刑または30万円以下の罰金</td></tr><tr><td>イヤホンで周りの音や声が聞こえない状態で運転する</td><td>青切符（公安委員会遵守事項違反）</td><td>反則金5,000円</td></tr><tr><td>傘を差すなど視野や安定を妨げる方法で運転する</td><td>青切符（公安委員会遵守事項違反）</td><td>反則金5,000円</td></tr></tbody></table></div>
@@ -215,6 +222,7 @@ tr:last-child td{border-bottom:0}
 </article>
 <footer class="footer"><p>© 2026 SNS反応まっぷ — <a href="../">トップ</a> · <a href="../about.html#operator">運営者情報</a> · <a href="../about.html#method">調査・編集方法</a> · <a href="https://docs.google.com/forms/d/e/1FAIpQLSdySbMYxEsLOYmI4jsqjIkSGl6WHF78qLlypOmXAg9tVDy2FQ/viewform" target="_blank" rel="noopener">お問い合わせ・訂正依頼</a> · <a href="../privacy.html">プライバシーポリシー</a> · <a href="../disclaimer.html">免責事項</a> · <a href="../image-policy.html">画像制作方針</a></p></footer>
 </main>
+<script src="../article-reason-journey.js?v=1" defer></script>
 <script>
 document.addEventListener("click", function (event) {
   var link = event.target.closest && event.target.closest("a[data-article-link]");

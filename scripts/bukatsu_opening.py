@@ -126,8 +126,8 @@ def check_config(config: dict, public: dict, memo_text: str, display_headline: s
     checked = config["checked_on"]
     if checked < period["guideline_on"]:
         raise SystemExit("checked_on がガイドラインの策定日より前です")
-    if checked < public["claim_verification"]["checked_on"]:
-        raise SystemExit("制度の確認日 checked_on が、主張の照合日より古くなっています")
+    # 主張の照合と冒頭の確認は対象が異なる。各欄に実際の確認日を表示し、
+    # 投稿照合だけの更新で事故調査・制度全体の確認日を進めない。
     memo_on = memo_checked_on(memo_text, config["memo_section"])
     if memo_on != checked:
         raise SystemExit(f"一次資料メモの節「{config['memo_section']}」の確認日 {memo_on} が checked_on {checked} と違います"
@@ -140,7 +140,11 @@ def check_config(config: dict, public: dict, memo_text: str, display_headline: s
             raise SystemExit("period.midterm_checked_on が前期の終わり（中間評価）より前です")
     if display_headline is not None and display_headline != headline_of(config):
         raise SystemExit(f"H1（{headline_of(config)}）が configs/theme-seo.json の display_headline（{display_headline}）と違います")
+    issue_ids = {issue["id"] for issue in public["issues"]}
     for a in config["answers"]:
+        for item in a.get("issue_links", []):
+            if item["id"] not in issue_ids or not item.get("text"):
+                raise SystemExit(f"短答 {a['key']} の論点リンクが不正です: {item}")
         for key in ("short", "body"):
             missing = set(PHASES) - set(a[key]) if "all" not in a[key] else set()
             if missing:
@@ -301,13 +305,23 @@ def render_answers(config: dict, as_of: str, public: dict) -> str:
     for i, a in enumerate(config["answers"], 1):
         short = by_phase(a["short"], phase).format(**values)
         body = by_phase(a["body"], phase).format(**values)
+        issue_links = "".join(
+            f'<a class="bko-issue-link" href="#issue-{esc(item["id"])}" '
+            f'data-opening-issue="{esc(item["id"])}">{esc(item["text"])}</a>'
+            for item in a.get("issue_links", [])
+        )
+        links_html = f'<nav class="bko-issue-links" aria-label="{esc(a["question"])}に関係する論点">{issue_links}</nav>' if issue_links else ""
+        detail_link = (
+            f'<a class="bko-answer__link" href="{esc(a["link"]["href"])}">{esc(a["link"]["text"])} →</a>'
+            if a["link"]["href"] not in {"#issue-" + item["id"] for item in a.get("issue_links", [])} else ""
+        )
         cards.append(
             f'<article class="bko-answer bko-answer--{esc(a["key"])}" aria-labelledby="bko-q{i}">'
             f'<p class="bko-answer__kind bko-answer__kind--{esc(a["kind"])}">{esc(a["kind_label"])}</p>'
             f'<h2 id="bko-q{i}">{icon(a["key"])}{esc(a["question"])}</h2>'
-            f'<p class="bko-answer__short">{esc(short)}</p>'
+            f'<p class="bko-answer__short">{esc(short)}</p>{links_html}'
             f'<p class="bko-answer__body">{esc(body)}</p>'
-            f'<a class="bko-answer__link" href="{esc(a["link"]["href"])}">{esc(a["link"]["text"])} →</a></article>'
+            f'{detail_link}</article>'
         )
     return f'<div class="bko-answers" aria-label="検索で多い3つの疑問への短い答え">{"".join(cards)}</div>'
 

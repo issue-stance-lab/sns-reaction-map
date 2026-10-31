@@ -1,5 +1,5 @@
 """辺野古の原資料照合。本文を読んで選定した主張を公開契約へ接続する。"""
-CHECKED_AT = "2026年9月13日"
+CHECKED_AT = "2026年10月31日"
 FACT_CHECKS = [{'key': 'school-escort',
   'claim': '転覆時、生徒が乗る船に引率教員は同行していなかった',
   'verdict': 'fact',

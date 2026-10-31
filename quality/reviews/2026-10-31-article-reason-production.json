@@ -1,0 +1,651 @@
+{
+  "published_at": "2026-10-31T17:05:50+09:00",
+  "source_commit": "3493e25ad51479cc44a8b23ad74e3023a36501c8",
+  "docs_tree": "ae4b68fbae049515ca52cb27a36f211681ae3445",
+  "operator_test": true,
+  "first_full_day": "2026-11-01",
+  "browser": {
+    "routes": [
+      {
+        "article": "bike-blue-ticket-unfair",
+        "landing": {
+          "height": 812,
+          "overflow": false,
+          "referrer": "https://sns-reaction-map.jp/articles/bike-blue-ticket-unfair.html",
+          "selected": [
+            {
+              "firstReasonText": "導入後も違反が残り取締りの実効性を求める28件23.1%",
+              "id": "bike-blue-ticket-enforcement-support",
+              "panelTop": 104.03125,
+              "reasonHeight": 75.75,
+              "reasonTop": 799.53125,
+              "visibleRatio": 0.1646039603960396
+            }
+          ],
+          "url": "https://sns-reaction-map.jp/bike-blue-ticket-reaction-map.html#issue-bike-blue-ticket-enforcement-support",
+          "width": 375
+        },
+        "reasons": {
+          "height": 812,
+          "overflow": false,
+          "referrer": "https://sns-reaction-map.jp/articles/bike-blue-ticket-unfair.html",
+          "selected": [
+            {
+              "id": "bike-blue-ticket-enforcement-support",
+              "panelTop": -299.96875,
+              "reasonHeight": 75.75,
+              "reasonTop": 395.53125,
+              "visibleRatio": 1
+            }
+          ],
+          "url": "https://sns-reaction-map.jp/bike-blue-ticket-reaction-map.html#issue-bike-blue-ticket-enforcement-support",
+          "width": 375
+        }
+      },
+      {
+        "article": "kobe-katsu",
+        "landing": {
+          "height": 812,
+          "overflow": false,
+          "referrer": "https://sns-reaction-map.jp/articles/kobe-katsu.html",
+          "selected": [
+            {
+              "firstReasonText": "誰がいくら払うか決めて55件30.2%",
+              "id": "bukatsu-chiiki-hiyo",
+              "panelTop": 104.15625,
+              "reasonHeight": 55,
+              "reasonTop": 736.015625,
+              "visibleRatio": 1
+            }
+          ],
+          "url": "https://sns-reaction-map.jp/bukatsu-chiiki-reaction-map.html#issue-bukatsu-chiiki-hiyo",
+          "width": 375
+        },
+        "reasons": {
+          "height": 812,
+          "overflow": false,
+          "referrer": "https://sns-reaction-map.jp/articles/kobe-katsu.html",
+          "selected": [
+            {
+              "id": "bukatsu-chiiki-hiyo",
+              "panelTop": -300.84375,
+              "reasonHeight": 55,
+              "reasonTop": 331.015625,
+              "visibleRatio": 1
+            }
+          ],
+          "url": "https://sns-reaction-map.jp/bukatsu-chiiki-reaction-map.html#issue-bukatsu-chiiki-hiyo",
+          "width": 375
+        }
+      }
+    ],
+    "test_flag_control": {
+      "height": 812,
+      "referrer": "https://sns-reaction-map.jp/articles/kobe-katsu.html?analytics_test=1",
+      "selected": [
+        {
+          "id": "bukatsu-chiiki-hiyo",
+          "reasonHeight": 55,
+          "reasonTop": 736.015625,
+          "visibleRatio": 1
+        }
+      ],
+      "url": "https://sns-reaction-map.jp/bukatsu-chiiki-reaction-map.html#issue-bukatsu-chiiki-hiyo",
+      "width": 375
+    }
+  },
+  "realtime": {
+    "before": {
+      "fetched_at": "2026-10-31T08:06:18.184849+00:00",
+      "period": "直近30分",
+      "operator_test": true,
+      "request": {
+        "dimensions": [
+          {
+            "name": "eventName"
+          }
+        ],
+        "metrics": [
+          {
+            "name": "eventCount"
+          }
+        ],
+        "dimensionFilter": {
+          "filter": {
+            "fieldName": "eventName",
+            "inListFilter": {
+              "values": [
+                "article_reason_click",
+                "article_reason_view"
+              ],
+              "caseSensitive": true
+            }
+          }
+        },
+        "limit": 1000
+      },
+      "response": {
+        "dimensionHeaders": [
+          {
+            "name": "eventName"
+          }
+        ],
+        "metricHeaders": [
+          {
+            "name": "eventCount",
+            "type": "TYPE_INTEGER"
+          }
+        ],
+        "kind": "analyticsData#runRealtimeReport"
+      }
+    },
+    "bike_before_scroll": {
+      "fetched_at": "2026-10-31T08:06:58.766310+00:00",
+      "period": "直近30分",
+      "operator_test": true,
+      "request": {
+        "dimensions": [
+          {
+            "name": "eventName"
+          }
+        ],
+        "metrics": [
+          {
+            "name": "eventCount"
+          }
+        ],
+        "dimensionFilter": {
+          "filter": {
+            "fieldName": "eventName",
+            "inListFilter": {
+              "values": [
+                "article_reason_click",
+                "article_reason_view"
+              ],
+              "caseSensitive": true
+            }
+          }
+        },
+        "limit": 1000
+      },
+      "response": {
+        "dimensionHeaders": [
+          {
+            "name": "eventName"
+          }
+        ],
+        "metricHeaders": [
+          {
+            "name": "eventCount",
+            "type": "TYPE_INTEGER"
+          }
+        ],
+        "rows": [
+          {
+            "dimensionValues": [
+              {
+                "value": "article_reason_click"
+              }
+            ],
+            "metricValues": [
+              {
+                "value": "1"
+              }
+            ]
+          }
+        ],
+        "rowCount": 1,
+        "kind": "analyticsData#runRealtimeReport"
+      }
+    },
+    "after_bike": {
+      "fetched_at": "2026-10-31T08:08:04.040751+00:00",
+      "period": "直近30分",
+      "operator_test": true,
+      "request": {
+        "dimensions": [
+          {
+            "name": "eventName"
+          }
+        ],
+        "metrics": [
+          {
+            "name": "eventCount"
+          }
+        ],
+        "dimensionFilter": {
+          "filter": {
+            "fieldName": "eventName",
+            "inListFilter": {
+              "values": [
+                "article_reason_click",
+                "article_reason_view"
+              ],
+              "caseSensitive": true
+            }
+          }
+        },
+        "limit": 1000
+      },
+      "response": {
+        "dimensionHeaders": [
+          {
+            "name": "eventName"
+          }
+        ],
+        "metricHeaders": [
+          {
+            "name": "eventCount",
+            "type": "TYPE_INTEGER"
+          }
+        ],
+        "rows": [
+          {
+            "dimensionValues": [
+              {
+                "value": "article_reason_click"
+              }
+            ],
+            "metricValues": [
+              {
+                "value": "1"
+              }
+            ]
+          },
+          {
+            "dimensionValues": [
+              {
+                "value": "article_reason_view"
+              }
+            ],
+            "metricValues": [
+              {
+                "value": "1"
+              }
+            ]
+          }
+        ],
+        "rowCount": 2,
+        "kind": "analyticsData#runRealtimeReport"
+      }
+    },
+    "after_kobe": {
+      "fetched_at": "2026-10-31T08:08:47.918176+00:00",
+      "period": "直近30分",
+      "operator_test": true,
+      "request": {
+        "dimensions": [
+          {
+            "name": "eventName"
+          }
+        ],
+        "metrics": [
+          {
+            "name": "eventCount"
+          }
+        ],
+        "dimensionFilter": {
+          "filter": {
+            "fieldName": "eventName",
+            "inListFilter": {
+              "values": [
+                "article_reason_click",
+                "article_reason_view"
+              ],
+              "caseSensitive": true
+            }
+          }
+        },
+        "limit": 1000
+      },
+      "response": {
+        "dimensionHeaders": [
+          {
+            "name": "eventName"
+          }
+        ],
+        "metricHeaders": [
+          {
+            "name": "eventCount",
+            "type": "TYPE_INTEGER"
+          }
+        ],
+        "rows": [
+          {
+            "dimensionValues": [
+              {
+                "value": "article_reason_click"
+              }
+            ],
+            "metricValues": [
+              {
+                "value": "2"
+              }
+            ]
+          },
+          {
+            "dimensionValues": [
+              {
+                "value": "article_reason_view"
+              }
+            ],
+            "metricValues": [
+              {
+                "value": "2"
+              }
+            ]
+          }
+        ],
+        "rowCount": 2,
+        "kind": "analyticsData#runRealtimeReport"
+      }
+    },
+    "test_flag_control": {
+      "fetched_at": "2026-10-31T08:09:34.425326+00:00",
+      "period": "直近30分",
+      "operator_test": true,
+      "request": {
+        "dimensions": [
+          {
+            "name": "eventName"
+          }
+        ],
+        "metrics": [
+          {
+            "name": "eventCount"
+          }
+        ],
+        "dimensionFilter": {
+          "filter": {
+            "fieldName": "eventName",
+            "inListFilter": {
+              "values": [
+                "article_reason_click",
+                "article_reason_view"
+              ],
+              "caseSensitive": true
+            }
+          }
+        },
+        "limit": 1000
+      },
+      "response": {
+        "dimensionHeaders": [
+          {
+            "name": "eventName"
+          }
+        ],
+        "metricHeaders": [
+          {
+            "name": "eventCount",
+            "type": "TYPE_INTEGER"
+          }
+        ],
+        "rows": [
+          {
+            "dimensionValues": [
+              {
+                "value": "article_reason_click"
+              }
+            ],
+            "metricValues": [
+              {
+                "value": "2"
+              }
+            ]
+          },
+          {
+            "dimensionValues": [
+              {
+                "value": "article_reason_view"
+              }
+            ],
+            "metricValues": [
+              {
+                "value": "2"
+              }
+            ]
+          }
+        ],
+        "rowCount": 2,
+        "kind": "analyticsData#runRealtimeReport"
+      }
+    },
+    "test_flag_control_verified": {
+      "fetched_at": "2026-10-31T08:12:35.843136+00:00",
+      "period": "直近30分",
+      "operator_test": true,
+      "request": {
+        "dimensions": [
+          {
+            "name": "eventName"
+          }
+        ],
+        "metrics": [
+          {
+            "name": "eventCount"
+          }
+        ],
+        "dimensionFilter": {
+          "filter": {
+            "fieldName": "eventName",
+            "inListFilter": {
+              "values": [
+                "article_reason_click",
+                "article_reason_view"
+              ],
+              "caseSensitive": true
+            }
+          }
+        },
+        "limit": 1000
+      },
+      "response": {
+        "dimensionHeaders": [
+          {
+            "name": "eventName"
+          }
+        ],
+        "metricHeaders": [
+          {
+            "name": "eventCount",
+            "type": "TYPE_INTEGER"
+          }
+        ],
+        "rows": [
+          {
+            "dimensionValues": [
+              {
+                "value": "article_reason_click"
+              }
+            ],
+            "metricValues": [
+              {
+                "value": "2"
+              }
+            ]
+          },
+          {
+            "dimensionValues": [
+              {
+                "value": "article_reason_view"
+              }
+            ],
+            "metricValues": [
+              {
+                "value": "2"
+              }
+            ]
+          }
+        ],
+        "rowCount": 2,
+        "kind": "analyticsData#runRealtimeReport"
+      }
+    }
+  },
+  "checks": {
+    "theme": {
+      "exit_code": 0
+    },
+    "number": {
+      "exit_code": 0
+    },
+    "top": {
+      "exit_code": 0
+    },
+    "unit": {
+      "exit_code": 0,
+      "tests": 2387,
+      "seconds": 228.734
+    },
+    "public": {
+      "exit_code": 0,
+      "tests": 2161,
+      "seconds": 146.625
+    }
+  },
+  "deployment": {
+    "conclusion": "success",
+    "headSha": "3493e25ad51479cc44a8b23ad74e3023a36501c8",
+    "jobs": [
+      {
+        "completedAt": "2026-10-31T08:05:37Z",
+        "conclusion": "success",
+        "databaseId": 124484502188,
+        "name": "build",
+        "startedAt": "2026-10-31T08:05:13Z",
+        "status": "completed",
+        "steps": [
+          {
+            "completedAt": "2026-10-31T08:05:14Z",
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "startedAt": "2026-10-31T08:05:13Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-31T08:05:33Z",
+            "conclusion": "success",
+            "name": "Run actions/checkout@v4",
+            "number": 2,
+            "startedAt": "2026-10-31T08:05:14Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-31T08:05:33Z",
+            "conclusion": "success",
+            "name": "Inject Supabase credentials into HTML files",
+            "number": 3,
+            "startedAt": "2026-10-31T08:05:33Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-31T08:05:36Z",
+            "conclusion": "success",
+            "name": "Upload Pages artifact",
+            "number": 4,
+            "startedAt": "2026-10-31T08:05:33Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-31T08:05:36Z",
+            "conclusion": "success",
+            "name": "Post Run actions/checkout@v4",
+            "number": 8,
+            "startedAt": "2026-10-31T08:05:36Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-31T08:05:36Z",
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 9,
+            "startedAt": "2026-10-31T08:05:36Z",
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/41183142101/job/124484502188"
+      },
+      {
+        "completedAt": "2026-10-31T08:05:50Z",
+        "conclusion": "success",
+        "databaseId": 124484595530,
+        "name": "deploy",
+        "startedAt": "2026-10-31T08:05:42Z",
+        "status": "completed",
+        "steps": [
+          {
+            "completedAt": "2026-10-31T08:05:43Z",
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "startedAt": "2026-10-31T08:05:42Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-31T08:05:49Z",
+            "conclusion": "success",
+            "name": "Deploy to GitHub Pages",
+            "number": 2,
+            "startedAt": "2026-10-31T08:05:43Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-31T08:05:49Z",
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 3,
+            "startedAt": "2026-10-31T08:05:49Z",
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/41183142101/job/124484595530"
+      }
+    ],
+    "updatedAt": "2026-10-31T08:05:51Z",
+    "url": "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/41183142101"
+  },
+  "ci": {
+    "conclusion": "success",
+    "headSha": "3493e25ad51479cc44a8b23ad74e3023a36501c8",
+    "status": "completed",
+    "updatedAt": "2026-10-31T08:10:34Z",
+    "url": "https://github.com/issue-stance-lab/sns-reaction-map/actions/runs/41183142083"
+  },
+  "tap_target_fix_production": {
+    "published_source": "513a8cd1bbe52df45d72a120fa50a9adb8ee4876",
+    "bike": {
+      "source": {
+        "centerLink": "../bike-blue-ticket-reaction-map.html#issue-bike-blue-ticket-enforcement-support",
+        "height": 56.78125,
+        "overflow": false,
+        "url": "https://sns-reaction-map.jp/articles/bike-blue-ticket-unfair.html?analytics_test=1#s1",
+        "width": 375
+      },
+      "target": {
+        "referrer": "https://sns-reaction-map.jp/articles/bike-blue-ticket-unfair.html?analytics_test=1",
+        "selected": [
+          "bike-blue-ticket-enforcement-support"
+        ],
+        "url": "https://sns-reaction-map.jp/bike-blue-ticket-reaction-map.html#issue-bike-blue-ticket-enforcement-support"
+      }
+    },
+    "kobe": {
+      "source": {
+        "centerLink": "../bukatsu-chiiki-reaction-map.html#issue-bukatsu-chiiki-hiyo",
+        "height": 44,
+        "overflow": false,
+        "url": "https://sns-reaction-map.jp/articles/kobe-katsu.html?analytics_test=1#s1",
+        "width": 375
+      },
+      "target": {
+        "referrer": "https://sns-reaction-map.jp/articles/kobe-katsu.html?analytics_test=1",
+        "selected": [
+          "bukatsu-chiiki-hiyo"
+        ],
+        "url": "https://sns-reaction-map.jp/bukatsu-chiiki-reaction-map.html#issue-bukatsu-chiiki-hiyo"
+      }
+    }
+  }
+}

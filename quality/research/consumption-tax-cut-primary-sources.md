@@ -806,3 +806,9 @@
 - 衆議院の[第222回国会・議案一覧](https://www.shugiin.go.jp/internet/itdb_gian.nsf/html/gian/menu.htm)を確認。第222回・閣法第1号は引き続き「衆議院で審議中」。議案の経過は、引き続き[専用ページ](https://www.shugiin.go.jp/internet/itdb_gian.nsf/html/gian/keika/1DE342E.htm)で確認する。
 - 衆議院の[第222回国会・質問一覧](https://www.shugiin.go.jp/internet/itdb_shitsumon.nsf/html/shitsumon/kaiji222_l.htm)と[質問第12号の経過情報](https://www.shugiin.go.jp/internet/itdb_shitsumon.nsf/html/shitsumon/222012.htm)を確認。10月15日提出、経過状況は「質問受理」。内閣転送年月日・答弁受領年月日は空欄で、質問一覧にも質問・答弁本文へのリンクがない。
 - よって、質問本文の内容や政府答弁を推測しない。法案の成立・公布も確認できない。質問・答弁の掲載と法案の審議経過を次回も確認する。
+
+### 2026-10-31：政府法案の審議経過の再確認
+
+- 衆議院の[第222回国会・閣法第1号の審議経過](https://www.shugiin.go.jp/internet/itdb_gian.nsf/html/gian/keika/1DE342E.htm)を再取得（ブラウザで表示）。衆議院の議案受理は10月9日、付託は10月20日・財務金融委員会。衆議院の審査終了・審議終了（議決）の欄は空。参議院は予備審査議案受理（10月9日）のみで、議案受理・付託・議決・公布の欄は空。よって成立していない。
+- 10/21の確認時点では付託の欄は空だった。ページの文言（付託の有無）をこの確認に合わせて直した。
+- 質問第12号の経過、国税庁・財務省の対象品目ページ全体の再監査は今回行っていない。税率と対象品目の確認日は10/13のまま。

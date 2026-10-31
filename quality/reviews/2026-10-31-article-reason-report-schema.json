@@ -1,0 +1,74 @@
+{
+  "status": "schema_verified_only",
+  "note": "APIが受け付けることだけを確認。未公開イベントの空行を到達ゼロとは扱わない。",
+  "request": {
+    "dateRanges": [
+      {
+        "startDate": "2026-10-04",
+        "endDate": "2026-10-30"
+      }
+    ],
+    "metrics": [
+      {
+        "name": "totalUsers"
+      },
+      {
+        "name": "eventCount"
+      }
+    ],
+    "dimensionFilter": {
+      "andGroup": {
+        "expressions": [
+          {
+            "filter": {
+              "fieldName": "hostName",
+              "stringFilter": {
+                "matchType": "EXACT",
+                "value": "sns-reaction-map.jp"
+              }
+            }
+          },
+          {
+            "filter": {
+              "fieldName": "eventName",
+              "stringFilter": {
+                "matchType": "EXACT",
+                "value": "article_reason_view",
+                "caseSensitive": true
+              }
+            }
+          },
+          {
+            "filter": {
+              "fieldName": "pageReferrer",
+              "stringFilter": {
+                "matchType": "FULL_REGEXP",
+                "value": "https://sns-reaction-map\\.jp/articles/(bike\\-blue\\-ticket\\-unfair|kobe\\-katsu)\\.html",
+                "caseSensitive": true
+              }
+            }
+          },
+          {
+            "notExpression": {
+              "filter": {
+                "fieldName": "pageLocation",
+                "stringFilter": {
+                  "matchType": "PARTIAL_REGEXP",
+                  "value": "analytics_test=1(?:&|#|$)",
+                  "caseSensitive": true
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "response": {
+    "metadata": {
+      "currencyCode": "JPY",
+      "timeZone": "Asia/Tokyo"
+    },
+    "kind": "analyticsData#runReport"
+  }
+}

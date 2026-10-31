@@ -42,6 +42,8 @@ h1{margin:0 0 10px;font-size:clamp(23px,5.6vw,32px);line-height:1.45}
 .article-body h2{font-size:21px;line-height:1.5;margin:38px 0 12px;padding-bottom:8px;border-bottom:2px solid var(--accent-soft)}
 .article-body h3{font-size:17px;margin:26px 0 8px}
 .article-body p,.article-body li{color:#2b3445}
+/* 理由比較へのリンクは、折り返しの行間も押せる44px以上の面にする。 */
+.article-body p a[href*=".html#issue-"],.article-body td a[href*=".html#issue-"]{display:inline-block;max-width:100%;min-height:44px;padding:6px 0;vertical-align:middle}
 .article-body ul,.article-body ol{padding-left:22px}
 .table-wrap{overflow-x:auto;margin:14px 0 20px;border:1px solid var(--line);border-radius:var(--radius);background:var(--panel)}
 table{border-collapse:collapse;width:100%;font-size:14px;line-height:1.6}
@@ -66,6 +68,11 @@ tr:last-child td{border-bottom:0}
 .sources ul,.related ul{margin:0;padding-left:20px}
 .sources li{margin:0 0 6px}
 .sources small{color:var(--muted)}
+.issue-entry{margin:16px 0 24px;padding:12px 16px;border-left:4px solid var(--accent);background:var(--accent-soft);font-size:14px}
+.issue-entry p{margin:0 0 4px;font-weight:700}
+.issue-entry ul{list-style:none;margin:0;padding:0}
+.issue-entry a{display:inline-flex;align-items:center;min-height:44px;font-weight:700;line-height:1.6}
+.issue-entry a:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
 .cta{background:var(--accent-soft);border-color:#c7dcf8}
 .cta p{margin:0 0 10px}
 .cta a.button{display:inline-block;padding:10px 16px;border-radius:999px;background:var(--accent);color:#fff;font-weight:700;text-decoration:none}
@@ -160,19 +167,19 @@ tr:last-child td{border-bottom:0}
 <h1>部活動の地域移行に反対・賛成する理由は？SNSの意見を論点別に</h1>
 <p class="byline article-chrome">SNS反応まっぷ編集部・公開 2026年10月17日</p>
 </header>
-<nav class="toc article-chrome" aria-label="目次"><p>目次</p><ol><li><a href="#s1">部活動の地域移行への意見を論点と立場で分けると</a></li><li><a href="#s2">部活動の地域移行への反対意見は何を心配しているか</a></li><li><a href="#s3">部活動の地域移行に賛成する人は何を変えたいのか</a></li><li><a href="#s4">部活動の地域移行に「条件付き」の人が求めていること</a></li><li><a href="#s5">部活動の地域移行のメリット・デメリットを投稿から整理する</a></li><li><a href="#s6">投稿の件数から分からないこと</a></li></ol></nav>
+
 <div class="article-body">
-<p>部活動の地域移行について当サイトが集めたXの投稿では、賛成する理由の中心は先生の働き方でした。慎重・反対の投稿が最も多く挙げたのは、子どもが部活動で得てきた機会や学びが減るという心配です。どの論点で語るかによって、慎重・反対の割合は大きく変わります。</p>
+<p>部活動の地域移行について当サイトが集めたXの投稿では、賛成する理由の中心は先生の働き方でした。慎重・反対の投稿が最も多く挙げたのは、子どもが部活動で得てきた機会や学びが減るという心配です。どの論点で語るかによって、慎重・反対の割合は大きく変わります。</p><nav class="issue-entry article-chrome" aria-label="この話題に関係する論点"><p>この話題の意見と理由を読む</p><ul><li><a href="../bukatsu-chiiki-reaction-map.html#issue-bukatsu-chiiki-kyoin" data-article-link="theme-issue">教員の働き方の意見と理由を読む</a></li><li><a href="../bukatsu-chiiki-reaction-map.html#issue-bukatsu-chiiki-kyoiku" data-article-link="theme-issue">教育的意義・機会の意見と理由を読む</a></li></ul></nav><nav class="toc article-chrome" aria-label="目次"><p>目次</p><ol><li><a href="#s1">部活動の地域移行への意見を論点と立場で分けると</a></li><li><a href="#s2">部活動の地域移行への反対意見は何を心配しているか</a></li><li><a href="#s3">部活動の地域移行に賛成する人は何を変えたいのか</a></li><li><a href="#s4">部活動の地域移行に「条件付き」の人が求めていること</a></li><li><a href="#s5">部活動の地域移行のメリット・デメリットを投稿から整理する</a></li><li><a href="#s6">投稿の件数から分からないこと</a></li></ol></nav>
 <p>国は<a href="https://www.mext.go.jp/sports/content/20251226-spt_oripara-000046627_00234.pdf" target="_blank" rel="noopener">2025年12月のガイドライン</a>で、呼び名を「地域移行」から「地域展開」に改めました。2026〜2031年度を「改革実行期間」とし、休日の学校部活動は期間内に原則すべて地域へ展開することを目指しています（<a href="https://www.mext.go.jp/sports/content/20251226-spt_oripara-000046627_001.pdf" target="_blank" rel="noopener">ガイドラインの概要</a>）。この記事では、従来の呼び方の「地域移行」を使います。</p>
 <h2 id="s1">部活動の地域移行への意見を論点と立場で分けると</h2>
-<p>データは、Yahoo!リアルタイム検索で拾えるXの公開投稿から集めました。2026年6月27日〜10月18日に集めた2,129件のうち、意見と判定した1,677件を論点と立場で分けています。</p>
-<figure class="stance-chart article-chrome"><figcaption>論点ごとの立場の内訳（意見1,677件、2026年6月27日〜10月18日）</figcaption><div class="chart-row"><div class="chart-label">教員の働き方<span>508件</span></div><div class="bar" role="img" aria-label="教員の働き方の意見508件の内訳: 移行支持230件（45.3%）、条件付き・改善要求113件（22.2%）、中立・情報126件（24.8%）、慎重・反対39件（7.7%）"><span class="seg s1" style="width:45.28%"></span><span class="seg s2" style="width:22.24%"></span><span class="seg s3" style="width:24.80%"></span><span class="seg s4" style="width:7.68%"></span></div></div><div class="chart-row"><div class="chart-label">制度・移行プロセス<span>363件</span></div><div class="bar" role="img" aria-label="制度・移行プロセスの意見363件の内訳: 移行支持138件（38.0%）、条件付き・改善要求69件（19.0%）、中立・情報101件（27.8%）、慎重・反対55件（15.2%）"><span class="seg s1" style="width:38.02%"></span><span class="seg s2" style="width:19.01%"></span><span class="seg s3" style="width:27.82%"></span><span class="seg s4" style="width:15.15%"></span></div></div><div class="chart-row"><div class="chart-label">教育的意義・機会<span>292件</span></div><div class="bar" role="img" aria-label="教育的意義・機会の意見292件の内訳: 移行支持96件（32.9%）、条件付き・改善要求33件（11.3%）、中立・情報77件（26.4%）、慎重・反対86件（29.5%）"><span class="seg s1" style="width:32.88%"></span><span class="seg s2" style="width:11.30%"></span><span class="seg s3" style="width:26.37%"></span><span class="seg s4" style="width:29.45%"></span></div></div><div class="chart-row"><div class="chart-label">受け皿・指導者<span>255件</span></div><div class="bar" role="img" aria-label="受け皿・指導者の意見255件の内訳: 移行支持51件（20.0%）、条件付き・改善要求60件（23.5%）、中立・情報89件（34.9%）、慎重・反対55件（21.6%）"><span class="seg s1" style="width:20.00%"></span><span class="seg s2" style="width:23.53%"></span><span class="seg s3" style="width:34.90%"></span><span class="seg s4" style="width:21.57%"></span></div></div><div class="chart-row"><div class="chart-label">費用・家庭負担<span>174件</span></div><div class="bar" role="img" aria-label="費用・家庭負担の意見174件の内訳: 移行支持35件（20.1%）、条件付き・改善要求47件（27.0%）、中立・情報56件（32.2%）、慎重・反対36件（20.7%）"><span class="seg s1" style="width:20.11%"></span><span class="seg s2" style="width:27.01%"></span><span class="seg s3" style="width:32.18%"></span><span class="seg s4" style="width:20.69%"></span></div></div><div class="chart-row"><div class="chart-label">地域格差<span>21件</span></div><div class="bar" role="img" aria-label="地域格差の意見21件の内訳: 移行支持1件（4.8%）、条件付き・改善要求5件（23.8%）、中立・情報7件（33.3%）、慎重・反対8件（38.1%）"><span class="seg s1" style="width:4.76%"></span><span class="seg s2" style="width:23.81%"></span><span class="seg s3" style="width:33.33%"></span><span class="seg s4" style="width:38.10%"></span></div></div><ul class="legend"><li><i class="s1"></i>移行支持</li><li><i class="s2"></i>条件付き・改善要求</li><li><i class="s3"></i>中立・情報</li><li><i class="s4"></i>慎重・反対</li></ul><p class="chart-note">Xの公開投稿のサンプルを分類した件数です。社会全体の世論調査ではありません。</p></figure>
-<p>最も多く語られた論点は「教員の働き方」で、全体の30.3%を占めます。全論点を通すと、移行支持は575件、慎重・反対は289件でした。</p>
+<p>データは、Yahoo!リアルタイム検索で拾えるXの公開投稿から集めました。2026年6月27日〜10月31日に集めた2,282件のうち、意見と判定した1,771件を論点と立場で分けています。</p>
+<figure class="stance-chart article-chrome"><figcaption>論点ごとの立場の内訳（意見1,771件、2026年6月27日〜10月31日）</figcaption><div class="chart-row"><div class="chart-label">教員の働き方<span>536件</span></div><div class="bar" role="img" aria-label="教員の働き方の意見536件の内訳: 移行支持241件（45.0%）、条件付き・改善要求122件（22.8%）、中立・情報132件（24.6%）、慎重・反対41件（7.6%）"><span class="seg s1" style="width:44.96%"></span><span class="seg s2" style="width:22.76%"></span><span class="seg s3" style="width:24.63%"></span><span class="seg s4" style="width:7.65%"></span></div></div><div class="chart-row"><div class="chart-label">制度・移行プロセス<span>374件</span></div><div class="bar" role="img" aria-label="制度・移行プロセスの意見374件の内訳: 移行支持139件（37.2%）、条件付き・改善要求75件（20.1%）、中立・情報105件（28.1%）、慎重・反対55件（14.7%）"><span class="seg s1" style="width:37.17%"></span><span class="seg s2" style="width:20.05%"></span><span class="seg s3" style="width:28.07%"></span><span class="seg s4" style="width:14.71%"></span></div></div><div class="chart-row"><div class="chart-label">教育的意義・機会<span>316件</span></div><div class="bar" role="img" aria-label="教育的意義・機会の意見316件の内訳: 移行支持107件（33.9%）、条件付き・改善要求33件（10.4%）、中立・情報81件（25.6%）、慎重・反対95件（30.1%）"><span class="seg s1" style="width:33.86%"></span><span class="seg s2" style="width:10.44%"></span><span class="seg s3" style="width:25.63%"></span><span class="seg s4" style="width:30.06%"></span></div></div><div class="chart-row"><div class="chart-label">受け皿・指導者<span>273件</span></div><div class="bar" role="img" aria-label="受け皿・指導者の意見273件の内訳: 移行支持53件（19.4%）、条件付き・改善要求65件（23.8%）、中立・情報96件（35.2%）、慎重・反対59件（21.6%）"><span class="seg s1" style="width:19.41%"></span><span class="seg s2" style="width:23.81%"></span><span class="seg s3" style="width:35.16%"></span><span class="seg s4" style="width:21.61%"></span></div></div><div class="chart-row"><div class="chart-label">費用・家庭負担<span>182件</span></div><div class="bar" role="img" aria-label="費用・家庭負担の意見182件の内訳: 移行支持36件（19.8%）、条件付き・改善要求50件（27.5%）、中立・情報57件（31.3%）、慎重・反対39件（21.4%）"><span class="seg s1" style="width:19.78%"></span><span class="seg s2" style="width:27.47%"></span><span class="seg s3" style="width:31.32%"></span><span class="seg s4" style="width:21.43%"></span></div></div><div class="chart-row"><div class="chart-label">地域格差<span>22件</span></div><div class="bar" role="img" aria-label="地域格差の意見22件の内訳: 移行支持1件（4.5%）、条件付き・改善要求5件（22.7%）、中立・情報8件（36.4%）、慎重・反対8件（36.4%）"><span class="seg s1" style="width:4.55%"></span><span class="seg s2" style="width:22.73%"></span><span class="seg s3" style="width:36.36%"></span><span class="seg s4" style="width:36.36%"></span></div></div><ul class="legend"><li><i class="s1"></i>移行支持</li><li><i class="s2"></i>条件付き・改善要求</li><li><i class="s3"></i>中立・情報</li><li><i class="s4"></i>慎重・反対</li></ul><p class="chart-note">Xの公開投稿のサンプルを分類した件数です。社会全体の世論調査ではありません。</p></figure>
+<p>最も多く語られた論点は「教員の働き方」で、全体の30.3%を占めます。全論点を通すと、移行支持は603件、慎重・反対は308件でした。</p>
 <p>これはXに投稿した人の意見を数えたもので、世論調査ではありません。投稿する人の顔ぶれには偏りがあり、件数の多さを社会全体の多数と読むことはできません。</p>
-<p>論点ごとに見ると、立場の割合はかなり違います。「教員の働き方」では移行支持が45.3%を占め、慎重・反対は7.7%しかありません。「教育的意義・機会」になると、慎重・反対の割合は29.5%まで上がります。</p>
+<p>論点ごとに見ると、立場の割合はかなり違います。「教員の働き方」では移行支持が45.0%を占め、慎重・反対は7.6%しかありません。「教育的意義・機会」になると、慎重・反対の割合は30.1%まで上がります。</p>
 <p>賛成する人と反対する人は、同じ問いに逆の答えを出しているというより、別々の場面を思い浮かべて書いているのかもしれません。</p>
 <h2 id="s2">部活動の地域移行への反対意見は何を心配しているか</h2>
-<p>中学に入ってから友達に誘われ、初めての楽器や競技に触れる子がいます。慎重・反対の投稿には、学校の中にあるこうした気軽な入り口がなくなることへの心配が繰り返し出てきます。この心配が入る「教育的意義・機会」は、慎重・反対が最も多く集まった論点で、86件ありました。</p>
+<p>中学に入ってから友達に誘われ、初めての楽器や競技に触れる子がいます。慎重・反対の投稿には、学校の中にあるこうした気軽な入り口がなくなることへの心配が繰り返し出てきます。この心配が入る「教育的意義・機会」は、慎重・反対が最も多く集まった論点で、95件ありました。</p>
 <p>ただし、慎重・反対の投稿には、地域に移すより部活動そのものをやめるべきだという意見も含まれます。反対の理由は、部活動を今の形のまま守りたいという一方向だけではありません。</p>
 <h3>学校で始める機会と居場所が減る</h3>
 <p>学校で友達と一緒に活動したい、校内での偶然の出会いを大事にしたいという投稿があります。放課後の居場所がなくなり、大人の目が届かないところで過ごす子が増えるのを心配する声もありました。演劇部や吹奏楽部、競技人口の少ない種目は、地域では成り立ちにくいという指摘もありました。</p>
@@ -185,13 +192,13 @@ tr:last-child td{border-bottom:0}
 <h3>進め方と責任の移し方への不信</h3>
 <p>制度・移行プロセスの論点では、計画が固まらないまま急いで進めることや、責任だけを地域に移すやり方への反発が見られます。特定の市の進め方が急すぎるという批判もあれば、国の方針が後退したことへの怒りを書いた投稿もありました。</p>
 <h2 id="s3">部活動の地域移行に賛成する人は何を変えたいのか</h2>
-<p>移行支持の投稿が最も多く出ている論点は「教員の働き方」で、230件あります。投稿では、先生が勤務時間外の練習や休日の引率を、わずかな手当で担ってきたことが問題にされています。先生の善意に頼るやり方はもう続かない、という見方がこれらの投稿の出発点です。</p>
+<p>移行支持の投稿が最も多く出ている論点は「教員の働き方」で、241件あります。投稿では、先生が勤務時間外の練習や休日の引率を、わずかな手当で担ってきたことが問題にされています。先生の善意に頼るやり方はもう続かない、という見方がこれらの投稿の出発点です。</p>
 <p>休日に家族と過ごせないという声があり、部活に関わる時間が減れば自分の時間が増える、と移行を歓迎する投稿もありました。部活動の指導は先生の本来の仕事ではなく、授業の準備に時間を使うべきだという主張も目立ちます。顧問の負担が先生のなり手不足を招いている、と見る投稿もありました。指導したい先生は地域のクラブで報酬を受けて教えればよい、という提案も出ています。</p>
 <p>子どもにとっての利点を挙げる投稿もあります。専門の指導者に教わる機会、学校になかった種目を選べること、閉じた人間関係やいじめから離れられることなどです。生徒が減って学校ごとでは部が成り立たない以上、地域でまとめなければ部活動そのものが続かないという意見も、移行支持の側に入ります。</p>
 <p>移行を支持する側は、先生が授業と自分の生活に使える時間を取り戻そうとしています。そのうえで、部活動を続けるためにこそ形を変える、という考え方もここには含まれていました。学校の部活動はやめてよいという投稿も、移行支持に分類されています。</p>
 <h2 id="s4">部活動の地域移行に「条件付き」の人が求めていること</h2>
-<p>集めた投稿のうち334件は、移行の是非より、成り立たせるための条件や改善を求めるものでした。お金の話になると、賛成の側も条件を付けます。</p>
-<p>「費用・家庭負担」の論点では、条件付き・改善要求が47件ありました。移行支持（35件）を上回る数です。移行支持に分類された投稿にも、保護者に負担を回すことだけは認めないというものがありました。</p>
+<p>集めた投稿のうち357件は、移行の是非より、成り立たせるための条件や改善を求めるものでした。お金の話になると、賛成の側も条件を付けます。</p>
+<p>「費用・家庭負担」の論点では、条件付き・改善要求が50件ありました。移行支持（36件）を上回る数です。移行支持に分類された投稿にも、保護者に負担を回すことだけは認めないというものがありました。</p>
 <p>条件の中身は、大きく4つに分かれます。</p>
 <ul><li>お金では、月会費の公費補助、苦しい家庭への支援、国の交付金が終わったあとの財源</li><li>指導者では、時給や謝礼を上げる予算と、資格や経験の基準</li><li>責任の分担では、引率や事故対応、保護者対応を先生に残さない決まり</li><li>学校に部活動を残す場合は、顧問への残業代や手当</li></ul>
 <p>ただし、誰が払うかについては、条件付きの投稿どうしでも考えが割れています。公費で月会費を補うべきだという投稿がある一方で、部活動を残したい人が費用を持つべきだという投稿もありました。</p>
@@ -205,16 +212,17 @@ tr:last-child td{border-bottom:0}
 <h2 id="s6">投稿の件数から分からないこと</h2>
 <p>論点によって立場の割合が変わる理由までは、この集計では分かりません。同じ人が話題ごとに立場を変えているのか、別々の人が別々の論点で書いているのか、区別できないためです。</p>
 <p>投稿しない人の考えは、ここには入っていません。投稿者が先生か保護者か生徒かも数えていないため、誰の声が多いのかも言えません。</p>
-<p>「地域格差」の論点は21件しかありませんでした。件数が少ないのは、この収集で語られなかったという意味で、地域による差が小さいという意味ではありません。</p>
+<p>「地域格差」の論点は22件しかありませんでした。件数が少ないのは、この収集で語られなかったという意味で、地域による差が小さいという意味ではありません。</p>
 <p>収集元はXの公開投稿だけで、知恵袋などの質問サイトや、自治体が保護者に取ったアンケートとは集め方が違います。</p>
 </div>
-<aside class="data-note article-chrome"><h2>データについて</h2><p>SNSの件数は、Yahoo!リアルタイム検索で2026年6月27日〜10月18日に集めたXの公開投稿2,129件のうち、意見と判定した1,677件を論点と立場に分けた件数です（2026年10月18日更新）。投稿した人の中での内訳で、社会全体の世論調査ではありません。</p><p>制度の説明は、下の資料を確認日の時点で読んだ内容です。その後に変わっている場合があります。誤りのご指摘は<a href="https://docs.google.com/forms/d/e/1FAIpQLSdySbMYxEsLOYmI4jsqjIkSGl6WHF78qLlypOmXAg9tVDy2FQ/viewform" target="_blank" rel="noopener">お問い合わせフォーム</a>からお寄せください。</p></aside>
+<aside class="data-note article-chrome"><h2>データについて</h2><p>SNSの件数は、Yahoo!リアルタイム検索で2026年6月27日〜10月31日に集めたXの公開投稿2,282件のうち、意見と判定した1,771件を論点と立場に分けた件数です（2026年10月31日更新）。投稿した人の中での内訳で、社会全体の世論調査ではありません。</p><p>制度の説明は、下の資料を確認日の時点で読んだ内容です。その後に変わっている場合があります。誤りのご指摘は<a href="https://docs.google.com/forms/d/e/1FAIpQLSdySbMYxEsLOYmI4jsqjIkSGl6WHF78qLlypOmXAg9tVDy2FQ/viewform" target="_blank" rel="noopener">お問い合わせフォーム</a>からお寄せください。</p></aside>
 <section class="sources article-chrome"><h2>この記事で使った資料</h2><ul><li><a href="https://www.mext.go.jp/sports/content/20251226-spt_oripara-000046627_00234.pdf" target="_blank" rel="noopener">文部科学省（スポーツ庁・文化庁）「部活動改革及び地域クラブ活動の推進等に関する総合的なガイドライン」本文（令和7年12月）</a> <small>（2026年10月14日確認）</small></li><li><a href="https://www.mext.go.jp/sports/content/20251226-spt_oripara-000046627_001.pdf" target="_blank" rel="noopener">文部科学省（スポーツ庁・文化庁）「部活動改革及び地域クラブ活動の推進等に関する総合的なガイドライン」の概要（令和7年12月）</a> <small>（2026年10月17日確認）</small></li></ul></section>
-<aside class="cta article-chrome"><h2>論点ごとの意見と投票は、テーマのページで</h2><p>部活動の地域移行について集めた意見1,677件を、論点ごとの代表的な投稿とあわせて読めます。あなたの考えに近い立場を選ぶ投票もあります。</p><a class="button" href="../bukatsu-chiiki-reaction-map.html" data-article-link="theme-cta">部活動の地域移行のページを見る</a></aside>
+<aside class="cta article-chrome"><h2>論点ごとの意見と投票は、テーマのページで</h2><p>部活動の地域移行について集めた意見1,771件を、論点ごとの代表的な投稿とあわせて読めます。あなたの考えに近い立場を選ぶ投票もあります。</p><a class="button" href="../bukatsu-chiiki-reaction-map.html" data-article-link="theme-cta">部活動の地域移行のページを見る</a></aside>
 <section class="related article-chrome"><h2>あわせて読む</h2><ul><li><a href="bukatsu-chiiki-cost.html" data-article-link="related">部活動の地域移行で親の費用負担はいくら？会費・送迎・保険</a></li><li><a href="bukatsu-chiiki-problems.html" data-article-link="related">部活動の地域移行の問題点は？進まない理由を国の調査で確認</a></li><li><a href="bukatsu-chiiki-cities.html" data-article-link="related">部活動の地域移行は市でどう違う？政令市20市の時期と進み方</a></li><li><a href="kobe-katsu.html" data-article-link="related">コベカツとは？神戸市の部活動地域移行の会費・仕組みと反応</a></li><li><a href="../bukatsu-chiiki-reaction-map.html" data-article-link="theme">部活動の地域移行のテーマページ（全論点・代表的な投稿・投票）</a></li></ul><p><a href="index.html" data-article-link="index">記事の一覧</a></p></section>
 </article>
 <footer class="footer"><p>© 2026 SNS反応まっぷ — <a href="../">トップ</a> · <a href="../about.html#operator">運営者情報</a> · <a href="../about.html#method">調査・編集方法</a> · <a href="https://docs.google.com/forms/d/e/1FAIpQLSdySbMYxEsLOYmI4jsqjIkSGl6WHF78qLlypOmXAg9tVDy2FQ/viewform" target="_blank" rel="noopener">お問い合わせ・訂正依頼</a> · <a href="../privacy.html">プライバシーポリシー</a> · <a href="../disclaimer.html">免責事項</a> · <a href="../image-policy.html">画像制作方針</a></p></footer>
 </main>
+<script src="../article-reason-journey.js?v=1" defer></script>
 <script>
 document.addEventListener("click", function (event) {
   var link = event.target.closest && event.target.closest("a[data-article-link]");

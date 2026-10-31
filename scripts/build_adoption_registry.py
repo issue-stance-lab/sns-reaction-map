@@ -108,7 +108,7 @@ def load_sources(root, evidence_root, topic):
     return sources,metadata
 
 
-def build(root=ROOT,evidence_root=EVIDENCE,snapshot_at=None):
+def build(root=ROOT,evidence_root=EVIDENCE,snapshot_at=None,topics=None):
     themes=yaml.safe_load((root/'THEMES.yaml').read_text())['themes']
     seed=read(root/DECISIONS)
     validate_evidence(root,evidence_root,seed)
@@ -117,6 +117,8 @@ def build(root=ROOT,evidence_root=EVIDENCE,snapshot_at=None):
             'scope_config':{'file':'configs/adoption-sources.yaml','sha256':digest(root/'configs/adoption-sources.yaml')},
             'decision_seed':{'file':DECISIONS,'sha256':digest(root/DECISIONS)},'topics':{}}
     for topic,theme in sorted(themes.items()):
+        if topics is not None and topic not in topics:
+            continue
         canonical_path=root/theme['sample_file'];rows=read(canonical_path)
         public_path=root/'data/public/themes'/f'{topic}.json'
         public=read(public_path) if public_path.exists() else None

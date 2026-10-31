@@ -42,6 +42,8 @@ h1{margin:0 0 10px;font-size:clamp(23px,5.6vw,32px);line-height:1.45}
 .article-body h2{font-size:21px;line-height:1.5;margin:38px 0 12px;padding-bottom:8px;border-bottom:2px solid var(--accent-soft)}
 .article-body h3{font-size:17px;margin:26px 0 8px}
 .article-body p,.article-body li{color:#2b3445}
+/* 理由比較へのリンクは、折り返しの行間も押せる44px以上の面にする。 */
+.article-body p a[href*=".html#issue-"],.article-body td a[href*=".html#issue-"]{display:inline-block;max-width:100%;min-height:44px;padding:6px 0;vertical-align:middle}
 .article-body ul,.article-body ol{padding-left:22px}
 .table-wrap{overflow-x:auto;margin:14px 0 20px;border:1px solid var(--line);border-radius:var(--radius);background:var(--panel)}
 table{border-collapse:collapse;width:100%;font-size:14px;line-height:1.6}
@@ -66,6 +68,11 @@ tr:last-child td{border-bottom:0}
 .sources ul,.related ul{margin:0;padding-left:20px}
 .sources li{margin:0 0 6px}
 .sources small{color:var(--muted)}
+.issue-entry{margin:16px 0 24px;padding:12px 16px;border-left:4px solid var(--accent);background:var(--accent-soft);font-size:14px}
+.issue-entry p{margin:0 0 4px;font-weight:700}
+.issue-entry ul{list-style:none;margin:0;padding:0}
+.issue-entry a{display:inline-flex;align-items:center;min-height:44px;font-weight:700;line-height:1.6}
+.issue-entry a:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
 .cta{background:var(--accent-soft);border-color:#c7dcf8}
 .cta p{margin:0 0 10px}
 .cta a.button{display:inline-block;padding:10px 16px;border-radius:999px;background:var(--accent);color:#fff;font-weight:700;text-decoration:none}
@@ -160,9 +167,9 @@ tr:last-child td{border-bottom:0}
 <h1>部活動の地域移行で親の費用負担はいくら？会費・送迎・保険</h1>
 <p class="byline article-chrome">SNS反応まっぷ編集部・公開 2026年10月17日</p>
 </header>
-<nav class="toc article-chrome" aria-label="目次"><p>目次</p><ol><li><a href="#s1">部活動の地域移行で会費はいくら？国のイメージは月1,000〜3,000円</a></li><li><a href="#s2">地域クラブの月謝と困窮世帯への支援は自治体で違う</a></li><li><a href="#s3">会費以外の親の負担は送迎・大会参加費・保険</a></li><li><a href="#s4">地域移行の費用負担、SNSの意見は「誰が払うか」で分かれる</a></li><li><a href="#s5">保護者の負担額、公的な統計では確かめられないこと</a></li></ol></nav>
+
 <div class="article-body">
-<p>部活動の地域移行で保護者が負担する会費は、休日に週1日・月4日ほどの活動で月額1,000〜3,000円程度というのが国の示したイメージです。実際の額は市区町村やクラブが決めるので、住む地域によって差が出ます。会費のほかに送迎や大会参加費、けがに備える保険でも家庭の費用負担は変わります。</p>
+<p>部活動の地域移行で保護者が負担する会費は、休日に週1日・月4日ほどの活動で月額1,000〜3,000円程度というのが国の示したイメージです。実際の額は市区町村やクラブが決めるので、住む地域によって差が出ます。会費のほかに送迎や大会参加費、けがに備える保険でも家庭の費用負担は変わります。</p><nav class="issue-entry article-chrome" aria-label="この話題に関係する論点"><p>この話題の意見と理由を読む</p><ul><li><a href="../bukatsu-chiiki-reaction-map.html#issue-bukatsu-chiiki-hiyo" data-article-link="theme-issue">費用・家庭負担の意見と理由を読む</a></li></ul></nav><nav class="toc article-chrome" aria-label="目次"><p>目次</p><ol><li><a href="#s1">部活動の地域移行で会費はいくら？国のイメージは月1,000〜3,000円</a></li><li><a href="#s2">地域クラブの月謝と困窮世帯への支援は自治体で違う</a></li><li><a href="#s3">会費以外の親の負担は送迎・大会参加費・保険</a></li><li><a href="#s4">地域移行の費用負担、SNSの意見は「誰が払うか」で分かれる</a></li><li><a href="#s5">保護者の負担額、公的な統計では確かめられないこと</a></li></ol></nav>
 <h2 id="s1">部活動の地域移行で会費はいくら？国のイメージは月1,000〜3,000円</h2>
 <p>スポーツ庁はガイドラインの<a href="https://www.mext.go.jp/sports/content/20260409-spt_oripara-000028261_1.pdf" target="_blank" rel="noopener">FAQ</a>で、休日に週1日・月4日程度の活動なら<strong>月額1,000〜3,000円程度</strong>を「参加費のイメージ」として示しました。ただしあくまでイメージで、月数百円や4,000円程度の設定も、参加費を取らずに全額を公費でまかなう運営もあり得るとしています。</p>
 <p><a href="https://www.mext.go.jp/sports/content/20251226-spt_oripara-000046627_00234.pdf" target="_blank" rel="noopener">ガイドライン</a>は、家庭が払う参加費の水準に「地方公共団体間で大きなばらつきが出ないように」するため、国が金額の目安を示すと定めています。認定を受けた地域クラブには「可能な限り低廉な参加費等」の設定も求めていますが、上限の金額は書かれていません。</p>
@@ -188,12 +195,12 @@ tr:last-child td{border-bottom:0}
 <p>中学生以下が入るスポーツ安全保険のA1区分は<a href="https://www.sportsanzen.org/Info/2025/ak1t2o00000001y5-att/R8_kaitei.pdf" target="_blank" rel="noopener">年間掛金800円</a>で、2026年度の補償は死亡3,000万円、後遺障害が最高4,500万円です。学校の災害共済給付は、死亡が3,000万円、第1級の後遺障害が4,000万円です。ただし災害共済給付は医療費の給付が別にあり、後遺障害も等級ごとに額が決まるので、最高額を並べただけではどちらが手厚いとは言えません。</p>
 <p>掛金を誰が出し、どう加入するかも自治体で違います。神戸市は市立中学生の保険料を市が負担しています。名古屋市は、活動団体が参加者を傷害保険や賠償責任保険に入れる決まりです。</p>
 <h2 id="s4">地域移行の費用負担、SNSの意見は「誰が払うか」で分かれる</h2>
-<p>SNS反応まっぷは2026年6月27日〜10月18日に、Yahoo!リアルタイム検索でXの公開投稿を2,129件集めました。意見と判定した1,677件のうち、費用や家庭の負担を論じた投稿は174件でした。無作為に選んだ人への世論調査ではないため、ここでの内訳は投稿した人の中の割合にとどまります。</p>
-<figure class="stance-chart article-chrome"><figcaption>「費用・家庭負担」の意見174件の立場（2026年6月27日〜10月18日）</figcaption><div class="bar" role="img" aria-label="費用・家庭負担の意見174件の内訳: 移行支持35件（20.1%）、条件付き・改善要求47件（27.0%）、中立・情報56件（32.2%）、慎重・反対36件（20.7%）"><span class="seg s1" style="width:20.11%"></span><span class="seg s2" style="width:27.01%"></span><span class="seg s3" style="width:32.18%"></span><span class="seg s4" style="width:20.69%"></span></div><ul class="legend"><li><i class="s1"></i>移行支持 35件（20.1%）</li><li><i class="s2"></i>条件付き・改善要求 47件（27.0%）</li><li><i class="s3"></i>中立・情報 56件（32.2%）</li><li><i class="s4"></i>慎重・反対 36件（20.7%）</li></ul><p class="chart-note">Xの公開投稿のサンプルを分類した件数です。社会全体の世論調査ではありません。</p></figure>
-<p>条件付き・改善要求の47件は、移行支持の35件を上回ります。移行支持の割合は、教員の働き方を論じた投稿では45.3%、費用・家庭負担では20.1%です。集めた投稿を見る限り、お金の話になると移行に前向きな側も条件を付けています。</p>
+<p>SNS反応まっぷは2026年6月27日〜10月31日に、Yahoo!リアルタイム検索でXの公開投稿を2,282件集めました。意見と判定した1,771件のうち、費用や家庭の負担を論じた投稿は182件でした。無作為に選んだ人への世論調査ではないため、ここでの内訳は投稿した人の中の割合にとどまります。</p>
+<figure class="stance-chart article-chrome"><figcaption>「費用・家庭負担」の意見182件の立場（2026年6月27日〜10月31日）</figcaption><div class="bar" role="img" aria-label="費用・家庭負担の意見182件の内訳: 移行支持36件（19.8%）、条件付き・改善要求50件（27.5%）、中立・情報57件（31.3%）、慎重・反対39件（21.4%）"><span class="seg s1" style="width:19.78%"></span><span class="seg s2" style="width:27.47%"></span><span class="seg s3" style="width:31.32%"></span><span class="seg s4" style="width:21.43%"></span></div><ul class="legend"><li><i class="s1"></i>移行支持 36件（19.8%）</li><li><i class="s2"></i>条件付き・改善要求 50件（27.5%）</li><li><i class="s3"></i>中立・情報 57件（31.3%）</li><li><i class="s4"></i>慎重・反対 39件（21.4%）</li></ul><p class="chart-note">Xの公開投稿のサンプルを分類した件数です。社会全体の世論調査ではありません。</p></figure>
+<p>条件付き・改善要求の50件は、移行支持の36件を上回ります。移行支持の割合は、教員の働き方を論じた投稿では45.0%、費用・家庭負担では19.8%です。集めた投稿を見る限り、お金の話になると移行に前向きな側も条件を付けています。</p>
 <p>移行支持に分類した投稿の中にも、移行には賛成だが保護者へ負担を付け替えることは認めない、という趣旨のものがありました。逆に、移行は支持しながら税金を使うことには反対し、費用は自分たちで払えばよいとする投稿もあります。</p>
 <p>支持する側にとっては、教員がただで指導する前提をやめることが先です。部費が安かったのは教員の指導が無償だったからだ、という投稿の指摘は、検討会議の提言の説明とも重なります。</p>
-<p>慎重・反対の36件で繰り返し出てくるのは、会費と送迎が重なったときに部活をあきらめる子が出るという心配です。反対する人たちから見ると、学校の部活動は家計に余裕がなくても入れる場所でした。そこに月謝と送迎の手間が加われば、お金と時間を出せる家の子しか続けられなくなると見ています。</p>
+<p>慎重・反対の39件で繰り返し出てくるのは、会費と送迎が重なったときに部活をあきらめる子が出るという心配です。反対する人たちから見ると、学校の部活動は家計に余裕がなくても入れる場所でした。そこに月謝と送迎の手間が加われば、お金と時間を出せる家の子しか続けられなくなると見ています。</p>
 <p>守りたいのは、家の経済力で子どもの活動の機会が決まらないことです。反対の立場をとりながら、月謝を自治体が持つことや部活への予算投入を求める投稿もありました。</p>
 <p>条件付き・改善要求の投稿は、誰が払うかで二つに分かれます。市税で会費を補助してほしい、経済的な理由で子どもがスポーツをあきらめずに済む仕組みにしてほしい、という要求が一方にあります。もう一方は、部活の意義を唱える側が自分たちで費用を持つべきだという考えです。</p>
 <p>中立・情報に分類した投稿にも、部活の隠れていた費用が月会費として見えるようになった、という受け止めがありました。賛成の投稿にも反対の投稿にも、いまの部費の安さは誰かの無償の手間に支えられてきた、という認識が出てきます。見えるようになった費用を税金で持つのか家庭が払うのか、意見が分かれるのはそこです。</p>
@@ -201,13 +208,14 @@ tr:last-child td{border-bottom:0}
 <p>全国の地域クラブの会費を平均で示した国や自治体の統計は、確認できていません。SNSで見かける「運動部の費用は年平均8万4千円」「保護者の65%が負担を感じている」という数字も、国や自治体の統計では裏が取れませんでした。出どころは規模と方法を公表した民間のネット調査で、投稿の数字が誤りだという意味ではありません。</p>
 <p>名古屋市の2026年度の支援上限は公式資料で確かめられず、京都市の会費はこれから決まる段階です。交付金が終わった後の保護者負担を心配する投稿もありましたが、国の補助が改革実行期間の終わる2031年度より後も続くかどうかは確認できていません。</p>
 </div>
-<aside class="data-note article-chrome"><h2>データについて</h2><p>SNSの件数は、Yahoo!リアルタイム検索で2026年6月27日〜10月18日に集めたXの公開投稿2,129件のうち、意見と判定した1,677件を論点と立場に分けた件数です（2026年10月18日更新）。投稿した人の中での内訳で、社会全体の世論調査ではありません。</p><p>制度の説明は、下の資料を確認日の時点で読んだ内容です。その後に変わっている場合があります。誤りのご指摘は<a href="https://docs.google.com/forms/d/e/1FAIpQLSdySbMYxEsLOYmI4jsqjIkSGl6WHF78qLlypOmXAg9tVDy2FQ/viewform" target="_blank" rel="noopener">お問い合わせフォーム</a>からお寄せください。</p></aside>
+<aside class="data-note article-chrome"><h2>データについて</h2><p>SNSの件数は、Yahoo!リアルタイム検索で2026年6月27日〜10月31日に集めたXの公開投稿2,282件のうち、意見と判定した1,771件を論点と立場に分けた件数です（2026年10月31日更新）。投稿した人の中での内訳で、社会全体の世論調査ではありません。</p><p>制度の説明は、下の資料を確認日の時点で読んだ内容です。その後に変わっている場合があります。誤りのご指摘は<a href="https://docs.google.com/forms/d/e/1FAIpQLSdySbMYxEsLOYmI4jsqjIkSGl6WHF78qLlypOmXAg9tVDy2FQ/viewform" target="_blank" rel="noopener">お問い合わせフォーム</a>からお寄せください。</p></aside>
 <section class="sources article-chrome"><h2>この記事で使った資料</h2><ul><li><a href="https://www.mext.go.jp/sports/content/20260409-spt_oripara-000028261_1.pdf" target="_blank" rel="noopener">スポーツ庁「部活動改革及び地域クラブ活動の推進等に関する総合的なガイドライン」FAQ（令和8年3月31日時点）</a> <small>（2026年10月17日確認）</small></li><li><a href="https://www.mext.go.jp/sports/content/20251226-spt_oripara-000046627_00234.pdf" target="_blank" rel="noopener">文部科学省（スポーツ庁・文化庁）「部活動改革及び地域クラブ活動の推進等に関する総合的なガイドライン」（令和7年12月）</a> <small>（2026年10月17日確認）</small></li><li><a href="https://www.mext.go.jp/sports/content/20260409-spt_oripara-000028257_1.pdf" target="_blank" rel="noopener">スポーツ庁・文化庁「部活動の地域展開等の全国的な実施」（令和8年度予算）</a> <small>（2026年10月17日確認）</small></li><li><a href="https://www.mext.go.jp/sports/content/20220722-spt_oripara-000023182_2.pdf" target="_blank" rel="noopener">運動部活動の地域移行に関する検討会議「運動部活動の地域移行に関する検討会議提言」（令和4年6月6日）第7章・第8章</a> <small>（2026年9月7日確認）</small></li><li><a href="https://www.city.chiba.jp/kyoiku/gakkokyoiku/hokentaiiku/tiikiikou/tiikiikou_r8torikumijoukyou.html" target="_blank" rel="noopener">千葉市教育委員会「部活動地域展開に関する令和8年度の取組み」</a> <small>（2026年10月17日確認）</small></li><li><a href="https://www.city.nagoya.jp/_res/projects/default_project/_page_/001/016/914/jisshihoushingaiyou.pdf" target="_blank" rel="noopener">名古屋市教育委員会「名古屋市における土・日曜日のクラブ活動の実施方針について」概要版</a> <small>（2026年10月17日確認）</small></li><li><a href="https://www.city.kobe.lg.jp/a33992/bukatus/chiikiikou.html" target="_blank" rel="noopener">神戸市「部活動の地域展開」（コベカツ）</a> <small>（2026年10月17日確認）</small></li><li><a href="https://www.city.kyoto.lg.jp/kyoiku/page/0000355478.html" target="_blank" rel="noopener">京都市教育委員会「京都市学校部活動地域展開実施計画」</a> <small>（2026年9月23日確認）</small></li><li><a href="https://www.city.itabashi.tokyo.jp/_res/projects/default_project/_page_/001/052/379/vision2030.pdf" target="_blank" rel="noopener">板橋区教育委員会「板橋区立中学校部活動地域移行推進ビジョン2030」</a> <small>（2026年8月31日確認）</small></li><li><a href="https://www.mext.go.jp/sports/content/20260325-spt_oripara-000048484_001.pdf" target="_blank" rel="noopener">スポーツ庁「地域クラブ活動における創設・運営ガイドブック」（令和8年3月25日公表）p.77</a> <small>（2026年8月31日確認）</small></li><li><a href="https://laws.e-gov.go.jp/law/414AC0000000162" target="_blank" rel="noopener">独立行政法人日本スポーツ振興センター法 第15条（e-Gov法令検索）</a> <small>（2026年9月7日確認）</small></li><li><a href="https://www.sportsanzen.org/Info/2025/ak1t2o00000001y5-att/R8_kaitei.pdf" target="_blank" rel="noopener">公益財団法人スポーツ安全協会「令和8年度加入区分・掛金・補償額（改定のお知らせ）」</a> <small>（2026年9月7日確認）</small></li></ul></section>
-<aside class="cta article-chrome"><h2>論点ごとの意見と投票は、テーマのページで</h2><p>部活動の地域移行について集めた意見1,677件を、論点ごとの代表的な投稿とあわせて読めます。あなたの考えに近い立場を選ぶ投票もあります。</p><a class="button" href="../bukatsu-chiiki-reaction-map.html" data-article-link="theme-cta">部活動の地域移行のページを見る</a></aside>
+<aside class="cta article-chrome"><h2>論点ごとの意見と投票は、テーマのページで</h2><p>部活動の地域移行について集めた意見1,771件を、論点ごとの代表的な投稿とあわせて読めます。あなたの考えに近い立場を選ぶ投票もあります。</p><a class="button" href="../bukatsu-chiiki-reaction-map.html" data-article-link="theme-cta">部活動の地域移行のページを見る</a></aside>
 <section class="related article-chrome"><h2>あわせて読む</h2><ul><li><a href="bukatsu-chiiki-problems.html" data-article-link="related">部活動の地域移行の問題点は？進まない理由を国の調査で確認</a></li><li><a href="bukatsu-chiiki-opinions.html" data-article-link="related">部活動の地域移行に反対・賛成する理由は？SNSの意見を論点別に</a></li><li><a href="bukatsu-chiiki-cities.html" data-article-link="related">部活動の地域移行は市でどう違う？政令市20市の時期と進み方</a></li><li><a href="kobe-katsu.html" data-article-link="related">コベカツとは？神戸市の部活動地域移行の会費・仕組みと反応</a></li><li><a href="../bukatsu-chiiki-reaction-map.html" data-article-link="theme">部活動の地域移行のテーマページ（全論点・代表的な投稿・投票）</a></li></ul><p><a href="index.html" data-article-link="index">記事の一覧</a></p></section>
 </article>
 <footer class="footer"><p>© 2026 SNS反応まっぷ — <a href="../">トップ</a> · <a href="../about.html#operator">運営者情報</a> · <a href="../about.html#method">調査・編集方法</a> · <a href="https://docs.google.com/forms/d/e/1FAIpQLSdySbMYxEsLOYmI4jsqjIkSGl6WHF78qLlypOmXAg9tVDy2FQ/viewform" target="_blank" rel="noopener">お問い合わせ・訂正依頼</a> · <a href="../privacy.html">プライバシーポリシー</a> · <a href="../disclaimer.html">免責事項</a> · <a href="../image-policy.html">画像制作方針</a></p></footer>
 </main>
+<script src="../article-reason-journey.js?v=1" defer></script>
 <script>
 document.addEventListener("click", function (event) {
   var link = event.target.closest && event.target.closest("a[data-article-link]");
