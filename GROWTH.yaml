@@ -48,7 +48,7 @@ kpi:
       weekly_users: 12
       pageviews: 23
       pages_per_session: 1.917
-      votes_total: null
+      votes_total: 26
       votes_week: null
       gsc_impressions: 138
       gsc_clicks: 9
@@ -63,6 +63,8 @@ kpi:
         公開ページの共通クライアントによるGETも失敗（課題107）。投票は欠測、Xフォロワーは未確認。
         直近日のGSC集計待ちと、公開ホスト内の運営者アクセスの除外状態は未確認。
         調査とJSONは /Volumes/M2-WorkSpace/Projects/副業/UIデザイン調査/2026-10-31_SNS反応まっぷ_全体点検/ に保存。
+        同日追記: 管理画面でプロジェクト停止を確認しResumeで復旧。現行APIの実集計26票を取得できたため欠測を訂正。
+        保存・重複防止はトランザクションで検証しROLLBACK。実票を加えるブラウザ通し送信は未実施。
     - date: 2026-10-11
       weekly_users: 13           # GA4: 過去7日アクティブユーザー（公開ホスト限定）
       pageviews: 98              # GA4: 過去7日（公開ホスト限定）
