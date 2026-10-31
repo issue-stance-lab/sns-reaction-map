@@ -1,5 +1,5 @@
 version: 1
-updated_at: "2026-10-10"
+updated_at: "2026-10-31"
 
 rules:
   required_for:
@@ -2996,3 +2996,20 @@ items:
     requested_at: "2026-10-31"
     decided_at: "2026-10-31"
     decision_note: "オーナーが監査の説明（推移の見かけの差・制度確認日が10/14のまま）を読んだうえで、このチャットで『公開して』と承認（2026-10-31）。承認時点の候補（収集2,282件・意見1,771件）から、データ内容は変えていない。"
+
+  - id: approval-20261031-early-issue-links
+    department: engineering-growth
+    action: website_publication
+    summary: 短い回答の直後から関連論点へ進む案内を公開する
+    reason: 部活動の短答と記事15本から独自分析へ進む距離を短くする。関連する25リンクと、外部記事から指定論点へ移る処理を公開する。
+    risks:
+    - Googleの検索登録回復や流入増加を保証するものではない
+    - 計測イベントの本番受信は公開後に確認する
+    recommendation: approve
+    evidence:
+    - quality/reviews/2026-10-31-early-issue-links.md
+    - tasks/task-51.md
+    status: approved
+    requested_at: '2026-10-31'
+    decided_at: '2026-10-31'
+    decision_note: オーナーがこのチャットで「この内容で公開して、本番でもスマホで論点への移動を確認して、課題表を更新して」と承認。承認対象は34d901c6のdocs（tree 4294970692a0bb873321aac56c34d506460daaf4）。公開文・数値・出典は確認版から変更しない。
