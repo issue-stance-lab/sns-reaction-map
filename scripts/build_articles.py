@@ -585,7 +585,8 @@ GA_TAG = """<!-- GA_TAG_START -->
 
 # 記事から出ていくリンクのクリックを数える（OPERATIONS.md「計測できない施策は実装しない」）。
 # 内部リンクに utm を付けるとセッションの流入元が上書きされるため、GA4 のイベントで数える。
-CLICK_SCRIPT = """<script>
+CLICK_SCRIPT = """<script src="../article-reason-journey.js?v=1" defer></script>
+<script>
 document.addEventListener("click", function (event) {
   var link = event.target.closest && event.target.closest("a[data-article-link]");
   if (!link || typeof window.gtag !== "function") return;

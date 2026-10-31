@@ -1,4 +1,10 @@
 (function () {
+  // 記事から来た読者が理由一覧まで進んだかを、共通の計測器で確認する。
+  var journeyScript = document.createElement('script');
+  journeyScript.src = new URL('article-reason-journey.js?v=1', document.currentScript.src).href;
+  journeyScript.defer = true;
+  document.head.appendChild(journeyScript);
+
   // ---- 共有URLの正典 ------------------------------------------------------
   // シェア導線（FAB / 投票後 / ビルダー生成分）は必ずここを通す。
   // UTMが無いとGA4では t.co / referral にまとまり、どの導線からの流入か区別できない。
