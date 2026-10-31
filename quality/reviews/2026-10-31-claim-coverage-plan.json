@@ -1,0 +1,350 @@
+{
+  "as_of": "2026-10-31",
+  "status": "prepared_not_completed",
+  "themes": [
+    {
+      "theme": "henoko-student-accident",
+      "checked_on": "2026-09-13",
+      "period_end": "2026-10-23",
+      "next_refresh": "2026-11-07",
+      "collected": 658,
+      "opinion_count": 511,
+      "canonical_file": "social-samples/henoko/henoko_hermes_arena_classified.json",
+      "canonical_sha256": "e906c8ee47a0672fe6302dbaf63efb4a568a07750c7197298157948606352714",
+      "claim_posts_file": "data/henoko-student-accident_claim_posts.json",
+      "claims": [
+        {
+          "claim": "転覆時、生徒が乗る船に引率教員は同行していなかった",
+          "finding": "文科省の見解本文の「研修旅行の計画・事前準備等」に記載があります。学校の計画・引率体制の確認であり、個人の刑事責任を確定したものではありません。",
+          "id": "school-escort",
+          "issue_ids": [
+            "henoko-student-accident-safety"
+          ],
+          "matched_post_count": 2,
+          "sources": [
+            {
+              "name": "文部科学省：研修旅行の検証見解（2頁）",
+              "url": "https://www.mext.go.jp/content/202600525-ope_dev02-000050128_1.pdf"
+            }
+          ],
+          "verdict": "fact"
+        },
+        {
+          "claim": "当日は波浪警報が出ていた",
+          "finding": "文科省資料に記されているのは波浪注意報です。危険の指摘と、気象情報の種類は分けて読む必要があります。注意報だったから安全だった、という意味でもありません。",
+          "id": "weather-advisory",
+          "issue_ids": [
+            "henoko-student-accident-safety",
+            "henoko-student-accident-base-politics"
+          ],
+          "matched_post_count": 3,
+          "sources": [
+            {
+              "name": "文部科学省：安全管理の確認事項（3〜4頁）",
+              "url": "https://www.mext.go.jp/content/202600525-ope_dev02-000050128_1.pdf"
+            }
+          ],
+          "verdict": "gap"
+        },
+        {
+          "claim": "文科省は、辺野古への移設工事に関する学習が教育基本法に反すると判断した",
+          "finding": "文科省は、当時把握した情報に基づいて判断しています。様々な見解の提示、抗議船の利用、しおり等を総合し、辺野古への移設工事に関する学習が同法第14条第2項に反するとしました。その判断への賛否と、判断が公表された事実は別です。",
+          "id": "education-finding",
+          "issue_ids": [
+            "henoko-student-accident-neutrality"
+          ],
+          "matched_post_count": 6,
+          "sources": [
+            {
+              "name": "文部科学省：教育活動についての見解（7頁）",
+              "url": "https://www.mext.go.jp/content/202600525-ope_dev02-000050128_1.pdf"
+            }
+          ],
+          "verdict": "fact"
+        },
+        {
+          "claim": "文科省が指摘したのは、危険な乗船をやめることだけだ",
+          "finding": "見解は安全管理に加え、教育活動の内容も対象にしています。一方、平和学習そのものを否定した文書ではありません。",
+          "id": "not-safety-only",
+          "issue_ids": [
+            "henoko-student-accident-peace-education"
+          ],
+          "matched_post_count": 1,
+          "sources": [
+            {
+              "name": "文部科学省：安全管理・教育活動の見解（3〜8頁）",
+              "url": "https://www.mext.go.jp/content/202600525-ope_dev02-000050128_1.pdf"
+            }
+          ],
+          "verdict": "gap"
+        },
+        {
+          "claim": "事故の船は、海上運送法の事業登録を受けずに運送していた",
+          "finding": "国土交通省は、2隻による運送が事業登録を受けていなかったと公表しました。転覆した船のうち1隻の船長について、必要な登録を欠く違反と判断し、告発すると発表しています。事故の原因や刑事裁判の結論とは別の確認です。",
+          "id": "unregistered-service",
+          "issue_ids": [
+            "henoko-student-accident-safety"
+          ],
+          "matched_post_count": 1,
+          "sources": [
+            {
+              "name": "国土交通省：海上運送法違反について（5月22日）",
+              "url": "https://www.mlit.go.jp/report/press/kaiji03_hh_000224.html"
+            }
+          ],
+          "verdict": "fact"
+        },
+        {
+          "claim": "教育基本法は、政治的教養を学ぶこと自体を否定していない",
+          "finding": "4月通知の別添は政治的教養を尊重する規定を説明し、多様な見解を通じて生徒が判断する指導を求めています。特定政党のための政治教育等の禁止と併せて読む必要があります。",
+          "id": "political-learning",
+          "issue_ids": [
+            "henoko-student-accident-neutrality"
+          ],
+          "matched_post_count": 1,
+          "sources": [
+            {
+              "name": "文部科学省：4月7日通知の別添（7〜8頁）",
+              "url": "https://www.mext.go.jp/content/20260408-mxt_kyousei01-000048885_2.pdf"
+            }
+          ],
+          "verdict": "fact"
+        }
+      ],
+      "review_scope": "既存の照合範囲を示すID台帳が不足しているため、現行の意見全件を安全側の対象に固定。次回の新規・修正意見も追加する。",
+      "review_complete": false
+    },
+    {
+      "theme": "bukatsu-chiiki",
+      "checked_on": "2026-09-02",
+      "period_end": "2026-10-31",
+      "next_refresh": "2026-11-08",
+      "collected": 2282,
+      "opinion_count": 1771,
+      "canonical_file": "social-samples/bukatsu-chiiki_hermes_classified.json",
+      "canonical_sha256": "56bb4693cf60c43b3295fc1b9ea9b8da876a37ee51160a76b448489e2fec55e7",
+      "claim_posts_file": "data/bukatsu-chiiki_claim_posts.json",
+      "claims": [
+        {
+          "claim": "部活動の地域移行は、もともと2023〜2025年度（令和5〜7年度）で完了する計画だった",
+          "finding": "3年間という期間はそのとおりだが、資料はそれを「重点的に支援する期間」と書いており、全国の移行を終える期限としては書いていない。",
+          "id": "original-deadline",
+          "issue_ids": [
+            "bukatsu-chiiki-seido"
+          ],
+          "matched_post_count": 4,
+          "sources": [
+            {
+              "name": "スポーツ庁・文化庁 学校部活動及び新たな地域クラブ活動の在り方等に関する総合的なガイドライン（令和4年12月・PDF）",
+              "url": "https://www.mext.go.jp/sports/content/20221227-spt_oripara-000026750_2.pdf"
+            },
+            {
+              "name": "文部科学省 部活動改革及び地域クラブ活動の推進等に関する総合的なガイドライン（令和7年12月・PDF）",
+              "url": "https://www.mext.go.jp/sports/content/20251226-spt_oripara-000046627_00234.pdf"
+            }
+          ],
+          "verdict": "gap"
+        },
+        {
+          "claim": "地域移行に国はほとんど金を出さず、あとは自治体と家庭任せだ",
+          "finding": "国費は付いており、額も公表されている。ただし補助の対象は運営経費側で、家庭が払う会費そのものを国が肩代わりする仕組みではないため、負担が残るという感覚のほうは資料と矛盾しない。",
+          "id": "national-funding",
+          "issue_ids": [
+            "bukatsu-chiiki-seido",
+            "bukatsu-chiiki-hiyo"
+          ],
+          "matched_post_count": 6,
+          "sources": [
+            {
+              "name": "スポーツ庁 部活動の地域展開等の全国的な実施（令和8年度当初予算・PDF）",
+              "url": "https://www.mext.go.jp/sports/content/20260409-spt_oripara-000028257_1.pdf"
+            },
+            {
+              "name": "スポーツ庁 学習指導要領における部活動・地域クラブ活動の取扱いに関する検討ワーキンググループ（第2回）議事録",
+              "url": "https://www.mext.go.jp/sports/b_menu/shingi/043_index/001/gijiroku/jsa_00003.html"
+            }
+          ],
+          "verdict": "gap"
+        },
+        {
+          "claim": "地域移行後の指導者の報酬は最低賃金並みで、だから引き受け手がいない",
+          "finding": "最低賃金に届かない試算（熊本市の副顧問1,000円）は実在するが、公表されている時間額は1,000円台後半から2,000円台までひらきがある。全国どこでも最低賃金並み、という形にはなっていない。",
+          "id": "coach-pay",
+          "issue_ids": [
+            "bukatsu-chiiki-ukezara"
+          ],
+          "matched_post_count": 10,
+          "sources": [
+            {
+              "name": "熊本市教育委員会 熊本市立中学校における新しい学校部活動の在り方（素案）（PDF）",
+              "url": "https://www.city.kumamoto.jp/kiji00354887/5_54887_419171_up_PHDXW6PS.pdf"
+            },
+            {
+              "name": "厚生労働省 令和7年度地域別最低賃金の審議結果・最低賃金額一覧（PDF）",
+              "url": "https://www.mhlw.go.jp/content/11201250/001687973.pdf#page=4"
+            },
+            {
+              "name": "熊本市 令和8年度 熊本市立中学校部活動指導員（会計年度任用職員）募集",
+              "url": "https://www.city.kumamoto.jp/kiji00370419/index.html"
+            }
+          ],
+          "verdict": "gap"
+        },
+        {
+          "claim": "部活動指導員は顧問を任され大会の引率もできるが、外部指導者は技術指導しかできない",
+          "finding": "顧問を命じられること、大会の引率ができることは、どちらも資料に書いてある。ただし投稿が添える「会計年度任用の非常勤職員」という身分は国の資料には無く、身分や任用は学校の設置者が規則で定める（自治体ごとに違う）。",
+          "id": "shidoin-role",
+          "issue_ids": [
+            "bukatsu-chiiki-ukezara"
+          ],
+          "matched_post_count": 4,
+          "sources": [
+            {
+              "name": "スポーツ庁 部活動指導員の概要（PDF）",
+              "url": "https://www.mext.go.jp/sports/content/20240930-spt_oripara-000014391_2.pdf"
+            },
+            {
+              "name": "e-Gov法令検索 学校教育法施行規則 第七十八条の二",
+              "url": "https://laws.e-gov.go.jp/law/322M40000080011"
+            }
+          ],
+          "verdict": "fact"
+        },
+        {
+          "claim": "中体連の大会に地域クラブのチームが出られるようになっている",
+          "finding": "参加できるようになっているのはそのとおり。ただし細則を読むと、学校の部活動と地域クラブの掛け持ちで大会に出ることは認められておらず、生徒はどちらか一方を選ぶことになる。",
+          "id": "chutairen-entry",
+          "issue_ids": [
+            "bukatsu-chiiki-kyoiku"
+          ],
+          "matched_post_count": 4,
+          "sources": [
+            {
+              "name": "日本中学校体育連盟 令和7年度全国中学校体育大会 地域クラブ活動の参加資格の特例競技部細則（令６日中体発第305号・PDF）",
+              "url": "https://www.fukui-jpa.com/data/saisoku061011.pdf"
+            }
+          ],
+          "verdict": "fact"
+        },
+        {
+          "claim": "運動部の費用は年平均8万4千円で、保護者の65%が負担を感じている",
+          "finding": "投稿が間違いという意味ではない。国や自治体が公表した統計としては裏が取れなかった、というだけ。数字の出どころは、規模と方法が公表されている民間のネット調査だった。",
+          "id": "club-cost-survey",
+          "issue_ids": [
+            "bukatsu-chiiki-hiyo"
+          ],
+          "matched_post_count": 3,
+          "sources": [],
+          "verdict": "miss"
+        },
+        {
+          "claim": "給特法は改正されたが、教職調整額は4%のままだ",
+          "finding": "この投稿が書かれた2026年8月の時点で、教職調整額はすでに5%へ上がっている。足りないという評価は評価として、4%のままという事実の部分は法律の条文と合わない。",
+          "id": "kyushokuchoseigaku",
+          "issue_ids": [
+            "bukatsu-chiiki-kyoin"
+          ],
+          "matched_post_count": 1,
+          "sources": [
+            {
+              "name": "e-Gov法令検索 公立の義務教育諸学校等の教育職員の給与等に関する特別措置法 第三条・附則",
+              "url": "https://laws.e-gov.go.jp/law/346AC0000000077"
+            }
+          ],
+          "verdict": "gap"
+        }
+      ],
+      "review_scope": "既存の照合範囲を示すID台帳が不足しているため、現行の意見全件を安全側の対象に固定。次回の新規・修正意見も追加する。",
+      "review_complete": false
+    },
+    {
+      "theme": "school-nickname-ban",
+      "checked_on": "2026-09-12",
+      "period_end": "2026-10-18",
+      "next_refresh": "2026-11-15",
+      "collected": 507,
+      "opinion_count": 110,
+      "canonical_file": "social-samples/school-nickname-ban_hermes_arena_classified.json",
+      "canonical_sha256": "0e0a47ef1812572274d529aea3a0162ad565aed988be19f61b1c48032e4fe41d",
+      "claim_posts_file": "data/school-nickname-ban_claim_posts.json",
+      "claims": [
+        {
+          "claim": "今の学校では、あだ名禁止が普通になっている",
+          "finding": "確認した法律・国の基本方針・生徒指導提要には、あだ名禁止や全員さん付けを全国一律に求める記述は見当たりません。これだけでは導入校の割合も分かりません。個別の学校で導入されているという体験談と、全国的な普及の度合いを分けて読む必要があります。",
+          "id": "national-rule",
+          "issue_ids": [
+            "school-nickname-ban-school-practice"
+          ],
+          "matched_post_count": 2,
+          "sources": [
+            {
+              "name": "e-Gov：いじめ防止対策推進法",
+              "url": "https://laws.e-gov.go.jp/law/425AC1000000071"
+            },
+            {
+              "name": "文部科学省：生徒指導提要（改訂版）",
+              "url": "https://www.mext.go.jp/content/20230220-mxt_jidou01-000024699-201-1.pdf"
+            }
+          ],
+          "verdict": "miss"
+        },
+        {
+          "claim": "あだ名禁止は憲法違反なので従う必要がない",
+          "finding": "今回の資料確認では、この断言を支える判例を特定できませんでした。生徒指導提要は校則について、教育目的と社会通念上の合理性を踏まえると説明しています。個々のルールの内容や運用を確かめず、禁止はすべて違憲だと結論づけることはできません。",
+          "id": "constitution",
+          "issue_ids": [
+            "school-nickname-ban-uniform-rule"
+          ],
+          "matched_post_count": 1,
+          "sources": [
+            {
+              "name": "文部科学省：生徒指導提要（改訂版）",
+              "url": "https://www.mext.go.jp/content/20230220-mxt_jidou01-000024699-201-1.pdf"
+            }
+          ],
+          "verdict": "miss"
+        },
+        {
+          "claim": "ルールは、禁止の理由を理解できるように指導する必要がある",
+          "finding": "生徒指導提要の「校則の運用」は、守らせることだけにこだわらず、背景や理由を教職員が理解し、児童生徒自身が意味を理解するよう指導することを求めています。特定の呼称ルールへの賛否を国が指定したものではありません。",
+          "id": "rule-reason",
+          "issue_ids": [
+            "school-nickname-ban-gender-consideration",
+            "school-nickname-ban-uniform-rule"
+          ],
+          "matched_post_count": 2,
+          "sources": [
+            {
+              "name": "文部科学省：生徒指導提要（改訂版）",
+              "url": "https://www.mext.go.jp/content/20230220-mxt_jidou01-000024699-201-1.pdf"
+            }
+          ],
+          "verdict": "fact"
+        },
+        {
+          "claim": "嫌な呼び名が、いじめにつながることがある",
+          "finding": "法律は、一定の人的関係にある他の児童生徒から心理的・物理的な影響を受け、対象となった子供が心身の苦痛を感じる行為をいじめと定義しています。基本方針も、被害性に着目する考え方です。あだ名という形式だけで一律に決まるわけではなく、個別の事情の確認が要ります。",
+          "id": "unwanted-name",
+          "issue_ids": [
+            "school-nickname-ban-psychological-safety",
+            "school-nickname-ban-individual-choice"
+          ],
+          "matched_post_count": 3,
+          "sources": [
+            {
+              "name": "e-Gov：いじめ防止対策推進法",
+              "url": "https://laws.e-gov.go.jp/law/425AC1000000071"
+            },
+            {
+              "name": "文部科学省：いじめの防止等のための基本的な方針",
+              "url": "https://www.mext.go.jp/component/a_menu/education/detail/__icsFiles/afieldfile/2019/06/26/1400030_007.pdf"
+            }
+          ],
+          "verdict": "fact"
+        }
+      ],
+      "review_scope": "既存の照合範囲を示すID台帳が不足しているため、現行の意見全件を安全側の対象に固定。次回の新規・修正意見も追加する。",
+      "review_complete": false
+    }
+  ]
+}
