@@ -1,0 +1,81 @@
+{
+  "period": {
+    "start": "2026-10-04",
+    "end": "2026-10-30"
+  },
+  "baseline": true,
+  "published_at": null,
+  "articles": {
+    "bike-blue-ticket-unfair": {
+      "page_view": {
+        "users": 3,
+        "events": 6,
+        "status": "measured",
+        "metadata": {
+          "currencyCode": "JPY",
+          "timeZone": "Asia/Tokyo"
+        }
+      },
+      "reason_click": {
+        "users": null,
+        "events": null,
+        "status": "not_measured"
+      },
+      "reason_view": {
+        "users": null,
+        "events": null,
+        "status": "not_measured"
+      }
+    },
+    "kobe-katsu": {
+      "page_view": {
+        "users": 4,
+        "events": 5,
+        "status": "measured",
+        "metadata": {
+          "currencyCode": "JPY",
+          "timeZone": "Asia/Tokyo"
+        }
+      },
+      "reason_click": {
+        "users": null,
+        "events": null,
+        "status": "not_measured"
+      },
+      "reason_view": {
+        "users": null,
+        "events": null,
+        "status": "not_measured"
+      }
+    }
+  },
+  "notes": [
+    "usersはGA4のtotalUsers。記事別人数を足して全体人数にしない。",
+    "理由表示は同一サイト記事からの直接遷移で、選択論点の理由一覧の先頭行が半分以上表示されたとき。理解・読了は表さない。",
+    "計測拒否、広告ブロック、参照元を送らない移動は数えられない。",
+    "analytics_test=1の動作確認を除外。既存の運営者アクセス除外は未確認。",
+    "人数は各行動の集合であり、同一利用者の閉じたファネルではない。転換率と断定しない。",
+    "日付はGA4プロパティのタイムゾーン。未確定の直近日は比較に使わない。"
+  ],
+  "combined": {
+    "page_view": {
+      "users": 6,
+      "events": 11,
+      "status": "measured",
+      "metadata": {
+        "currencyCode": "JPY",
+        "timeZone": "Asia/Tokyo"
+      }
+    },
+    "reason_click": {
+      "users": null,
+      "events": null,
+      "status": "not_measured"
+    },
+    "reason_view": {
+      "users": null,
+      "events": null,
+      "status": "not_measured"
+    }
+  }
+}
