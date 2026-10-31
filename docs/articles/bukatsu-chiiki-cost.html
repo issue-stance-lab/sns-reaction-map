@@ -42,6 +42,8 @@ h1{margin:0 0 10px;font-size:clamp(23px,5.6vw,32px);line-height:1.45}
 .article-body h2{font-size:21px;line-height:1.5;margin:38px 0 12px;padding-bottom:8px;border-bottom:2px solid var(--accent-soft)}
 .article-body h3{font-size:17px;margin:26px 0 8px}
 .article-body p,.article-body li{color:#2b3445}
+/* 理由比較へのリンクは、折り返しの行間も押せる44px以上の面にする。 */
+.article-body p a[href*=".html#issue-"],.article-body td a[href*=".html#issue-"]{display:inline-block;max-width:100%;min-height:44px;padding:6px 0;vertical-align:middle}
 .article-body ul,.article-body ol{padding-left:22px}
 .table-wrap{overflow-x:auto;margin:14px 0 20px;border:1px solid var(--line);border-radius:var(--radius);background:var(--panel)}
 table{border-collapse:collapse;width:100%;font-size:14px;line-height:1.6}
