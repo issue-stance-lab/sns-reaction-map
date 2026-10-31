@@ -169,3 +169,7 @@ GitHub Actionsの公開検査とPages配信が成功。本番ページで収集6
 ## 2026-10-24 定期更新（2026-10-24収集分、10/23予定の1日遅れ）
 
 新ルール（読み手2名の伏せ読み＋Kimi突き合わせ＋新論点チェック）で2回目。139件取得・既存と重複58件・新規81件、意見40件（Kimiは67件）。累計745→826件・意見481→521件。取得期間は2026-06-27〜2026-10-24（オーナー確認済みのため手で延長）。次回は10/31。意見外41件の大半は、運転の荒い相手への罵倒としての「返納しろ」。過去回に同種が意見として残る可能性がある。`review_candidate` に `is_relevant` の修正を追加。読書面の古い注記（`claim_notes.increase`）を外した。「語られていない争点」の母数は481→521、新論点の提案は無し。監査: [quality/reviews/2026-10-24-elderly-license-revocation-refresh-review.md](../quality/reviews/2026-10-24-elderly-license-revocation-refresh-review.md)。承認は `approval-20261024-elderly-license-revocation-refresh`。
+
+## 2026-10-31 定期更新（2026-10-31収集分）
+
+新ルールで3回目。159件取得・既存と重複101件・新規58件、意見30件（Kimiは46件、補正22件）。累計826→884件・意見521→551件。取得期間は2026-06-27〜2026-10-31（オーナー確認済みのため手で伸ばした）。新論点チェックは「その他」3.3%で提案なし（「生活保護と車」5件を観察）。監査: `quality/reviews/2026-10-31-elderly-license-revocation-refresh-review.md`。
