@@ -1,0 +1,691 @@
+{
+  "schema_version": 1,
+  "audit_date_jst": "2026-11-01",
+  "created_at": "2026-11-01T12:00:06.320871+00:00",
+  "scope": "課題99・生成AI6主張の採否基準と現行一次資料の独立監査。リポジトリ読み取りのみ、外部成果物のみ保存。90日再調査ではない。",
+  "independence": "criteria-after-blind.json、official-source-urls.json、許可されたFACT_CHECKSを入力にした。旧監査結果・source_findings・前担当の判定メモは読んでいない。元判定への追従を避け、法的命題の範囲を別途検査した。",
+  "protected_unchanged": [
+    "公開HTML",
+    "正典",
+    "公開日",
+    "checked_on",
+    "quality/research/status.yaml",
+    "TASK_BOARD.md"
+  ],
+  "inputs": [
+    {
+      "path": "/Volumes/M2-WorkSpace/Projects/副業/UIデザイン調査/2026-11-01_生成AI_独立確認/criteria-after-blind.json",
+      "sha256": "fb47a51af85da4e07ae6520b3b1d7937e230a12019f1f31afafd1f3c7bc40da0"
+    },
+    {
+      "path": "/Volumes/M2-WorkSpace/Projects/副業/UIデザイン調査/2026-11-01_生成AI_独立確認/official-source-urls.json",
+      "sha256": "784152955a19a26c4101f08d6699e2e726a35099a4be3a52d8d0c906d4cd9389"
+    },
+    {
+      "path": "/Volumes/M2-WorkSpace/Projects/副業/SNS反応まっぷ/main/scripts/build_ai_copyright_process_sections.py",
+      "sha256": "6da3c1b6a69235846ed8cedd972afb498966620ce535d5e0ed14c27ad9254a5f"
+    }
+  ],
+  "method": [
+    "現行確認でwebを使用。e-Govは法令API v2本文を機械的に抽出して条文照合した。",
+    "webが内閣府の一部URLを404と返したためurllibで再取得。公式現行ページから同PDFへのリンクを確認し200・hashを保存。web失敗をリンク切れと断定していない。",
+    "PDFはpdftotext -layoutで抽出して該当頁を読んだ。通算頁は1始まり。本文頁とのずれを明記。",
+    "原本をsources-independent/へ取得日時・SHA256付きで保存。取得と精読は区別。",
+    "裁判DBの入口はメンテナンス表示のため全判例網羅・裁判例不存在の主張は行わない。"
+  ],
+  "summary": {
+    "as_written_verifiable": [
+      "unauthorized_learning_infringement",
+      "creator_protection_insufficient"
+    ],
+    "requires_limitation": [
+      "data_disclosure_needed",
+      "compensation_required",
+      "ai_output_has_copyright"
+    ],
+    "evaluative_not_decidable_as_written": [
+      "tech_innovation_over_regulation"
+    ],
+    "warning": "O（生成物権利）は現見出しの「通常同様」を「無条件」と同一視できず、R（法規制）は程度評価を制度不存在へ置換できない。凍結基準に沿う件数が得られても現見出しの正誤は確定しない。"
+  },
+  "claims": [
+    {
+      "claim_id": "unauthorized_learning_infringement",
+      "status": "見出しのまま判定可",
+      "verdict_maintain": "gap維持可",
+      "limitation_required": "結論の条件追加は不要だが根拠説明に補足必要",
+      "reason": "「常に」という全称命題は、30条の4の要件を満たす無許諾学習があり得るため成立しない。無許諾と違法を同義にできない。反面、非享受目的だけで全て適法となるわけではなく、必要な限度・権利者利益を不当に害する場合のただし書も必要。",
+      "wording_revision": "見出しは維持。説明は「30条の4の要件を満たす場合には許諾なく利用できる。享受目的の併存、必要な限度を超える利用、著作権者の利益を不当に害する場合などは別途判断する」とする。少量追加学習・作風模倣だけで例外成立と書かず、創作的表現を直接感得できる出力を目的と評価できるかを示す。",
+      "criteria_assessment": "概ね妥当。無条件の著作権侵害を対象にし、リスク・倫理・契約・特定侵害を除く線引きは維持。「犯罪」は著作権法違反の犯罪を指すと限定。一般の犯罪・不正アクセス等まで同命題へ入れない。",
+      "criteria_revision": {
+        "include": "無許諾のAI学習それ自体が例外なく著作権侵害又は著作権法違反の犯罪であると投稿者本人が断定する。反語は前後を読んで本人が命題を支持する場合に限る。",
+        "exclude": "特定作品の入力・類似出力や享受目的に限る例、侵害リスク、契約違反、倫理上の盗み、相手の断定を引用して否定する投稿は分ける。"
+      },
+      "evidence": [
+        {
+          "source_id": "copyright-law",
+          "url": "https://laws.e-gov.go.jp/api/2/law_data/345AC0000000048",
+          "retrieved_at": "2026-11-01T11:55:01.098899+00:00",
+          "http_status": 200,
+          "final_url": "https://laws.e-gov.go.jp/api/2/law_data/345AC0000000048",
+          "local_path": "/Volumes/M2-WorkSpace/Projects/副業/UIデザイン調査/2026-11-01_生成AI_独立確認/sources-independent/copyright-law.json",
+          "sha256": "55d18c00b4db9c3298504a85d0ac88c4abdc11a933297d5e26717a0a968a84b1",
+          "location": "30条の4柱書・ただし書・2号",
+          "actually_read": "e-Gov法令API v2の現行版revision 345AC0000000048_20260624_508AC0000000048。2条1項1・2号、30条の4、63条1・2項、112条、114条、114条の3、114条の5。2条その他定義・附則の全体は精読対象外。",
+          "finding": "情報解析について非享受目的・必要な限度・不当な利益侵害例外の条文実体をAPIで確認。"
+        },
+        {
+          "source_id": "culture",
+          "url": "https://www.bunka.go.jp/seisaku/bunkashingikai/chosakuken/pdf/94037901_01.pdf",
+          "retrieved_at": "2026-11-01T11:55:01.098328+00:00",
+          "http_status": 200,
+          "final_url": "https://www.bunka.go.jp/seisaku/bunkashingikai/chosakuken/pdf/94037901_01.pdf",
+          "local_path": "/Volumes/M2-WorkSpace/Projects/副業/UIデザイン調査/2026-11-01_生成AI_独立確認/sources-independent/culture.pdf",
+          "sha256": "65a473fa3829436a7ed8b0f6e92e188b090028cceb01b8f2311ba9dde26e3db4",
+          "location": "通算20–23頁/本文19–22頁",
+          "actually_read": "PDF通算1頁（注意書き）、18–23頁（本文17–22頁）、28–31頁（本文27–30頁）、40–42頁（本文39–41頁）。その他は見出し・語句検索のみ。",
+          "finding": "情報解析と非享受目的、享受目的併存、作風と創作的表現の区別。"
+        }
+      ],
+      "unconfirmed": [
+        "個々の事業者の学習態様の適法性。",
+        "全てのAI関連確定裁判例の網羅。"
+      ],
+      "original_claim": "AIによる無断学習は、著作権法上、常に著作権侵害にあたる",
+      "frozen_criteria": {
+        "include": "AIによる無許諾の学習それ自体を、条件なく著作権侵害・犯罪と明示する。反語でも本人が肯定する命題は含む。",
+        "exclude": "特定作品の入力・類似出力や享受目的に限る例、侵害リスク、契約違反、倫理上の盗み、相手の断定を引用して否定する投稿は分ける。"
+      },
+      "original_verdict": "gap",
+      "post_level_limit": "この担当は投稿本文の採否を決定していない。主張・基準・根拠の独立監査であり、候補数や既存対象数は結論に用いていない。"
+    },
+    {
+      "claim_id": "data_disclosure_needed",
+      "status": "限定修正必要",
+      "verdict_maintain": "一般的・事前の法定開示義務に限定した命題ならfactを維持可。現見出しを全局面の開示義務不存在と読めば維持不可。",
+      "limitation_required": "一般の事前開示と個別訴訟上の提出命令、任意コードを区別する",
+      "reason": "現行プリンシプル・コードは法的拘束力がないと明記し、受け入れた事業者に実施又は理由説明を求める。2026-10-26に届出受付開始、10-30の公式一覧に7社掲載。ただし著作権法114条の3には、侵害訴訟で必要な書類・電磁的記録の提出を裁判所が命ずる制度がある。出所が争点となる個別事件の法的な情報提出まで「制度なし」で包摂できない。",
+      "wording_revision": "「AI事業者一般に学習データの出所を事前に公表させる一律の法的義務は、今回確認した現行制度には見当たらない。現行のプリンシプル・コードは任意の枠組みで、個別訴訟での提出命令等は別に存在する」へ限定する。",
+      "criteria_assessment": "現在のincludeは「法律上義務づける制度がない」を広く読めるため過広。一般的な事前公表義務の不存在という主張に限定すべき。開示を求める提案や現在の非公開状態は別というexcludeは妥当。",
+      "criteria_revision": {
+        "include": "日本に、AI事業者一般へ学習データの出所の事前公表を一律に義務づける法制度がないという現在の事実主張。一般義務を問題にしていることを本文で確認する。",
+        "exclude": "開示すべきとの提案、現在非公開という報告、クリーンな学習元への要望、AI使用表示や投稿者身元開示、EU等の制度は別。 個別訴訟・個別行政手続での提出又は開示義務の存否は別命題。"
+      },
+      "evidence": [
+        {
+          "source_id": "code-old",
+          "url": "https://www.cas.go.jp/jp/seisakukaigi/titeki2/ai_kentoukai/kaisai/pdf/ai_principle_code.pdf",
+          "retrieved_at": "2026-11-01T11:55:01.098601+00:00",
+          "http_status": 200,
+          "final_url": "https://www.cas.go.jp/jp/seisakukaigi/titeki2/ai_kentoukai/kaisai/pdf/ai_principle_code.pdf",
+          "local_path": "/Volumes/M2-WorkSpace/Projects/副業/UIデザイン調査/2026-11-01_生成AI_独立確認/sources-independent/code-old.pdf",
+          "sha256": "bf657ebb2fb8e0a64935f3478b07087e3c977a69fed75601aaee42d07a11dd27",
+          "location": "本文4頁1(3)、6頁原則1、9–11頁原則2、14頁その他",
+          "actually_read": "PDF/本文1–11、14頁。12–13頁の原則3の全文は未精読。旧資料名keyだが本日現行の公式届出ページから同URLへリンクを確認。",
+          "finding": "非拘束・受入れ任意・コンプライオアエクスプレインを確認。原則2は法的手続準備者等への任意の情報照会、別の法的手続を制限しない。"
+        },
+        {
+          "source_id": "code-page",
+          "url": "https://www.cas.go.jp/jp/seisakukaigi/titeki2/ai_principle_code/index.html",
+          "retrieved_at": "2026-11-01T11:55:01.098748+00:00",
+          "http_status": 200,
+          "final_url": "https://www.cas.go.jp/jp/seisakukaigi/titeki2/ai_principle_code/index.html",
+          "local_path": "/Volumes/M2-WorkSpace/Projects/副業/UIデザイン調査/2026-11-01_生成AI_独立確認/sources-independent/code-page.html",
+          "sha256": "8e4d51a5ca71b27ae3f5294c2ca7f865e4c125811a2a723bb35ef04ee4b76d4c",
+          "location": "届出について",
+          "actually_read": "本文全文とPDF日本語リンク・届出開始日。",
+          "finding": "令和8年10月26日から届出受付開始。"
+        },
+        {
+          "source_id": "code-list",
+          "url": "https://www.cas.go.jp/jp/seisakukaigi/titeki2/ai_principle_code/jigyousha_ichiran.html",
+          "retrieved_at": "2026-11-01T11:55:01.644957+00:00",
+          "http_status": 200,
+          "final_url": "https://www.cas.go.jp/jp/seisakukaigi/titeki2/ai_principle_code/jigyousha_ichiran.html",
+          "local_path": "/Volumes/M2-WorkSpace/Projects/副業/UIデザイン調査/2026-11-01_生成AI_独立確認/sources-independent/code-list.html",
+          "sha256": "c28f2c8ffc9b38a29c66520ea7e62c1490a64e187d8b75aa25a9ae0f7df732c2",
+          "location": "本文一覧及び更新注記",
+          "actually_read": "本文の7社一覧、届出日、2026-10-30更新注記。事業者リンク先本文は未確認。",
+          "finding": "届出7社、2026年10月30日更新。掲載内容の審査・実効性を意味しない。"
+        },
+        {
+          "source_id": "copyright-law",
+          "url": "https://laws.e-gov.go.jp/api/2/law_data/345AC0000000048",
+          "retrieved_at": "2026-11-01T11:55:01.098899+00:00",
+          "http_status": 200,
+          "final_url": "https://laws.e-gov.go.jp/api/2/law_data/345AC0000000048",
+          "local_path": "/Volumes/M2-WorkSpace/Projects/副業/UIデザイン調査/2026-11-01_生成AI_独立確認/sources-independent/copyright-law.json",
+          "sha256": "55d18c00b4db9c3298504a85d0ac88c4abdc11a933297d5e26717a0a968a84b1",
+          "location": "114条の3第1・2項",
+          "actually_read": "e-Gov法令API v2の現行版revision 345AC0000000048_20260624_508AC0000000048。2条1項1・2号、30条の4、63条1・2項、112条、114条、114条の3、114条の5。2条その他定義・附則の全体は精読対象外。",
+          "finding": "侵害訴訟における必要書類又は電磁的記録の提出命令と正当理由例外。"
+        },
+        {
+          "source_id": "ai-law",
+          "url": "https://laws.e-gov.go.jp/api/2/law_data/507AC0000000053",
+          "retrieved_at": "2026-11-01T11:55:01.200187+00:00",
+          "http_status": 200,
+          "final_url": "https://laws.e-gov.go.jp/api/2/law_data/507AC0000000053",
+          "local_path": "/Volumes/M2-WorkSpace/Projects/副業/UIデザイン調査/2026-11-01_生成AI_独立確認/sources-independent/ai-law.json",
+          "sha256": "3c7a6c257330cacc1ff07827cf88504a910a0725be754ef377b7b2ef29bd92a4",
+          "location": "3条4項、7条、13・16条",
+          "actually_read": "e-Gov法令API v2 revision 507AC0000000053_20250901_000000000000000。全条見出し一覧、1・3・7・13・16–18条、附則1条。",
+          "finding": "透明性施策、事業者の協力責務、指針整備、調査研究等は存在するが、一般的な全学習データ出所の事前公表義務とは異なる。"
+        }
+      ],
+      "unconfirmed": [
+        "日本法全分野の開示義務を網羅した不存在証明はしていない。個別のデータ・事業・手続による他法令の義務は別途確認を要する。",
+        "コード各社の開示資料の内容・遵守実態。"
+      ],
+      "original_claim": "学習データの出所開示をAI事業者に法律で義務づける制度は、日本にはまだ無い",
+      "frozen_criteria": {
+        "include": "日本に、AI事業者の学習データ出所開示を法律上義務づける制度がないとの現在の事実主張。",
+        "exclude": "開示すべきとの提案、現在非公開という報告、クリーンな学習元への要望、AI使用表示や投稿者身元開示、EU等の制度は別。"
+      },
+      "original_verdict": "fact",
+      "post_level_limit": "この担当は投稿本文の採否を決定していない。主張・基準・根拠の独立監査であり、候補数や既存対象数は結論に用いていない。"
+    },
+    {
+      "claim_id": "compensation_required",
+      "status": "限定修正必要",
+      "verdict_maintain": "30条の4の要件内の利用に対する一律の法定補償義務の不存在ならfact維持可。支払義務全般の不存在は維持不可。",
+      "limitation_required": "30条の4適用内、契約上の支払債務、侵害損害賠償を区別する",
+      "reason": "30条の4は対価支払を要件としていない。しかし非享受目的だけで適用されるものではない。有償契約を締結した場合の支払・債務不履行責任や、適用外で侵害した場合の損害賠償責任は法的責任を伴う。「自主的に契約した」ことと「契約後も支払義務が任意」は異なる。侵害損害賠償を通常の対価と同一視するのも不適切。",
+      "wording_revision": "「著作権法30条の4の要件を満たすAI学習利用について、同条は許諾料・補償金の一律支払いを条件としていない。有償契約に基づく支払い、適用外の侵害に対する損害賠償は別に生じ得る」とする。",
+      "criteria_assessment": "includeの「AI学習データの利用対価を法で支払義務化していない」は利用範囲が広過ぎる。除外で個別契約不履行を分けるのは妥当だが、見出しと根拠説明でも同じ範囲を明記しないと読み手に誤解が残る。",
+      "criteria_revision": {
+        "include": "日本で30条の4の適用要件を満たすAI学習利用に、利用者一般へ法定の許諾料・補償金支払いを一律に課す制度がないとの事実主張。",
+        "exclude": "現実の未払い、払うべきとの主張、制作発注費、サービス利用料、任意ライセンス、個別契約の不履行は別。 30条の4適用外の利用や侵害損害賠償の不存在は別命題。"
+      },
+      "evidence": [
+        {
+          "source_id": "copyright-law",
+          "url": "https://laws.e-gov.go.jp/api/2/law_data/345AC0000000048",
+          "retrieved_at": "2026-11-01T11:55:01.098899+00:00",
+          "http_status": 200,
+          "final_url": "https://laws.e-gov.go.jp/api/2/law_data/345AC0000000048",
+          "local_path": "/Volumes/M2-WorkSpace/Projects/副業/UIデザイン調査/2026-11-01_生成AI_独立確認/sources-independent/copyright-law.json",
+          "sha256": "55d18c00b4db9c3298504a85d0ac88c4abdc11a933297d5e26717a0a968a84b1",
+          "location": "30条の4、63条1・2項、114条3項",
+          "actually_read": "e-Gov法令API v2の現行版revision 345AC0000000048_20260624_508AC0000000048。2条1項1・2号、30条の4、63条1・2項、112条、114条、114条の3、114条の5。2条その他定義・附則の全体は精読対象外。",
+          "finding": "同条適用内の法定対価要件なし、許諾の条件、侵害の使用料相当額損害賠償を確認。"
+        },
+        {
+          "source_id": "civil-law",
+          "url": "https://laws.e-gov.go.jp/api/2/law_data/129AC0000000089",
+          "retrieved_at": "2026-11-01T11:56:09.712599+00:00",
+          "http_status": 200,
+          "local_path": "/Volumes/M2-WorkSpace/Projects/副業/UIデザイン調査/2026-11-01_生成AI_独立確認/sources-independent/civil-law.json",
+          "sha256": "04bb2c396669bfc490c488305a85c4c3a79617d0cd83705e6eb024ebbc402309",
+          "location": "415・521・709条",
+          "actually_read": "e-Gov法令API v2 revision 129AC0000000089_20260624_508AC0000000045。415・521・709条。",
+          "finding": "契約自由・債務不履行及び不法行為責任の現行条文。"
+        },
+        {
+          "source_id": "interim-old",
+          "url": "https://www.cas.go.jp/jp/seisakukaigi/titeki2/chitekizaisan2024/0528_ai.pdf",
+          "retrieved_at": "2026-11-01T11:55:01.098668+00:00",
+          "http_status": 200,
+          "final_url": "https://www.cas.go.jp/jp/seisakukaigi/titeki2/chitekizaisan2024/0528_ai.pdf",
+          "local_path": "/Volumes/M2-WorkSpace/Projects/副業/UIデザイン調査/2026-11-01_生成AI_独立確認/sources-independent/interim-old.pdf",
+          "sha256": "c73b53db1cb788693974558ff518985878d8e57a4f7f6caaa4233c87f1416737",
+          "location": "PDF通算49頁/本文48頁",
+          "actually_read": "PDF通算49–50、72–73頁（本文48–49、71–72頁）。",
+          "finding": "許諾不要でも合意による対価還元は可能。有償契約を担保する法的ルールを説明。"
+        },
+        {
+          "source_id": "culture",
+          "url": "https://www.bunka.go.jp/seisaku/bunkashingikai/chosakuken/pdf/94037901_01.pdf",
+          "retrieved_at": "2026-11-01T11:55:01.098328+00:00",
+          "http_status": 200,
+          "final_url": "https://www.bunka.go.jp/seisaku/bunkashingikai/chosakuken/pdf/94037901_01.pdf",
+          "local_path": "/Volumes/M2-WorkSpace/Projects/副業/UIデザイン調査/2026-11-01_生成AI_独立確認/sources-independent/culture.pdf",
+          "sha256": "65a473fa3829436a7ed8b0f6e92e188b090028cceb01b8f2311ba9dde26e3db4",
+          "location": "PDF通算42頁/本文41頁",
+          "actually_read": "PDF通算1頁（注意書き）、18–23頁（本文17–22頁）、28–31頁（本文27–30頁）、40–42頁（本文39–41頁）。その他は見出し・語句検索のみ。",
+          "finding": "法30条の4の趣旨からの法定補償金制度の説明困難と、市場還元を別論点として整理。"
+        }
+      ],
+      "unconfirmed": [
+        "全種類の学習データ・全特別法上の金銭義務の網羅。",
+        "個別契約、具体的利用の30条の4該当性。"
+      ],
+      "original_claim": "AI事業者に、学習データの利用について対価の支払いを義務づける法律は無い",
+      "frozen_criteria": {
+        "include": "日本でAI学習データの利用対価を法で支払義務化していないとの現在の事実主張。",
+        "exclude": "現実の未払い、払うべきとの主張、制作発注費、サービス利用料、任意ライセンス、個別契約の不履行は別。"
+      },
+      "original_verdict": "fact",
+      "post_level_limit": "この担当は投稿本文の採否を決定していない。主張・基準・根拠の独立監査であり、候補数や既存対象数は結論に用いていない。"
+    },
+    {
+      "claim_id": "creator_protection_insufficient",
+      "status": "見出しのまま判定可",
+      "verdict_maintain": "文字どおり対抗・救済手段が皆無との一般断定に対してgap維持可",
+      "limitation_required": "救済を請求できる制度と実際の救済・学習済み影響除去を区別する",
+      "reason": "侵害又はそのおそれを要件とする差止・予防、必要な廃棄等の請求が法112条にある。無許諾でも30条の4等により適法な利用を必ず止められるわけではない。robots.txt等は事前の収集回避策で、既に学習した影響を除去する救済とは異なる。将来学習用データセットの除去は将来の新たな侵害の蓋然性が高い場合等の条件付きであり、モデル廃棄は通常認められないという文化庁整理もある。",
+      "wording_revision": "見出しを採る場合は「手段が一切ない」という断定に照合する。説明は「著作権侵害等が認められる場合には差止や損害賠償等を請求できる制度がある。無許諾の学習をすべて止めたり、学習済みの影響を必ず除けるという意味ではない。立証・費用・技術・執行の問題は残る」とする。",
+      "criteria_assessment": "概ね妥当。制度不存在と実効性の弱さ・個別の行為を止められないことを除外で分けている点を維持。「対抗する手段がない」が文脈上単なる実効性批判なら一般制度不存在に補完しない。",
+      "criteria_revision": {
+        "include": "学習された作品の作者には対抗・救済手段が一切ないという制度面を含む一般的な断定。",
+        "exclude": "普及が止まらないという諦め、立証・費用・実効性の困難、特定の適法行為が止められないこと、提訴を求める反語は一般的不存在へ補完しない。 学習済みモデルの影響を除く技術的手段の不足・不存在を、法的救済全般の不存在へ置き換えない。"
+      },
+      "evidence": [
+        {
+          "source_id": "copyright-law",
+          "url": "https://laws.e-gov.go.jp/api/2/law_data/345AC0000000048",
+          "retrieved_at": "2026-11-01T11:55:01.098899+00:00",
+          "http_status": 200,
+          "final_url": "https://laws.e-gov.go.jp/api/2/law_data/345AC0000000048",
+          "local_path": "/Volumes/M2-WorkSpace/Projects/副業/UIデザイン調査/2026-11-01_生成AI_独立確認/sources-independent/copyright-law.json",
+          "sha256": "55d18c00b4db9c3298504a85d0ac88c4abdc11a933297d5e26717a0a968a84b1",
+          "location": "112条1・2項、114条、114条の3",
+          "actually_read": "e-Gov法令API v2の現行版revision 345AC0000000048_20260624_508AC0000000048。2条1項1・2号、30条の4、63条1・2項、112条、114条、114条の3、114条の5。2条その他定義・附則の全体は精読対象外。",
+          "finding": "侵害停止・予防と必要な措置、損害額、証拠提出の制度。"
+        },
+        {
+          "source_id": "culture",
+          "url": "https://www.bunka.go.jp/seisaku/bunkashingikai/chosakuken/pdf/94037901_01.pdf",
+          "retrieved_at": "2026-11-01T11:55:01.098328+00:00",
+          "http_status": 200,
+          "final_url": "https://www.bunka.go.jp/seisaku/bunkashingikai/chosakuken/pdf/94037901_01.pdf",
+          "local_path": "/Volumes/M2-WorkSpace/Projects/副業/UIデザイン調査/2026-11-01_生成AI_独立確認/sources-independent/culture.pdf",
+          "sha256": "65a473fa3829436a7ed8b0f6e92e188b090028cceb01b8f2311ba9dde26e3db4",
+          "location": "PDF通算30–31頁/本文29–30頁、42頁/本文41頁",
+          "actually_read": "PDF通算1頁（注意書き）、18–23頁（本文17–22頁）、28–31頁（本文27–30頁）、40–42頁（本文39–41頁）。その他は見出し・語句検索のみ。",
+          "finding": "学習侵害の救済、将来データセット除去の条件、学習済モデル廃棄の通常否定と例外、影響除去の技術的課題。"
+        },
+        {
+          "source_id": "guide-old",
+          "url": "https://www.cas.go.jp/jp/seisakukaigi/titeki2/chitekizaisan2024/2411_tebiki.pdf",
+          "retrieved_at": "2026-11-01T11:55:01.098711+00:00",
+          "http_status": 200,
+          "final_url": "https://www.cas.go.jp/jp/seisakukaigi/titeki2/chitekizaisan2024/2411_tebiki.pdf",
+          "local_path": "/Volumes/M2-WorkSpace/Projects/副業/UIデザイン調査/2026-11-01_生成AI_独立確認/sources-independent/guide-old.pdf",
+          "sha256": "c26b2d9b591a94154f2ca168c8887ff3ee9a62b67eb90a104c75ee6784c418ad",
+          "location": "PDF通算15・17・36頁/本文14・16・35頁",
+          "actually_read": "PDF通算4–7、15、17、36、38頁（本文3–6、14、16、35、37頁）。",
+          "finding": "robots.txt等の事前対策と限界。転載・非遵守クローラへ効果がない場合。"
+        },
+        {
+          "source_id": "code-old",
+          "url": "https://www.cas.go.jp/jp/seisakukaigi/titeki2/ai_kentoukai/kaisai/pdf/ai_principle_code.pdf",
+          "retrieved_at": "2026-11-01T11:55:01.098601+00:00",
+          "http_status": 200,
+          "final_url": "https://www.cas.go.jp/jp/seisakukaigi/titeki2/ai_kentoukai/kaisai/pdf/ai_principle_code.pdf",
+          "local_path": "/Volumes/M2-WorkSpace/Projects/副業/UIデザイン調査/2026-11-01_生成AI_独立確認/sources-independent/code-old.pdf",
+          "sha256": "bf657ebb2fb8e0a64935f3478b07087e3c977a69fed75601aaee42d07a11dd27",
+          "location": "本文7頁（救済窓口）及び9–11頁原則2",
+          "actually_read": "PDF/本文1–11、14頁。12–13頁の原則3の全文は未精読。旧資料名keyだが本日現行の公式届出ページから同URLへリンクを確認。",
+          "finding": "任意の救済窓口・開示照会もあるが法的強制ではない。"
+        }
+      ],
+      "unconfirmed": [
+        "各作者が実際に救済できる確率・費用・期間・証拠確保・外国事業者への執行実績。",
+        "技術的な学習済みモデルからの影響除去の現在到達度の全面調査。"
+      ],
+      "original_claim": "無断でAIに学習された作品の作者は、対抗する手段を持たない",
+      "frozen_criteria": {
+        "include": "学習された作品の作者には対抗・救済手段が一切ないという制度面を含む一般的な断定。",
+        "exclude": "普及が止まらないという諦め、立証・費用・実効性の困難、特定の適法行為が止められないこと、提訴を求める反語は一般的不存在へ補完しない。"
+      },
+      "original_verdict": "gap",
+      "post_level_limit": "この担当は投稿本文の採否を決定していない。主張・基準・根拠の独立監査であり、候補数や既存対象数は結論に用いていない。"
+    },
+    {
+      "claim_id": "ai_output_has_copyright",
+      "status": "限定修正必要",
+      "verdict_maintain": "現見出しのままgapを断定不可。創作的寄与がなくても一律保護との命題に明確化できる場合だけgap。",
+      "limitation_required": "「通常の著作物と同じように」の多義性を解消し、原投稿に無条件性が実在するか確認する",
+      "reason": "文化庁整理はAI生成物にも法2条の通常の著作物定義を適用し、人の創作的寄与を個別具体的に判断する。したがって「AI使用でも通常と同じ基準で保護され得る」なら資料と整合する。「生成物は人の寄与に関係なく保護される」という意味であれば整合しない。現見出しは後者を明示せず、凍結基準が「条件なく」を加えて別の強い命題へ変えている。",
+      "wording_revision": "選択肢1：原投稿が無条件保護を実際に断定する場合だけ「AI生成物は、人の創作的寄与がなくても一律に著作権で保護される」へ限定しgap。選択肢2：現見出しを維持するなら曖昧なため判定保留とし、人の創作的寄与を踏まえた個別判断という整理のみ示す。候補投稿の不足を補うための見出し変更・意味上乗せはしない。",
+      "criteria_assessment": "無条件保護という独立した狭い命題の選別基準としては妥当。しかし現見出しの照合基準としては過狭であり、投稿にない無条件性を補完してgapへ導く危険がある。個別の保護ありという自己申告は一般論でも確定判例でもない。",
+      "criteria_revision": {
+        "include": "人の創作的寄与がなくても、AIが出力しただけで著作権が一律に成立すると投稿者本人が明示する。現見出しの「通常と同じ」だけでは採用しない。",
+        "exclude": "個別の権利取得の自己申告、条件付きの著作物性、既存の絵の著作権、他者の権利を侵害しないこと、創作性や作品価値についての倫理的評価は別。 人の寄与を個別判断するという意味での「通常と同じ基準」や「保護される場合がある」は別命題。"
+      },
+      "evidence": [
+        {
+          "source_id": "copyright-law",
+          "url": "https://laws.e-gov.go.jp/api/2/law_data/345AC0000000048",
+          "retrieved_at": "2026-11-01T11:55:01.098899+00:00",
+          "http_status": 200,
+          "final_url": "https://laws.e-gov.go.jp/api/2/law_data/345AC0000000048",
+          "local_path": "/Volumes/M2-WorkSpace/Projects/副業/UIデザイン調査/2026-11-01_生成AI_独立確認/sources-independent/copyright-law.json",
+          "sha256": "55d18c00b4db9c3298504a85d0ac88c4abdc11a933297d5e26717a0a968a84b1",
+          "location": "2条1項1・2号",
+          "actually_read": "e-Gov法令API v2の現行版revision 345AC0000000048_20260624_508AC0000000048。2条1項1・2号、30条の4、63条1・2項、112条、114条、114条の3、114条の5。2条その他定義・附則の全体は精読対象外。",
+          "finding": "創作的表現である著作物・創作する者である著作者の定義。"
+        },
+        {
+          "source_id": "culture",
+          "url": "https://www.bunka.go.jp/seisaku/bunkashingikai/chosakuken/pdf/94037901_01.pdf",
+          "retrieved_at": "2026-11-01T11:55:01.098328+00:00",
+          "http_status": 200,
+          "final_url": "https://www.bunka.go.jp/seisaku/bunkashingikai/chosakuken/pdf/94037901_01.pdf",
+          "local_path": "/Volumes/M2-WorkSpace/Projects/副業/UIデザイン調査/2026-11-01_生成AI_独立確認/sources-independent/culture.pdf",
+          "sha256": "65a473fa3829436a7ed8b0f6e92e188b090028cceb01b8f2311ba9dde26e3db4",
+          "location": "PDF通算40–41頁/本文39–40頁",
+          "actually_read": "PDF通算1頁（注意書き）、18–23頁（本文17–22頁）、28–31頁（本文27–30頁）、40–42頁（本文39–41頁）。その他は見出し・語句検索のみ。",
+          "finding": "AI生成物にも通常の著作物定義を適用。指示がアイデアにとどまる場合は著作物性なし。創作的寄与を総合考慮。人の加筆部分は通常保護。"
+        },
+        {
+          "source_id": "government-answer",
+          "url": "https://www.shugiin.go.jp/internet/itdb_shitsumon.nsf/html/shitsumon/b219129.htm",
+          "retrieved_at": "2026-11-01T11:55:01.317368+00:00",
+          "http_status": 200,
+          "final_url": "https://www.shugiin.go.jp/internet/itdb_shitsumon.nsf/html/shitsumon/b219129.htm",
+          "local_path": "/Volumes/M2-WorkSpace/Projects/副業/UIデザイン調査/2026-11-01_生成AI_独立確認/sources-independent/government-answer.html",
+          "sha256": "41d604007fd3d033ad213cb65deb70a2458f7d01d5f9e76270570c77ec5741d5",
+          "location": "2025-12-19答弁「一について」及び二・三",
+          "actually_read": "答弁書の書誌、令和7年12月19日、一～三の答弁全文。",
+          "finding": "2024整理の個別具体判断を改めて引用。警察捜査・検挙の答弁は生成物全般の確定判例を示すものではない。"
+        },
+        {
+          "source_id": "court-search",
+          "url": "https://www.courts.go.jp/hanrei/search1/index.html",
+          "retrieved_at": "2026-11-01T11:55:01.638695+00:00",
+          "http_status": 200,
+          "final_url": "https://www.courts.go.jp/error_document/sorry.html",
+          "local_path": "/Volumes/M2-WorkSpace/Projects/副業/UIデザイン調査/2026-11-01_生成AI_独立確認/sources-independent/court-search.html",
+          "sha256": "128ea0d502f39add28ad0274709bf1be0679c2fa51a11266155ecbc9e58f3b99",
+          "location": "入口→https://www.courts.go.jp/error_document/sorry.html",
+          "actually_read": "検索入口からsorry.htmlへのリダイレクトとメンテナンス表示のみ。判例検索本文は利用できず。",
+          "finding": "本日メンテナンス表示。現在の全裁判例の存否を確認できない。"
+        },
+        {
+          "source_id": "culture-current-index",
+          "url": "https://www.bunka.go.jp/seisaku/chosakuken/aiandcopyright.html",
+          "retrieved_at": "2026-11-01T11:57:16.318308+00:00",
+          "http_status": 200,
+          "local_path": "/Volumes/M2-WorkSpace/Projects/副業/UIデザイン調査/2026-11-01_生成AI_独立確認/sources-independent/culture-current-index.html",
+          "sha256": "1d0913648c3b3a1a6017fa12c96a1fd984644409020cb629205cb610481c62a6",
+          "location": "AIと著作権に関する考え方について",
+          "actually_read": "AIと著作権について、基本的考え方、2024-03-15資料紹介、関連資料一覧。個別新着・全委員会議事録の追跡はしていない。",
+          "finding": "2024資料を現在も紹介。判例蓄積がないという紹介文は作成時背景で、2026年の全判例不存在の証明に用いない。"
+        }
+      ],
+      "unconfirmed": [
+        "現在の全裁判例、各事件の判決内容・確定状況。提訴・送検・検挙を判決として扱っていない。",
+        "各原投稿の「通常と同じ」が一般基準の共通性か、無条件保護か。"
+      ],
+      "original_claim": "AIが生成した作品にも、通常の著作物と同じように著作権が認められる",
+      "frozen_criteria": {
+        "include": "AI生成物一般に、創作的寄与の条件なく通常の著作物同様の著作権が成立するとの明示。",
+        "exclude": "個別の権利取得の自己申告、条件付きの著作物性、既存の絵の著作権、他者の権利を侵害しないこと、創作性や作品価値についての倫理的評価は別。"
+      },
+      "original_verdict": "gap",
+      "post_level_limit": "この担当は投稿本文の採否を決定していない。主張・基準・根拠の独立監査であり、候補数や既存対象数は結論に用いていない。"
+    },
+    {
+      "claim_id": "tech_innovation_over_regulation",
+      "status": "評価として断定不可",
+      "verdict_maintain": "現見出し「ほとんど進まず・野放し」に対するgapは維持不可。法律が一切ないという別の事実命題ならgap。",
+      "limitation_required": "制度の存在、強制力、規制の強さ・進捗という評価を分ける",
+      "reason": "著作権法の侵害救済、2025年全面施行AI法の施策協力・指針・調査分析・指導助言、任意コードが存在する。これは「適用法が一切ない」の反証にはなるが、「規制が弱い」「進捗が足りない」の反証ではない。推進法制定や任意の透明性コードだけを挙げて法規制の程度が十分だと結論することはできない。「ほとんど」は比較対象・時点・規制対象・評価尺度が欠ける。「野放し」も比喩又は効果評価となり得る。",
+      "wording_revision": "現見出しは程度評価として判定保留にする。検証可能な別命題へ限定する場合は、実際の原投稿に明示があるときだけ「日本には生成AIの開発・利用に適用される法律が一切ない」とする。制度説明には既存法、AI法の施策枠組み、任意コードの強制力の違いを併記する。",
+      "criteria_assessment": "重大な不一致。現includeは程度評価を「法やルールの不存在」という別命題へ狭め、excludeは現見出しに含まれる進捗・実効性評価を外している。「法規制が未確立」は制度が存在しても用い得るため、不存在への採用語として過広。「法的に取り締まれない」も特定の適法行為又は特定罰則を指す場合は全般不存在に補完できない。",
+      "criteria_revision": {
+        "include": "日本の生成AIの開発・利用に適用される法律又は法制度が一切存在しないと投稿者本人が明示し、対象が全般であることが本文から確かめられる場合に限る。これは現見出しとは別命題であると記録する。",
+        "exclude": "規制の弱さ・進捗不足・実効性不足・未確立という評価、追加制度提案、特定行為又は罰則のみの不存在、海外制度、引用、野放し・無法地帯という比喩のみは採用しない。"
+      },
+      "evidence": [
+        {
+          "source_id": "ai-law",
+          "url": "https://laws.e-gov.go.jp/api/2/law_data/507AC0000000053",
+          "retrieved_at": "2026-11-01T11:55:01.200187+00:00",
+          "http_status": 200,
+          "final_url": "https://laws.e-gov.go.jp/api/2/law_data/507AC0000000053",
+          "local_path": "/Volumes/M2-WorkSpace/Projects/副業/UIデザイン調査/2026-11-01_生成AI_独立確認/sources-independent/ai-law.json",
+          "sha256": "3c7a6c257330cacc1ff07827cf88504a910a0725be754ef377b7b2ef29bd92a4",
+          "location": "1条、3条4項、7条、13・16–18条、現行revision施行日2025-09-01",
+          "actually_read": "e-Gov法令API v2 revision 507AC0000000053_20250901_000000000000000。全条見出し一覧、1・3・7・13・16–18条、附則1条。",
+          "finding": "推進を目的とする法、透明性施策、事業者の協力責務、指針、情報収集・事案分析・指導助言等。禁止・罰則型規制の強さと同一ではない。"
+        },
+        {
+          "source_id": "copyright-law",
+          "url": "https://laws.e-gov.go.jp/api/2/law_data/345AC0000000048",
+          "retrieved_at": "2026-11-01T11:55:01.098899+00:00",
+          "http_status": 200,
+          "final_url": "https://laws.e-gov.go.jp/api/2/law_data/345AC0000000048",
+          "local_path": "/Volumes/M2-WorkSpace/Projects/副業/UIデザイン調査/2026-11-01_生成AI_独立確認/sources-independent/copyright-law.json",
+          "sha256": "55d18c00b4db9c3298504a85d0ac88c4abdc11a933297d5e26717a0a968a84b1",
+          "location": "30条の4、112条、114条の3",
+          "actually_read": "e-Gov法令API v2の現行版revision 345AC0000000048_20260624_508AC0000000048。2条1項1・2号、30条の4、63条1・2項、112条、114条、114条の3、114条の5。2条その他定義・附則の全体は精読対象外。",
+          "finding": "AIに関連する既存法の適用範囲・救済・訴訟制度の実体。"
+        },
+        {
+          "source_id": "code-old",
+          "url": "https://www.cas.go.jp/jp/seisakukaigi/titeki2/ai_kentoukai/kaisai/pdf/ai_principle_code.pdf",
+          "retrieved_at": "2026-11-01T11:55:01.098601+00:00",
+          "http_status": 200,
+          "final_url": "https://www.cas.go.jp/jp/seisakukaigi/titeki2/ai_kentoukai/kaisai/pdf/ai_principle_code.pdf",
+          "local_path": "/Volumes/M2-WorkSpace/Projects/副業/UIデザイン調査/2026-11-01_生成AI_独立確認/sources-independent/code-old.pdf",
+          "sha256": "bf657ebb2fb8e0a64935f3478b07087e3c977a69fed75601aaee42d07a11dd27",
+          "location": "4頁1(3)、6–7頁原則1",
+          "actually_read": "PDF/本文1–11、14頁。12–13頁の原則3の全文は未精読。旧資料名keyだが本日現行の公式届出ページから同URLへリンクを確認。",
+          "finding": "任意・非拘束の知財保護及び透明性措置。法律の強制的禁止と混同しない。"
+        },
+        {
+          "source_id": "code-page",
+          "url": "https://www.cas.go.jp/jp/seisakukaigi/titeki2/ai_principle_code/index.html",
+          "retrieved_at": "2026-11-01T11:55:01.098748+00:00",
+          "http_status": 200,
+          "final_url": "https://www.cas.go.jp/jp/seisakukaigi/titeki2/ai_principle_code/index.html",
+          "local_path": "/Volumes/M2-WorkSpace/Projects/副業/UIデザイン調査/2026-11-01_生成AI_独立確認/sources-independent/code-page.html",
+          "sha256": "8e4d51a5ca71b27ae3f5294c2ca7f865e4c125811a2a723bb35ef04ee4b76d4c",
+          "location": "届出開始案内",
+          "actually_read": "本文全文とPDF日本語リンク・届出開始日。",
+          "finding": "制度整備が動いていることは確認できるが規制十分性の測定値ではない。"
+        }
+      ],
+      "unconfirmed": [
+        "生成AI規制の十分性を判定する合意済み評価尺度。",
+        "生成AI関連全分野の法規制と罰則・行政措置の網羅比較。",
+        "30条の4及び47条の5の改正履歴全件の比較。現行API本文のみ確認したため「改正されていない」と年限不明で断定しない。"
+      ],
+      "original_claim": "生成AIへの法規制はほとんど進んでおらず、野放し状態にある",
+      "frozen_criteria": {
+        "include": "日本で生成AIに法規制・規制制度・ルールがない、法的に取り締まれない、法規制が未確立と明示する。",
+        "exclude": "追加整備を求める提案、進捗・実効性・政治家への評価、罰則や個別制度だけの不存在、海外制度、他者の発言の引用は分ける。無法地帯の比喩等は境界保留とする。"
+      },
+      "original_verdict": "gap",
+      "post_level_limit": "この担当は投稿本文の採否を決定していない。主張・基準・根拠の独立監査であり、候補数や既存対象数は結論に用いていない。"
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "culture",
+      "url": "https://www.bunka.go.jp/seisaku/bunkashingikai/chosakuken/pdf/94037901_01.pdf",
+      "retrieved_at": "2026-11-01T11:55:01.098328+00:00",
+      "http_status": 200,
+      "final_url": "https://www.bunka.go.jp/seisaku/bunkashingikai/chosakuken/pdf/94037901_01.pdf",
+      "content_type": "application/pdf",
+      "local_path": "/Volumes/M2-WorkSpace/Projects/副業/UIデザイン調査/2026-11-01_生成AI_独立確認/sources-independent/culture.pdf",
+      "sha256": "65a473fa3829436a7ed8b0f6e92e188b090028cceb01b8f2311ba9dde26e3db4",
+      "size": 1523728,
+      "actually_read": "PDF通算1頁（注意書き）、18–23頁（本文17–22頁）、28–31頁（本文27–30頁）、40–42頁（本文39–41頁）。その他は見出し・語句検索のみ。"
+    },
+    {
+      "source_id": "code-old",
+      "url": "https://www.cas.go.jp/jp/seisakukaigi/titeki2/ai_kentoukai/kaisai/pdf/ai_principle_code.pdf",
+      "retrieved_at": "2026-11-01T11:55:01.098601+00:00",
+      "http_status": 200,
+      "final_url": "https://www.cas.go.jp/jp/seisakukaigi/titeki2/ai_kentoukai/kaisai/pdf/ai_principle_code.pdf",
+      "content_type": "application/pdf",
+      "local_path": "/Volumes/M2-WorkSpace/Projects/副業/UIデザイン調査/2026-11-01_生成AI_独立確認/sources-independent/code-old.pdf",
+      "sha256": "bf657ebb2fb8e0a64935f3478b07087e3c977a69fed75601aaee42d07a11dd27",
+      "size": 417021,
+      "actually_read": "PDF/本文1–11、14頁。12–13頁の原則3の全文は未精読。旧資料名keyだが本日現行の公式届出ページから同URLへリンクを確認。"
+    },
+    {
+      "source_id": "interim-old",
+      "url": "https://www.cas.go.jp/jp/seisakukaigi/titeki2/chitekizaisan2024/0528_ai.pdf",
+      "retrieved_at": "2026-11-01T11:55:01.098668+00:00",
+      "http_status": 200,
+      "final_url": "https://www.cas.go.jp/jp/seisakukaigi/titeki2/chitekizaisan2024/0528_ai.pdf",
+      "content_type": "application/pdf",
+      "local_path": "/Volumes/M2-WorkSpace/Projects/副業/UIデザイン調査/2026-11-01_生成AI_独立確認/sources-independent/interim-old.pdf",
+      "sha256": "c73b53db1cb788693974558ff518985878d8e57a4f7f6caaa4233c87f1416737",
+      "size": 3042067,
+      "actually_read": "PDF通算49–50、72–73頁（本文48–49、71–72頁）。"
+    },
+    {
+      "source_id": "guide-old",
+      "url": "https://www.cas.go.jp/jp/seisakukaigi/titeki2/chitekizaisan2024/2411_tebiki.pdf",
+      "retrieved_at": "2026-11-01T11:55:01.098711+00:00",
+      "http_status": 200,
+      "final_url": "https://www.cas.go.jp/jp/seisakukaigi/titeki2/chitekizaisan2024/2411_tebiki.pdf",
+      "content_type": "application/pdf",
+      "local_path": "/Volumes/M2-WorkSpace/Projects/副業/UIデザイン調査/2026-11-01_生成AI_独立確認/sources-independent/guide-old.pdf",
+      "sha256": "c26b2d9b591a94154f2ca168c8887ff3ee9a62b67eb90a104c75ee6784c418ad",
+      "size": 1851838,
+      "actually_read": "PDF通算4–7、15、17、36、38頁（本文3–6、14、16、35、37頁）。"
+    },
+    {
+      "source_id": "code-page",
+      "url": "https://www.cas.go.jp/jp/seisakukaigi/titeki2/ai_principle_code/index.html",
+      "retrieved_at": "2026-11-01T11:55:01.098748+00:00",
+      "http_status": 200,
+      "final_url": "https://www.cas.go.jp/jp/seisakukaigi/titeki2/ai_principle_code/index.html",
+      "content_type": "text/html",
+      "local_path": "/Volumes/M2-WorkSpace/Projects/副業/UIデザイン調査/2026-11-01_生成AI_独立確認/sources-independent/code-page.html",
+      "sha256": "8e4d51a5ca71b27ae3f5294c2ca7f865e4c125811a2a723bb35ef04ee4b76d4c",
+      "size": 9186,
+      "actually_read": "本文全文とPDF日本語リンク・届出開始日。"
+    },
+    {
+      "source_id": "ip-top",
+      "url": "https://www.cas.go.jp/jp/seisakukaigi/titeki2/index.html",
+      "retrieved_at": "2026-11-01T11:55:01.098788+00:00",
+      "http_status": 200,
+      "final_url": "https://www.cas.go.jp/jp/seisakukaigi/titeki2/index.html",
+      "content_type": "text/html",
+      "local_path": "/Volumes/M2-WorkSpace/Projects/副業/UIデザイン調査/2026-11-01_生成AI_独立確認/sources-independent/ip-top.html",
+      "sha256": "5e38b3df1d96648e8f7a7bd2629143d96ef9c010e41061d14edac924333ee801",
+      "size": 123399,
+      "actually_read": "取得のみ、本文未精読・結論に不使用。"
+    },
+    {
+      "source_id": "interim-dai8",
+      "url": "https://www.cas.go.jp/jp/seisakukaigi/titeki2/ai_kentoukai/gijisidai/dai8/sanko1-2.pdf",
+      "retrieved_at": "2026-11-01T11:55:01.098844+00:00",
+      "http_status": 200,
+      "final_url": "https://www.cas.go.jp/jp/seisakukaigi/titeki2/ai_kentoukai/gijisidai/dai8/sanko1-2.pdf",
+      "content_type": "application/pdf",
+      "local_path": "/Volumes/M2-WorkSpace/Projects/副業/UIデザイン調査/2026-11-01_生成AI_独立確認/sources-independent/interim-dai8.pdf",
+      "sha256": "f1a8378679f28bfd8d7fef0219c3f225f25e90e1916b95fdaef438ab1f6a577e",
+      "size": 3092023,
+      "actually_read": "取得後、通算25–26頁のみ閲覧したが意匠法の段落であり本監査結論の証拠に不使用。"
+    },
+    {
+      "source_id": "copyright-law",
+      "url": "https://laws.e-gov.go.jp/api/2/law_data/345AC0000000048",
+      "retrieved_at": "2026-11-01T11:55:01.098899+00:00",
+      "http_status": 200,
+      "final_url": "https://laws.e-gov.go.jp/api/2/law_data/345AC0000000048",
+      "content_type": "application/json",
+      "local_path": "/Volumes/M2-WorkSpace/Projects/副業/UIデザイン調査/2026-11-01_生成AI_独立確認/sources-independent/copyright-law.json",
+      "sha256": "55d18c00b4db9c3298504a85d0ac88c4abdc11a933297d5e26717a0a968a84b1",
+      "size": 890782,
+      "actually_read": "e-Gov法令API v2の現行版revision 345AC0000000048_20260624_508AC0000000048。2条1項1・2号、30条の4、63条1・2項、112条、114条、114条の3、114条の5。2条その他定義・附則の全体は精読対象外。"
+    },
+    {
+      "source_id": "ai-law",
+      "url": "https://laws.e-gov.go.jp/api/2/law_data/507AC0000000053",
+      "retrieved_at": "2026-11-01T11:55:01.200187+00:00",
+      "http_status": 200,
+      "final_url": "https://laws.e-gov.go.jp/api/2/law_data/507AC0000000053",
+      "content_type": "application/json",
+      "local_path": "/Volumes/M2-WorkSpace/Projects/副業/UIデザイン調査/2026-11-01_生成AI_独立確認/sources-independent/ai-law.json",
+      "sha256": "3c7a6c257330cacc1ff07827cf88504a910a0725be754ef377b7b2ef29bd92a4",
+      "size": 35332,
+      "actually_read": "e-Gov法令API v2 revision 507AC0000000053_20250901_000000000000000。全条見出し一覧、1・3・7・13・16–18条、附則1条。"
+    },
+    {
+      "source_id": "culture-faq",
+      "url": "https://www.bunka.go.jp/seisaku/chosakuken/kaizoku/faq.html",
+      "retrieved_at": "2026-11-01T11:55:01.243470+00:00",
+      "http_status": 200,
+      "final_url": "https://www.bunka.go.jp/seisaku/chosakuken/kaizoku/faq.html",
+      "content_type": "text/html",
+      "local_path": "/Volumes/M2-WorkSpace/Projects/副業/UIデザイン調査/2026-11-01_生成AI_独立確認/sources-independent/culture-faq.html",
+      "sha256": "3ee917a279825632294111fd7257c89dad406402a46cf43b35847c892e582ea7",
+      "size": 193932,
+      "actually_read": "取得のみ、本文未精読・結論に不使用。"
+    },
+    {
+      "source_id": "government-answer",
+      "url": "https://www.shugiin.go.jp/internet/itdb_shitsumon.nsf/html/shitsumon/b219129.htm",
+      "retrieved_at": "2026-11-01T11:55:01.317368+00:00",
+      "http_status": 200,
+      "final_url": "https://www.shugiin.go.jp/internet/itdb_shitsumon.nsf/html/shitsumon/b219129.htm",
+      "content_type": "text/html; charset=Shift_JIS",
+      "local_path": "/Volumes/M2-WorkSpace/Projects/副業/UIデザイン調査/2026-11-01_生成AI_独立確認/sources-independent/government-answer.html",
+      "sha256": "41d604007fd3d033ad213cb65deb70a2458f7d01d5f9e76270570c77ec5741d5",
+      "size": 8973,
+      "actually_read": "答弁書の書誌、令和7年12月19日、一～三の答弁全文。"
+    },
+    {
+      "source_id": "government-question",
+      "url": "https://www.shugiin.go.jp/internet/itdb_shitsumon.nsf/html/shitsumon/a219129.htm",
+      "retrieved_at": "2026-11-01T11:55:01.499478+00:00",
+      "http_status": 200,
+      "final_url": "https://www.shugiin.go.jp/internet/itdb_shitsumon.nsf/html/shitsumon/a219129.htm",
+      "content_type": "text/html; charset=Shift_JIS",
+      "local_path": "/Volumes/M2-WorkSpace/Projects/副業/UIデザイン調査/2026-11-01_生成AI_独立確認/sources-independent/government-question.html",
+      "sha256": "c71ef909569b655adc3e86c061e7450b89def84d210a74394144f4018d3f6bba",
+      "size": 7827,
+      "actually_read": "取得のみ、本文未精読・結論に不使用。"
+    },
+    {
+      "source_id": "court-search",
+      "url": "https://www.courts.go.jp/hanrei/search1/index.html",
+      "retrieved_at": "2026-11-01T11:55:01.638695+00:00",
+      "http_status": 200,
+      "final_url": "https://www.courts.go.jp/error_document/sorry.html",
+      "content_type": "text/html",
+      "local_path": "/Volumes/M2-WorkSpace/Projects/副業/UIデザイン調査/2026-11-01_生成AI_独立確認/sources-independent/court-search.html",
+      "sha256": "128ea0d502f39add28ad0274709bf1be0679c2fa51a11266155ecbc9e58f3b99",
+      "size": 1252,
+      "actually_read": "検索入口からsorry.htmlへのリダイレクトとメンテナンス表示のみ。判例検索本文は利用できず。"
+    },
+    {
+      "source_id": "code-list",
+      "url": "https://www.cas.go.jp/jp/seisakukaigi/titeki2/ai_principle_code/jigyousha_ichiran.html",
+      "retrieved_at": "2026-11-01T11:55:01.644957+00:00",
+      "http_status": 200,
+      "final_url": "https://www.cas.go.jp/jp/seisakukaigi/titeki2/ai_principle_code/jigyousha_ichiran.html",
+      "content_type": "text/html",
+      "local_path": "/Volumes/M2-WorkSpace/Projects/副業/UIデザイン調査/2026-11-01_生成AI_独立確認/sources-independent/code-list.html",
+      "sha256": "c28f2c8ffc9b38a29c66520ea7e62c1490a64e187d8b75aa25a9ae0f7df732c2",
+      "size": 6768,
+      "actually_read": "本文の7社一覧、届出日、2026-10-30更新注記。事業者リンク先本文は未確認。"
+    },
+    {
+      "source_id": "civil-law",
+      "url": "https://laws.e-gov.go.jp/api/2/law_data/129AC0000000089",
+      "retrieved_at": "2026-11-01T11:56:09.712599+00:00",
+      "http_status": 200,
+      "local_path": "/Volumes/M2-WorkSpace/Projects/副業/UIデザイン調査/2026-11-01_生成AI_独立確認/sources-independent/civil-law.json",
+      "sha256": "04bb2c396669bfc490c488305a85c4c3a79617d0cd83705e6eb024ebbc402309",
+      "size": 1618343,
+      "actually_read": "e-Gov法令API v2 revision 129AC0000000089_20260624_508AC0000000045。415・521・709条。"
+    },
+    {
+      "source_id": "culture-current-index",
+      "url": "https://www.bunka.go.jp/seisaku/chosakuken/aiandcopyright.html",
+      "retrieved_at": "2026-11-01T11:57:16.318308+00:00",
+      "http_status": 200,
+      "local_path": "/Volumes/M2-WorkSpace/Projects/副業/UIデザイン調査/2026-11-01_生成AI_独立確認/sources-independent/culture-current-index.html",
+      "sha256": "1d0913648c3b3a1a6017fa12c96a1fd984644409020cb629205cb610481c62a6",
+      "size": 28914,
+      "actually_read": "AIと著作権について、基本的考え方、2024-03-15資料紹介、関連資料一覧。個別新着・全委員会議事録の追跡はしていない。"
+    }
+  ],
+  "global_unconfirmed": [
+    "全判例の現在の存否・確定状況",
+    "法律全分野の一般的不存在証明",
+    "原投稿本文に無条件性・全称性が実際にあるかという投稿単位の採否"
+  ]
+}

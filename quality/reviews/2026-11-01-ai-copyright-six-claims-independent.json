@@ -1,0 +1,1660 @@
+{
+  "theme": "ai-copyright",
+  "reviewed_on": "2026-11-01",
+  "recorded_at": "2026-11-01T21:13:44.180537+09:00",
+  "status": "targeted_independent_review_complete_requires_claim_scope_revision",
+  "human_review_complete": false,
+  "independent_target_review_complete": true,
+  "full_3975_independently_reread": false,
+  "full_corpus_recount_under_revised_criteria_complete": false,
+  "public_adoption_ready": false,
+  "input_manifest": "quality/reviews/2026-11-01-ai-independent-inputs.json",
+  "input_manifest_sha256": "54e324e57b18e97e2773bfd86c07fe17fa70cca72bf1b3f31446d4523e1b216e",
+  "prior_review": "quality/reviews/2026-11-01-ai-copyright-six-claims-full.json",
+  "prior_review_sha256": "4ee0af3fd2fe93705fad8380e0cb593cc1c6d7cb7c5ebc85375f35c5cd6b4bde",
+  "blind_input_sha256": "634784d43adf772fb2d3fd1dab207f2a7f82520b59d9652ee29f9e43897eb671",
+  "scope": {
+    "initial_candidate_associations": 25,
+    "initial_hold_associations": 35,
+    "existing_associations": 12,
+    "total_associations": 72,
+    "unique_target_records": 71,
+    "full_3975_independently_reread": false
+  },
+  "reviewer_artifacts": [
+    {
+      "reviewer": "A",
+      "path": "quality/reviews/2026-11-01-ai-independent-body-a.json",
+      "sha256": "7ab842eb6e935aa17a4f973196e98b780df7f79fd1dcbc116a674833af486b9e",
+      "context": "new_context_original_claim_blind",
+      "reference_reader": null
+    },
+    {
+      "reviewer": "B",
+      "path": "quality/reviews/2026-11-01-ai-independent-body-b.json",
+      "sha256": "0f5c3e25017aed6b8eea0621c6db6699e91d580b9b4bdfcbacafc74c57fa291c",
+      "context": "new_context_original_claim_blind",
+      "reference_reader": null
+    },
+    {
+      "reviewer": "C",
+      "path": "quality/reviews/2026-11-01-ai-independent-body-c.json",
+      "sha256": "79432f18af533182d153edd7ae1a19bc72e7d085e43eb9efe5d14ece25a1b73e",
+      "context": "new_context_frozen_criteria_review",
+      "reference_reader": "A"
+    },
+    {
+      "reviewer": "D",
+      "path": "quality/reviews/2026-11-01-ai-independent-body-d.json",
+      "sha256": "4fce12df83499cad195c1d6642487f813960ba8d6091cc43ff0cd721898c2b32",
+      "context": "new_context_frozen_criteria_review",
+      "reference_reader": "B"
+    }
+  ],
+  "source_audit": {
+    "path": "quality/reviews/2026-11-01-ai-independent-sources.json",
+    "sha256": "7d9df15ebadd60ac27802fc1473ef11c453d3fdb949f8bdb16259f815021208c",
+    "prior_audit_findings_withheld": true,
+    "existing_public_verdict_visible_in_builder": true,
+    "retrieved_originals": 16,
+    "court_database_search_complete": false
+  },
+  "agreement": {
+    "original_heading_blind_A_B_same_status_out_of_72": 64,
+    "frozen_C_D_same_status_out_of_72": 59,
+    "editorial_disagreements_unadjudicated": 0
+  },
+  "status_definitions": {
+    "direct": "旧凍結解釈に限る主張全文への直接対応。新しい基準への採用・投稿の真偽認定ではない。",
+    "partial": "限定された関連命題・行為・手段の説明はあるが主張全文は確認できない。",
+    "opposed": "当該命題と逆方向の説明がある。投稿の法解釈が正しいという認定ではない。",
+    "borderline": "対象行為や法的意味を本文で確定できないという完了済みの非採用判断。追加の根拠を補わず採用しない。",
+    "no": "当該命題の表明が本文にない。話題自体への賛否の不存在を意味しない。"
+  },
+  "initial_group_editor_counts": {
+    "matched_claims": {
+      "direct": 23,
+      "partial": 2
+    },
+    "borderline_claims": {
+      "partial": 15,
+      "borderline": 18,
+      "no": 1,
+      "direct": 1
+    },
+    "existing": {
+      "opposed": 1,
+      "no": 10,
+      "partial": 1
+    }
+  },
+  "direct_associations_for_comparison_only": 24,
+  "claims": [
+    {
+      "claim_id": "unauthorized_learning_infringement",
+      "original_claim": "AIによる無断学習は、著作権法上、常に著作権侵害にあたる",
+      "frozen_criteria": {
+        "include": "AIによる無許諾の学習それ自体を、条件なく著作権侵害・犯罪と明示する。反語でも本人が肯定する命題は含む。",
+        "exclude": "特定作品の入力・類似出力や享受目的に限る例、侵害リスク、契約違反、倫理上の盗み、相手の断定を引用して否定する投稿は分ける。"
+      },
+      "initial_direct": 7,
+      "initial_hold": 18,
+      "existing": 2,
+      "editor_frozen_status_counts": {
+        "partial": 4,
+        "direct": 8,
+        "borderline": 13,
+        "opposed": 1,
+        "no": 1
+      },
+      "current_heading_source_status": "見出しのまま判定可",
+      "source_assessment": "gap維持可",
+      "source_reason": "「常に」という全称命題は、30条の4の要件を満たす無許諾学習があり得るため成立しない。無許諾と違法を同義にできない。反面、非享受目的だけで全て適法となるわけではなく、必要な限度・権利者利益を不当に害する場合のただし書も必要。",
+      "recommended_criteria": {
+        "include": "無許諾のAI学習それ自体が例外なく著作権侵害又は著作権法違反の犯罪であると投稿者本人が断定する。反語は前後を読んで本人が命題を支持する場合に限る。",
+        "exclude": "特定作品の入力・類似出力や享受目的に限る例、侵害リスク、契約違反、倫理上の盗み、相手の断定を引用して否定する投稿は分ける。"
+      },
+      "wording_revision": "見出しは維持。説明は「30条の4の要件を満たす場合には許諾なく利用できる。享受目的の併存、必要な限度を超える利用、著作権者の利益を不当に害する場合などは別途判断する」とする。少量追加学習・作風模倣だけで例外成立と書かず、創作的表現を直接感得できる出力を目的と評価できるかを示す。",
+      "public_adoption_ready": false
+    },
+    {
+      "claim_id": "data_disclosure_needed",
+      "original_claim": "学習データの出所開示をAI事業者に法律で義務づける制度は、日本にはまだ無い",
+      "frozen_criteria": {
+        "include": "日本に、AI事業者の学習データ出所開示を法律上義務づける制度がないとの現在の事実主張。",
+        "exclude": "開示すべきとの提案、現在非公開という報告、クリーンな学習元への要望、AI使用表示や投稿者身元開示、EU等の制度は別。"
+      },
+      "initial_direct": 0,
+      "initial_hold": 0,
+      "existing": 2,
+      "editor_frozen_status_counts": {
+        "no": 2
+      },
+      "current_heading_source_status": "限定修正必要",
+      "source_assessment": "一般的・事前の法定開示義務に限定した命題ならfactを維持可。現見出しを全局面の開示義務不存在と読めば維持不可。",
+      "source_reason": "現行プリンシプル・コードは法的拘束力がないと明記し、受け入れた事業者に実施又は理由説明を求める。2026-10-26に届出受付開始、10-30の公式一覧に7社掲載。ただし著作権法114条の3には、侵害訴訟で必要な書類・電磁的記録の提出を裁判所が命ずる制度がある。出所が争点となる個別事件の法的な情報提出まで「制度なし」で包摂できない。",
+      "recommended_criteria": {
+        "include": "日本に、AI事業者一般へ学習データの出所の事前公表を一律に義務づける法制度がないという現在の事実主張。一般義務を問題にしていることを本文で確認する。",
+        "exclude": "開示すべきとの提案、現在非公開という報告、クリーンな学習元への要望、AI使用表示や投稿者身元開示、EU等の制度は別。 個別訴訟・個別行政手続での提出又は開示義務の存否は別命題。"
+      },
+      "wording_revision": "「AI事業者一般に学習データの出所を事前に公表させる一律の法的義務は、今回確認した現行制度には見当たらない。現行のプリンシプル・コードは任意の枠組みで、個別訴訟での提出命令等は別に存在する」へ限定する。",
+      "public_adoption_ready": false
+    },
+    {
+      "claim_id": "compensation_required",
+      "original_claim": "AI事業者に、学習データの利用について対価の支払いを義務づける法律は無い",
+      "frozen_criteria": {
+        "include": "日本でAI学習データの利用対価を法で支払義務化していないとの現在の事実主張。",
+        "exclude": "現実の未払い、払うべきとの主張、制作発注費、サービス利用料、任意ライセンス、個別契約の不履行は別。"
+      },
+      "initial_direct": 0,
+      "initial_hold": 0,
+      "existing": 2,
+      "editor_frozen_status_counts": {
+        "no": 2
+      },
+      "current_heading_source_status": "限定修正必要",
+      "source_assessment": "30条の4の要件内の利用に対する一律の法定補償義務の不存在ならfact維持可。支払義務全般の不存在は維持不可。",
+      "source_reason": "30条の4は対価支払を要件としていない。しかし非享受目的だけで適用されるものではない。有償契約を締結した場合の支払・債務不履行責任や、適用外で侵害した場合の損害賠償責任は法的責任を伴う。「自主的に契約した」ことと「契約後も支払義務が任意」は異なる。侵害損害賠償を通常の対価と同一視するのも不適切。",
+      "recommended_criteria": {
+        "include": "日本で30条の4の適用要件を満たすAI学習利用に、利用者一般へ法定の許諾料・補償金支払いを一律に課す制度がないとの事実主張。",
+        "exclude": "現実の未払い、払うべきとの主張、制作発注費、サービス利用料、任意ライセンス、個別契約の不履行は別。 30条の4適用外の利用や侵害損害賠償の不存在は別命題。"
+      },
+      "wording_revision": "「著作権法30条の4の要件を満たすAI学習利用について、同条は許諾料・補償金の一律支払いを条件としていない。有償契約に基づく支払い、適用外の侵害に対する損害賠償は別に生じ得る」とする。",
+      "public_adoption_ready": false
+    },
+    {
+      "claim_id": "creator_protection_insufficient",
+      "original_claim": "無断でAIに学習された作品の作者は、対抗する手段を持たない",
+      "frozen_criteria": {
+        "include": "学習された作品の作者には対抗・救済手段が一切ないという制度面を含む一般的な断定。",
+        "exclude": "普及が止まらないという諦め、立証・費用・実効性の困難、特定の適法行為が止められないこと、提訴を求める反語は一般的不存在へ補完しない。"
+      },
+      "initial_direct": 1,
+      "initial_hold": 5,
+      "existing": 2,
+      "editor_frozen_status_counts": {
+        "partial": 5,
+        "no": 3
+      },
+      "current_heading_source_status": "見出しのまま判定可",
+      "source_assessment": "文字どおり対抗・救済手段が皆無との一般断定に対してgap維持可",
+      "source_reason": "侵害又はそのおそれを要件とする差止・予防、必要な廃棄等の請求が法112条にある。無許諾でも30条の4等により適法な利用を必ず止められるわけではない。robots.txt等は事前の収集回避策で、既に学習した影響を除去する救済とは異なる。将来学習用データセットの除去は将来の新たな侵害の蓋然性が高い場合等の条件付きであり、モデル廃棄は通常認められないという文化庁整理もある。",
+      "recommended_criteria": {
+        "include": "学習された作品の作者には対抗・救済手段が一切ないという制度面を含む一般的な断定。",
+        "exclude": "普及が止まらないという諦め、立証・費用・実効性の困難、特定の適法行為が止められないこと、提訴を求める反語は一般的不存在へ補完しない。 学習済みモデルの影響を除く技術的手段の不足・不存在を、法的救済全般の不存在へ置き換えない。"
+      },
+      "wording_revision": "見出しを採る場合は「手段が一切ない」という断定に照合する。説明は「著作権侵害等が認められる場合には差止や損害賠償等を請求できる制度がある。無許諾の学習をすべて止めたり、学習済みの影響を必ず除けるという意味ではない。立証・費用・技術・執行の問題は残る」とする。",
+      "public_adoption_ready": false
+    },
+    {
+      "claim_id": "ai_output_has_copyright",
+      "original_claim": "AIが生成した作品にも、通常の著作物と同じように著作権が認められる",
+      "frozen_criteria": {
+        "include": "AI生成物一般に、創作的寄与の条件なく通常の著作物同様の著作権が成立するとの明示。",
+        "exclude": "個別の権利取得の自己申告、条件付きの著作物性、既存の絵の著作権、他者の権利を侵害しないこと、創作性や作品価値についての倫理的評価は別。"
+      },
+      "initial_direct": 1,
+      "initial_hold": 0,
+      "existing": 2,
+      "editor_frozen_status_counts": {
+        "direct": 1,
+        "no": 1,
+        "partial": 1
+      },
+      "current_heading_source_status": "限定修正必要",
+      "source_assessment": "現見出しのままgapを断定不可。創作的寄与がなくても一律保護との命題に明確化できる場合だけgap。",
+      "source_reason": "文化庁整理はAI生成物にも法2条の通常の著作物定義を適用し、人の創作的寄与を個別具体的に判断する。したがって「AI使用でも通常と同じ基準で保護され得る」なら資料と整合する。「生成物は人の寄与に関係なく保護される」という意味であれば整合しない。現見出しは後者を明示せず、凍結基準が「条件なく」を加えて別の強い命題へ変えている。",
+      "recommended_criteria": {
+        "include": "人の創作的寄与がなくても、AIが出力しただけで著作権が一律に成立すると投稿者本人が明示する。現見出しの「通常と同じ」だけでは採用しない。",
+        "exclude": "個別の権利取得の自己申告、条件付きの著作物性、既存の絵の著作権、他者の権利を侵害しないこと、創作性や作品価値についての倫理的評価は別。 人の寄与を個別判断するという意味での「通常と同じ基準」や「保護される場合がある」は別命題。"
+      },
+      "wording_revision": "選択肢1：原投稿が無条件保護を実際に断定する場合だけ「AI生成物は、人の創作的寄与がなくても一律に著作権で保護される」へ限定しgap。選択肢2：現見出しを維持するなら曖昧なため判定保留とし、人の創作的寄与を踏まえた個別判断という整理のみ示す。候補投稿の不足を補うための見出し変更・意味上乗せはしない。",
+      "public_adoption_ready": false
+    },
+    {
+      "claim_id": "tech_innovation_over_regulation",
+      "original_claim": "生成AIへの法規制はほとんど進んでおらず、野放し状態にある",
+      "frozen_criteria": {
+        "include": "日本で生成AIに法規制・規制制度・ルールがない、法的に取り締まれない、法規制が未確立と明示する。",
+        "exclude": "追加整備を求める提案、進捗・実効性・政治家への評価、罰則や個別制度だけの不存在、海外制度、他者の発言の引用は分ける。無法地帯の比喩等は境界保留とする。"
+      },
+      "initial_direct": 16,
+      "initial_hold": 12,
+      "existing": 2,
+      "editor_frozen_status_counts": {
+        "partial": 8,
+        "direct": 15,
+        "borderline": 5,
+        "no": 2
+      },
+      "current_heading_source_status": "評価として断定不可",
+      "source_assessment": "現見出し「ほとんど進まず・野放し」に対するgapは維持不可。法律が一切ないという別の事実命題ならgap。",
+      "source_reason": "著作権法の侵害救済、2025年全面施行AI法の施策協力・指針・調査分析・指導助言、任意コードが存在する。これは「適用法が一切ない」の反証にはなるが、「規制が弱い」「進捗が足りない」の反証ではない。推進法制定や任意の透明性コードだけを挙げて法規制の程度が十分だと結論することはできない。「ほとんど」は比較対象・時点・規制対象・評価尺度が欠ける。「野放し」も比喩又は効果評価となり得る。",
+      "recommended_criteria": {
+        "include": "日本の生成AIの開発・利用に適用される法律又は法制度が一切存在しないと投稿者本人が明示し、対象が全般であることが本文から確かめられる場合に限る。これは現見出しとは別命題であると記録する。",
+        "exclude": "規制の弱さ・進捗不足・実効性不足・未確立という評価、追加制度提案、特定行為又は罰則のみの不存在、海外制度、引用、野放し・無法地帯という比喩のみは採用しない。"
+      },
+      "wording_revision": "現見出しは程度評価として判定保留にする。検証可能な別命題へ限定する場合は、実際の原投稿に明示があるときだけ「日本には生成AIの開発・利用に適用される法律が一切ない」とする。制度説明には既存法、AI法の施策枠組み、任意コードの強制力の違いを併記する。",
+      "public_adoption_ready": false
+    }
+  ],
+  "pair_reviews": [
+    {
+      "record_id_hash": "sha256:440798629ff76e052ae305ee028edc87219f418fc0432d3c7835324a555b0ae4",
+      "claim_id": "creator_protection_insufficient",
+      "kind": "borderline_claims",
+      "blind_index": 12,
+      "text_sha256": "9dd6d20e386b9559273b9189e3936c197ba85913278ea79abf06036156a1c792",
+      "reader_statuses": {
+        "A": "borderline",
+        "B": "partial",
+        "C": "partial",
+        "D": "borderline"
+      },
+      "editor_status_under_frozen_interpretation": "partial",
+      "editor_reason": "著作権の実効性が低いという評価はあるが、対抗手段が制度上も事実上も全てないとは述べない。",
+      "prior_editor_reason": "今の生成AIに著作権が役に立たないという断定。実効性の評価か救済制度そのものの不在か本文だけでは確定できない。",
+      "adopt_to_public": false,
+      "boundary_is_completed_nonadoption": false
+    },
+    {
+      "record_id_hash": "sha256:7e625622b35fd60085c223632e37ed943188490cec87fbb719f483caa5e8230e",
+      "claim_id": "unauthorized_learning_infringement",
+      "kind": "borderline_claims",
+      "blind_index": 50,
+      "text_sha256": "4c823bdcbf4dd6a1649fd989ea3fea27288a3de4090201aedd66467a9933e46b",
+      "reader_statuses": {
+        "A": "partial",
+        "B": "partial",
+        "C": "partial",
+        "D": "partial"
+      },
+      "editor_status_under_frozen_interpretation": "partial",
+      "editor_reason": "特定人物をめぐる素材を学習させる文脈で、肖像権と著作権の問題を挙げている。対象人物やその素材を離れた無許諾学習全体への断定は述べていない。",
+      "prior_editor_reason": "特定の人物の画像を学習させる行為への警告であり、全無断学習が常に侵害との一般化は補わない。",
+      "adopt_to_public": false,
+      "boundary_is_completed_nonadoption": false
+    },
+    {
+      "record_id_hash": "sha256:7e6343e8d84993bac0bbca9612558d1b98bd5d269cfd70b4954d9daa32b29553",
+      "claim_id": "unauthorized_learning_infringement",
+      "kind": "matched_claims",
+      "blind_index": 46,
+      "text_sha256": "a1e7889251cb482838d53c0a892e13fbcd2319caf77306356b635741cbb1e3fc",
+      "reader_statuses": {
+        "A": "partial",
+        "B": "direct",
+        "C": "direct",
+        "D": "direct"
+      },
+      "editor_status_under_frozen_interpretation": "direct",
+      "editor_reason": "自己が描く絵という媒体の一般論から、無断のAI学習も犯罪と述べている。特定の一作品だけの事例ではない。",
+      "prior_editor_reason": "自作物は自動的に権利が付き無断転載・AI学習をした側が犯罪になると、無条件に法違反へ結び付けている。",
+      "adopt_to_public": false,
+      "boundary_is_completed_nonadoption": false
+    },
+    {
+      "record_id_hash": "sha256:8e6e4de0ba9becfa5aa1b18560a16ad1d4a4895a1cc68a4c2d482959ee7c0288",
+      "claim_id": "unauthorized_learning_infringement",
+      "kind": "borderline_claims",
+      "blind_index": 54,
+      "text_sha256": "8283a439cc1f612f4ec66995c1f1ca23235e3304f8ddf4013c1a1611d7062e5f",
+      "reader_statuses": {
+        "A": "borderline",
+        "B": "borderline",
+        "C": "partial",
+        "D": "borderline"
+      },
+      "editor_status_under_frozen_interpretation": "partial",
+      "editor_reason": "依頼した特定のイラストを入力・加工する行為への質問であり、学習自体が一律に侵害との一般論へ広げない。",
+      "prior_editor_reason": "特定の依頼絵の再入力への疑問であり、学習一般が必ず侵害との断定ではない。",
+      "adopt_to_public": false,
+      "boundary_is_completed_nonadoption": false
+    },
+    {
+      "record_id_hash": "sha256:bfaf9fac52db6cbf4b40936b2962d7fd704b7c1075c081f5687c0f242ef44c54",
+      "claim_id": "unauthorized_learning_infringement",
+      "kind": "borderline_claims",
+      "blind_index": 22,
+      "text_sha256": "0a8952ea3bc193fa6055e9f2442ce0aa44c23926ec51777e085e10a8a243f416",
+      "reader_statuses": {
+        "A": "borderline",
+        "B": "borderline",
+        "C": "borderline",
+        "D": "borderline"
+      },
+      "editor_status_under_frozen_interpretation": "borderline",
+      "editor_reason": "著作権法の条文を挙げてAIを使用する行為を犯罪と評しているが、違法とする対象がモデル学習そのものだとは特定できない。",
+      "prior_editor_reason": "生成AIの使用を30条・30条の4違反と一般的に断定するが、学習行為と利用・出力のどれを指すか本文に明示がない。",
+      "adopt_to_public": false,
+      "boundary_is_completed_nonadoption": true
+    },
+    {
+      "record_id_hash": "sha256:752d6e9d5094fd8a7b35f16b4651770bc3b0a0a487007c7c3bbde22d5e63cf1d",
+      "claim_id": "unauthorized_learning_infringement",
+      "kind": "borderline_claims",
+      "blind_index": 28,
+      "text_sha256": "8d742a63a6549fefe6847edc243fe0f261d2c682f53ee3bd05183d19d84d2b17",
+      "reader_statuses": {
+        "A": "borderline",
+        "B": "borderline",
+        "C": "borderline",
+        "D": "borderline"
+      },
+      "editor_status_under_frozen_interpretation": "borderline",
+      "editor_reason": "生成AIの仕組みや使用を著作権法の条文への違反と評しているが、違反行為をモデル学習に特定していない。学習の法的評価を補うことはできない。",
+      "prior_editor_reason": "生成AIを30条の4違反の装置と断定するが、学習行為への一律判断と出力・私的使用の混同のどちらか本文だけで確定しない。",
+      "adopt_to_public": false,
+      "boundary_is_completed_nonadoption": true
+    },
+    {
+      "record_id_hash": "sha256:754d5e85f3215f112f02f4d5dcf1f3022d8f28889ef40a2f8956b7176b6b1c30",
+      "claim_id": "unauthorized_learning_infringement",
+      "kind": "matched_claims",
+      "blind_index": 63,
+      "text_sha256": "7e4e6d08ea88a6ffc17bb1095311c9ef63c02a94d3e2a1a0114d43c093787920",
+      "reader_statuses": {
+        "A": "direct",
+        "B": "direct",
+        "C": "direct",
+        "D": "direct"
+      },
+      "editor_status_under_frozen_interpretation": "direct",
+      "editor_reason": "無許諾学習を理由に生成AIが著作権侵害になるという本人の一般的な法的評価がある。特定作品・特定出力・享受目的だけに限定する条件は置いていない。",
+      "prior_editor_reason": "生成AIでしている行為は無断学習を考えると著作権侵害にあたると、一般的に結び付けている。",
+      "adopt_to_public": false,
+      "boundary_is_completed_nonadoption": false
+    },
+    {
+      "record_id_hash": "sha256:648c3cd18027c971e6fe62e5c095aa950935f3c78685f954eb1d7f76e74e866e",
+      "claim_id": "tech_innovation_over_regulation",
+      "kind": "borderline_claims",
+      "blind_index": 27,
+      "text_sha256": "87d6b1d97e990682f2fd2dbee76793ab229bd114314c2ac0b163ab7ca935821c",
+      "reader_statuses": {
+        "A": "partial",
+        "B": "partial",
+        "C": "partial",
+        "D": "partial"
+      },
+      "editor_status_under_frozen_interpretation": "partial",
+      "editor_reason": "著作権法のAI対応が不足しているという見解である。著作権法以外も含めた生成AIの規制制度全体の不存在は述べていない。",
+      "prior_editor_reason": "生成AIへ著作権法が対応していないという表現。既存法が適用不能との事実主張と追加整備の不十分さの評価を分ける必要がある。",
+      "adopt_to_public": false,
+      "boundary_is_completed_nonadoption": false
+    },
+    {
+      "record_id_hash": "sha256:04a07bf47c341a9c17d60a1892fce360c319e4e88c11390fa2a0cfb178072c10",
+      "claim_id": "tech_innovation_over_regulation",
+      "kind": "matched_claims",
+      "blind_index": 3,
+      "text_sha256": "085ca3af2bb72170f6f53d0152155e8b014f8c876acd4f7336887a7441a9c56c",
+      "reader_statuses": {
+        "A": "partial",
+        "B": "direct",
+        "C": "direct",
+        "D": "partial"
+      },
+      "editor_status_under_frozen_interpretation": "partial",
+      "editor_reason": "非公開データセットを使う生成AIやそのデータ取得に対象を絞った法の不足の話で、全ての適用法の不存在まで補わない。",
+      "prior_editor_reason": "生成AIを規制する法律がまだないため合法だと、法の不存在を明示している。",
+      "adopt_to_public": false,
+      "boundary_is_completed_nonadoption": false
+    },
+    {
+      "record_id_hash": "sha256:f0b9c36bae702c46a68cbcb23aa2197827f1b4b3def49ad17cdaf423b4f2c73c",
+      "claim_id": "tech_innovation_over_regulation",
+      "kind": "matched_claims",
+      "blind_index": 25,
+      "text_sha256": "077f4678c5e902ac2b06fa1b0cf1e3ed9d5a7d314467c9df73725f0ac0d507c9",
+      "reader_statuses": {
+        "A": "direct",
+        "B": "direct",
+        "C": "direct",
+        "D": "direct"
+      },
+      "editor_status_under_frozen_interpretation": "direct",
+      "editor_reason": "単に秩序の乏しさを比喩で述べるだけでなく、現在は規則が一つもないと述べている。法律による規制への賛意と結びつけた一般的な不存在の主張である。",
+      "prior_editor_reason": "生成AIにはルールも何もない無法地帯だと現在の規制不在を明示する。",
+      "adopt_to_public": false,
+      "boundary_is_completed_nonadoption": false
+    },
+    {
+      "record_id_hash": "sha256:70c0c1a319cc310a1ad5c43b8aba51967037790b65247d43eaabf2bf3b853c01",
+      "claim_id": "creator_protection_insufficient",
+      "kind": "borderline_claims",
+      "blind_index": 15,
+      "text_sha256": "b0ca4e1beef9856841a6aa7a59857e879517f6113f6cc280d326eace97511543",
+      "reader_statuses": {
+        "A": "partial",
+        "B": "partial",
+        "C": "partial",
+        "D": "partial"
+      },
+      "editor_status_under_frozen_interpretation": "partial",
+      "editor_reason": "データを特定できないことを理由に提訴できないとする。証拠と実効性に関する障害であり、法制度を含め一切の手段がないとの主張ではない。",
+      "prior_editor_reason": "データ非開示で被害者を特定できず訴訟できないという実行上の困難。法制度として手段がない命題と同じかは独立確認を要する。享受目的の条件付き侵害でUの一律断定には含めない。",
+      "adopt_to_public": false,
+      "boundary_is_completed_nonadoption": false
+    },
+    {
+      "record_id_hash": "sha256:bbae6fdfc38ef43b59ac385f2cfdf24890a890dae2ff6eeebfa00d4e88a4c9e6",
+      "claim_id": "tech_innovation_over_regulation",
+      "kind": "borderline_claims",
+      "blind_index": 51,
+      "text_sha256": "a9d5eb5f21171e8ebbc7b08958ce56763390357f3a872f4910af77d27dcde154",
+      "reader_statuses": {
+        "A": "partial",
+        "B": "partial",
+        "C": "partial",
+        "D": "partial"
+      },
+      "editor_status_under_frozen_interpretation": "partial",
+      "editor_reason": "生成AIの特定の構造的問題が著作権法では規制されていないと反語で述べる。著作権法による対応の範囲を論じるもので、法制度全般の不存在とは範囲が異なる。",
+      "prior_editor_reason": "ロンダリング構造が著作権法で規制されていないとの反語的表現。特定構造の規制の不足と法制度全体の不在の境界を保留する。",
+      "adopt_to_public": false,
+      "boundary_is_completed_nonadoption": false
+    },
+    {
+      "record_id_hash": "sha256:f014a9edd537f99c14991e9d530c4ca83e93eb1ce4acd54f95a30d246888d494",
+      "claim_id": "tech_innovation_over_regulation",
+      "kind": "borderline_claims",
+      "blind_index": 9,
+      "text_sha256": "0d3358973e2f32f7766cd928d64e6a9516d2c7a3db8f63a3df037f72ed667b5e",
+      "reader_statuses": {
+        "A": "partial",
+        "B": "direct",
+        "C": "borderline",
+        "D": "borderline"
+      },
+      "editor_status_under_frozen_interpretation": "borderline",
+      "editor_reason": "生成AIの出発時の状態を無秩序と評し規制の必要性を問う。凍結基準が留保する比喩表現にあたり、現時点の制度不存在を明示したものとは区別する。",
+      "prior_editor_reason": "無法状態でスタートしたという時点を含む表現。現在の法制度不存在を断定しているかは独立確認を要する。",
+      "adopt_to_public": false,
+      "boundary_is_completed_nonadoption": true
+    },
+    {
+      "record_id_hash": "sha256:b2d3bc83fb8989887be0fbc3ff422262e6fa0488512ddd5337a960afbae6ffb5",
+      "claim_id": "creator_protection_insufficient",
+      "kind": "borderline_claims",
+      "blind_index": 59,
+      "text_sha256": "9064ebb11bda41b2befe300f7b479450dae5a5a1bae17660d3b37732df151690",
+      "reader_statuses": {
+        "A": "borderline",
+        "B": "borderline",
+        "C": "no",
+        "D": "borderline"
+      },
+      "editor_status_under_frozen_interpretation": "no",
+      "editor_reason": "被害者に我慢を求める他者の態度を疑問形で批判するもので、対抗手段の不存在を事実として断定していない。",
+      "prior_editor_reason": "被害者は泣き寝入りかという反語的な抗議で、救済制度が一切存在しないという事実の断定かは未確定。",
+      "adopt_to_public": false,
+      "boundary_is_completed_nonadoption": false
+    },
+    {
+      "record_id_hash": "sha256:bfa2c03480634d9488b3da605fee2c8c21c73e567c6aa4a1f791482423d55eac",
+      "claim_id": "tech_innovation_over_regulation",
+      "kind": "matched_claims",
+      "blind_index": 42,
+      "text_sha256": "4dff605c7b811de63b43b6a4547357739d1759e7164fa1e9c5c5115724e52eab",
+      "reader_statuses": {
+        "A": "direct",
+        "B": "direct",
+        "C": "direct",
+        "D": "direct"
+      },
+      "editor_status_under_frozen_interpretation": "direct",
+      "editor_reason": "医療・教育には指針があると区別しつつ、対象としているAIには規制や規則がないという現在の状態を本人が明示している。",
+      "prior_editor_reason": "生成AIには規制やルールがないと明示し、医療・教育分野のガイドラインと対比する。無断学習を拒否できない点は全救済手段の不存在とは別。",
+      "adopt_to_public": false,
+      "boundary_is_completed_nonadoption": false
+    },
+    {
+      "record_id_hash": "sha256:f27ad7bc47a610fdab9495c2a93eab2f1251f11fca6e7a66d4d4d68c41581e52",
+      "claim_id": "unauthorized_learning_infringement",
+      "kind": "borderline_claims",
+      "blind_index": 30,
+      "text_sha256": "fac7600a2402def2bec7f372e3636b5150d3c1d7aef445ea80e40015bb748f8c",
+      "reader_statuses": {
+        "A": "borderline",
+        "B": "borderline",
+        "C": "borderline",
+        "D": "borderline"
+      },
+      "editor_status_under_frozen_interpretation": "borderline",
+      "editor_reason": "無断で取得した著作物を基盤にする技術を違法と評価している。ただしデータ取得の行為、モデル学習、技術全体のいずれを法的な侵害行為とするのかは本文だけで分けられない。",
+      "prior_editor_reason": "生成AIの技術自体を著作物の無断取得に基づく違法なものと断定するが、学習行為自体の著作権侵害を述べるかは明示されない。独立確認を要する。",
+      "adopt_to_public": false,
+      "boundary_is_completed_nonadoption": true
+    },
+    {
+      "record_id_hash": "sha256:b20909aa6e7aa21582999aabb98e97845f443e3d50bfae58c5a62cb01b03570f",
+      "claim_id": "tech_innovation_over_regulation",
+      "kind": "matched_claims",
+      "blind_index": 70,
+      "text_sha256": "d055169285e45e37b5a954838b99fd60bf62cec898952885cc926e9b0144f79b",
+      "reader_statuses": {
+        "A": "direct",
+        "B": "direct",
+        "C": "direct",
+        "D": "direct"
+      },
+      "editor_status_under_frozen_interpretation": "direct",
+      "editor_reason": "生成AIが普及し法律の成立より先に権利侵害や混乱が生じているとの現状認識がある。法律がまだ整っていないという明示的な時間関係を示している。",
+      "prior_editor_reason": "生成AIの急成長に対し法律ができる前であると明言しており、現行の法制度未整備という命題の直接候補。既存法の適用と区別して独立確認が必要。",
+      "adopt_to_public": false,
+      "boundary_is_completed_nonadoption": false
+    },
+    {
+      "record_id_hash": "sha256:f49ca01b1aaa846396c89684793aa52b3b1ed6ec41517135716a7080e10d8a4e",
+      "claim_id": "unauthorized_learning_infringement",
+      "kind": "borderline_claims",
+      "blind_index": 71,
+      "text_sha256": "0cf15110ccb41b5373686a137931dbcf09b95452c7b5398c6f924964d3d97f19",
+      "reader_statuses": {
+        "A": "borderline",
+        "B": "borderline",
+        "C": "borderline",
+        "D": "borderline"
+      },
+      "editor_status_under_frozen_interpretation": "borderline",
+      "editor_reason": "許可のないイラスト学習を強く否定するが、法律上の侵害を意味するのか倫理上の禁止を意味するのかは断定できない。イラストという媒体だから限定扱いにしたのではなく、法的評価が明示されないことが留保理由である。",
+      "prior_editor_reason": "無断のAI学習を絶対アウトと述べるが、法的な著作権侵害か倫理的な禁止かを区別できないため保留。",
+      "adopt_to_public": false,
+      "boundary_is_completed_nonadoption": true
+    },
+    {
+      "record_id_hash": "sha256:c8860092809c5b2e4b8914017a9d6606fa32128e800fddbc726aaaf732716936",
+      "claim_id": "unauthorized_learning_infringement",
+      "kind": "matched_claims",
+      "blind_index": 47,
+      "text_sha256": "8bcbdac0a66cc1d1d14b523760551e46bdc99c281fdf7d9d90f26cc0465c3cab",
+      "reader_statuses": {
+        "A": "direct",
+        "B": "direct",
+        "C": "direct",
+        "D": "direct"
+      },
+      "editor_status_under_frozen_interpretation": "direct",
+      "editor_reason": "無許諾学習が著作権侵害だという司法判断がすでにあると、本人の一般的な説明として述べる。本文には特定作品や事件、享受目的だけに適用を限る記述がなく、海賊版への言及もその一般説明と別の追加理由として置かれている。",
+      "prior_editor_reason": "無断学習は既に著作権侵害と司法が判決したと、条件なしに学習と侵害を結び付けている。裁判の国・範囲は本文から確定できず、日本判例の証拠には使わない。",
+      "adopt_to_public": false,
+      "boundary_is_completed_nonadoption": false
+    },
+    {
+      "record_id_hash": "sha256:408eb128cad2f3d1cf54830bd7339357004f670b09ffd0fda1ec9fe953a15331",
+      "claim_id": "tech_innovation_over_regulation",
+      "kind": "borderline_claims",
+      "blind_index": 8,
+      "text_sha256": "492097f8cb49f02645451d21eb36d08b730e85d5e031ca9bb21c50565f95f1d7",
+      "reader_statuses": {
+        "A": "partial",
+        "B": "partial",
+        "C": "partial",
+        "D": "no"
+      },
+      "editor_status_under_frozen_interpretation": "partial",
+      "editor_reason": "構造的問題に事前の業法が必要という特定の規制方式への要求で、既存の全ての法制度の不存在とは別。",
+      "prior_editor_reason": "個別事象を扱う著作権法では構造的問題に対応できず業法が必要とする。既存法全体の不存在ではなく対象範囲の限界にも読めるため保留。",
+      "adopt_to_public": false,
+      "boundary_is_completed_nonadoption": false
+    },
+    {
+      "record_id_hash": "sha256:f43b7fc2780b2e79f92fd044cbbcb323db512b4483a497252667735196c5a217",
+      "claim_id": "unauthorized_learning_infringement",
+      "kind": "borderline_claims",
+      "blind_index": 13,
+      "text_sha256": "1d33b3da1dfeb3a6d2f13cdc45c6c5b1e00a0bf5d15920d5757c1e4a46ee00d1",
+      "reader_statuses": {
+        "A": "borderline",
+        "B": "borderline",
+        "C": "borderline",
+        "D": "borderline"
+      },
+      "editor_status_under_frozen_interpretation": "borderline",
+      "editor_reason": "出力が著作権侵害になる危険を理由に無許諾学習を否定している。学習自体を現行法上の侵害と断定するのか、危険を踏まえた禁止要求なのかが曖昧である。",
+      "prior_editor_reason": "類似物の侵害リスクから無断学習が許されないと結論するが、学習単独の一律の違法評価か倫理的拒否かが明示されない。",
+      "adopt_to_public": false,
+      "boundary_is_completed_nonadoption": true
+    },
+    {
+      "record_id_hash": "sha256:083d54597dec9e0bfab4066c60867991cc1d8317de42ead93515eb2fb894d7e5",
+      "claim_id": "tech_innovation_over_regulation",
+      "kind": "matched_claims",
+      "blind_index": 57,
+      "text_sha256": "c196c77365eef02ed89638f220801d6944a3c4ba15eaa6b0c1b13242cbbd83a8",
+      "reader_statuses": {
+        "A": "direct",
+        "B": "direct",
+        "C": "direct",
+        "D": "direct"
+      },
+      "editor_status_under_frozen_interpretation": "direct",
+      "editor_reason": "生成AIは現時点では法律による規制を受けていないと、無断転載の禁止とは区別して本人が述べる。",
+      "prior_editor_reason": "現状の生成AIは法的に規制されていないと、無断転載との対比で明示する。",
+      "adopt_to_public": false,
+      "boundary_is_completed_nonadoption": false
+    },
+    {
+      "record_id_hash": "sha256:3570faeb0c44ca52b7fb6fb4022e42b54aaf8cc6965b2aa204d054c54aba3230",
+      "claim_id": "unauthorized_learning_infringement",
+      "kind": "matched_claims",
+      "blind_index": 61,
+      "text_sha256": "ad0fba23b8d784b25414fa8be575000a53a424eb7b983eff78a3067a05be5ec1",
+      "reader_statuses": {
+        "A": "direct",
+        "B": "direct",
+        "C": "direct",
+        "D": "direct"
+      },
+      "editor_status_under_frozen_interpretation": "direct",
+      "editor_reason": "生成AIへの反対理由として、その学習が明確な著作権侵害だと本人が反語で述べる。特定作品や特定目的だけに限る条件は示していない。",
+      "prior_editor_reason": "生成AIへの反対理由は学習が明確に著作権を侵害することだと反語で述べている。",
+      "adopt_to_public": false,
+      "boundary_is_completed_nonadoption": false
+    },
+    {
+      "record_id_hash": "sha256:ffda95df99b682345757e63909ab93a02c4fc07d57ca190508ef5bb07eafeaa2",
+      "claim_id": "unauthorized_learning_infringement",
+      "kind": "borderline_claims",
+      "blind_index": 65,
+      "text_sha256": "5d7f960f09f8fae342a8fd5fb5f0325e04605602adff220becd01143b0781d0c",
+      "reader_statuses": {
+        "A": "borderline",
+        "B": "borderline",
+        "C": "borderline",
+        "D": "borderline"
+      },
+      "editor_status_under_frozen_interpretation": "borderline",
+      "editor_reason": "他人の作品を取り込む者を犯罪者と評しているが、入力の工程をモデル学習に特定していない。透かしをめぐる事例の条件も不明であり、学習一般の法的断定とするには補完が要る。",
+      "prior_editor_reason": "人の作品を盗んでAIに食わせる人を犯罪者とするが、入力・改変と学習の区別がなく、学習単独の侵害命題との対応は独立確認が必要。",
+      "adopt_to_public": false,
+      "boundary_is_completed_nonadoption": true
+    },
+    {
+      "record_id_hash": "sha256:d0fac72f5c2ab069d12aded8e5bb827e80e79155b643ad40ac1e9c5bfdeb5ad9",
+      "claim_id": "unauthorized_learning_infringement",
+      "kind": "matched_claims",
+      "blind_index": 58,
+      "text_sha256": "5bfa4dda99d7766f88051b223ac47e73eaf3599a0246d79b58d5120947b82830",
+      "reader_statuses": {
+        "A": "partial",
+        "B": "partial",
+        "C": "direct",
+        "D": "direct"
+      },
+      "editor_status_under_frozen_interpretation": "direct",
+      "editor_reason": "人間の曲の無断学習を侵害と一般化しており、特定曲や享受目的だけの条件はない。音楽という媒体だけの限定を除外理由にしない。",
+      "prior_editor_reason": "曲を無断学習しているから普通に著作権侵害だと、学習と侵害を直接結び付ける。",
+      "adopt_to_public": false,
+      "boundary_is_completed_nonadoption": false
+    },
+    {
+      "record_id_hash": "sha256:e11164319937d28e27edfa9efadb1712f81272d5a9a556bf650ae77c5130b983",
+      "claim_id": "unauthorized_learning_infringement",
+      "kind": "borderline_claims",
+      "blind_index": 32,
+      "text_sha256": "68cd92e0a64dfeda4df7918f9a30e9e93dfdb483669f8fb82a59c3d17f79a10d",
+      "reader_statuses": {
+        "A": "partial",
+        "B": "borderline",
+        "C": "direct",
+        "D": "direct"
+      },
+      "editor_status_under_frozen_interpretation": "direct",
+      "editor_reason": "特定作品の事例ではなく、無許諾のイラストデータの大量入力を著作権侵害と一般化している。自己の素材による適法な学習を認めることは無許諾学習への例外ではなく、媒体だけの限定は特定事例として除外しない。",
+      "prior_editor_reason": "大量入力とコラージュ出力を一体として著作権侵害と断定する。無断学習単独の侵害命題に対応するかは独立確認に回す。",
+      "adopt_to_public": false,
+      "boundary_is_completed_nonadoption": false
+    },
+    {
+      "record_id_hash": "sha256:2e664538b9914753fb53df5dfefab2d314698789293e0572436181b93098eb90",
+      "claim_id": "unauthorized_learning_infringement",
+      "kind": "borderline_claims",
+      "blind_index": 69,
+      "text_sha256": "f98de7a0a1413f0d8ce8e4205ed523d4d5609b856aea9fc1b46762b99e1a7fa4",
+      "reader_statuses": {
+        "A": "borderline",
+        "B": "borderline",
+        "C": "borderline",
+        "D": "borderline"
+      },
+      "editor_status_under_frozen_interpretation": "borderline",
+      "editor_reason": "侵害がないという他者の見方を疑い、学習元の無許諾利用を根拠にする。ただし疑問の対象が学習自体なのか引用元で扱う別の行為かは本文では確定せず、返信・引用先の内容で補えない。",
+      "prior_editor_reason": "生成AIの無許諾データ利用を根拠に非侵害という見方に反論するが、学習単独と出力・転載データの問題を分けておらず命題対応は保留。",
+      "adopt_to_public": false,
+      "boundary_is_completed_nonadoption": true
+    },
+    {
+      "record_id_hash": "sha256:a373480008677b86676f981aadc0208a377ad46aaf630a2460725efbc274b8ae",
+      "claim_id": "tech_innovation_over_regulation",
+      "kind": "borderline_claims",
+      "blind_index": 14,
+      "text_sha256": "3b86888ef685d07ab2e9cb74fab964f585ee79004939a1b3bf61617ba0872eb2",
+      "reader_statuses": {
+        "A": "partial",
+        "B": "partial",
+        "C": "partial",
+        "D": "partial"
+      },
+      "editor_status_under_frozen_interpretation": "partial",
+      "editor_reason": "日本のAIに関する著作権分野の法整備が未完了だと述べる。分野を限定した主張であり、生成AIへの法規制全般が存在しないとまでは述べない。",
+      "prior_editor_reason": "日本のAI著作権問題の法整備はまだとの断定。AI全般の法制度不存在と、著作権への追加整備の未了を指す可能性を区別して保留する。",
+      "adopt_to_public": false,
+      "boundary_is_completed_nonadoption": false
+    },
+    {
+      "record_id_hash": "sha256:0a2c5a99397fb21c71e89de12ae6e9f003e7eec4336b68a0f17d217c95b42237",
+      "claim_id": "tech_innovation_over_regulation",
+      "kind": "borderline_claims",
+      "blind_index": 45,
+      "text_sha256": "a062b43ea8d622abf3deb19a7df74c419a841fb6655f21799ef61de2eeae04b5",
+      "reader_statuses": {
+        "A": "partial",
+        "B": "partial",
+        "C": "partial",
+        "D": "partial"
+      },
+      "editor_status_under_frozen_interpretation": "partial",
+      "editor_reason": "日本のAIの著作権分野について法整備が未完了だという主張である。生成AIに関するすべての法規制が存在しないという範囲には広げられない。",
+      "prior_editor_reason": "日本のAI著作権問題の法整備はまだとの断定。AI全般の法制度不存在と、著作権への追加整備の未了を指す可能性を区別して保留する。",
+      "adopt_to_public": false,
+      "boundary_is_completed_nonadoption": false
+    },
+    {
+      "record_id_hash": "sha256:5d2b26facb4674e833fda2860fab1686e2075d9eff2274e3e353897cb85c0d35",
+      "claim_id": "tech_innovation_over_regulation",
+      "kind": "matched_claims",
+      "blind_index": 36,
+      "text_sha256": "65ad7c02aa2d5abfe3ae2ae2a684de189339009393cdf6d3cf7eb8a00cb3843d",
+      "reader_statuses": {
+        "A": "direct",
+        "B": "direct",
+        "C": "direct",
+        "D": "direct"
+      },
+      "editor_status_under_frozen_interpretation": "direct",
+      "editor_reason": "生成AIには指針も制約も規制もないという現状認識を本人が明示している。指針だけの不足や追加規制の提案には限られていない。",
+      "prior_editor_reason": "生成AIにはガイドライン・制限・規制がないと、制度の不在を明示している。",
+      "adopt_to_public": false,
+      "boundary_is_completed_nonadoption": false
+    },
+    {
+      "record_id_hash": "sha256:654ea325b772e16dd3ccdfc3489726c0befea2360328d5212dafbe0e99e59e57",
+      "claim_id": "tech_innovation_over_regulation",
+      "kind": "borderline_claims",
+      "blind_index": 48,
+      "text_sha256": "9955e555394f122a5c244434d28805e86707efb1347100583d06a71174216fda",
+      "reader_statuses": {
+        "A": "direct",
+        "B": "direct",
+        "C": "borderline",
+        "D": "borderline"
+      },
+      "editor_status_under_frozen_interpretation": "borderline",
+      "editor_reason": "現在の状態を無資格の運転になぞらえて無秩序と評し、法律による統制を求めている。凍結基準では比喩的な現状評価を法律・制度の不存在の明示と区別する。",
+      "prior_editor_reason": "無免許の車という比喩で現状の無法地帯を批判する。規制制度の不存在と行為の横行を同一視しないため保留する。",
+      "adopt_to_public": false,
+      "boundary_is_completed_nonadoption": true
+    },
+    {
+      "record_id_hash": "sha256:3aaa705bff9cee9cf7b0e0ca6441cb56bb8d04ffab773c13ad3b88e6b9677059",
+      "claim_id": "tech_innovation_over_regulation",
+      "kind": "borderline_claims",
+      "blind_index": 29,
+      "text_sha256": "fa992fa9294d761c926a37fec4a93f64ee8e63ef7a8ab3820aaddb06b965a3d9",
+      "reader_statuses": {
+        "A": "partial",
+        "B": "partial",
+        "C": "partial",
+        "D": "partial"
+      },
+      "editor_status_under_frozen_interpretation": "partial",
+      "editor_reason": "刃物にあるような規制法が現在のAIには存在しないと述べる。対応する事前規制の枠組みの不足であり、他の法制度まで全く適用されないとは明言していない。",
+      "prior_editor_reason": "生成AIには銃刀法のような法がないと述べるが、専用の利用規制法の不足と既存法全体の不存在は別であり、命題対応は保留。",
+      "adopt_to_public": false,
+      "boundary_is_completed_nonadoption": false
+    },
+    {
+      "record_id_hash": "sha256:c0acb96e3b9877cf58024f054b5caa372e41b61be34f33e9902920a5fc0b75a6",
+      "claim_id": "tech_innovation_over_regulation",
+      "kind": "matched_claims",
+      "blind_index": 11,
+      "text_sha256": "af8373e21d737e30531092db6ab41fd28a9ff7132106a8e55b401293ac127a15",
+      "reader_statuses": {
+        "A": "direct",
+        "B": "direct",
+        "C": "direct",
+        "D": "direct"
+      },
+      "editor_status_under_frozen_interpretation": "direct",
+      "editor_reason": "日本のコンテンツへの被害を挙げたうえで、政府が法規制を一つも設けていないという現状を本人が断定している。",
+      "prior_editor_reason": "日本政府は何の法規制も敷いておらず完全な野放図状態だと、命題全体を明示する。",
+      "adopt_to_public": false,
+      "boundary_is_completed_nonadoption": false
+    },
+    {
+      "record_id_hash": "sha256:0b6b2adb51ab4c3b52cb5d21f8dad47a1139c4504314f220f06d90656a263ce4",
+      "claim_id": "unauthorized_learning_infringement",
+      "kind": "borderline_claims",
+      "blind_index": 17,
+      "text_sha256": "b146a387b4dadaec072acb6d0febd170c543b682effb9ecdf2ee7b09358637a0",
+      "reader_statuses": {
+        "A": "partial",
+        "B": "borderline",
+        "C": "borderline",
+        "D": "borderline"
+      },
+      "editor_status_under_frozen_interpretation": "borderline",
+      "editor_reason": "権利がある絵の無許可利用を否定し、その文脈には学習がある。ただし法律上の侵害を述べるのか、作者への配慮として禁止を求めるのかが明瞭でない。",
+      "prior_editor_reason": "著作権の存在を理由に元データの無断利用を禁止すると読めるが、学習そのものの法的な一律侵害と倫理的な拒否の境界が曖昧なため保留。",
+      "adopt_to_public": false,
+      "boundary_is_completed_nonadoption": true
+    },
+    {
+      "record_id_hash": "sha256:28d301285c78432384e2d605a748939a9e23861034dbe4b3f9346bf4a12063ff",
+      "claim_id": "unauthorized_learning_infringement",
+      "kind": "borderline_claims",
+      "blind_index": 6,
+      "text_sha256": "4c925b7b85679629c086bb9dca51662fb06666f464ecfe5ba771033f82c389de",
+      "reader_statuses": {
+        "A": "borderline",
+        "B": "borderline",
+        "C": "borderline",
+        "D": "borderline"
+      },
+      "editor_status_under_frozen_interpretation": "borderline",
+      "editor_reason": "権利者がいることを根拠に許可のない学習を禁じる意見はある。ただし著作権侵害という法律上の断定か、倫理や権利尊重の要求かを本文だけでは確定できない。",
+      "prior_editor_reason": "権利者の存在を理由に無許諾学習が駄目と一般化するが、侵害の法的断定と倫理的・利用条件上の禁止のどれかは独立確認が必要。",
+      "adopt_to_public": false,
+      "boundary_is_completed_nonadoption": true
+    },
+    {
+      "record_id_hash": "sha256:42039ae49276aff6c8c945f50982553780c4535c5daa5145112a460d5bbf4695",
+      "claim_id": "creator_protection_insufficient",
+      "kind": "borderline_claims",
+      "blind_index": 18,
+      "text_sha256": "8f484b797778ddc0a0efb221211bf622ceb04589ded64349b4abac6ca1947d56",
+      "reader_statuses": {
+        "A": "borderline",
+        "B": "borderline",
+        "C": "no",
+        "D": "borderline"
+      },
+      "editor_status_under_frozen_interpretation": "partial",
+      "editor_reason": "司法で止めにくいという関連する説明はあるが、無断学習された作者の全ての対抗手段の不存在を本文は特定しない。",
+      "prior_editor_reason": "特定文脈で裁判では規制できないと述べるが、何の被害に対する救済か不明。作品の作者の全救済手段不存在への一般化は保留する。",
+      "adopt_to_public": false,
+      "boundary_is_completed_nonadoption": false
+    },
+    {
+      "record_id_hash": "sha256:e564a67b2823a915cdd586fb861dda374d9cf06832c0a5be489c0957295f3cd9",
+      "claim_id": "unauthorized_learning_infringement",
+      "kind": "matched_claims",
+      "blind_index": 44,
+      "text_sha256": "7003fef4e6ab8edc55411da4a02cba0bf0ac9285d0b8f300098f9bfc0e23c528",
+      "reader_statuses": {
+        "A": "direct",
+        "B": "direct",
+        "C": "partial",
+        "D": "direct"
+      },
+      "editor_status_under_frozen_interpretation": "direct",
+      "editor_reason": "他人の作品等をAIに学習させることを著作権侵害・非合法と一般化する反語。利便性への批判はあるが、特定作品の創作的表現を享受する場合だけという法的な条件は示されていない。一般的な作成目的だけを享受目的の併存と補わず直接対応を残す。",
+      "prior_editor_reason": "人の作品をAI学習させることが合法なはずがないと、無条件の侵害へ結び付けている。",
+      "adopt_to_public": false,
+      "boundary_is_completed_nonadoption": false
+    },
+    {
+      "record_id_hash": "sha256:84c904d8a475d39c3a7ae2aa19bfae112df6679173ac8f19ae76d125246d91f3",
+      "claim_id": "unauthorized_learning_infringement",
+      "kind": "borderline_claims",
+      "blind_index": 60,
+      "text_sha256": "5400a51258b2efa5214236fc5520be3b03c632ea9c68c50366090874044e255b",
+      "reader_statuses": {
+        "A": "direct",
+        "B": "borderline",
+        "C": "borderline",
+        "D": "direct"
+      },
+      "editor_status_under_frozen_interpretation": "borderline",
+      "editor_reason": "AI学習の違法性には触れるが、著作権侵害か他の法令上の問題か、許諾の有無・対象行為を本文から確定できない。参照先サイトの内容を補わず直接採用しない。",
+      "prior_editor_reason": "AI学習の違法性を述べるが本家サイトの注意を指しており、対象作品・用途の範囲が本文だけでは確定できない。",
+      "adopt_to_public": false,
+      "boundary_is_completed_nonadoption": true
+    },
+    {
+      "record_id_hash": "sha256:4584631f04279e27844863cfa6bf5e54ea0832d9b50e1e1757b2429d9058057d",
+      "claim_id": "tech_innovation_over_regulation",
+      "kind": "matched_claims",
+      "blind_index": 53,
+      "text_sha256": "af83f44b2bd18192551b2ed0bf71d8e8a95a7e655dd68ed5ea166c504bce1c27",
+      "reader_statuses": {
+        "A": "direct",
+        "B": "direct",
+        "C": "direct",
+        "D": "direct"
+      },
+      "editor_status_under_frozen_interpretation": "direct",
+      "editor_reason": "生成AIが現在は法律によって制約されていないという認識を、自分が利用を止めない理由として明言している。",
+      "prior_editor_reason": "現状は法で縛られていないため反対しても気持ちにすぎないと明言する。法的枠組み不存在という命題の直接候補として独立確認に回す。",
+      "adopt_to_public": false,
+      "boundary_is_completed_nonadoption": false
+    },
+    {
+      "record_id_hash": "sha256:2afdfda5f19928889cc40c090438195a08a3cd58081bdd1c896e07249ecd24f2",
+      "claim_id": "unauthorized_learning_infringement",
+      "kind": "borderline_claims",
+      "blind_index": 19,
+      "text_sha256": "ba22b4c0d847e31fba308de6ab27341ec2d1b611e7e53c66c7895106bf7619ee",
+      "reader_statuses": {
+        "A": "borderline",
+        "B": "borderline",
+        "C": "partial",
+        "D": "borderline"
+      },
+      "editor_status_under_frozen_interpretation": "partial",
+      "editor_reason": "身近な人による特定の入力を侵害とする事例。モデル学習と入力加工も区別できず、無断学習全体へ補わない。",
+      "prior_editor_reason": "AIへの入力を侵害・犯罪と断定するが、学習とi2i改変等の区別がなく、学習単独の命題との対応は保留。",
+      "adopt_to_public": false,
+      "boundary_is_completed_nonadoption": false
+    },
+    {
+      "record_id_hash": "sha256:e68b754f3c87d5bec0081adbfbf18e37043b4bb8bf571cd75ecfe7f1390dc801",
+      "claim_id": "unauthorized_learning_infringement",
+      "kind": "borderline_claims",
+      "blind_index": 40,
+      "text_sha256": "a8216a9f6c8f08fce5a09bff208134c148f594a73637f233643a19670bcaf796",
+      "reader_statuses": {
+        "A": "borderline",
+        "B": "borderline",
+        "C": "borderline",
+        "D": "borderline"
+      },
+      "editor_status_under_frozen_interpretation": "borderline",
+      "editor_reason": "他人の絵を無許可で入力する行為を別問題として有罪になぞらえるが、モデル学習か入力利用か、法的判断か倫理的判断かが不明である。",
+      "prior_editor_reason": "無許諾の画像入力をギルティとするが、学習とi2i利用の区別や法的評価が明示されないため保留。",
+      "adopt_to_public": false,
+      "boundary_is_completed_nonadoption": true
+    },
+    {
+      "record_id_hash": "sha256:949791d43c3459d7edeed9e8d93e9755acba092f01e8f37132ba1a7c832b0870",
+      "claim_id": "creator_protection_insufficient",
+      "kind": "borderline_claims",
+      "blind_index": 52,
+      "text_sha256": "9fea740c0f1a2d2c6885d34be71a6d76f53d4b222855d7bb5deea07ca29b5873",
+      "reader_statuses": {
+        "A": "borderline",
+        "B": "partial",
+        "C": "partial",
+        "D": "borderline"
+      },
+      "editor_status_under_frozen_interpretation": "partial",
+      "editor_reason": "著作権がほぼ機能しないという効果の評価であり、作者の全ての対抗手段の不存在ではない。",
+      "prior_editor_reason": "著作権がほぼ機能しないとし新法を求めるが、実効性の不足と法的手段・既存法の不存在は同一ではないため命題対応を保留。",
+      "adopt_to_public": false,
+      "boundary_is_completed_nonadoption": false
+    },
+    {
+      "record_id_hash": "sha256:949791d43c3459d7edeed9e8d93e9755acba092f01e8f37132ba1a7c832b0870",
+      "claim_id": "tech_innovation_over_regulation",
+      "kind": "borderline_claims",
+      "blind_index": 52,
+      "text_sha256": "9fea740c0f1a2d2c6885d34be71a6d76f53d4b222855d7bb5deea07ca29b5873",
+      "reader_statuses": {
+        "A": "partial",
+        "B": "partial",
+        "C": "partial",
+        "D": "no"
+      },
+      "editor_status_under_frozen_interpretation": "partial",
+      "editor_reason": "著作権の効果不足と新法の必要性を述べるが、既存法全体が存在しないとの断定にはしない。",
+      "prior_editor_reason": "著作権がほぼ機能しないとし新法を求めるが、実効性の不足と法的手段・既存法の不存在は同一ではないため命題対応を保留。",
+      "adopt_to_public": false,
+      "boundary_is_completed_nonadoption": false
+    },
+    {
+      "record_id_hash": "sha256:26f2ceb1925ce7b58fdc95a3e75b4b8e84427ecffd9a8aaf57e0b0b78eacf4c7",
+      "claim_id": "tech_innovation_over_regulation",
+      "kind": "borderline_claims",
+      "blind_index": 67,
+      "text_sha256": "0fa33b9ae66a8425aaddcfade5958a15a63f42ace196b7a6eab8d338a2f3ee48",
+      "reader_statuses": {
+        "A": "direct",
+        "B": "direct",
+        "C": "borderline",
+        "D": "borderline"
+      },
+      "editor_status_under_frozen_interpretation": "borderline",
+      "editor_reason": "現在のAIが統制されずにいると評価して早期の立法を求めている。凍結基準では現在の規制制度が皆無という明示より弱い現状評価として留保する。",
+      "prior_editor_reason": "野放し状態と法整備が必須との表現。制度の不存在か、実効性・追加制度への要求かを独立確認で区別する。",
+      "adopt_to_public": false,
+      "boundary_is_completed_nonadoption": true
+    },
+    {
+      "record_id_hash": "sha256:8e7790b53edb4d12d9427bfcd38d5ff80bf87b1760f125c815f0ea458851100e",
+      "claim_id": "unauthorized_learning_infringement",
+      "kind": "matched_claims",
+      "blind_index": 68,
+      "text_sha256": "a86d695137efed91f9d4b965bb53933fc99609c433273245e11e9071ee5bc930",
+      "reader_statuses": {
+        "A": "direct",
+        "B": "direct",
+        "C": "direct",
+        "D": "direct"
+      },
+      "editor_status_under_frozen_interpretation": "direct",
+      "editor_reason": "AI学習に作品を無許可で使うことが著作権侵害だと直接述べる。特定作品・特定目的などに限らない一般的な法的評価である。",
+      "prior_editor_reason": "AI学習への無断使用は著作権侵害にあたると、条件なしに明示している。",
+      "adopt_to_public": false,
+      "boundary_is_completed_nonadoption": false
+    },
+    {
+      "record_id_hash": "sha256:9e649129fec3b219d9e7dde3009bdbcc12fb2f40df3067dee73f68db9311fd4c",
+      "claim_id": "tech_innovation_over_regulation",
+      "kind": "matched_claims",
+      "blind_index": 38,
+      "text_sha256": "29783c68bbb5f6dfb507d9d8aefabf28820bc2e2b70d56688f8e688337b6aa72",
+      "reader_statuses": {
+        "A": "direct",
+        "B": "direct",
+        "C": "direct",
+        "D": "direct"
+      },
+      "editor_status_under_frozen_interpretation": "direct",
+      "editor_reason": "現在は生成AIの規制法が定まっていないという事実認識を明示し、それを利用の仕方についての提案の前提にしている。",
+      "prior_editor_reason": "生成AIの規制法が決められていない今、と現時点の制度未整備を明示する。",
+      "adopt_to_public": false,
+      "boundary_is_completed_nonadoption": false
+    },
+    {
+      "record_id_hash": "sha256:1a94c2b986ad63c28431a8097634c772d5338e437c0bba05ae56e78f12819494",
+      "claim_id": "tech_innovation_over_regulation",
+      "kind": "matched_claims",
+      "blind_index": 43,
+      "text_sha256": "6ae9080378c65d85a35e89ac9567c74d0f1de6118016f0d4b17a3e149942f039",
+      "reader_statuses": {
+        "A": "direct",
+        "B": "direct",
+        "C": "direct",
+        "D": "direct"
+      },
+      "editor_status_under_frozen_interpretation": "direct",
+      "editor_reason": "法による規制が存在しないことを利用者の問題行動の前提として明言している。",
+      "prior_editor_reason": "法の規制がないことを利用していると明示する。複製・解析や個別の侵害生成物への批判は学習一般の一律侵害とは分ける。",
+      "adopt_to_public": false,
+      "boundary_is_completed_nonadoption": false
+    },
+    {
+      "record_id_hash": "sha256:6a375ba8602ad0b3dc3a0a7ab8b1f4acaec7e01f45e1f49852c8825c5cb65a21",
+      "claim_id": "unauthorized_learning_infringement",
+      "kind": "borderline_claims",
+      "blind_index": 64,
+      "text_sha256": "712cee4a0bd4dc38090d277ffe4d5189ddf742f7011c1eddfe6391ca349a0f30",
+      "reader_statuses": {
+        "A": "borderline",
+        "B": "borderline",
+        "C": "borderline",
+        "D": "borderline"
+      },
+      "editor_status_under_frozen_interpretation": "borderline",
+      "editor_reason": "AIを作る過程に著作権法違反があるとは述べるが、データ取得などと区別して学習それ自体を侵害と明示してはいない。",
+      "prior_editor_reason": "生成AIの製造過程で著作権違反していると断定するが、学習単独と特定データ調達の区別がなく、命題への対応は独立確認を要する。",
+      "adopt_to_public": false,
+      "boundary_is_completed_nonadoption": true
+    },
+    {
+      "record_id_hash": "sha256:e132601a145992d2f39b7ca1a54aed6a9e1488daaecd3a491f0539bb41e3e88f",
+      "claim_id": "tech_innovation_over_regulation",
+      "kind": "matched_claims",
+      "blind_index": 2,
+      "text_sha256": "29e7f947147f9eab6963d2a0ad6d135e586f71be57411d38893e593097c6c232",
+      "reader_statuses": {
+        "A": "direct",
+        "B": "direct",
+        "C": "direct",
+        "D": "direct"
+      },
+      "editor_status_under_frozen_interpretation": "direct",
+      "editor_reason": "日本には生成AIへの規制が存在しないと直接述べ、継続して被害が出るとの予測につなげている。",
+      "prior_editor_reason": "生成AIへの規制がない日本、と現状の不存在を明示する。権利を守らないのかという疑問は救済制度の不存在と同一には扱わない。",
+      "adopt_to_public": false,
+      "boundary_is_completed_nonadoption": false
+    },
+    {
+      "record_id_hash": "sha256:e838d09f0c8353bdf941cc27084117d15267b2148afbd5b39ae84dc7448a3916",
+      "claim_id": "tech_innovation_over_regulation",
+      "kind": "matched_claims",
+      "blind_index": 39,
+      "text_sha256": "e9632926825399f79b45130a736326a29afed953fa5e986acd7a36e1793a7b49",
+      "reader_statuses": {
+        "A": "direct",
+        "B": "direct",
+        "C": "direct",
+        "D": "direct"
+      },
+      "editor_status_under_frozen_interpretation": "direct",
+      "editor_reason": "社会的な負担を生じさせている生成AIを現時点まで規制せずに放置している、という認識を本人が疑問形で表明している。単なる将来への規制要望ではない。",
+      "prior_editor_reason": "現状の生成AIをいつまで無規制で放置するのかと明示するため、規制不存在という命題の直接候補。規制の強弱との区別は独立確認を要する。",
+      "adopt_to_public": false,
+      "boundary_is_completed_nonadoption": false
+    },
+    {
+      "record_id_hash": "sha256:65737294d8f59773960fc8a25257232658f1fe25df34eab1b90d4cb2277b3c93",
+      "claim_id": "tech_innovation_over_regulation",
+      "kind": "matched_claims",
+      "blind_index": 24,
+      "text_sha256": "66b63fd91b672a662c290b09d5a112cfd83e5f6bf34a53d44a6c01eb561327b4",
+      "reader_statuses": {
+        "A": "direct",
+        "B": "direct",
+        "C": "direct",
+        "D": "direct"
+      },
+      "editor_status_under_frozen_interpretation": "direct",
+      "editor_reason": "他の道具には法律があるのにAIには規制がないという本人の現在の認識を示している。",
+      "prior_editor_reason": "他の道具には規制や法律があるのにAIに規制がないと、現在の法制度の不在を対比している。",
+      "adopt_to_public": false,
+      "boundary_is_completed_nonadoption": false
+    },
+    {
+      "record_id_hash": "sha256:0a94204d2e53ec57da49d49bf41c97ed403d908921dc706fcd57e15e5a8245d4",
+      "claim_id": "ai_output_has_copyright",
+      "kind": "matched_claims",
+      "blind_index": 49,
+      "text_sha256": "3396a7e361437e1d53d340c2536a3cf0c4abb26a6c47d0a19af2a50c2b5ef176",
+      "reader_statuses": {
+        "A": "direct",
+        "B": "direct",
+        "C": "direct",
+        "D": "direct"
+      },
+      "editor_status_under_frozen_interpretation": "direct",
+      "editor_reason": "作成者への権利帰属という一般的な自説を表明しているため、旧編集が用いた一般的な保護という凍結解釈では直接対応として比較する。ただし創作的寄与がなくても成立すると明示した投稿ではなく、推奨する厳密な無条件保護命題への採用はしない。",
+      "prior_editor_reason": "生成AIで生み出したものの著作権は生み出した人にあるという一般的な自説を表明し、他者権利との抵触調査責任を別に述べる。創作的寄与の条件は示されず無条件保護の直接候補。末尾は自説の妥当性を尋ねる疑問のため独立確認を要する。",
+      "adopt_to_public": false,
+      "boundary_is_completed_nonadoption": false
+    },
+    {
+      "record_id_hash": "sha256:a760c1c58ff17107ca82d3864c63ef396f690105eed409a43d90bab961a3d2af",
+      "claim_id": "unauthorized_learning_infringement",
+      "kind": "borderline_claims",
+      "blind_index": 55,
+      "text_sha256": "6777857e752272edf321ae62046bfd82e5078e8cf786fcfd0548a286e761f6c4",
+      "reader_statuses": {
+        "A": "borderline",
+        "B": "borderline",
+        "C": "borderline",
+        "D": "borderline"
+      },
+      "editor_status_under_frozen_interpretation": "borderline",
+      "editor_reason": "著作権法の例外規定を使うことへの批判と法的に不適切だという見解はある。ただし具体的に違法とされる工程が学習なのか、享受的な利用なのか、別の行為なのか本文では特定できない。",
+      "prior_editor_reason": "30条の4による正当化に反論し、弁護士が著作権的にアウトとする見解を述べるが、特定事案の条件や学習単独への一般化の範囲が不明なため保留。",
+      "adopt_to_public": false,
+      "boundary_is_completed_nonadoption": true
+    },
+    {
+      "record_id_hash": "sha256:a9be9d2b68f5300195462615a6743c3a6183f0260fd7bc91d63b4d0e5ad65c83",
+      "claim_id": "tech_innovation_over_regulation",
+      "kind": "matched_claims",
+      "blind_index": 1,
+      "text_sha256": "9b1e132bbab667d292184be4bb28ab0ea7c0a8f6877589eab59894017f053304",
+      "reader_statuses": {
+        "A": "direct",
+        "B": "direct",
+        "C": "direct",
+        "D": "direct"
+      },
+      "editor_status_under_frozen_interpretation": "direct",
+      "editor_reason": "倫理と法律を区別しつつ、生成AIを現時点で法規制の対象になっていない技術として位置づけている。単なる規制への要望より踏み込んだ現状認識がある。",
+      "prior_editor_reason": "生成AIを法規制されていないが倫理に反する行為として、車や包丁の過去の無規制状態に比べている。",
+      "adopt_to_public": false,
+      "boundary_is_completed_nonadoption": false
+    },
+    {
+      "record_id_hash": "sha256:36b84821a7a0b222ab179328faf68cf135f26ae8298ab1f5087014f061bc7a2b",
+      "claim_id": "tech_innovation_over_regulation",
+      "kind": "matched_claims",
+      "blind_index": 16,
+      "text_sha256": "57a40a539a6da7b3dac6443c0667b9b8ab81c52e3dbb583319577bf96e93a0db",
+      "reader_statuses": {
+        "A": "direct",
+        "B": "direct",
+        "C": "direct",
+        "D": "direct"
+      },
+      "editor_status_under_frozen_interpretation": "direct",
+      "editor_reason": "新技術に法規制が対応できていないことを理由に、現行法では生成AIを取り締まれないと明言している。",
+      "prior_editor_reason": "生成AIは現行法で取り締まれず法規制が追いついていないと、現在の法的規制の欠如を明示する。",
+      "adopt_to_public": false,
+      "boundary_is_completed_nonadoption": false
+    },
+    {
+      "record_id_hash": "sha256:05f19b6c735ca3b8e23e090adbd9c7e97de27f231eb979765ee421475c48aefe",
+      "claim_id": "tech_innovation_over_regulation",
+      "kind": "matched_claims",
+      "blind_index": 37,
+      "text_sha256": "b00c2ebc9186085e55596d2a12216f49f8dda36b4951ff4aa5c36c001893ef17",
+      "reader_statuses": {
+        "A": "direct",
+        "B": "direct",
+        "C": "direct",
+        "D": "direct"
+      },
+      "editor_status_under_frozen_interpretation": "direct",
+      "editor_reason": "二次創作は法規制の対象である一方、生成AIはまだ法規制されていないと本人が明確に対比している。",
+      "prior_editor_reason": "生成AIはまだ法規制されていないと、規制される二次創作との対比で明示する。",
+      "adopt_to_public": false,
+      "boundary_is_completed_nonadoption": false
+    },
+    {
+      "record_id_hash": "sha256:05aa9142741312cb44769b8f40531abf69080bff30b2474de7c0795e7287de84",
+      "claim_id": "tech_innovation_over_regulation",
+      "kind": "borderline_claims",
+      "blind_index": 20,
+      "text_sha256": "e67f3fb1fe2e933c68657fb399e9ce35eb418327aa818031e5e8684900c49edf",
+      "reader_statuses": {
+        "A": "direct",
+        "B": "direct",
+        "C": "borderline",
+        "D": "borderline"
+      },
+      "editor_status_under_frozen_interpretation": "borderline",
+      "editor_reason": "規制を予防手段に見立て、その手段がないまま生成AIが拡大したと批判している。凍結基準では比喩的な無規制評価を制度不存在の明示と分ける必要がある。",
+      "prior_editor_reason": "規制というワクチンがないとの比喩。法律の不存在と実効性への評価のどちらかを本文だけで確定しない。",
+      "adopt_to_public": false,
+      "boundary_is_completed_nonadoption": true
+    },
+    {
+      "record_id_hash": "sha256:9a74c896cf4c7567fa4c196f2c0795fccf7e33795247c359fd13d62ca16914af",
+      "claim_id": "tech_innovation_over_regulation",
+      "kind": "borderline_claims",
+      "blind_index": 66,
+      "text_sha256": "f8602289555156872b2b81a076908864c3fd655696476997cd289be49bbd1280",
+      "reader_statuses": {
+        "A": "direct",
+        "B": "direct",
+        "C": "borderline",
+        "D": "borderline"
+      },
+      "editor_status_under_frozen_interpretation": "borderline",
+      "editor_reason": "法規制を早く整えることを求め、現状を極端に無秩序だと評価している。凍結基準ではこの種の比喩と規制提案だけから制度不存在の断定にはしない。",
+      "prior_editor_reason": "無法地帯との評価と法規制への要望があり、制度の不存在か不十分さかは独立確認で裁定する。",
+      "adopt_to_public": false,
+      "boundary_is_completed_nonadoption": true
+    },
+    {
+      "record_id_hash": "sha256:b2df26cd7f33e2c4e7459224289d6427edbbf0c88d032bbe53746c9c0b83397c",
+      "claim_id": "unauthorized_learning_infringement",
+      "kind": "borderline_claims",
+      "blind_index": 41,
+      "text_sha256": "85c59a3a251348e4a05980a2c09f39cca0f2320cf105974d2809c9f12f97504c",
+      "reader_statuses": {
+        "A": "borderline",
+        "B": "borderline",
+        "C": "partial",
+        "D": "borderline"
+      },
+      "editor_status_under_frozen_interpretation": "partial",
+      "editor_reason": "特定の絵をAIに読み込ませて別の絵・動画を作る利用への侵害指摘であり、学習単独の一律侵害とは分ける。",
+      "prior_editor_reason": "勝手なAIへの読み込みを著作権侵害とするが、学習と参照・加工生成の区別がなく、学習単独の命題対応は保留。",
+      "adopt_to_public": false,
+      "boundary_is_completed_nonadoption": false
+    },
+    {
+      "record_id_hash": "sha256:6ffd2042ac2adebeff4c498023da5ef9f1675d93e7a6a8ad9615e836e93157ed",
+      "claim_id": "creator_protection_insufficient",
+      "kind": "matched_claims",
+      "blind_index": 62,
+      "text_sha256": "a18c7df1cfd358eeb98a20f3107ea048593db1155442752a54836c8fd57bb3a3",
+      "reader_statuses": {
+        "A": "borderline",
+        "B": "borderline",
+        "C": "partial",
+        "D": "borderline"
+      },
+      "editor_status_under_frozen_interpretation": "partial",
+      "editor_reason": "AIによる自分の絵の利用について訴えられないとするが、モデル学習か入力加工・出力かは特定しない。自衛にも言及し、学習された作者の対抗手段全体の不存在へ広げられない。",
+      "prior_editor_reason": "通常の盗用は訴えられるがAIによるものはまだ法的に無理で自衛しかないと断定する。AI被害に法的対抗手段がないという命題の直接候補として独立確認に回す。",
+      "adopt_to_public": false,
+      "boundary_is_completed_nonadoption": false
+    },
+    {
+      "record_id_hash": "sha256:ed33c0bdca70ad623798bb18a829b5d31bc0ee71ea102e8ba9c509d6a8ca7526",
+      "claim_id": "unauthorized_learning_infringement",
+      "kind": "existing",
+      "blind_index": 34,
+      "text_sha256": "11cfd3a8e71f68d5aef916e3caa0ed00b0efcb1f9aadd2e8e71608d77fd94c7e",
+      "reader_statuses": {
+        "A": "opposed",
+        "B": "opposed",
+        "C": "opposed",
+        "D": "opposed"
+      },
+      "editor_status_under_frozen_interpretation": "opposed",
+      "editor_reason": "許可がないことを問題視しつつ、学習時の複製にも著作権が制限される範囲があると本人が明示している。無許諾なら学習が必ず侵害になるという命題とは両立しない。",
+      "prior_editor_reason": "無許諾という共通点への批判だが権利制限も明記しており、常に侵害との断定ではない。",
+      "adopt_to_public": false,
+      "boundary_is_completed_nonadoption": false
+    },
+    {
+      "record_id_hash": "sha256:49dc300a567f9d2ef05b40ae3408825797177f0015b828ed9cb20cdc41142b93",
+      "claim_id": "unauthorized_learning_infringement",
+      "kind": "existing",
+      "blind_index": 35,
+      "text_sha256": "06aea8e768742ed7f235d3cbeff7339d3845eaa2fabc728ec92e19d95a0aca56",
+      "reader_statuses": {
+        "A": "no",
+        "B": "no",
+        "C": "no",
+        "D": "no"
+      },
+      "editor_status_under_frozen_interpretation": "no",
+      "editor_reason": "無許諾学習や盗作を非難しているが、法的な侵害の断定ではなく作者として名乗る資格や制作姿勢の評価が中心である。",
+      "prior_editor_reason": "無断学習と出力物の盗作への批判はあるが、常に著作権法違反とする断定はない。",
+      "adopt_to_public": false,
+      "boundary_is_completed_nonadoption": false
+    },
+    {
+      "record_id_hash": "sha256:91199bf9cbfa1528ee8a3d7e18ea7760b808b672b8f36e94bbee339e4be78eef",
+      "claim_id": "data_disclosure_needed",
+      "kind": "existing",
+      "blind_index": 31,
+      "text_sha256": "47c1c65547fa47af3cdb8473378ae8f779b69bc9dd45b2420585e4cd1883027c",
+      "reader_statuses": {
+        "A": "no",
+        "B": "no",
+        "C": "no",
+        "D": "no"
+      },
+      "editor_status_under_frozen_interpretation": "no",
+      "editor_reason": "本文は画像生成の学習元への不信を扱うが、日本に学習元の出所開示を法的に義務づける制度がないという説明はない。",
+      "prior_editor_reason": "既存の開示義務不存在への対応だが、本文は無断利用への反対であり開示義務の有無は述べていない。",
+      "adopt_to_public": false,
+      "boundary_is_completed_nonadoption": false
+    },
+    {
+      "record_id_hash": "sha256:ebc2e7fdb026cefdbc26143d9194eec90e5d1b8188b897c4cef35a8644df3e0d",
+      "claim_id": "data_disclosure_needed",
+      "kind": "existing",
+      "blind_index": 56,
+      "text_sha256": "1a450e445c45713405f3b13f32235014bb6f2a63a32c5b7a7938edf5f848661c",
+      "reader_statuses": {
+        "A": "no",
+        "B": "no",
+        "C": "no",
+        "D": "no"
+      },
+      "editor_status_under_frozen_interpretation": "no",
+      "editor_reason": "適切な学習元を使うことへの要求であり、出所開示の法定義務の不存在ではない。",
+      "prior_editor_reason": "既存の開示義務不存在への対応だが、本文はクリーンな学習データを求める意見で、出所開示の法的義務について述べていない。",
+      "adopt_to_public": false,
+      "boundary_is_completed_nonadoption": false
+    },
+    {
+      "record_id_hash": "sha256:9ef225eb4d770c6b72fbba3abaaf767794f2d1ac73168cbd59bc02f47ec8bbab",
+      "claim_id": "compensation_required",
+      "kind": "existing",
+      "blind_index": 7,
+      "text_sha256": "2193354d5a56a9e92f8fc5c83936542f6d67878c92ac638726935ed3054ccfae",
+      "reader_statuses": {
+        "A": "no",
+        "B": "no",
+        "C": "no",
+        "D": "no"
+      },
+      "editor_status_under_frozen_interpretation": "no",
+      "editor_reason": "開発者が対価を渡していないという現実の非難であり、支払いを義務づける法律が存在しないとの説明ではない。",
+      "prior_editor_reason": "現実に対価を支払っていないとの批判で、支払義務を定める法律がないという主張ではない。",
+      "adopt_to_public": false,
+      "boundary_is_completed_nonadoption": false
+    },
+    {
+      "record_id_hash": "sha256:2ec4f22e53104014e19de11cf47f4373efd2a61150d7e0b854f5dc03e3ff0ec0",
+      "claim_id": "compensation_required",
+      "kind": "existing",
+      "blind_index": 26,
+      "text_sha256": "e0f65de5004fea0b6c68382393b92ae6618890e37bce69db5c6559fb6c94557a",
+      "reader_statuses": {
+        "A": "no",
+        "B": "no",
+        "C": "no",
+        "D": "no"
+      },
+      "editor_status_under_frozen_interpretation": "no",
+      "editor_reason": "無対価で利用されているという非難であり、対価支払い義務を定める法律の有無には言及しない。",
+      "prior_editor_reason": "無許諾・対価未払いへの批判で、法的な支払義務が存在しないとは述べていない。",
+      "adopt_to_public": false,
+      "boundary_is_completed_nonadoption": false
+    },
+    {
+      "record_id_hash": "sha256:ae490960f51c94022604c97f8450565ec24ce0fd60787bb527e993564778f6c5",
+      "claim_id": "creator_protection_insufficient",
+      "kind": "existing",
+      "blind_index": 21,
+      "text_sha256": "b4ca6448bdc19353318a0e599f928d43842b0e377e7a1448a39835c7bf4ba477",
+      "reader_statuses": {
+        "A": "no",
+        "B": "no",
+        "C": "no",
+        "D": "no"
+      },
+      "editor_status_under_frozen_interpretation": "no",
+      "editor_reason": "本文は必要画像枚数と他人の画像を集める行為への批判を扱うが、学習された作品の作者にすべての対抗・救済手段がないという説明はない。",
+      "prior_editor_reason": "既存の対抗手段なしへの対応だが、本文は必要学習量と無断収集への批判で対抗手段の存否を述べていない。",
+      "adopt_to_public": false,
+      "boundary_is_completed_nonadoption": false
+    },
+    {
+      "record_id_hash": "sha256:d4dc47aada3a4c13cf948bd934fad77b65bc5ebb807c7523dd840107927e1bf8",
+      "claim_id": "creator_protection_insufficient",
+      "kind": "existing",
+      "blind_index": 33,
+      "text_sha256": "f9562f92cab41610b45d7aadde869b57f5da91b23835a5b4ef2acec43bdd7004",
+      "reader_statuses": {
+        "A": "no",
+        "B": "no",
+        "C": "no",
+        "D": "no"
+      },
+      "editor_status_under_frozen_interpretation": "no",
+      "editor_reason": "本文は個人情報の学習利用と制度改正への反対を扱うが、学習された作品の作者にすべての対抗・救済手段がないという説明はない。",
+      "prior_editor_reason": "既存の対抗手段なしへの対応だが、個人情報保護法改正と利用者への批判で、作品の作者の救済手段の存否は述べていない。",
+      "adopt_to_public": false,
+      "boundary_is_completed_nonadoption": false
+    },
+    {
+      "record_id_hash": "sha256:4eac0fae71568dd1afbd4a219f863161c3ada22f0384fed8e81e8bff31837f93",
+      "claim_id": "ai_output_has_copyright",
+      "kind": "existing",
+      "blind_index": 23,
+      "text_sha256": "459a9c79e01dfbac3767671339b332d49d443999eb8db23956ed4bee4bf0f349",
+      "reader_statuses": {
+        "A": "no",
+        "B": "no",
+        "C": "no",
+        "D": "no"
+      },
+      "editor_status_under_frozen_interpretation": "no",
+      "editor_reason": "本文は学習と侵害する出力の公開を区別する見解を扱うが、AI生成物そのものの著作権が一般的に成立するかについては述べていない。",
+      "prior_editor_reason": "既存のAI生成物の著作物性への対応だが、本文は学習と他者の権利侵害を区別するだけで、生成物自体の著作権の成立を述べていない。",
+      "adopt_to_public": false,
+      "boundary_is_completed_nonadoption": false
+    },
+    {
+      "record_id_hash": "sha256:a27ab8abbad19b53c5d0becac082dcd6630a22d65f73866bb77ce88254ccd5ae",
+      "claim_id": "ai_output_has_copyright",
+      "kind": "existing",
+      "blind_index": 10,
+      "text_sha256": "1d0428b7e23a6102834c974368c3043f4bacf8c6a4735ebeca84f55a9569e655",
+      "reader_statuses": {
+        "A": "partial",
+        "B": "partial",
+        "C": "partial",
+        "D": "partial"
+      },
+      "editor_status_under_frozen_interpretation": "partial",
+      "editor_reason": "本人が制作した一曲について権利を取得したと申告している。取得の内容や創作的関与は不明で、AI作品全般に条件なく権利が発生するという一般則は述べない。",
+      "prior_editor_reason": "個別の生成曲で著作権を取得したという自己申告であり、AI生成物一般の一律保護を述べていない。創作的寄与や実際の権利取得は外から補わない。",
+      "adopt_to_public": false,
+      "boundary_is_completed_nonadoption": false
+    },
+    {
+      "record_id_hash": "sha256:3aff48ea01ceb19c3b86c40de872681e4d4d5d686e2a8489b82471417e7a7b6a",
+      "claim_id": "tech_innovation_over_regulation",
+      "kind": "existing",
+      "blind_index": 5,
+      "text_sha256": "c4e758434ad55840589e70d03b9c67855554d9f4ca5374863cf18055a1ceea97",
+      "reader_statuses": {
+        "A": "no",
+        "B": "no",
+        "C": "no",
+        "D": "no"
+      },
+      "editor_status_under_frozen_interpretation": "no",
+      "editor_reason": "本文はAI利用への適応を求める意見を扱うが、生成AIに規制制度が存在しない、または法的に取り締まれないという説明はない。",
+      "prior_editor_reason": "既存の規制未整備への対応だが、本文はAI利用と労働への意見で、法整備の進捗や規制の存否は述べていない。",
+      "adopt_to_public": false,
+      "boundary_is_completed_nonadoption": false
+    },
+    {
+      "record_id_hash": "sha256:4b098887bc3e01c032d8bef5876851601f22f3ebc1ef341fdea3efefbd868040",
+      "claim_id": "tech_innovation_over_regulation",
+      "kind": "existing",
+      "blind_index": 4,
+      "text_sha256": "0acca695b9ab6178e2ed714d44406998edeeaa06a734bc97235fcb46a4e79294",
+      "reader_statuses": {
+        "A": "no",
+        "B": "no",
+        "C": "no",
+        "D": "no"
+      },
+      "editor_status_under_frozen_interpretation": "no",
+      "editor_reason": "個人情報に関する制度変更の狙いを論じるが、生成AI一般の規制が存在しないとは述べていない。",
+      "prior_editor_reason": "既存の規制未整備への対応だが、本文はAI開発に向けた制度整備があると評価しており、規制が進まず野放しとの断定ではない。",
+      "adopt_to_public": false,
+      "boundary_is_completed_nonadoption": false
+    }
+  ],
+  "cross_claim_extra_findings": [
+    {
+      "reviewer": "C",
+      "blind_index": 18,
+      "record_id_hash": "sha256:42039ae49276aff6c8c945f50982553780c4535c5daa5145112a460d5bbf4695",
+      "claim_id": "tech_innovation_over_regulation",
+      "reader_status": "direct",
+      "editor_status": "partial",
+      "editor_reason": "個別のAI利用への司法対応が難しいという説明を、AIの全適用法不存在へ広げない。追加の直接候補には採用しない。"
+    }
+  ],
+  "changes_to_original_direct": [
+    {
+      "record_id_hash": "sha256:04a07bf47c341a9c17d60a1892fce360c319e4e88c11390fa2a0cfb178072c10",
+      "claim_id": "tech_innovation_over_regulation",
+      "kind": "matched_claims",
+      "blind_index": 3,
+      "text_sha256": "085ca3af2bb72170f6f53d0152155e8b014f8c876acd4f7336887a7441a9c56c",
+      "reader_statuses": {
+        "A": "partial",
+        "B": "direct",
+        "C": "direct",
+        "D": "partial"
+      },
+      "editor_status_under_frozen_interpretation": "partial",
+      "editor_reason": "非公開データセットを使う生成AIやそのデータ取得に対象を絞った法の不足の話で、全ての適用法の不存在まで補わない。",
+      "prior_editor_reason": "生成AIを規制する法律がまだないため合法だと、法の不存在を明示している。",
+      "adopt_to_public": false,
+      "boundary_is_completed_nonadoption": false
+    },
+    {
+      "record_id_hash": "sha256:6ffd2042ac2adebeff4c498023da5ef9f1675d93e7a6a8ad9615e836e93157ed",
+      "claim_id": "creator_protection_insufficient",
+      "kind": "matched_claims",
+      "blind_index": 62,
+      "text_sha256": "a18c7df1cfd358eeb98a20f3107ea048593db1155442752a54836c8fd57bb3a3",
+      "reader_statuses": {
+        "A": "borderline",
+        "B": "borderline",
+        "C": "partial",
+        "D": "borderline"
+      },
+      "editor_status_under_frozen_interpretation": "partial",
+      "editor_reason": "AIによる自分の絵の利用について訴えられないとするが、モデル学習か入力加工・出力かは特定しない。自衛にも言及し、学習された作者の対抗手段全体の不存在へ広げられない。",
+      "prior_editor_reason": "通常の盗用は訴えられるがAIによるものはまだ法的に無理で自衛しかないと断定する。AI被害に法的対抗手段がないという命題の直接候補として独立確認に回す。",
+      "adopt_to_public": false,
+      "boundary_is_completed_nonadoption": false
+    }
+  ],
+  "promoted_from_original_hold": [
+    {
+      "record_id_hash": "sha256:e11164319937d28e27edfa9efadb1712f81272d5a9a556bf650ae77c5130b983",
+      "claim_id": "unauthorized_learning_infringement",
+      "kind": "borderline_claims",
+      "blind_index": 32,
+      "text_sha256": "68cd92e0a64dfeda4df7918f9a30e9e93dfdb483669f8fb82a59c3d17f79a10d",
+      "reader_statuses": {
+        "A": "partial",
+        "B": "borderline",
+        "C": "direct",
+        "D": "direct"
+      },
+      "editor_status_under_frozen_interpretation": "direct",
+      "editor_reason": "特定作品の事例ではなく、無許諾のイラストデータの大量入力を著作権侵害と一般化している。自己の素材による適法な学習を認めることは無許諾学習への例外ではなく、媒体だけの限定は特定事例として除外しない。",
+      "prior_editor_reason": "大量入力とコラージュ出力を一体として著作権侵害と断定する。無断学習単独の侵害命題に対応するかは独立確認に回す。",
+      "adopt_to_public": false,
+      "boundary_is_completed_nonadoption": false
+    }
+  ],
+  "public_data_changed": false,
+  "public_checked_on": "2026-09-19",
+  "coverage_warning_resolved": false,
+  "coverage_gap_days": 38,
+  "private_evidence_directory": "/Volumes/M2-WorkSpace/Projects/副業/UIデザイン調査/2026-11-01_生成AI_独立確認",
+  "next_step": "見出し・資料説明・基準の意味をそろえ、変更した命題を全3975件へ再照合してから採用・公開候補を作る。",
+  "limitations": [
+    "対象は候補25組・保留35組・既存12組の計72組・71本文。4読み手が各71本文を読んだが全3975件の独立再読ではない。",
+    "A/Bは前回採否・基準を伏せた。C/Dは対応するA又はBの固定判断と凍結基準を参照しており、A/Bからも独立した完全な伏せ読みとは呼ばない。",
+    "資料担当は前回の監査結論を読まなかったが、既存生成元の公開判定・説明は参照した。全判定を伏せた資料監査ではない。",
+    "AI担当同士の独立確認であり、人間による監査・法律専門家による意見ではない。共通の見落としは残り得る。",
+    "旧基準の24組をそのまま公開件数にしない。O/Rは元見出しと凍結解釈に意味のずれがあり、D/Pは資料説明の限定と法域の明記が必要。",
+    "境界の非採用は主張が虚偽だという判定ではない。主張との対応と一次資料による評価は分ける。",
+    "裁判所DBは本日も保守画面で内部検索未実施。判例不存在・司法の統一判断・全法分野の不存在証明はしていない。",
+    "11/4の追加・修正意見との統合、正典採用、公開前検査、公開は今回の対象外。"
+  ],
+  "verification": {
+    "checked_at": "2026-11-01T21:17:12.671208+09:00",
+    "input_target_72_pairs_71_records_exact": true,
+    "all_original_text_hashes_match": true,
+    "prior_3975_review_unchanged": true,
+    "A_B_blind_phase_locks_unchanged": true,
+    "C_D_inputs_and_71_records_validated": true,
+    "all_4_times_426_reader_decisions_validated": true,
+    "adjudicated_72_pairs_and_counts_recomputed": true,
+    "direct_for_comparison_only": 24,
+    "source_16_original_hashes_match": true,
+    "public_and_canonical_fingerprints_unchanged": true,
+    "no_raw_social_ids_or_entire_bodies_in_tracked_audits": true,
+    "local_links_resolve": true,
+    "task_board_bytes": 29920,
+    "public_adoption_ready": false,
+    "warning_resolved": false,
+    "claim_verdict_tests": {
+      "run": 8,
+      "failures": 0,
+      "errors": 0
+    },
+    "public_registry_against_private": "all 10 themes match",
+    "claim_count_consistency": "all 10 themes / 60 claims match",
+    "task_board_check": "pass"
+  },
+  "private_evidence_archive": {
+    "path": "/Volumes/M2-WorkSpace/Projects/副業/UIデザイン調査/ai-copyright-independent-evidence-20261101.tar.gz",
+    "sha256": "659ed549d07699ef68c8fa80247c2996d15d26b3bf8e76d84e26ab2d227ea464",
+    "bytes": 10512683,
+    "files": 53,
+    "restore_verified": true,
+    "mirror_path": "/Volumes/HD-LE-B/issue-stance-private-backups/ai-copyright-independent-evidence-20261101.tar.gz",
+    "mirror_sha256": "659ed549d07699ef68c8fa80247c2996d15d26b3bf8e76d84e26ab2d227ea464"
+  }
+}

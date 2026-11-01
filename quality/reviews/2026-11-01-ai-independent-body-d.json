@@ -1,0 +1,1482 @@
+{
+  "reviewer": "D",
+  "phase": "frozen_criteria_new_context",
+  "blind_input_sha256": "634784d43adf772fb2d3fd1dab207f2a7f82520b59d9652ee29f9e43897eb671",
+  "phase1_reference_sha256": "0f5c3e25017aed6b8eea0621c6db6699e91d580b9b4bdfcbacafc74c57fa291c",
+  "criteria_input_sha256": "fb47a51af85da4e07ae6520b3b1d7937e230a12019f1f31afafd1f3c7bc40da0",
+  "criteria_assessment": [
+    {
+      "claim_id": "unauthorized_learning_infringement",
+      "status": "accept",
+      "issue": "元命題の「常に」を、条件や例外を問わない学習自体の違法性として捉える点は適切。ただし媒体が音楽・イラストというだけの一般論を特定作品の条件付き事例と同一視すると過度に狭くなる。",
+      "recommended_criterion": "無許諾の学習自体を本人が一律に法的侵害と説明すればdirect。媒体だけの限定は除外しない。特定作品の入力、出力利用、享受目的などの条件が付く法的説明はpartial、入力とモデル学習が判別できない場合や法的意味が不明な評価はborderline。"
+    },
+    {
+      "claim_id": "data_disclosure_needed",
+      "status": "accept",
+      "issue": "元命題にある日本・出所・法律上の義務という三点を保っている。現実の非公開と法定義務不存在を分ける範囲も適切。",
+      "recommended_criterion": "日本でAI事業者に学習データの出所を開示させる法定義務が現状ないという本人の説明をdirectとする。非公開の事実、開示要望、外国法、AI使用表示はそれだけで対応としない。"
+    },
+    {
+      "claim_id": "compensation_required",
+      "status": "revise",
+      "issue": "元命題には国名がないのに凍結基準が日本に限定しており、本文にない法域を追加している。現実の未払いと法定支払義務不存在を分ける点は適切。",
+      "recommended_criterion": "対価を法律で支払わせる義務の不存在という制度命題を対象にする。法域が示されればその範囲を記録し、日本のことだと補わない。公開カードを日本に限るなら見出し自体にも日本と明示してから判定する。"
+    },
+    {
+      "claim_id": "creator_protection_insufficient",
+      "status": "accept",
+      "issue": "元命題の手段不存在は保護不足より強いので、困難や実効性不足だけをdirectにしない点は適切。制度に限定した話だけでなく、他の対抗手段も含む命題であることは維持する必要がある。",
+      "recommended_criterion": "無断学習された作者の対抗手段が全般に無いとの本人の明示をdirectとする。提訴や拒否など一部手段の不存在はpartial、被害の種類が不明な場合や要求の反語だけはborderline。費用や立証の困難だけで全手段不存在を補わない。"
+    },
+    {
+      "claim_id": "ai_output_has_copyright",
+      "status": "revise",
+      "issue": "元の「通常の著作物と同じように」は、通常の作品にも必要な創作性などの条件を保持し得る。これを人の創作的寄与が無くても全生成物が保護されるという命題に置き換えると意味が強くなる。条件を明示しない一般論と、条件を明確に否定する断定も同一ではない。",
+      "recommended_criterion": "AI生成作品について通常の著作物に準じる権利成立や帰属を一般に肯定する本人の説明をdirectとする。無条件保護と判定するにはその内容を別に確認する。特定作品の権利取得はpartial、人の創作的関与を条件とする説明も条件を保持したpartialとし、通常と同様というだけで無条件保護へ広げない。"
+    },
+    {
+      "claim_id": "tech_innovation_over_regulation",
+      "status": "revise",
+      "issue": "元命題は規制の進み方と実際に放置される状況を述べるが、凍結基準は制度が無いという断定に狭め、進捗や実効性の評価を除いている。一方で法律と区別のつかない私的な規則の不存在まで含める部分は広すぎる。比喩だけであることと、法規制の事実主張を含まないことも同じではない。",
+      "recommended_criterion": "現行の法律上の規制がほぼ進まず放置されているという包括的な現状説明をdirectとする。制度不存在を必須にしない。特定法の不足や実効性不足だけの説明はpartial。追加整備の提案だけはno。法律上の規制か私的なルールか不明ならborderlineとし、放置状態の表現でも法律の文脈が明確なら意味内容を判断する。"
+    }
+  ],
+  "reviews": [
+    {
+      "blind_index": 1,
+      "record_id_hash": "sha256:a9be9d2b68f5300195462615a6743c3a6183f0260fd7bc91d63b4d0e5ad65c83",
+      "text_sha256": "9b1e132bbab667d292184be4bb28ab0ea7c0a8f6877589eab59894017f053304",
+      "direct": [
+        "tech_innovation_over_regulation"
+      ],
+      "partial": [],
+      "opposed": [],
+      "borderline": [],
+      "reason_by_claim": {
+        "unauthorized_learning_infringement": "無許諾の学習それ自体を、条件なく著作権侵害とする法的説明はない。",
+        "data_disclosure_needed": "日本の学習データ出所に関する法律上の開示義務の有無は説明していない。",
+        "compensation_required": "学習データ利用の対価を法律で支払わせる制度の有無は説明していない。",
+        "creator_protection_insufficient": "無断学習後の作者が対抗手段を持つかどうかは説明していない。",
+        "ai_output_has_copyright": "AI生成物そのものの著作権成立や帰属についての説明はない。",
+        "tech_innovation_over_regulation": "倫理上の非難とは分けて、現状の生成AIには法律による制限がないと本人が説明している。"
+      }
+    },
+    {
+      "blind_index": 2,
+      "record_id_hash": "sha256:e132601a145992d2f39b7ca1a54aed6a9e1488daaecd3a491f0539bb41e3e88f",
+      "text_sha256": "29e7f947147f9eab6963d2a0ad6d135e586f71be57411d38893e593097c6c232",
+      "direct": [
+        "tech_innovation_over_regulation"
+      ],
+      "partial": [],
+      "opposed": [],
+      "borderline": [
+        "creator_protection_insufficient"
+      ],
+      "reason_by_claim": {
+        "unauthorized_learning_infringement": "未制作の部分を無許諾で映像化する出力利用の問題であり、学習それ自体の違法性とは分ける。",
+        "data_disclosure_needed": "日本の学習データ出所に関する法律上の開示義務の有無は説明していない。",
+        "compensation_required": "学習データ利用の対価を法律で支払わせる制度の有無は説明していない。",
+        "creator_protection_insufficient": "権利者を守ってほしいという問いであり、無断学習後の救済手段が存在しないとの断定かは分からない。",
+        "ai_output_has_copyright": "AI生成物そのものの著作権成立や帰属についての説明はない。",
+        "tech_innovation_over_regulation": "日本の生成AIについて規制の不存在を現在の状況として断定している。"
+      }
+    },
+    {
+      "blind_index": 3,
+      "record_id_hash": "sha256:04a07bf47c341a9c17d60a1892fce360c319e4e88c11390fa2a0cfb178072c10",
+      "text_sha256": "085ca3af2bb72170f6f53d0152155e8b014f8c876acd4f7336887a7441a9c56c",
+      "direct": [],
+      "partial": [
+        "tech_innovation_over_regulation"
+      ],
+      "opposed": [],
+      "borderline": [
+        "unauthorized_learning_infringement"
+      ],
+      "reason_by_claim": {
+        "unauthorized_learning_infringement": "学習元の権利処理を批判しつつ現状は合法とも説明しており、学習それ自体が著作権侵害だという一律の断定にはならない。",
+        "data_disclosure_needed": "学習元を実際に公開していないことへの批判であり、日本の法律が出所開示を義務づけているかどうかは説明しない。",
+        "compensation_required": "学習データ利用の対価を法律で支払わせる制度の有無は説明していない。",
+        "creator_protection_insufficient": "無断学習後の作者が対抗手段を持つかどうかは説明していない。",
+        "ai_output_has_copyright": "AI生成物そのものの著作権成立や帰属についての説明はない。",
+        "tech_innovation_over_regulation": "学習元が公開されない生成AIのデータ利用に絞って、規制する法律がないと説明している。規制全体の不存在とは区別する。"
+      }
+    },
+    {
+      "blind_index": 4,
+      "record_id_hash": "sha256:4b098887bc3e01c032d8bef5876851601f22f3ebc1ef341fdea3efefbd868040",
+      "text_sha256": "0acca695b9ab6178e2ed714d44406998edeeaa06a734bc97235fcb46a4e79294",
+      "direct": [],
+      "partial": [],
+      "opposed": [],
+      "borderline": [],
+      "reason_by_claim": {
+        "unauthorized_learning_infringement": "無許諾の学習それ自体を、条件なく著作権侵害とする法的説明はない。",
+        "data_disclosure_needed": "日本の学習データ出所に関する法律上の開示義務の有無は説明していない。",
+        "compensation_required": "学習データ利用の対価を法律で支払わせる制度の有無は説明していない。",
+        "creator_protection_insufficient": "無断学習後の作者が対抗手段を持つかどうかは説明していない。",
+        "ai_output_has_copyright": "AI生成物そのものの著作権成立や帰属についての説明はない。",
+        "tech_innovation_over_regulation": "法案の狙いや賛否を述べており、現行の生成AI規制がほぼ存在しないという主張ではない。"
+      }
+    },
+    {
+      "blind_index": 5,
+      "record_id_hash": "sha256:3aff48ea01ceb19c3b86c40de872681e4d4d5d686e2a8489b82471417e7a7b6a",
+      "text_sha256": "c4e758434ad55840589e70d03b9c67855554d9f4ca5374863cf18055a1ceea97",
+      "direct": [],
+      "partial": [],
+      "opposed": [],
+      "borderline": [],
+      "reason_by_claim": {
+        "unauthorized_learning_infringement": "無許諾の学習それ自体を、条件なく著作権侵害とする法的説明はない。",
+        "data_disclosure_needed": "日本の学習データ出所に関する法律上の開示義務の有無は説明していない。",
+        "compensation_required": "学習データ利用の対価を法律で支払わせる制度の有無は説明していない。",
+        "creator_protection_insufficient": "無断学習後の作者が対抗手段を持つかどうかは説明していない。",
+        "ai_output_has_copyright": "AI生成物そのものの著作権成立や帰属についての説明はない。",
+        "tech_innovation_over_regulation": "生成AIの法律による規制が現状存在するかどうかの説明はない。"
+      }
+    },
+    {
+      "blind_index": 6,
+      "record_id_hash": "sha256:28d301285c78432384e2d605a748939a9e23861034dbe4b3f9346bf4a12063ff",
+      "text_sha256": "4c925b7b85679629c086bb9dca51662fb06666f464ecfe5ba771033f82c389de",
+      "direct": [],
+      "partial": [],
+      "opposed": [],
+      "borderline": [
+        "unauthorized_learning_infringement"
+      ],
+      "reason_by_claim": {
+        "unauthorized_learning_infringement": "画像の権利者がいることを理由に無許諾学習を禁じているが、法律上の侵害と明示する部分がない。媒体が画像であること自体は除外理由にしていない。",
+        "data_disclosure_needed": "日本の学習データ出所に関する法律上の開示義務の有無は説明していない。",
+        "compensation_required": "学習データ利用の対価を法律で支払わせる制度の有無は説明していない。",
+        "creator_protection_insufficient": "無断学習後の作者が対抗手段を持つかどうかは説明していない。",
+        "ai_output_has_copyright": "AI生成物そのものの著作権成立や帰属についての説明はない。",
+        "tech_innovation_over_regulation": "生成AIの法律による規制が現状存在するかどうかの説明はない。"
+      }
+    },
+    {
+      "blind_index": 7,
+      "record_id_hash": "sha256:9ef225eb4d770c6b72fbba3abaaf767794f2d1ac73168cbd59bc02f47ec8bbab",
+      "text_sha256": "2193354d5a56a9e92f8fc5c83936542f6d67878c92ac638726935ed3054ccfae",
+      "direct": [],
+      "partial": [],
+      "opposed": [],
+      "borderline": [],
+      "reason_by_claim": {
+        "unauthorized_learning_infringement": "無許諾の学習それ自体を、条件なく著作権侵害とする法的説明はない。",
+        "data_disclosure_needed": "日本の学習データ出所に関する法律上の開示義務の有無は説明していない。",
+        "compensation_required": "支払いのない搾取を批判するが、法律上の支払義務が存在しないとは説明していない。",
+        "creator_protection_insufficient": "無断学習後の作者が対抗手段を持つかどうかは説明していない。",
+        "ai_output_has_copyright": "AI生成物そのものの著作権成立や帰属についての説明はない。",
+        "tech_innovation_over_regulation": "生成AIの法律による規制が現状存在するかどうかの説明はない。"
+      }
+    },
+    {
+      "blind_index": 8,
+      "record_id_hash": "sha256:408eb128cad2f3d1cf54830bd7339357004f670b09ffd0fda1ec9fe953a15331",
+      "text_sha256": "492097f8cb49f02645451d21eb36d08b730e85d5e031ca9bb21c50565f95f1d7",
+      "direct": [],
+      "partial": [],
+      "opposed": [],
+      "borderline": [
+        "creator_protection_insufficient"
+      ],
+      "reason_by_claim": {
+        "unauthorized_learning_infringement": "無許諾の学習それ自体を、条件なく著作権侵害とする法的説明はない。",
+        "data_disclosure_needed": "日本の学習データ出所に関する法律上の開示義務の有無は説明していない。",
+        "compensation_required": "学習データ利用の対価を法律で支払わせる制度の有無は説明していない。",
+        "creator_protection_insufficient": "既存の著作権法では構造的な問題に対応できないという評価であり、学習された作者が利用できる手段の説明には至っていない。",
+        "ai_output_has_copyright": "AI生成物そのものの著作権成立や帰属についての説明はない。",
+        "tech_innovation_over_regulation": "既存法では十分対応できないという実効性の評価と新法の提案である。凍結基準が求める制度不存在の断定はない。"
+      }
+    },
+    {
+      "blind_index": 9,
+      "record_id_hash": "sha256:f014a9edd537f99c14991e9d530c4ca83e93eb1ce4acd54f95a30d246888d494",
+      "text_sha256": "0d3358973e2f32f7766cd928d64e6a9516d2c7a3db8f63a3df037f72ed667b5e",
+      "direct": [],
+      "partial": [],
+      "opposed": [],
+      "borderline": [
+        "tech_innovation_over_regulation"
+      ],
+      "reason_by_claim": {
+        "unauthorized_learning_infringement": "無許諾の学習それ自体を、条件なく著作権侵害とする法的説明はない。",
+        "data_disclosure_needed": "日本の学習データ出所に関する法律上の開示義務の有無は説明していない。",
+        "compensation_required": "学習データ利用の対価を法律で支払わせる制度の有無は説明していない。",
+        "creator_protection_insufficient": "無断学習後の作者が対抗手段を持つかどうかは説明していない。",
+        "ai_output_has_copyright": "AI生成物そのものの著作権成立や帰属についての説明はない。",
+        "tech_innovation_over_regulation": "現状を法が働かない状態として描写しているが、凍結基準が留保する比喩的な表現に当たる。"
+      }
+    },
+    {
+      "blind_index": 10,
+      "record_id_hash": "sha256:a27ab8abbad19b53c5d0becac082dcd6630a22d65f73866bb77ce88254ccd5ae",
+      "text_sha256": "1d0428b7e23a6102834c974368c3043f4bacf8c6a4735ebeca84f55a9569e655",
+      "direct": [],
+      "partial": [
+        "ai_output_has_copyright"
+      ],
+      "opposed": [],
+      "borderline": [],
+      "reason_by_claim": {
+        "unauthorized_learning_infringement": "無許諾の学習それ自体を、条件なく著作権侵害とする法的説明はない。",
+        "data_disclosure_needed": "日本の学習データ出所に関する法律上の開示義務の有無は説明していない。",
+        "compensation_required": "学習データ利用の対価を法律で支払わせる制度の有無は説明していない。",
+        "creator_protection_insufficient": "無断学習後の作者が対抗手段を持つかどうかは説明していない。",
+        "ai_output_has_copyright": "特定の一作品で権利を得たという経験談である。すべてのAI生成物について通常と同じ権利が成立すると一般化していない。",
+        "tech_innovation_over_regulation": "生成AIの法律による規制が現状存在するかどうかの説明はない。"
+      }
+    },
+    {
+      "blind_index": 11,
+      "record_id_hash": "sha256:c0acb96e3b9877cf58024f054b5caa372e41b61be34f33e9902920a5fc0b75a6",
+      "text_sha256": "af8373e21d737e30531092db6ab41fd28a9ff7132106a8e55b401293ac127a15",
+      "direct": [
+        "tech_innovation_over_regulation"
+      ],
+      "partial": [],
+      "opposed": [],
+      "borderline": [],
+      "reason_by_claim": {
+        "unauthorized_learning_infringement": "無許諾の学習それ自体を、条件なく著作権侵害とする法的説明はない。",
+        "data_disclosure_needed": "日本の学習データ出所に関する法律上の開示義務の有無は説明していない。",
+        "compensation_required": "学習データ利用の対価を法律で支払わせる制度の有無は説明していない。",
+        "creator_protection_insufficient": "無断学習後の作者が対抗手段を持つかどうかは説明していない。",
+        "ai_output_has_copyright": "AI生成物そのものの著作権成立や帰属についての説明はない。",
+        "tech_innovation_over_regulation": "国内コンテンツの被害を挙げ、政府が生成AIに法律上の規制を設けていないと包括的に説明している。"
+      }
+    },
+    {
+      "blind_index": 12,
+      "record_id_hash": "sha256:440798629ff76e052ae305ee028edc87219f418fc0432d3c7835324a555b0ae4",
+      "text_sha256": "9dd6d20e386b9559273b9189e3936c197ba85913278ea79abf06036156a1c792",
+      "direct": [],
+      "partial": [],
+      "opposed": [],
+      "borderline": [
+        "creator_protection_insufficient"
+      ],
+      "reason_by_claim": {
+        "unauthorized_learning_infringement": "無許諾の学習それ自体を、条件なく著作権侵害とする法的説明はない。",
+        "data_disclosure_needed": "日本の学習データ出所に関する法律上の開示義務の有無は説明していない。",
+        "compensation_required": "学習データ利用の対価を法律で支払わせる制度の有無は説明していない。",
+        "creator_protection_insufficient": "著作権による対応の有用性を否定しているが、対象が無断学習後の作者の手段なのかは本文から確定できない。",
+        "ai_output_has_copyright": "AI生成物そのものの著作権成立や帰属についての説明はない。",
+        "tech_innovation_over_regulation": "著作権法が役立たないという実効性の評価であり、法規制そのものが存在しないとは述べていない。"
+      }
+    },
+    {
+      "blind_index": 13,
+      "record_id_hash": "sha256:f43b7fc2780b2e79f92fd044cbbcb323db512b4483a497252667735196c5a217",
+      "text_sha256": "1d33b3da1dfeb3a6d2f13cdc45c6c5b1e00a0bf5d15920d5757c1e4a46ee00d1",
+      "direct": [],
+      "partial": [],
+      "opposed": [],
+      "borderline": [
+        "unauthorized_learning_infringement"
+      ],
+      "reason_by_claim": {
+        "unauthorized_learning_infringement": "類似する出力の侵害危険から無断学習を否定している。学習自体の法的侵害を断言しているのか、倫理上の禁止なのかが定まらない。",
+        "data_disclosure_needed": "日本の学習データ出所に関する法律上の開示義務の有無は説明していない。",
+        "compensation_required": "学習データ利用の対価を法律で支払わせる制度の有無は説明していない。",
+        "creator_protection_insufficient": "無断学習後の作者が対抗手段を持つかどうかは説明していない。",
+        "ai_output_has_copyright": "AI生成物そのものの著作権成立や帰属についての説明はない。",
+        "tech_innovation_over_regulation": "生成AIの法律による規制が現状存在するかどうかの説明はない。"
+      }
+    },
+    {
+      "blind_index": 14,
+      "record_id_hash": "sha256:a373480008677b86676f981aadc0208a377ad46aaf630a2460725efbc274b8ae",
+      "text_sha256": "3b86888ef685d07ab2e9cb74fab964f585ee79004939a1b3bf61617ba0872eb2",
+      "direct": [],
+      "partial": [
+        "tech_innovation_over_regulation"
+      ],
+      "opposed": [],
+      "borderline": [],
+      "reason_by_claim": {
+        "unauthorized_learning_infringement": "無許諾の学習それ自体を、条件なく著作権侵害とする法的説明はない。",
+        "data_disclosure_needed": "日本の学習データ出所に関する法律上の開示義務の有無は説明していない。",
+        "compensation_required": "学習データ利用の対価を法律で支払わせる制度の有無は説明していない。",
+        "creator_protection_insufficient": "無断学習後の作者が対抗手段を持つかどうかは説明していない。",
+        "ai_output_has_copyright": "AI生成物そのものの著作権成立や帰属についての説明はない。",
+        "tech_innovation_over_regulation": "日本のAIと著作権の分野に限り制度整備が済んでいないと説明している。生成AIの法規制全体の不存在までは述べない。"
+      }
+    },
+    {
+      "blind_index": 15,
+      "record_id_hash": "sha256:70c0c1a319cc310a1ad5c43b8aba51967037790b65247d43eaabf2bf3b853c01",
+      "text_sha256": "b0ca4e1beef9856841a6aa7a59857e879517f6113f6cc280d326eace97511543",
+      "direct": [],
+      "partial": [
+        "unauthorized_learning_infringement",
+        "creator_protection_insufficient"
+      ],
+      "opposed": [
+        "tech_innovation_over_regulation"
+      ],
+      "borderline": [],
+      "reason_by_claim": {
+        "unauthorized_learning_infringement": "作品を享受する目的での学習に条件を付けて違法と説明している。無許諾学習すべての違法性には広げない。",
+        "data_disclosure_needed": "データセットが現に公開されていないと説明するだけで、開示義務を定める日本の法律の不存在は述べない。",
+        "compensation_required": "学習データ利用の対価を法律で支払わせる制度の有無は説明していない。",
+        "creator_protection_insufficient": "使用データが分からず訴えられないという特定の救済手段の障害を説明している。他の対抗手段まで否定していない。",
+        "ai_output_has_copyright": "AI生成物そのものの著作権成立や帰属についての説明はない。",
+        "tech_innovation_over_regulation": "一定目的の学習には既存の日本法による禁止が働くと説明しているため、法的に取り締まれないという包括的説明に反する。ただし規制が十分だという意味ではない。"
+      }
+    },
+    {
+      "blind_index": 16,
+      "record_id_hash": "sha256:36b84821a7a0b222ab179328faf68cf135f26ae8298ab1f5087014f061bc7a2b",
+      "text_sha256": "57a40a539a6da7b3dac6443c0667b9b8ab81c52e3dbb583319577bf96e93a0db",
+      "direct": [
+        "tech_innovation_over_regulation"
+      ],
+      "partial": [],
+      "opposed": [],
+      "borderline": [],
+      "reason_by_claim": {
+        "unauthorized_learning_infringement": "無許諾の学習それ自体を、条件なく著作権侵害とする法的説明はない。",
+        "data_disclosure_needed": "日本の学習データ出所に関する法律上の開示義務の有無は説明していない。",
+        "compensation_required": "学習データ利用の対価を法律で支払わせる制度の有無は説明していない。",
+        "creator_protection_insufficient": "無断学習後の作者が対抗手段を持つかどうかは説明していない。",
+        "ai_output_has_copyright": "AI生成物そのものの著作権成立や帰属についての説明はない。",
+        "tech_innovation_over_regulation": "現行の法律では生成AIを取り締まれないと一般的に述べ、法規制の遅れをその理由にしている。"
+      }
+    },
+    {
+      "blind_index": 17,
+      "record_id_hash": "sha256:0b6b2adb51ab4c3b52cb5d21f8dad47a1139c4504314f220f06d90656a263ce4",
+      "text_sha256": "b146a387b4dadaec072acb6d0febd170c543b682effb9ecdf2ee7b09358637a0",
+      "direct": [],
+      "partial": [],
+      "opposed": [],
+      "borderline": [
+        "unauthorized_learning_infringement"
+      ],
+      "reason_by_claim": {
+        "unauthorized_learning_infringement": "画像生成の学習に使う絵の権利を挙げて無断利用を否定しているが、学習自体を法的侵害と明示してはいない。画像分野の一般論として読んでいる。",
+        "data_disclosure_needed": "日本の学習データ出所に関する法律上の開示義務の有無は説明していない。",
+        "compensation_required": "学習データ利用の対価を法律で支払わせる制度の有無は説明していない。",
+        "creator_protection_insufficient": "無断学習後の作者が対抗手段を持つかどうかは説明していない。",
+        "ai_output_has_copyright": "AI生成物そのものの著作権成立や帰属についての説明はない。",
+        "tech_innovation_over_regulation": "生成AIの法律による規制が現状存在するかどうかの説明はない。"
+      }
+    },
+    {
+      "blind_index": 18,
+      "record_id_hash": "sha256:42039ae49276aff6c8c945f50982553780c4535c5daa5145112a460d5bbf4695",
+      "text_sha256": "8f484b797778ddc0a0efb221211bf622ceb04589ded64349b4abac6ca1947d56",
+      "direct": [],
+      "partial": [
+        "tech_innovation_over_regulation"
+      ],
+      "opposed": [],
+      "borderline": [
+        "creator_protection_insufficient"
+      ],
+      "reason_by_claim": {
+        "unauthorized_learning_infringement": "無許諾の学習それ自体を、条件なく著作権侵害とする法的説明はない。",
+        "data_disclosure_needed": "日本の学習データ出所に関する法律上の開示義務の有無は説明していない。",
+        "compensation_required": "学習データ利用の対価を法律で支払わせる制度の有無は説明していない。",
+        "creator_protection_insufficient": "司法で止められないとの説明はあるが、無断学習された作者の救済なのか、別のAI利用への対処なのかが明確でない。",
+        "ai_output_has_copyright": "AI生成物そのものの著作権成立や帰属についての説明はない。",
+        "tech_innovation_over_regulation": "裁判によって生成AIを制止できないという範囲の説明である。あらゆる法律上の規制の不存在までは示さない。"
+      }
+    },
+    {
+      "blind_index": 19,
+      "record_id_hash": "sha256:2afdfda5f19928889cc40c090438195a08a3cd58081bdd1c896e07249ecd24f2",
+      "text_sha256": "ba22b4c0d847e31fba308de6ab27341ec2d1b611e7e53c66c7895106bf7619ee",
+      "direct": [],
+      "partial": [],
+      "opposed": [],
+      "borderline": [
+        "unauthorized_learning_infringement"
+      ],
+      "reason_by_claim": {
+        "unauthorized_learning_infringement": "身近な人による特定の読み込みを犯罪と扱っている。モデルの学習なのか入力した素材の処理なのかが不明で、学習一般の断定にはできない。",
+        "data_disclosure_needed": "日本の学習データ出所に関する法律上の開示義務の有無は説明していない。",
+        "compensation_required": "学習データ利用の対価を法律で支払わせる制度の有無は説明していない。",
+        "creator_protection_insufficient": "無断学習後の作者が対抗手段を持つかどうかは説明していない。",
+        "ai_output_has_copyright": "AI生成物そのものの著作権成立や帰属についての説明はない。",
+        "tech_innovation_over_regulation": "生成AIの法律による規制が現状存在するかどうかの説明はない。"
+      }
+    },
+    {
+      "blind_index": 20,
+      "record_id_hash": "sha256:05aa9142741312cb44769b8f40531abf69080bff30b2474de7c0795e7287de84",
+      "text_sha256": "e67f3fb1fe2e933c68657fb399e9ce35eb418327aa818031e5e8684900c49edf",
+      "direct": [],
+      "partial": [],
+      "opposed": [],
+      "borderline": [
+        "tech_innovation_over_regulation"
+      ],
+      "reason_by_claim": {
+        "unauthorized_learning_infringement": "無許諾の学習それ自体を、条件なく著作権侵害とする法的説明はない。",
+        "data_disclosure_needed": "日本の学習データ出所に関する法律上の開示義務の有無は説明していない。",
+        "compensation_required": "学習データ利用の対価を法律で支払わせる制度の有無は説明していない。",
+        "creator_protection_insufficient": "無断学習後の作者が対抗手段を持つかどうかは説明していない。",
+        "ai_output_has_copyright": "AI生成物そのものの著作権成立や帰属についての説明はない。",
+        "tech_innovation_over_regulation": "規制が存在しないとの趣旨を比喩で述べているが、法律上の規制なのかまで明確でなく、凍結基準では留保する。"
+      }
+    },
+    {
+      "blind_index": 21,
+      "record_id_hash": "sha256:ae490960f51c94022604c97f8450565ec24ce0fd60787bb527e993564778f6c5",
+      "text_sha256": "b4ca6448bdc19353318a0e599f928d43842b0e377e7a1448a39835c7bf4ba477",
+      "direct": [],
+      "partial": [],
+      "opposed": [],
+      "borderline": [],
+      "reason_by_claim": {
+        "unauthorized_learning_infringement": "他人の素材の取得を盗用として批判するが、学習自体の著作権侵害を法的に断定してはいない。",
+        "data_disclosure_needed": "日本の学習データ出所に関する法律上の開示義務の有無は説明していない。",
+        "compensation_required": "学習データ利用の対価を法律で支払わせる制度の有無は説明していない。",
+        "creator_protection_insufficient": "無断学習後の作者が対抗手段を持つかどうかは説明していない。",
+        "ai_output_has_copyright": "AI生成物そのものの著作権成立や帰属についての説明はない。",
+        "tech_innovation_over_regulation": "生成AIの法律による規制が現状存在するかどうかの説明はない。"
+      }
+    },
+    {
+      "blind_index": 22,
+      "record_id_hash": "sha256:bfaf9fac52db6cbf4b40936b2962d7fd704b7c1075c081f5687c0f242ef44c54",
+      "text_sha256": "0a8952ea3bc193fa6055e9f2442ce0aa44c23926ec51777e085e10a8a243f416",
+      "direct": [],
+      "partial": [],
+      "opposed": [],
+      "borderline": [
+        "unauthorized_learning_infringement"
+      ],
+      "reason_by_claim": {
+        "unauthorized_learning_infringement": "生成AIの利用を法条文に結び付けて違法と非難するが、無許諾の学習行為それ自体が対象だとは書かれていない。",
+        "data_disclosure_needed": "日本の学習データ出所に関する法律上の開示義務の有無は説明していない。",
+        "compensation_required": "学習データ利用の対価を法律で支払わせる制度の有無は説明していない。",
+        "creator_protection_insufficient": "無断学習後の作者が対抗手段を持つかどうかは説明していない。",
+        "ai_output_has_copyright": "AI生成物そのものの著作権成立や帰属についての説明はない。",
+        "tech_innovation_over_regulation": "生成AIの法律による規制が現状存在するかどうかの説明はない。"
+      }
+    },
+    {
+      "blind_index": 23,
+      "record_id_hash": "sha256:4eac0fae71568dd1afbd4a219f863161c3ada22f0384fed8e81e8bff31837f93",
+      "text_sha256": "459a9c79e01dfbac3767671339b332d49d443999eb8db23956ed4bee4bf0f349",
+      "direct": [],
+      "partial": [],
+      "opposed": [],
+      "borderline": [
+        "unauthorized_learning_infringement"
+      ],
+      "reason_by_claim": {
+        "unauthorized_learning_infringement": "学習を問題視しない見方を支持者の立場として紹介している。無許諾学習についての本人の法的判断として確定できない。",
+        "data_disclosure_needed": "日本の学習データ出所に関する法律上の開示義務の有無は説明していない。",
+        "compensation_required": "学習データ利用の対価を法律で支払わせる制度の有無は説明していない。",
+        "creator_protection_insufficient": "無断学習後の作者が対抗手段を持つかどうかは説明していない。",
+        "ai_output_has_copyright": "AI生成物そのものの著作権成立や帰属についての説明はない。",
+        "tech_innovation_over_regulation": "生成AIの法律による規制が現状存在するかどうかの説明はない。"
+      }
+    },
+    {
+      "blind_index": 24,
+      "record_id_hash": "sha256:65737294d8f59773960fc8a25257232658f1fe25df34eab1b90d4cb2277b3c93",
+      "text_sha256": "66b63fd91b672a662c290b09d5a112cfd83e5f6bf34a53d44a6c01eb561327b4",
+      "direct": [
+        "tech_innovation_over_regulation"
+      ],
+      "partial": [],
+      "opposed": [],
+      "borderline": [],
+      "reason_by_claim": {
+        "unauthorized_learning_infringement": "無許諾の学習それ自体を、条件なく著作権侵害とする法的説明はない。",
+        "data_disclosure_needed": "日本の学習データ出所に関する法律上の開示義務の有無は説明していない。",
+        "compensation_required": "学習データ利用の対価を法律で支払わせる制度の有無は説明していない。",
+        "creator_protection_insufficient": "無断学習後の作者が対抗手段を持つかどうかは説明していない。",
+        "ai_output_has_copyright": "AI生成物そのものの著作権成立や帰属についての説明はない。",
+        "tech_innovation_over_regulation": "他の道具に適用される法律と比べてAIには規制がないと説明している。提案だけでなく現状の制度不存在を含む。"
+      }
+    },
+    {
+      "blind_index": 25,
+      "record_id_hash": "sha256:f0b9c36bae702c46a68cbcb23aa2197827f1b4b3def49ad17cdaf423b4f2c73c",
+      "text_sha256": "077f4678c5e902ac2b06fa1b0cf1e3ed9d5a7d314467c9df73725f0ac0d507c9",
+      "direct": [
+        "tech_innovation_over_regulation"
+      ],
+      "partial": [],
+      "opposed": [],
+      "borderline": [],
+      "reason_by_claim": {
+        "unauthorized_learning_infringement": "無許諾の学習それ自体を、条件なく著作権侵害とする法的説明はない。",
+        "data_disclosure_needed": "日本の学習データ出所に関する法律上の開示義務の有無は説明していない。",
+        "compensation_required": "学習データ利用の対価を法律で支払わせる制度の有無は説明していない。",
+        "creator_protection_insufficient": "無断学習後の作者が対抗手段を持つかどうかは説明していない。",
+        "ai_output_has_copyright": "AI生成物そのものの著作権成立や帰属についての説明はない。",
+        "tech_innovation_over_regulation": "法律による規制を求める文脈で、現在は規則が存在しないと明示している。比喩だけの投稿ではない。"
+      }
+    },
+    {
+      "blind_index": 26,
+      "record_id_hash": "sha256:2ec4f22e53104014e19de11cf47f4373efd2a61150d7e0b854f5dc03e3ff0ec0",
+      "text_sha256": "e0f65de5004fea0b6c68382393b92ae6618890e37bce69db5c6559fb6c94557a",
+      "direct": [],
+      "partial": [],
+      "opposed": [],
+      "borderline": [],
+      "reason_by_claim": {
+        "unauthorized_learning_infringement": "無許諾利用や出力物への非難はあるが、学習自体を一律に著作権侵害と説明してはいない。",
+        "data_disclosure_needed": "日本の学習データ出所に関する法律上の開示義務の有無は説明していない。",
+        "compensation_required": "実際の無償利用に対する非難であり、対価を義務にする法律が無いという制度の説明ではない。",
+        "creator_protection_insufficient": "無断学習後の作者が対抗手段を持つかどうかは説明していない。",
+        "ai_output_has_copyright": "AI生成物そのものの著作権成立や帰属についての説明はない。",
+        "tech_innovation_over_regulation": "生成AIの法律による規制が現状存在するかどうかの説明はない。"
+      }
+    },
+    {
+      "blind_index": 27,
+      "record_id_hash": "sha256:648c3cd18027c971e6fe62e5c095aa950935f3c78685f954eb1d7f76e74e866e",
+      "text_sha256": "87d6b1d97e990682f2fd2dbee76793ab229bd114314c2ac0b163ab7ca935821c",
+      "direct": [],
+      "partial": [
+        "tech_innovation_over_regulation"
+      ],
+      "opposed": [],
+      "borderline": [],
+      "reason_by_claim": {
+        "unauthorized_learning_infringement": "無許諾の学習それ自体を、条件なく著作権侵害とする法的説明はない。",
+        "data_disclosure_needed": "日本の学習データ出所に関する法律上の開示義務の有無は説明していない。",
+        "compensation_required": "学習データ利用の対価を法律で支払わせる制度の有無は説明していない。",
+        "creator_protection_insufficient": "無断学習後の作者が対抗手段を持つかどうかは説明していない。",
+        "ai_output_has_copyright": "AI生成物そのものの著作権成立や帰属についての説明はない。",
+        "tech_innovation_over_regulation": "生成AIには著作権法が対応していないという特定分野の説明であり、全体の規制がないとは述べていない。"
+      }
+    },
+    {
+      "blind_index": 28,
+      "record_id_hash": "sha256:752d6e9d5094fd8a7b35f16b4651770bc3b0a0a487007c7c3bbde22d5e63cf1d",
+      "text_sha256": "8d742a63a6549fefe6847edc243fe0f261d2c682f53ee3bd05183d19d84d2b17",
+      "direct": [],
+      "partial": [],
+      "opposed": [],
+      "borderline": [
+        "unauthorized_learning_infringement"
+      ],
+      "reason_by_claim": {
+        "unauthorized_learning_infringement": "生成AIの仕組みや使用を法条文に照らして犯罪と呼ぶが、学習と出力利用のどちらへの法的評価か切り分けられない。",
+        "data_disclosure_needed": "日本の学習データ出所に関する法律上の開示義務の有無は説明していない。",
+        "compensation_required": "学習データ利用の対価を法律で支払わせる制度の有無は説明していない。",
+        "creator_protection_insufficient": "無断学習後の作者が対抗手段を持つかどうかは説明していない。",
+        "ai_output_has_copyright": "AI生成物そのものの著作権成立や帰属についての説明はない。",
+        "tech_innovation_over_regulation": "生成AIの法律による規制が現状存在するかどうかの説明はない。"
+      }
+    },
+    {
+      "blind_index": 29,
+      "record_id_hash": "sha256:3aaa705bff9cee9cf7b0e0ca6441cb56bb8d04ffab773c13ad3b88e6b9677059",
+      "text_sha256": "fa992fa9294d761c926a37fec4a93f64ee8e63ef7a8ab3820aaddb06b965a3d9",
+      "direct": [],
+      "partial": [
+        "tech_innovation_over_regulation"
+      ],
+      "opposed": [],
+      "borderline": [],
+      "reason_by_claim": {
+        "unauthorized_learning_infringement": "無許諾の学習それ自体を、条件なく著作権侵害とする法的説明はない。",
+        "data_disclosure_needed": "日本の学習データ出所に関する法律上の開示義務の有無は説明していない。",
+        "compensation_required": "学習データ利用の対価を法律で支払わせる制度の有無は説明していない。",
+        "creator_protection_insufficient": "無断学習後の作者が対抗手段を持つかどうかは説明していない。",
+        "ai_output_has_copyright": "AI生成物そのものの著作権成立や帰属についての説明はない。",
+        "tech_innovation_over_regulation": "他の道具に対する専用の取締法に相当するものが生成AIにはないという限定された説明である。既存法の適用全体の不存在とは区別する。"
+      }
+    },
+    {
+      "blind_index": 30,
+      "record_id_hash": "sha256:f27ad7bc47a610fdab9495c2a93eab2f1251f11fca6e7a66d4d4d68c41581e52",
+      "text_sha256": "fac7600a2402def2bec7f372e3636b5150d3c1d7aef445ea80e40015bb748f8c",
+      "direct": [],
+      "partial": [],
+      "opposed": [],
+      "borderline": [
+        "unauthorized_learning_infringement"
+      ],
+      "reason_by_claim": {
+        "unauthorized_learning_infringement": "技術の成立と著作物の取得をまとめて違法と扱っている。無許諾学習自体が侵害なのか、作品の取得方法が違法なのかは本文で分かれていない。",
+        "data_disclosure_needed": "日本の学習データ出所に関する法律上の開示義務の有無は説明していない。",
+        "compensation_required": "学習データ利用の対価を法律で支払わせる制度の有無は説明していない。",
+        "creator_protection_insufficient": "無断学習後の作者が対抗手段を持つかどうかは説明していない。",
+        "ai_output_has_copyright": "AI生成物そのものの著作権成立や帰属についての説明はない。",
+        "tech_innovation_over_regulation": "生成AIの法律による規制が現状存在するかどうかの説明はない。"
+      }
+    },
+    {
+      "blind_index": 31,
+      "record_id_hash": "sha256:91199bf9cbfa1528ee8a3d7e18ea7760b808b672b8f36e94bbee339e4be78eef",
+      "text_sha256": "47c1c65547fa47af3cdb8473378ae8f779b69bc9dd45b2420585e4cd1883027c",
+      "direct": [],
+      "partial": [],
+      "opposed": [],
+      "borderline": [],
+      "reason_by_claim": {
+        "unauthorized_learning_infringement": "学習元の盗用を強く批判するが、著作権法上の学習侵害という判断を明示してはいない。",
+        "data_disclosure_needed": "日本の学習データ出所に関する法律上の開示義務の有無は説明していない。",
+        "compensation_required": "学習データ利用の対価を法律で支払わせる制度の有無は説明していない。",
+        "creator_protection_insufficient": "無断学習後の作者が対抗手段を持つかどうかは説明していない。",
+        "ai_output_has_copyright": "AI生成物そのものの著作権成立や帰属についての説明はない。",
+        "tech_innovation_over_regulation": "生成AIの法律による規制が現状存在するかどうかの説明はない。"
+      }
+    },
+    {
+      "blind_index": 32,
+      "record_id_hash": "sha256:e11164319937d28e27edfa9efadb1712f81272d5a9a556bf650ae77c5130b983",
+      "text_sha256": "68cd92e0a64dfeda4df7918f9a30e9e93dfdb483669f8fb82a59c3d17f79a10d",
+      "direct": [
+        "unauthorized_learning_infringement"
+      ],
+      "partial": [],
+      "opposed": [],
+      "borderline": [],
+      "reason_by_claim": {
+        "unauthorized_learning_infringement": "イラストのデータを無許諾で大量に読み込ませる仕組みを著作権侵害として説明している。権利処理された自作素材への言及は、無許諾学習を認める例外ではない。対象媒体がイラストであるだけで特定作品の事例にはしていない。",
+        "data_disclosure_needed": "日本の学習データ出所に関する法律上の開示義務の有無は説明していない。",
+        "compensation_required": "学習データ利用の対価を法律で支払わせる制度の有無は説明していない。",
+        "creator_protection_insufficient": "無断学習後の作者が対抗手段を持つかどうかは説明していない。",
+        "ai_output_has_copyright": "AI生成物そのものの著作権成立や帰属についての説明はない。",
+        "tech_innovation_over_regulation": "生成AIの法律による規制が現状存在するかどうかの説明はない。"
+      }
+    },
+    {
+      "blind_index": 33,
+      "record_id_hash": "sha256:d4dc47aada3a4c13cf948bd934fad77b65bc5ebb807c7523dd840107927e1bf8",
+      "text_sha256": "f9562f92cab41610b45d7aadde869b57f5da91b23835a5b4ef2acec43bdd7004",
+      "direct": [],
+      "partial": [],
+      "opposed": [],
+      "borderline": [],
+      "reason_by_claim": {
+        "unauthorized_learning_infringement": "無許諾の学習それ自体を、条件なく著作権侵害とする法的説明はない。",
+        "data_disclosure_needed": "日本の学習データ出所に関する法律上の開示義務の有無は説明していない。",
+        "compensation_required": "学習データ利用の対価を法律で支払わせる制度の有無は説明していない。",
+        "creator_protection_insufficient": "無断学習後の作者が対抗手段を持つかどうかは説明していない。",
+        "ai_output_has_copyright": "AI生成物そのものの著作権成立や帰属についての説明はない。",
+        "tech_innovation_over_regulation": "個人情報に関する法案を批判しており、生成AI全体の現行規制の不存在を説明する投稿ではない。"
+      }
+    },
+    {
+      "blind_index": 34,
+      "record_id_hash": "sha256:ed33c0bdca70ad623798bb18a829b5d31bc0ee71ea102e8ba9c509d6a8ca7526",
+      "text_sha256": "11cfd3a8e71f68d5aef916e3caa0ed00b0efcb1f9aadd2e8e71608d77fd94c7e",
+      "direct": [],
+      "partial": [],
+      "opposed": [
+        "unauthorized_learning_infringement"
+      ],
+      "borderline": [],
+      "reason_by_claim": {
+        "unauthorized_learning_infringement": "許諾のない学習であっても、学習時の複製などに権利が及ばない範囲があると認めている。無許諾なら常に侵害という断定と両立しない。",
+        "data_disclosure_needed": "日本の学習データ出所に関する法律上の開示義務の有無は説明していない。",
+        "compensation_required": "学習データ利用の対価を法律で支払わせる制度の有無は説明していない。",
+        "creator_protection_insufficient": "無断学習後の作者が対抗手段を持つかどうかは説明していない。",
+        "ai_output_has_copyright": "AI生成物そのものの著作権成立や帰属についての説明はない。",
+        "tech_innovation_over_regulation": "生成AIの法律による規制が現状存在するかどうかの説明はない。"
+      }
+    },
+    {
+      "blind_index": 35,
+      "record_id_hash": "sha256:49dc300a567f9d2ef05b40ae3408825797177f0015b828ed9cb20cdc41142b93",
+      "text_sha256": "06aea8e768742ed7f235d3cbeff7339d3845eaa2fabc728ec92e19d95a0aca56",
+      "direct": [],
+      "partial": [],
+      "opposed": [],
+      "borderline": [],
+      "reason_by_claim": {
+        "unauthorized_learning_infringement": "学習元を無断利用することや作者を名乗ることを批判するが、無許諾学習自体の法的侵害は明示しない。",
+        "data_disclosure_needed": "日本の学習データ出所に関する法律上の開示義務の有無は説明していない。",
+        "compensation_required": "学習データ利用の対価を法律で支払わせる制度の有無は説明していない。",
+        "creator_protection_insufficient": "無断学習後の作者が対抗手段を持つかどうかは説明していない。",
+        "ai_output_has_copyright": "作り手と呼べるか、誰の絵といえるかという創作上の評価であり、生成物自体の法的権利の帰属は説明しない。",
+        "tech_innovation_over_regulation": "生成AIの法律による規制が現状存在するかどうかの説明はない。"
+      }
+    },
+    {
+      "blind_index": 36,
+      "record_id_hash": "sha256:5d2b26facb4674e833fda2860fab1686e2075d9eff2274e3e353897cb85c0d35",
+      "text_sha256": "65ad7c02aa2d5abfe3ae2ae2a684de189339009393cdf6d3cf7eb8a00cb3843d",
+      "direct": [
+        "tech_innovation_over_regulation"
+      ],
+      "partial": [],
+      "opposed": [],
+      "borderline": [],
+      "reason_by_claim": {
+        "unauthorized_learning_infringement": "無許諾の学習それ自体を、条件なく著作権侵害とする法的説明はない。",
+        "data_disclosure_needed": "日本の学習データ出所に関する法律上の開示義務の有無は説明していない。",
+        "compensation_required": "学習データ利用の対価を法律で支払わせる制度の有無は説明していない。",
+        "creator_protection_insufficient": "無断学習後の作者が対抗手段を持つかどうかは説明していない。",
+        "ai_output_has_copyright": "AI生成物そのものの著作権成立や帰属についての説明はない。",
+        "tech_innovation_over_regulation": "生成AIに規則や制限がないと包括的に述べており、規則の不存在も含める凍結基準には直接該当する。法律と運用上の指針の区別は本文で不明である。"
+      }
+    },
+    {
+      "blind_index": 37,
+      "record_id_hash": "sha256:05f19b6c735ca3b8e23e090adbd9c7e97de27f231eb979765ee421475c48aefe",
+      "text_sha256": "b00c2ebc9186085e55596d2a12216f49f8dda36b4951ff4aa5c36c001893ef17",
+      "direct": [
+        "tech_innovation_over_regulation"
+      ],
+      "partial": [],
+      "opposed": [],
+      "borderline": [],
+      "reason_by_claim": {
+        "unauthorized_learning_infringement": "無許諾の学習それ自体を、条件なく著作権侵害とする法的説明はない。",
+        "data_disclosure_needed": "日本の学習データ出所に関する法律上の開示義務の有無は説明していない。",
+        "compensation_required": "学習データ利用の対価を法律で支払わせる制度の有無は説明していない。",
+        "creator_protection_insufficient": "無断学習後の作者が対抗手段を持つかどうかは説明していない。",
+        "ai_output_has_copyright": "AI生成物そのものの著作権成立や帰属についての説明はない。",
+        "tech_innovation_over_regulation": "既存の創作活動との比較で、生成AIはまだ法律上規制されていないと明示している。"
+      }
+    },
+    {
+      "blind_index": 38,
+      "record_id_hash": "sha256:9e649129fec3b219d9e7dde3009bdbcc12fb2f40df3067dee73f68db9311fd4c",
+      "text_sha256": "29783c68bbb5f6dfb507d9d8aefabf28820bc2e2b70d56688f8e688337b6aa72",
+      "direct": [
+        "tech_innovation_over_regulation"
+      ],
+      "partial": [],
+      "opposed": [],
+      "borderline": [],
+      "reason_by_claim": {
+        "unauthorized_learning_infringement": "無許諾の学習それ自体を、条件なく著作権侵害とする法的説明はない。",
+        "data_disclosure_needed": "日本の学習データ出所に関する法律上の開示義務の有無は説明していない。",
+        "compensation_required": "学習データ利用の対価を法律で支払わせる制度の有無は説明していない。",
+        "creator_protection_insufficient": "無断学習後の作者が対抗手段を持つかどうかは説明していない。",
+        "ai_output_has_copyright": "AI生成物そのものの著作権成立や帰属についての説明はない。",
+        "tech_innovation_over_regulation": "現在は規制の法律が確定していないという事実認識を述べている。穏便な利用を求める提案だけではない。"
+      }
+    },
+    {
+      "blind_index": 39,
+      "record_id_hash": "sha256:e838d09f0c8353bdf941cc27084117d15267b2148afbd5b39ae84dc7448a3916",
+      "text_sha256": "e9632926825399f79b45130a736326a29afed953fa5e986acd7a36e1793a7b49",
+      "direct": [
+        "tech_innovation_over_regulation"
+      ],
+      "partial": [],
+      "opposed": [],
+      "borderline": [],
+      "reason_by_claim": {
+        "unauthorized_learning_infringement": "無許諾の学習それ自体を、条件なく著作権侵害とする法的説明はない。",
+        "data_disclosure_needed": "日本の学習データ出所に関する法律上の開示義務の有無は説明していない。",
+        "compensation_required": "学習データ利用の対価を法律で支払わせる制度の有無は説明していない。",
+        "creator_protection_insufficient": "無断学習後の作者が対抗手段を持つかどうかは説明していない。",
+        "ai_output_has_copyright": "AI生成物そのものの著作権成立や帰属についての説明はない。",
+        "tech_innovation_over_regulation": "生成AIが規制されないまま放置されていると現状を断定している。規制という語だけでも含める凍結基準に該当する。"
+      }
+    },
+    {
+      "blind_index": 40,
+      "record_id_hash": "sha256:e68b754f3c87d5bec0081adbfbf18e37043b4bb8bf571cd75ecfe7f1390dc801",
+      "text_sha256": "a8216a9f6c8f08fce5a09bff208134c148f594a73637f233643a19670bcaf796",
+      "direct": [],
+      "partial": [],
+      "opposed": [],
+      "borderline": [
+        "unauthorized_learning_infringement"
+      ],
+      "reason_by_claim": {
+        "unauthorized_learning_infringement": "他人の絵の無許諾入力を強く非難する一方、評価語が法的な侵害の断定か倫理上の判断か確定できない。入力とモデル学習の関係も明示されない。",
+        "data_disclosure_needed": "日本の学習データ出所に関する法律上の開示義務の有無は説明していない。",
+        "compensation_required": "学習データ利用の対価を法律で支払わせる制度の有無は説明していない。",
+        "creator_protection_insufficient": "無断学習後の作者が対抗手段を持つかどうかは説明していない。",
+        "ai_output_has_copyright": "AI生成物そのものの著作権成立や帰属についての説明はない。",
+        "tech_innovation_over_regulation": "生成AIの法律による規制が現状存在するかどうかの説明はない。"
+      }
+    },
+    {
+      "blind_index": 41,
+      "record_id_hash": "sha256:b2df26cd7f33e2c4e7459224289d6427edbbf0c88d032bbe53746c9c0b83397c",
+      "text_sha256": "85c59a3a251348e4a05980a2c09f39cca0f2320cf105974d2809c9f12f97504c",
+      "direct": [],
+      "partial": [],
+      "opposed": [],
+      "borderline": [
+        "unauthorized_learning_infringement"
+      ],
+      "reason_by_claim": {
+        "unauthorized_learning_infringement": "特定のイラストを入力して別の画像を作る行為を侵害と扱っている。個別入力の処理なのかモデル学習なのかが不明なので、学習一般の法的評価には広げない。",
+        "data_disclosure_needed": "日本の学習データ出所に関する法律上の開示義務の有無は説明していない。",
+        "compensation_required": "学習データ利用の対価を法律で支払わせる制度の有無は説明していない。",
+        "creator_protection_insufficient": "無断学習後の作者が対抗手段を持つかどうかは説明していない。",
+        "ai_output_has_copyright": "AI生成物そのものの著作権成立や帰属についての説明はない。",
+        "tech_innovation_over_regulation": "生成AIの法律による規制が現状存在するかどうかの説明はない。"
+      }
+    },
+    {
+      "blind_index": 42,
+      "record_id_hash": "sha256:bfa2c03480634d9488b3da605fee2c8c21c73e567c6aa4a1f791482423d55eac",
+      "text_sha256": "4dff605c7b811de63b43b6a4547357739d1759e7164fa1e9c5c5115724e52eab",
+      "direct": [
+        "tech_innovation_over_regulation"
+      ],
+      "partial": [
+        "creator_protection_insufficient"
+      ],
+      "opposed": [],
+      "borderline": [],
+      "reason_by_claim": {
+        "unauthorized_learning_infringement": "無許諾の学習それ自体を、条件なく著作権侵害とする法的説明はない。",
+        "data_disclosure_needed": "日本の学習データ出所に関する法律上の開示義務の有無は説明していない。",
+        "compensation_required": "学習データ利用の対価を法律で支払わせる制度の有無は説明していない。",
+        "creator_protection_insufficient": "許諾しない学習を拒めないという特定手段の欠如を挙げている。あらゆる事後的救済まで無いとは述べない。",
+        "ai_output_has_copyright": "AI生成物そのものの著作権成立や帰属についての説明はない。",
+        "tech_innovation_over_regulation": "一部用途の指針に触れながら、生成AI全般の規則や規制がないと説明している。規則の不存在も拾う凍結基準には該当するが、法規制の意味は確定しない。"
+      }
+    },
+    {
+      "blind_index": 43,
+      "record_id_hash": "sha256:1a94c2b986ad63c28431a8097634c772d5338e437c0bba05ae56e78f12819494",
+      "text_sha256": "6ae9080378c65d85a35e89ac9567c74d0f1de6118016f0d4b17a3e149942f039",
+      "direct": [
+        "tech_innovation_over_regulation"
+      ],
+      "partial": [],
+      "opposed": [],
+      "borderline": [
+        "unauthorized_learning_infringement"
+      ],
+      "reason_by_claim": {
+        "unauthorized_learning_infringement": "複製や無許諾の解析だとの説明と、出力利用による各種犯罪への批判が混在する。学習自体の著作権侵害を明示したとまでは確定できない。",
+        "data_disclosure_needed": "日本の学習データ出所に関する法律上の開示義務の有無は説明していない。",
+        "compensation_required": "権利を害する利用への批判はあるが、学習の対価を義務づける法律の有無とは別の話である。",
+        "creator_protection_insufficient": "無断学習後の作者が対抗手段を持つかどうかは説明していない。",
+        "ai_output_has_copyright": "AI生成物そのものの著作権成立や帰属についての説明はない。",
+        "tech_innovation_over_regulation": "他者の権利を害する利用について、法律による規制がないと現状を明示している。"
+      }
+    },
+    {
+      "blind_index": 44,
+      "record_id_hash": "sha256:e564a67b2823a915cdd586fb861dda374d9cf06832c0a5be489c0957295f3cd9",
+      "text_sha256": "7003fef4e6ab8edc55411da4a02cba0bf0ac9285d0b8f300098f9bfc0e23c528",
+      "direct": [
+        "unauthorized_learning_infringement"
+      ],
+      "partial": [],
+      "opposed": [],
+      "borderline": [],
+      "reason_by_claim": {
+        "unauthorized_learning_infringement": "他人の作品を学習させる行為を著作権侵害と結び付け、合法とは認められないと反語で一般化している。特定作品や目的に限る条件はない。",
+        "data_disclosure_needed": "日本の学習データ出所に関する法律上の開示義務の有無は説明していない。",
+        "compensation_required": "学習データ利用の対価を法律で支払わせる制度の有無は説明していない。",
+        "creator_protection_insufficient": "無断学習後の作者が対抗手段を持つかどうかは説明していない。",
+        "ai_output_has_copyright": "AI生成物そのものの著作権成立や帰属についての説明はない。",
+        "tech_innovation_over_regulation": "生成AIの法律による規制が現状存在するかどうかの説明はない。"
+      }
+    },
+    {
+      "blind_index": 45,
+      "record_id_hash": "sha256:0a2c5a99397fb21c71e89de12ae6e9f003e7eec4336b68a0f17d217c95b42237",
+      "text_sha256": "a062b43ea8d622abf3deb19a7df74c419a841fb6655f21799ef61de2eeae04b5",
+      "direct": [],
+      "partial": [
+        "tech_innovation_over_regulation"
+      ],
+      "opposed": [],
+      "borderline": [],
+      "reason_by_claim": {
+        "unauthorized_learning_infringement": "無許諾の学習それ自体を、条件なく著作権侵害とする法的説明はない。",
+        "data_disclosure_needed": "日本の学習データ出所に関する法律上の開示義務の有無は説明していない。",
+        "compensation_required": "学習データ利用の対価を法律で支払わせる制度の有無は説明していない。",
+        "creator_protection_insufficient": "無断学習後の作者が対抗手段を持つかどうかは説明していない。",
+        "ai_output_has_copyright": "AI生成物そのものの著作権成立や帰属についての説明はない。",
+        "tech_innovation_over_regulation": "日本でAIと著作権に関する制度整備が済んでいないという限定された主張であり、全般的な規制不存在にはしない。"
+      }
+    },
+    {
+      "blind_index": 46,
+      "record_id_hash": "sha256:7e6343e8d84993bac0bbca9612558d1b98bd5d269cfd70b4954d9daa32b29553",
+      "text_sha256": "a1e7889251cb482838d53c0a892e13fbcd2319caf77306356b635741cbb1e3fc",
+      "direct": [
+        "unauthorized_learning_infringement"
+      ],
+      "partial": [],
+      "opposed": [],
+      "borderline": [],
+      "reason_by_claim": {
+        "unauthorized_learning_infringement": "自作の絵の権利を根拠に、無断のAI学習を一律に犯罪と説明している。絵という媒体限定はあるが、特定作品だけの事件ではない。",
+        "data_disclosure_needed": "日本の学習データ出所に関する法律上の開示義務の有無は説明していない。",
+        "compensation_required": "学習データ利用の対価を法律で支払わせる制度の有無は説明していない。",
+        "creator_protection_insufficient": "無断学習後の作者が対抗手段を持つかどうかは説明していない。",
+        "ai_output_has_copyright": "人が描いた絵の著作権を説明している。AI生成物に独自の著作権が成立するとの主張ではない。",
+        "tech_innovation_over_regulation": "生成AIの法律による規制が現状存在するかどうかの説明はない。"
+      }
+    },
+    {
+      "blind_index": 47,
+      "record_id_hash": "sha256:c8860092809c5b2e4b8914017a9d6606fa32128e800fddbc726aaaf732716936",
+      "text_sha256": "8bcbdac0a66cc1d1d14b523760551e46bdc99c281fdf7d9d90f26cc0465c3cab",
+      "direct": [
+        "unauthorized_learning_infringement"
+      ],
+      "partial": [],
+      "opposed": [],
+      "borderline": [],
+      "reason_by_claim": {
+        "unauthorized_learning_infringement": "無許諾学習が著作権侵害だと一般的に説明し、裁判の判断を根拠としている。本文にない個別訴訟の事情を補って範囲を変えない。",
+        "data_disclosure_needed": "日本の学習データ出所に関する法律上の開示義務の有無は説明していない。",
+        "compensation_required": "学習データ利用の対価を法律で支払わせる制度の有無は説明していない。",
+        "creator_protection_insufficient": "無断学習後の作者が対抗手段を持つかどうかは説明していない。",
+        "ai_output_has_copyright": "AI生成物そのものの著作権成立や帰属についての説明はない。",
+        "tech_innovation_over_regulation": "生成AIの法律による規制が現状存在するかどうかの説明はない。"
+      }
+    },
+    {
+      "blind_index": 48,
+      "record_id_hash": "sha256:654ea325b772e16dd3ccdfc3489726c0befea2360328d5212dafbe0e99e59e57",
+      "text_sha256": "9955e555394f122a5c244434d28805e86707efb1347100583d06a71174216fda",
+      "direct": [],
+      "partial": [],
+      "opposed": [],
+      "borderline": [
+        "tech_innovation_over_regulation"
+      ],
+      "reason_by_claim": {
+        "unauthorized_learning_infringement": "無許諾の学習それ自体を、条件なく著作権侵害とする法的説明はない。",
+        "data_disclosure_needed": "日本の学習データ出所に関する法律上の開示義務の有無は説明していない。",
+        "compensation_required": "学習データ利用の対価を法律で支払わせる制度の有無は説明していない。",
+        "creator_protection_insufficient": "無断学習後の作者が対抗手段を持つかどうかは説明していない。",
+        "ai_output_has_copyright": "AI生成物そのものの著作権成立や帰属についての説明はない。",
+        "tech_innovation_over_regulation": "法律による管理を求めつつ、現状を交通の比喩で描写している。制度不存在を比喩から採らない凍結基準では留保する。"
+      }
+    },
+    {
+      "blind_index": 49,
+      "record_id_hash": "sha256:0a94204d2e53ec57da49d49bf41c97ed403d908921dc706fcd57e15e5a8245d4",
+      "text_sha256": "3396a7e361437e1d53d340c2536a3cf0c4abb26a6c47d0a19af2a50c2b5ef176",
+      "direct": [
+        "ai_output_has_copyright"
+      ],
+      "partial": [],
+      "opposed": [],
+      "borderline": [],
+      "reason_by_claim": {
+        "unauthorized_learning_infringement": "無許諾の学習それ自体を、条件なく著作権侵害とする法的説明はない。",
+        "data_disclosure_needed": "日本の学習データ出所に関する法律上の開示義務の有無は説明していない。",
+        "compensation_required": "学習データ利用の対価を法律で支払わせる制度の有無は説明していない。",
+        "creator_protection_insufficient": "無断学習後の作者が対抗手段を持つかどうかは説明していない。",
+        "ai_output_has_copyright": "生成物の権利は作成者に帰属するという一般的な認識を述べ、人による創作的関与の条件を本文に付けていない。疑問の形で確かめてはいるが、自分の立場を示している。",
+        "tech_innovation_over_regulation": "生成AIの法律による規制が現状存在するかどうかの説明はない。"
+      }
+    },
+    {
+      "blind_index": 50,
+      "record_id_hash": "sha256:7e625622b35fd60085c223632e37ed943188490cec87fbb719f483caa5e8230e",
+      "text_sha256": "4c823bdcbf4dd6a1649fd989ea3fea27288a3de4090201aedd66467a9933e46b",
+      "direct": [],
+      "partial": [
+        "unauthorized_learning_infringement"
+      ],
+      "opposed": [],
+      "borderline": [],
+      "reason_by_claim": {
+        "unauthorized_learning_infringement": "特定の対象に関する素材のAI学習について、権利侵害や法的な問題を指摘している。あらゆる無許諾学習への一般化はしない。",
+        "data_disclosure_needed": "日本の学習データ出所に関する法律上の開示義務の有無は説明していない。",
+        "compensation_required": "学習データ利用の対価を法律で支払わせる制度の有無は説明していない。",
+        "creator_protection_insufficient": "権利者への連絡という対応に触れるが、無断学習後の作者が制度上救済されるとの説明まではない。",
+        "ai_output_has_copyright": "AI生成物そのものの著作権成立や帰属についての説明はない。",
+        "tech_innovation_over_regulation": "生成AIの法律による規制が現状存在するかどうかの説明はない。"
+      }
+    },
+    {
+      "blind_index": 51,
+      "record_id_hash": "sha256:bbae6fdfc38ef43b59ac385f2cfdf24890a890dae2ff6eeebfa00d4e88a4c9e6",
+      "text_sha256": "a9d5eb5f21171e8ebbc7b08958ce56763390357f3a872f4910af77d27dcde154",
+      "direct": [],
+      "partial": [
+        "tech_innovation_over_regulation"
+      ],
+      "opposed": [],
+      "borderline": [],
+      "reason_by_claim": {
+        "unauthorized_learning_infringement": "無許諾の学習それ自体を、条件なく著作権侵害とする法的説明はない。",
+        "data_disclosure_needed": "日本の学習データ出所に関する法律上の開示義務の有無は説明していない。",
+        "compensation_required": "学習データ利用の対価を法律で支払わせる制度の有無は説明していない。",
+        "creator_protection_insufficient": "無断学習後の作者が対抗手段を持つかどうかは説明していない。",
+        "ai_output_has_copyright": "AI生成物そのものの著作権成立や帰属についての説明はない。",
+        "tech_innovation_over_regulation": "生成AIのデータ処理構造について著作権法による規制が働いていないと反語で説明している。特定法による対応の話である。"
+      }
+    },
+    {
+      "blind_index": 52,
+      "record_id_hash": "sha256:949791d43c3459d7edeed9e8d93e9755acba092f01e8f37132ba1a7c832b0870",
+      "text_sha256": "9fea740c0f1a2d2c6885d34be71a6d76f53d4b222855d7bb5deea07ca29b5873",
+      "direct": [],
+      "partial": [],
+      "opposed": [],
+      "borderline": [
+        "creator_protection_insufficient"
+      ],
+      "reason_by_claim": {
+        "unauthorized_learning_infringement": "無許諾の学習それ自体を、条件なく著作権侵害とする法的説明はない。",
+        "data_disclosure_needed": "日本の学習データ出所に関する法律上の開示義務の有無は説明していない。",
+        "compensation_required": "学習データ利用の対価を法律で支払わせる制度の有無は説明していない。",
+        "creator_protection_insufficient": "画像生成に対し著作権の働きが弱いと評価しているが、無断学習後の作者の手段を述べているのかは明確でない。",
+        "ai_output_has_copyright": "AI生成物そのものの著作権成立や帰属についての説明はない。",
+        "tech_innovation_over_regulation": "著作権の実効性が低いとの評価である。凍結基準が分ける実効性不足なので、制度不存在の主張にはしない。"
+      }
+    },
+    {
+      "blind_index": 53,
+      "record_id_hash": "sha256:4584631f04279e27844863cfa6bf5e54ea0832d9b50e1e1757b2429d9058057d",
+      "text_sha256": "af83f44b2bd18192551b2ed0bf71d8e8a95a7e655dd68ed5ea166c504bce1c27",
+      "direct": [
+        "tech_innovation_over_regulation"
+      ],
+      "partial": [],
+      "opposed": [],
+      "borderline": [],
+      "reason_by_claim": {
+        "unauthorized_learning_infringement": "無許諾の学習それ自体を、条件なく著作権侵害とする法的説明はない。",
+        "data_disclosure_needed": "日本の学習データ出所に関する法律上の開示義務の有無は説明していない。",
+        "compensation_required": "学習データ利用の対価を法律で支払わせる制度の有無は説明していない。",
+        "creator_protection_insufficient": "無断学習後の作者が対抗手段を持つかどうかは説明していない。",
+        "ai_output_has_copyright": "AI生成物そのものの著作権成立や帰属についての説明はない。",
+        "tech_innovation_over_regulation": "現在の生成AIは法律によって制限されていないと一般的に述べている。利用を好まないという感想と分けて採る。"
+      }
+    },
+    {
+      "blind_index": 54,
+      "record_id_hash": "sha256:8e6e4de0ba9becfa5aa1b18560a16ad1d4a4895a1cc68a4c2d482959ee7c0288",
+      "text_sha256": "8283a439cc1f612f4ec66995c1f1ca23235e3304f8ddf4013c1a1611d7062e5f",
+      "direct": [],
+      "partial": [],
+      "opposed": [],
+      "borderline": [
+        "unauthorized_learning_infringement"
+      ],
+      "reason_by_claim": {
+        "unauthorized_learning_infringement": "依頼した一枚の絵を入力して加工する場面について、侵害ではないかと問うている。モデル学習の話かは不明で、無許諾学習全体の断定でもない。",
+        "data_disclosure_needed": "日本の学習データ出所に関する法律上の開示義務の有無は説明していない。",
+        "compensation_required": "学習データ利用の対価を法律で支払わせる制度の有無は説明していない。",
+        "creator_protection_insufficient": "無断学習後の作者が対抗手段を持つかどうかは説明していない。",
+        "ai_output_has_copyright": "人に依頼して描いてもらった作品の権利であり、AIによる生成物の権利成立とは別の説明である。",
+        "tech_innovation_over_regulation": "生成AIの法律による規制が現状存在するかどうかの説明はない。"
+      }
+    },
+    {
+      "blind_index": 55,
+      "record_id_hash": "sha256:a760c1c58ff17107ca82d3864c63ef396f690105eed409a43d90bab961a3d2af",
+      "text_sha256": "6777857e752272edf321ae62046bfd82e5078e8cf786fcfd0548a286e761f6c4",
+      "direct": [],
+      "partial": [],
+      "opposed": [],
+      "borderline": [
+        "unauthorized_learning_infringement"
+      ],
+      "reason_by_claim": {
+        "unauthorized_learning_infringement": "権利のある作品を使う行為に対する法的な否定はあるが、学習それ自体と出力の利用を本文だけで分けられない。",
+        "data_disclosure_needed": "日本の学習データ出所に関する法律上の開示義務の有無は説明していない。",
+        "compensation_required": "学習データ利用の対価を法律で支払わせる制度の有無は説明していない。",
+        "creator_protection_insufficient": "無断学習後の作者が対抗手段を持つかどうかは説明していない。",
+        "ai_output_has_copyright": "AI生成物そのものの著作権成立や帰属についての説明はない。",
+        "tech_innovation_over_regulation": "生成AIの法律による規制が現状存在するかどうかの説明はない。"
+      }
+    },
+    {
+      "blind_index": 56,
+      "record_id_hash": "sha256:ebc2e7fdb026cefdbc26143d9194eec90e5d1b8188b897c4cef35a8644df3e0d",
+      "text_sha256": "1a450e445c45713405f3b13f32235014bb6f2a63a32c5b7a7938edf5f848661c",
+      "direct": [],
+      "partial": [],
+      "opposed": [],
+      "borderline": [],
+      "reason_by_claim": {
+        "unauthorized_learning_infringement": "学習元の適切な権利処理を求める倫理上の批判であり、著作権侵害という法的判断の明示ではない。",
+        "data_disclosure_needed": "日本の学習データ出所に関する法律上の開示義務の有無は説明していない。",
+        "compensation_required": "学習データ利用の対価を法律で支払わせる制度の有無は説明していない。",
+        "creator_protection_insufficient": "無断学習後の作者が対抗手段を持つかどうかは説明していない。",
+        "ai_output_has_copyright": "AI生成物そのものの著作権成立や帰属についての説明はない。",
+        "tech_innovation_over_regulation": "生成AIの法律による規制が現状存在するかどうかの説明はない。"
+      }
+    },
+    {
+      "blind_index": 57,
+      "record_id_hash": "sha256:083d54597dec9e0bfab4066c60867991cc1d8317de42ead93515eb2fb894d7e5",
+      "text_sha256": "c196c77365eef02ed89638f220801d6944a3c4ba15eaa6b0c1b13242cbbd83a8",
+      "direct": [
+        "tech_innovation_over_regulation"
+      ],
+      "partial": [],
+      "opposed": [],
+      "borderline": [],
+      "reason_by_claim": {
+        "unauthorized_learning_infringement": "無許諾の学習それ自体を、条件なく著作権侵害とする法的説明はない。",
+        "data_disclosure_needed": "日本の学習データ出所に関する法律上の開示義務の有無は説明していない。",
+        "compensation_required": "学習データ利用の対価を法律で支払わせる制度の有無は説明していない。",
+        "creator_protection_insufficient": "無断学習後の作者が対抗手段を持つかどうかは説明していない。",
+        "ai_output_has_copyright": "AI生成物そのものの著作権成立や帰属についての説明はない。",
+        "tech_innovation_over_regulation": "既に禁止されている転載と対比して、生成AIは現状法律上規制されていないと明示している。"
+      }
+    },
+    {
+      "blind_index": 58,
+      "record_id_hash": "sha256:d0fac72f5c2ab069d12aded8e5bb827e80e79155b643ad40ac1e9c5bfdeb5ad9",
+      "text_sha256": "5bfa4dda99d7766f88051b223ac47e73eaf3599a0246d79b58d5120947b82830",
+      "direct": [
+        "unauthorized_learning_infringement"
+      ],
+      "partial": [],
+      "opposed": [],
+      "borderline": [],
+      "reason_by_claim": {
+        "unauthorized_learning_infringement": "曲の無断学習を著作権侵害だと一般的に説明している。音楽という媒体だけの限定であり、特定の一曲や特定目的に限る条件はない。",
+        "data_disclosure_needed": "日本の学習データ出所に関する法律上の開示義務の有無は説明していない。",
+        "compensation_required": "学習データ利用の対価を法律で支払わせる制度の有無は説明していない。",
+        "creator_protection_insufficient": "無断学習後の作者が対抗手段を持つかどうかは説明していない。",
+        "ai_output_has_copyright": "AI生成物そのものの著作権成立や帰属についての説明はない。",
+        "tech_innovation_over_regulation": "生成AIの法律による規制が現状存在するかどうかの説明はない。"
+      }
+    },
+    {
+      "blind_index": 59,
+      "record_id_hash": "sha256:b2d3bc83fb8989887be0fbc3ff422262e6fa0488512ddd5337a960afbae6ffb5",
+      "text_sha256": "9064ebb11bda41b2befe300f7b479450dae5a5a1bae17660d3b37732df151690",
+      "direct": [],
+      "partial": [],
+      "opposed": [],
+      "borderline": [
+        "creator_protection_insufficient"
+      ],
+      "reason_by_claim": {
+        "unauthorized_learning_infringement": "無許諾の学習それ自体を、条件なく著作権侵害とする法的説明はない。",
+        "data_disclosure_needed": "日本の学習データ出所に関する法律上の開示義務の有無は説明していない。",
+        "compensation_required": "学習データ利用の対価を法律で支払わせる制度の有無は説明していない。",
+        "creator_protection_insufficient": "被害を受けた作り手に我慢を求めるのかという反語であり、学習後に利用できる手段が無いという本人の事実断定ではない。",
+        "ai_output_has_copyright": "AI生成物そのものの著作権成立や帰属についての説明はない。",
+        "tech_innovation_over_regulation": "生成AIの法律による規制が現状存在するかどうかの説明はない。"
+      }
+    },
+    {
+      "blind_index": 60,
+      "record_id_hash": "sha256:84c904d8a475d39c3a7ae2aa19bfae112df6679173ac8f19ae76d125246d91f3",
+      "text_sha256": "5400a51258b2efa5214236fc5520be3b03c632ea9c68c50366090874044e255b",
+      "direct": [
+        "unauthorized_learning_infringement"
+      ],
+      "partial": [],
+      "opposed": [],
+      "borderline": [],
+      "reason_by_claim": {
+        "unauthorized_learning_infringement": "AI学習の違法性を既知のものとして一般に述べている。無許諾の学習にもその評価が及ぶ説明で、条件や例外を本文に付けていない。",
+        "data_disclosure_needed": "日本の学習データ出所に関する法律上の開示義務の有無は説明していない。",
+        "compensation_required": "学習データ利用の対価を法律で支払わせる制度の有無は説明していない。",
+        "creator_protection_insufficient": "無断学習後の作者が対抗手段を持つかどうかは説明していない。",
+        "ai_output_has_copyright": "AI生成物そのものの著作権成立や帰属についての説明はない。",
+        "tech_innovation_over_regulation": "生成AIの法律による規制が現状存在するかどうかの説明はない。"
+      }
+    },
+    {
+      "blind_index": 61,
+      "record_id_hash": "sha256:3570faeb0c44ca52b7fb6fb4022e42b54aaf8cc6965b2aa204d054c54aba3230",
+      "text_sha256": "ad0fba23b8d784b25414fa8be575000a53a424eb7b983eff78a3067a05be5ec1",
+      "direct": [
+        "unauthorized_learning_infringement"
+      ],
+      "partial": [],
+      "opposed": [],
+      "borderline": [],
+      "reason_by_claim": {
+        "unauthorized_learning_infringement": "生成AIの学習が著作権を侵害するという一般的な認識を、反対する理由として本人が肯定している。",
+        "data_disclosure_needed": "日本の学習データ出所に関する法律上の開示義務の有無は説明していない。",
+        "compensation_required": "学習データ利用の対価を法律で支払わせる制度の有無は説明していない。",
+        "creator_protection_insufficient": "無断学習後の作者が対抗手段を持つかどうかは説明していない。",
+        "ai_output_has_copyright": "AI生成物そのものの著作権成立や帰属についての説明はない。",
+        "tech_innovation_over_regulation": "学習への著作権の適用を主張するが、規制全体の有無や整備状況を論じてはいない。"
+      }
+    },
+    {
+      "blind_index": 62,
+      "record_id_hash": "sha256:6ffd2042ac2adebeff4c498023da5ef9f1675d93e7a6a8ad9615e836e93157ed",
+      "text_sha256": "a18c7df1cfd358eeb98a20f3107ea048593db1155442752a54836c8fd57bb3a3",
+      "direct": [],
+      "partial": [
+        "tech_innovation_over_regulation"
+      ],
+      "opposed": [],
+      "borderline": [
+        "creator_protection_insufficient"
+      ],
+      "reason_by_claim": {
+        "unauthorized_learning_infringement": "無許諾の学習それ自体を、条件なく著作権侵害とする法的説明はない。",
+        "data_disclosure_needed": "日本の学習データ出所に関する法律上の開示義務の有無は説明していない。",
+        "compensation_required": "学習データ利用の対価を法律で支払わせる制度の有無は説明していない。",
+        "creator_protection_insufficient": "AIに関する被害では訴えられないと説明するが、対象が無断学習なのか生成物の利用なのかが分からない。自衛への言及だけで学習後の手段全般の不存在にはしない。",
+        "ai_output_has_copyright": "AI生成物そのものの著作権成立や帰属についての説明はない。",
+        "tech_innovation_over_regulation": "AIによる被害を法律で訴えられないという範囲の説明がある。生成AI全般に規制がないとの主張までは広げない。"
+      }
+    },
+    {
+      "blind_index": 63,
+      "record_id_hash": "sha256:754d5e85f3215f112f02f4d5dcf1f3022d8f28889ef40a2f8956b7176b6b1c30",
+      "text_sha256": "7e4e6d08ea88a6ffc17bb1095311c9ef63c02a94d3e2a1a0114d43c093787920",
+      "direct": [
+        "unauthorized_learning_infringement"
+      ],
+      "partial": [],
+      "opposed": [],
+      "borderline": [],
+      "reason_by_claim": {
+        "unauthorized_learning_infringement": "無許諾学習を理由に、生成AIで行われることが著作権侵害だという本人の判断を述べている。条件付きの事例には絞っていない。",
+        "data_disclosure_needed": "日本の学習データ出所に関する法律上の開示義務の有無は説明していない。",
+        "compensation_required": "学習データ利用の対価を法律で支払わせる制度の有無は説明していない。",
+        "creator_protection_insufficient": "無断学習後の作者が対抗手段を持つかどうかは説明していない。",
+        "ai_output_has_copyright": "AI生成物そのものの著作権成立や帰属についての説明はない。",
+        "tech_innovation_over_regulation": "生成AIの法律による規制が現状存在するかどうかの説明はない。"
+      }
+    },
+    {
+      "blind_index": 64,
+      "record_id_hash": "sha256:6a375ba8602ad0b3dc3a0a7ab8b1f4acaec7e01f45e1f49852c8825c5cb65a21",
+      "text_sha256": "712cee4a0bd4dc38090d277ffe4d5189ddf742f7011c1eddfe6391ca349a0f30",
+      "direct": [],
+      "partial": [],
+      "opposed": [],
+      "borderline": [
+        "unauthorized_learning_infringement"
+      ],
+      "reason_by_claim": {
+        "unauthorized_learning_infringement": "生成AIを作る過程で著作権法違反があると述べるが、作品の入手や複製と学習自体のどれを指すかは分からない。",
+        "data_disclosure_needed": "日本の学習データ出所に関する法律上の開示義務の有無は説明していない。",
+        "compensation_required": "学習データ利用の対価を法律で支払わせる制度の有無は説明していない。",
+        "creator_protection_insufficient": "無断学習後の作者が対抗手段を持つかどうかは説明していない。",
+        "ai_output_has_copyright": "AI生成物そのものの著作権成立や帰属についての説明はない。",
+        "tech_innovation_over_regulation": "安全な利用のための規制を求める提案であり、現状の法律による規制が存在しないという説明ではない。"
+      }
+    },
+    {
+      "blind_index": 65,
+      "record_id_hash": "sha256:ffda95df99b682345757e63909ab93a02c4fc07d57ca190508ef5bb07eafeaa2",
+      "text_sha256": "5d7f960f09f8fae342a8fd5fb5f0325e04605602adff220becd01143b0781d0c",
+      "direct": [],
+      "partial": [],
+      "opposed": [],
+      "borderline": [
+        "unauthorized_learning_infringement"
+      ],
+      "reason_by_claim": {
+        "unauthorized_learning_infringement": "作品を取得してAIに入力する人を犯罪者と呼ぶが、不正取得と学習のどちらを法的違反とするか切り分けられない。",
+        "data_disclosure_needed": "日本の学習データ出所に関する法律上の開示義務の有無は説明していない。",
+        "compensation_required": "学習データ利用の対価を法律で支払わせる制度の有無は説明していない。",
+        "creator_protection_insufficient": "予防的な技術対策の有効性は述べるが、既に学習された作品の作者の事後的手段を説明してはいない。",
+        "ai_output_has_copyright": "AI生成物そのものの著作権成立や帰属についての説明はない。",
+        "tech_innovation_over_regulation": "生成AIの法律による規制が現状存在するかどうかの説明はない。"
+      }
+    },
+    {
+      "blind_index": 66,
+      "record_id_hash": "sha256:9a74c896cf4c7567fa4c196f2c0795fccf7e33795247c359fd13d62ca16914af",
+      "text_sha256": "f8602289555156872b2b81a076908864c3fd655696476997cd289be49bbd1280",
+      "direct": [],
+      "partial": [],
+      "opposed": [],
+      "borderline": [
+        "tech_innovation_over_regulation"
+      ],
+      "reason_by_claim": {
+        "unauthorized_learning_infringement": "無許諾の学習それ自体を、条件なく著作権侵害とする法的説明はない。",
+        "data_disclosure_needed": "日本の学習データ出所に関する法律上の開示義務の有無は説明していない。",
+        "compensation_required": "学習データ利用の対価を法律で支払わせる制度の有無は説明していない。",
+        "creator_protection_insufficient": "無断学習後の作者が対抗手段を持つかどうかは説明していない。",
+        "ai_output_has_copyright": "AI生成物そのものの著作権成立や帰属についての説明はない。",
+        "tech_innovation_over_regulation": "法整備を求め、現在の状況を法が働かない状態として比喩的に述べている。凍結基準では比喩だけで制度不存在へは進めない。"
+      }
+    },
+    {
+      "blind_index": 67,
+      "record_id_hash": "sha256:26f2ceb1925ce7b58fdc95a3e75b4b8e84427ecffd9a8aaf57e0b0b78eacf4c7",
+      "text_sha256": "0fa33b9ae66a8425aaddcfade5958a15a63f42ace196b7a6eab8d338a2f3ee48",
+      "direct": [],
+      "partial": [],
+      "opposed": [],
+      "borderline": [
+        "tech_innovation_over_regulation"
+      ],
+      "reason_by_claim": {
+        "unauthorized_learning_infringement": "無許諾の学習それ自体を、条件なく著作権侵害とする法的説明はない。",
+        "data_disclosure_needed": "日本の学習データ出所に関する法律上の開示義務の有無は説明していない。",
+        "compensation_required": "学習データ利用の対価を法律で支払わせる制度の有無は説明していない。",
+        "creator_protection_insufficient": "学習を禁じる方針への賛意は示すが、学習された作者が実際に対抗できるとの説明ではない。",
+        "ai_output_has_copyright": "AI生成物そのものの著作権成立や帰属についての説明はない。",
+        "tech_innovation_over_regulation": "現在の放置状態への評価と法整備の提案を述べている。凍結基準が求める制度そのものの不存在の明示まではない。"
+      }
+    },
+    {
+      "blind_index": 68,
+      "record_id_hash": "sha256:8e7790b53edb4d12d9427bfcd38d5ff80bf87b1760f125c815f0ea458851100e",
+      "text_sha256": "a86d695137efed91f9d4b965bb53933fc99609c433273245e11e9071ee5bc930",
+      "direct": [
+        "unauthorized_learning_infringement"
+      ],
+      "partial": [],
+      "opposed": [],
+      "borderline": [],
+      "reason_by_claim": {
+        "unauthorized_learning_infringement": "学習のために無断で利用する行為自体を著作権侵害と明示している。特定目的や特定作品に限る条件はない。",
+        "data_disclosure_needed": "日本の学習データ出所に関する法律上の開示義務の有無は説明していない。",
+        "compensation_required": "学習データ利用の対価を法律で支払わせる制度の有無は説明していない。",
+        "creator_protection_insufficient": "行為を止めて権利者を保護すべきだとの提案である。救済手段の現状を説明したとは扱わない。",
+        "ai_output_has_copyright": "AI生成物そのものの著作権成立や帰属についての説明はない。",
+        "tech_innovation_over_regulation": "生成AIの法律による規制が現状存在するかどうかの説明はない。"
+      }
+    },
+    {
+      "blind_index": 69,
+      "record_id_hash": "sha256:2e664538b9914753fb53df5dfefab2d314698789293e0572436181b93098eb90",
+      "text_sha256": "f98de7a0a1413f0d8ce8e4205ed523d4d5609b856aea9fc1b46762b99e1a7fa4",
+      "direct": [],
+      "partial": [],
+      "opposed": [],
+      "borderline": [
+        "unauthorized_learning_infringement"
+      ],
+      "reason_by_claim": {
+        "unauthorized_learning_infringement": "非侵害との評価に疑問を示し無許諾データの利用を挙げているが、本人が学習すべてを侵害と断定したのか、権利処理への疑念なのかは定まらない。",
+        "data_disclosure_needed": "事業者が無許諾データの利用を明らかにしたという説明であり、出所開示を法律で義務づける日本の制度の有無ではない。",
+        "compensation_required": "学習データ利用の対価を法律で支払わせる制度の有無は説明していない。",
+        "creator_protection_insufficient": "無断学習後の作者が対抗手段を持つかどうかは説明していない。",
+        "ai_output_has_copyright": "AI生成物そのものの著作権成立や帰属についての説明はない。",
+        "tech_innovation_over_regulation": "生成AIの法律による規制が現状存在するかどうかの説明はない。"
+      }
+    },
+    {
+      "blind_index": 70,
+      "record_id_hash": "sha256:b20909aa6e7aa21582999aabb98e97845f443e3d50bfae58c5a62cb01b03570f",
+      "text_sha256": "d055169285e45e37b5a954838b99fd60bf62cec898952885cc926e9b0144f79b",
+      "direct": [
+        "tech_innovation_over_regulation"
+      ],
+      "partial": [],
+      "opposed": [],
+      "borderline": [],
+      "reason_by_claim": {
+        "unauthorized_learning_infringement": "無許諾の学習それ自体を、条件なく著作権侵害とする法的説明はない。",
+        "data_disclosure_needed": "日本の学習データ出所に関する法律上の開示義務の有無は説明していない。",
+        "compensation_required": "学習データ利用の対価を法律で支払わせる制度の有無は説明していない。",
+        "creator_protection_insufficient": "無断学習後の作者が対抗手段を持つかどうかは説明していない。",
+        "ai_output_has_copyright": "AI生成物そのものの著作権成立や帰属についての説明はない。",
+        "tech_innovation_over_regulation": "生成AIの急速な普及に対して法律がまだできていないという時間的な現状を説明している。"
+      }
+    },
+    {
+      "blind_index": 71,
+      "record_id_hash": "sha256:f49ca01b1aaa846396c89684793aa52b3b1ed6ec41517135716a7080e10d8a4e",
+      "text_sha256": "0cf15110ccb41b5373686a137931dbcf09b95452c7b5398c6f924964d3d97f19",
+      "direct": [],
+      "partial": [],
+      "opposed": [],
+      "borderline": [
+        "unauthorized_learning_infringement"
+      ],
+      "reason_by_claim": {
+        "unauthorized_learning_infringement": "無許諾でイラストを学習することを否定するが、法的な侵害という意味か倫理上の評価かは明示されない。媒体限定のために留保したわけではない。",
+        "data_disclosure_needed": "日本の学習データ出所に関する法律上の開示義務の有無は説明していない。",
+        "compensation_required": "学習データ利用の対価を法律で支払わせる制度の有無は説明していない。",
+        "creator_protection_insufficient": "無断学習後の作者が対抗手段を持つかどうかは説明していない。",
+        "ai_output_has_copyright": "AI生成物そのものの著作権成立や帰属についての説明はない。",
+        "tech_innovation_over_regulation": "生成AIの法律による規制が現状存在するかどうかの説明はない。"
+      }
+    }
+  ],
+  "recommended_differences": [
+    {
+      "blind_index": 8,
+      "claim_id": "tech_innovation_over_regulation",
+      "frozen_status": "no",
+      "recommended_status": "partial",
+      "reason": "新たな制度の必要性と現行の著作権法では構造に対応できないという説明は、元命題の規制不足に部分対応する。制度不存在に限定するとこの内容が落ちる。"
+    },
+    {
+      "blind_index": 9,
+      "claim_id": "tech_innovation_over_regulation",
+      "frozen_status": "borderline",
+      "recommended_status": "direct",
+      "reason": "規制をめぐる議論の中で生成AIの現状を包括的に法が働かない状態だと述べている。元命題も放置状態の評価なので、比喩という形式だけで留保する必要はない。"
+    },
+    {
+      "blind_index": 12,
+      "claim_id": "tech_innovation_over_regulation",
+      "frozen_status": "no",
+      "recommended_status": "partial",
+      "reason": "著作権による対応の実効性不足は規制全体の不存在ではないが、元命題の規制不足という面には限定して関係する。"
+    },
+    {
+      "blind_index": 15,
+      "claim_id": "tech_innovation_over_regulation",
+      "frozen_status": "opposed",
+      "recommended_status": "no",
+      "reason": "特定の目的の学習に既存法が及ぶという説明は、制度が全く無いとの主張には反する。しかし元命題の規制がほとんど進んでいないという評価は、一部の既存法の適用と両立するため、この内容だけを元命題への反対とはしない。"
+    },
+    {
+      "blind_index": 36,
+      "claim_id": "tech_innovation_over_regulation",
+      "frozen_status": "direct",
+      "recommended_status": "borderline",
+      "reason": "指針や制限をまとめた説明のため、法律上の規制が無いとの主張かが不明である。元命題の法規制に対応させるならその区別を残す。"
+    },
+    {
+      "blind_index": 39,
+      "claim_id": "tech_innovation_over_regulation",
+      "frozen_status": "direct",
+      "recommended_status": "borderline",
+      "reason": "現状の無規制を述べるが、具体的な法律の有無か運用上の抑制の不足かが本文で分かれない。法規制の命題としては留保する。"
+    },
+    {
+      "blind_index": 42,
+      "claim_id": "tech_innovation_over_regulation",
+      "frozen_status": "direct",
+      "recommended_status": "borderline",
+      "reason": "規則や用途別の指針の話と法律上の規制を区別できない。規則が無いというだけで元命題の法規制不存在へ進めない。"
+    },
+    {
+      "blind_index": 48,
+      "claim_id": "tech_innovation_over_regulation",
+      "frozen_status": "borderline",
+      "recommended_status": "direct",
+      "reason": "法律による管理を求める文脈で現状の包括的な放置を断定している。元命題に沿えば、制度不存在の明示まで求める必要はない。"
+    },
+    {
+      "blind_index": 52,
+      "claim_id": "tech_innovation_over_regulation",
+      "frozen_status": "no",
+      "recommended_status": "partial",
+      "reason": "著作権が十分働かないとの評価は制度不存在とは異なるが、元命題の規制の弱さ・実効性不足に部分対応する。"
+    },
+    {
+      "blind_index": 66,
+      "claim_id": "tech_innovation_over_regulation",
+      "frozen_status": "borderline",
+      "recommended_status": "direct",
+      "reason": "法律の整備を求める同じ文脈で現在の包括的な放置状態を述べているため、元命題の規制の遅れ・放置という意味に直接対応する。"
+    },
+    {
+      "blind_index": 67,
+      "claim_id": "tech_innovation_over_regulation",
+      "frozen_status": "borderline",
+      "recommended_status": "direct",
+      "reason": "現状が放置されているという本人の認識と法律の整備が急務という説明を合わせると、元命題の規制の遅れ・放置を直接述べている。制度が全く無いという追加条件は不要。"
+    }
+  ],
+  "limitations": [
+    "本文と元命題を全71件実際に読んで判定した。事実関係や法律解釈の正しさ、リンク先、画像、返信先は調べていない。本文にない条件・対象・法域は補わない。",
+    "読み取り対象は指定されたblind-input.json、body-b-blind.json、criteria-after-blind.jsonに限る。旧Bは参照として読み、入力を書き換えていない。他レビュー、旧採否、対応組合せの私的ファイルは参照していない。",
+    "reviewsの区分は凍結基準による。directは本人による一般命題の明示、partialは特定の事例・制度・手段に限る関連、opposedは本人の明確な反対内容、borderlineは対象・法律的意味・発言主体が確定しない場合。各配列にない命題はnoである。",
+    "凍結基準のexcludeには、直接対応から外す限定事例と全く別の主張が混在する。限定事例が元命題の一部を実際に述べる場合だけpartialとし、義務の提案・実際の未払い・現実の非公開を制度不存在のpartialにはしない。規制の実効性・進捗評価を除くという明示は凍結判定で守り、元命題に忠実な変更はrecommended_differencesへ分けた。",
+    "日本という対象が本文にない場合、読者の所在地やサービスの文脈から日本固有の法制度を推定していない。対価命題の凍結基準にのみ追加された日本限定はcriteria_assessmentに記録した。",
+    "通常の著作物と同様の保護と、人の創作的寄与が無くても無条件の保護が成立することを同一視しない。条件を書かない一般的な帰属説明を、条件を明示的に否定した発言とは報告しない。",
+    "原文、元の識別子、個人名を出力へ転載していない。レコードとの対応は渡されたハッシュだけで維持した。",
+    "リポジトリは読み取りのみ。外部のこの結果ファイルだけを書き出した。公開、分類正典への反映、採否確定は行っていない。"
+  ]
+}
