@@ -14,6 +14,7 @@ from collections import Counter
 from pathlib import Path
 
 from public_registry_common import CLAIM_AUDIT_SOURCES
+from claim_assessment import validate_assessment
 
 ROOT = Path(__file__).resolve().parents[1]
 ALLOWED = {"fact", "gap", "miss"}
@@ -188,8 +189,10 @@ def audit() -> tuple[dict[str, int], list[str]]:
         counts[theme] = len(checks)
         for index, check in enumerate(checks, start=1):
             verdict = check.get("verdict")
-            if verdict not in ALLOWED:
-                errors.append(f"{theme} #{index}: 不正な判定語 {verdict!r}")
+            try:
+                validate_assessment(check)
+            except ValueError as exc:
+                errors.append(f"{theme} #{index}: {exc}")
     constitutional_labels = read_literal(
         ROOT / "scripts/build_constitutional_process_sections.py", "VERDICT_LABEL"
     )
@@ -211,7 +214,7 @@ def main() -> int:
         print("\n".join(errors))
         return 1
     # テーマ数は SOURCES から数える（固定文字列にすると登録追加のたびに古くなる）
-    print(f"OK: {len(SOURCES)}テーマすべてが fact / gap / miss のみを使用")
+    print(f"OK: {len(SOURCES)}テーマの資料照合は fact / gap / miss、条件・評価の説明には正誤判定なし")
     print("OK: 主張ごとの件数が 正典 / data\u002fverification / 公開JSON で一致")
     print("OK: 確定データに旧判定語が残っていない")
     warnings = coverage_warnings()

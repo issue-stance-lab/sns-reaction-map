@@ -298,6 +298,16 @@ def ocean_layer_of(public: dict) -> dict:
 # 判定（fact/gap/miss）を読者向けの文言へ直す（設計書3.3の表）。
 # 10テーマ共通の言葉にする。テーマごとに言い換えると、同じ判定が別物に見える。
 # miss を「嘘」と書かない。「確認できなかった」で止める（3.3の読者への注意）。
+try:
+    from .claim_assessment import context_label, validate_assessment
+except ImportError:
+    from claim_assessment import context_label, validate_assessment
+
+
+def claim_label(claim: dict) -> str:
+    return context_label(claim) if claim.get("verdict") is None else verdict_label(claim["verdict"])
+
+
 VERDICT_LABELS = {
     "fact": ("資料どおり", "一次資料でも確認できました。「正しい意見」という意味ではありません。"),
     "gap": ("少しずれる", "部分的には合っていますが、一次資料とずれている点があります。"),
@@ -333,12 +343,18 @@ def _verdict_severity(claim: dict) -> int:
         ) from None
 
 
-def issue_verdict(issue_id: str, claims: list[dict]) -> tuple[str | None, list[dict]]:
+def issue_verdict(issue_id: str, claims: list[dict], *, ignore_empty: bool = False) -> tuple[str | None, list[dict]]:
     matched = [c for c in claims if issue_id in c.get("issue_ids", [])]
     if not matched:
         return None, []
-    worst = max(matched, key=_verdict_severity)
-    return worst["verdict"], matched
+    for claim in matched:
+        try:
+            validate_assessment(claim)
+        except ValueError as exc:
+            raise SystemExit(f"主張 {claim.get('id')}: {exc}") from exc
+    judged = [c for c in matched if c["verdict"] is not None
+              and (not ignore_empty or c.get("matched_post_count", 0) > 0)]
+    return (max(judged, key=_verdict_severity)["verdict"] if judged else None), matched
 
 
 # ---------------------------------------------------------------- 本体
@@ -660,7 +676,8 @@ def build(topic: str, *, canonical: list[dict] | None = None,
 
         st = cross.get(k, {})
         top = max(stances, key=lambda s: st.get(s, 0))
-        verdict, matched_claims = issue_verdict(ic["id"], claim_verification["claims"])
+        verdict, matched_claims = issue_verdict(ic["id"], claim_verification["claims"],
+                                              ignore_empty=cfg["theme_id"] == "ai-copyright")
         issues.append({
             "id": ic["id"],
             "key": k,
@@ -720,7 +737,9 @@ def build(topic: str, *, canonical: list[dict] | None = None,
                 "id": c["id"],
                 "claim": c["claim"],
                 "verdict": c["verdict"],
-                "verdict_label": verdict_label(c["verdict"]),
+                "verdict_label": claim_label(c),
+                **{k: c[k] for k in ("assessment_kind", "source_summary", "matched_post_count") if k in c and
+                   (k != "matched_post_count" or cfg["theme_id"] == "ai-copyright")},
                 "finding": c["finding"],
                 "sources": [{"name": s["name"], "url": s["url"]} for s in c.get("sources", [])],
             }
@@ -1025,13 +1044,16 @@ def issue_extras_html(issue: dict, data: dict) -> str:
         out.append('      <p class="sub" style="margin-top:14px"><b>資料との照合</b></p>')
         rows = []
         for c in claims:
-            label, note = VERDICT_LABELS[c["verdict"]]
+            label = claim_label(c)
+            note = VERDICT_LABELS[c["verdict"]][1] if c["verdict"] is not None else ""
+            kind = c.get("assessment_kind", c["verdict"])
+            summary = f'<span class="source-summary">{e(c["source_summary"])}</span>' if c.get("source_summary") else ""
             links = "".join(
                 f'<a href="{e(src["url"])}" rel="nofollow">{e(src["name"])}</a>'
                 for src in c.get("sources", []))
             rows.append(
-                f'<li><span class="verdict v-{e(c["verdict"])}">{e(label)}</span>'
-                f'{e(c["claim"])}<span class="finding">{e(c["finding"])}</span>'
+                f'<li><span class="verdict v-{e(kind)}">{e(label)}</span>'
+                f'{e(c["claim"])}{summary}<span class="finding">{e(c["finding"])}</span>'
                 f'<span class="vnote">{e(note)}</span>'
                 + (f'<span class="srcs">{links}</span>' if links else "") + '</li>')
         out.append(f'      <ul class="claims">{"".join(rows)}</ul>')
@@ -1179,6 +1201,9 @@ def static_editorial(data: dict) -> str:
 
 
 def render_page(data: dict, template: str, payload: str) -> str:
+    if any(c.get("assessment_kind") in {"conditional_explanation", "evaluation_context"} for c in data["claims"]):
+        template = template.replace('cs=D.claims||[];', 'cs=(D.claims||[]).filter(c=>c.verdict!==null && c.matched_post_count!==0);')
+        template = template.replace('qi===D.claims.length-1', 'qi===cs.length-1')
     if data["theme_id"] == "bike-blue-ticket":
         template = template.replace(
             "この論点の中身（編集部が本文を読んで分けたもの）",

@@ -5,10 +5,9 @@
 同じく、人が確定した投稿IDの写しを `data/verification/` へ出す
 `write_provenance_records()` を持つ。実際のクイズ描画は共通の惑星ジェネレータ
 （`build_planet_data.py`）が `data/public/themes/ai-copyright.json` の
-`claim_verification` を読んで行う（こちらは変更しない）。
+`claim_verification` を読んで行う（資料照合と条件・評価の説明を区別する）。
 
-件数の正典は `data/ai-copyright_claim_posts.json`（2026-09-13、編集部が1件ずつ読んで
-確定したもの）。ここでは数え直すだけで、キーワード抽出の結果は使わない。
+件数の正典は `data/ai-copyright_claim_posts.json`（編集担当が本文を確認して確定したもの）。ここでは数え直すだけで、キーワード抽出の結果は使わない。
 
 山なみ変換（2026-09-14）の時点でこのスクリプトが作られず、`CLAIM_AUDIT_SOURCES`
 （`scripts/public_registry_common.py`）にも未登録だったため、`claim_posts.json`が
@@ -30,93 +29,78 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 
-CHECKED_AT = "2026年9月19日"
+CHECKED_AT = "2026年11月1日"
 
-# 判定は fact / gap / miss の3語。読者に見せる言い方は他テーマと重ねない
+# 資料照合は fact / gap / miss。条件・評価の説明は assessment_kind を付け verdict=None とする。
+# 読者に見せる言い方は他テーマと重ねない
 # （`scripts/verify_page_originality.py` の趣旨）。
 # FACT_CHECKS は ast.literal_eval で外部から読まれる（公開JSONの入力）。
 # fact=「公表資料で確認できた」/ gap=「公表資料と話が合わない」/ miss=「公表資料では追えなかった」
 
-FACT_CHECKS = [
-    {
-        "key": "unauthorized_learning_infringement",
-        "issues": ["学習データ・無断利用"],
-        "claim": "AIによる無断学習は、著作権法上、常に著作権侵害にあたる",
-        "source": "著作権法第30条の4は、著作物に表現された思想又は感情の享受を目的としない利用であれば、原則として権利者の許諾なく利用できると定めている。文化庁「AIと著作権に関する考え方について」は、AIの学習のための利用はこの規定にあたり原則として著作権侵害にならないとしつつ、『学習データの創作的表現をそのまま出力させる目的』が併存する場合（特定のクリエイターの少量の作品のみで追加学習し作風を模倣する場合等）は対象外になりうるとしている。",
-        "verdict": "gap",
-        "verdict_label": "公表資料と話が合わない",
-        "note": "無断で著作物が使われていること自体は事実で、懸念には根拠がある。ただし著作権法は学習のための利用を原則として権利者の許諾が不要な行為と位置づけており、常に著作権侵害にあたるとまでは言えない。享受目的が併存する場合など例外的に問題になりうる、という整理がより正確。",
-        "url": "https://www.bunka.go.jp/seisaku/bunkashingikai/chosakuken/pdf/94037901_01.pdf",
-        "url_label": "文化審議会著作権分科会法制度小委員会「AIと著作権に関する考え方について」（令和6年3月15日）",
-        "extra_links": [
-            (
-                "https://laws.e-gov.go.jp/law/345AC0000000048",
-                "e-Gov法令検索 著作権法 第30条の4",
-            ),
-        ],
-    },
-    {
-        "key": "data_disclosure_needed",
-        "issues": ["学習データ・無断利用", "法制度・規制整備"],
-        "claim": "学習データの出所開示をAI事業者に法律で義務づける制度は、日本にはまだ無い",
-        "source": "内閣府知的財産戦略推進事務局は「生成AIの適切な利活用等に向けた知的財産の保護及び透明性に関するプリンシプル・コード」を作成した。AI事業者に学習データの出所等の開示を求めるが、開示を強制するものではなく、実施するか実施しない場合はその理由を説明する「コンプライ・オア・エクスプレイン」方式を採用している。",
-        "verdict": "fact",
-        "verdict_label": "公表資料で確認できた",
-        "note": "そのとおりです。政府（内閣府）が用意しているのは、開示するか、しない場合は理由を説明すればよい任意の枠組み（プリンシプル・コード）で、開示を法律で義務づけるものではありません。",
-        "url": "https://www.cas.go.jp/jp/seisakukaigi/titeki2/ai_kentoukai/kaisai/pdf/ai_principle_code.pdf",
-        "url_label": "内閣府知的財産戦略推進事務局「生成AIの適切な利活用等に向けた知的財産の保護及び透明性に関するプリンシプル・コード」",
-    },
-    {
-        "key": "compensation_required",
-        "issues": ["クリエイター保護・権利"],
-        "claim": "AI事業者に、学習データの利用について対価の支払いを義務づける法律は無い",
-        "source": "著作権法第30条の4は、非享受目的の利用であれば権利者の許諾も対価の支払いも法律上の要件としていない。一方で内閣府「AI時代の知的財産権検討会 中間とりまとめ」は、開発者・提供者が自ら進んで権利者と合意のうえで対価還元策を講じることは可能であり、良質な学習データに係るライセンス市場の形成と対価還元の実現が期待されるとし、拠出者へ報酬を配分する民間の取組事例を挙げている。",
-        "verdict": "fact",
-        "verdict_label": "公表資料で確認できた",
-        "note": "そのとおりです。著作権法第30条の4は、非享受目的の利用であれば権利者の許諾も対価の支払いも法律上の要件としていません。契約に基づき自主的に対価を還元する事業者の取組事例は資料にありますが、法律上の義務ではありません。",
-        "url": "https://www.cas.go.jp/jp/seisakukaigi/titeki2/chitekizaisan2024/0528_ai.pdf",
-        "url_label": "内閣府「AI時代の知的財産権検討会 中間とりまとめ」（2024年5月）",
-    },
-    {
-        "key": "creator_protection_insufficient",
-        "issues": ["クリエイター保護・権利"],
-        "claim": "無断でAIに学習された作品の作者は、対抗する手段を持たない",
-        "source": "内閣府「中間とりまとめ－権利者のための手引き－」は、robots.txtの記載や利用規約への明示によるオプトアウトの方法を紹介する一方、「robots.txtの記載による収集制限を尊重しないクローラも存在している」「人力で別サイトに転載されてしまった場合、そこから収集されることは防げない」と限界も明記している。他方、文化庁「AIと著作権に関する考え方について」は、著作権侵害が認められれば生成物の廃棄請求や、一定の場合には学習用データセットからの除去請求ができるとしている。",
-        "verdict": "gap",
-        "verdict_label": "公表資料と話が合わない",
-        "note": "オプトアウトの手段が不完全であることは資料にも明記されており、無力感には根拠がある。ただし著作権侵害が認められた場合の救済手段（廃棄請求・除去請求等）は制度として存在しており、対抗手段が皆無というわけではない。",
-        "url": "https://www.cas.go.jp/jp/seisakukaigi/titeki2/chitekizaisan2024/2411_tebiki.pdf",
-        "url_label": "内閣府「AI時代の知的財産権検討会『中間とりまとめ』－権利者のための手引き－」（2024年11月）",
-        "extra_links": [
-            (
-                "https://www.bunka.go.jp/seisaku/bunkashingikai/chosakuken/pdf/94037901_01.pdf",
-                "文化庁「AIと著作権に関する考え方について」（救済手段の整理箇所）",
-            ),
-        ],
-    },
-    {
-        "key": "ai_output_has_copyright",
-        "issues": ["AI生成物の権利・創作性"],
-        "claim": "AIが生成した作品にも、通常の著作物と同じように著作権が認められる",
-        "source": "文化審議会著作権分科会法制度小委員会では「生成物の著作物性」が議題として扱われ、人の創作的寄与が必要かどうかが論点とされている。文化庁の整理自体、AIと著作権の関係を直接的に取り扱った判例・裁判例が未だ乏しい状態であると明記している。",
-        "verdict": "gap",
-        "verdict_label": "公表資料と話が合わない",
-        "note": "AI生成物が一律に著作物として保護される、あるいは一律に保護されないという単純な結論は資料には無い。人の創作的寄与の有無によってケースごとに判断される論点として扱われており、これを直接確定させた判例もまだ確認できていない。",
-        "url": "https://www.bunka.go.jp/seisaku/bunkashingikai/chosakuken/pdf/94037901_01.pdf",
-        "url_label": "文化審議会著作権分科会法制度小委員会「AIと著作権に関する考え方について」（生成物の著作物性の議論）",
-    },
-    {
-        "key": "tech_innovation_over_regulation",
-        "issues": ["技術競争・推進", "法制度・規制整備"],
-        "claim": "生成AIへの法規制はほとんど進んでおらず、野放し状態にある",
-        "source": "AI技術全般の研究開発・活用を推進する法律（人工知能関連技術の研究開発及び活用の推進に関する法律、令和七年法律第五十三号）が2025年6月4日に公布された。あわせて内閣府は、AI事業者に学習データの出所等の開示を求める「プリンシプル・コード」の整備を進めている。一方、著作権法そのもの（第30条の4・第47条の5）は改正されていない。",
-        "verdict": "gap",
-        "verdict_label": "公表資料と話が合わない",
-        "note": "著作権法上のAI学習に関する条文が改正されていないのは事実である。ただしAI法の制定やプリンシプル・コードの整備は進んでおり、法制度の対応が「ほとんど進んでいない」「野放し」とまでは言えない。",
-        "url": "https://laws.e-gov.go.jp/law/507AC0000000053",
-        "url_label": "e-Gov法令検索「人工知能関連技術の研究開発及び活用の推進に関する法律」（令和七年法律第五十三号、2025年6月4日公布）",
-    },
-]
+FACT_CHECKS = [{'key': 'unauthorized_learning_infringement',
+  'issues': ['学習データ・無断利用'],
+  'claim': 'AIによる無断学習は、著作権法上、常に著作権侵害にあたる',
+  'source': '著作権法第30条の4では、作品の思想や感情を楽しむことを目的としない利用が認められています。利用できるのは必要な限度内で、権利者の利益を不当に害しない場合です。文化庁は、学習元の創作的な表現を出力させる目的がある場合などを区別しています。',
+  'verdict': 'gap',
+  'verdict_label': '公表資料と話が合わない',
+  'note': '無許諾という理由だけで、すべての学習を著作権侵害とすることはできません。作風が似ていることだけを、創作的表現の利用と同一視しないことも必要です。',
+  'url': 'https://www.bunka.go.jp/seisaku/bunkashingikai/chosakuken/pdf/94037901_01.pdf',
+  'url_label': '文化審議会著作権分科会法制度小委員会「AIと著作権に関する考え方について」（令和6年3月15日）',
+  'extra_links': [('https://laws.e-gov.go.jp/law/345AC0000000048', 'e-Gov法令検索 著作権法 第30条の4')]},
+ {'key': 'data_disclosure_needed',
+  'issues': ['学習データ・無断利用', '法制度・規制整備'],
+  'claim': '日本では、AI事業者に学習データの出所を事前に一般公開させる一律の法的義務はない',
+  'source': '政府のプリンシプル・コードは、学習データの出所などの開示を求める任意の枠組みです。受け入れは任意で、実施しない場合には理由の説明を求めています。一方、著作権法第114条の3には、個別の訴訟で書類などの提出を命じる制度があります。',
+  'verdict': 'fact',
+  'verdict_label': '公表資料で確認できた',
+  'note': 'ここで確認するのは、事業者全般に出所の事前公開を義務づける制度です。個別の訴訟で利用できる開示手段まで、存在しないという意味ではありません。',
+  'url': 'https://www.cas.go.jp/jp/seisakukaigi/titeki2/ai_kentoukai/kaisai/pdf/ai_principle_code.pdf',
+  'url_label': '内閣府知的財産戦略推進事務局「生成AIの適切な利活用等に向けた知的財産の保護及び透明性に関するプリンシプル・コード」',
+  'extra_links': [('https://laws.e-gov.go.jp/law/345AC0000000048', '著作権法第114条の3')]},
+ {'key': 'compensation_required',
+  'issues': ['クリエイター保護・権利'],
+  'claim': '日本では、著作権法第30条の4の要件を満たす学習に、一律の法定対価は求められない',
+  'source': '著作権法第30条の4は、要件内の利用に一律の対価支払いを条件としていません。許諾を受ける契約を結んだ場合の支払義務や、権利侵害に対する損害賠償は別に考える必要があります。',
+  'verdict': 'fact',
+  'verdict_label': '公表資料で確認できた',
+  'note': '第30条の4は、目的や利用の限度などの条件を満たす場合の規定です。契約を結ぶかどうかの任意性と、結んだ契約に従う義務を分けて考えます。',
+  'url': 'https://www.cas.go.jp/jp/seisakukaigi/titeki2/chitekizaisan2024/0528_ai.pdf',
+  'url_label': '内閣府「AI時代の知的財産権検討会 中間とりまとめ」（2024年5月）',
+  'extra_links': [('https://laws.e-gov.go.jp/law/345AC0000000048', '著作権法第30条の4・第63条・第114条'),
+                  ('https://laws.e-gov.go.jp/law/129AC0000000089', '民法第415条・第521条・第709条')]},
+ {'key': 'creator_protection_insufficient',
+  'issues': ['クリエイター保護・権利'],
+  'claim': '無断でAIに学習された作品の作者は、対抗する手段を持たない',
+  'source': '権利侵害が認められれば、差止めや損害賠償を請求する制度があります。文化庁は、一定の条件で学習用データセットからの除去を請求できると整理しています。ただし、学習済みモデルを当然に廃棄させられる制度ではありません。',
+  'verdict': 'gap',
+  'verdict_label': '公表資料と話が合わない',
+  'note': 'すべての対抗手段がないという説明は、制度の整理と合いません。一方、収集を事前に避ける対策にも限界があります。救済制度の存在だけで、立証の難しさや費用の負担が解消するわけではありません。',
+  'url': 'https://www.cas.go.jp/jp/seisakukaigi/titeki2/chitekizaisan2024/2411_tebiki.pdf',
+  'url_label': '内閣府「AI時代の知的財産権検討会『中間とりまとめ』－権利者のための手引き－」（2024年11月）',
+  'extra_links': [('https://www.bunka.go.jp/seisaku/bunkashingikai/chosakuken/pdf/94037901_01.pdf',
+                   '文化庁「AIと著作権に関する考え方について」（救済手段の整理箇所）')]},
+ {'key': 'ai_output_has_copyright',
+  'issues': ['AI生成物の権利・創作性'],
+  'claim': 'AIで作った作品にも、通常の作品と同じように著作権が認められる',
+  'source': '文化庁は、AIを使った生成物にも通常の著作物と同じ判断基準を用いると整理しています。人の創作的寄与が認められるかを、具体的な使い方に応じて判断します。AI自体が著作者になるわけではありません。',
+  'verdict': None,
+  'verdict_label': '条件を確認',
+  'note': '通常と同じ基準で判断するという意味なら、資料と矛盾しません。生成物がすべて自動的に保護されるという意味かどうかは、投稿に書かれた条件を確認します。条件の省略だけで、無条件の保護を主張したとは扱いません。',
+  'url': 'https://www.bunka.go.jp/seisaku/bunkashingikai/chosakuken/pdf/94037901_01.pdf',
+  'url_label': '文化審議会著作権分科会法制度小委員会「AIと著作権に関する考え方について」（生成物の著作物性の議論）',
+  'assessment_kind': 'conditional_explanation'},
+ {'key': 'tech_innovation_over_regulation',
+  'issues': ['技術競争・推進', '法制度・規制整備'],
+  'claim': '生成AIへの法規制は不十分だ',
+  'source': '日本には著作権法やAI法があり、政府の任意のプリンシプル・コードもあります。AI法は研究開発や活用の推進を含む枠組みで、任意のコードにも法的な強制力はありません。制度があることと、規制が十分かどうかは別の論点です。',
+  'verdict': None,
+  'verdict_label': '評価の論点',
+  'note': '規制の十分さは、法律が存在することだけでは正誤を決められません。禁止する行為や罰則、実際の運用を含めて考える評価の論点です。「規制が弱い」という批判を、法律が一切ないという主張には読み替えません。',
+  'url': 'https://laws.e-gov.go.jp/law/507AC0000000053',
+  'url_label': 'e-Gov法令検索「人工知能関連技術の研究開発及び活用の推進に関する法律」（令和七年法律第五十三号、2025年6月4日公布）',
+  'assessment_kind': 'evaluation_context',
+  'extra_links': [('https://www.cas.go.jp/jp/seisakukaigi/titeki2/ai_kentoukai/kaisai/pdf/ai_principle_code.pdf',
+                   'プリンシプル・コード')]}]
 
 
 def claim_posts(path: Path | None = None) -> dict:
@@ -208,29 +192,25 @@ def build_audit_section(posts: dict) -> str:
             f'<a href="{url}" target="_blank" rel="noopener noreferrer">{esc(label)}</a>'
             for url, label in links
         )
-        items.append(f"""  <article class="ca-item" data-verdict="{check['verdict']}">
+        items.append(f"""  <article class="ca-item" data-verdict="{check['verdict'] or ''}" data-assessment-kind="{check.get('assessment_kind', 'source_comparison')}">
     <p class="ca-say">「{esc(check['claim'])}」<span class="ca-n">該当した投稿 {len(ids)}件</span></p>
     <dl class="ca-detail">
       <dt>原典はこう書いている</dt><dd>{esc(check['source'])}</dd>
-      <dt>突き合わせた結果</dt><dd><b class="ca-mark">{VERDICT_MARK[check['verdict']]}</b>{esc(check['note'])}</dd>
+      <dt>突き合わせた結果</dt><dd><b class="ca-mark">{check['verdict_label'] if check['verdict'] is None else VERDICT_MARK[check['verdict']]}</b>{esc(check['note'])}</dd>
     </dl>
     <p class="ca-src">{src_html}</p>
   </article>""")
     body = "\n".join(items)
     total = sum(counts)
     lead = (
-        "生成AIと著作権をめぐる投稿には、法律の条文名や政府資料を挙げて語られる"
-        "ものが目立ちます。名前が本物でも、書いてある中身まで正確とは限りません。"
-        f"ここでは投稿でよく見かける言い分のうち、公表資料で当否を確かめられるものを"
-        f"{len(FACT_CHECKS)}つ取り出し、文化庁の考え方、内閣府の検討会資料、著作権法の条文、"
-        f"国会答弁に当たりました。照合したのは{CHECKED_AT}です。"
+        "生成AIと著作権をめぐる6つの主張を、文化庁の考え方や法律の条文と照合しました。"
+        "著作権が認められる条件や、規制の十分さを考える論点も説明しています。"
+        f"照合したのは{CHECKED_AT}です。"
     )
     how = (
-        "件数の数え方について。キーワードだけで拾うと、無関係な文脈で同じ語を使った"
-        "投稿も混ざります。ここでは候補となった投稿を1件ずつ本文で確認し、実際にその"
-        f"言い分を述べている投稿だけを数えました（合わせて{total}件）。規制に賛成か"
-        "推進に賛成かは問うていません。投稿の本文はこの節には載せず、件数と照合結果"
-        "だけを示しています。"
+        f"主張に直接当たる投稿は、合わせて{total}件です。本文に書かれた条件を確認し、"
+        "提案だけの投稿や、別の意味で同じ語を使った投稿は数えていません。"
+        "0件は、今回の意見にその主張への直接の表明がなかったという意味です。"
     )
     return f"""<section class="panel claim-audit" id="ai-copyright-audit">
 {AUDIT_CSS}

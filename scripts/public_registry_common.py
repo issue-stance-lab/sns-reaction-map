@@ -90,6 +90,12 @@ def _iso_date(value: str) -> str:
     return f"{match.group(1)}-{int(match.group(2)):02d}-{int(match.group(3)):02d}"
 
 
+try:
+    from .claim_assessment import validate_assessment
+except ImportError:
+    from claim_assessment import validate_assessment
+
+
 def build_claim_verification(theme_id: str) -> dict[str, Any]:
     source = CLAIM_AUDIT_SOURCES.get(theme_id)
     if source is None:
@@ -129,8 +135,10 @@ def build_claim_verification(theme_id: str) -> dict[str, Any]:
     for check in checks:
         claim_id = check["key"]
         verdict = check["verdict"]
-        if verdict not in {"fact", "gap", "miss"}:
-            raise RegistryError(f"{theme_id}/{claim_id}: 判定語が未統一です: {verdict!r}")
+        try:
+            validate_assessment(check)
+        except ValueError as exc:
+            raise RegistryError(f"{theme_id}/{claim_id}: {exc}") from exc
         if claim_id not in counts:
             raise RegistryError(f"{theme_id}/{claim_id}: 検証用投稿がありません")
         labels = check.get("issues")
@@ -156,7 +164,13 @@ def build_claim_verification(theme_id: str) -> dict[str, Any]:
             raise RegistryError(
                 f"{theme_id}/{claim_id}: 判定が {verdict} なのに一次資料が1件もありません"
             )
+        extra = {}
+        if check.get("assessment_kind", "source_comparison") != "source_comparison":
+            extra["assessment_kind"] = check["assessment_kind"]
+        if theme_id == "ai-copyright":
+            extra["source_summary"] = check["source"]
         claims.append({
+            **extra,
             "id": claim_id,
             "claim": check[claim_key],
             "verdict": verdict,
@@ -168,7 +182,7 @@ def build_claim_verification(theme_id: str) -> dict[str, Any]:
     if set(counts) != {claim["id"] for claim in claims}:
         raise RegistryError(f"{theme_id}: 検証用投稿と照合カードの主張IDが一致しません")
     # The new ledger records an AI source review; do not present it as a human review.
-    reviewer_type = "ai_assisted" if theme_id in {"henoko-student-accident", "bukatsu-chiiki", "school-nickname-ban"} else "editorial_review"
+    reviewer_type = "ai_assisted" if theme_id in {"henoko-student-accident", "bukatsu-chiiki", "school-nickname-ban", "ai-copyright"} else "editorial_review"
     return {"status": "complete", "checked_on": checked_on, "reviewer_type": reviewer_type, "claims": claims}
 
 
@@ -645,6 +659,12 @@ def validate_schema(instance: Any, schema: dict, root_schema: dict | None = None
     if "$ref" in schema:
         schema = _resolve_ref(schema["$ref"], root_schema)
 
+    if "oneOf" in schema:
+        matches = sum(not validate_schema(instance, choice, root_schema, path)
+                      for choice in schema["oneOf"])
+        if matches != 1:
+            return [f"{path}: oneOf は1種類だけに一致する必要があります（一致 {matches}）"]
+
     if "const" in schema:
         return [] if instance == schema["const"] else [f"{path}: const {schema['const']!r} != {instance!r}"]
     if "enum" in schema:
@@ -792,6 +812,10 @@ def check_theme_invariants(theme_json: dict) -> list[str]:
     known_issue_ids = {i["id"] for i in issues}
     other_issue_ids = {i["id"] for i in issues if i["kind"] == "other"}
     for claim in claims:
+        try:
+            validate_assessment(claim)
+        except ValueError as exc:
+            errors.append(f"{tid}/{claim['id']}: {exc}")
         for issue_id in claim["issue_ids"]:
             if issue_id not in known_issue_ids:
                 errors.append(f"{tid}/{claim['id']}: 論点IDが公開JSONに存在しません: {issue_id}")

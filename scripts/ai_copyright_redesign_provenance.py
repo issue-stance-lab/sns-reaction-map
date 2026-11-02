@@ -145,7 +145,7 @@ def verified_selectors(source: str, root: Path) -> dict[str, str]:
                 _check(node is not None and _fmt(int(claim["matched_post_count"])) + "件" in node.get_text(),
                        f"{iid} の主張 {claim['id']} の投稿数")
                 allowed.add(int(claim["matched_post_count"]))
-                allowed |= _confirmed_numbers([claim["claim"], claim["finding"]], _norm(node.get_text()))
+                allowed |= _confirmed_numbers([claim["claim"], claim["finding"], claim.get("source_summary", "")], _norm(node.get_text()))
         # 資料にしかない話：検索の母数と件数。再検索の記録は、画面の文が記録と完全一致のときだけ文中の件数を認める
         for sunk in public["ocean_layer"]["sunk_continents"]:
             if sunk["nearest_issue_id"] == iid:

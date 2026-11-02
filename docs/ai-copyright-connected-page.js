@@ -112,6 +112,7 @@
   if (quizRoot) quizRoot.remove();
   var quiz = { active: false, position: 0, answers: new Map() };
   var verdicts = ['fact', 'gap', 'miss'];
+  var quizClaims = data.claims.filter(function (c) { return verdicts.includes(c.verdict) && c.matched_post_count !== 0; });
   var discoveryActive = false;
   var selectingForQuiz = false;
 
@@ -150,13 +151,13 @@
   function mount() {
     var aside = panel.querySelector('.aic-evidence');
     if (!aside) { quiz.active = false; discoveryActive = false; quizRoot.remove(); discoveryRoot.remove(); return; }
-    var claim = data.claims[quiz.position];
+    var claim = quizClaims[quiz.position];
     if (quiz.active && claim && !selectingForQuiz && map.getState().issueId !== claimIssue(claim)) quiz.active = false;
     if (!aside.querySelector('.aic-evidence-controls')) {
       var reading = document.createElement('div'); reading.className = 'aic-reading-sources';
       reading.append.apply(reading, aside.childNodes);
       var controls = document.createElement('div'); controls.className = 'aic-evidence-controls'; controls.setAttribute('aria-label', '資料の読み方');
-      controls.innerHTML = '<button type="button" data-aic-read>資料を読む</button><button type="button" data-aic-discover>x投稿で語られない話</button><button type="button" data-aic-quiz>一次資料クイズ · ' + data.claims.length + '問</button>';
+      controls.innerHTML = '<button type="button" data-aic-read>資料を読む</button><button type="button" data-aic-discover>x投稿で語られない話</button><button type="button" data-aic-quiz>一次資料クイズ · ' + quizClaims.length + '問</button>';
       controls.querySelector('[data-aic-read]').onclick = returnToReading;
       controls.querySelector('[data-aic-discover]').onclick = function (event) {
         var opening = !discoveryActive;
@@ -181,10 +182,10 @@
     }
   }
   function renderQuiz() {
-    var claim = data.claims[quiz.position];
+    var claim = quizClaims[quiz.position];
     if (!claim) {
-      var score = data.claims.filter(function (c) { return quiz.answers.get(c.id) === c.verdict; }).length;
-      quizRoot.innerHTML = '<h3>資料クイズの結果</h3><p class="aic-quiz-score">' + score + ' / ' + data.claims.length + '問正解</p>'
+      var score = quizClaims.filter(function (c) { return quiz.answers.get(c.id) === c.verdict; }).length;
+      quizRoot.innerHTML = '<h3>資料クイズの結果</h3><p class="aic-quiz-score">' + score + ' / ' + quizClaims.length + '問正解</p>'
         + '<p>回答済み ' + quiz.answers.size + '問。本文の資料と同じ内容で照合しています。</p>'
         + '<button type="button" data-aic-restart>最初の問題へ</button><button type="button" data-aic-finish>資料に戻る</button>';
       quizRoot.querySelector('[data-aic-restart]').onclick = function () { showQuestion(0); };
@@ -192,14 +193,14 @@
       return;
     }
     var answer = quiz.answers.get(claim.id);
-    quizRoot.innerHTML = '<div class="qh" tabindex="-1"><span>問 ' + (quiz.position + 1) + ' / ' + data.claims.length + '</span><span>資料照合 ' + esc(data.ocean.checked_on) + '</span></div>'
+    quizRoot.innerHTML = '<div class="qh" tabindex="-1"><span>問 ' + (quiz.position + 1) + ' / ' + quizClaims.length + '</span><span>資料照合 ' + esc(data.ocean.checked_on) + '</span></div>'
       + '<p class="aic-quiz-note">収集した投稿から選んだ主張です。掲載した投稿例そのものへの判定ではありません。</p>'
       + '<p class="qclaim">「' + esc(claim.claim) + '」</p><div class="aic-qopts">' + verdicts.map(function (v) {
         return '<button type="button" data-verdict="' + v + '" ' + (answer ? 'disabled' : '') + ' class="' + (answer ? (v === claim.verdict ? 'hit' : v === answer ? 'miss' : '') : '') + '">' + esc(verdictLabel(v)) + '</button>';
       }).join('') + '</div>'
       + '<div class="qans" ' + (answer ? '' : 'hidden') + '><p class="aic-verdict">' + esc(claim.verdict_label) + '</p><p>' + esc(claim.finding) + '</p>'
       + '<div class="aic-quiz-sources">' + claim.sources.map(function (s) { return '<p><a href="' + esc(s.url) + '" target="_blank" rel="noopener noreferrer">' + esc(s.name) + '</a></p>'; }).join('') + '</div>'
-      + '<button type="button" class="qnext">' + (quiz.position === data.claims.length - 1 ? '結果を見る' : '次の問題 →') + '</button></div>';
+      + '<button type="button" class="qnext">' + (quiz.position === quizClaims.length - 1 ? '結果を見る' : '次の問題 →') + '</button></div>';
     quizRoot.dataset.claimId = claim.id;
     quizRoot.querySelectorAll('[data-verdict]').forEach(function (button) {
       button.onclick = function () {
@@ -214,7 +215,7 @@
   }
   function showQuestion(position) {
     quiz.position = position; quiz.active = true; discoveryActive = false; selectingForQuiz = true;
-    var claim = data.claims[position];
+    var claim = quizClaims[position];
     var issueId = claim ? claimIssue(claim) : null;
     if (issueId) map.selectIssue(issueId);
     selectingForQuiz = false;

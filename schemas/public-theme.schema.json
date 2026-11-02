@@ -233,7 +233,8 @@
           "enum": [
             "fact",
             "gap",
-            "miss"
+            "miss",
+            null
           ]
         },
         "finding": {
@@ -257,8 +258,53 @@
           "items": {
             "$ref": "#/$defs/claim_source"
           }
+        },
+        "assessment_kind": {
+          "enum": [
+            "source_comparison",
+            "conditional_explanation",
+            "evaluation_context"
+          ]
+        },
+        "source_summary": {
+          "type": "string",
+          "minLength": 1
         }
-      }
+      },
+      "oneOf": [
+        {
+          "properties": {
+            "verdict": {
+              "enum": [
+                "fact",
+                "gap",
+                "miss"
+              ]
+            },
+            "assessment_kind": {
+              "const": "source_comparison"
+            }
+          },
+          "type": "object"
+        },
+        {
+          "required": [
+            "assessment_kind"
+          ],
+          "properties": {
+            "verdict": {
+              "type": "null"
+            },
+            "assessment_kind": {
+              "enum": [
+                "conditional_explanation",
+                "evaluation_context"
+              ]
+            }
+          },
+          "type": "object"
+        }
+      ]
     },
     "claim_source": {
       "type": "object",
