@@ -1,5 +1,5 @@
 version: 1
-updated_at: "2026-10-31"
+updated_at: "2026-11-02"
 
 rules:
   required_for:
@@ -3055,3 +3055,27 @@ items:
       承認対象は public-candidate-preflight-fixed の38ファイル。候補manifest SHA-256 49a48194825fcd706bfaa34b838f8b16342eba997d2a03a1c8897d8c1a37c815。
       全対象ファイルの元版・候補の指紋一致を確認して適用。公開文章・件数・判定・出典は検査版から変更しない。
       266fbb32で公開し、検査・配信の成功と本番375pxで全17主張・21表示箇所を確認。結果は quality/reviews/2026-10-31-three-theme-claim-release.md。
+
+  - id: approval-20261102-ai-claim-display
+    department: engineering-data
+    action: website_publication
+    summary: 生成AIの検査済み照合100組と条件・評価の説明を公開する
+    reason: 修正後の見出し・採否基準に合わせた照合件数と資料説明を読書面へ反映する。
+    risks:
+    - 対応件数は投稿と主張の関係であり、賛同者数や世論変化を示さない
+    - 修正4命題の全件再照合は担当AI1名による確認。修正後全件の独立監査や人間の審査ではない
+    recommendation: approve
+    evidence:
+    - quality/reviews/2026-11-02-ai-copyright-display-preflight.md
+    - quality/reviews/2026-11-02-ai-copyright-display-preflight.json
+    - quality/reviews/2026-11-01-ai-copyright-revised-full.md
+    - tasks/task-99.md
+    status: approved
+    requested_at: '2026-11-02'
+    decided_at: '2026-11-02'
+    decision_note: >-
+      オーナーがこのチャットで「公開して」と承認。
+      承認対象はd0fae3c742d8ca18460da7e7f6208c7e27429300の検査済み25ファイル。
+      候補manifest SHA-256 d1336f9ae605942922dde4f49e12fff92749b0282859791ae34c9bb691870137。
+      最新main・別セッションのX運用記録・トップ同期を取り込んだ後も、全25ファイルと意見正典の指紋一致を確認した。
+      件数・見出し・資料説明・条件と評価の表示・出典は検査版から変更しない。
