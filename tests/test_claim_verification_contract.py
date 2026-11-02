@@ -59,14 +59,17 @@ class ClaimVerificationContractTest(unittest.TestCase):
         self.assertEqual(done["reviewer_type"], "ai_assisted")
         self.assertEqual(len(done["claims"]), 6)
 
-    def test_ai_copyright_is_verified_by_editorial_review(self) -> None:
+    def test_ai_copyright_source_and_context_assessments_are_distinguished(self) -> None:
         # 山なみ変換（2026-09-14）でCLAIM_AUDIT_SOURCESへの登録が漏れ、一次資料クイズが
         # 空のまま公開されていた（オーナー報告で発覚、2026-09-19に解消）。
         done = prc.build_claim_verification("ai-copyright")
         self.assertEqual(done["status"], "complete")
-        self.assertEqual(done["reviewer_type"], "editorial_review")
+        self.assertEqual(done["reviewer_type"], "ai_assisted")
         self.assertEqual(len(done["claims"]), 6)
-        self.assertTrue(all(item["matched_post_count"] > 0 for item in done["claims"]))
+        self.assertEqual([item["matched_post_count"] for item in done["claims"]], [8, 0, 0, 0, 6, 86])
+        self.assertEqual([item["verdict"] for item in done["claims"]], ["gap", "fact", "fact", "gap", None, None])
+        self.assertEqual([item["assessment_kind"] for item in done["claims"][-2:]],
+                         ["conditional_explanation", "evaluation_context"])
         self.assertTrue(all(item["issue_ids"] for item in done["claims"]))
         self.assertTrue(all(item["sources"] for item in done["claims"]))
         self.assertNotIn("tweet_id", json.dumps(done, ensure_ascii=False))

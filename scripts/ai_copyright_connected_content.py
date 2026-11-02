@@ -154,7 +154,11 @@ def render_templates(data: dict, source: str, index: dict) -> str:
             c = claims[cid]
             out.append(
                 f'<details class="aic-claim" data-aic-claim="{e(cid)}"{" open" if j == 0 else ""}><summary>「{e(c["claim"])}」</summary>'
-                f'<span class="aic-verdict">{e(c["verdict_label"])}</span><p>{e(c["finding"])}</p>' + sources(c["sources"]) + '</details>'
+                f'<span class="aic-verdict">{e(c["verdict_label"])}</span>'
+                + (f'<p>{e(c["source_summary"])}</p>' if c.get("source_summary") else "")
+                + f'<p>{e(c["finding"])}</p>'
+                + (f'<p>この主張に当たる投稿 {c["matched_post_count"]}件</p>' if "matched_post_count" in c else "")
+                + sources(c["sources"]) + '</details>'
             )
         if connection["shared_concern_ids"]:
             out.append('<h3>同じ心配から、違う結論へ</h3>')

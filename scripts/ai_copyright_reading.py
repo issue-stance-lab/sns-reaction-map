@@ -49,6 +49,10 @@ sys.path.insert(0, str(ROOT / "scripts"))
 
 import ai_copyright_opening as opening  # noqa: E402
 from bukatsu_redesign.x_embeds import add_x_embeds  # noqa: E402
+try:
+    from .claim_assessment import context_label, validate_assessment
+except ImportError:
+    from claim_assessment import context_label, validate_assessment
 
 CONFIG = ROOT / "configs" / "ai-copyright-reading.json"
 OUT_DIR = ROOT / "quality" / "prototypes" / "ai-copyright-reading"
@@ -234,7 +238,11 @@ def check_all(d: dict) -> None:
     cv = public["claim_verification"]
     per_claim = Counter(p["claim"] for p in d["claim_posts"])
     for c in cv["claims"]:
-        if c["verdict"] not in cfg["verdict_labels"]:
+        try:
+            validate_assessment(c)
+        except ValueError as exc:
+            raise SystemExit(f"主張 {c['id']}: {exc}") from exc
+        if c["verdict"] is not None and c["verdict"] not in cfg["verdict_labels"]:
             raise SystemExit(f"主張 {c['id']} の判定 {c['verdict']} の言い換えが設定にありません")
         if set(c["issue_ids"]) - ids:
             raise SystemExit(f"主張 {c['id']} の論点が公開JSONにありません")
@@ -555,14 +563,17 @@ def render_evidence(d: dict, issue: dict, icfg: dict) -> str:
     out = [f'<section class="fr-block fr-evidence"><h4>{esc(compact(d)["evidence_title"])}</h4>'
            + fold("fr-evidence-about", esc(s["title"]), f'<p class="fr-lead">{esc(s["lead"])}</p>')]
     for c in claims:
-        lab = d["cfg"]["verdict_labels"][c["verdict"]]
+        lab = context_label(c) if c["verdict"] is None else d["cfg"]["verdict_labels"][c["verdict"]]
+        kind = c.get("assessment_kind", c["verdict"])
+        source_summary = f'<p class="fr-source-summary">{esc(c["source_summary"])}</p>' if c.get("source_summary") else ""
+        zero_note = f'<p class="fr-fine">{esc(s["zero_matches"])}</p>' if c["matched_post_count"] == 0 else ""
         note = icfg.get("claim_notes", {}).get(c["id"])
         body = (f'<p class="fr-eyebrow">{esc(s["claim_eyebrow"])}<span>{esc(s["checked"].format(checked_on=jp_date(cv["checked_on"])))}</span></p>'
-                f'<p>{esc(c["finding"])}</p>'
+                + source_summary + f'<p>{esc(c["finding"])}</p>'
                 + (f'<p class="fr-fine">{esc(note)}</p>' if note else "")
                 + f'<p class="fr-fine">{esc(s["matched"].format(n=fmt(c["matched_post_count"])))}</p>'
-                + details_sources(c["sources"], s["sources_label"]))
-        out.append(fold(f'fr-claim fr-verdict-{esc(c["verdict"])}',
+                + zero_note + details_sources(c["sources"], s["sources_label"]))
+        out.append(fold(f'fr-claim fr-verdict-{esc(kind)}',
                         f'<span class="fr-sum-text">「{esc(c["claim"])}」</span><span class="fr-verdict">{esc(lab)}</span>',
                         body, f' data-claim="{esc(c["id"])}"'))
     for mc in memo_checks:
