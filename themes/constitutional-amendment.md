@@ -109,3 +109,7 @@ build_constitutional_process_sections.py を新設し adapter 経由で CLAIM_AU
 ## 2026-10-24 定期更新（2026-10-24収集分）
 
 新ルール（読み手2名の伏せ読み＋Kimi突き合わせ＋新論点チェック）で2回目。225件取得・重複0・新規225件、意見205件（Kimiは204件、補正113件）。累計2,447→2,672件・意見2,152→2,357件。取得期間は2026-06-20〜2026-10-24。次回は11/1。同文の連投は1件1意見で数えた。`review_candidate` に `is_relevant` の修正を追加。「語られていない争点」の母数は2,152→2,357（機械の候補3件を本文で確認し、いずれも不一致）、新論点の提案は無し。監査: [quality/reviews/2026-10-24-constitutional-amendment-refresh-review.md](../quality/reviews/2026-10-24-constitutional-amendment-refresh-review.md)。承認は `approval-20261024-constitutional-amendment-refresh`。
+
+## 2026-11-03 定期更新（2026-11-03収集分）
+
+新ルールで3回目。223件取得・重複0・新規223件、意見191件（Kimiは202件、補正74件）。読み手2名の伏せ読みと突き合わせ、食い違い31件・区分未確定19件は編集担当が本文を読んで確定。累計は収集2,895件・意見2,548件。新論点の提案はなし（その他0%）。「資料にしかない話」は母数を2,548へ更新し、候補は個別発議の1件を計上・2件を除外。公開は未実施（候補の確認後にオーナーの承認を待つ）。監査は [quality/reviews/2026-11-03-constitutional-amendment-refresh-review.md](../quality/reviews/2026-11-03-constitutional-amendment-refresh-review.md)。
