@@ -286,7 +286,7 @@ class BackgroundTests(unittest.TestCase):
     def test_timeline_order_and_phase(self):
         events = [li["data-event"] for li in self.bg.select("#bg-timeline li")]
         self.assertEqual(events, ["referendum-2020", "enactment-2026", "draft", "comment-close", "enforce"])
-        self.assertIn("（予定）", self.bg.select_one('#bg-timeline li[data-event="enforce"]').get_text())
+        self.assertIn("（予定日）", self.bg.select_one('#bg-timeline li[data-event="enforce"]').get_text())
         after = self.render_bg("2026-10-31")
         self.assertEqual(after["data-law-phase"], "after_unconfirmed")
         self.assertIn("施行予定でした。施行後の条文は編集部で確かめていません", after.get_text())
