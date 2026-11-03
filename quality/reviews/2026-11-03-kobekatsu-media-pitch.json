@@ -1,0 +1,147 @@
+{
+  "created_on": "2026-11-03",
+  "task": 51,
+  "status": "drafts_ready_unsent",
+  "recipients": [
+    {
+      "id": "kobejournal",
+      "priority": 1,
+      "name": "神戸ジャーナル",
+      "contact": "https://business.form-mailer.jp/fms/3646374e213385",
+      "email": "kobejournal-pr@journeygene.co.jp",
+      "context": "https://kobe-journal.com/archives/7534977723.html",
+      "angle": "会費支援と移動支援を分け、家庭ごとに残る負担を取材する企画。相乗りタクシー記事の続きとして提案。",
+      "contact_note": "採用・不採用の個別回答なし。返答を求める追送はしない。",
+      "file": "01-kobejournal.txt",
+      "draft_path": "/Volumes/M2-WorkSpace/Projects/副業/UIデザイン調査/2026-11-03_地域媒体向け掲載打診案/01-kobejournal.txt",
+      "draft_sha256": "c2bddd91635bf7e39782fb6086ff734c447c7267ffb20a52b8011392aa4fa88d",
+      "suggested_publication_url": "https://sns-reaction-map.jp/articles/kobe-katsu.html?utm_source=kobejournal&utm_medium=referral&utm_campaign=kobekatsu_media_pilot",
+      "status": "draft_unsent"
+    },
+    {
+      "id": "kisspress",
+      "priority": 2,
+      "name": "Kiss PRESS",
+      "contact": "https://kisspress.jp/inquiry/",
+      "context": "https://kisspress.jp/articles/57996/",
+      "angle": "クラブの選択肢紹介に続けて、家族が通い続けられる条件を比較する企画。",
+      "contact_note": "情報提供を選ぶ。採用・不採用の個別回答なし。添付は公開可能なものだけ。",
+      "file": "02-kisspress.txt",
+      "draft_path": "/Volumes/M2-WorkSpace/Projects/副業/UIデザイン調査/2026-11-03_地域媒体向け掲載打診案/02-kisspress.txt",
+      "draft_sha256": "208118f4a2c12a760111850bcf8d8bd4432d55f4c745bef280d47abbb7068487",
+      "suggested_publication_url": "https://sns-reaction-map.jp/articles/kobe-katsu.html?utm_source=kisspress&utm_medium=referral&utm_campaign=kobekatsu_media_pilot",
+      "status": "draft_unsent"
+    },
+    {
+      "id": "bukatsu_no_mirai",
+      "priority": 3,
+      "name": "部活のミライ",
+      "contact": "https://bukatsu-no-mirai.jp/contact",
+      "context": "https://bukatsu-no-mirai.jp/articles/regional-development-parents-faq",
+      "angle": "保護者FAQに続く読み物として、同じ費用負担でも問いが違うことを全国SNSの理由分類で示す。神戸は制度の具体例として案内。",
+      "contact_note": "取材・掲載の相談に該当。氏名と返信用メールアドレスは送信時に実際の情報を使用。",
+      "file": "03-bukatsu-no-mirai.txt",
+      "draft_path": "/Volumes/M2-WorkSpace/Projects/副業/UIデザイン調査/2026-11-03_地域媒体向け掲載打診案/03-bukatsu-no-mirai.txt",
+      "draft_sha256": "48321bd86846e26829a6230d7617ff8e291077e84f64d224ec96222b2213f349",
+      "suggested_publication_url": "https://sns-reaction-map.jp/articles/kobe-katsu.html?utm_source=bukatsu_no_mirai&utm_medium=referral&utm_campaign=kobekatsu_media_pilot",
+      "status": "draft_unsent"
+    }
+  ],
+  "editorial_value": "公式の制度情報と、全国SNS投稿を理由別に整理したページを分けて読めること。新規調査・新発見の発表としては売り込まない。",
+  "published_reason_categories": [
+    "誰がいくら払うか決めて",
+    "家庭の負担が増える",
+    "お金で参加できない子",
+    "安さは無償労働のおかげ"
+  ],
+  "provenance": {
+    "source": "configs/bukatsu-chiiki-reading.json / docs/articles/kobe-katsu.html",
+    "source_scope": "全国の部活動地域移行に関するSNS公開投稿。神戸の保護者の調査や無作為抽出ではない。",
+    "source_sha256": "e336c943571c00260d240c2afe676834e3c18fea8b3c440a9e0cc43955bd2c47",
+    "published_article": "https://sns-reaction-map.jp/articles/kobe-katsu.html",
+    "official_source": "https://www.city.kobe.lg.jp/a33992/bukatus/chiikiikou.html"
+  },
+  "publication_request": "関連リンク・参考情報としての掲載を依頼。本文への引用・画像の二次利用・提供者名の公開範囲は送信時に限定する。現段階で包括的な転載許諾は出さない。",
+  "measurement": {
+    "primary_landing": "/articles/kobe-katsu.html",
+    "source_identification": "掲載URLがUTM付きならsessionSource/sessionCampaignName、付かない場合は実際の掲載元ドメインのreferralを確認する。公開掲載URLを見てから確定する。",
+    "events": [
+      "page_view",
+      "article_reason_click",
+      "article_reason_view"
+    ],
+    "metric": "媒体別来訪totalUsersとsessions、記事経由の理由比較表示totalUsers。媒体別ユーザーを合計して全体人数にしない。",
+    "limits": [
+      "送付先の編集者による試読を一般読者の成果へ混ぜない。公開掲載日以降を分けて集計する。",
+      "確認操作はanalytics_test=1で除外。既存の運営者アクセス除外状態は未確認。",
+      "直接理由比較ページへリンクされた場合、article_reason_viewは記事経由を条件とするため到達人数に使えない。その経路は来訪数のみを報告する。",
+      "クリックと到達は各行動の利用者集合であり、同じ人が通った割合を示す閉じたファネルではない。",
+      "広告ブロック・計測拒否・UTMや参照元の除去は欠測になりうる。"
+    ]
+  },
+  "pilot": {
+    "recommended_first_recipient": "kobejournal",
+    "cost_yen": 0,
+    "evaluation_window": "実際の紹介掲載日から14日。未掲載の場合は送付から14日で公開掲載の有無のみ確認。",
+    "provisional_continuation_markers": {
+      "visitor_users": 10,
+      "article_reason_view_users": 3
+    },
+    "decision": "数値は効果予測や自動採用基準ではない。紹介の有無・来訪・理由表示のどこで止まったかを分けてオーナーが判断。",
+    "dispatch": "オーナーが相手と本文を承認後、1件ずつ情報提供する。現段階は未送信。"
+  },
+  "attachments": {
+    "status": "none",
+    "note": "初回は既に公開済みのページへのリンクのみ。未作成の資料・グラフの添付や、追加取材・原本データ提供は約束しない。"
+  },
+  "followups_preserved": [
+    "11/7の課題51・54の観測予約",
+    "11/17の記事検索観測"
+  ],
+  "verification": {
+    "yomiyasu_scores": [
+      98,
+      98,
+      100
+    ],
+    "yomiyasu_blockers": 0,
+    "scope_note_kept": "神戸の保護者調査ではない旨は意味を守るため維持",
+    "new_draft_persona_leaks": 0,
+    "new_draft_banned_phrases": 0,
+    "browser_link_check": {
+      "viewport": 375,
+      "results": [
+        {
+          "recipient": "kobejournal",
+          "status": 200,
+          "article_to_cost_issue": true,
+          "reason_labels_verified": true,
+          "overflow": 0
+        },
+        {
+          "recipient": "kisspress",
+          "status": 200,
+          "article_to_cost_issue": true,
+          "reason_labels_verified": true,
+          "overflow": 0
+        },
+        {
+          "recipient": "bukatsu_no_mirai",
+          "status": 200,
+          "article_to_cost_issue": true,
+          "reason_labels_verified": true,
+          "overflow": 0
+        }
+      ],
+      "page_errors": [],
+      "analytics_external_requests": "blocked"
+    }
+  },
+  "evidence_archive": {
+    "path": "/Volumes/M2-WorkSpace/Projects/副業/UIデザイン調査/kobekatsu-media-pitches-20261103.tar.gz",
+    "mirror_path": "/Volumes/HD-LE-B/issue-stance-private-backups/kobekatsu-media-pitches-20261103.tar.gz",
+    "sha256": "a9314b7447f161e34db92ba0e9e740148cd2c5d6cedbd4a8013492d11683c69f",
+    "restore_verified": true,
+    "mirror_verified": true
+  }
+}
