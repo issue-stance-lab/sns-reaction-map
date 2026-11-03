@@ -397,4 +397,4 @@ consumption-tax-cut）も持ち越し。詳細は
 
 **段階12（AdSense再申請、2026-09-15）の状態**: **完了。** オーナーがAdSense管理画面・Search Consoleを自ら操作し、新ドメイン `sns-reaction-map.jp` の登録・所有権確認・4回目の審査リクエストまで完了した（`approval-20260915-002`）。審査結果待ち（通常数日〜2〜4週間）。詳細は課題15。
 
-2026-10-10：部活動E＋B試作をリポジトリ内の生成処理へ移植。Supabase互換・公開前候補・更新停止条件・残作業は[実装記録](../quality/designs/2026-10-10-bukatsu-production-candidate.md)。公開は未実施。
+2026-10-10：部活動E＋B試作をリポジトリ内の生成処理へ移植。Supabase互換・公開前候補・更新停止条件・残作業は[実装記録](../quality/designs/2026-10-10-bukatsu-production-candidate.md)。公開は未実施。 作業記録（画像案・HTML試作・検査）は[記録](../quality/designs/2026-10-10-bukatsu-prototype-log.md)。
