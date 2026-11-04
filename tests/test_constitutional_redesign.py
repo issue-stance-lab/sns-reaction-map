@@ -65,7 +65,7 @@ class OpeningTests(unittest.TestCase):
         self.assertIn("2026年10月31日に施行される予定です", before)
         after = self.frag(as_of="2026-10-31")
         self.assertIn('data-law-phase="after_unconfirmed"', after)
-        self.assertIn("施行される予定でした。施行後の条文は編集部で確かめていません", after)
+        self.assertIn("施行される予定でした。施行後の条文は、まだ編集部で照合していません", after)
         cfg = copy.deepcopy(self.config)
         cfg["law"]["enforcement_confirmed_on"] = "2026-11-02"
         done = self.frag(cfg, as_of="2026-11-05")
@@ -797,11 +797,11 @@ class LayoutTests(unittest.TestCase):
             (root / layout.CONFIG).write_text('{"enabled": true}')
             for rel in ("docs/data/themes/constitutional-amendment.json", "data/public/themes/constitutional-amendment.json"):
                 data = json.loads((root / rel).read_text(encoding="utf-8"))
-                data["updated_on"] = "2026-11-02"
+                data["updated_on"] = "2026-11-03"
                 (root / rel).write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
             themes = (root / "THEMES.yaml").read_text(encoding="utf-8")
             block = re.search(r"\n  constitutional-amendment:\n(?:    .*\n)+", themes).group()
-            fixed = re.sub(r"(\n    updated_at: )['\"]?[0-9-]+['\"]?", r"\g<1>2026-11-02", block, count=1)
+            fixed = re.sub(r"(\n    updated_at: )['\"]?[0-9-]+['\"]?", r"\g<1>2026-11-03", block, count=1)
             (root / "THEMES.yaml").write_text(themes.replace(block, fixed), encoding="utf-8")
             self.assertEqual(set(layout.finish(root)), {layout.SOURCE, layout.PAGE})
             s = soup_of((root / layout.PAGE).read_text(encoding="utf-8"))
