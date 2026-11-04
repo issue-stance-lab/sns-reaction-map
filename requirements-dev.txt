@@ -2,3 +2,10 @@
 # Pillow は本番の生成でも使うため requirements.txt にある（tests/test_theme_hero_assets.py も実寸を読む）
 # beautifulsoup4: tests/test_koshitsu_page_candidate.py が候補HTMLの構造を読む
 beautifulsoup4>=4.12
+# soupsieve: beautifulsoup4 の `.select()`（CSSセレクタ）の実装。
+# 4.0 から、HTMLの仕様どおり <template> の中身を別文書として扱うようになり、
+# `soup.select('[data-aic-post-url]')` のようなセレクタが template 内の要素を拾わなくなった。
+# 連動表示（皇室・辺野古・憲法改正・生成AI・自転車・消費税）の検査は template 内の要素を
+# 数えているので、4.0 が入ると0件になりCIだけが赤になる（2026-11-04、failures=4/errors=3）。
+# セレクタ側を template 対応に直すまで3系に留める（TASK_BOARD 課題108）。
+soupsieve<4

@@ -180,6 +180,32 @@ gh run list --branch main --limit 3
 ローカルの「NG 1件」と**テスト名が一致するか**を確認し、一致しなければ
 別原因（下記コラム参照）。
 
+#### コラム: 手元は通るのにCIだけ赤いとき
+
+**まずコミットの差分を疑わない。** 別のコミットのpushでも、緑だった過去のコミットの
+`gh run rerun` でも同じ失敗の組み合わせが出るなら、原因は差分ではなく**環境**（CIが
+毎回入れ直す依存ライブラリの版）か**スキップ漏れ**（非公開正典を読むテストが
+`PRIVATE_DATA_TESTS` に入っていない。2026-09-19）のどちらか。
+
+CIと同じ条件は、共有ツリーに触らずに作り直せる（コミット済みファイルだけの使い捨てコピー）:
+
+```sh
+mkdir -p /tmp/ci-repro && git archive HEAD | tar -x -C /tmp/ci-repro
+python3 -m venv /tmp/ci-venv
+/tmp/ci-venv/bin/pip install -r requirements.txt -r requirements-dev.txt
+cd /tmp/ci-repro && /tmp/ci-venv/bin/python scripts/run_public_checks.py
+```
+
+成功の形: `OK: 公開ファイルだけで確かめられる範囲はすべて通りました`。
+ここで**再現したら環境が原因**（手元のライブラリが古いだけ）。再現しなければスキップ漏れか
+非公開データ由来。CIが入れた版は `gh run view <run-id> --log` の `Successfully installed`
+の行に全部出ているので、手元の `pip list` と見比べる。
+
+2026-11-04 の例: `soupsieve`（`.select()` の中身）が4.0になり、HTMLの仕様どおり
+`<template>` の中を別文書として扱うようになった。連動表示の検査は template 内の投稿要素を
+`select()` で数えているため0件になり、7件（failures=4/errors=3）が落ちた。
+`requirements-dev.txt` で `soupsieve<4` に固定して止めてある。
+
 ### ⑥ 公開サイトで実物を確認する
 
 GitHub Pages は反映に1〜数分かかる。**push した直後に見ると古い版が返る。**
