@@ -29,7 +29,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 
-CHECKED_AT = "2026年11月1日"
+CHECKED_AT = "2026年11月6日"
 
 # 資料照合は fact / gap / miss。条件・評価の説明は assessment_kind を付け verdict=None とする。
 # 読者に見せる言い方は他テーマと重ねない

@@ -66,7 +66,7 @@ class ClaimVerificationContractTest(unittest.TestCase):
         self.assertEqual(done["status"], "complete")
         self.assertEqual(done["reviewer_type"], "ai_assisted")
         self.assertEqual(len(done["claims"]), 6)
-        self.assertEqual([item["matched_post_count"] for item in done["claims"]], [8, 0, 0, 0, 6, 86])
+        self.assertEqual([item["matched_post_count"] for item in done["claims"]], [8, 0, 0, 0, 7, 87])
         self.assertEqual([item["verdict"] for item in done["claims"]], ["gap", "fact", "fact", "gap", None, None])
         self.assertEqual([item["assessment_kind"] for item in done["claims"][-2:]],
                          ["conditional_explanation", "evaluation_context"])
