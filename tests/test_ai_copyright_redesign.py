@@ -858,11 +858,11 @@ class LayoutTests(unittest.TestCase):
             (root / layout.CONFIG).write_text('{"enabled": true}')
             for rel in ("docs/data/themes/ai-copyright.json", "data/public/themes/ai-copyright.json"):
                 data = json.loads((root / rel).read_text(encoding="utf-8"))
-                data["updated_on"] = "2026-10-27"
+                data["updated_on"] = "2026-11-05"
                 (root / rel).write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
             themes = (root / "THEMES.yaml").read_text(encoding="utf-8")
             block = re.search(r"\n  ai-copyright:\n(?:    .*\n)+", themes).group()
-            fixed = re.sub(r"(\n    updated_at: )['\"]?[0-9-]+['\"]?", r"\g<1>2026-10-27", block, count=1)
+            fixed = re.sub(r"(\n    updated_at: )['\"]?[0-9-]+['\"]?", r"\g<1>2026-11-05", block, count=1)
             (root / "THEMES.yaml").write_text(themes.replace(block, fixed), encoding="utf-8")
             # 「意見の推移」の時点（保存した収集回の最新日）は更新日より前のままでも止まらない
             self.assertEqual(set(layout.finish(root)), {layout.SOURCE, layout.PAGE})
