@@ -4,6 +4,8 @@
 TASK_BOARD.md は毎セッション読まれるので、経緯や調査記録を書き足すと
 その分だけ他の作業に使える余力が減る。2026-09-03 に索引と詳細を分けた。
 索引には1課題あたり数行だけを置き、本文は tasks/task-{番号}.md に置く。
+2026-11-05 から「進行中」の件数と期限も検査する（終わらない課題が進行中のまま
+居座り、索引が5週間上限に張り付いた。OPERATIONS.md「課題ボードの棚卸し」参照）。
 
   python3 scripts/verify_task_board.py
 
@@ -26,6 +28,10 @@ MAX_BOARD_BYTES = 30_000
 MAX_FIELD_CHARS = 120
 # 詳細ファイル1本の長さ。超えたら設計文書（quality/designs/）へ切り出す
 MAX_DETAIL_LINES = 400
+# 同時に「進行中」にできる課題の数（2026-11-05）。索引が上限に張り付いたのは大きさの
+# 問題ではなく、終わらない課題が「進行中」のまま出ていかなかったため。超えたら
+# OPERATIONS.md「課題ボードの棚卸し」をする合図にする（上限を上げるのではない）
+MAX_IN_PROGRESS = 8
 
 HEADING = re.compile(r"^###\s+課題(\d+)\s*[:：]\s*(.+?)\s*$")
 FIELD = re.compile(r"^\*\*(.+?)\*\*\s*[:：]\s*(.*)$")
@@ -79,6 +85,7 @@ def main() -> int:
         problems.append("TASK_BOARD.md に「### 課題N: タイトル」の行が1つも無い")
 
     seen: dict[int, int] = {}
+    in_progress: list[int] = []
     for entry in entries:
         tag = f"課題{entry['id']}（TASK_BOARD.md:{entry['line']}）"
 
@@ -103,6 +110,14 @@ def main() -> int:
                 f"{tag}: 「状態」は {' / '.join(PHASES)} のどれかで書き出す（いまは「{status[:20]}…」）。"
                 "管理ダッシュボードがこの書き出しで区分を判定している"
             )
+        if status.startswith("進行中"):
+            in_progress.append(entry["id"])
+            if not entry["fields"].get("期限", (0, ""))[1]:
+                problems.append(
+                    f"{tag}: 「進行中」には `**期限**: YYYY-MM-DD` を書く。"
+                    "書けないなら進行中ではないので「保留」へ落とすこと"
+                    "（期限が入っていれば期限超過は管理ダッシュボードが拾う）"
+                )
         if status.startswith("完了"):
             problems.append(
                 f"{tag}: 完了した課題は索引に残さない。"
@@ -120,6 +135,13 @@ def main() -> int:
             problems.append(f"{tag}: 詳細ファイル tasks/task-{entry['id']}.md が無い")
         elif entry["fields"].get("詳細") and f"task-{entry['id']}.md" not in entry["fields"]["詳細"][1]:
             problems.append(f"{tag}: 「詳細」の行が tasks/task-{entry['id']}.md を指していない")
+
+    if len(in_progress) > MAX_IN_PROGRESS:
+        problems.append(
+            f"「進行中」が {len(in_progress)} 件ある（上限 {MAX_IN_PROGRESS}）: "
+            f"{'、'.join(f'課題{i}' for i in in_progress)}。"
+            "OPERATIONS.md「課題ボードの棚卸し」の手順で、動いていないものを「保留」へ落とすこと"
+        )
 
     indexed = {entry["id"] for entry in entries}
     for path in sorted(TASKS.glob("task-*.md")):
@@ -139,7 +161,10 @@ def main() -> int:
             print(f"  - {problem}")
         return 1
 
-    print(f"OK: 索引 {size:,} バイト / 課題 {len(entries)} 件。すべての課題に詳細ファイルがあります")
+    print(
+        f"OK: 索引 {size:,} バイト（上限 {MAX_BOARD_BYTES:,}）/ 課題 {len(entries)} 件 "
+        f"/ 進行中 {len(in_progress)} 件（上限 {MAX_IN_PROGRESS}）。すべての課題に詳細ファイルがあります"
+    )
     return 0
 
 

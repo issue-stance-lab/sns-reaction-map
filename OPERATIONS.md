@@ -158,6 +158,7 @@ python3 scripts/build_admin_dashboard.py
 | **一次資料メモの再確認** | テーマごと90日目安（法改正が近いテーマは短縮） | `quality/research/status.yaml` の `last_verified` + `review_days` | `.claude/skills/primary-research/SKILL.md` |
 | **Xデータの保全確認** | 更新直後＋週1回 | `company/data-operations.yaml` と復元記録から7日 | [段階Eの手順](quality/designs/2026-09-06-stage-e-data-preservation.md) |
 | **作業ツリーの片付け** | 本番反映ごと | 反映完了時 | `.claude/skills/release/SKILL.md` |
+| **課題ボードの棚卸し** | 月1 | 前回から30日（ダッシュボードが検知） | `GROWTH.yaml` の `recurring.task-board-review` / 下の「課題ボードの棚卸し」 |
 
 ---
 
@@ -181,6 +182,34 @@ python3 scripts/build_admin_dashboard.py
 - ブランチは `task/growth-{id}`。main への直接コミットはしない
 - 規模が大きいものは `configs/prompts/{YYYYMMDD}_growth-{id}.md` に発注プロンプトを書いて止める
 - やったことは `GROWTH.yaml` の `activity_log` に1行残す
+
+---
+
+## 課題ボードの棚卸し
+
+**課題が索引から出ていく仕組みが「完了したとき」しか無かったため、終わらない課題が
+「進行中」のまま居座り、索引が上限に張り付いた工程。** 月1回、以下を上から順に行う。
+
+索引は `TASK_BOARD.md`、詳細は `tasks/task-{番号}.md`。記録は `GROWTH.yaml` の
+`recurring.task-board-review.last_run`。
+
+1. **完了したものをアーカイブへ移す。** 索引の該当課題を消し、`archive/TASK_BOARD_ARCHIVE.md`
+   の「完了済み課題」に1行残す。詳細ファイルは `archive/tasks/` へ移す
+2. **60日以上動いていない「進行中」を「保留」へ落とす。** 動いた日は
+   `git log -1 --format=%ad --date=short -- tasks/task-{番号}.md` で見る。
+   「保留」は捨てることではない。索引に残るので、またやるときは「進行中」へ戻す
+3. **「保留」のうちもうやらないものを「見送り」としてアーカイブへ移す。**
+   **どれを見送るかはオーナーの判断。** AIは候補（保留のうち動いていない順）を並べるだけ
+4. **「進行中」が8件以内か確かめる。** 超えていたら2をやり直す。
+   9件目を進行中にしたいときは、どれか1件を保留に落とす
+
+守ること:
+
+- **進行中には `期限` を書く。** 書けないものは進行中ではない（保留へ落とす）。
+  期限が入っていれば、期限超過は管理ダッシュボードが拾う
+- 上限（索引30,000バイト・進行中8件）は `python3 scripts/verify_task_board.py` が検査する。
+  **落ちたら上限を上げるのではなく、この棚卸しをする**
+- 索引は6欄1行ずつ。経緯は詳細ファイルへ（`TASK_BOARD.md` を読むのは毎セッション全員）
 
 ---
 

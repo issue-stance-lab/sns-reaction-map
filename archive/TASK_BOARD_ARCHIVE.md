@@ -108,6 +108,10 @@
 | 2026-08-15 | Claude | 全員 | **ルート（`issue-stance-lab.github.io/`）は入口。説明を書き足さないこと。** 調査方法・編集方針・数字の読み方は `docs/about.html` に一本化する。ルートは `scripts/build_root_index.py` が正典から生成するので手で編集せず、変更後は `--check` で一致を確認する。読者にとってのトップは `/sns-reaction-map/` 側。詳細は課題48 |
 | 2026-08-30 | Codex | 全員 | **上の2026-08-15ルールは廃止。** `sns-reaction-map.jp/` を唯一のトップにし、`issue-stance-lab/issue-stance-lab.github.io` を唯一の公開専用リポジトリとする。公開物は `docs/` から `scripts/sync_public_site.py` で同期する。詳細は課題48と `quality/designs/domain-migration-2026-08-30.md` |
 
+| 2026-07-01 | Antigravity | 全員 | 課題16 OGP対応完了。build_reaction_map.pyにOGP自動挿入機能を追加済み |
+| 2026-08-01 | Claude | 全員 | `archive/planning-2026-08/WORK_PLAN_2026-08.md` と `archive/planning-2026-08/WORK_PLAN_2026-08_SESSIONS.md` を追加。8月はこの計画に従い、S1〜S5 のセッション単位で進める。発注書は `configs/prompts/codex/` に置く |
+| 2026-09-16 | Claude | 全員 | CI「公開ファイルの検査」が9/15夜から2回連続で失敗していたのを修正しmainへ反映（`9f065db`）。原因は9/15のbukatsu-chiiki更新（課題69）で `docs/sitemap.xml` の該当lastmod更新と `company/data-assets.json` の再生成が漏れていたため。`DATA_REFRESH.md` のsitemapチェックリストに `validate_theme_seo.py` のローカル実行を追記済み（課題69残り7テーマでの再発防止）。`verify_top_page.py` は課題69の収集停止8テーマ起因で従来どおりrc=1のまま（今回の修正と無関係、既知） |
+
 
 ---
 
