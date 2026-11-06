@@ -665,7 +665,7 @@ recurring:
         （2026-09-21、引用RTを運用枠として復活。返信と同じ予測重み5.0のため）。
         content/x/weekly-reviews.md で到達・会話・関心・流入を確認し、
         翌週に変える変数を1つだけ決める。プロフィール・固定ポストも見直す
-    last_run: 2026-11-05       # 昼2本・夜2本（47NEWS・朝日新聞）の計4本を送信。
+    last_run: 2026-11-06       # 朝の返信1本を送信。11/4夜の返信を43表示で計測。
     procedure: >-
       正典 .claude/skills/x-daily/SKILL.md に従う。先に対象者と追加価値を判定し、通過した候補だけを
       返信数・表示速度・時事性で並べ替える。画像と問いかけは必須にせず、理解や会話を助ける場合だけ使う。
@@ -731,10 +731,10 @@ recurring:
       以後5週間ずっと上限30,000の直下で張り付いていた（課題を1件足せず、今回の積み残しを登録できなかった）。
       原因は大きさではなく、課題が索引から出ていく仕組みが「完了したとき」しか無かったこと。
       このとき生きている課題52件のうち35件が30日以上動かず、17件は9/3の分割から一度も更新されていなかった。
-featured: koshitsu-tenpakai   # 現在のポータル注目テーマ（自動選定、scripts/refresh_featured_slots.py）
+featured: ai-copyright   # 現在のポータル注目テーマ（自動選定、scripts/refresh_featured_slots.py）
 
 featured_questions:
-  updated_at: 2026-11-05
+  updated_at: 2026-11-06
   criteria: |
     - 公開テーマのうち意見300件以上を対象にする
     - THEMES.yaml の updated_at が新しい順に5件選び、1件目を「今週の注目テーマ」、
@@ -742,14 +742,14 @@ featured_questions:
     - 選定は scripts/refresh_featured_slots.py が自動で行い、
       実行のたびにこのファイルとページを同期する
   items:
+    - theme: koshitsu-tenpakai
+      question: 皇室典範改正、何が変わる？愛子さまは？
     - theme: constitutional-amendment
       question: 憲法改正はどう決まり、何が争点か
     - theme: fukushuto
       question: 副首都はどこに、いつ決まる？
     - theme: bukatsu-chiiki
       question: 部活動の地域移行はいつから？
-    - theme: consumption-tax-cut
-      question: 消費税減税はいつから、何％？
 
 activity_log:
   - date: 2026-11-03
