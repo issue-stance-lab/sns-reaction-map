@@ -1,6 +1,6 @@
 # 辺野古高校生死亡事故 定期更新の監査（2026-11-07）
 
-作業ブランチ: `claude/focused-chaum-9d551b`（このセッション専用の作業ツリー）。公開・本番反映は未実施（オーナー承認待ち）。
+作業ブランチ: `claude/focused-chaum-9d551b`（このセッション専用の作業ツリー）。オーナー承認（2026-11-07）を受けて本番反映済み（main `f05fc2ac`）。
 run-id: `20261107_122024`。手順は `.claude/skills/theme-refresh/SKILL.md`（10/9の新ルール＋新論点チェック）と `configs/wave_review/henoko-student-accident.yaml` の `notes`。
 collect_at は 2026-11-07 で、期限当日の実施。
 
