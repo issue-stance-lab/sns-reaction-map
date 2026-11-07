@@ -731,10 +731,10 @@ recurring:
       以後5週間ずっと上限30,000の直下で張り付いていた（課題を1件足せず、今回の積み残しを登録できなかった）。
       原因は大きさではなく、課題が索引から出ていく仕組みが「完了したとき」しか無かったこと。
       このとき生きている課題52件のうち35件が30日以上動かず、17件は9/3の分割から一度も更新されていなかった。
-featured: ai-copyright   # 現在のポータル注目テーマ（自動選定、scripts/refresh_featured_slots.py）
+featured: bike-blue-ticket   # 現在のポータル注目テーマ（自動選定、scripts/refresh_featured_slots.py）
 
 featured_questions:
-  updated_at: 2026-11-06
+  updated_at: 2026-11-07
   criteria: |
     - 公開テーマのうち意見300件以上を対象にする
     - THEMES.yaml の updated_at が新しい順に5件選び、1件目を「今週の注目テーマ」、
@@ -742,14 +742,14 @@ featured_questions:
     - 選定は scripts/refresh_featured_slots.py が自動で行い、
       実行のたびにこのファイルとページを同期する
   items:
+    - theme: ai-copyright
+      question: 生成AIと著作権、何が侵害になる？
     - theme: koshitsu-tenpakai
       question: 皇室典範改正、何が変わる？愛子さまは？
     - theme: constitutional-amendment
       question: 憲法改正はどう決まり、何が争点か
     - theme: fukushuto
       question: 副首都はどこに、いつ決まる？
-    - theme: bukatsu-chiiki
-      question: 部活動の地域移行はいつから？
 
 activity_log:
   - date: 2026-11-03
