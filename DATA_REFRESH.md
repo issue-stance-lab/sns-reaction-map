@@ -1146,6 +1146,10 @@ mainへ取り込む前に、**「合格した」という報告を鵜呑みに�
   新デザインのページを `docs/` に書く。**他テーマの更新でも毎回この処理が走る**（憲法の照合が合わないと、その回の公開候補生成全体が止まる）。
   `false` に戻すと、公開ページが新デザインのまま「更新設定が無効」で止まる。戻すときは旧形式のページ
   （`data/page-sources/constitutional-amendment.html`）を先に `docs/` へ戻すこと
+- **写真・図解・比較表**: 制度解説と写真の出典は `scripts/constitutional_redesign/visual-guide.html` に置く。
+  通常更新では、冒頭・山なみと同じ公開集計と再読記録から、ガイドの件数・棒グラフ・理由の要約・目次を生成する。
+  制度や提案が変わった回は、原典に照らして該当する図表・解説・確認記録を更新する。写真は差し替え時に撮影日・被写体・利用条件を確かめる。
+  候補の確認では、件数の照合に加え、375px幅の表と目次、理由への移動を確認する。
 - **元HTMLの場所**: `data/page-sources/constitutional-amendment.html`（Git管理）。`refresh_adapters/constitutional.py`（山なみ・潮目・連動表示）・
   `build_constitutional_arena.py`（引数なし）・`inject_tide_widget.py`（潮目の汎用JS・CSSの原型）はこれを入力にする。手で編集しない。
   `docs/constitutional-amendment-reaction-map.html` を旧形式の生成器に直接渡すと拒否される（新デザインの再入力防止）。

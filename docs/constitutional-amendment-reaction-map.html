@@ -724,6 +724,87 @@ body.constitutional-layout main{display:block}
   .related-card span{padding:2px 12px 10px;font-size:12.5px}
 }
 
+.cav { max-width: 1240px; margin: 3rem auto; padding: 0 1.25rem; color: #262b39; }
+.cav > header { margin-bottom: 1.5rem; }
+.cav h2, .cav h3 { font-family: "Noto Serif JP", serif; line-height: 1.5; }
+.cav h3 { font-size: clamp(1.25rem, 2.6vw, 1.7rem); }
+.cav p, .cav li, .cav td { font-size: 1rem; line-height: 1.85; }
+.cav a { color: #514375; overflow-wrap: anywhere; }
+.cav-layout { display: grid; grid-template-columns: 15rem minmax(0, 1fr); gap: 1.75rem; align-items: start; }
+.cav-nav { position: sticky; top: 5.5rem; padding: .85rem; background: #f2eff6; border-radius: 8px; }
+.cav-nav summary { cursor: pointer; padding: .5rem 0; font-weight: 700; }
+.cav-nav ul { list-style: none; margin: .65rem 0 0; padding: 0; max-height: 57vh; overflow: auto; }
+.cav-nav li a { display: flex; align-items: center; min-height: 44px; padding: .4rem .3rem; line-height: 1.45; font-size: .875rem; }
+.cav-nav a[aria-current] { background: #e3eee9; color: #205f53; font-weight: 700; }
+.cav-tabs, .cav .comparison-tools { display: flex; gap: .35rem; flex-wrap: wrap; margin: .5rem 0; }
+.cav button { min-height: 44px; padding: .45rem .6rem; font: inherit; background: #fff; color: #453661; border: 1px solid #aaa1b8; border-radius: 4px; cursor: pointer; }
+.cav button[aria-pressed=true] { background: #514375; color: #fff; }
+.cav input { box-sizing: border-box; max-width: 100%; min-height: 44px; font-size: 1rem; }
+.cav [hidden] { display: none !important; }
+.cav-content > [id] { padding: 1.55rem 0; border-top: 1px solid #d8d4de; scroll-margin-top: 1.5rem; min-width: 0; }
+.cav .eyebrow, .cav .section-number { font-size: .82rem; color: #514375; font-weight: 700; }
+.cav .photo-explainer, .cav .photo-story-grid, .cav .photo-wide-strip,
+.cav .clause-diagram, .cav .function-fork, .cav .process-layout {
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; align-items: start;
+}
+.cav .question-topic { display: flex; gap: .9rem; align-items: center; }
+.cav .question-topic img { width: 96px; aspect-ratio: 4/3; object-fit: cover; }
+.cav .question-row { padding: .75rem 0; border-bottom: 1px solid #ddd9e3; }
+.cav figure { margin: 0; min-width: 0; }
+.cav img { max-width: 100%; height: auto; border-radius: 4px; }
+.cav figcaption, .cav .plain-note, .cav .source-line { color: #515864; font-size: .85rem; line-height: 1.7; }
+.cav .credit-short { display: block; }
+.cav .cav-photos, .cav .condition-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.15rem; }
+.cav-photos img { width: 100%; aspect-ratio: 4/3; object-fit: cover; }
+.cav .layer-stack > a, .cav .function-fork article, .cav .clause-box, .cav .condition-grid article,
+.cav .argument-document, .cav .counter-question, .cav .related-sns, .cav .diagram-takeaway {
+  display: block; padding: .85rem 1rem; background: #f2eff6; border-left: 3px solid #807096; margin: .55rem 0;
+}
+.cav .clause-add, .cav .argument-document, .cav .diagram-takeaway { background: #eef5f1; border-color: #337c6d; }
+.cav .diagram-takeaway { grid-column: 1/-1; }
+.cav .clause-box b { margin-right: 1rem; }
+.cav .function-origin { padding: .75rem; text-align: center; background: #514375; color: white; }
+.cav table { width: 100%; table-layout: fixed; border-collapse: collapse; }
+.cav table caption { text-align: left; font-weight: 700; margin-bottom: .5rem; }
+.cav table :is(td, th) { padding: .65rem; border: 1px solid #ded9e5; vertical-align: top; text-align: left; overflow-wrap: anywhere; }
+.cav table th { background: #efebf4; }
+.cav .n { display: block; font-size: .85rem; font-weight: normal; }
+.cav .sample-steps, .cav .vote-fields { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: .7rem; padding: 0; }
+.cav .sample-steps { grid-template-columns: repeat(4,minmax(0,1fr)); list-style: none; }
+.cav .sample-steps li { background: #f2eff6; padding: .8rem; }
+.cav .sample-steps b { display: block; font-size: 1.4rem; }
+.cav-bars { list-style: none; margin: 0; padding: 0; }
+.cav-bars li { display: grid; grid-template-columns: 9rem 1fr auto; gap: .75rem; align-items: center; margin: .45rem 0; }
+.cav-bar { display: block; height: .55rem; background: #e9e5ee; }
+.cav-bar i { display: block; height: 100%; background: #807096; }
+.cav .ballot-diagram { background: #eef5f1; padding: 1rem; margin: 1rem 0; }
+.cav .ballot-bars { display: flex; background: #ddd; height: 2.75rem; }
+.cav .ballot-bars span { min-width: 0; overflow: hidden; white-space: nowrap; background: #386e60; color: white; text-align: center; }
+.cav .ballot-bars span + span { background: #65537f; }
+.cav .invalid-votes { display: flex; flex-wrap: wrap; gap: .65rem; margin-top: .65rem; }
+.cav .vote-fields label { min-width: 0; }
+.cav .vote-fields input { width: 100%; display: block; }
+@media (max-width: 820px) {
+  .cav-layout { display: block; }
+  .cav-nav { top: 4rem; z-index: 4; margin-bottom: 1rem; }
+  .cav-nav ul { max-height: 42vh; }
+  .cav-content > [id] { scroll-margin-top: 4.5rem; }
+}
+@media (max-width: 600px) {
+  .cav { padding-inline: .9rem; }
+  .cav .photo-explainer, .cav .photo-story-grid, .cav .photo-wide-strip,
+  .cav .clause-diagram, .cav .function-fork, .cav .process-layout, .cav .condition-grid { grid-template-columns: 1fr; }
+  .cav .sample-steps, .cav .cav-photos { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .cav-bars li { grid-template-columns: 7rem 1fr auto; gap: .5rem; }
+  .cav table, .cav table caption, .cav tbody, .cav tr, .cav td, .cav th { display: block; }
+  .cav table thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+  .cav table tr { margin-bottom: .9rem; }
+  .cav td[data-label]::before { display: block; content: attr(data-label); color: #514375; font-weight: 700; font-size: .8rem; }
+}
+
+.cav .layer-stack > a { color: #262b39; text-decoration: none; }
+.cav .layer-stack > a h3 { color: #514375; text-decoration: underline; }
+
 /* TIDE_CARD_START */
 .update-dashboard{padding:18px min(4vw,40px) 34px;background:var(--bg)}
 .tide-card{max-width:1180px;margin:0 auto;padding:26px 28px;border:1px solid #d9e2ef;border-radius:20px;background:#fff;box-shadow:0 16px 40px rgba(18,35,64,.09);color:var(--ink)}
@@ -955,7 +1036,1857 @@ body.constitutional-layout main{display:block}
 <li><a href="https://www.shugiin.go.jp/internet/itdb_kenpou.nsf/html/kenpou/r8_shiryosyu.pdf/$File/r8_shiryosyu.pdf" rel="noopener" target="_blank">衆議院憲法審査会 関係資料集（令和8年版）</a><span>2026年8月31日確認</span></li>
 </ul></details>
 </section>
-<!-- PLANET_SECTION_START -->
+<section aria-labelledby="cav-title" class="cav" id="constitutional-visual-guide"><header><p class="eyebrow">憲法改正を読み解く</p><h2 id="cav-title">写真・図解・比較表で読む憲法改正</h2><p>SNSの集計は2026年11月3日更新。制度の確認日は、各資料の記録を参照してください。</p><p><a href="#constitutional-amendment-reading">SNSの反応マップへ ↓</a></p></header><div class="cav-layout"><details class="cav-nav" open=""><summary>目次・図表・検索</summary><div aria-label="目次の表示" class="cav-tabs" role="group"><button aria-pressed="true" data-cav-mode="all" type="button">目次</button><button aria-pressed="false" data-cav-mode="visual" type="button">図・表</button><button aria-pressed="false" data-cav-mode="search" type="button">検索</button></div><label class="cav-search" hidden="">本文の項目・SNSの理由を探す<input type="search"/></label><p class="cav-empty" hidden="" role="status">見つかりませんでした。</p><ul><li data-kind="article"><a href="#question-directory">知りたい問いから読む</a></li><li data-kind="diagram"><a href="#reading-layers">条文・提案・SNSの違い</a></li><li data-kind="table"><a href="#comparison">三つの論点の主張比較</a></li><li data-kind="table"><a href="#article9-documents">現行9条と2018年の提案</a></li><li data-kind="diagram"><a href="#article9-structure">9条のどこに、何を加える案か</a></li><li data-kind="article"><a href="#article9-dossier-defense">防衛を重視する理由</a></li><li data-kind="article"><a href="#article9-dossier-war">平和と権利を重視する理由</a></li><li data-kind="diagram"><a href="#emergency-functions">国会の継続と内閣の臨時権限</a></li><li data-kind="table"><a href="#emergency-comparison">非常時の制度・提案を三つの文書で比較</a></li><li data-kind="article"><a href="#emergency-conditions">権限を確かめる3つの条件</a></li><li data-kind="article"><a href="#emergency-dossier-necessity">国会機能の維持を重視する理由</a></li><li data-kind="article"><a href="#emergency-dossier-control">権限への歯止めを重視する理由</a></li><li data-kind="diagram"><a href="#referendum-calculation">仮の票数で「過半数」の分母を図解</a></li><li data-kind="table"><a href="#referendum-examples">同数・1票差・無効票を比べる</a></li><li data-kind="table"><a href="#referendum-information">判断材料の出し手・目的・確かめ方</a></li><li data-kind="photo"><a href="#referendum-photo-story">投票所・投票箱・出口調査の写真</a></li><li data-kind="article"><a href="#referendum-dossier-participation">国民による判断を重視する理由</a></li><li data-kind="article"><a href="#referendum-dossier-advertising">情報の公平さを重視する理由</a></li><li data-kind="diagram"><a href="#process">国会の発議から国民投票・公布まで</a></li><li data-kind="diagram"><a href="#sample-flow">収集した投稿から、論点・理由分類まで</a></li><li data-kind="article"><a href="#article9-sources">原典と確認日</a></li><li data-kind="article"><a href="#emergency-sources">原典と確認日</a></li><li data-kind="article"><a href="#referendum-sources">原典と確認日</a></li><li data-kind="photo"><a href="#gallery">写真・資料</a></li><li data-kind="article"><a href="#issue-constitutional-amendment-general">改憲全般・914件</a></li><li data-kind="article"><a href="#issue-constitutional-amendment-article9">9条・自衛隊・506件</a></li><li data-kind="article"><a href="#issue-constitutional-amendment-emergency">緊急事態条項・398件</a></li><li data-kind="article"><a href="#issue-constitutional-amendment-referendum">国民投票・広告・336件</a></li><li data-kind="article"><a href="#issue-constitutional-amendment-procedure">政党・発議手続き・221件</a></li><li data-kind="article"><a href="#issue-constitutional-amendment-deliberation">情報・議論の質・155件</a></li><li data-kind="article"><a href="#issue-constitutional-amendment-other">その他・18件</a></li><li data-kind="reason" hidden=""><a href="#fr-r-constitutional-amendment-general-debate-conditions">改憲全般 ／ 賛否の表明・運動と議論の仕方</a></li><li data-kind="reason" hidden=""><a href="#fr-r-constitutional-amendment-general-peace-security">改憲全般 ／ 戦争を避ける方法と防衛</a></li><li data-kind="reason" hidden=""><a href="#fr-r-constitutional-amendment-general-political-trust">改憲全般 ／ 改正を担う政権・政党への評価</a></li><li data-kind="reason" hidden=""><a href="#fr-r-constitutional-amendment-general-referendum">改憲全般 ／ 国民投票で決めることへの評価</a></li><li data-kind="reason" hidden=""><a href="#fr-r-constitutional-amendment-general-rights-scope">改憲全般 ／ 変更する条項と暮らし・権利</a></li><li data-kind="reason" hidden=""><a href="#fr-r-constitutional-amendment-general-em-war">改憲全般 ／ 戦争・動員との結びつきへの懸念</a></li><li data-kind="reason" hidden=""><a href="#fr-r-constitutional-amendment-general-em-control">改憲全般 ／ 権限集中と自由への制約</a></li><li data-kind="reason" hidden=""><a href="#fr-r-constitutional-amendment-general-em-necessity">改憲全般 ／ 既存制度と条項の必要性</a></li><li data-kind="reason" hidden=""><a href="#fr-r-constitutional-amendment-general-em-political">改憲全般 ／ 政治への不信と関連政策</a></li><li data-kind="reason" hidden=""><a href="#fr-r-constitutional-amendment-general-em-election">改憲全般 ／ 任期延長と選挙の機会</a></li><li data-kind="reason" hidden=""><a href="#fr-r-constitutional-amendment-article9-a9-war">9条・自衛隊 ／ 戦争・徴兵・権利制限への懸念</a></li><li data-kind="reason" hidden=""><a href="#fr-r-constitutional-amendment-article9-a9-defense">9条・自衛隊 ／ 抑止力・防衛力と国を守る方法</a></li><li data-kind="reason" hidden=""><a href="#fr-r-constitutional-amendment-article9-a9-legal">9条・自衛隊 ／ 自衛隊の位置づけと憲法解釈</a></li><li data-kind="reason" hidden=""><a href="#fr-r-constitutional-amendment-article9-a9-discussion">9条・自衛隊 ／ 発言・報道・運動への応対</a></li><li data-kind="reason" hidden=""><a href="#fr-r-constitutional-amendment-article9-a9-us">9条・自衛隊 ／ 米国との関係・海外派遣への評価</a></li><li data-kind="reason" hidden=""><a href="#fr-r-constitutional-amendment-article9-a9-politics">9条・自衛隊 ／ 政党・政権と他の政策への評価</a></li><li data-kind="reason" hidden=""><a href="#fr-r-constitutional-amendment-article9-a9-position">9条・自衛隊 ／ 賛否の表明・改正を求める声</a></li><li data-kind="reason" hidden=""><a href="#fr-r-constitutional-amendment-article9-a9-draft">9条・自衛隊 ／ 改正案の内容・範囲と進め方</a></li><li data-kind="reason" hidden=""><a href="#fr-r-constitutional-amendment-article9-a9-military">9条・自衛隊 ／ 国防軍・軍事法廷と自衛官の扱い</a></li><li data-kind="reason" hidden=""><a href="#fr-r-constitutional-amendment-article9-a9-context">9条・自衛隊 ／ 本文だけでは理由を特定できない</a></li><li data-kind="reason" hidden=""><a href="#fr-r-constitutional-amendment-article9-a9-other-law">9条・自衛隊 ／ 皇室典範の第9条の話題</a></li><li data-kind="reason" hidden=""><a href="#fr-r-constitutional-amendment-emergency-em-control">緊急事態条項 ／ 権限集中と自由への制約</a></li><li data-kind="reason" hidden=""><a href="#fr-r-constitutional-amendment-emergency-em-political">緊急事態条項 ／ 政治への不信と関連政策</a></li><li data-kind="reason" hidden=""><a href="#fr-r-constitutional-amendment-emergency-em-necessity">緊急事態条項 ／ 既存制度と条項の必要性</a></li><li data-kind="reason" hidden=""><a href="#fr-r-constitutional-amendment-emergency-em-war">緊急事態条項 ／ 戦争・動員との結びつきへの懸念</a></li><li data-kind="reason" hidden=""><a href="#fr-r-constitutional-amendment-emergency-debate-conditions">緊急事態条項 ／ 賛否の表明・運動と議論の仕方</a></li><li data-kind="reason" hidden=""><a href="#fr-r-constitutional-amendment-emergency-em-commentator">緊急事態条項 ／ 他者の説明・立場への批評</a></li><li data-kind="reason" hidden=""><a href="#fr-r-constitutional-amendment-emergency-em-election">緊急事態条項 ／ 任期延長と選挙の機会</a></li><li data-kind="reason" hidden=""><a href="#fr-r-constitutional-amendment-emergency-political-trust">緊急事態条項 ／ 改正を担う政権・政党への評価</a></li><li data-kind="reason" hidden=""><a href="#fr-r-constitutional-amendment-emergency-em-conditions">緊急事態条項 ／ 発動・延長・検証の条件</a></li><li data-kind="reason" hidden=""><a href="#fr-r-constitutional-amendment-emergency-rights-scope">緊急事態条項 ／ 変更する条項と暮らし・権利</a></li><li data-kind="reason" hidden=""><a href="#fr-r-constitutional-amendment-emergency-peace-security">緊急事態条項 ／ 戦争を避ける方法と防衛</a></li><li data-kind="reason" hidden=""><a href="#fr-r-constitutional-amendment-referendum-ref-advertising">国民投票・広告 ／ 広告・資金力と情報の公平さ</a></li><li data-kind="reason" hidden=""><a href="#fr-r-constitutional-amendment-referendum-ref-threshold">国民投票・広告 ／ 最低投票率と承認に必要な票数</a></li><li data-kind="reason" hidden=""><a href="#fr-r-constitutional-amendment-referendum-ref-integrity">国民投票・広告 ／ 投票・開票への不信と監視の要望</a></li><li data-kind="reason" hidden=""><a href="#fr-r-constitutional-amendment-referendum-ref-participation">国民投票・広告 ／ 国民投票への参加と意思表示</a></li><li data-kind="reason" hidden=""><a href="#fr-r-constitutional-amendment-referendum-ref-reporting">国民投票・広告 ／ 報道・周知を求める声</a></li><li data-kind="reason" hidden=""><a href="#fr-r-constitutional-amendment-referendum-ref-political">国民投票・広告 ／ 政党・政治家と関連政策への評価</a></li><li data-kind="reason" hidden=""><a href="#fr-r-constitutional-amendment-referendum-ref-sequence">国民投票・広告 ／ 法改正を進める順序と議論の時間</a></li><li data-kind="reason" hidden=""><a href="#fr-r-constitutional-amendment-referendum-ref-rules">国民投票・広告 ／ 投票のルール整備への評価</a></li><li data-kind="reason" hidden=""><a href="#fr-r-constitutional-amendment-referendum-ref-proposal">国民投票・広告 ／ 改正案の内容と権利・戦争への懸念</a></li><li data-kind="reason" hidden=""><a href="#fr-r-constitutional-amendment-referendum-ref-discussion">国民投票・広告 ／ 他者の説明への問い・批評</a></li><li data-kind="reason" hidden=""><a href="#fr-r-constitutional-amendment-referendum-ref-context">国民投票・広告 ／ 本文だけでは理由を特定できない</a></li><li data-kind="reason" hidden=""><a href="#fr-r-constitutional-amendment-procedure-party-policy">政党・発議手続き ／ 政党・政治家の政策と支持の判断</a></li><li data-kind="reason" hidden=""><a href="#fr-r-constitutional-amendment-procedure-party-consistency">政党・発議手続き ／ 政党の発言と採決の食い違いへの指摘</a></li><li data-kind="reason" hidden=""><a href="#fr-r-constitutional-amendment-procedure-party-stop">政党・発議手続き ／ 審査会・発議を止めるよう求める声</a></li><li data-kind="reason" hidden=""><a href="#fr-r-constitutional-amendment-procedure-party-procedure">政党・発議手続き ／ 議論・国民投票と手続きへの評価</a></li><li data-kind="reason" hidden=""><a href="#fr-r-constitutional-amendment-procedure-party-seats">政党・発議手続き ／ 発議に必要な議席と成立の見通し</a></li><li data-kind="reason" hidden=""><a href="#fr-r-constitutional-amendment-procedure-party-cooperate">政党・発議手続き ／ 政党間の協力・連立と違い</a></li><li data-kind="reason" hidden=""><a href="#fr-r-constitutional-amendment-deliberation-info-dialogue">情報・議論の質 ／ 決めつけ・中傷と対話の仕方</a></li><li data-kind="reason" hidden=""><a href="#fr-r-constitutional-amendment-deliberation-info-action">情報・議論の質 ／ 声の上げ方や運動の伝え方</a></li><li data-kind="reason" hidden=""><a href="#fr-r-constitutional-amendment-deliberation-info-evidence">情報・議論の質 ／ 数字・条文・説明の根拠を確かめる声</a></li><li data-kind="reason" hidden=""><a href="#fr-r-constitutional-amendment-deliberation-info-speakers">情報・議論の質 ／ 発信者の立場や主張への批評</a></li><li data-kind="reason" hidden=""><a href="#fr-r-constitutional-amendment-deliberation-info-media">情報・議論の質 ／ 報道の不足や偏りへの指摘</a></li><li data-kind="reason" hidden=""><a href="#fr-r-constitutional-amendment-deliberation-info-campaign">情報・議論の質 ／ 宣伝・情報操作への懸念</a></li><li data-kind="reason" hidden=""><a href="#fr-r-constitutional-amendment-deliberation-info-democracy">情報・議論の質 ／ 民主主義と考える力への評価</a></li><li data-kind="reason" hidden=""><a href="#fr-r-constitutional-amendment-other-other-policy">その他 ／ 家族・皇室・代表者選びの制度</a></li><li data-kind="reason" hidden=""><a href="#fr-r-constitutional-amendment-other-other-protest">その他 ／ デモと異なる立場への応対</a></li><li data-kind="reason" hidden=""><a href="#fr-r-constitutional-amendment-other-other-constitution">その他 ／ 憲法への向き合い方</a></li><li data-kind="reason" hidden=""><a href="#fr-r-constitutional-amendment-other-other-city">その他 ／ 人口集中と居住の自由</a></li></ul></details><div class="cav-content">
+<section class="section question-directory" data-readpoint="知りたい問いから読む" id="question-directory">
+<div class="section-head">
+<div>
+<p class="section-number">
+     気になる疑問を、ひとつ選ぶ
+    </p>
+<h3>
+     その問いから、読み始める。
+    </h3>
+<p class="section-intro">
+     短い比較で全体をつかみ、主張の詳説からSNSの理由と原典へ進めます。
+    </p>
+</div>
+<a class="mini-link" href="#comparison">
+    まず主張を一覧で比べる ↓
+   </a>
+</div>
+<div class="question-rows">
+<article class="question-row">
+<div class="question-topic">
+<img alt="" loading="lazy" src="images/constitutional-visual/sdf.webp"/>
+<div>
+<p>
+       論点
+      </p>
+<h3>
+       9条・自衛隊
+      </h3>
+<a href="#issue-constitutional-amendment-article9">
+       背景から読む →
+      </a>
+</div>
+</div>
+<ol>
+<li>
+<a href="#article9-dossier-defense">
+       存在の明記で、活動の範囲も変わる？
+       <span aria-hidden="true">
+        →
+       </span>
+</a>
+</li>
+<li>
+<a href="#article9-documents">
+       どの文言を変える提案？
+       <span aria-hidden="true">
+        →
+       </span>
+</a>
+</li>
+<li>
+<a href="#issue-constitutional-amendment-article9">
+       徴兵への懸念は、資料と一致する？
+       <span aria-hidden="true">
+        →
+       </span>
+</a>
+</li>
+</ol>
+</article>
+<article class="question-row">
+<div class="question-topic">
+<img alt="" loading="lazy" src="images/constitutional-visual/disaster.webp"/>
+<div>
+<p>
+       論点
+      </p>
+<h3>
+       緊急事態条項
+      </h3>
+<a href="#issue-constitutional-amendment-emergency">
+       背景から読む →
+      </a>
+</div>
+</div>
+<ol>
+<li>
+<a href="#emergency-dossier-necessity">
+       国会を続けるために、改正が必要？
+       <span aria-hidden="true">
+        →
+       </span>
+</a>
+</li>
+<li>
+<a href="#emergency-dossier-control">
+       権限の集中を、どう抑える？
+       <span aria-hidden="true">
+        →
+       </span>
+</a>
+</li>
+<li>
+<a href="#emergency-conditions">
+       誰が認めて、いつ終える？
+       <span aria-hidden="true">
+        →
+       </span>
+</a>
+</li>
+</ol>
+</article>
+<article class="question-row">
+<div class="question-topic">
+<img alt="" loading="lazy" src="images/constitutional-visual/ballot.webp"/>
+<div>
+<p>
+       論点
+      </p>
+<h3>
+       国民投票・広告
+      </h3>
+<a href="#issue-constitutional-amendment-referendum">
+       背景から読む →
+      </a>
+</div>
+</div>
+<ol>
+<li>
+<a href="#referendum-dossier-participation">
+       投票する機会と、判断材料は十分？
+       <span aria-hidden="true">
+        →
+       </span>
+</a>
+</li>
+<li>
+<a href="#referendum-dossier-advertising">
+       広告と資金の差が、なぜ問題？
+       <span aria-hidden="true">
+        →
+       </span>
+</a>
+</li>
+<li>
+<a href="#referendum-calculation">
+       過半数は、どの票で計算する？
+       <span aria-hidden="true">
+        →
+       </span>
+</a>
+</li>
+</ol>
+</article>
+</div>
+<p class="plain-note">
+   各写真の撮影時期・原典・利用条件は、
+   <a href="#gallery">
+    写真・資料の記録
+   </a>
+   にまとめました。
+  </p>
+</section>
+<section class="section visual-guide" data-format="diagram" data-format-title="条文・提案・SNSの違い" data-readpoint="条文・提案・SNSを図解" id="reading-layers">
+<div class="section-head">
+<div>
+<p class="section-number">
+     読むための見取り図
+    </p>
+<h3>
+     同じ「改正」の話でも、
+     <br/>
+     見ているものが違う。
+    </h3>
+<p class="section-intro">
+     条文が定めること、提案されていること、投稿で語られること。三つを行き来しながら、議論の前提をそろえます。
+    </p>
+</div>
+</div>
+<div class="photo-explainer">
+<figure class="editor-photo">
+<a href="images/constitutional-visual/hall-ceiling.webp" rel="noopener" target="_blank">
+<img alt="国会議事堂の中央広間の天井。憲法施行70周年の特別参観で撮影（2017年5月3日）。" decoding="async" loading="lazy" src="images/constitutional-visual/hall-ceiling.webp"/>
+</a>
+<figcaption>
+     国会議事堂の中央広間の天井。憲法施行70周年の特別参観で撮影（2017年5月3日）。
+     <span class="credit-short">
+      Kestrel ／
+      <a href="https://commons.wikimedia.org/wiki/File:National_Diet_Building_Central_Hall_Ceiling_P5030176.jpg" rel="noopener" target="_blank">
+       写真の原典
+      </a>
+<a href="https://creativecommons.org/licenses/by-sa/4.0" rel="noopener" target="_blank">
+       CC BY-SA 4.0
+      </a>
+      ／ WebPへの形式変換、1500×1125への縮小。表示枠による切り抜き。
+     </span>
+</figcaption>
+</figure>
+<div class="layer-stack">
+<a href="#constitutional-amendment-background">
+<span class="layer-badge">
+      現在の制度
+     </span>
+<h3>
+      憲法・法律
+     </h3>
+<p>
+      いま有効な決まりを、条文で確認する。
+     </p>
+<span class="layer-example">
+      例：憲法9条・54条・96条
+     </span>
+</a>
+<a href="#emergency-comparison">
+<span class="layer-badge">
+      変更の提案
+     </span>
+<h3>
+      政党の案・国会の議論用資料
+     </h3>
+<p>
+      誰が、いつ、何を変えようとしているかを読む。
+     </p>
+<span class="layer-example">
+      例：2018年の政党案、2026年5月の資料
+     </span>
+</a>
+<a href="#constitutional-amendment-reading">
+<span class="layer-badge">
+      意見の理由
+     </span>
+<h3>
+      SNSでの期待・懸念
+     </h3>
+<p>
+      どの案を指し、何を守ろうとしているかを探す。
+     </p>
+<span class="layer-example">
+      例：防衛、自由、情報の公平さ
+     </span>
+</a>
+</div>
+</div>
+<p class="plain-note">
+   写真は議事堂の施設の記録です。各制度の成立や、写真の撮影者の賛否を示すものではありません。
+  </p>
+</section>
+<section class="section" data-format="table" data-format-title="三つの論点の主張比較" data-readpoint="主張の比較表" data-section="3つの論点を読み比べる" id="comparison">
+<div class="section-head">
+<div>
+<p class="section-number">
+     3つの問いを見渡す
+    </p>
+<h3>
+     同じ課題を、
+     <br/>
+     違う角度から考える。
+    </h3>
+<p class="section-intro">
+     何を実現したいのか。何を心配しているのか。主張を並べたあとで、条文・提案・投稿の理由を詳しく読めます。
+    </p>
+</div>
+</div>
+<div aria-label="比較する論点を絞る" class="comparison-tools" role="group">
+<button aria-pressed="true" class="chip" data-filter="all">
+    3つを一覧
+   </button>
+<button aria-pressed="false" class="chip" data-filter="article9">
+    9条・自衛隊
+   </button>
+<button aria-pressed="false" class="chip" data-filter="emergency">
+    緊急事態条項
+   </button>
+<button aria-pressed="false" class="chip" data-filter="referendum">
+    国民投票・広告
+   </button>
+</div>
+<table class="compare-table">
+<caption class="sr-only">
+    9条・緊急事態条項・国民投票について、主張の理由と確かめる点を比較
+   </caption>
+<thead>
+<tr>
+<th scope="col">
+      論点
+     </th>
+<th scope="col">
+      改正を進める側の理由
+     </th>
+<th scope="col">
+      慎重・反対側の理由
+     </th>
+<th scope="col">
+      確かめたいこと
+     </th>
+</tr>
+</thead>
+<tbody>
+<tr data-topic="article9">
+<th scope="row">
+      9条・自衛隊
+      <span class="n">
+       この分類の件数
+       <b data-cav-count="article9">506</b>
+       件
+      </span>
+</th>
+<td data-label="改正を進める側の理由">
+<strong class="teal">
+       国を守る力を、どう整えるか。
+      </strong>
+<p>
+       防衛力や抑止力を重視し、自衛隊の位置づけを明確にするため改正が必要だと考える。
+      </p>
+<a class="jump" data-cav-target="article9/a9-defense" href="#fr-r-constitutional-amendment-article9-a9-defense">
+       防衛をめぐる理由を読む →
+      </a>
+</td>
+<td data-label="慎重・反対側の理由">
+<strong class="purple">
+       平和と権利を、どう守るか。
+      </strong>
+<p>
+       改正が戦争への参加や権利の制限につながらないかを心配し、今の9条の役割を重視する。
+      </p>
+<a class="jump" data-cav-target="article9/a9-war" href="#fr-r-constitutional-amendment-article9-a9-war">
+       懸念されている理由を読む →
+      </a>
+</td>
+<td data-label="確かめたいこと">
+<strong>
+       どの条文を、どう変える案か。
+      </strong>
+<p>
+       2018年の自民党案は、9条1項・2項を残して自衛隊を加える提案です。
+      </p>
+<a href="#article9-structure">
+       条文と提案を確かめる
+      </a>
+</td>
+</tr>
+<tr data-topic="emergency">
+<th scope="row">
+      緊急事態条項
+      <span class="n">
+       この分類の件数
+       <b data-cav-count="emergency">398</b>
+       件
+      </span>
+</th>
+<td data-label="改正を進める側の理由">
+<strong class="teal">
+       非常時にも、国会を動かす。
+      </strong>
+<p>
+       大規模災害などで選挙が難しい場合に備え、国会機能を維持する仕組みを求める。
+      </p>
+<a class="jump" data-cav-target="emergency/em-necessity" href="#fr-r-constitutional-amendment-emergency-em-necessity">
+       必要性をめぐる理由を読む →
+      </a>
+</td>
+<td data-label="慎重・反対側の理由">
+<strong class="purple">
+       権限の集中と、自由の制約。
+      </strong>
+<p>
+       非常時を理由に政府へ権限が集まり、選挙の機会や人権が制限されることを心配する。
+      </p>
+<a class="jump" data-cav-target="emergency/em-control" href="#fr-r-constitutional-amendment-emergency-em-control">
+       権限への懸念を読む →
+      </a>
+</td>
+<td data-label="確かめたいこと">
+<strong>
+       発動・延長・終了の条件。
+      </strong>
+<p>
+       2026年5月の議論用資料には、承認要件の選択肢や期間の空欄があります。
+      </p>
+<a href="#emergency-comparison">
+       議論用のイメージ案を確認
+      </a>
+</td>
+</tr>
+<tr data-topic="referendum">
+<th scope="row">
+      国民投票・広告
+      <span class="n">
+       この分類の件数
+       <b data-cav-count="referendum">336</b>
+       件
+      </span>
+</th>
+<td data-label="改正を進める側の理由">
+<strong class="teal">
+       最後は、国民自身で決める。
+      </strong>
+<p>
+       改正案を国民投票にかけ、有権者が直接判断することを重視する。
+      </p>
+<a class="jump" data-cav-target="general/referendum" href="#fr-r-constitutional-amendment-general-referendum">
+       国民の判断を重視する理由 →
+      </a>
+</td>
+<td data-label="慎重・反対側の理由">
+<strong class="purple">
+       判断できる情報は、公平か。
+      </strong>
+<p>
+       広告に使える資金の違いが発信量の差となり、判断を左右しないかを心配する。
+      </p>
+<a class="jump" data-cav-target="referendum/ref-advertising" href="#fr-r-constitutional-amendment-referendum-ref-advertising">
+       広告と資金の理由を読む →
+      </a>
+</td>
+<td data-label="確かめたいこと">
+<strong>
+       投票の条件と、情報の届け方。
+      </strong>
+<p>
+       承認条件を定める条文と、広告・広報のルールを分けて確かめます。
+      </p>
+<a href="#referendum-sources">
+       投票の決まりを確かめる
+      </a>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="plain-note">
+   上の表は主張の要約です。各列が同じ件数あることや、同じ理由の投稿が一つの立場にそろっていることを示しません。政党の提案と、現行の制度も区別しています。
+  </p>
+</section>
+<div class="table-frame" data-format="table" data-format-title="現行9条と2018年の提案" data-readpoint="現行条文と提案の比較" data-topic-owner="article9" id="article9-documents">
+<table class="detail-table">
+<caption>
+    文書を分けて読むための比較
+   </caption>
+<thead>
+<tr>
+<th scope="col">
+      確かめる点
+     </th>
+<th scope="col">
+      現行の第9条
+     </th>
+<th scope="col">
+      自民党の2018年の提案
+     </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th scope="row">
+      条文の構成
+     </th>
+<td data-label="現行の第9条">
+      戦争の放棄、戦力の不保持などを1項・2項に定める
+     </td>
+<td data-label="自民党の2018年の提案">
+      1項・2項を維持し、自衛隊に関する条文を加える
+     </td>
+</tr>
+<tr>
+<th scope="row">
+      自衛隊の記載
+     </th>
+<td data-label="現行の第9条">
+      自衛隊という名称の記載はない
+     </td>
+<td data-label="自民党の2018年の提案">
+      自衛隊の保持を条文に明記する
+     </td>
+</tr>
+<tr>
+<th scope="row">
+      文書の位置づけ
+     </th>
+<td data-label="現行の第9条">
+      現在の憲法の条文
+     </td>
+<td data-label="自民党の2018年の提案">
+      政党が示した条文イメージ
+     </td>
+</tr>
+</tbody>
+</table>
+</div>
+<section class="deep-reading" data-format="diagram" data-format-title="9条のどこに、何を加える案か" data-readpoint="9条の構成を図解" data-topic-owner="article9" id="article9-structure">
+<div class="deep-heading">
+<p class="eyebrow">
+    条文の位置関係
+   </p>
+<h3>
+    残す部分と、加える部分。
+   </h3>
+<p>
+    自民党が2018年に示した条文イメージの構成です。現行の条文と、追加する提案を色と見出しで分けました。
+   </p>
+</div>
+<div class="clause-diagram">
+<div class="clause-column">
+<p class="diagram-label">
+     現行の第9条
+    </p>
+<div class="clause-box">
+<b>
+      1項
+     </b>
+<span>
+      戦争の放棄など
+     </span>
+</div>
+<div class="clause-box">
+<b>
+      2項
+     </b>
+<span>
+      戦力の不保持・交戦権の否認
+     </span>
+</div>
+</div>
+<div class="clause-column proposal-column">
+<p class="diagram-label">
+     2018年の自民党の提案
+    </p>
+<div class="clause-box">
+<b>
+      1項
+     </b>
+<span>
+      維持する
+     </span>
+</div>
+<div class="clause-box">
+<b>
+      2項
+     </b>
+<span>
+      維持する
+     </span>
+</div>
+<div class="clause-box clause-add">
+<b>
+      追加
+     </b>
+<span>
+      第9条の2
+      <br/>
+      自衛の措置・自衛隊の保持
+      <br/>
+      行動に対する国会の統制
+     </span>
+</div>
+</div>
+</div>
+<div class="diagram-takeaway">
+<h4>
+    「条文を残す」と「効果が変わらない」は、別の問い。
+   </h4>
+<p>
+    現行の1項・2項を維持する構成かどうかは、原文が判断の手がかりです。追加した条文が活動の範囲にどう関わるかは、その内容と解釈を読む必要があります。
+   </p>
+<a class="inline-ref" href="#article9-document-2">
+    2018年資料の2ページを確認 ↗
+   </a>
+</div>
+</section>
+<article class="argument-dossier" data-readpoint="防衛を重視する理由" data-topic-owner="article9" id="article9-dossier-defense">
+<div class="argument-heading">
+<p class="eyebrow">
+    主張の詳説 ／ 防衛を重視する理由
+   </p>
+<h4>
+    自衛隊の明記は、何を解決するのか。
+   </h4>
+</div>
+<div class="argument-logic">
+<h5>
+    位置づけを明確にしたい
+   </h5>
+<p>
+    防衛の必要性を重視する意見でも、憲法に名称を加える目的と、装備や活動を変える目的は分けて考えられます。自衛隊をどう位置づけるかという問いと、どこまでの活動を認めるかという問いが含まれるためです。
+   </p>
+<p>
+    2018年の自民党の資料は、自衛隊を憲法に位置づけ、違憲とする議論を解消することを改正の理由に挙げています。これは提案した党の説明です。書き加えることで、その目的を実現できるかは、条文の読み方も含めて検討する必要があります。
+   </p>
+<div class="counter-question">
+<h5>
+     相手の立場からの問い
+    </h5>
+<p>
+     存在を明記するだけで、活動の範囲は変わらないと言えるのか。現行の9条を残すことと、新しい条文の効果を、どう説明するか。
+    </p>
+<a href="#article9-dossier-war">
+     もう一方の主張を読む →
+    </a>
+</div>
+<div class="argument-document">
+<h5>
+     資料のどこを読む？
+    </h5>
+<p>
+     2018年資料の2ページには、9条1項・2項を維持する方針と、追加する条文イメージが並んでいます。国会の統制にも触れた提案です。目的の説明と、実際に加える文言の両方を読みます。
+    </p>
+<a class="inline-ref" href="#article9-document-2">
+     2018年の提案・2ページ ↗
+    </a>
+</div>
+</div>
+<div class="related-sns" data-cav-reason="article9/a9-defense">
+<h4>抑止力・防衛力と国を守る方法</h4><p>79件・この論点の15.6％</p><p>近くの国の軍事的な動きやウクライナの例を挙げ、抑止力を高めるために9条を改正すべきだという声が大半です。戦争には反対だからこそ、自衛隊の明記や防衛費の増額に賛成するという投稿が目立ちます。反対の側からは、防衛を強めるなら平和外交やエネルギー政策を先に進めるべきだという声があります。</p><a href="#fr-r-constitutional-amendment-article9-a9-defense">SNSの理由と内訳を読む →</a></div>
+</article>
+<article class="argument-dossier" data-readpoint="平和と権利を重視する理由" data-topic-owner="article9" id="article9-dossier-war">
+<div class="argument-heading">
+<p class="eyebrow">
+    主張の詳説 ／ 平和と権利を重視する理由
+   </p>
+<h4>
+    戦争への懸念と、条文の効果を分ける。
+   </h4>
+</div>
+<div class="argument-logic">
+<h5>
+    制約が弱まることを心配する
+   </h5>
+<p>
+    戦争や権利の制限を心配する声には、将来の活動の拡大を警戒する意見と、現行の制度について述べる主張が含まれます。「起きてほしくないこと」と「その案で起きると確かめられたこと」は、区別が必要です。
+   </p>
+<p>
+    徴兵への懸念を読む場合も、政府が示してきた憲法18条の解釈と、将来を心配する意見を区別します。下の照合記録で確認したのは、過去の政府答弁との一致です。特定の改正案の効果を、すべて確認した記録ではありません。
+   </p>
+<div class="counter-question">
+<h5>
+     相手の立場からの問い
+    </h5>
+<p>
+     どの案の、どの文言が制約を弱めるのか。名称の追加への反対と、活動や権限の拡大への反対を、同じものとして扱ってよいか。
+    </p>
+<a href="#article9-dossier-defense">
+     もう一方の主張を読む →
+    </a>
+</div>
+<div class="argument-document">
+<h5>
+     資料のどこを読む？
+    </h5>
+<p>
+     現行の9条と、追加する条文を比べます。徴兵に関する政府解釈は、別に国会答弁で確かめます。将来の懸念を述べた投稿だけで、現在の制度が変わったとは判断できません。
+    </p>
+<a class="inline-ref" href="#issue-constitutional-amendment-article9">
+     政府答弁と主張の照合記録 ↗
+    </a>
+</div>
+</div>
+<div class="related-sns" data-cav-reason="article9/a9-war">
+<h4>戦争・徴兵・権利制限への懸念</h4><p>97件・この論点の19.2％</p><p>9条を変えると戦争に加わる国になり、徴兵や言論の統制につながると心配する声がほとんどです。自民党の改正草案の条文を挙げて警戒する投稿や、9条が戦後の平和を支えてきたとする投稿があります。9条を変えなくても自衛隊法の改正で足りるという記事を引いて、改正の必要を疑う投稿もあります。</p><a href="#fr-r-constitutional-amendment-article9-a9-war">SNSの理由と内訳を読む →</a></div>
+</article>
+<section class="deep-reading" data-format="diagram" data-format-title="国会の継続と内閣の臨時権限" data-readpoint="非常時の二つの機能を図解" data-topic-owner="emergency" id="emergency-functions">
+<div class="deep-heading">
+<p class="eyebrow">
+    呼び名を分けて読む
+   </p>
+<h3>
+    国会を続ける話と、
+    <br/>
+    内閣の臨時権限の話。
+   </h3>
+<p>
+    ここで見るのは、異なる機能についての提案が同じ資料に載った例です。議論を読むときの出発点は、どちらの仕組みを指しているかです。
+   </p>
+</div>
+<div class="function-origin">
+   非常時に、何を維持するための案か？
+  </div>
+<div class="function-fork">
+<article>
+<span class="branch-label">
+     代表を通じた議論・議決
+    </span>
+<h4>
+     国会の機能を保つ
+    </h4>
+<ul>
+<li>
+      選挙が難しい場合の対応
+     </li>
+<li>
+      参議院の緊急集会との関係
+     </li>
+<li>
+      議員任期の特例など
+     </li>
+</ul>
+<p>
+     選挙を行う機会と、議会を続ける必要性をどう両立するか。
+    </p>
+<a href="#emergency-dossier-necessity">
+     必要性をめぐる主張へ →
+    </a>
+</article>
+<article>
+<span class="branch-label">
+     通常の手続きを待てない場面
+    </span>
+<h4>
+     内閣の臨時権限を定める
+    </h4>
+<ul>
+<li>
+      法律と同一の効力を持つ緊急政令
+     </li>
+<li>
+      緊急の財政上の処分
+     </li>
+<li>
+      国会の事後承認など
+     </li>
+</ul>
+<p>
+     迅速な対応を認める条件と、権限への歯止めをどう定めるか。
+    </p>
+<a href="#emergency-dossier-control">
+     権限への懸念を読む →
+    </a>
+</article>
+</div>
+<p class="source-line">
+   2026年5月の議論用資料の要点を編集部が図解。
+   <a class="inline-ref" href="#emergency-document-2">
+    本文1〜3ページと論点を確認 ↗
+   </a>
+</p>
+</section>
+<section class="deep-reading" data-format="table" data-format-title="非常時の制度・提案を三つの文書で比較" data-readpoint="現行・2018年・2026年を比較" data-topic-owner="emergency" id="emergency-comparison">
+<div class="deep-heading">
+<p class="eyebrow">
+    年と位置づけで比べる
+   </p>
+<h3>
+    同じ案として、ひとまとめにしない。
+   </h3>
+<p>
+    現在の制度と、二つの時期の文書を対照させます。どの提案を指すかで、確かめる条件が変わります。
+   </p>
+</div>
+<div class="responsive-table">
+<table class="reading-table" id="emergency-document-comparison">
+<caption>
+     三つの文書の違い
+    </caption>
+<thead>
+<tr>
+<th scope="col">
+       文書
+      </th>
+<th scope="col">
+       対象・仕組み
+      </th>
+<th scope="col">
+       承認・期間などの読みどころ
+      </th>
+<th scope="col">
+       位置づけ・原典
+      </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th scope="row">
+       現行の憲法54条
+      </th>
+<td data-label="対象・仕組み">
+       衆議院の解散中に、内閣が参議院の緊急集会を求められる。
+      </td>
+<td data-label="承認・期間などの読みどころ">
+       措置は臨時。次の国会開会後10日以内に衆議院の同意がなければ効力を失う。
+      </td>
+<td data-label="位置づけ・原典">
+       現在の条文。
+       <a class="inline-ref" href="#emergency-document-1">
+        第54条 ↗
+       </a>
+</td>
+</tr>
+<tr>
+<th scope="row">
+       2018年の自民党の提案
+      </th>
+<td data-label="対象・仕組み">
+       大規模災害を想定した政令の制定と、議員任期の特例を提案。
+      </td>
+<td data-label="承認・期間などの読みどころ">
+       政令を制定した内閣は速やかに国会の承認を求める。任期特例にも議決要件を置く。
+      </td>
+<td data-label="位置づけ・原典">
+       政党の条文イメージ。
+       <a class="inline-ref" href="#emergency-document-3">
+        3ページ ↗
+       </a>
+</td>
+</tr>
+<tr>
+<th scope="row">
+       2026年5月の議論用資料
+      </th>
+<td data-label="対象・仕組み">
+       選挙・任期の特例、オンライン国会、緊急政令・緊急財政処分などを整理。
+      </td>
+<td data-label="承認・期間などの読みどころ">
+       選択肢・空欄を含む。措置ごとに認定・承認・期間などを読む。
+      </td>
+<td data-label="位置づけ・原典">
+       今後の議論のための資料。
+       <a class="inline-ref" href="#emergency-document-2">
+        本文1〜3ページ ↗
+       </a>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p class="plain-note">
+   この表は、掲載した資料の要点を比較したものです。政党案の全体や最新の合意状況を網羅していません。
+  </p>
+</section>
+<div class="condition-grid" data-readpoint="権限を確かめる3つの条件" data-topic-owner="emergency" id="emergency-conditions">
+<article>
+<span>
+    01 ／ 決める人
+   </span>
+<h3>
+    誰が認める？
+   </h3>
+<p>
+    発動の判断と、国会の承認を誰が担うか。事前承認と事後承認の条件を確かめます。
+   </p>
+</article>
+<article>
+<span>
+    02 ／ 続ける条件
+   </span>
+<h3>
+    いつまで続く？
+   </h3>
+<p>
+    期間の上限、延長の回数、解除する条件を確かめます。空欄の部分は未確定です。
+   </p>
+</article>
+<article>
+<span>
+    03 ／ 確かめる仕組み
+   </span>
+<h3>
+    誰が検証する？
+   </h3>
+<p>
+    国会や司法の関与、記録の公開、事後の検証をどう定めるかが論点になります。
+   </p>
+</article>
+</div>
+<article class="argument-dossier" data-readpoint="国会機能の維持を重視する理由" data-topic-owner="emergency" id="emergency-dossier-necessity">
+<div class="argument-heading">
+<p class="eyebrow">
+    主張の詳説 ／ 国会機能の維持を重視する理由
+   </p>
+<h4>
+    選挙ができないとき、どう議会を保つ？
+   </h4>
+</div>
+<div class="argument-logic">
+<h5>
+    備えの必要性と、既存制度の範囲
+   </h5>
+<p>
+    国会機能を維持する案は、通常どおり選挙を実施できない場面を想定しています。どの程度の地域でどのくらいの期間、選挙が難しい場合かを考える必要があります。災害への備えという目的だけで、必要な制度の範囲が決まるわけではありません。
+   </p>
+<p>
+    現行憲法54条には、衆議院の解散中に参議院の緊急集会を求める規定があります。2026年5月の資料では、この仕組みと議員任期の特例をどう使い分けるかも論点の一つです。新しい規定の必要性は、既存制度で対応できる範囲と合わせて検討します。
+   </p>
+<div class="counter-question">
+<h5>
+     相手の立場からの問い
+    </h5>
+<p>
+     既存の緊急集会では足りないのは、具体的にどの場面か。任期を延ばす場合に、有権者が代表を選ぶ機会をどう確保するか。
+    </p>
+<a href="#emergency-dossier-control">
+     もう一方の主張を読む →
+    </a>
+</div>
+<div class="argument-document">
+<h5>
+     資料のどこを読む？
+    </h5>
+<p>
+     憲法54条の現行規定と、議論用資料にある使い分けの説明を比べます。下の「既存制度と条項の必要性」は、必要だという意見と不要だという意見の両方を含む分類です。
+    </p>
+<a class="inline-ref" href="#emergency-document-1">
+     現行54条と議論用資料 ↗
+    </a>
+</div>
+</div>
+<div class="related-sns" data-cav-reason="emergency/em-necessity">
+<h4>既存制度と条項の必要性</h4><p>46件・この論点の11.6％</p><p>条項は要らないとする声が大半です。参議院の緊急集会やいまの法律で対応できるという投稿や、大震災やコロナ禍も条項なしで乗り切ったという投稿があります。一方で、治安の維持やコロナ禍の経験から、条項は必要だとする声も少しあります。</p><a href="#fr-r-constitutional-amendment-emergency-em-necessity">SNSの理由と内訳を読む →</a></div>
+</article>
+<article class="argument-dossier" data-readpoint="権限への歯止めを重視する理由" data-topic-owner="emergency" id="emergency-dossier-control">
+<div class="argument-heading">
+<p class="eyebrow">
+    主張の詳説 ／ 権限への歯止めを重視する理由
+   </p>
+<h4>
+    非常時にも、権限を戻せるのか。
+   </h4>
+</div>
+<div class="argument-logic">
+<h5>
+    一時的な措置が続くことを警戒する
+   </h5>
+<p>
+    非常時の対応を認める場合でも、誰が始めて延長を判断し、いつ終えるかが問われます。国会を続ける仕組みと、内閣に特別な権限を与える仕組みでは、確かめる条件も異なります。呼び名が同じでも、対象となる案の特定が必要です。
+   </p>
+<p>
+    2026年5月の議論用資料は、選挙が難しい事態の認定や国会承認などを整理したものです。一方で、多数要件に選択肢があり、期間には空欄が残ります。歯止めが十分かを考えるには、未確定の箇所も含めて読む必要があります。
+   </p>
+<div class="counter-question">
+<h5>
+     相手の立場からの問い
+    </h5>
+<p>
+     広い地域で長く選挙ができない場合に、今の仕組みで国会をどう続けるのか。権限を抑える条件と、機能を維持する方法を両方説明できるか。
+    </p>
+<a href="#emergency-dossier-necessity">
+     もう一方の主張を読む →
+    </a>
+</div>
+<div class="argument-document">
+<h5>
+     資料のどこを読む？
+    </h5>
+<p>
+     議論用資料の本文2ページ以降で、認定・承認・期間の条件を読みます。空欄を決定済みの数字に置き換えたり、この資料を成立した改正条文として扱ったりしないことが必要です。
+    </p>
+<a class="inline-ref" href="#emergency-document-2">
+     2026年5月の議論用資料 ↗
+    </a>
+</div>
+</div>
+<div class="related-sns" data-cav-reason="emergency/em-control">
+<h4>権限集中と自由への制約</h4><p>102件・この論点の25.6％</p><p>条項ができると権限が内閣に集まり、人権や自由がたやすく制限されると心配する声です。独裁につながるとして、過去の外国の例を挙げる投稿が多くあります。国会機能維持条項と名前を変えても、中身は同じだと指摘する投稿もあります。</p><a href="#fr-r-constitutional-amendment-emergency-em-control">SNSの理由と内訳を読む →</a></div>
+</article>
+<div aria-labelledby="vote-title" class="vote-lab" data-format="diagram" data-format-title="仮の票数で「過半数」の分母を図解" data-readpoint="仮の票数で承認条件を確認" data-topic-owner="referendum" id="referendum-calculation">
+<div>
+<p class="eyebrow">
+    数字を動かして確かめる
+   </p>
+<h3 id="vote-title">
+    仮の票数で、
+    <br/>
+    承認の条件を確かめる。
+   </h3>
+<p>
+    賛成の割合は、入力した票数から計算した値です。実際の投票結果や世論調査ではありません。
+   </p>
+</div>
+<div aria-labelledby="ballot-diagram-title" class="ballot-diagram">
+<h4 id="ballot-diagram-title">
+    承認の割合に入れる票、入れない票
+   </h4>
+<div class="valid-votes">
+<p>
+     計算の分母は、賛成票と反対票の合計
+    </p>
+<div aria-label="賛成51票、反対49票" class="ballot-bars" id="ballot-bars" role="img">
+<span id="diagram-yes">
+      賛成 51
+     </span>
+<span id="diagram-no">
+      反対 49
+     </span>
+</div>
+</div>
+<div class="invalid-votes">
+<span>
+     無効票
+    </span>
+<b id="diagram-invalid">
+     10票
+    </b>
+<span>
+     この割合の計算に含めない
+    </span>
+</div>
+</div>
+<div class="vote-fields">
+<label>
+    賛成票
+    <input id="vote-yes" inputmode="numeric" max="1000000000" min="0" step="1" type="number" value="51"/>
+</label>
+<label>
+    反対票
+    <input id="vote-no" inputmode="numeric" max="1000000000" min="0" step="1" type="number" value="49"/>
+</label>
+<label>
+    無効票
+    <input id="vote-invalid" inputmode="numeric" max="1000000000" min="0" step="1" type="number" value="10"/>
+</label>
+</div>
+<div aria-live="polite" id="cav-vote-result" role="status">
+</div>
+<p class="plain-note">
+   承認には、賛成が50％を超える必要があります。無効票を変えても、賛成と反対の割合は変わりません。
+   <a href="#referendum-sources">
+    ［3］根拠となる条文
+   </a>
+</p>
+</div>
+<section class="deep-reading" data-format="table" data-format-title="同数・1票差・無効票を比べる" data-readpoint="三つの票数例を比較" data-topic-owner="referendum" id="referendum-examples">
+<div class="deep-heading">
+<p class="eyebrow">
+    似た数字を、並べて確かめる
+   </p>
+<h3>
+    「半分」と「半分を超える」の違い。
+   </h3>
+<p>
+    賛成と反対の票数が同じ場合は、過半数に届きません。無効票だけが増えても、賛成と反対の割合は変わらない計算です。
+   </p>
+</div>
+<div class="responsive-table">
+<table class="reading-table" id="vote-examples">
+<caption>
+     承認条件を理解するための仮の票数例
+    </caption>
+<thead>
+<tr>
+<th scope="col">
+       場合
+      </th>
+<th scope="col">
+       賛成
+      </th>
+<th scope="col">
+       反対
+      </th>
+<th scope="col">
+       無効
+      </th>
+<th scope="col">
+       計算結果
+      </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th scope="row">
+       賛否が同数
+      </th>
+<td data-label="賛成">
+       50票
+      </td>
+<td data-label="反対">
+       50票
+      </td>
+<td data-label="無効">
+       0票
+      </td>
+<td data-label="計算結果">
+       50.0％・条件を満たさない
+      </td>
+</tr>
+<tr>
+<th scope="row">
+       賛成が1票多い
+      </th>
+<td data-label="賛成">
+       51票
+      </td>
+<td data-label="反対">
+       50票
+      </td>
+<td data-label="無効">
+       0票
+      </td>
+<td data-label="計算結果">
+       約50.5％・条件を満たす
+      </td>
+</tr>
+<tr>
+<th scope="row">
+       無効票が増えた場合
+      </th>
+<td data-label="賛成">
+       51票
+      </td>
+<td data-label="反対">
+       50票
+      </td>
+<td data-label="無効">
+       100票
+      </td>
+<td data-label="計算結果">
+       約50.5％・条件を満たす
+      </td>
+</tr>
+</tbody>
+</table>
+</div>
+<p class="plain-note">
+   すべて仮の例です。実際の投票結果やSNSの集計値ではありません。
+  </p>
+<a class="text-route" href="#referendum-calculation">
+   票数を変えて確かめる ↑
+  </a>
+</section>
+<section class="deep-reading" data-format="table" data-format-title="判断材料の出し手・目的・確かめ方" data-readpoint="資料・広告・SNSを比較" data-topic-owner="referendum" id="referendum-information">
+<div class="deep-heading">
+<p class="eyebrow">
+    判断材料の読み分け
+   </p>
+<h3>
+    届いた情報は、誰が出したもの？
+   </h3>
+<p>
+    案の原文、賛否を訴える広告、SNSの投稿。それぞれで確認する点が違います。
+   </p>
+</div>
+<div class="responsive-table">
+<table class="reading-table" id="information-comparison">
+<caption>
+     情報の種類ごとに確かめる点
+    </caption>
+<thead>
+<tr>
+<th scope="col">
+       種類
+      </th>
+<th scope="col">
+       読む目的
+      </th>
+<th scope="col">
+       先に確かめる点
+      </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th scope="row">
+       案の原文・公的な資料
+      </th>
+<td data-label="読む目的">
+       何が提案され、何が未確定かを読む。
+      </td>
+<td data-label="先に確かめる点">
+       作成した組織・日付・文書の位置づけ。
+       <a class="inline-ref" href="#referendum-sources">
+        原典の入口 ↗
+       </a>
+</td>
+</tr>
+<tr>
+<th scope="row">
+       広告・賛否を訴える発信
+      </th>
+<td data-label="読む目的">
+       何を実現したいか、何を心配しているかを読む。
+      </td>
+<td data-label="先に確かめる点">
+       発信者・根拠の資料・どの案への主張か。
+      </td>
+</tr>
+<tr>
+<th scope="row">
+       SNSの投稿・その要約
+      </th>
+<td data-label="読む目的">
+       どんな理由や疑問が語られているかを探す。
+      </td>
+<td data-label="先に確かめる点">
+       投稿の文脈と原文。件数を世論と読み替えない。
+       <a data-cav-target="referendum/ref-advertising" href="#fr-r-constitutional-amendment-referendum-ref-advertising">
+        広告をめぐるSNSの理由 →
+       </a>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p class="plain-note">
+   情報を読むための編集部の整理です。広告規制の最新の条文や全媒体のルールを一覧にした表ではありません。
+  </p>
+</section>
+<section class="deep-reading" data-format="photo" data-format-title="投票所・投票箱・出口調査の写真" data-readpoint="投票と調査を写真で読む" data-topic-owner="referendum" id="referendum-photo-story">
+<div class="deep-heading">
+<p class="eyebrow">
+    投票の場と、声を集める場
+   </p>
+<h3>
+    投票、調査、SNS。
+    <br/>
+    集めているものが違う。
+   </h3>
+</div>
+<div class="photo-story-grid">
+<div>
+<figure class="editor-photo">
+<a href="images/constitutional-visual/ballot-box.webp" rel="noopener" target="_blank">
+<img alt="大阪市長選挙の投票箱（2005年11月）。憲法改正の国民投票の写真ではありません。" decoding="async" loading="lazy" src="images/constitutional-visual/ballot-box.webp"/>
+</a>
+<figcaption>
+      大阪市長選挙の投票箱（2005年11月）。憲法改正の国民投票の写真ではありません。
+      <span class="credit-short">
+       MASA ／
+       <a href="https://commons.wikimedia.org/wiki/File:Osaka_Mayoral_Election_ballot_box_20051127.jpg" rel="noopener" target="_blank">
+        写真の原典
+       </a>
+<a href="https://creativecommons.org/licenses/by-sa/3.0/" rel="noopener" target="_blank">
+        CC BY-SA 3.0
+       </a>
+       ／ WebPへの形式変換、879×684への縮小。表示枠による切り抜き。
+      </span>
+</figcaption>
+</figure>
+<h4>
+     票を投じる
+    </h4>
+<p>
+     投票箱に入れる票は、制度で定めた投票の手続きに沿って扱われます。改正案への承認条件は、条文で確認します。
+    </p>
+</div>
+<div>
+<figure class="editor-photo">
+<a href="images/constitutional-visual/exit-poll.webp" rel="noopener" target="_blank">
+<img alt="2014年の衆議院選挙における出口調査。東京都文京区で撮影。憲法改正の国民投票の写真ではありません。" decoding="async" loading="lazy" src="images/constitutional-visual/exit-poll.webp"/>
+</a>
+<figcaption>
+      2014年の衆議院選挙における出口調査。東京都文京区で撮影。憲法改正の国民投票の写真ではありません。
+      <span class="credit-short">
+       Whym ／
+       <a href="https://commons.wikimedia.org/wiki/File:Exit_poll_Tokyo_2014.JPG" rel="noopener" target="_blank">
+        写真の原典
+       </a>
+<a href="https://creativecommons.org/licenses/by-sa/3.0" rel="noopener" target="_blank">
+        CC BY-SA 3.0
+       </a>
+       ／ WebPへの形式変換、1000×755への縮小。表示枠による切り抜き。
+      </span>
+</figcaption>
+</figure>
+<h4>
+     調査に答える
+    </h4>
+<p>
+     写真は選挙の出口調査です。調査への回答と、投票そのものは別の記録です。SNSの投稿も、国民全体から無作為に集めた票ではありません。
+    </p>
+</div>
+</div>
+<div class="photo-wide-strip">
+<figure class="editor-photo">
+<a href="images/constitutional-visual/polling-2024.webp" rel="noopener" target="_blank">
+<img alt="衆議院選挙の投票所となった熊谷市立市民ホール（2024年10月27日）。憲法改正の国民投票の写真ではありません。" decoding="async" loading="lazy" src="images/constitutional-visual/polling-2024.webp"/>
+</a>
+<figcaption>
+     衆議院選挙の投票所となった熊谷市立市民ホール（2024年10月27日）。憲法改正の国民投票の写真ではありません。
+     <span class="credit-short">
+      Nori Norisa ／
+      <a href="https://commons.wikimedia.org/wiki/File:Polling_station,_Kumagaya_City_Civic_Hall_-_Oct_27,_2024.jpg" rel="noopener" target="_blank">
+       写真の原典
+      </a>
+<a href="https://creativecommons.org/licenses/by/2.0" rel="noopener" target="_blank">
+       CC BY 2.0
+      </a>
+      ／ WebPへの形式変換、1500×921への縮小。表示枠による切り抜き。
+     </span>
+</figcaption>
+</figure>
+<div>
+<h4>
+     投票の機会と、情報を得る機会。
+    </h4>
+<p>
+     会場に行けること、手続きが分かること、案の違いを理解できること。国民投票を考えるときも、それぞれを確かめたい条件です。
+    </p>
+<a href="#referendum-dossier-advertising">
+     情報の公平さをめぐる主張へ →
+    </a>
+</div>
+</div>
+</section>
+<article class="argument-dossier" data-readpoint="国民による判断を重視する理由" data-topic-owner="referendum" id="referendum-dossier-participation">
+<div class="argument-heading">
+<p class="eyebrow">
+    主張の詳説 ／ 国民による判断を重視する理由
+   </p>
+<h4>
+    投票の機会を、どう判断につなげる？
+   </h4>
+</div>
+<div class="argument-logic">
+<h5>
+    一人ひとりが意思を示す
+   </h5>
+<p>
+    国民が直接判断する機会を重視する意見は、改正への賛成だけに限られません。収集した投稿には、国民投票で反対の意思を示そうという呼びかけもあります。「投票に参加する」と「改正案に賛成する」は、別の意思表示です。
+   </p>
+<p>
+    憲法96条は、国会の発議に加えて国民の承認を必要としています。ただし、承認の条件を知っていることと、個別の改正案を十分に理解できることは別です。案の中身、投票の条件、判断材料の順に確かめる読み方もできます。
+   </p>
+<div class="counter-question">
+<h5>
+     相手の立場からの問い
+    </h5>
+<p>
+     投票までに、誰がどのように案の違いを説明するのか。参加を呼びかけるだけで、情報の不足や偏りへの懸念に答えられるか。
+    </p>
+<a href="#referendum-dossier-advertising">
+     もう一方の主張を読む →
+    </a>
+</div>
+<div class="argument-document">
+<h5>
+     資料のどこを読む？
+    </h5>
+<p>
+     憲法96条で承認の手続きを確認し、仮の票数で計算の分母を確かめます。投票参加の分類に含まれる立場は、慎重・反対・改正推進・中立・手続き重視です。
+    </p>
+<a class="inline-ref" href="#referendum-calculation">
+     仮の票数で承認条件を確認 ↗
+    </a>
+</div>
+</div>
+<div class="related-sns" data-cav-reason="referendum/ref-participation">
+<h4>国民投票への参加と意思表示</h4><p>32件・この論点の9.5％</p><p>国民投票になったら必ず投票に行こうという呼びかけが多く、反対票を入れるよう勧める投稿が目立ちます。改正を進めたい側に見られるのは、反対なら発議を止めるより投票で示せばよいという声です。賛否を呼びかけるより、仕組みを正しく伝えることが大事だという声もあります。</p><a href="#fr-r-constitutional-amendment-referendum-ref-participation">SNSの理由と内訳を読む →</a></div>
+</article>
+<article class="argument-dossier" data-readpoint="情報の公平さを重視する理由" data-topic-owner="referendum" id="referendum-dossier-advertising">
+<div class="argument-heading">
+<p class="eyebrow">
+    主張の詳説 ／ 情報の公平さを重視する理由
+   </p>
+<h4>
+    判断材料は、同じように届くのか。
+   </h4>
+</div>
+<div class="argument-logic">
+<h5>
+    広告や資金の差を心配する
+   </h5>
+<p>
+    投票できることと、判断に必要な情報を得られることは、別々に確かめたい条件です。SNSの投稿には、広告に使える資金の違いが発信量の差になると心配する声があります。これは集めた投稿の意見であり、広告の効果を測った調査結果ではありません。
+   </p>
+<p>
+    この懸念を具体的に読むには、テレビCM・ネット広告・公的な広報・報道のどれについての話かを分けます。「情報が偏っている」という主張でも、誰が出すどの情報を指すかによって、確かめるルールや資料が変わります。
+   </p>
+<div class="counter-question">
+<h5>
+     相手の立場からの問い
+    </h5>
+<p>
+     公平さを何で判断するのか。資金・掲載量・接触した人の数・内容の正確さのうち、どの問題にどんなルールを求めるのか。
+    </p>
+<a href="#referendum-dossier-participation">
+     もう一方の主張を読む →
+    </a>
+</div>
+<div class="argument-document">
+<h5>
+     資料のどこを読む？
+    </h5>
+<p>
+     投票の承認条件を定める条文だけでは、情報の公平さは判定できません。投稿が対象にする広告や広報を特定し、関連する規定へ進みます。投票ルールの原典と、投稿の要約を分けて読めます。
+    </p>
+<a class="inline-ref" href="#referendum-sources">
+     投票の法律と参照条文 ↗
+    </a>
+</div>
+</div>
+<div class="related-sns" data-cav-reason="referendum/ref-advertising">
+<h4>広告・資金力と情報の公平さ</h4><p>82件・この論点の24.4％</p><p>テレビCMやネット広告の規制が弱く、資金の多い側が有利になると心配する声がほとんどです。政府の広報予算が大きく増えることを、改正に向けた宣伝に使われるのではと警戒する投稿もあります。手続きを重んじる立場から、広告の規制を強めるよう求める声もあります。</p><a href="#fr-r-constitutional-amendment-referendum-ref-advertising">SNSの理由と内訳を読む →</a></div>
+</article>
+<section class="section" data-format="diagram" data-format-title="国会の発議から国民投票・公布まで" data-readpoint="改正の手続き" data-section="憲法が変わるまで" id="process">
+<div class="section-head">
+<div>
+<p class="section-number">
+     制度を知る
+    </p>
+<h3>
+     憲法が変わるまでの、4段階。
+    </h3>
+<p class="section-intro">
+     国会での議論と、国民による承認。改正には両方の手続きが必要です。
+    </p>
+</div>
+</div>
+<div class="process-layout">
+<ol class="process-steps procedure-diagram">
+<li>
+<h3>
+      国会で議論し、原案を出す
+     </h3>
+<p>
+      憲法審査会で審査します。議員が原案を出すには、衆議院100人以上、参議院50人以上の賛成が必要です。
+     </p>
+</li>
+<li>
+<h3>
+<span class="threshold">
+       2/3
+      </span>
+      以上の賛成で、国会が発議
+     </h3>
+<p>
+      衆議院と参議院、それぞれの総議員が母数です。内容の関連する事項ごとに分けて発議します。
+     </p>
+</li>
+<li>
+<h3>
+      国民投票で、改正案を選ぶ
+     </h3>
+<p>
+      国会の発議から60日以後180日以内に実施。18歳以上の日本国民に投票権があります。
+     </p>
+</li>
+<li>
+<h3>
+<span class="threshold">
+       1/2
+      </span>
+      を超える賛成で、承認
+     </h3>
+<p>
+      賛成と反対を合わせた票の半分を超える賛成が必要です。その後、天皇が国民の名で公布します。
+     </p>
+</li>
+</ol>
+<figure class="process-photo">
+<img alt="衆議院本会議場の議長席と演壇。誰も着席していない議場の写真" height="960" loading="lazy" src="images/constitutional-visual/diet-chamber.webp" width="1280"/>
+<figcaption>
+     衆議院本会議場の施設写真。2007年5月撮影。
+     <br/>
+     写真：
+     <a href="https://commons.wikimedia.org/wiki/File:国会議事堂_衆議院議場-2.jpg" rel="noopener" target="_blank">
+      DS80s
+     </a>
+     ／
+     <a href="https://creativecommons.org/licenses/by-sa/3.0/" rel="noopener" target="_blank">
+      CC BY-SA 3.0
+     </a>
+     ／ 表示枠に合わせて切り抜き
+    </figcaption>
+<p class="photo-intro">
+     憲法の条文と、
+     <br/>
+     投票の法律は別のもの。
+    </p>
+<p class="body-small">
+     国民投票法は投票の手続きを定める法律です。その法律が改正されても、それだけで憲法本文は変わりません。
+    </p>
+</figure>
+</div>
+<p class="source-line">
+   制度の出典：
+   <a href="https://www.shugiin.go.jp/internet/itdb_annai.nsf/html/statics/shiryo/dl-constitution.htm" rel="noopener" target="_blank">
+    日本国憲法 第96条
+   </a>
+<a href="https://laws.e-gov.go.jp/law/419AC1000000051" rel="noopener" target="_blank">
+    国民投票法 第2・3・126条
+   </a>
+<a href="https://www.kenpoushinsa.sangiin.go.jp/gaiyo/kokkaihou.html" rel="noopener" target="_blank">
+    国会法 第68条の2・3
+   </a>
+</p>
+</section>
+<section class="section" data-format="diagram" data-format-title="収集した投稿から、論点・理由分類まで" data-readpoint="SNS集計の範囲を図解" id="sample-flow">
+<div class="section-head">
+<div>
+<p class="section-number">
+     数を見る前に、集計の範囲を知る
+    </p>
+<h3>
+     この地図に入っている声。
+    </h3>
+<p class="section-intro">
+     検索で集めた公開投稿を、意見・論点・理由に整理した記録です。世論調査の支持率や、国民投票の見通しとしては読めません。
+    </p>
+</div>
+</div>
+<ol class="sample-steps">
+<li>
+<span>
+     収集した公開投稿
+    </span>
+<b>
+<span data-cav-count="collected">2,895</span>
+<small>
+      件
+     </small>
+</b>
+</li>
+<li>
+<span>
+     意見を含む投稿
+    </span>
+<b>
+<span data-cav-count="opinions">2,548</span>
+<small>
+      件
+     </small>
+</b>
+</li>
+<li>
+<span>
+     何についての話か
+    </span>
+<b>
+<span data-cav-count="issues">7</span>
+<small>
+      区分
+     </small>
+</b>
+</li>
+<li>
+<span>
+     どんな理由か
+    </span>
+<b>
+<span data-cav-count="reasons">60</span>
+<small>
+      分類
+     </small>
+</b>
+</li>
+</ol>
+<div class="sample-issues" data-cav-issues="">
+<h4>論点ごとの意見件数</h4><ul class="cav-bars"><li><a href="#issue-constitutional-amendment-general">改憲全般</a><span aria-hidden="true" class="cav-bar"><i style="width:35.9%"></i></span><b>914件</b></li><li><a href="#issue-constitutional-amendment-article9">9条・自衛隊</a><span aria-hidden="true" class="cav-bar"><i style="width:19.9%"></i></span><b>506件</b></li><li><a href="#issue-constitutional-amendment-emergency">緊急事態条項</a><span aria-hidden="true" class="cav-bar"><i style="width:15.6%"></i></span><b>398件</b></li><li><a href="#issue-constitutional-amendment-referendum">国民投票・広告</a><span aria-hidden="true" class="cav-bar"><i style="width:13.2%"></i></span><b>336件</b></li><li><a href="#issue-constitutional-amendment-procedure">政党・発議手続き</a><span aria-hidden="true" class="cav-bar"><i style="width:8.7%"></i></span><b>221件</b></li><li><a href="#issue-constitutional-amendment-deliberation">情報・議論の質</a><span aria-hidden="true" class="cav-bar"><i style="width:6.1%"></i></span><b>155件</b></li><li><a href="#issue-constitutional-amendment-other">その他</a><span aria-hidden="true" class="cav-bar"><i style="width:0.7%"></i></span><b>18件</b></li></ul></div>
+<div class="diagram-takeaway">
+<h4>
+    件数の大きさと、正しさは分けて読む。
+   </h4>
+<p>
+    検索語や収集時期によって、集まる投稿には偏りがあります。同じ理由分類にも複数の立場が含まれます。
+   </p>
+<a href="#cap-method">
+    収集期間と編集方法を読む →
+   </a>
+</div>
+</section>
+<section class="deep-reading article-sources" data-readpoint="原典と確認日" data-topic-owner="article9" id="article9-sources">
+<div class="deep-heading">
+<p class="eyebrow">
+    原典に戻る
+   </p>
+<h3>
+    この論点の、出発点になる資料。
+   </h3>
+</div>
+<ol class="article-source-list">
+<li id="article9-document-1">
+<span class="document-kind">
+     資料1 ／ 現行条文
+    </span>
+<h4>
+<a href="https://www.shugiin.go.jp/internet/itdb_annai.nsf/html/statics/shiryo/dl-constitution.htm" rel="noopener" target="_blank">
+      日本国憲法 第9条 ↗
+     </a>
+</h4>
+<p>
+     戦争の放棄と戦力の不保持などを定める条文。提案と比べるときの起点です。
+    </p>
+</li>
+<li id="article9-document-2">
+<span class="document-kind">
+     資料2 ／ 政党の提案・2018年
+    </span>
+<h4>
+<a href="https://storage.jimin.jp/pdf/constitution/news/20180326_01.pdf" rel="noopener" target="_blank">
+      自民党の条文イメージ ↗
+     </a>
+</h4>
+<p>
+     9条1項・2項を維持して自衛隊を加える提案。現行条文との違いを原文で確認できます。
+    </p>
+</li>
+</ol>
+</section>
+<section class="deep-reading article-sources" data-readpoint="原典と確認日" data-topic-owner="emergency" id="emergency-sources">
+<div class="deep-heading">
+<p class="eyebrow">
+    原典に戻る
+   </p>
+<h3>
+    この論点の、出発点になる資料。
+   </h3>
+</div>
+<ol class="article-source-list">
+<li id="emergency-document-1">
+<span class="document-kind">
+     資料1 ／ 現行条文
+    </span>
+<h4>
+<a href="https://www.shugiin.go.jp/internet/itdb_annai.nsf/html/statics/shiryo/dl-constitution.htm" rel="noopener" target="_blank">
+      日本国憲法 第54条 ↗
+     </a>
+</h4>
+<p>
+     衆議院の解散と参議院の緊急集会に関する規定。現行の仕組みを確認できます。
+    </p>
+</li>
+<li id="emergency-document-2">
+<span class="document-kind">
+     資料2 ／ 議論用資料・2026年5月14日
+    </span>
+<h4>
+<a href="https://www.shugiin.go.jp/internet/itdb_kenpou.nsf/html/kenpou/2210514housei_kenshin-siryou.pdf/$File/2210514housei_kenshin-siryou.pdf" rel="noopener" target="_blank">
+      「緊急事態条項」のイメージ（案） ↗
+     </a>
+</h4>
+<p>
+     国会機能の維持に関する案と、議論のための選択肢・空欄を含む資料です。成立した条文ではありません。
+    </p>
+</li>
+<li id="emergency-document-3">
+<span class="document-kind">
+     資料3 ／ 政党の提案・2018年
+    </span>
+<h4>
+<a href="https://storage.jimin.jp/pdf/constitution/news/20180326_01.pdf" rel="noopener" target="_blank">
+      自民党の緊急事態対応の条文イメージ ↗
+     </a>
+</h4>
+<p>
+     3ページの73条の2と64条の2。政令を制定するための規定と、議員任期の特例を読むための原文です。
+    </p>
+</li>
+</ol>
+</section>
+<section class="deep-reading article-sources" data-readpoint="原典と確認日" data-topic-owner="referendum" id="referendum-sources">
+<div class="deep-heading">
+<p class="eyebrow">
+    原典に戻る
+   </p>
+<h3>
+    この論点の、出発点になる資料。
+   </h3>
+</div>
+<ol class="article-source-list">
+<li id="referendum-document-1">
+<span class="document-kind">
+     資料1 ／ 現行条文
+    </span>
+<h4>
+<a href="https://www.shugiin.go.jp/internet/itdb_annai.nsf/html/statics/shiryo/dl-constitution.htm" rel="noopener" target="_blank">
+      日本国憲法 第96条 ↗
+     </a>
+</h4>
+<p>
+     国会の発議と国民の承認を必要とする、憲法改正の基本手続きです。
+    </p>
+</li>
+<li id="referendum-document-2">
+<span class="document-kind">
+     資料2 ／ 投票の法律
+    </span>
+<h4>
+<a href="https://laws.e-gov.go.jp/law/419AC1000000051" rel="noopener" target="_blank">
+      日本国憲法の改正手続に関する法律 ↗
+     </a>
+</h4>
+<p>
+     投票の基本条件を定める法律。最新の条文と改正履歴はe-Govで確認できます。
+    </p>
+</li>
+<li id="referendum-document-3">
+<span class="document-kind">
+     資料3 ／ 国会掲載の参照条文
+    </span>
+<h4>
+<a href="https://www.shugiin.go.jp/internet/itdb_kenpou.nsf/html/kenpou/tetsuzuki.htm" rel="noopener" target="_blank">
+      衆議院憲法審査会・改正手続 ↗
+     </a>
+</h4>
+<p>
+     承認条件などを読むための参照条文。法律全体の最新改正はe-Govで確認します。
+    </p>
+</li>
+</ol>
+</section>
+<section data-format="photo" data-readpoint="写真・資料" id="gallery">
+<h3>
+   写真・資料と出典
+  </h3>
+<div class="cav-photos">
+<figure>
+<a href="images/constitutional-visual/diet-front.webp" rel="noopener" target="_blank">
+<img alt="国会議事堂の正面（2013年6月1日）" loading="lazy" src="images/constitutional-visual/diet-front.webp"/>
+</a>
+<figcaption>
+     国会議事堂の正面（2013年6月1日） Douglas Paul Perkins ／
+     <a href="https://commons.wikimedia.org/wiki/File:Tokyo_Diet_Building_2.jpg" rel="noopener" target="_blank">
+      原典
+     </a>
+<a href="https://creativecommons.org/licenses/by/3.0/" rel="noopener" target="_blank">
+      CC BY 3.0
+     </a>
+     ／ 1600×1200への縮小、WebPへの形式変換、表示枠による切り抜き
+    </figcaption>
+</figure>
+<figure>
+<a href="images/constitutional-visual/diet-chamber.webp" rel="noopener" target="_blank">
+<img alt="衆議院本会議場の議長席と演壇（2007年5月）" loading="lazy" src="images/constitutional-visual/diet-chamber.webp"/>
+</a>
+<figcaption>
+     衆議院本会議場の議長席と演壇（2007年5月） DS80s ／
+     <a href="https://commons.wikimedia.org/wiki/File:国会議事堂_衆議院議場-2.jpg" rel="noopener" target="_blank">
+      原典
+     </a>
+<a href="https://creativecommons.org/licenses/by-sa/3.0/" rel="noopener" target="_blank">
+      CC BY-SA 3.0
+     </a>
+     ／ WebPへの形式変換、表示枠に合わせた切り抜き。 加工画像も同じライセンスです。
+    </figcaption>
+</figure>
+<figure>
+<a href="images/constitutional-visual/constitution.webp" rel="noopener" target="_blank">
+<img alt="日本国憲法の原本。上諭、御名御璽、大臣副署を並べた資料画像。" loading="lazy" src="images/constitutional-visual/constitution.webp"/>
+</a>
+<figcaption>
+     日本国憲法の原本。上諭、御名御璽、大臣副署を並べた資料画像。 The government of Japan ／
+     <a href="https://commons.wikimedia.org/wiki/File:Constitution_of_Japan_original_copy.jpg" rel="noopener" target="_blank">
+      原典
+     </a>
+<a href="https://commons.wikimedia.org/wiki/File:Constitution_of_Japan_original_copy.jpg" rel="noopener" target="_blank">
+      Public domain
+     </a>
+     ／ 縮小・WebPへの形式変換。表示枠に合わせた切り抜き。
+    </figcaption>
+</figure>
+<figure>
+<a href="images/constitutional-visual/ballot.webp" rel="noopener" target="_blank">
+<img alt="2025年7月20日、東大阪市稲田の参院選投票会場。" loading="lazy" src="images/constitutional-visual/ballot.webp"/>
+</a>
+<figcaption>
+     2025年7月20日、東大阪市稲田の参院選投票会場。 Mr.ちゅらさん ／
+     <a href="https://commons.wikimedia.org/wiki/File:Election_Vote_2025-07_Inada_Higashi-Osaka.jpg" rel="noopener" target="_blank">
+      原典
+     </a>
+<a href="https://creativecommons.org/licenses/by/4.0" rel="noopener" target="_blank">
+      CC BY 4.0
+     </a>
+     ／ 縮小・WebPへの形式変換。表示枠に合わせた切り抜き。
+    </figcaption>
+</figure>
+<figure>
+<a href="images/constitutional-visual/disaster.webp" rel="noopener" target="_blank">
+<img alt="2011年3月18日、岩手県大槌町で捜索する陸上自衛隊員と救援隊。" loading="lazy" src="images/constitutional-visual/disaster.webp"/>
+</a>
+<figcaption>
+     2011年3月18日、岩手県大槌町で捜索する陸上自衛隊員と救援隊。 U.S. Navy / Dylan McCord ／
+     <a href="https://commons.wikimedia.org/wiki/File:Aerial_view_of_Japanese_Ground_Self-Defense_Force_personnel_and_disaster_relief_crews_searching_Otsuchi,_Japan.jpg" rel="noopener" target="_blank">
+      原典
+     </a>
+<a href="https://commons.wikimedia.org/wiki/File:Aerial_view_of_Japanese_Ground_Self-Defense_Force_personnel_and_disaster_relief_crews_searching_Otsuchi,_Japan.jpg" rel="noopener" target="_blank">
+      Public domain
+     </a>
+     ／ 縮小・WebPへの形式変換。表示枠に合わせた切り抜き。
+    </figcaption>
+</figure>
+<figure>
+<a href="images/constitutional-visual/sdf.webp" rel="noopener" target="_blank">
+<img alt="多国間訓練RIMPAC 2020に参加する海上自衛隊の護衛艦「いせ」。" loading="lazy" src="images/constitutional-visual/sdf.webp"/>
+</a>
+<figcaption>
+     多国間訓練RIMPAC 2020に参加する海上自衛隊の護衛艦「いせ」。 海上自衛隊 ／
+     <a href="https://commons.wikimedia.org/wiki/File:JS_ISE%EF%BC%88DDH-182%EF%BC%89RIMPAC_2020.jpg" rel="noopener" target="_blank">
+      原典
+     </a>
+<a href="https://creativecommons.org/licenses/by/4.0" rel="noopener" target="_blank">
+      CC BY 4.0
+     </a>
+     ／ 縮小・WebPへの形式変換。表示枠に合わせた切り抜き。
+    </figcaption>
+</figure>
+<figure>
+<a href="images/constitutional-visual/abe.webp" rel="noopener" target="_blank">
+<img alt="安倍晋三氏の肖像写真（2012年5月1日）。" loading="lazy" src="images/constitutional-visual/abe.webp"/>
+</a>
+<figcaption>
+     安倍晋三氏の肖像写真（2012年5月1日）。 Prime Minister of Japan Official ／
+     <a href="https://commons.wikimedia.org/wiki/File:Shinz%C5%8D_Abe_20120501.jpg" rel="noopener" target="_blank">
+      原典
+     </a>
+<a href="https://creativecommons.org/licenses/by/4.0" rel="noopener" target="_blank">
+      CC BY 4.0
+     </a>
+     ／ 縮小・WebPへの形式変換。表示枠に合わせた切り抜き。
+    </figcaption>
+</figure>
+<figure>
+<a href="images/constitutional-visual/ballot-box.webp" rel="noopener" target="_blank">
+<img alt="大阪市長選挙の投票箱（2005年11月）。憲法改正の国民投票の写真ではありません。" loading="lazy" src="images/constitutional-visual/ballot-box.webp"/>
+</a>
+<figcaption>
+     大阪市長選挙の投票箱（2005年11月）。憲法改正の国民投票の写真ではありません。 MASA ／
+     <a href="https://commons.wikimedia.org/wiki/File:Osaka_Mayoral_Election_ballot_box_20051127.jpg" rel="noopener" target="_blank">
+      原典
+     </a>
+<a href="https://creativecommons.org/licenses/by-sa/3.0/" rel="noopener" target="_blank">
+      CC BY-SA 3.0
+     </a>
+     ／ WebPへの形式変換、879×684への縮小。表示枠による切り抜き。 加工画像も同じライセンスです。
+    </figcaption>
+</figure>
+<figure>
+<a href="images/constitutional-visual/exit-poll.webp" rel="noopener" target="_blank">
+<img alt="2014年の衆議院選挙における出口調査。東京都文京区で撮影。憲法改正の国民投票の写真ではありません。" loading="lazy" src="images/constitutional-visual/exit-poll.webp"/>
+</a>
+<figcaption>
+     2014年の衆議院選挙における出口調査。東京都文京区で撮影。憲法改正の国民投票の写真ではありません。 Whym ／
+     <a href="https://commons.wikimedia.org/wiki/File:Exit_poll_Tokyo_2014.JPG" rel="noopener" target="_blank">
+      原典
+     </a>
+<a href="https://creativecommons.org/licenses/by-sa/3.0" rel="noopener" target="_blank">
+      CC BY-SA 3.0
+     </a>
+     ／ WebPへの形式変換、1000×755への縮小。表示枠による切り抜き。 加工画像も同じライセンスです。
+    </figcaption>
+</figure>
+<figure>
+<a href="images/constitutional-visual/hall-ceiling.webp" rel="noopener" target="_blank">
+<img alt="国会議事堂の中央広間の天井。憲法施行70周年の特別参観で撮影（2017年5月3日）。" loading="lazy" src="images/constitutional-visual/hall-ceiling.webp"/>
+</a>
+<figcaption>
+     国会議事堂の中央広間の天井。憲法施行70周年の特別参観で撮影（2017年5月3日）。 Kestrel ／
+     <a href="https://commons.wikimedia.org/wiki/File:National_Diet_Building_Central_Hall_Ceiling_P5030176.jpg" rel="noopener" target="_blank">
+      原典
+     </a>
+<a href="https://creativecommons.org/licenses/by-sa/4.0" rel="noopener" target="_blank">
+      CC BY-SA 4.0
+     </a>
+     ／ WebPへの形式変換、1500×1125への縮小。表示枠による切り抜き。 加工画像も同じライセンスです。
+    </figcaption>
+</figure>
+<figure>
+<a href="images/constitutional-visual/polling-2024.webp" rel="noopener" target="_blank">
+<img alt="衆議院選挙の投票所となった熊谷市立市民ホール（2024年10月27日）。憲法改正の国民投票の写真ではありません。" loading="lazy" src="images/constitutional-visual/polling-2024.webp"/>
+</a>
+<figcaption>
+     衆議院選挙の投票所となった熊谷市立市民ホール（2024年10月27日）。憲法改正の国民投票の写真ではありません。 Nori Norisa ／
+     <a href="https://commons.wikimedia.org/wiki/File:Polling_station,_Kumagaya_City_Civic_Hall_-_Oct_27,_2024.jpg" rel="noopener" target="_blank">
+      原典
+     </a>
+<a href="https://creativecommons.org/licenses/by/2.0" rel="noopener" target="_blank">
+      CC BY 2.0
+     </a>
+     ／ WebPへの形式変換、1500×921への縮小。表示枠による切り抜き。
+    </figcaption>
+</figure>
+</div>
+</section>
+</div>
+</div></section><!-- PLANET_SECTION_START -->
 <!-- CONSTITUTIONAL_READING_START -->
 <section aria-labelledby="fr-title" class="fr" data-default-issue="constitutional-amendment-general" id="constitutional-amendment-reading">
 <header class="fr-head">
@@ -1221,7 +3152,7 @@ body.constitutional-layout main{display:block}
 </div>
 </section>
 <div aria-hidden="true" class="cap-planet-progress" hidden="" id="progress"><i id="pbar"></i><b id="pnum"></b></div>
-<script id="planet-data">window.PLANET_DATA={"schema": 1, "theme_id": "constitutional-amendment", "title": "憲法改正論議", "question": "憲法の何を、どんな条件で変えるのか", "snapshot_id": "constitutional-amendment-20261103", "updated_at": "2026-11-03", "sample_period": "2026-06-20〜2026-11-03", "source_label": "Yahoo!リアルタイム検索", "show_unreviewed_note": false, "totals": {"collected": 2895, "opinions": 2548}, "elevation_formula": {"definition": "強い表現（intensity=high）の投稿が占める割合", "p0": 0.4035, "k": 50, "max_pct": 4.0}, "stances": [{"key": "改正推進", "label": "改正推進", "id": "constitutional-amendment-support", "color": "#2F8F83", "pattern": "plain", "count": 433}, {"key": "慎重・反対", "label": "慎重・反対", "id": "constitutional-amendment-cautious", "color": "#7D5BA6", "pattern": "diagonal", "count": 1739}, {"key": "手続き重視", "label": "手続き重視", "id": "constitutional-amendment-procedure-focus", "color": "#D9A520", "pattern": "dots", "count": 114}, {"key": "中立", "label": "中立", "id": "constitutional-amendment-neutral", "color": "#8B9199", "pattern": "mesh", "count": 262}], "vote_issue_order": ["改憲全般", "9条・自衛隊", "緊急事態条項", "国民投票・広告", "政党・発議手続き", "情報・議論の質"], "reread_summary": {"connected_editorial_count": 2548, "connected_issue_population": 2548, "not_connected_opinion_count": 0}, "modes": [{"id": "all", "label": "すべての意見", "total": 2548, "counts": {"constitutional-amendment-general": 914, "constitutional-amendment-article9": 506, "constitutional-amendment-emergency": 398, "constitutional-amendment-referendum": 336, "constitutional-amendment-procedure": 221, "constitutional-amendment-deliberation": 155, "constitutional-amendment-other": 18}, "width_pct": {"constitutional-amendment-general": 35.87, "constitutional-amendment-article9": 19.86, "constitutional-amendment-emergency": 15.62, "constitutional-amendment-referendum": 13.19, "constitutional-amendment-procedure": 8.67, "constitutional-amendment-deliberation": 6.08, "constitutional-amendment-other": 0.71}, "high_pct": {"constitutional-amendment-general": 39.5, "constitutional-amendment-article9": 40.5, "constitutional-amendment-emergency": 54.0, "constitutional-amendment-referendum": 44.6, "constitutional-amendment-procedure": 31.2, "constitutional-amendment-deliberation": 15.5, "constitutional-amendment-other": 22.2}, "high_counts": {"constitutional-amendment-general": 361, "constitutional-amendment-article9": 205, "constitutional-amendment-emergency": 215, "constitutional-amendment-referendum": 150, "constitutional-amendment-procedure": 69, "constitutional-amendment-deliberation": 24, "constitutional-amendment-other": 4}}, {"id": "改正推進", "label": "改正推進", "total": 433, "counts": {"constitutional-amendment-general": 129, "constitutional-amendment-article9": 231, "constitutional-amendment-emergency": 16, "constitutional-amendment-referendum": 11, "constitutional-amendment-procedure": 27, "constitutional-amendment-deliberation": 17, "constitutional-amendment-other": 2}, "width_pct": {"constitutional-amendment-general": 29.79, "constitutional-amendment-article9": 53.35, "constitutional-amendment-emergency": 3.7, "constitutional-amendment-referendum": 2.54, "constitutional-amendment-procedure": 6.24, "constitutional-amendment-deliberation": 3.93, "constitutional-amendment-other": 0.46}, "high_pct": {"constitutional-amendment-general": 24.0, "constitutional-amendment-article9": 41.1, "constitutional-amendment-emergency": 6.2, "constitutional-amendment-referendum": 27.3, "constitutional-amendment-procedure": 33.3, "constitutional-amendment-deliberation": 17.6, "constitutional-amendment-other": 50.0}, "high_counts": {"constitutional-amendment-general": 31, "constitutional-amendment-article9": 95, "constitutional-amendment-emergency": 1, "constitutional-amendment-referendum": 3, "constitutional-amendment-procedure": 9, "constitutional-amendment-deliberation": 3, "constitutional-amendment-other": 1}}, {"id": "慎重・反対", "label": "慎重・反対", "total": 1739, "counts": {"constitutional-amendment-general": 657, "constitutional-amendment-article9": 248, "constitutional-amendment-emergency": 357, "constitutional-amendment-referendum": 280, "constitutional-amendment-procedure": 137, "constitutional-amendment-deliberation": 56, "constitutional-amendment-other": 4}, "width_pct": {"constitutional-amendment-general": 37.78, "constitutional-amendment-article9": 14.26, "constitutional-amendment-emergency": 20.53, "constitutional-amendment-referendum": 16.1, "constitutional-amendment-procedure": 7.88, "constitutional-amendment-deliberation": 3.22, "constitutional-amendment-other": 0.23}, "high_pct": {"constitutional-amendment-general": 47.6, "constitutional-amendment-article9": 44.4, "constitutional-amendment-emergency": 58.5, "constitutional-amendment-referendum": 51.4, "constitutional-amendment-procedure": 40.9, "constitutional-amendment-deliberation": 30.4, "constitutional-amendment-other": 50.0}, "high_counts": {"constitutional-amendment-general": 313, "constitutional-amendment-article9": 110, "constitutional-amendment-emergency": 209, "constitutional-amendment-referendum": 144, "constitutional-amendment-procedure": 56, "constitutional-amendment-deliberation": 17, "constitutional-amendment-other": 2}}, {"id": "手続き重視", "label": "手続き重視", "total": 114, "counts": {"constitutional-amendment-general": 28, "constitutional-amendment-article9": 5, "constitutional-amendment-emergency": 4, "constitutional-amendment-referendum": 35, "constitutional-amendment-procedure": 28, "constitutional-amendment-deliberation": 14, "constitutional-amendment-other": 0}, "width_pct": {"constitutional-amendment-general": 24.56, "constitutional-amendment-article9": 4.39, "constitutional-amendment-emergency": 3.51, "constitutional-amendment-referendum": 30.7, "constitutional-amendment-procedure": 24.56, "constitutional-amendment-deliberation": 12.28, "constitutional-amendment-other": 0.0}, "high_pct": {"constitutional-amendment-general": 7.1, "constitutional-amendment-article9": 0.0, "constitutional-amendment-emergency": 0.0, "constitutional-amendment-referendum": 8.6, "constitutional-amendment-procedure": 3.6, "constitutional-amendment-deliberation": 0.0, "constitutional-amendment-other": 0.0}, "high_counts": {"constitutional-amendment-general": 2, "constitutional-amendment-article9": 0, "constitutional-amendment-emergency": 0, "constitutional-amendment-referendum": 3, "constitutional-amendment-procedure": 1, "constitutional-amendment-deliberation": 0, "constitutional-amendment-other": 0}}, {"id": "中立", "label": "中立", "total": 262, "counts": {"constitutional-amendment-general": 100, "constitutional-amendment-article9": 22, "constitutional-amendment-emergency": 21, "constitutional-amendment-referendum": 10, "constitutional-amendment-procedure": 29, "constitutional-amendment-deliberation": 68, "constitutional-amendment-other": 12}, "width_pct": {"constitutional-amendment-general": 38.17, "constitutional-amendment-article9": 8.4, "constitutional-amendment-emergency": 8.02, "constitutional-amendment-referendum": 3.82, "constitutional-amendment-procedure": 11.07, "constitutional-amendment-deliberation": 25.95, "constitutional-amendment-other": 4.58}, "high_pct": {"constitutional-amendment-general": 15.0, "constitutional-amendment-article9": 0.0, "constitutional-amendment-emergency": 23.8, "constitutional-amendment-referendum": 0.0, "constitutional-amendment-procedure": 10.3, "constitutional-amendment-deliberation": 5.9, "constitutional-amendment-other": 8.3}, "high_counts": {"constitutional-amendment-general": 15, "constitutional-amendment-article9": 0, "constitutional-amendment-emergency": 5, "constitutional-amendment-referendum": 0, "constitutional-amendment-procedure": 3, "constitutional-amendment-deliberation": 4, "constitutional-amendment-other": 1}}], "issues": [{"id": "constitutional-amendment-general", "key": "改憲全般", "label": "改憲全般", "icon": "📜", "count": 914, "share_pct": 35.9, "stances": {"改正推進": 129, "慎重・反対": 657, "手続き重視": 28, "中立": 100}, "top_stance": "慎重・反対", "purity_pct": 71.9, "intensity": {"high": 361, "medium": 445, "low": 108}, "high_pct": 39.5, "high_adjusted_pct": 39.5, "sub": {"status": "reread", "coverage": "full", "coverage_note": "この論点の収集本文を読み、理由で分けました。改正への賛否と、手続きを進めることへの意見を区別しています。", "show_coverage_note": false, "source_file": "data/constitutional-amendment_issues-reread.json", "reread_count": 914, "unread_count": 0, "skipped_count": 0, "grown_count": 0, "unknown_timing_count": 0, "items": [{"id": "debate-conditions", "label": "賛否の表明・運動と議論の仕方", "count": 319, "pct_in_issue": 34.9}, {"id": "peace-security", "label": "戦争を避ける方法と防衛", "count": 193, "pct_in_issue": 21.1}, {"id": "political-trust", "label": "改正を担う政権・政党への評価", "count": 172, "pct_in_issue": 18.8}, {"id": "referendum", "label": "国民投票で決めることへの評価", "count": 104, "pct_in_issue": 11.4}, {"id": "rights-scope", "label": "変更する条項と暮らし・権利", "count": 103, "pct_in_issue": 11.3}, {"id": "em-war", "label": "戦争・動員との結びつきへの懸念", "count": 9, "pct_in_issue": 1.0}, {"id": "em-control", "label": "権限集中と自由への制約", "count": 8, "pct_in_issue": 0.9}, {"id": "em-necessity", "label": "既存制度と条項の必要性", "count": 3, "pct_in_issue": 0.3}, {"id": "em-political", "label": "政治への不信と関連政策", "count": 2, "pct_in_issue": 0.2}, {"id": "em-election", "label": "任期延長と選挙の機会", "count": 1, "pct_in_issue": 0.1}]}, "verdict": null, "claims": [], "veins": ["constitutional-amendment-avoid-war"]}, {"id": "constitutional-amendment-article9", "key": "9条・自衛隊", "label": "9条・自衛隊", "icon": "🛡️", "count": 506, "share_pct": 19.9, "stances": {"改正推進": 231, "慎重・反対": 248, "手続き重視": 5, "中立": 22}, "top_stance": "慎重・反対", "purity_pct": 49.0, "intensity": {"high": 205, "medium": 270, "low": 31}, "high_pct": 40.5, "high_adjusted_pct": 40.5, "sub": {"status": "reread", "coverage": "full", "coverage_note": "投稿本文を読み、主な話題・理由で分けました。投稿者の主張を整理したもので、事実と確認されたことを意味しません。皇室典範の9条に言及する3件は別枠にしています", "show_coverage_note": false, "source_file": "data/constitutional-amendment_issues-reread.json", "reread_count": 506, "unread_count": 0, "skipped_count": 0, "grown_count": 0, "unknown_timing_count": 0, "items": [{"id": "a9-war", "label": "戦争・徴兵・権利制限への懸念", "count": 97, "pct_in_issue": 19.2}, {"id": "a9-defense", "label": "抑止力・防衛力と国を守る方法", "count": 79, "pct_in_issue": 15.6}, {"id": "a9-legal", "label": "自衛隊の位置づけと憲法解釈", "count": 66, "pct_in_issue": 13.0}, {"id": "a9-discussion", "label": "発言・報道・運動への応対", "count": 58, "pct_in_issue": 11.5}, {"id": "a9-us", "label": "米国との関係・海外派遣への評価", "count": 55, "pct_in_issue": 10.9}, {"id": "a9-politics", "label": "政党・政権と他の政策への評価", "count": 53, "pct_in_issue": 10.5}, {"id": "a9-position", "label": "賛否の表明・改正を求める声", "count": 36, "pct_in_issue": 7.1}, {"id": "a9-draft", "label": "改正案の内容・範囲と進め方", "count": 34, "pct_in_issue": 6.7}, {"id": "a9-military", "label": "国防軍・軍事法廷と自衛官の扱い", "count": 21, "pct_in_issue": 4.2}, {"id": "a9-context", "label": "本文だけでは理由を特定できない", "count": 4, "pct_in_issue": 0.8}, {"id": "a9-other-law", "label": "憲法の9条ではなく皇室典範の話題", "count": 3, "pct_in_issue": 0.6}]}, "verdict": "fact", "claims": [{"claim": "徴兵制は憲法18条の苦役禁止に当たる", "finding": "2016年10月11日の国会答弁で、政府は徴兵制を憲法18条が禁じる苦役と説明している。その政府解釈との一致を確認したもので、将来のあらゆる制度の可否を断定するものではない。", "id": "article18_conscription", "issue_ids": ["constitutional-amendment-article9"], "matched_post_count": 1, "sources": [{"name": "国会会議録 2016年10月11日 参議院予算委員会 稲田防衛大臣答弁", "url": "https://kokkai.ndl.go.jp/txt/119215261X00320161011/151"}], "verdict": "fact"}, {"claim": "自衛隊を違憲とする解釈がある", "finding": "当時の政府答弁で解釈の対立への言及を確認できる。これは学説を直接調査した資料ではなく、現在の学者の割合を示す根拠としては扱わない。", "id": "jieitai_iken_gaku", "issue_ids": ["constitutional-amendment-article9"], "matched_post_count": 3, "sources": [{"name": "国会会議録 2017年5月9日 参議院予算委員会 安倍総理答弁", "url": "https://kokkai.ndl.go.jp/txt/119315261X01820170509/43"}], "verdict": "fact"}], "veins": []}, {"id": "constitutional-amendment-emergency", "key": "緊急事態条項", "label": "緊急事態条項", "icon": "⚖️", "count": 398, "share_pct": 15.6, "stances": {"改正推進": 16, "慎重・反対": 357, "手続き重視": 4, "中立": 21}, "top_stance": "慎重・反対", "purity_pct": 89.7, "intensity": {"high": 215, "medium": 172, "low": 11}, "high_pct": 54.0, "high_adjusted_pct": 52.5, "sub": {"status": "reread", "coverage": "full", "coverage_note": "この論点の収集本文を読み、理由で分けました。改正への賛否と、手続きを進めることへの意見を区別しています。", "show_coverage_note": false, "source_file": "data/constitutional-amendment_issues-reread.json", "reread_count": 398, "unread_count": 0, "skipped_count": 0, "grown_count": 0, "unknown_timing_count": 0, "items": [{"id": "em-control", "label": "権限集中と自由への制約", "count": 102, "pct_in_issue": 25.6}, {"id": "em-political", "label": "政治への不信と関連政策", "count": 75, "pct_in_issue": 18.8}, {"id": "em-necessity", "label": "既存制度と条項の必要性", "count": 46, "pct_in_issue": 11.6}, {"id": "em-war", "label": "戦争・動員との結びつきへの懸念", "count": 43, "pct_in_issue": 10.8}, {"id": "debate-conditions", "label": "賛否の表明・運動と議論の仕方", "count": 35, "pct_in_issue": 8.8}, {"id": "em-commentator", "label": "他者の説明・立場への批評", "count": 28, "pct_in_issue": 7.0}, {"id": "em-election", "label": "任期延長と選挙の機会", "count": 27, "pct_in_issue": 6.8}, {"id": "political-trust", "label": "改正を担う政権・政党への評価", "count": 15, "pct_in_issue": 3.8}, {"id": "em-conditions", "label": "発動・延長・検証の条件", "count": 14, "pct_in_issue": 3.5}, {"id": "rights-scope", "label": "変更する条項と暮らし・権利", "count": 9, "pct_in_issue": 2.3}, {"id": "peace-security", "label": "戦争を避ける方法と防衛", "count": 4, "pct_in_issue": 1.0}]}, "verdict": "miss", "claims": [{"claim": "緊急事態条項案では内閣が国会を経ずに法律を作れる", "finding": "この投稿がどの年のどの案を指すかは特定できない。2018年の自民党案73条の2は大規模災害などの条件と国会の承認を求める手続きを置くが、2026年解説ではより広い緊急事態や国会機能代行も議論されている。参照する案を決めずに、この投稿を正しい・誤りとは判定しない。", "id": "emergency_law_making", "issue_ids": ["constitutional-amendment-emergency"], "matched_post_count": 1, "sources": [{"name": "自民党 条文イメージ・たたき台素案（2018年3月）PDF", "url": "https://storage.jimin.jp/pdf/constitution/news/20180326_01.pdf"}, {"name": "自民党 2026年解説版 p.7", "url": "https://storage.jimin.jp/pdf/constitution/document/kenpou_manual2026.pdf"}], "verdict": "miss"}], "veins": []}, {"id": "constitutional-amendment-referendum", "key": "国民投票・広告", "label": "国民投票・広告", "icon": "🗳️", "count": 336, "share_pct": 13.2, "stances": {"改正推進": 11, "慎重・反対": 280, "手続き重視": 35, "中立": 10}, "top_stance": "慎重・反対", "purity_pct": 83.3, "intensity": {"high": 150, "medium": 162, "low": 24}, "high_pct": 44.6, "high_adjusted_pct": 44.1, "sub": {"status": "reread", "coverage": "full", "coverage_note": "投稿本文を読み、主な理由ごとに分けました。不正や情報操作への懸念は投稿者の意見で、事実と確認されたことを意味しません。本文だけでは理由を特定できない投稿は別にしています", "show_coverage_note": false, "source_file": "data/constitutional-amendment_issues-reread.json", "reread_count": 336, "unread_count": 0, "skipped_count": 0, "grown_count": 0, "unknown_timing_count": 0, "items": [{"id": "ref-advertising", "label": "広告・資金力と情報の公平さ", "count": 82, "pct_in_issue": 24.4}, {"id": "ref-threshold", "label": "最低投票率と承認に必要な票数", "count": 58, "pct_in_issue": 17.3}, {"id": "ref-integrity", "label": "投票・開票への不信と監視の要望", "count": 54, "pct_in_issue": 16.1}, {"id": "ref-participation", "label": "国民投票への参加と意思表示", "count": 32, "pct_in_issue": 9.5}, {"id": "ref-reporting", "label": "報道・周知を求める声", "count": 32, "pct_in_issue": 9.5}, {"id": "ref-political", "label": "政党・政治家と関連政策への評価", "count": 19, "pct_in_issue": 5.7}, {"id": "ref-sequence", "label": "法改正を進める順序と議論の時間", "count": 16, "pct_in_issue": 4.8}, {"id": "ref-rules", "label": "投票のルール整備への評価", "count": 15, "pct_in_issue": 4.5}, {"id": "ref-proposal", "label": "改正案の内容と権利・戦争への懸念", "count": 14, "pct_in_issue": 4.2}, {"id": "ref-discussion", "label": "他者の説明への問い・批評", "count": 8, "pct_in_issue": 2.4}, {"id": "ref-context", "label": "本文だけでは具体的な理由を特定できない", "count": 6, "pct_in_issue": 1.8}]}, "verdict": "fact", "claims": [{"claim": "国民投票には最低投票率の規定がない", "finding": "国民投票法126条1項は賛成票が投票総数の2分の1を超えることを承認の条件とし、最低投票率を成立条件にしていない。98条2項の投票総数は賛成票と反対票の合計。", "id": "minimum_vote_rate", "issue_ids": ["constitutional-amendment-referendum"], "matched_post_count": 31, "sources": [{"name": "e-Gov 国民投票法（日本国憲法の改正手続に関する法律）", "url": "https://laws.e-gov.go.jp/law/419AC1000000051"}], "verdict": "fact"}, {"claim": "国会の発議から国民投票まで最短60日だ", "finding": "60日以上180日以内という数字は第2条の条文どおり。期日の決定は国会の議決によることも明記されている。", "id": "period_60days", "issue_ids": ["constitutional-amendment-referendum"], "matched_post_count": 1, "sources": [{"name": "e-Gov 国民投票法（日本国憲法の改正手続に関する法律）", "url": "https://laws.e-gov.go.jp/law/419AC1000000051"}], "verdict": "fact"}], "veins": []}, {"id": "constitutional-amendment-procedure", "key": "政党・発議手続き", "label": "政党・発議手続き", "icon": "🏛️", "count": 221, "share_pct": 8.7, "stances": {"改正推進": 27, "慎重・反対": 137, "手続き重視": 28, "中立": 29}, "top_stance": "慎重・反対", "purity_pct": 62.0, "intensity": {"high": 69, "medium": 124, "low": 28}, "high_pct": 31.2, "high_adjusted_pct": 32.9, "sub": {"status": "reread", "coverage": "full", "coverage_note": "投稿本文を読み、主な話題・理由で分けました。投稿者の主張を整理したもので、事実と確認されたことを意味しません", "show_coverage_note": false, "source_file": "data/constitutional-amendment_issues-reread.json", "reread_count": 221, "unread_count": 0, "skipped_count": 0, "grown_count": 0, "unknown_timing_count": 0, "items": [{"id": "party-policy", "label": "政党・政治家の政策と支持の判断", "count": 76, "pct_in_issue": 34.4}, {"id": "party-consistency", "label": "政党の発言と採決の食い違いへの指摘", "count": 37, "pct_in_issue": 16.7}, {"id": "party-stop", "label": "審査会・発議を止めるよう求める声", "count": 30, "pct_in_issue": 13.6}, {"id": "party-seats", "label": "発議に必要な議席と成立の見通し", "count": 28, "pct_in_issue": 12.7}, {"id": "party-procedure", "label": "議論・国民投票と手続きへの評価", "count": 28, "pct_in_issue": 12.7}, {"id": "party-cooperate", "label": "政党間の協力・連立と違い", "count": 22, "pct_in_issue": 10.0}]}, "verdict": "fact", "claims": [{"claim": "憲法改正には衆参両院それぞれ3分の2以上の賛成が必要だ", "finding": "3分の2・各議院という条件は第96条第1項の条文どおり。「総議員」の解釈（欠員を含むか）に学説上の議論はあるが、3分の2以上という数字の読みに食い違いはない。", "id": "two_thirds", "issue_ids": ["constitutional-amendment-procedure"], "matched_post_count": 6, "sources": [{"name": "e-Gov法令検索 日本国憲法 第96条", "url": "https://laws.e-gov.go.jp/law/321CONSTITUTION"}], "verdict": "fact"}], "veins": []}, {"id": "constitutional-amendment-deliberation", "key": "情報・議論の質", "label": "情報・議論の質", "icon": "💬", "count": 155, "share_pct": 6.1, "stances": {"改正推進": 17, "慎重・反対": 56, "手続き重視": 14, "中立": 68}, "top_stance": "中立", "purity_pct": 43.9, "intensity": {"high": 24, "medium": 108, "low": 23}, "high_pct": 15.5, "high_adjusted_pct": 21.5, "sub": {"status": "reread", "coverage": "full", "coverage_note": "投稿本文を読み、主な話題・理由で分けました。投稿者の主張を整理したもので、事実と確認されたことを意味しません", "show_coverage_note": false, "source_file": "data/constitutional-amendment_issues-reread.json", "reread_count": 155, "unread_count": 0, "skipped_count": 0, "grown_count": 0, "unknown_timing_count": 0, "items": [{"id": "info-dialogue", "label": "決めつけ・中傷と対話の仕方", "count": 42, "pct_in_issue": 27.1}, {"id": "info-action", "label": "声の上げ方や運動の伝え方", "count": 25, "pct_in_issue": 16.1}, {"id": "info-evidence", "label": "数字・条文・説明の根拠を確かめる声", "count": 24, "pct_in_issue": 15.5}, {"id": "info-speakers", "label": "発信者の立場や主張への批評", "count": 24, "pct_in_issue": 15.5}, {"id": "info-media", "label": "報道の不足や偏りへの指摘", "count": 18, "pct_in_issue": 11.6}, {"id": "info-campaign", "label": "宣伝・情報操作への懸念", "count": 14, "pct_in_issue": 9.0}, {"id": "info-democracy", "label": "民主主義と考える力への評価", "count": 8, "pct_in_issue": 5.2}]}, "verdict": null, "claims": [], "veins": []}, {"id": "constitutional-amendment-other", "key": "その他", "label": "その他", "icon": "◯", "count": 18, "share_pct": 0.7, "stances": {"改正推進": 2, "慎重・反対": 4, "手続き重視": 0, "中立": 12}, "top_stance": "中立", "purity_pct": 66.7, "intensity": {"high": 4, "medium": 6, "low": 8}, "high_pct": 22.2, "high_adjusted_pct": 35.5, "sub": {"status": "reread", "coverage": "full", "coverage_note": "投稿本文を読み、主な話題・理由で分けました。投稿者の主張を整理したもので、事実と確認されたことを意味しません", "show_coverage_note": false, "source_file": "data/constitutional-amendment_issues-reread.json", "reread_count": 18, "unread_count": 0, "skipped_count": 0, "grown_count": 0, "unknown_timing_count": 0, "items": [{"id": "other-policy", "label": "家族・皇室・代表者選びの制度", "count": 9, "pct_in_issue": 50.0}, {"id": "other-protest", "label": "デモと異なる立場への応対", "count": 6, "pct_in_issue": 33.3}, {"id": "other-constitution", "label": "憲法への向き合い方", "count": 2, "pct_in_issue": 11.1}, {"id": "other-city", "label": "人口集中と居住の自由", "count": 1, "pct_in_issue": 5.6}]}, "verdict": null, "claims": [], "veins": []}], "claims": [{"id": "minimum_vote_rate", "claim": "国民投票には最低投票率の規定がない", "verdict": "fact", "verdict_label": "資料どおり", "finding": "国民投票法126条1項は賛成票が投票総数の2分の1を超えることを承認の条件とし、最低投票率を成立条件にしていない。98条2項の投票総数は賛成票と反対票の合計。", "sources": [{"name": "e-Gov 国民投票法（日本国憲法の改正手続に関する法律）", "url": "https://laws.e-gov.go.jp/law/419AC1000000051"}]}, {"id": "period_60days", "claim": "国会の発議から国民投票まで最短60日だ", "verdict": "fact", "verdict_label": "資料どおり", "finding": "60日以上180日以内という数字は第2条の条文どおり。期日の決定は国会の議決によることも明記されている。", "sources": [{"name": "e-Gov 国民投票法（日本国憲法の改正手続に関する法律）", "url": "https://laws.e-gov.go.jp/law/419AC1000000051"}]}, {"id": "two_thirds", "claim": "憲法改正には衆参両院それぞれ3分の2以上の賛成が必要だ", "verdict": "fact", "verdict_label": "資料どおり", "finding": "3分の2・各議院という条件は第96条第1項の条文どおり。「総議員」の解釈（欠員を含むか）に学説上の議論はあるが、3分の2以上という数字の読みに食い違いはない。", "sources": [{"name": "e-Gov法令検索 日本国憲法 第96条", "url": "https://laws.e-gov.go.jp/law/321CONSTITUTION"}]}, {"id": "emergency_law_making", "claim": "緊急事態条項案では内閣が国会を経ずに法律を作れる", "verdict": "miss", "verdict_label": "裏が取れない", "finding": "この投稿がどの年のどの案を指すかは特定できない。2018年の自民党案73条の2は大規模災害などの条件と国会の承認を求める手続きを置くが、2026年解説ではより広い緊急事態や国会機能代行も議論されている。参照する案を決めずに、この投稿を正しい・誤りとは判定しない。", "sources": [{"name": "自民党 条文イメージ・たたき台素案（2018年3月）PDF", "url": "https://storage.jimin.jp/pdf/constitution/news/20180326_01.pdf"}, {"name": "自民党 2026年解説版 p.7", "url": "https://storage.jimin.jp/pdf/constitution/document/kenpou_manual2026.pdf"}]}, {"id": "article18_conscription", "claim": "徴兵制は憲法18条の苦役禁止に当たる", "verdict": "fact", "verdict_label": "資料どおり", "finding": "2016年10月11日の国会答弁で、政府は徴兵制を憲法18条が禁じる苦役と説明している。その政府解釈との一致を確認したもので、将来のあらゆる制度の可否を断定するものではない。", "sources": [{"name": "国会会議録 2016年10月11日 参議院予算委員会 稲田防衛大臣答弁", "url": "https://kokkai.ndl.go.jp/txt/119215261X00320161011/151"}]}, {"id": "jieitai_iken_gaku", "claim": "自衛隊を違憲とする解釈がある", "verdict": "fact", "verdict_label": "資料どおり", "finding": "当時の政府答弁で解釈の対立への言及を確認できる。これは学説を直接調査した資料ではなく、現在の学者の割合を示す根拠としては扱わない。", "sources": [{"name": "国会会議録 2017年5月9日 参議院予算委員会 安倍総理答弁", "url": "https://kokkai.ndl.go.jp/txt/119315261X01820170509/43"}]}], "editorial": {"checked_on": "2026-09-12", "findings": [{"id": "constitutional-amendment-ed-1", "kind": "shared_premise", "text": "戦争を避けたいという思いは、改正を進めたい投稿にも、改正に反対する投稿にもありました。防衛の仕組みを変えることと、現行憲法による歯止めを保つことの、どちらを頼りにするかで分かれています。"}, {"id": "constitutional-amendment-ed-2", "kind": "real_conflict", "text": "改正そのものを認める投稿でも、いまの政権が出す案には反対する場合があります。「誰が変えるか」と「どこを変えるか」を分けると、単純な賛否では見えない条件が読めます。"}, {"id": "constitutional-amendment-ed-3", "kind": "real_conflict", "text": "国民投票まで進めて国民が判断すればよいという意見と、広告や情報、投開票への不信から発議前に止めたいという意見があります。投票で決めることへの信頼も争点です。"}, {"id": "constitutional-amendment-ed-4", "kind": "still_unknown", "text": "反対派を批判しただけの投稿から、書き手自身が改正案を支持しているとは限りません。本文に立場が明示されているかと、何を評価しているかを分けて整理しています。"}, {"id": "constitutional-amendment-ed-5", "kind": "still_unknown", "text": "過去の草案、現在の提案、現行の条文を混ぜると、同じ言葉でも別の制度について話してしまいます。資料に書かれている範囲と、投稿者が予測していることを区別します。"}], "reviewer_type": "ai_assisted", "status": "complete"}, "ocean": {"claim_status": "complete", "checked_on": "2026-10-13", "reviewer_type": "editorial_review", "ocean_status": "complete", "ocean_checked_on": "2026-11-03", "ocean_reviewer_type": "ai_assisted", "sunk_continents": [{"checked_on": "2026-11-03", "id": "constitutional-amendment-challenge", "life_impact": "国民投票に異議がある投票人は、結果の告示から30日以内に東京高等裁判所へ訴訟を起こせます。不正への不安を語ることとは別に、結果に異議を申し立てる期限と相手が法定されています。", "nearest_issue_id": null, "reviewer_type": "ai_assisted", "sns_base": 2548, "sns_count": 0, "sns_note": "全意見の制度語検索と該当本文の照合では、この具体的な手続きへの言及を確認できませんでした。言い換えを含めた完全な不存在の証明ではありません。2026-09-18: 新規199件（意見）を同じ条件語（訴訟|裁判|異議）で再検索。新規の一致なし、母数のみ更新。 2026-09-26収集: 新規188件（意見）を同じ条件語（訴訟|裁判|異議）で再検索。3件が候補に挙がったが、憲法裁判所の設置、または「解釈改憲に異議」という報道見出しへの言及であり不一致。新規の一致なし、母数のみ更新。 2026-10-04収集: 新規207件（意見）を同じ条件語（訴訟|裁判|異議）で再検索。新規の一致なし、母数のみ更新。 2026-10-13収集: 新規189件（意見）を同じ条件語（訴訟|裁判|異議）で再検索。1件が候補に挙がったが、2008年名古屋高裁判決への言及で不一致。新規の一致なし、母数のみ更新。 2026-10-24収集: 新規205件（意見）を同じ条件語（訴訟|裁判|異議）で再検索。1件が候補に挙がったが、国民投票法案の採決をめぐる政党への批判で不一致。新規の一致なし、母数のみ更新。 2026-11-03収集: 新規223件（意見191）を同じ条件語で再検索。候補1件（裁判の開始と人権への懸念）は、異議訴訟の手続きへの言及ではないため不一致。", "sources": [{"date": "2026-09-12確認", "location": "第127条", "name": "e-Gov：国民投票法", "url": "https://laws.e-gov.go.jp/law/419AC1000000051"}], "topic": "国民投票の結果に異議を申し立てる手続き", "opinion_count_now": 2548, "base_stale": false, "short_label": "国民投票の結果に異議を申し…"}, {"checked_on": "2026-11-03", "id": "constitutional-amendment-emergency-review", "life_impact": "参議院の緊急集会で採った措置は臨時のものです。次の国会が開かれてから10日以内に衆議院の同意がなければ効力を失います。緊急時に決める仕組みには、後から確かめる手続きもあります。", "nearest_issue_id": null, "reviewer_type": "ai_assisted", "sns_base": 2548, "sns_count": 0, "sns_note": "全意見の制度語検索と該当本文の照合では、この具体的な手続きへの言及を確認できませんでした。言い換えを含めた完全な不存在の証明ではありません。2026-09-18: 新規199件（意見）を同じ条件語（緊急集会）で再検索。2件が候補に挙がった。いずれも「参議院の緊急集会」という制度の存在・要否への一般的な言及だった。第54条第3項の具体的手続き（次の国会開会後10日以内に衆議院の同意が無いと効力を失う事後審査）には触れていないため不一致。新規の一致なし、母数のみ更新。 2026-09-26収集: 新規188件（意見）を同じ条件語（緊急集会）で再検索。新規の一致なし、母数のみ更新。 2026-10-04収集: 新規207件（意見）を同じ条件語（緊急集会）で再検索。新規の一致なし、母数のみ更新。 2026-10-13収集: 新規189件（意見）を同じ条件語（緊急集会）で再検索。1件が候補に挙がったが、緊急集会で対応できるという制度一般への言及で、事後審査の手続きには触れておらず不一致。新規の一致なし、母数のみ更新。 2026-10-24収集: 新規205件（意見）を同じ条件語で再検索。新規の一致なし、母数のみ更新。 2026-11-03収集: 新規223件（意見191）を同じ条件語で再検索。候補1件（緊急集会で対応できない事態の説明を求める問い）は、事後審査の手続きへの言及ではないため不一致。", "sources": [{"date": "2026-09-12確認", "location": "第54条第3項", "name": "e-Gov：日本国憲法", "url": "https://laws.e-gov.go.jp/law/321CONSTITUTION"}], "topic": "参議院の緊急集会で採った措置の、その後", "opinion_count_now": 2548, "base_stale": false, "short_label": "参議院の緊急集会で採った措…"}, {"checked_on": "2026-11-03", "id": "constitutional-amendment-sc-3", "life_impact": "自民党が掲げる複数の改正項目（9条・緊急事態条項など）が同時に国会発議されても、有権者は項目ごとに個別の賛成・反対を投票する。ある項目には賛成し別の項目には反対する、という投票ができ、複数項目をまとめて一つの賛否しか選べない投票にはならない。", "nearest_issue_id": "constitutional-amendment-procedure", "reviewer_type": "editorial_review", "sns_base": 2548, "sns_count": 1, "sns_note": "「4項目」「一括発議」「パッケージ」等の語での一致は5件あった。いずれも改正4項目の中身の是非やその紹介の仕方を論じているだけで、発議・投票が項目ごとに区分される手続きそのものへの言及ではない。 2026-09-26収集: 新規188件（意見）を同じ条件語で再検索。新規の一致なし、母数のみ更新。 2026-10-04収集: 新規207件（意見）を同じ条件語で再検索。新規の一致なし、母数のみ更新。 2026-10-13収集: 新規189件（意見）を同じ条件語で再検索。1件が候補に挙がったが、改憲4項目のリーフレット名の紹介で不一致。新規の一致なし、母数のみ更新。 2026-10-24収集: 新規205件（意見）を同じ条件語で再検索。2件が候補に挙がったが、いずれも改憲4項目の中身をめぐる反論で、発議・投票が項目ごとに区分される手続きへの言及ではない。新規の一致なし、母数のみ更新。 2026-11-03収集: 新規223件（意見191）を同じ条件語で再検索。候補1件（個別に発議することを知らない人が多いという投稿）は、項目ごとに個別発議する手続きへの言及として該当。該当1件として数えた。", "sources": [{"date": "2007-05-18", "location": "第68条の3（平成19年法律第51号附則により新設。同時に新設された第68条の2は発議に必要な賛成者数〈衆院100人以上・参院50人以上〉を規定）", "name": "e-Gov法令検索：国会法（昭和22年法律第79号）", "url": "https://laws.e-gov.go.jp/law/322AC1000000079"}], "topic": "国会法第68条の3は、憲法改正原案を発議する際に「内容において関連する事項ごとに区分して行う」ことを定めており、内容が関連しない複数の改正項目を一つにまとめて単一の賛否だけを問う発議はできない。", "opinion_count_now": 2548, "base_stale": false, "short_label": "国会法第68条の3は、憲法…"}, {"checked_on": "2026-11-03", "id": "constitutional-amendment-sc-4", "life_impact": "この答弁のとおり運用されれば、将来、憲法改正の国民投票が実施される場合も、衆議院議員選挙・参議院議員選挙とは別の投票日になる。有権者は、代表者を選ぶ国政選挙と、制度の可否を決める国民投票を、別の機会に投票することになる。", "nearest_issue_id": "constitutional-amendment-referendum", "reviewer_type": "editorial_review", "sns_base": 2548, "sns_count": 0, "sns_note": "「同日実施」「ダブル選」等の語での一致は2件あった。いずれも衆議院の解散と参議院選挙を同じ日に行う「衆参ダブル選挙」という別の政治的タイミングの話だった。憲法改正国民投票を国政選挙と同日にしないという2007年の立法意思そのものへの言及ではない。 2026-09-26収集: 新規188件（意見）を同じ条件語で再検索。新規の一致なし、母数のみ更新。 2026-10-04収集: 新規207件（意見）を同じ条件語で再検索。1件が候補に挙がったが、改憲の議論と護憲を同時に進めてよいという意味の「同時に」で不一致。新規の一致なし、母数のみ更新。 2026-10-13収集: 新規189件（意見）を同じ条件語で再検索。新規の一致なし、母数のみ更新。 2026-10-24収集: 新規205件（意見）を同じ条件語で再検索。新規の一致なし、母数のみ更新。", "sources": [{"date": "2026-07-23", "location": "speechOrder 28", "name": "国立国会図書館「国会会議録検索システム」参議院沖縄・北方問題及び地方に関する特別委員会議事録 第8号（足立康史発言）", "url": "https://kokkai.ndl.go.jp/txt/122115382X00820260723/28"}, {"date": "2026-07-23", "location": "speechOrder 59, 63", "name": "国立国会図書館「国会会議録検索システム」参議院沖縄・北方問題及び地方に関する特別委員会・総務委員会連合審査会議事録 第1号（足立康史発言）", "url": "https://kokkai.ndl.go.jp/txt/122115391X00120260723/63"}], "topic": "2026年7月23日の参議院委員会審議で、足立康史議員は、2007年の国民投票法制定時に「制度を選ぶ憲法改正国民投票と人物を選ぶ国政選挙を一緒にするのは適当ではない」という立法意思を提出者が明確に答弁しており、両者を同日に実施しないことは既に確定していると述べた。", "opinion_count_now": 2548, "base_stale": false, "short_label": "2026年7月23日の参議…"}], "veins": [{"checked_on": "2026-09-12", "diverging_reason": "推進側は防衛力や抑止のための改正が戦争を防ぐと考え、反対側は憲法を変えることで戦争に関わる危険が増すと考えています。守りたい平和が共通でも、頼りにする方法が異なります。", "id": "constitutional-amendment-avoid-war", "issue_ids": ["constitutional-amendment-general"], "reviewer_type": "ai_assisted", "shared_concern": "戦争を避けたい。", "sides": [{"post_count": 2, "stance_label": "改正推進"}, {"post_count": 2, "stance_label": "慎重・反対"}]}]}};</script>
+<script id="planet-data">window.PLANET_DATA={"schema": 1, "theme_id": "constitutional-amendment", "title": "憲法改正論議", "question": "憲法の何を、どんな条件で変えるのか", "snapshot_id": "constitutional-amendment-20261103", "updated_at": "2026-11-03", "sample_period": "2026-06-20〜2026-11-03", "source_label": "Yahoo!リアルタイム検索", "show_unreviewed_note": false, "totals": {"collected": 2895, "opinions": 2548}, "elevation_formula": {"definition": "強い表現（intensity=high）の投稿が占める割合", "p0": 0.4035, "k": 50, "max_pct": 4.0}, "stances": [{"key": "改正推進", "label": "改正推進", "id": "constitutional-amendment-support", "color": "#2F8F83", "pattern": "plain", "count": 433}, {"key": "慎重・反対", "label": "慎重・反対", "id": "constitutional-amendment-cautious", "color": "#7D5BA6", "pattern": "diagonal", "count": 1739}, {"key": "手続き重視", "label": "手続き重視", "id": "constitutional-amendment-procedure-focus", "color": "#D9A520", "pattern": "dots", "count": 114}, {"key": "中立", "label": "中立", "id": "constitutional-amendment-neutral", "color": "#8B9199", "pattern": "mesh", "count": 262}], "vote_issue_order": ["改憲全般", "9条・自衛隊", "緊急事態条項", "国民投票・広告", "政党・発議手続き", "情報・議論の質"], "reread_summary": {"connected_editorial_count": 2548, "connected_issue_population": 2548, "not_connected_opinion_count": 0}, "modes": [{"id": "all", "label": "すべての意見", "total": 2548, "counts": {"constitutional-amendment-general": 914, "constitutional-amendment-article9": 506, "constitutional-amendment-emergency": 398, "constitutional-amendment-referendum": 336, "constitutional-amendment-procedure": 221, "constitutional-amendment-deliberation": 155, "constitutional-amendment-other": 18}, "width_pct": {"constitutional-amendment-general": 35.87, "constitutional-amendment-article9": 19.86, "constitutional-amendment-emergency": 15.62, "constitutional-amendment-referendum": 13.19, "constitutional-amendment-procedure": 8.67, "constitutional-amendment-deliberation": 6.08, "constitutional-amendment-other": 0.71}, "high_pct": {"constitutional-amendment-general": 39.5, "constitutional-amendment-article9": 40.5, "constitutional-amendment-emergency": 54.0, "constitutional-amendment-referendum": 44.6, "constitutional-amendment-procedure": 31.2, "constitutional-amendment-deliberation": 15.5, "constitutional-amendment-other": 22.2}, "high_counts": {"constitutional-amendment-general": 361, "constitutional-amendment-article9": 205, "constitutional-amendment-emergency": 215, "constitutional-amendment-referendum": 150, "constitutional-amendment-procedure": 69, "constitutional-amendment-deliberation": 24, "constitutional-amendment-other": 4}}, {"id": "改正推進", "label": "改正推進", "total": 433, "counts": {"constitutional-amendment-general": 129, "constitutional-amendment-article9": 231, "constitutional-amendment-emergency": 16, "constitutional-amendment-referendum": 11, "constitutional-amendment-procedure": 27, "constitutional-amendment-deliberation": 17, "constitutional-amendment-other": 2}, "width_pct": {"constitutional-amendment-general": 29.79, "constitutional-amendment-article9": 53.35, "constitutional-amendment-emergency": 3.7, "constitutional-amendment-referendum": 2.54, "constitutional-amendment-procedure": 6.24, "constitutional-amendment-deliberation": 3.93, "constitutional-amendment-other": 0.46}, "high_pct": {"constitutional-amendment-general": 24.0, "constitutional-amendment-article9": 41.1, "constitutional-amendment-emergency": 6.2, "constitutional-amendment-referendum": 27.3, "constitutional-amendment-procedure": 33.3, "constitutional-amendment-deliberation": 17.6, "constitutional-amendment-other": 50.0}, "high_counts": {"constitutional-amendment-general": 31, "constitutional-amendment-article9": 95, "constitutional-amendment-emergency": 1, "constitutional-amendment-referendum": 3, "constitutional-amendment-procedure": 9, "constitutional-amendment-deliberation": 3, "constitutional-amendment-other": 1}}, {"id": "慎重・反対", "label": "慎重・反対", "total": 1739, "counts": {"constitutional-amendment-general": 657, "constitutional-amendment-article9": 248, "constitutional-amendment-emergency": 357, "constitutional-amendment-referendum": 280, "constitutional-amendment-procedure": 137, "constitutional-amendment-deliberation": 56, "constitutional-amendment-other": 4}, "width_pct": {"constitutional-amendment-general": 37.78, "constitutional-amendment-article9": 14.26, "constitutional-amendment-emergency": 20.53, "constitutional-amendment-referendum": 16.1, "constitutional-amendment-procedure": 7.88, "constitutional-amendment-deliberation": 3.22, "constitutional-amendment-other": 0.23}, "high_pct": {"constitutional-amendment-general": 47.6, "constitutional-amendment-article9": 44.4, "constitutional-amendment-emergency": 58.5, "constitutional-amendment-referendum": 51.4, "constitutional-amendment-procedure": 40.9, "constitutional-amendment-deliberation": 30.4, "constitutional-amendment-other": 50.0}, "high_counts": {"constitutional-amendment-general": 313, "constitutional-amendment-article9": 110, "constitutional-amendment-emergency": 209, "constitutional-amendment-referendum": 144, "constitutional-amendment-procedure": 56, "constitutional-amendment-deliberation": 17, "constitutional-amendment-other": 2}}, {"id": "手続き重視", "label": "手続き重視", "total": 114, "counts": {"constitutional-amendment-general": 28, "constitutional-amendment-article9": 5, "constitutional-amendment-emergency": 4, "constitutional-amendment-referendum": 35, "constitutional-amendment-procedure": 28, "constitutional-amendment-deliberation": 14, "constitutional-amendment-other": 0}, "width_pct": {"constitutional-amendment-general": 24.56, "constitutional-amendment-article9": 4.39, "constitutional-amendment-emergency": 3.51, "constitutional-amendment-referendum": 30.7, "constitutional-amendment-procedure": 24.56, "constitutional-amendment-deliberation": 12.28, "constitutional-amendment-other": 0.0}, "high_pct": {"constitutional-amendment-general": 7.1, "constitutional-amendment-article9": 0.0, "constitutional-amendment-emergency": 0.0, "constitutional-amendment-referendum": 8.6, "constitutional-amendment-procedure": 3.6, "constitutional-amendment-deliberation": 0.0, "constitutional-amendment-other": 0.0}, "high_counts": {"constitutional-amendment-general": 2, "constitutional-amendment-article9": 0, "constitutional-amendment-emergency": 0, "constitutional-amendment-referendum": 3, "constitutional-amendment-procedure": 1, "constitutional-amendment-deliberation": 0, "constitutional-amendment-other": 0}}, {"id": "中立", "label": "中立", "total": 262, "counts": {"constitutional-amendment-general": 100, "constitutional-amendment-article9": 22, "constitutional-amendment-emergency": 21, "constitutional-amendment-referendum": 10, "constitutional-amendment-procedure": 29, "constitutional-amendment-deliberation": 68, "constitutional-amendment-other": 12}, "width_pct": {"constitutional-amendment-general": 38.17, "constitutional-amendment-article9": 8.4, "constitutional-amendment-emergency": 8.02, "constitutional-amendment-referendum": 3.82, "constitutional-amendment-procedure": 11.07, "constitutional-amendment-deliberation": 25.95, "constitutional-amendment-other": 4.58}, "high_pct": {"constitutional-amendment-general": 15.0, "constitutional-amendment-article9": 0.0, "constitutional-amendment-emergency": 23.8, "constitutional-amendment-referendum": 0.0, "constitutional-amendment-procedure": 10.3, "constitutional-amendment-deliberation": 5.9, "constitutional-amendment-other": 8.3}, "high_counts": {"constitutional-amendment-general": 15, "constitutional-amendment-article9": 0, "constitutional-amendment-emergency": 5, "constitutional-amendment-referendum": 0, "constitutional-amendment-procedure": 3, "constitutional-amendment-deliberation": 4, "constitutional-amendment-other": 1}}], "issues": [{"id": "constitutional-amendment-general", "key": "改憲全般", "label": "改憲全般", "icon": "📜", "count": 914, "share_pct": 35.9, "stances": {"改正推進": 129, "慎重・反対": 657, "手続き重視": 28, "中立": 100}, "top_stance": "慎重・反対", "purity_pct": 71.9, "intensity": {"high": 361, "medium": 445, "low": 108}, "high_pct": 39.5, "high_adjusted_pct": 39.5, "sub": {"status": "reread", "coverage": "full", "coverage_note": "この論点の収集本文を読み、理由で分けました。改正への賛否と、手続きを進めることへの意見を区別しています。", "show_coverage_note": false, "source_file": "data/constitutional-amendment_issues-reread.json", "reread_count": 914, "unread_count": 0, "skipped_count": 0, "grown_count": 0, "unknown_timing_count": 0, "items": [{"id": "debate-conditions", "label": "賛否の表明・運動と議論の仕方", "count": 319, "pct_in_issue": 34.9}, {"id": "peace-security", "label": "戦争を避ける方法と防衛", "count": 193, "pct_in_issue": 21.1}, {"id": "political-trust", "label": "改正を担う政権・政党への評価", "count": 172, "pct_in_issue": 18.8}, {"id": "referendum", "label": "国民投票で決めることへの評価", "count": 104, "pct_in_issue": 11.4}, {"id": "rights-scope", "label": "変更する条項と暮らし・権利", "count": 103, "pct_in_issue": 11.3}, {"id": "em-war", "label": "戦争・動員との結びつきへの懸念", "count": 9, "pct_in_issue": 1.0}, {"id": "em-control", "label": "権限集中と自由への制約", "count": 8, "pct_in_issue": 0.9}, {"id": "em-necessity", "label": "既存制度と条項の必要性", "count": 3, "pct_in_issue": 0.3}, {"id": "em-political", "label": "政治への不信と関連政策", "count": 2, "pct_in_issue": 0.2}, {"id": "em-election", "label": "任期延長と選挙の機会", "count": 1, "pct_in_issue": 0.1}]}, "verdict": null, "claims": [], "veins": ["constitutional-amendment-avoid-war"]}, {"id": "constitutional-amendment-article9", "key": "9条・自衛隊", "label": "9条・自衛隊", "icon": "🛡️", "count": 506, "share_pct": 19.9, "stances": {"改正推進": 231, "慎重・反対": 248, "手続き重視": 5, "中立": 22}, "top_stance": "慎重・反対", "purity_pct": 49.0, "intensity": {"high": 205, "medium": 270, "low": 31}, "high_pct": 40.5, "high_adjusted_pct": 40.5, "sub": {"status": "reread", "coverage": "full", "coverage_note": "投稿本文を読み、主な話題・理由で分けました。投稿者の主張を整理したもので、事実と確認されたことを意味しません。皇室典範の9条に言及する3件は別枠にしています", "show_coverage_note": false, "source_file": "data/constitutional-amendment_issues-reread.json", "reread_count": 506, "unread_count": 0, "skipped_count": 0, "grown_count": 0, "unknown_timing_count": 0, "items": [{"id": "a9-war", "label": "戦争・徴兵・権利制限への懸念", "count": 97, "pct_in_issue": 19.2}, {"id": "a9-defense", "label": "抑止力・防衛力と国を守る方法", "count": 79, "pct_in_issue": 15.6}, {"id": "a9-legal", "label": "自衛隊の位置づけと憲法解釈", "count": 66, "pct_in_issue": 13.0}, {"id": "a9-discussion", "label": "発言・報道・運動への応対", "count": 58, "pct_in_issue": 11.5}, {"id": "a9-us", "label": "米国との関係・海外派遣への評価", "count": 55, "pct_in_issue": 10.9}, {"id": "a9-politics", "label": "政党・政権と他の政策への評価", "count": 53, "pct_in_issue": 10.5}, {"id": "a9-position", "label": "賛否の表明・改正を求める声", "count": 36, "pct_in_issue": 7.1}, {"id": "a9-draft", "label": "改正案の内容・範囲と進め方", "count": 34, "pct_in_issue": 6.7}, {"id": "a9-military", "label": "国防軍・軍事法廷と自衛官の扱い", "count": 21, "pct_in_issue": 4.2}, {"id": "a9-context", "label": "本文だけでは理由を特定できない", "count": 4, "pct_in_issue": 0.8}, {"id": "a9-other-law", "label": "憲法の9条ではなく皇室典範の話題", "count": 3, "pct_in_issue": 0.6}]}, "verdict": "fact", "claims": [{"claim": "徴兵制は憲法18条の苦役禁止に当たる", "finding": "2016年10月11日の国会答弁で、政府は徴兵制を憲法18条が禁じる苦役と説明している。その政府解釈との一致を確認したもので、将来のあらゆる制度の可否を断定するものではない。", "id": "article18_conscription", "issue_ids": ["constitutional-amendment-article9"], "matched_post_count": 1, "sources": [{"name": "国会会議録 2016年10月11日 参議院予算委員会 稲田防衛大臣答弁", "url": "https://kokkai.ndl.go.jp/txt/119215261X00320161011/151"}], "verdict": "fact"}, {"claim": "自衛隊を違憲とする解釈がある", "finding": "当時の政府答弁で解釈の対立への言及を確認できる。これは学説を直接調査した資料ではなく、現在の学者の割合を示す根拠としては扱わない。", "id": "jieitai_iken_gaku", "issue_ids": ["constitutional-amendment-article9"], "matched_post_count": 3, "sources": [{"name": "国会会議録 2017年5月9日 参議院予算委員会 安倍総理答弁", "url": "https://kokkai.ndl.go.jp/txt/119315261X01820170509/43"}], "verdict": "fact"}], "veins": []}, {"id": "constitutional-amendment-emergency", "key": "緊急事態条項", "label": "緊急事態条項", "icon": "⚖️", "count": 398, "share_pct": 15.6, "stances": {"改正推進": 16, "慎重・反対": 357, "手続き重視": 4, "中立": 21}, "top_stance": "慎重・反対", "purity_pct": 89.7, "intensity": {"high": 215, "medium": 172, "low": 11}, "high_pct": 54.0, "high_adjusted_pct": 52.5, "sub": {"status": "reread", "coverage": "full", "coverage_note": "この論点の収集本文を読み、理由で分けました。改正への賛否と、手続きを進めることへの意見を区別しています。", "show_coverage_note": false, "source_file": "data/constitutional-amendment_issues-reread.json", "reread_count": 398, "unread_count": 0, "skipped_count": 0, "grown_count": 0, "unknown_timing_count": 0, "items": [{"id": "em-control", "label": "権限集中と自由への制約", "count": 102, "pct_in_issue": 25.6}, {"id": "em-political", "label": "政治への不信と関連政策", "count": 75, "pct_in_issue": 18.8}, {"id": "em-necessity", "label": "既存制度と条項の必要性", "count": 46, "pct_in_issue": 11.6}, {"id": "em-war", "label": "戦争・動員との結びつきへの懸念", "count": 43, "pct_in_issue": 10.8}, {"id": "debate-conditions", "label": "賛否の表明・運動と議論の仕方", "count": 35, "pct_in_issue": 8.8}, {"id": "em-commentator", "label": "他者の説明・立場への批評", "count": 28, "pct_in_issue": 7.0}, {"id": "em-election", "label": "任期延長と選挙の機会", "count": 27, "pct_in_issue": 6.8}, {"id": "political-trust", "label": "改正を担う政権・政党への評価", "count": 15, "pct_in_issue": 3.8}, {"id": "em-conditions", "label": "発動・延長・検証の条件", "count": 14, "pct_in_issue": 3.5}, {"id": "rights-scope", "label": "変更する条項と暮らし・権利", "count": 9, "pct_in_issue": 2.3}, {"id": "peace-security", "label": "戦争を避ける方法と防衛", "count": 4, "pct_in_issue": 1.0}]}, "verdict": "miss", "claims": [{"claim": "緊急事態条項案では内閣が国会を経ずに法律を作れる", "finding": "この投稿がどの年のどの案を指すかは特定できない。2018年の自民党案73条の2は大規模災害などの条件と国会の承認を求める手続きを置くが、2026年解説ではより広い緊急事態や国会機能代行も議論されている。参照する案を決めずに、この投稿を正しい・誤りとは判定しない。", "id": "emergency_law_making", "issue_ids": ["constitutional-amendment-emergency"], "matched_post_count": 1, "sources": [{"name": "自民党 条文イメージ・たたき台素案（2018年3月）PDF", "url": "https://storage.jimin.jp/pdf/constitution/news/20180326_01.pdf"}, {"name": "自民党 2026年解説版 p.7", "url": "https://storage.jimin.jp/pdf/constitution/document/kenpou_manual2026.pdf"}], "verdict": "miss"}], "veins": []}, {"id": "constitutional-amendment-referendum", "key": "国民投票・広告", "label": "国民投票・広告", "icon": "🗳️", "count": 336, "share_pct": 13.2, "stances": {"改正推進": 11, "慎重・反対": 280, "手続き重視": 35, "中立": 10}, "top_stance": "慎重・反対", "purity_pct": 83.3, "intensity": {"high": 150, "medium": 162, "low": 24}, "high_pct": 44.6, "high_adjusted_pct": 44.1, "sub": {"status": "reread", "coverage": "full", "coverage_note": "投稿本文を読み、主な理由ごとに分けました。不正や情報操作への懸念は投稿者の意見で、事実と確認されたことを意味しません。本文だけでは理由を特定できない投稿は別にしています", "show_coverage_note": false, "source_file": "data/constitutional-amendment_issues-reread.json", "reread_count": 336, "unread_count": 0, "skipped_count": 0, "grown_count": 0, "unknown_timing_count": 0, "items": [{"id": "ref-advertising", "label": "広告・資金力と情報の公平さ", "count": 82, "pct_in_issue": 24.4}, {"id": "ref-threshold", "label": "最低投票率と承認に必要な票数", "count": 58, "pct_in_issue": 17.3}, {"id": "ref-integrity", "label": "投票・開票への不信と監視の要望", "count": 54, "pct_in_issue": 16.1}, {"id": "ref-participation", "label": "国民投票への参加と意思表示", "count": 32, "pct_in_issue": 9.5}, {"id": "ref-reporting", "label": "報道・周知を求める声", "count": 32, "pct_in_issue": 9.5}, {"id": "ref-political", "label": "政党・政治家と関連政策への評価", "count": 19, "pct_in_issue": 5.7}, {"id": "ref-sequence", "label": "法改正を進める順序と議論の時間", "count": 16, "pct_in_issue": 4.8}, {"id": "ref-rules", "label": "投票のルール整備への評価", "count": 15, "pct_in_issue": 4.5}, {"id": "ref-proposal", "label": "改正案の内容と権利・戦争への懸念", "count": 14, "pct_in_issue": 4.2}, {"id": "ref-discussion", "label": "他者の説明への問い・批評", "count": 8, "pct_in_issue": 2.4}, {"id": "ref-context", "label": "本文だけでは具体的な理由を特定できない", "count": 6, "pct_in_issue": 1.8}]}, "verdict": "fact", "claims": [{"claim": "国民投票には最低投票率の規定がない", "finding": "国民投票法126条1項は賛成票が投票総数の2分の1を超えることを承認の条件とし、最低投票率を成立条件にしていない。98条2項の投票総数は賛成票と反対票の合計。", "id": "minimum_vote_rate", "issue_ids": ["constitutional-amendment-referendum"], "matched_post_count": 31, "sources": [{"name": "e-Gov 国民投票法（日本国憲法の改正手続に関する法律）", "url": "https://laws.e-gov.go.jp/law/419AC1000000051"}], "verdict": "fact"}, {"claim": "国会の発議から国民投票まで最短60日だ", "finding": "60日以上180日以内という数字は第2条の条文どおり。期日の決定は国会の議決によることも明記されている。", "id": "period_60days", "issue_ids": ["constitutional-amendment-referendum"], "matched_post_count": 1, "sources": [{"name": "e-Gov 国民投票法（日本国憲法の改正手続に関する法律）", "url": "https://laws.e-gov.go.jp/law/419AC1000000051"}], "verdict": "fact"}], "veins": []}, {"id": "constitutional-amendment-procedure", "key": "政党・発議手続き", "label": "政党・発議手続き", "icon": "🏛️", "count": 221, "share_pct": 8.7, "stances": {"改正推進": 27, "慎重・反対": 137, "手続き重視": 28, "中立": 29}, "top_stance": "慎重・反対", "purity_pct": 62.0, "intensity": {"high": 69, "medium": 124, "low": 28}, "high_pct": 31.2, "high_adjusted_pct": 32.9, "sub": {"status": "reread", "coverage": "full", "coverage_note": "投稿本文を読み、主な話題・理由で分けました。投稿者の主張を整理したもので、事実と確認されたことを意味しません", "show_coverage_note": false, "source_file": "data/constitutional-amendment_issues-reread.json", "reread_count": 221, "unread_count": 0, "skipped_count": 0, "grown_count": 0, "unknown_timing_count": 0, "items": [{"id": "party-policy", "label": "政党・政治家の政策と支持の判断", "count": 76, "pct_in_issue": 34.4}, {"id": "party-consistency", "label": "政党の発言と採決の食い違いへの指摘", "count": 37, "pct_in_issue": 16.7}, {"id": "party-stop", "label": "審査会・発議を止めるよう求める声", "count": 30, "pct_in_issue": 13.6}, {"id": "party-seats", "label": "発議に必要な議席と成立の見通し", "count": 28, "pct_in_issue": 12.7}, {"id": "party-procedure", "label": "議論・国民投票と手続きへの評価", "count": 28, "pct_in_issue": 12.7}, {"id": "party-cooperate", "label": "政党間の協力・連立と違い", "count": 22, "pct_in_issue": 10.0}]}, "verdict": "fact", "claims": [{"claim": "憲法改正には衆参両院それぞれ3分の2以上の賛成が必要だ", "finding": "3分の2・各議院という条件は第96条第1項の条文どおり。「総議員」の解釈（欠員を含むか）に学説上の議論はあるが、3分の2以上という数字の読みに食い違いはない。", "id": "two_thirds", "issue_ids": ["constitutional-amendment-procedure"], "matched_post_count": 6, "sources": [{"name": "e-Gov法令検索 日本国憲法 第96条", "url": "https://laws.e-gov.go.jp/law/321CONSTITUTION"}], "verdict": "fact"}], "veins": []}, {"id": "constitutional-amendment-deliberation", "key": "情報・議論の質", "label": "情報・議論の質", "icon": "💬", "count": 155, "share_pct": 6.1, "stances": {"改正推進": 17, "慎重・反対": 56, "手続き重視": 14, "中立": 68}, "top_stance": "中立", "purity_pct": 43.9, "intensity": {"high": 24, "medium": 108, "low": 23}, "high_pct": 15.5, "high_adjusted_pct": 21.5, "sub": {"status": "reread", "coverage": "full", "coverage_note": "投稿本文を読み、主な話題・理由で分けました。投稿者の主張を整理したもので、事実と確認されたことを意味しません", "show_coverage_note": false, "source_file": "data/constitutional-amendment_issues-reread.json", "reread_count": 155, "unread_count": 0, "skipped_count": 0, "grown_count": 0, "unknown_timing_count": 0, "items": [{"id": "info-dialogue", "label": "決めつけ・中傷と対話の仕方", "count": 42, "pct_in_issue": 27.1}, {"id": "info-action", "label": "声の上げ方や運動の伝え方", "count": 25, "pct_in_issue": 16.1}, {"id": "info-evidence", "label": "数字・条文・説明の根拠を確かめる声", "count": 24, "pct_in_issue": 15.5}, {"id": "info-speakers", "label": "発信者の立場や主張への批評", "count": 24, "pct_in_issue": 15.5}, {"id": "info-media", "label": "報道の不足や偏りへの指摘", "count": 18, "pct_in_issue": 11.6}, {"id": "info-campaign", "label": "宣伝・情報操作への懸念", "count": 14, "pct_in_issue": 9.0}, {"id": "info-democracy", "label": "民主主義と考える力への評価", "count": 8, "pct_in_issue": 5.2}]}, "verdict": null, "claims": [], "veins": []}, {"id": "constitutional-amendment-other", "key": "その他", "label": "その他", "icon": "◯", "count": 18, "share_pct": 0.7, "stances": {"改正推進": 2, "慎重・反対": 4, "手続き重視": 0, "中立": 12}, "top_stance": "中立", "purity_pct": 66.7, "intensity": {"high": 4, "medium": 6, "low": 8}, "high_pct": 22.2, "high_adjusted_pct": 35.5, "sub": {"status": "reread", "coverage": "full", "coverage_note": "投稿本文を読み、主な話題・理由で分けました。投稿者の主張を整理したもので、事実と確認されたことを意味しません", "show_coverage_note": false, "source_file": "data/constitutional-amendment_issues-reread.json", "reread_count": 18, "unread_count": 0, "skipped_count": 0, "grown_count": 0, "unknown_timing_count": 0, "items": [{"id": "other-policy", "label": "家族・皇室・代表者選びの制度", "count": 9, "pct_in_issue": 50.0}, {"id": "other-protest", "label": "デモと異なる立場への応対", "count": 6, "pct_in_issue": 33.3}, {"id": "other-constitution", "label": "憲法への向き合い方", "count": 2, "pct_in_issue": 11.1}, {"id": "other-city", "label": "人口集中と居住の自由", "count": 1, "pct_in_issue": 5.6}]}, "verdict": null, "claims": [], "veins": []}], "claims": [{"id": "minimum_vote_rate", "claim": "国民投票には最低投票率の規定がない", "verdict": "fact", "verdict_label": "資料どおり", "finding": "国民投票法126条1項は賛成票が投票総数の2分の1を超えることを承認の条件とし、最低投票率を成立条件にしていない。98条2項の投票総数は賛成票と反対票の合計。", "sources": [{"name": "e-Gov 国民投票法（日本国憲法の改正手続に関する法律）", "url": "https://laws.e-gov.go.jp/law/419AC1000000051"}]}, {"id": "period_60days", "claim": "国会の発議から国民投票まで最短60日だ", "verdict": "fact", "verdict_label": "資料どおり", "finding": "60日以上180日以内という数字は第2条の条文どおり。期日の決定は国会の議決によることも明記されている。", "sources": [{"name": "e-Gov 国民投票法（日本国憲法の改正手続に関する法律）", "url": "https://laws.e-gov.go.jp/law/419AC1000000051"}]}, {"id": "two_thirds", "claim": "憲法改正には衆参両院それぞれ3分の2以上の賛成が必要だ", "verdict": "fact", "verdict_label": "資料どおり", "finding": "3分の2・各議院という条件は第96条第1項の条文どおり。「総議員」の解釈（欠員を含むか）に学説上の議論はあるが、3分の2以上という数字の読みに食い違いはない。", "sources": [{"name": "e-Gov法令検索 日本国憲法 第96条", "url": "https://laws.e-gov.go.jp/law/321CONSTITUTION"}]}, {"id": "emergency_law_making", "claim": "緊急事態条項案では内閣が国会を経ずに法律を作れる", "verdict": "miss", "verdict_label": "裏が取れない", "finding": "この投稿がどの年のどの案を指すかは特定できない。2018年の自民党案73条の2は大規模災害などの条件と国会の承認を求める手続きを置くが、2026年解説ではより広い緊急事態や国会機能代行も議論されている。参照する案を決めずに、この投稿を正しい・誤りとは判定しない。", "sources": [{"name": "自民党 条文イメージ・たたき台素案（2018年3月）PDF", "url": "https://storage.jimin.jp/pdf/constitution/news/20180326_01.pdf"}, {"name": "自民党 2026年解説版 p.7", "url": "https://storage.jimin.jp/pdf/constitution/document/kenpou_manual2026.pdf"}]}, {"id": "article18_conscription", "claim": "徴兵制は憲法18条の苦役禁止に当たる", "verdict": "fact", "verdict_label": "資料どおり", "finding": "2016年10月11日の国会答弁で、政府は徴兵制を憲法18条が禁じる苦役と説明している。その政府解釈との一致を確認したもので、将来のあらゆる制度の可否を断定するものではない。", "sources": [{"name": "国会会議録 2016年10月11日 参議院予算委員会 稲田防衛大臣答弁", "url": "https://kokkai.ndl.go.jp/txt/119215261X00320161011/151"}]}, {"id": "jieitai_iken_gaku", "claim": "自衛隊を違憲とする解釈がある", "verdict": "fact", "verdict_label": "資料どおり", "finding": "当時の政府答弁で解釈の対立への言及を確認できる。これは学説を直接調査した資料ではなく、現在の学者の割合を示す根拠としては扱わない。", "sources": [{"name": "国会会議録 2017年5月9日 参議院予算委員会 安倍総理答弁", "url": "https://kokkai.ndl.go.jp/txt/119315261X01820170509/43"}]}], "editorial": {"checked_on": "2026-09-12", "findings": [{"id": "constitutional-amendment-ed-1", "kind": "shared_premise", "text": "戦争を避けたいという思いは、改正を進めたい投稿にも、改正に反対する投稿にもありました。防衛の仕組みを変えることと、現行憲法による歯止めを保つことの、どちらを頼りにするかで分かれています。"}, {"id": "constitutional-amendment-ed-2", "kind": "real_conflict", "text": "改正そのものを認める投稿でも、いまの政権が出す案には反対する場合があります。「誰が変えるか」と「どこを変えるか」を分けると、単純な賛否では見えない条件が読めます。"}, {"id": "constitutional-amendment-ed-3", "kind": "real_conflict", "text": "国民投票まで進めて国民が判断すればよいという意見と、広告や情報、投開票への不信から発議前に止めたいという意見があります。投票で決めることへの信頼も争点です。"}, {"id": "constitutional-amendment-ed-4", "kind": "still_unknown", "text": "反対派を批判しただけの投稿から、書き手自身が改正案を支持しているとは限りません。本文に立場が明示されているかと、何を評価しているかを分けて整理しています。"}, {"id": "constitutional-amendment-ed-5", "kind": "still_unknown", "text": "過去の草案、現在の提案、現行の条文を混ぜると、同じ言葉でも別の制度について話してしまいます。資料に書かれている範囲と、投稿者が予測していることを区別します。"}], "reviewer_type": "ai_assisted", "status": "complete"}, "ocean": {"claim_status": "complete", "checked_on": "2026-10-13", "reviewer_type": "editorial_review", "ocean_status": "complete", "ocean_checked_on": "2026-11-03", "ocean_reviewer_type": "ai_assisted", "sunk_continents": [{"checked_on": "2026-11-03", "id": "constitutional-amendment-challenge", "life_impact": "国民投票に異議がある投票人は、結果の告示から30日以内に東京高等裁判所へ訴訟を起こせます。不正への不安を語ることとは別に、結果に異議を申し立てる期限と相手が法定されています。", "nearest_issue_id": null, "reviewer_type": "ai_assisted", "sns_base": 2548, "sns_count": 0, "sns_note": "全意見の制度語検索と該当本文の照合では、この具体的な手続きへの言及を確認できませんでした。言い換えを含めた完全な不存在の証明ではありません。2026-09-18: 新規199件（意見）を同じ条件語（訴訟|裁判|異議）で再検索。新規の一致なし、母数のみ更新。 2026-09-26収集: 新規188件（意見）を同じ条件語（訴訟|裁判|異議）で再検索。3件が候補に挙がったが、憲法裁判所の設置、または「解釈改憲に異議」という報道見出しへの言及であり不一致。新規の一致なし、母数のみ更新。 2026-10-04収集: 新規207件（意見）を同じ条件語（訴訟|裁判|異議）で再検索。新規の一致なし、母数のみ更新。 2026-10-13収集: 新規189件（意見）を同じ条件語（訴訟|裁判|異議）で再検索。1件が候補に挙がったが、2008年名古屋高裁判決への言及で不一致。新規の一致なし、母数のみ更新。 2026-10-24収集: 新規205件（意見）を同じ条件語（訴訟|裁判|異議）で再検索。1件が候補に挙がったが、国民投票法案の採決をめぐる政党への批判で不一致。新規の一致なし、母数のみ更新。 2026-11-03収集: 新規223件（意見191）を同じ条件語で再検索。候補1件（裁判の開始と人権への懸念）は、異議訴訟の手続きへの言及ではないため不一致。", "sources": [{"date": "2026-09-12確認", "location": "第127条", "name": "e-Gov：国民投票法", "url": "https://laws.e-gov.go.jp/law/419AC1000000051"}], "topic": "国民投票の結果に異議を申し立てる手続き", "opinion_count_now": 2548, "base_stale": false, "short_label": "国民投票の結果に異議を申し…"}, {"checked_on": "2026-11-03", "id": "constitutional-amendment-emergency-review", "life_impact": "参議院の緊急集会で採った措置は臨時のものです。次の国会が開かれてから10日以内に衆議院の同意がなければ効力を失います。緊急時に決める仕組みには、後から確かめる手続きもあります。", "nearest_issue_id": null, "reviewer_type": "ai_assisted", "sns_base": 2548, "sns_count": 0, "sns_note": "全意見の制度語検索と該当本文の照合では、この具体的な手続きへの言及を確認できませんでした。言い換えを含めた完全な不存在の証明ではありません。2026-09-18: 新規199件（意見）を同じ条件語（緊急集会）で再検索。2件が候補に挙がった。いずれも「参議院の緊急集会」という制度の存在・要否への一般的な言及だった。第54条第3項の具体的手続き（次の国会開会後10日以内に衆議院の同意が無いと効力を失う事後審査）には触れていないため不一致。新規の一致なし、母数のみ更新。 2026-09-26収集: 新規188件（意見）を同じ条件語（緊急集会）で再検索。新規の一致なし、母数のみ更新。 2026-10-04収集: 新規207件（意見）を同じ条件語（緊急集会）で再検索。新規の一致なし、母数のみ更新。 2026-10-13収集: 新規189件（意見）を同じ条件語（緊急集会）で再検索。1件が候補に挙がったが、緊急集会で対応できるという制度一般への言及で、事後審査の手続きには触れておらず不一致。新規の一致なし、母数のみ更新。 2026-10-24収集: 新規205件（意見）を同じ条件語で再検索。新規の一致なし、母数のみ更新。 2026-11-03収集の候補1件（緊急集会で対応できない事態の説明を求める問い）は事後審査の手続きへの言及ではなく不一致。", "sources": [{"date": "2026-09-12確認", "location": "第54条第3項", "name": "e-Gov：日本国憲法", "url": "https://laws.e-gov.go.jp/law/321CONSTITUTION"}], "topic": "参議院の緊急集会で採った措置の、その後", "opinion_count_now": 2548, "base_stale": false, "short_label": "参議院の緊急集会で採った措…"}, {"checked_on": "2026-11-03", "id": "constitutional-amendment-sc-3", "life_impact": "自民党が掲げる複数の改正項目（9条・緊急事態条項など）が同時に国会発議されても、有権者は項目ごとに個別の賛成・反対を投票する。ある項目には賛成し別の項目には反対する、という投票ができ、複数項目をまとめて一つの賛否しか選べない投票にはならない。", "nearest_issue_id": "constitutional-amendment-procedure", "reviewer_type": "editorial_review", "sns_base": 2548, "sns_count": 1, "sns_note": "「4項目」「一括発議」「パッケージ」等の語での一致は5件あった。いずれも改正4項目の中身の是非やその紹介の仕方を論じているだけで、発議・投票が項目ごとに区分される手続きそのものへの言及ではない。 2026-09-26収集: 新規188件（意見）を同じ条件語で再検索。新規の一致なし、母数のみ更新。 2026-10-04収集: 新規207件（意見）を同じ条件語で再検索。新規の一致なし、母数のみ更新。 2026-10-13収集: 新規189件（意見）を同じ条件語で再検索。1件が候補に挙がったが、改憲4項目のリーフレット名の紹介で不一致。新規の一致なし、母数のみ更新。 2026-10-24収集: 新規205件（意見）を同じ条件語で再検索。2件が候補に挙がったが、いずれも改憲4項目の中身をめぐる反論で、発議・投票が項目ごとに区分される手続きへの言及ではない。新規の一致なし、母数のみ更新。 2026-11-03収集: 新規223件（意見191）を同じ条件語で再検索。候補1件（個別に発議することを知らない人が多いという投稿）は、項目ごとに個別発議する手続きへの言及として該当。該当1件として数えた。", "sources": [{"date": "2007-05-18", "location": "第68条の3（平成19年法律第51号附則により新設。同時に新設された第68条の2は発議に必要な賛成者数〈衆院100人以上・参院50人以上〉を規定）", "name": "e-Gov法令検索：国会法（昭和22年法律第79号）", "url": "https://laws.e-gov.go.jp/law/322AC1000000079"}], "topic": "国会法第68条の3は、憲法改正原案を発議する際に「内容において関連する事項ごとに区分して行う」ことを定めており、内容が関連しない複数の改正項目を一つにまとめて単一の賛否だけを問う発議はできない。", "opinion_count_now": 2548, "base_stale": false, "short_label": "国会法第68条の3は、憲法…"}, {"checked_on": "2026-11-03", "id": "constitutional-amendment-sc-4", "life_impact": "この答弁のとおり運用されれば、将来、憲法改正の国民投票が実施される場合も、衆議院議員選挙・参議院議員選挙とは別の投票日になる。有権者は、代表者を選ぶ国政選挙と、制度の可否を決める国民投票を、別の機会に投票することになる。", "nearest_issue_id": "constitutional-amendment-referendum", "reviewer_type": "editorial_review", "sns_base": 2548, "sns_count": 0, "sns_note": "「同日実施」「ダブル選」等の語での一致は2件あった。いずれも衆議院の解散と参議院選挙を同じ日に行う「衆参ダブル選挙」という別の政治的タイミングの話だった。憲法改正国民投票を国政選挙と同日にしないという2007年の立法意思そのものへの言及ではない。 2026-09-26収集: 新規188件（意見）を同じ条件語で再検索。新規の一致なし、母数のみ更新。 2026-10-04収集: 新規207件（意見）を同じ条件語で再検索。1件が候補に挙がったが、改憲の議論と護憲を同時に進めてよいという意味の「同時に」で不一致。新規の一致なし、母数のみ更新。 2026-10-13収集: 新規189件（意見）を同じ条件語で再検索。新規の一致なし、母数のみ更新。 2026-10-24収集: 新規205件（意見）を同じ条件語で再検索。新規の一致なし、母数のみ更新。", "sources": [{"date": "2026-07-23", "location": "speechOrder 28", "name": "国立国会図書館「国会会議録検索システム」参議院沖縄・北方問題及び地方に関する特別委員会議事録 第8号（足立康史発言）", "url": "https://kokkai.ndl.go.jp/txt/122115382X00820260723/28"}, {"date": "2026-07-23", "location": "speechOrder 59, 63", "name": "国立国会図書館「国会会議録検索システム」参議院沖縄・北方問題及び地方に関する特別委員会・総務委員会連合審査会議事録 第1号（足立康史発言）", "url": "https://kokkai.ndl.go.jp/txt/122115391X00120260723/63"}], "topic": "2026年7月23日の参議院委員会審議で、足立康史議員は、2007年の国民投票法制定時に「制度を選ぶ憲法改正国民投票と人物を選ぶ国政選挙を一緒にするのは適当ではない」という立法意思を提出者が明確に答弁しており、両者を同日に実施しないことは既に確定していると述べた。", "opinion_count_now": 2548, "base_stale": false, "short_label": "2026年7月23日の参議…"}], "veins": [{"checked_on": "2026-09-12", "diverging_reason": "推進側は防衛力や抑止のための改正が戦争を防ぐと考え、反対側は憲法を変えることで戦争に関わる危険が増すと考えています。守りたい平和が共通でも、頼りにする方法が異なります。", "id": "constitutional-amendment-avoid-war", "issue_ids": ["constitutional-amendment-general"], "reviewer_type": "ai_assisted", "shared_concern": "戦争を避けたい。", "sides": [{"post_count": 2, "stance_label": "改正推進"}, {"post_count": 2, "stance_label": "慎重・反対"}]}]}};</script>
 <script>
 (function(){
 "use strict";
@@ -2860,6 +4791,91 @@ try {
 })();
 </script>
 <script>(()=>{const aliases={"top": "ca-open", "progress": "ca-open", "change-lens": "ca-open", "change-lens-title": "ca-open", "change-lens-tabs": "ca-open", "constitutional-faq": "ca-faq-title", "quick-faq-title": "ca-faq-title", "lens-tab-article9": "bg-issues-map", "lens-panel-article9": "bg-issues-map", "lens-tab-emergency": "bg-issues-map", "lens-panel-emergency": "bg-issues-map", "lens-tab-referendum": "bg-referendum-law", "lens-panel-referendum": "bg-referendum-law", "lens-tab-reasons": "constitutional-amendment-reading", "lens-panel-reasons": "constitutional-amendment-reading", "stance-glance": "constitutional-amendment-reading", "stance-glance-title": "constitutional-amendment-reading", "stance-glance-buttons": "constitutional-amendment-reading", "stance-glance-result": "constitutional-amendment-reading", "fallback": "constitutional-amendment-reading", "fallback-nav": "constitutional-amendment-reading", "explainer-section": "constitutional-amendment-reading", "editorial": "constitutional-amendment-reading", "quiz": "constitutional-amendment-reading", "ocean": "constitutional-amendment-reading", "bukatsu-background": "constitutional-amendment-background", "bg-title": "constitutional-amendment-background", "bukatsu-check": "bg-issues-map", "ck-title": "bg-issues-map", "classroom-title": "bg-classroom"},prefixes=["fb-", "extras-", "figure-", "constitutional-amendment-reading-"];function resolve(){let id=decodeURIComponent(location.hash.slice(1));if(!id)return;const cur=document.getElementById(id);if(cur&&cur.getClientRects().length)return;const pre=prefixes.find(x=>id.startsWith(x));if(pre&&document.getElementById('issue-'+id.slice(pre.length)))id='issue-'+id.slice(pre.length);else if(aliases[id])id=aliases[id];else return;location.replace('#'+id);const t=document.getElementById(id);if(t&&t.tagName==='DETAILS')t.open=true;}function openRow(){const t=document.getElementById(decodeURIComponent(location.hash.slice(1)));if(!t)return;let d=t.tagName==='DETAILS'?t:t.closest('details'),moved=false;while(d){if(!d.open){d.open=true;moved=true;}d=d.parentElement&&d.parentElement.closest('details');}if(moved)requestAnimationFrame(()=>t.scrollIntoView({block:'start'}));}document.addEventListener('click',e=>{const a=e.target.closest&&e.target.closest('a[data-tide-mode]');if(!a)return;const id=a.getAttribute('href').slice(1),t=document.getElementById(id);if(!t)return;e.preventDefault();const d=t.closest('details');if(d)d.open=true;const b=t.querySelector('[data-tide-mode="'+a.dataset.tideMode+'"]');if(b&&b.getAttribute('aria-pressed')!=='true')b.click();history.replaceState(null,'','#'+id);requestAnimationFrame(()=>t.scrollIntoView({block:'start'}));});addEventListener('hashchange',()=>{resolve();openRow();});resolve();openRow();})();</script>
+<script>(() => {
+  const guide = document.querySelector(".cav");
+  if (!guide) return;
+  const nav = guide.querySelector(".cav-nav");
+  const search = guide.querySelector(".cav-search");
+  const input = search.querySelector("input");
+  const modes = [...nav.querySelectorAll("[data-cav-mode]")];
+  const links = [...nav.querySelectorAll("li[data-kind]")];
+  const mobile = matchMedia("(max-width: 820px)");
+  let mode = "all";
+  if (mobile.matches) nav.open = false;
+
+  function renderIndex() {
+    const query = input.value.normalize("NFKC").trim().toLowerCase();
+    search.hidden = mode !== "search";
+    for (const item of links) {
+      const kind = item.dataset.kind;
+      item.hidden = mode === "all" ? kind === "reason"
+        : mode === "visual" ? !["diagram", "table", "photo"].includes(kind)
+        : !query || !item.textContent.normalize("NFKC").toLowerCase().includes(query);
+    }
+    nav.querySelector(".cav-empty").hidden = mode !== "search" || !query || links.some(item => !item.hidden);
+  }
+  for (const button of modes) button.addEventListener("click", () => {
+    mode = button.dataset.cavMode;
+    for (const control of modes) control.setAttribute("aria-pressed", String(control === button));
+    renderIndex();
+    if (mode === "search") input.focus();
+  });
+  input.addEventListener("input", renderIndex);
+
+  guide.addEventListener("click", event => {
+    const link = event.target.closest("a");
+    if (!link) return;
+    if (nav.contains(link) && mobile.matches) nav.open = false;
+    if (typeof window.gtag === "function") {
+      window.gtag("event", "constitutional_guide_click", {
+        section_id: link.hash.slice(1) || link.closest("[id]")?.id || "photo",
+        entry: nav.contains(link) ? mode : "body"
+      });
+    }
+  });
+  const sections = [...guide.querySelectorAll(".cav-content > [data-readpoint]")];
+  const navLinks = new Map(links.map(item => [item.firstElementChild.hash, item.firstElementChild]));
+  let active;
+  const observer = new IntersectionObserver(entries => {
+    for (const entry of entries) {
+      if (!entry.isIntersecting) continue;
+      active?.removeAttribute("aria-current");
+      active = navLinks.get("#" + entry.target.id);
+      active?.setAttribute("aria-current", "location");
+    }
+  }, {rootMargin: "0px 0px -70% 0px"});
+  for (const section of sections) observer.observe(section);
+
+  const filters = [...guide.querySelectorAll(".comparison-tools [data-filter]")];
+  for (const button of filters) button.addEventListener("click", () => {
+    for (const option of filters) option.setAttribute("aria-pressed", String(option === button));
+    for (const row of guide.querySelectorAll(".compare-table tr[data-topic]")) {
+      row.hidden = button.dataset.filter !== "all" && row.dataset.topic !== button.dataset.filter;
+    }
+  });
+
+  const fields = ["yes", "no", "invalid"].map(key => guide.querySelector("#vote-" + key));
+  const result = guide.querySelector("#cav-vote-result");
+  function renderVote() {
+    const valid = fields.every(field => field.validity.valid && field.value !== "");
+    const [yes, no, invalid] = valid ? fields.map(field => field.valueAsNumber) : [0, 0, 0];
+    const total = yes + no;
+    for (const [key, label, value] of [["yes", "賛成", yes], ["no", "反対", no]]) {
+      const bar = guide.querySelector("#diagram-" + key);
+      bar.style.flex = String(total ? value : 1);
+      bar.textContent = label + " " + value.toLocaleString("ja-JP");
+    }
+    guide.querySelector("#diagram-invalid").textContent = invalid.toLocaleString("ja-JP") + "票";
+    guide.querySelector("#ballot-bars").setAttribute("aria-label", `賛成${yes}票、反対${no}票`);
+    if (!valid) result.textContent = "票数は0以上の整数で入力してください。";
+    else if (!total) result.textContent = "賛成票と反対票が0票のため、計算できません。";
+    else result.textContent = `賛成は約${(100 * yes / total).toFixed(1)}％。` +
+      (yes > no ? "承認条件を満たします。" : "承認条件を満たしません。");
+  }
+  for (const field of fields) field.addEventListener("input", renderVote);
+  renderVote();
+})();
+</script>
 <script src="share-x-btn.js"></script>
 </body>
 </html>

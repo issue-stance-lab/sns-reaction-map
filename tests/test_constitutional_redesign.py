@@ -692,7 +692,12 @@ class RedesignCandidateTests(unittest.TestCase):
     def test_provenance_counts_and_detects_mismatch(self):
         from scripts.constitutional_count_provenance import verified_selectors
         result = verified_selectors(self.release, ROOT)
-        self.assertEqual(len(result), len(PUBLIC["issues"]) + 1)
+        self.assertEqual(len(result), len(PUBLIC["issues"]) + 2)
+        self.assertIn("#constitutional-visual-guide", result)
+        count = self.s.select_one('[data-cav-count="opinions"]')
+        broken = self.release.replace(str(count), '<span data-cav-count="opinions">0</span>', 1)
+        with self.assertRaisesRegex(ValueError, "図解ガイドの集計"):
+            verified_selectors(broken, ROOT)
         node = self.s.select_one("#issue-constitutional-amendment-general li.fr-reason .fr-reason-n b")
         broken = self.release.replace(str(node), str(node).replace(node.get_text(), str(int(node.get_text().replace(",", "")) + 1)), 1)
         with self.assertRaisesRegex(ValueError, "一致しません"):
@@ -718,6 +723,7 @@ class LayoutTests(unittest.TestCase):
         root = Path(temp)
         shutil.copytree(ROOT / "configs", root / "configs")
         shutil.copytree(ROOT / "scripts/constitutional_redesign", root / "scripts/constitutional_redesign")
+        shutil.copytree(ROOT / "docs/images/constitutional-visual", root / "docs/images/constitutional-visual")
         for name in INPUTS:
             (root / name).parent.mkdir(parents=True, exist_ok=True)
             shutil.copy2(ROOT / name, root / name)

@@ -415,7 +415,7 @@ def compose(source: str, root: Path, mode: str, as_of: str | None = None) -> str
     body, d, as_of = render_body(root, as_of)
     assets = root / ASSETS
     css = "\n".join((assets / name).read_text(encoding="utf-8")
-                    for name in ("opening.css", "reading.css", "production.css"))
+                    for name in ("opening.css", "reading.css", "production.css", "visual-guide.css"))
     reading_js = (assets / "reading.js").read_text(encoding="utf-8")
     planet_js = (assets / "planet.js").read_text(encoding="utf-8")
 
@@ -480,6 +480,10 @@ def compose(source: str, root: Path, mode: str, as_of: str | None = None) -> str
     compact = d["cfg"]["compact"]
     _issue_glances(body_soup, tide, compact)
     _classroom(body_soup)
+    from constitutional_visual_guide import render as render_visual_guide
+    body_soup.find(string=lambda n: isinstance(n, Comment) and n.strip() == "CONSTITUTIONAL_READING_START").insert_before(
+        BeautifulSoup(render_visual_guide(root, d, body_soup), "html.parser")
+    )
     faq = _faq_json_ld(body_soup)
     head.insert(head.index("</head>"), faq)
     body_html = str(body_soup)
@@ -518,6 +522,7 @@ def compose(source: str, root: Path, mode: str, as_of: str | None = None) -> str
     page += "<script>" + reading_js + "</script>\n"
     page += "<script>" + planet_js + "</script>\n"
     page += x_script + "\n" + _alias_script() + "\n"
+    page += "<script>" + (assets / "visual-guide.js").read_text(encoding="utf-8") + "</script>\n"
     page += '<script src="share-x-btn.js"></script>\n</body>\n</html>\n'
     return page
 

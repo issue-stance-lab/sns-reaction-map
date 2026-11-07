@@ -199,4 +199,43 @@ def verified_selectors(source: str, root: Path) -> dict[str, str]:
         extra = set(_numbers(panel)) - allowed
         _check(not extra, f"{iid} の欄に説明できない件数 {sorted(extra)}")
         result["#issue-" + iid] = f"{PUBLIC} / {REREAD}（明細の数え直し）/ {READING}（{iid}）"
+    guide = soup.select_one("#constitutional-visual-guide")
+    if guide:
+        prefix = "constitutional-amendment-"
+        by_key = {i["id"].removeprefix(prefix): i for i in public["issues"]}
+        bases = {key: int(issue["count"]) for key, issue in by_key.items()}
+        bases.update(collected=int(public["collected_count"]), opinions=opinions,
+                     issues=len(by_key), reasons=sum(len(rr["buckets"]) for rr in reread.values()))
+        for field in guide.select("[data-cav-count]"):
+            key = field["data-cav-count"]
+            _check(key in bases and field.get_text() == _fmt(bases[key]), f"図解ガイドの集計 {key}")
+        bars = guide.select(".cav-bars li")
+        _check(len(bars) == len(by_key), "図解ガイドの論点数")
+        seen = set()
+        for bar in bars:
+            key = bar.a["href"].removeprefix("#issue-" + prefix)
+            _check(key in by_key and key not in seen, f"図解ガイドの論点 {key}")
+            seen.add(key)
+            n = bases[key]
+            _check(bar.b.get_text() == f"{_fmt(n)}件", f"図解ガイドの論点件数 {key}")
+            percent = f"{100 * n / opinions:.1f}" if opinions else "0.0"
+            _check(bar.i.get("style") == f"width:{percent}%", f"図解ガイドの棒の割合 {key}")
+        allowed = set(bases.values())
+        for node in guide.select("[data-cav-reason]"):
+            key, reason = node["data-cav-reason"].split("/")
+            issue = by_key[key]
+            rr = reread.get(issue["label"], {"items": [], "buckets": {}})
+            if reason not in rr["buckets"]:
+                _check(not _numbers(node), f"図解ガイドの未掲載理由 {reason}")
+                continue
+            n = sum(item["bucket"] == reason for item in rr["items"])
+            percent = f"{100 * n / bases[key]:.1f}" if bases[key] else "0.0"
+            _check(node.p is not None and node.p.get_text() == f"{_fmt(n)}件・この論点の{percent}％",
+                   f"図解ガイドの理由件数 {reason}")
+            allowed.add(n)
+            cfg = reading["issues"][issue["id"]].get("reasons", {}).get(reason, {})
+            allowed |= _confirmed_numbers(_strings(cfg), _norm(node.get_text()))
+        extra = set(_numbers(guide)) - allowed
+        _check(not extra, f"図解ガイドに説明できない件数 {sorted(extra)}")
+        result["#constitutional-visual-guide"] = f"{PUBLIC} / {REREAD}（明細の数え直し）"
     return result
