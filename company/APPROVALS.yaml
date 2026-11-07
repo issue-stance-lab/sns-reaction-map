@@ -3082,3 +3082,21 @@ items:
       公開コミットdc766c46aa973240930ec165a5233bc95f17fad1で配信し、
       本番320px・375px幅の6主張8表示箇所と出典7URLを確認した。
       結果はquality/reviews/2026-11-02-ai-copyright-claim-release.mdに記録。
+
+  - id: approval-20261107-constitutional-visual-guide
+    department: engineering-data
+    action: website_publication
+    summary: 憲法改正の写真・図解ガイドを公開する
+    reason: 写真、手順図、論点の比較表、スマホ用目次から憲法改正の背景とSNSの反応をたどれるようにする。
+    risks:
+    - SNSで収集した意見と世論調査の結果は、対象と集め方が異なるため、ページ内で分けて表示する
+    recommendation: approve
+    evidence:
+    - tasks/task-54.md
+    - docs/constitutional-amendment-reaction-map.html
+    status: approved
+    requested_at: '2026-11-07'
+    decided_at: '2026-11-07'
+    decision_note: >-
+      オーナーがこのチャットで「公開して」と承認。対象は公開候補 c65217b7df76332ef0bc51d2fabc61af4faf41cf。
+      11月3日までに集計したSNSの意見2,548件を使用する。
