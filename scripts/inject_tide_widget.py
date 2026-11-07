@@ -219,6 +219,10 @@ def biggest_change(labels: list[str], prev: dict, cur: dict) -> str:
     biggest = diffs[0]
     diff = biggest[2]
     label = biggest[1]
+    # 四捨五入して0.0ポイントになる差を「0.0ポイント減少」と書くと、
+    # 変化がないのに動いたように読める（2026-11-07の辺野古の回で発生）。
+    if round(abs(diff), 1) == 0.0:
+        return "構成比に大きな変化はありません"
     direction = "増加" if diff > 0 else "減少"
     return f"「{label}」が{abs(diff):.1f}ポイント{direction}"
 
