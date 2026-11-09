@@ -283,17 +283,21 @@ class PlanetDataTest(unittest.TestCase):
         2026-10-31、新規153件・意見94件を追加し、5論点の意見89件（教員28・制度11・教育24・
         受け皿18・費用8）をその回のうちに本文確認して区分へ接続した。未読は0件のまま。
         その他4件・地域格差1件は理由区分の設定が無いため未接続（85→90件）。
+
+        2026-11-09、新規114件・意見67件を追加し、5論点の意見64件（教員21・制度9・教育15・
+        受け皿5・費用14）をその回のうちに本文確認して区分へ接続した。未読は0件のまま。
+        その他2件・地域格差1件は理由区分の設定が無いため未接続（90→93件）。
         """
         data = bpd.build(TOPIC)
         cfg = bpd.yaml.safe_load((ROOT / "configs" / "planet" / f"{TOPIC}.yaml").read_text())
         by_label = {i["label"]: i["sub"] for i in data["issues"]}
-        for label, count, unread in [("教員の働き方", 536, 0), ("制度・移行プロセス", 374, 0),
-                                     ("教育的意義・機会", 316, 0)]:
+        for label, count, unread in [("教員の働き方", 557, 0), ("制度・移行プロセス", 383, 0),
+                                     ("教育的意義・機会", 331, 0)]:
             self.assertEqual(by_label[label]["reread_count"], count)
             self.assertEqual(by_label[label]["unread_count"], unread)
-        self.assertEqual(data["reread_summary"]["connected_editorial_count"], 1681)
-        self.assertEqual(data["reread_summary"]["not_connected_opinion_count"], 90)
-        self.assertEqual(data["reread_summary"]["connected_issue_population"], 1681)
+        self.assertEqual(data["reread_summary"]["connected_editorial_count"], 1745)
+        self.assertEqual(data["reread_summary"]["not_connected_opinion_count"], 93)
+        self.assertEqual(data["reread_summary"]["connected_issue_population"], 1745)
         self.assertEqual(by_label["費用・家庭負担"]["skipped_count"], 0)
         self.assertEqual(by_label["受け皿・指導者"]["skipped_count"], 0)
         self.assertEqual(bpd.independence_gate(data, cfg), [])
