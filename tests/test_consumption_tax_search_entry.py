@@ -75,9 +75,10 @@ class ConsumptionTaxSearchEntryTest(unittest.TestCase):
     def test_article_metadata_matches_visible_heading(self) -> None:
         article = json.loads(self.soup.select_one('script[type="application/ld+json"]').string)
         self.assertIn("いつから", article["headline"])
-        self.assertEqual(article["dateModified"], "2026-10-31")
+        updated = json.loads((ROOT / "data/public/themes/consumption-tax-cut.json").read_text())["updated_on"]
+        self.assertEqual(article["dateModified"], updated)
         dates = self.soup.select(".article-trust-meta time")
-        self.assertEqual([node["datetime"] for node in dates], ["2026-07-29", "2026-10-31"])
+        self.assertEqual([node["datetime"] for node in dates], ["2026-07-29", updated])
 
 
 if __name__ == "__main__":

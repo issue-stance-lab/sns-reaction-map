@@ -22,6 +22,7 @@ from scripts.refresh_topic import (
     load_promotion_manifest,
     prepare_archived_resume,
     prepare_promotion_manifest,
+    preserve_other_theme_pages,
     prepare_public_candidate_bundle_multi,
     prepare_multi_promotion_manifest,
     promote,
@@ -59,6 +60,25 @@ def classified(tweet_id: str, issue: str = "中傷動画・説明責任") -> dic
 
 
 class RefreshTopicTests(unittest.TestCase):
+    def test_candidate_keeps_unrelated_theme_pages_unchanged(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory) / 'root'
+            candidate = Path(directory) / 'candidate'
+            page = Path('docs/other-reaction-map.html')
+            source = Path('data/page-sources/other.html')
+            current = Path('docs/current-reaction-map.html')
+            for base in (root, candidate):
+                for path in (page, source, current):
+                    (base / path).parent.mkdir(parents=True, exist_ok=True)
+                    (base / path).write_text('original' if base == root else 'generated')
+            targets = {path: candidate / path for path in (page, source, current)}
+            themes = {'other': {'html': str(page)}, 'current': {'html': str(current)}}
+            preserve_other_theme_pages(root, candidate, themes, 'current', targets)
+            self.assertEqual((candidate / page).read_text(), 'original')
+            self.assertEqual((candidate / source).read_text(), 'original')
+            self.assertEqual((candidate / current).read_text(), 'generated')
+            self.assertEqual(set(targets), {current})
+
     def test_publication_uses_saved_wave_count_when_resuming(self):
         self.assertEqual(publication_new_count({"new": 0, "saved_wave_new": 60}), 60)
         self.assertEqual(publication_new_count({"new": 12}), 12)
@@ -182,6 +202,15 @@ class RefreshTopicTests(unittest.TestCase):
 
             self.assertEqual(manifest["report"]["new"], 562)
             self.assertEqual(manifest["report"]["opinions"], 483)
+
+            reviewed = prepare_promotion_manifest(
+                root, "topic", "2026-08-29", "run-1", stage,
+                {"raw": 666, "new": 562, "opinions": 450,
+                 "saved_wave_new": 562, "saved_wave_opinions": 483,
+                 "body_review": "data/verification/review.json"},
+                {Path("docs/page.html"): candidate_page},
+            )
+            self.assertEqual(reviewed["report"]["opinions"], 450)
 
     def test_archived_resume_preserves_wave_and_filters_against_current_canonical(self):
         with tempfile.TemporaryDirectory() as directory:

@@ -3100,3 +3100,25 @@ items:
     decision_note: >-
       オーナーがこのチャットで「公開して」と承認。対象は公開候補 c65217b7df76332ef0bc51d2fabc61af4faf41cf。
       11月3日までに集計したSNSの意見2,548件を使用する。
+
+  - id: approval-20261115-consumption-tax-refresh
+    department: engineering-data
+    action: website_publication
+    summary: "消費税減税の2026年11月13日収集回と一次資料の訂正を公開する"
+    reason: "収集済みの新規693件を本文確認し、法案の審議状況と予約販売・支援金の条件を一次資料に合わせたため"
+    risks:
+      - "SNS投稿の集計は世論調査ではない。同文の連投は各投稿を1件として数え、選挙運動文28件を代表投稿から除外する"
+      - "実際の投票送信と外部計測の作動は公開前には行っていない"
+    recommendation: approve
+    evidence:
+      - "quality/reviews/2026-11-15-consumption-tax-cut-refresh-review.md"
+      - "quality/reviews/2026-11-13-consumption-tax-cut-wave-reading.json"
+    status: approved
+    requested_at: "2026-11-14"
+    decided_at: "2026-11-14"
+    decision_note: >-
+      オーナーは「消費税減税を収集公開まで進めて」と指示。公開候補は収集8,079件・意見6,980件で、
+      独立監査ready_for_ceo、全体テスト2,398件と公開ファイル検査2,172件を通過。
+      候補manifest SHA-256は5f460da12260bb067182274682bee6f894928ff012067973d945955513ef60fd。
+      共有作業場所に残る別作業の履歴と未保存データについて、保全し公開に混ぜず共有作業場所を同期する整理を提案し、
+      オーナーが「良い」と承認した。別作業は別worktreeとバックアップに保全した。

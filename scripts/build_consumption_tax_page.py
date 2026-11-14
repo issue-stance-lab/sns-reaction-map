@@ -1687,11 +1687,12 @@ def build(
         f"<tbody>{marker_rows}</tbody></table></div></details>\n"
         f"<details><summary>収集クエリ</summary><ul>{query_items}"
         f"<li>{period}Yahooリアルタイム検索で{total}件を取得（重複除外後）。"
-        f"うちHermes（kimi-k2.6）が関連{relevant}件・意見{opinions}件と判定。</li></ul></details>\n"
+        f"関連{relevant}件・意見{opinions}件を集計。AIで分類し、編集部が本文の確認と補正を行っています。</li></ul></details>\n"
         "<details><summary>注意</summary><ul>"
         "<li>これは世論調査ではなく、Yahooリアルタイム検索で取得した投稿サンプルの反応整理です。</li>"
-        "<li>収集時点が食料品限定の減税案の決着直前のため、政府案への評価に反応が偏りやすいバイアスがあります。</li>"
+        "<li>収集した時期の出来事や検索語によって、集まる意見が偏ることがあります。</li>"
         "<li>検索語に「賛成」「反対」など意見誘発語を含むため、意見投稿の比率が実際のSNS全体より高く出ます。</li>"
+        "<li>同じ文面でも個別の投稿として数えています。連投が集計に影響する場合があります。</li>"
         "</ul></details>\n</section>"
     )
     start = html.index('<section class="panel details-panel" id="detail-data">')

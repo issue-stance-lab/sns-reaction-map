@@ -157,11 +157,13 @@ class ConnectedRefreshTests(unittest.TestCase):
         with patch('refresh_planet_section.bpd.build', return_value=data):
             _, page, failures = refresh(connected.TOPIC, source=self.source)
         # 表示は追従しても、未再読の論点が増えすぎた候補は既存の公開ゲートで止める。
-        self.assertEqual(failures, ['編集部が読み直した論点が意見の43%しかない（50%以上必要）'])
+        self.assertEqual(len(failures), 1)
+        self.assertRegex(failures[0], r'^編集部が読み直した論点が意見の\d+%しかない（50%以上必要）$')
+        self.assertLess(int(failures[0].split('意見の')[1].split('%')[0]), 50)
         soup = BeautifulSoup(page, 'html.parser')
-        self.assertIn('2341', soup.select_one('#fb-' + iid).get_text())
-        self.assertIn('7948', soup.select_one('#stance-glance').get_text())
-        self.assertIn('2341', soup.select_one('.thirty-summary').get_text())
+        self.assertIn(str(finance['count']), soup.select_one('#fb-' + iid).get_text())
+        self.assertIn(str(data['totals']['opinions']), soup.select_one('#stance-glance').get_text())
+        self.assertIn(str(finance['count']), soup.select_one('.thirty-summary').get_text())
         self.assertIn('減った分は誰が払うのか', soup.select_one('.thirty-summary').get_text())
         self.assertEqual(connected.content_index(connected.planet_data(page)), before)
         self.assertEqual(adapter.vote_fingerprint(page), adapter.vote_fingerprint(self.source))
