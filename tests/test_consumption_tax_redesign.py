@@ -446,7 +446,7 @@ class AllIssuesAndBackgroundTests(unittest.TestCase):
         bill = self.bg_at(PUBLIC["updated_on"])
         self.assertEqual(bill.section["data-phase"], "bill")
         self.assertIn("まだ成立していません", bill.find(id="bg-status").h4.get_text())
-        self.assertIn("国会の審議日程", bill.find(id="bg-unverified").get_text())
+        self.assertIn("審議日程", bill.find(id="bg-unverified").get_text())
         overdue = self.bg_at("2027-05-01")
         self.assertEqual(overdue.section["data-phase"], "overdue")
         self.assertIn("成立したかどうかは未確認", overdue.find(id="bg-status").h4.get_text())

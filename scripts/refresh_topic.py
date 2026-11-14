@@ -976,6 +976,19 @@ def _copy_candidate_tree(root: Path, stage: Path) -> Path:
     return candidate_root
 
 
+def preserve_other_theme_pages(root: Path, candidate_root: Path, themes: dict, topic: str, layout_targets: dict) -> None:
+    """他テーマのレイアウト再生成による表示変化を今回の公開対象に混ぜない。"""
+    for other, theme in themes.items():
+        if other == topic:
+            continue
+        paths = [Path(str(theme.get("html") or "")), Path("data/page-sources") / f"{other}.html"]
+        for path in paths:
+            original = root / path
+            if path in layout_targets and original.is_file():
+                shutil.copy2(original, candidate_root / path)
+                layout_targets.pop(path)
+
+
 def prepare_public_candidate_bundle(
     root: Path,
     topic: str,
@@ -1031,7 +1044,6 @@ def prepare_public_candidate_bundle(
         [sys.executable, "scripts/sync_portal_stats.py"],
         [sys.executable, "scripts/seo/generate_seo_assets.py", "--site-url", SITE_URL],
         [sys.executable, "scripts/verify_sample_periods.py", "--generate"],
-        [sys.executable, "scripts/build_data_sheet.py"],
     ]
     for command in commands:
         run(command, label="prepare public candidate", root=candidate_root)
@@ -1067,6 +1079,12 @@ def prepare_public_candidate_bundle(
     # 消費税減税の新デザインも同じ位置で適用する
     from scripts.consumption_tax_layout import finish as finish_consumption_tax_layout
     layout_targets.update(finish_consumption_tax_layout(candidate_root))
+    preserve_other_theme_pages(root, candidate_root, themes, topic, layout_targets)
+    # 最終レイアウト後の見出しを使って注目枠とトップを作り、台帳も揃える。
+    for command in ([sys.executable, "scripts/refresh_featured_slots.py"],
+                    [sys.executable, "scripts/build_top_page.py"],
+                    [sys.executable, "scripts/build_data_sheet.py"]):
+        run(command, label="prepare public candidate", root=candidate_root)
 
     # 公開候補として変わり得るものをすべて固定する。全テーマJSONはcatalogの入力でもあるため含める。
     # docs/data/ と docs/llms.txt は課題77 案1: data/public/ の写し・AI向け要約で、
@@ -1074,6 +1092,7 @@ def prepare_public_candidate_bundle(
     targets = [
         canonical,
         Path("THEMES.yaml"),
+        Path("GROWTH.yaml"),
         Path("configs/theme-seo.json"),
         Path("data/verification/sample-periods.json"),
         Path("DATA_SHEET.md"),
@@ -1133,7 +1152,8 @@ def prepare_promotion_manifest(
         "report": {
             "raw": report.get("raw"),
             "new": publication_new_count(report),
-            "opinions": report.get("saved_wave_opinions", report.get("opinions")),
+            "opinions": (report.get("opinions") if report.get("body_review")
+                         else report.get("saved_wave_opinions", report.get("opinions"))),
             "next_collect_at": report.get("next_collect_at"),
         },
         "files": files,

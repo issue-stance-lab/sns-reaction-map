@@ -12,6 +12,7 @@ import sys
 import tempfile
 import unittest
 from pathlib import Path
+from datetime import date, timedelta
 
 import yaml
 
@@ -28,7 +29,8 @@ from refresh_adapters import consumption_tax as adapter  # noqa: E402
 
 PAGE = ROOT / "docs/consumption-tax-cut-reaction-map.html"
 CANON = ROOT / "social-samples/consumption-tax-cut_hermes_arena_classified.json"
-NEW_DAY = "2026-11-09"
+NEW_DAY = (date.fromisoformat(max(r['fetched_at'][:10] for r in json.loads(CANON.read_text())
+                                  if r.get('fetched_at'))) + timedelta(days=7)).isoformat() if CANON.exists() else "2026-11-20"
 
 
 class TrendProvenanceTest(unittest.TestCase):
@@ -137,14 +139,19 @@ class NextRoundTest(unittest.TestCase):
         return self.page.read_text(encoding="utf-8")
 
     def test_new_round_extends_both_tabs_and_updates_the_date(self) -> None:
+        original = self.page.read_text()
         html = self.rebuild()
         for kind in ("stance", "issue"):
             panel = re.search(rf'<div class="trend-panel" id="consumption-tax-cut-trend-panel-{kind}".*?</table>', html, re.S).group(0)
-            self.assertEqual(len(re.findall(r'<tr id="[^"]+-row-2026-', panel)), 13)
+            old_panel = re.search(rf'<div class="trend-panel" id="consumption-tax-cut-trend-panel-{kind}".*?</table>', original, re.S).group(0)
+            self.assertEqual(len(re.findall(r'<tr id="[^"]+-row-2026-', panel)),
+                             len(re.findall(r'<tr id="[^"]+-row-2026-', old_panel)) + 1)
             self.assertIn(f"-row-{NEW_DAY}", panel)
-        self.assertIn("2026年11月9日時点", html)
+        day = date.fromisoformat(NEW_DAY)
+        label = f"{day.year}年{day.month}月{day.day}日時点"
+        self.assertIn(label, html)
         # 見出し（H2）の末尾の日付も、右上のバッジと同じく最新の収集日になる。
-        self.assertEqual(html.count('<span class="trend-h2-date">（2026年11月9日時点）</span>'), 3)  # 3つのタブ
+        self.assertEqual(html.count(f'<span class="trend-h2-date">（{label}）</span>'), 3)  # 3つのタブ
         self.assertNotIn("（2026年10月3日時点）", html)
         self.assertEqual(html.count("<!-- TREND_CARD_START -->"), 1)
 
