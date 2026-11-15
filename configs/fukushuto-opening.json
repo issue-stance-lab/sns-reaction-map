@@ -6,31 +6,31 @@
     "planet_config": "configs/planet/fukushuto.yaml",
     "themes_registry": "THEMES.yaml"
   },
-  "checked_on": "2026-10-19",
-  "_checked_on": "2026-10-19 に e-Gov 法令API（lawId 508AC1000000078）で法令番号・公布日・施行状態を、e-Gov パブリック・コメント（案件番号060261003）で受付終了と結果資料の掲載有無を確認。一次資料メモ 資料K・L の【2026-10-19追記】。",
+  "checked_on": "2026-11-15",
+  "_checked_on": "2026-11-15にe-Govの施行済み条文と意見募集の結果を再確認。2026-10-19 に e-Gov 法令API（lawId 508AC1000000078）で法令番号・公布日・施行状態を、e-Gov パブリック・コメント（案件番号060261003）で受付終了と結果資料の掲載有無を確認。一次資料メモ 資料K・L の【2026-10-19追記】。",
   "law": {
     "enacted_on": "2026-07-24",
     "promulgated_on": "2026-07-31",
     "enforcement_on": "2026-10-30",
     "_enforcement_on": "施行予定日。附則第1条は「公布の日から起算して三月を超えない範囲内において政令で定める日」から施行するとし、e-Gov API の amendment_scheduled_enforcement_date が 2026-10-30、amendment_enforcement_date は null（2026-10-11確認）。施行期日を定める政令は e-Gov にまだ無い。",
-    "enforcement_confirmed_on": null,
+    "enforcement_confirmed_on": "2026-11-15",
     "_enforcement_confirmed_on": "施行後に e-Gov で条文（施行済みの表示と施行日）を編集部が確かめた日を入れる。null の間、施行日を過ぎると「施行予定でした。施行後の条文は編集部で確かめていません」と出す。施行日より前の日付は入れられない（生成が止まる）。"
   },
   "comment": {
     "opens_on": "2026-10-03",
     "closes_on": "2026-10-16",
-    "result_published_on": null,
+    "result_published_on": "2026-11-15",
     "_result_published_on": "意見募集の結果（e-Gov の結果公示）を編集部が確かめた日を入れる。null の間、締切を過ぎると「締め切り済み（結果は未確認）」と出す。締切より前の日付は入れられない。",
     "source": {
       "label": "意見募集の資料（e-Gov）",
-      "url": "https://public-comment.e-gov.go.jp/pcm/detail?CLASSNAME=PCMMSTDETAIL&Mode=0&id=060261003"
+      "url": "https://public-comment.e-gov.go.jp/servlet/Public?CLASSNAME=PCM1040&Mode=1&id=060261003"
     }
   },
   "phase_text": {
     "comment": {
       "open": "{closes}まで意見募集",
       "closed": "{closes}に意見募集を締め切った。結果は編集部でまだ確かめていない",
-      "published": "意見募集の結果が公表された（{published}に確認）"
+      "published": "10月3日から16日まで意見を募集。結果は10月30日に公表された（{published}に確認）"
     },
     "enforce": {
       "before": "施行予定日として示されている",
@@ -45,7 +45,7 @@
     "answer_enforce": {
       "before": "法律の施行は{enforce_date}の予定です。",
       "after_unconfirmed": "法律は{enforce_date}に施行予定でした。施行後の条文は編集部で確かめていません。",
-      "after_confirmed": "法律は施行されました（{confirmed}に条文を確認）。"
+      "after_confirmed": "法律は{enforce_date}に施行されました（{confirmed}に条文を確認）。"
     },
     "state_labels": {
       "done": "済み",
@@ -75,7 +75,7 @@
   "lead": "法律で決まった手順と、各地の自治体の動きを確かめてから、SNSの意見を論点別に読んでいきます。",
   "decision": {
     "label": "決まり方と時期",
-    "text": "国が要件を定め、議会の議決を経た道府県の申出を受けて指定します。指定の時期はまだ決まっていません。"
+    "text": "国が要件を定め、議会の議決を経た道府県の申出を受けて指定します。確認した資料では指定の時期は示されていません。"
   },
   "steps": [
     {
@@ -107,7 +107,7 @@
       "key": "designate",
       "title": "国が指定",
       "date_from": null,
-      "note": "どこになるかは未決定"
+      "note": "指定先は確認できていません"
     }
   ],
   "answers": [
@@ -116,7 +116,7 @@
       "question": "どこになる？",
       "kind": "facts",
       "kind_label": "制度と自治体の資料",
-      "short": "まだ、どの道府県も指定されていません。",
+      "short": "確認した資料では、指定済みの道府県は見つかっていません。",
       "body_template": "自治体の資料で動きを確認できたのは{regions}地域です。指定を目指すか意思を表明した地域が{aiming}、検討中が{considering}あります。",
       "link": {
         "href": "#fuk-op-map",
@@ -128,7 +128,7 @@
       "question": "いつ決まる？",
       "kind": "facts",
       "kind_label": "制度の情報",
-      "short": "指定の時期は示されていません。",
+      "short": "確認した資料では、指定の時期は示されていません。",
       "body_template": "{comment_sentence}{enforce_sentence}",
       "link": {
         "href": "#fuk-op-route",
@@ -150,7 +150,7 @@
   ],
   "map": {
     "title": "各地の動き",
-    "national_label": "国の指定",
+    "national_label": "国の指定（確認できた数）",
     "national_count": 0,
     "national_unit": "道府県",
     "capital_label": "東京（首都）",

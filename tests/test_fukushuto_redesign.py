@@ -181,6 +181,7 @@ class OpeningPhaseTests(unittest.TestCase):
 
     def frag(self, as_of, **law_or_comment):
         data = copy.deepcopy(self.data)
+        data["config"]["checked_on"] = min(data["config"]["checked_on"], as_of)
         for key, value in law_or_comment.items():
             group, field = key.split("__")
             data["config"][group][field] = value
@@ -203,14 +204,14 @@ class OpeningPhaseTests(unittest.TestCase):
         self.assertIn("fop-stop--unconfirmed", after)
         confirmed = self.frag("2026-11-02", law__enforcement_confirmed_on="2026-11-01", comment__result_published_on="2026-10-30")
         self.assertIn("施行されました（2026年11月1日に条文を確認）", confirmed)
-        self.assertIn("意見募集の結果が公表された", confirmed)
+        self.assertIn("結果は10月30日に公表された", confirmed)
         self.assertNotIn("施行予定", confirmed.split('id="fuk-op-route"')[1].split("</section>")[0])
 
     def test_impossible_dates_stop(self):
         with self.assertRaises(SystemExit):
             self.frag("2026-10-31", law__enforcement_confirmed_on="2026-10-29")
-        with self.assertRaises(SystemExit):
-            self.frag("2026-10-20", law__enforcement_confirmed_on="2026-10-31")
+        with self.assertRaisesRegex(SystemExit, "基準日より後"):
+            opening.render_fragment(self.data, "2026-10-20")
         with self.assertRaises(SystemExit):
             self.frag("2026-10-20", comment__result_published_on="2026-10-15")
 
@@ -235,6 +236,7 @@ class BackgroundTests(unittest.TestCase):
 
     def render_bg(self, as_of, edit=None):
         d = copy.deepcopy(self.d)
+        d["ocfg"]["checked_on"] = min(d["ocfg"]["checked_on"], as_of)
         if edit:
             edit(d)
         import fukushuto_background as bgmod
@@ -286,7 +288,7 @@ class BackgroundTests(unittest.TestCase):
     def test_timeline_order_and_phase(self):
         events = [li["data-event"] for li in self.bg.select("#bg-timeline li")]
         self.assertEqual(events, ["referendum-2020", "enactment-2026", "draft", "comment-close", "enforce"])
-        self.assertIn("（予定日）", self.bg.select_one('#bg-timeline li[data-event="enforce"]').get_text())
+        self.assertIn("施行", self.bg.select_one('#bg-timeline li[data-event="enforce"]').get_text())
         after = self.render_bg("2026-10-31")
         self.assertEqual(after["data-law-phase"], "after_unconfirmed")
         self.assertIn("施行予定でした。施行後の条文は編集部で確かめていません", after.get_text())
@@ -325,7 +327,7 @@ import shutil  # noqa: E402
 from scripts import fukushuto_layout as layout  # noqa: E402
 from scripts import build_fukushuto_redesign as redesign  # noqa: E402
 
-AS_OF = "2026-10-11"
+AS_OF = PUBLIC["updated_on"]
 INPUTS = (
     "THEMES.yaml",
     "docs/data/themes/fukushuto.json",
@@ -558,11 +560,9 @@ class RedesignCandidateTests(unittest.TestCase):
         """基準日で時制が切り替わり、締切・施行日を過ぎても生成は止まらない。"""
         for as_of, law, comment in (("2026-10-17", "before", "closed"), ("2026-10-31", "after_unconfirmed", "closed")):
             with self.subTest(as_of=as_of):
-                redesign.build(self.source_path, self.out / as_of, "release", as_of=as_of)
-                s = soup_of((self.out / as_of / redesign.PAGE).read_text(encoding="utf-8"))
-                self.assertEqual(s.select_one("#fukushuto-opening")["data-law-phase"], law)
-                self.assertEqual(s.select_one("#fukushuto-opening")["data-comment-phase"], comment)
-                self.assertEqual(s.select_one("#fukushuto-background")["data-law-phase"], law)
+                with self.assertRaisesRegex(ValueError, "基準日より後"):
+                    redesign.build(self.source_path, self.out / as_of, "release", as_of=as_of)
+                self.assertEqual(opening.phase_of(opening.load_inputs(ROOT / "configs/fukushuto-opening.json")["config"], as_of), (law, comment))
 
 
 class CompactReadingTests(unittest.TestCase):
@@ -766,16 +766,16 @@ class LayoutTests(unittest.TestCase):
             (root / layout.CONFIG).write_text('{"enabled": true}')
             for rel in ("docs/data/themes/fukushuto.json", "data/public/themes/fukushuto.json"):
                 data = json.loads((root / rel).read_text(encoding="utf-8"))
-                data["updated_on"] = "2026-11-02"
+                data["updated_on"] = PUBLIC["updated_on"]
                 (root / rel).write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
             themes = (root / "THEMES.yaml").read_text(encoding="utf-8")
             block = re.search(r"\n  fukushuto:\n(?:    .*\n)+", themes).group()
-            fixed = re.sub(r"(\n    updated_at: )['\"]?[0-9-]+['\"]?", r"\g<1>2026-11-02", block, count=1)
+            fixed = re.sub(r"(\n    updated_at: )['\"]?[0-9-]+['\"]?", lambda m: m.group(1) + PUBLIC["updated_on"], block, count=1)
             (root / "THEMES.yaml").write_text(themes.replace(block, fixed), encoding="utf-8")
             self.assertEqual(set(layout.finish(root)), {layout.SOURCE, layout.PAGE})
             s = soup_of((root / layout.PAGE).read_text(encoding="utf-8"))
-            self.assertEqual(s.select_one("#fukushuto-opening")["data-law-phase"], "after_unconfirmed")
-            self.assertEqual(s.select_one("#fukushuto-background")["data-comment-phase"], "closed")
+            self.assertEqual(s.select_one("#fukushuto-opening")["data-law-phase"], "after_confirmed")
+            self.assertEqual(s.select_one("#fukushuto-background")["data-comment-phase"], "published")
         refresh = (ROOT / "scripts/refresh_topic.py").read_text(encoding="utf-8")
         self.assertEqual(refresh.count("finish_fukushuto_layout(candidate_root)"), 2)
         self.assertEqual(refresh.count("materialize_fukushuto(candidate_root)"), 1)
