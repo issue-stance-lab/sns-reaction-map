@@ -891,6 +891,8 @@ def static_caution(d: dict) -> str:
            + e(d["source_label"]) + "で集めた公開投稿のサンプルです。社会全体の世論調査ではありません。<br>"
            + "収集期間 " + e(d["sample_period"]) + "／収集" + str(t["collected"])
            + "件・<b>意見" + str(t["opinions"]) + "件</b>（この図の母数）／更新 " + e(d["updated_at"])
+           + ('<br>同じ人による複数の投稿や、似た内容の投稿も含みます。'
+              if d["theme_id"] == "constitutional-amendment" else '')
            + ('' if process_copy_hidden(d)
               else '<br><span class="review-note">AI分類。代表投稿は編集部が選定</span>')
            + "</p>"]
