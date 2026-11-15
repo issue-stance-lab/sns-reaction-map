@@ -48,7 +48,7 @@ class OpeningTests(unittest.TestCase):
         self.assertIn(f'data-checked-on="{self.config["checked_on"]}"', frag)
         cfg = copy.deepcopy(self.config)
         cfg["checked_on"] = "2026-12-01"
-        self.assertIn("2026年12月1日確認", self.frag(cfg))
+        self.assertIn("2026年12月1日確認", self.frag(cfg, as_of="2026-12-02"))
         cfg["checked_on"] = "2026-09-01"  # 背景台帳の確認日より古い
         with self.assertRaises(opening.OpeningError):
             self.frag(cfg)
@@ -60,13 +60,17 @@ class OpeningTests(unittest.TestCase):
     def test_law_phase_switches(self):
         law = self.config["law"]
         self.assertEqual(law["enforcement_on"], "2026-10-31")
-        before = self.frag(as_of="2026-10-30")
+        historical = copy.deepcopy(self.config)
+        historical["checked_on"] = "2026-10-12"
+        historical["law"]["enforcement_confirmed_on"] = None
+        before = self.frag(historical, as_of="2026-10-30")
         self.assertIn('data-law-phase="before"', before)
         self.assertIn("2026年10月31日に施行される予定です", before)
-        after = self.frag(as_of="2026-10-31")
+        after = self.frag(historical, as_of="2026-10-31")
         self.assertIn('data-law-phase="after_unconfirmed"', after)
         self.assertIn("施行される予定でした。施行後の条文は、まだ編集部で照合していません", after)
-        cfg = copy.deepcopy(self.config)
+        cfg = copy.deepcopy(historical)
+        cfg["checked_on"] = "2026-11-02"
         cfg["law"]["enforcement_confirmed_on"] = "2026-11-02"
         done = self.frag(cfg, as_of="2026-11-05")
         self.assertIn('data-law-phase="after_confirmed"', done)
@@ -78,7 +82,7 @@ class OpeningTests(unittest.TestCase):
         with self.assertRaises(opening.OpeningError):
             self.frag(cfg, as_of="2026-11-05")
         cfg["law"]["enforcement_confirmed_on"] = "2026-11-02"
-        with self.assertRaises(opening.OpeningError):  # 基準日が施行日より前
+        with self.assertRaisesRegex(opening.OpeningError, "基準日より後"):
             self.frag(cfg, as_of="2026-10-12")
         cfg = copy.deepcopy(self.config)
         del cfg["procedure"]["footnote_phase"]["after_unconfirmed"]
@@ -367,13 +371,17 @@ class AllIssuesAndBackgroundTests(unittest.TestCase):
         self.assertTrue(all(not r.has_attr("open") for r in rows))
 
     def test_law_phase_in_background(self):
-        before = soup_of(self.render_bg(as_of="2026-10-30"))
+        historical = copy.deepcopy(self.d)
+        historical["ocfg"]["checked_on"] = "2026-10-12"
+        historical["ocfg"]["law"]["enforcement_confirmed_on"] = None
+        before = soup_of(self.render_bg(historical, as_of="2026-10-30"))
         self.assertIn("施行される予定です", before.select_one("#bg-referendum-law [data-phase]").get_text())
         self.assertIn("（予定）", before.select_one('[data-event="law-enforcement"]').get_text())
-        after = soup_of(self.render_bg(as_of="2026-11-02"))
+        after = soup_of(self.render_bg(historical, as_of="2026-11-02"))
         self.assertIn("施行される予定でした", after.select_one("#bg-referendum-law [data-phase]").get_text())
         self.assertIn("施行後の条文は、まだ確かめていません", after.select_one(".fb-unverified").get_text())
-        d = copy.deepcopy(self.d)
+        d = copy.deepcopy(historical)
+        d["ocfg"]["checked_on"] = "2026-11-02"
         d["ocfg"]["law"]["enforcement_confirmed_on"] = "2026-11-02"
         done = soup_of(self.render_bg(d, as_of="2026-11-05"))
         self.assertIn("施行されました", done.select_one("#bg-referendum-law [data-phase]").get_text())
@@ -431,7 +439,7 @@ import shutil  # noqa: E402
 from scripts import build_constitutional_redesign as redesign  # noqa: E402
 from scripts import constitutional_layout as layout  # noqa: E402
 
-AS_OF = "2026-10-12"
+AS_OF = PUBLIC["updated_on"]
 INPUTS = (
     "THEMES.yaml",
     "docs/data/themes/constitutional-amendment.json",
@@ -711,11 +719,10 @@ class RedesignCandidateTests(unittest.TestCase):
 
     def test_law_phase_switch_by_as_of(self):
         """基準日で国民投票法の改正の施行の段階が切り替わり、施行日（10/31）を過ぎても生成は止まらない。"""
-        self.assertEqual(self.s.select_one("#ca-open")["data-law-phase"], "before")
-        redesign.build(self.source_path, self.out / "after", "release", as_of="2026-11-01")
-        s = soup_of((self.out / "after" / redesign.PAGE).read_text(encoding="utf-8"))
-        self.assertEqual(s.select_one("#ca-open")["data-law-phase"], "after_unconfirmed")
-        self.assertIn("まだ確かめていません", s.select_one("#bg-unverified").get_text())
+        self.assertEqual(self.s.select_one("#ca-open")["data-law-phase"], opening.phase_of(json.loads(OPENING_CONFIG.read_text()), AS_OF))
+        with self.assertRaisesRegex(ValueError, "基準日より後"):
+            redesign.build(self.source_path, self.out / "after", "release", as_of="2026-11-01")
+        self.assertEqual(opening.phase_of(json.loads(OPENING_CONFIG.read_text()), "2026-11-01"), "after_unconfirmed")
 
 
 class LayoutTests(unittest.TestCase):
@@ -803,15 +810,15 @@ class LayoutTests(unittest.TestCase):
             (root / layout.CONFIG).write_text('{"enabled": true}')
             for rel in ("docs/data/themes/constitutional-amendment.json", "data/public/themes/constitutional-amendment.json"):
                 data = json.loads((root / rel).read_text(encoding="utf-8"))
-                data["updated_on"] = "2026-11-03"
+                data["updated_on"] = PUBLIC["updated_on"]
                 (root / rel).write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
             themes = (root / "THEMES.yaml").read_text(encoding="utf-8")
             block = re.search(r"\n  constitutional-amendment:\n(?:    .*\n)+", themes).group()
-            fixed = re.sub(r"(\n    updated_at: )['\"]?[0-9-]+['\"]?", r"\g<1>2026-11-03", block, count=1)
+            fixed = re.sub(r"(\n    updated_at: )['\"]?[0-9-]+['\"]?", lambda m: m.group(1) + PUBLIC["updated_on"], block, count=1)
             (root / "THEMES.yaml").write_text(themes.replace(block, fixed), encoding="utf-8")
             self.assertEqual(set(layout.finish(root)), {layout.SOURCE, layout.PAGE})
             s = soup_of((root / layout.PAGE).read_text(encoding="utf-8"))
-            self.assertEqual(s.select_one("#ca-open")["data-law-phase"], "after_unconfirmed")
+            self.assertEqual(s.select_one("#ca-open")["data-law-phase"], opening.phase_of(json.loads(OPENING_CONFIG.read_text()), PUBLIC["updated_on"]))
         refresh = (ROOT / "scripts/refresh_topic.py").read_text(encoding="utf-8")
         self.assertEqual(refresh.count("finish_constitutional_layout(candidate_root)"), 2)
         self.assertEqual(refresh.count("materialize_constitutional(candidate_root)"), 1)

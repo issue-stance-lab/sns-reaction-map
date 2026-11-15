@@ -274,6 +274,8 @@ BODIES = {
 
 
 def render(d: dict, as_of: str, order: list[dict]) -> str:
+    if d["ocfg"]["checked_on"] > as_of:
+        raise ValueError("制度の確認日が基準日より後です。過去時点の入力を用意してください")
     check(d, as_of)
     law = opening.phase_of(d["ocfg"], as_of)
     ctx = {"law": law, "dates": dates(d["ocfg"])}

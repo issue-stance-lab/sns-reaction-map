@@ -130,11 +130,9 @@ def phase_of(config: dict, as_of: str) -> str:
         iso(confirmed, "law.enforcement_confirmed_on")
         if confirmed < law["enforcement_on"]:
             raise OpeningError("law.enforcement_confirmed_on が施行日より前です（施行後の条文を確かめた日を入れてください）")
-        if as_of < law["enforcement_on"]:
-            raise OpeningError("law.enforcement_confirmed_on が入っていますが、基準日が施行日より前です")
     if as_of < law["enforcement_on"]:
         return "before"
-    return "after_confirmed" if confirmed else "after_unconfirmed"
+    return "after_confirmed" if confirmed and confirmed <= as_of else "after_unconfirmed"
 
 
 def law_values(config: dict) -> dict:
@@ -204,6 +202,8 @@ def render_fragment(config: dict, data: dict, background: dict, source_label: st
     as_of = as_of or data["updated_on"]
     law_phase = phase_of(config, as_of)
     checked_on = iso(config["checked_on"], "checked_on")
+    if checked_on > as_of:
+        raise OpeningError("制度の確認日が基準日より後です。過去時点の入力を用意してください")
     if checked_on < background["checked_on"]:
         raise OpeningError("冒頭の checked_on が背景台帳の確認日より古くなっています")
     period_same_year = data["period_start"][:4] == data["period_end"][:4]
