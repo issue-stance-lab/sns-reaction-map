@@ -104,15 +104,11 @@ def check_dates(config: dict, as_of: str) -> None:
     if law.get("enforcement_confirmed_on"):
         if law["enforcement_confirmed_on"] < law["enforcement_on"]:
             raise SystemExit("law.enforcement_confirmed_on が施行日より前です（施行後の条文を確かめた日を入れてください）")
-        if as_of < law["enforcement_on"]:
-            raise SystemExit("law.enforcement_confirmed_on が入っていますが、基準日が施行日より前です")
     if comment["closes_on"] < comment["opens_on"]:
         raise SystemExit("意見募集の締切が開始日より前です")
     if comment.get("result_published_on"):
         if comment["result_published_on"] < comment["closes_on"]:
             raise SystemExit("comment.result_published_on が意見募集の締切より前です")
-        if as_of < comment["closes_on"]:
-            raise SystemExit("comment.result_published_on が入っていますが、基準日が締切より前です")
 
 
 def phase_of(config: dict, as_of: str) -> tuple[str, str]:
@@ -121,13 +117,13 @@ def phase_of(config: dict, as_of: str) -> tuple[str, str]:
     law, comment = config["law"], config["comment"]
     if as_of < law["enforcement_on"]:
         law_phase = "before"
-    elif law.get("enforcement_confirmed_on"):
+    elif law.get("enforcement_confirmed_on") and law["enforcement_confirmed_on"] <= as_of:
         law_phase = "after_confirmed"
     else:
         law_phase = "after_unconfirmed"
     if as_of <= comment["closes_on"]:
         comment_phase = "open"
-    elif comment.get("result_published_on"):
+    elif comment.get("result_published_on") and comment["result_published_on"] <= as_of:
         comment_phase = "published"
     else:
         comment_phase = "closed"
@@ -373,6 +369,8 @@ def default_as_of(data: dict) -> str:
 def render_fragment(data: dict, as_of: str | None = None) -> str:
     config, public = data["config"], data["public"]
     as_of = as_of or default_as_of(data)
+    if config["checked_on"] > as_of:
+        raise SystemExit("制度の確認日が基準日より後です。過去時点の入力を用意してください")
     law_phase, comment_phase = phase_of(config, as_of)
     crumb = " ／ ".join(esc(c) for c in config["crumb"])
     sources = "".join(
