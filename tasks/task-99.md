@@ -373,3 +373,7 @@ fukushuto・consumption-tax-cutの2テーマ。
 記録は [quality/reviews/2026-11-07-henoko-claim-coverage.json](../quality/reviews/2026-11-07-henoko-claim-coverage.json)。
 **一次資料は取り直していない**（進めたのは投稿側の照合日だけ）ので、記録に `primary_sources_refetched: false` と明記した。
 この型（定期更新の中で今回分だけを照合し、記録を1本残す）を他テーマの更新でも繰り返す。
+
+### 2026-11-16 皇室典範の更新回を照合
+
+今回の意見237件を6主張に照合し、5件を追加。独立確認と一次資料の再取得を実施し、照合日を11/16へ更新。[監査](../quality/reviews/2026-11-16-koshitsu-tenpakai-refresh-review.md)。

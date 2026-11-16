@@ -33,9 +33,9 @@ import yaml
 
 ROOT = Path(__file__).resolve().parents[2]
 JST = timezone(timedelta(hours=9))
-REVIEWER = "Claude Fable 5.1（編集担当）＋Claude Sonnet 5.5 読み手2名（自動分類を伏せて本文判定）"
+REVIEWER = "編集担当AI＋独立した読み手2名（自動分類を伏せて本文判定）"
 EXCLUDE_KINDS = ("not_opinion_candidate", "possibly_off_topic", "undecidable")
-RISK_WORDS = ("排外", "中傷", "根拠のない", "陰謀", "罵倒", "代表投稿に使わない", "署名", "定型文")
+RISK_WORDS = ("排外", "中傷", "根拠のない", "根拠不明", "不当な推測", "陰謀", "罵倒", "侮辱", "差別", "代表投稿に使わない", "署名", "定型文")
 NEW_ISSUE_RULE = "その他が今回の意見の5%超、または同じ趣旨が20件以上で新論点候補として検討"
 
 
@@ -472,11 +472,15 @@ def cmd_sunk_check(a, theme: Theme):
 
 
 def main():
+    global REVIEWER
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("command", choices=["batches", "compare", "decide", "apply", "register", "fill", "sunk-check"])
     ap.add_argument("--topic", required=True); ap.add_argument("--stage", required=True); ap.add_argument("--work", required=True)
     ap.add_argument("--date"); ap.add_argument("--decisions"); ap.add_argument("--batch-size", type=int, default=55)
+    ap.add_argument("--reviewer", help="確認記録に残す実際の担当者")
     a = ap.parse_args()
+    if a.reviewer:
+        REVIEWER = a.reviewer
     if a.command in ("apply", "register", "fill", "sunk-check") and not a.date:
         ap.error("--date YYYY-MM-DD が必要です")
     if a.command == "decide" and not a.decisions:
