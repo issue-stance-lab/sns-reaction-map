@@ -4,6 +4,8 @@ import sys
 import tempfile
 import unittest
 from pathlib import Path
+from types import SimpleNamespace
+from unittest.mock import patch
 
 import yaml
 
@@ -17,6 +19,29 @@ PRIVATE = (ROOT / "THEMES.yaml").exists() and all(
 
 
 class WaveReviewTests(unittest.TestCase):
+    def test_risky_reader_note_excludes_representative_post(self):
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d)
+            stage, work = root / "stage", root / "work"
+            stage.mkdir()
+            work.mkdir()
+            (root / "data/verification").mkdir(parents=True)
+            (root / "quality/reviews").mkdir(parents=True)
+            row = {"tweet_id": "1", "text": "本文", "classification": {
+                "is_opinion": True, "main_issue": "その他", "stance": "未表明", "article_usable": True}}
+            (stage / "new-only.json").write_text(json.dumps([row]))
+            (stage / "classified-wave.json").write_text(json.dumps([row]))
+            adjudicated = [{"index": 0, "tweet_id": "1", "agree": True, "is_opinion": True,
+                            "main_issue": "その他", "stance": "未表明", "bucket": None,
+                            "summary": "本文の要約", "notes": ["根拠不明の動機推測"]}]
+            (work / "adjudicated.json").write_text(json.dumps(adjudicated, ensure_ascii=False))
+            theme = SimpleNamespace(topic="example", sub={}, files={}, neutral="未表明")
+            args = SimpleNamespace(stage=str(stage), work=str(work), date="2026-11-16")
+            with patch.object(wr, "ROOT", root):
+                wr.cmd_apply(args, theme)
+            saved = json.loads((root / "data/verification/example-wave-review-20261116.json").read_text())
+            self.assertFalse(saved["overrides"][0]["classification"]["article_usable"])
+
     def test_every_planet_theme_loads(self):
         for cfg in sorted((ROOT / "configs/planet").glob("*.yaml")):
             topic = cfg.stem
