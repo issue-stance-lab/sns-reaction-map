@@ -126,13 +126,14 @@ class ConnectedThemeRegressionTest(unittest.TestCase):
         地方の足・移動権4件を理由区分へ接続し、既読339件・未読0件のまま。
         2026-10-24の定期収集で、義務化・事故防止22件、地方の足・移動権7件を接続し、既読368件・未読0件のまま。
         2026-10-31の定期収集で、義務化・事故防止10件、地方の足・移動権11件を接続し、既読389件・未読0件のまま。
+        2026-11-18の定期収集で、義務化・事故防止29件、地方の足・移動権3件を接続し、既読421件・未読0件のまま。
         """
         data = bpd.build("elderly-license-revocation")
-        self.assertEqual(data["reread_summary"]["connected_editorial_count"], 389)
+        self.assertEqual(data["reread_summary"]["connected_editorial_count"], 421)
         reviewed = [i for i in data["issues"] if i["sub"]["status"] == "reread"]
-        self.assertEqual(sorted(i["sub"]["reread_count"] for i in reviewed), [61, 328])
+        self.assertEqual(sorted(i["sub"]["reread_count"] for i in reviewed), [64, 357])
         unread_by_count = {i["count"]: i["sub"]["unread_count"] for i in reviewed}
-        self.assertEqual(unread_by_count, {328: 0, 61: 0})
+        self.assertEqual(unread_by_count, {357: 0, 64: 0})
         self.assertTrue(all(i["sub"]["skipped_count"] == 0 for i in reviewed))
 
 
