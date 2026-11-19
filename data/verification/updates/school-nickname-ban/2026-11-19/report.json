@@ -1,0 +1,56 @@
+{
+  "checks": {
+    "raw_equals_duplicates_plus_new": true,
+    "new_equals_classified": true,
+    "candidate_count": true,
+    "candidate_unique": true
+  },
+  "raw": 39,
+  "duplicates": 1,
+  "new": 38,
+  "relevant": 29,
+  "opinions": 12,
+  "opinion_flag_available": true,
+  "candidate": 545,
+  "classification_errors": 0,
+  "status": "validated",
+  "topic": "school-nickname-ban",
+  "date": "2026-11-19",
+  "run_id": "20261119_220831",
+  "taxonomy": {
+    "compatible": true,
+    "canonical_without_main_issue": false,
+    "unknown_issues": [],
+    "unknown_stances": []
+  },
+  "timings": {
+    "smoke_seconds": 7.94,
+    "fetch_seconds": 65.05,
+    "classify_seconds": 871.83
+  },
+  "provenance": {
+    "schema_version": 1,
+    "classifier": {
+      "script": "scripts/classify_nickname_arena_hermes.py",
+      "script_sha256": "39bb65dd8e1de1931d09e79e5caa6fb86f5ecbb12b5451a2cc8a28d163e7c4f4",
+      "taxonomy_sha256": "40eb32b5fe945c2be2933d38016bddd51ec65192dacb6e8f8d327b50bcb9ddee"
+    },
+    "input": {
+      "raw_sha256": "351f402dce8bd1cd6061e535b5ecc8a7be37a68b1545e00717b1ba7d14da992f",
+      "raw_records": 39,
+      "new_sha256": "87e942641844ab0f245c0c501ebf8d646941ea176c1ee7b7cb013e69d999a4b6"
+    },
+    "sources": {
+      "yahoo_realtime": 39
+    },
+    "model": {
+      "name": "kimi-k2.7-code",
+      "provider": "opencode-go",
+      "config_source": "config.yaml:model.default"
+    },
+    "output": {
+      "classified_sha256": "fd471a11a710ce4b58d38febe94ade221a06756b83cf670cc5163377480ac141"
+    }
+  },
+  "next_collect_at": "2026-12-17"
+}
