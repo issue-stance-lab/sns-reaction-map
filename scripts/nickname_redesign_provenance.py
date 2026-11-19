@@ -127,6 +127,8 @@ def verified_selectors(source: str, root: Path) -> dict[str, str]:
         counts = sorted((int(b["count"]) for b in other["buckets"].values()), reverse=True)
         allowed.update(counts)
         allowed.update(sum(counts[k:]) for k in range(len(counts)))
+    # 「少数」の注記に出るしきい値（冒頭の設定 count.small_threshold）。件数ではなく設定値
+    allowed.add(int(json.loads((root / OPENING).read_text(encoding="utf-8"))["count"]["small_threshold"]))
     extra = set(_numbers(count[0])) - allowed
     _check(not extra, f"冒頭の件数欄に説明できない件数 {sorted(extra)}")
     result[f"#{COUNT_ID}"] = f"{PUBLIC} / collected_count・opinion_count・issues[].count・issues[].stances の合計、{REREAD}（「その他」の区分）"
