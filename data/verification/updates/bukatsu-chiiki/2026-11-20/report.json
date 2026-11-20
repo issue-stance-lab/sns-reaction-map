@@ -1,0 +1,56 @@
+{
+  "checks": {
+    "raw_equals_duplicates_plus_new": true,
+    "new_equals_classified": true,
+    "candidate_count": true,
+    "candidate_unique": true
+  },
+  "raw": 230,
+  "duplicates": 98,
+  "new": 132,
+  "relevant": 127,
+  "opinions": 92,
+  "opinion_flag_available": true,
+  "candidate": 2528,
+  "classification_errors": 0,
+  "status": "validated",
+  "topic": "bukatsu-chiiki",
+  "date": "2026-11-20",
+  "run_id": "20261120_220837",
+  "taxonomy": {
+    "compatible": true,
+    "canonical_without_main_issue": false,
+    "unknown_issues": [],
+    "unknown_stances": []
+  },
+  "timings": {
+    "smoke_seconds": 7.81,
+    "fetch_seconds": 54.92,
+    "classify_seconds": 2376.61
+  },
+  "provenance": {
+    "schema_version": 1,
+    "classifier": {
+      "script": "scripts/classify_bukatsu_arena_hermes.py",
+      "script_sha256": "33a3b03caccf2e12a4e597f376d7b804ead07b9631c22084a31681338c35d6d0",
+      "taxonomy_sha256": "5c113653fe5c7402aa0c085bf32c73d16d31ab0e0ea9098961cc59dde6e47887"
+    },
+    "input": {
+      "raw_sha256": "e92bfa8df04f070ff5ca6b94ec2eb49ac0c13fcdc59d7db5f625ce4f50b91bc2",
+      "raw_records": 230,
+      "new_sha256": "691a2918b456660fe6863d29e2d292dda5a220ffee0807c658c0e5f1d3115653"
+    },
+    "sources": {
+      "yahoo_realtime": 230
+    },
+    "model": {
+      "name": "kimi-k2.7-code",
+      "provider": "opencode-go",
+      "config_source": "config.yaml:model.default"
+    },
+    "output": {
+      "classified_sha256": "af80e8c720b10f4f69fdbe7a2cc1d7c62ac040f04df4219de09a68c4e765a318"
+    }
+  },
+  "next_collect_at": "2026-11-28"
+}
