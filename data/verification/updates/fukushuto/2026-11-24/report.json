@@ -1,0 +1,56 @@
+{
+  "checks": {
+    "raw_equals_duplicates_plus_new": true,
+    "new_equals_classified": true,
+    "candidate_count": true,
+    "candidate_unique": true
+  },
+  "raw": 307,
+  "duplicates": 61,
+  "new": 246,
+  "relevant": 246,
+  "opinions": 191,
+  "opinion_flag_available": true,
+  "candidate": 4135,
+  "classification_errors": 0,
+  "status": "validated",
+  "topic": "fukushuto",
+  "date": "2026-11-24",
+  "run_id": "20261124_220836",
+  "taxonomy": {
+    "compatible": true,
+    "canonical_without_main_issue": false,
+    "unknown_issues": [],
+    "unknown_stances": []
+  },
+  "timings": {
+    "smoke_seconds": 10.79,
+    "fetch_seconds": 49.42,
+    "classify_seconds": 3852.47
+  },
+  "provenance": {
+    "schema_version": 1,
+    "classifier": {
+      "script": "scripts/classify_fukushuto_arena_hermes.py",
+      "script_sha256": "ecd6ea1048da697dddd2669e02fc127742ca43f81b58a7a3d432164311267331",
+      "taxonomy_sha256": "e72a9feb07e543c41c8278b1775fd59d97ec82af9b4400b51b4d12f9e1062fc0"
+    },
+    "input": {
+      "raw_sha256": "83cfa8af784811045950d5bbd55ea243ce27978b9435066164f815d8804828d6",
+      "raw_records": 307,
+      "new_sha256": "2a797683acdd77f8377149820a84c9e98b45391e8ffb7a703653c4a67a3675b8"
+    },
+    "sources": {
+      "yahoo_realtime": 307
+    },
+    "model": {
+      "name": "kimi-k2.7-code",
+      "provider": "opencode-go",
+      "config_source": "config.yaml:model.default"
+    },
+    "output": {
+      "classified_sha256": "b56560a1facda55810533678c50dbd6f7eed56711163d677f704e69c5125ad80"
+    }
+  },
+  "next_collect_at": "2026-12-01"
+}
