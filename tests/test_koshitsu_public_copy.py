@@ -70,17 +70,17 @@ class KoshitsuPublicCopyTests(unittest.TestCase):
         self.assertEqual(trust.apply_theme(self.html, theme, config), self.html)
 
     def test_counts_review_state_posts_sources_and_storage_notice_remain(self):
-        self.assertEqual(self.data["totals"], {"collected": 3798, "opinions": 3027})
-        self.assertIn("収集した3,798件のうち意見と判定した3,027件", self.html)
+        self.assertEqual(self.data["totals"], {"collected": 4094, "opinions": 3263})
+        self.assertIn("収集した4,094件のうち意見と判定した3,263件", self.html)
         self.assertEqual(
             {item["label"]: item["count"] for item in self.data["issues"]},
             {
-                "男系vs女系": 742,
-                "旧宮家養子縁組": 559,
-                "その他": 424,
-                "立法手続き・民主主義": 467,
-                "愛子さま・皇族の地位": 373,
-                "女性天皇・女系天皇": 462,
+                "男系vs女系": 768,
+                "旧宮家養子縁組": 605,
+                "その他": 449,
+                "立法手続き・民主主義": 523,
+                "愛子さま・皇族の地位": 405,
+                "女性天皇・女系天皇": 513,
             },
         )
         self.assertTrue(all(item["sub"]["status"] == "reread" for item in self.data["issues"]))
