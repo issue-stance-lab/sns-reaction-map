@@ -426,15 +426,18 @@ capabilities:
       論点ごとの固定リンク、「この論点を引用」ボタン（出典・年月・サンプル件数の定型文をコピー）。
       (b) テーマごとに「授業・ディベートで使う」節（賛成の理由3・反対の理由3・確かめる一次資料・印刷用ワークシート）。
       公開先URLは TASK_BOARD 課題51 の設計と合わせる
-    status: measuring
+    status: closed_undecided
     priority: 1
     metric: >-
       GA4 参照元（chatgpt.com / perplexity.ai / gemini.google.com / copilot）のセッション数と、
       GSC の検索語（ディベート・探究・メリット デメリット）の表示回数・クリック
     started_at: 2026-09-21
     judge_at: 2026-11-30       # 公開（2026-09-21）から4週間
-    closed_at: null
-    reopen_when: null
+    closed_at: 2026-11-26
+    reopen_when: >-
+      GSC 28日間の検索表示が50以上かつ、AI参照元セッションが5以上/月を維持し、
+      さらに「ディベート」「探究」「メリット デメリット」を含む検索語の合計表示が10以上/月になったら再判定する。
+      それまではインデックス回復（課題55）と追加観測を優先する。
     extension_count: 1
     reflection: >-
       2026-10-31初回振り返り。GA4の10/4〜10/30でChatGPT経由3セッション。
@@ -442,6 +445,10 @@ capabilities:
       GA4の10/1〜10/28でcite_copyは1回1人、classroom_print・classroom_link_clickは取得表に行なし。
       引用や教育利用による集客効果は未確定。11/30まで1回だけ延長し、再び不足ならclosed_undecidedで閉じて再開条件を設定する。
       URL検査で検索施策8ページがクロール済み未登録のため課題55の登録回復を優先する。判定記録はquality/reviews/2026-10-31-search-campaign-review.md。
+      【2026-11-26 判定】closed_undecided で確定。AI Assistant経由セッションは10と増加したが、
+      GSC 28日間表示は4に急減し、cite_copy / classroom_print / classroom_link_click はすべて0。
+      10月下旬にインデックス登録が約30→5へ急減しており、検索母数が成立しなかった（調査中：Item 5）。
+      タイトル改善3案はインデックス調査の結果を待って実装する。
     notes: >-
       2026-09-20 登録（TASK_BOARD 課題77、案1＋案2）。同日オーナーが採用し、発注書
       configs/prompts/20260920_growth-cite-and-search-structure.md（Part A=案1、Part B=案2）を作成。
