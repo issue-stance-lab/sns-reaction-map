@@ -49,6 +49,7 @@ TIMELINE_ISSUES = {
     "diet-followup": [TOPIC + "-safety", TOPIC + "-neutrality"],
     "diet-nhk": [TOPIC + "-public-response"],
     "prefecture-inquiry": [TOPIC + "-public-response"],
+    "national-school-survey": [TOPIC + "-safety", TOPIC + "-neutrality"],
 }
 
 
