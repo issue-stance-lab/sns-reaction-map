@@ -1,0 +1,56 @@
+{
+  "checks": {
+    "raw_equals_duplicates_plus_new": true,
+    "new_equals_classified": true,
+    "candidate_count": true,
+    "candidate_unique": true
+  },
+  "raw": 35,
+  "duplicates": 15,
+  "new": 20,
+  "relevant": 20,
+  "opinions": 17,
+  "opinion_flag_available": true,
+  "candidate": 697,
+  "classification_errors": 0,
+  "status": "validated",
+  "topic": "henoko-student-accident",
+  "date": "2026-11-26",
+  "run_id": "20261126_210025",
+  "taxonomy": {
+    "compatible": true,
+    "canonical_without_main_issue": false,
+    "unknown_issues": [],
+    "unknown_stances": []
+  },
+  "timings": {
+    "smoke_seconds": 7.24,
+    "fetch_seconds": 48.58,
+    "classify_seconds": 793.28
+  },
+  "provenance": {
+    "schema_version": 1,
+    "classifier": {
+      "script": "scripts/classify_henoko_arena_hermes.py",
+      "script_sha256": "ab490db69fb0c516c13db19fd884ccb402ded1ee6b9e9a97e3f4c17114d44642",
+      "taxonomy_sha256": "33097337e26c9052254e7ffcd1e4b374994b385106d6d5d5dda7c01dea8b3fa5"
+    },
+    "input": {
+      "raw_sha256": "3cf60962e9fa16fadf21404f48bbe7a54216808a2faeff23ce13c6a7a420e437",
+      "raw_records": 35,
+      "new_sha256": "c300b549d8905d45d709fefeae49698d30f5f38d5571a57a37324e7a33fcf757"
+    },
+    "sources": {
+      "yahoo_realtime": 35
+    },
+    "model": {
+      "name": "kimi-k2.7-code",
+      "provider": "opencode-go",
+      "config_source": "classifier_args:--model"
+    },
+    "output": {
+      "classified_sha256": "3f0732e4a719a7b0676b75619d8cd4d021220680e7f3d8d4424272dd066e7014"
+    }
+  },
+  "next_collect_at": "2026-12-24"
+}
