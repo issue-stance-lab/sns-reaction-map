@@ -1,0 +1,56 @@
+{
+  "checks": {
+    "raw_equals_duplicates_plus_new": true,
+    "new_equals_classified": true,
+    "candidate_count": true,
+    "candidate_unique": true
+  },
+  "raw": 140,
+  "duplicates": 91,
+  "new": 49,
+  "relevant": 0,
+  "opinions": 0,
+  "opinion_flag_available": false,
+  "candidate": 920,
+  "classification_errors": 0,
+  "status": "validated",
+  "topic": "bike-blue-ticket",
+  "date": "2026-11-27",
+  "run_id": "20261127_011223",
+  "taxonomy": {
+    "compatible": true,
+    "canonical_without_main_issue": false,
+    "unknown_issues": [],
+    "unknown_stances": []
+  },
+  "timings": {
+    "smoke_seconds": 7.81,
+    "fetch_seconds": 54.79,
+    "classify_seconds": 381.13
+  },
+  "provenance": {
+    "schema_version": 1,
+    "classifier": {
+      "script": "scripts/classify_bike_arena_hermes.py",
+      "script_sha256": "83c646ae625dfcad6bae565b8fe53df023a3e3724c0dc465f48e16f7324b4d63",
+      "taxonomy_sha256": "64f4379a4a341933c521361bed14e837c04fc2e8626f8c2829ea68e6d8c99cc2"
+    },
+    "input": {
+      "raw_sha256": "445a1ef99121d58913d4ca759426e86c211e45e3078f9e3221b7e6734061233f",
+      "raw_records": 140,
+      "new_sha256": "a739ec1e3330faa231471ffd31adf0d3be51d2f5c9f4a12bdf1d33babcb817c6"
+    },
+    "sources": {
+      "yahoo_realtime": 140
+    },
+    "model": {
+      "name": "kimi-k2.7-code",
+      "provider": "opencode-go",
+      "config_source": "config.yaml:model.default"
+    },
+    "output": {
+      "classified_sha256": "b2b2f9cc3eda2fefd08bf87f991709089753525f4341b9ed5add3d37b20f6efa"
+    }
+  },
+  "next_collect_at": "2026-12-11"
+}
