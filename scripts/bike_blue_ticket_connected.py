@@ -139,7 +139,7 @@ def _remove_process_copy(source: str, data: dict) -> str:
     )
     source = source.replace("／）", "）")
     source = source.replace("<div>Powered by Yahooリアルタイム検索 + AI分類</div>", "")
-    source = source.replace("\n    \n    <a href=\"index.html\"", "\n    <a href=\"index.html\"")
+    source = re.sub(r'\n    \n    (<a href="(?:index\.html|\./)")', r'\n    \1', source)
     source = source.replace("同じ検索語セットで取得した投稿をAIで分類しています。", "")
     source = source.replace(
         "この論点の中身（編集部が本文を読んで分けたもの）", "この論点の中身"
