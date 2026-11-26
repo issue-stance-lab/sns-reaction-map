@@ -11,6 +11,7 @@ import json
 import re
 import tempfile
 import unittest
+from datetime import date, timedelta
 from pathlib import Path
 
 from bs4 import BeautifulSoup
@@ -786,6 +787,26 @@ class LayoutTests(unittest.TestCase):
         shutil.copy2(layout.source_for_refresh(ROOT), root / layout.PAGE)
         return root
 
+    def _trend_date(self, root: Path) -> date:
+        source = soup_of((root / layout.PAGE).read_text(encoding="utf-8"))
+        label = source.select_one(".trend-asof").get_text(strip=True)
+        match = re.fullmatch(r"(\d{4})年(\d{1,2})月(\d{1,2})日時点", label)
+        self.assertIsNotNone(match, label)
+        return date(*map(int, match.groups()))
+
+    def _set_public_update(self, root: Path, updated_on: date) -> None:
+        value = updated_on.isoformat()
+        for relative in ("docs/data/themes/ai-copyright.json", "data/public/themes/ai-copyright.json"):
+            path = root / relative
+            data = json.loads(path.read_text(encoding="utf-8"))
+            data["updated_on"] = value
+            path.write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
+        path = root / "THEMES.yaml"
+        themes = path.read_text(encoding="utf-8")
+        block = re.search(r"\n  ai-copyright:\n(?:    .*\n)+", themes).group()
+        updated = re.sub(r"(\n    updated_at: )['\"]?[0-9-]+['\"]?", rf"\g<1>{value}", block, count=1)
+        path.write_text(themes.replace(block, updated), encoding="utf-8")
+
     def test_disabled_has_no_effect(self):
         with tempfile.TemporaryDirectory() as temp:
             root = self._root(temp)
@@ -856,15 +877,15 @@ class LayoutTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temp:
             root = self._root(temp)
             (root / layout.CONFIG).write_text('{"enabled": true}')
-            for rel in ("docs/data/themes/ai-copyright.json", "data/public/themes/ai-copyright.json"):
-                data = json.loads((root / rel).read_text(encoding="utf-8"))
-                data["updated_on"] = "2026-11-17"
-                (root / rel).write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
-            themes = (root / "THEMES.yaml").read_text(encoding="utf-8")
-            block = re.search(r"\n  ai-copyright:\n(?:    .*\n)+", themes).group()
-            fixed = re.sub(r"(\n    updated_at: )['\"]?[0-9-]+['\"]?", r"\g<1>2026-11-17", block, count=1)
-            (root / "THEMES.yaml").write_text(themes.replace(block, fixed), encoding="utf-8")
+            config_path = root / "configs/ai-copyright-opening.json"
+            config = json.loads(config_path.read_text(encoding="utf-8"))
+            filing = config["principle_code"]
+            filing_start = date.fromisoformat(filing["filing_starts_on"])
+            filing["filing_confirmed_on"] = None
+            config_path.write_text(json.dumps(config, ensure_ascii=False), encoding="utf-8")
             # 「意見の推移」の時点（保存した収集回の最新日）は更新日より前のままでも止まらない
+            updated_on = max(filing_start, self._trend_date(root)) + timedelta(days=1)
+            self._set_public_update(root, updated_on)
             self.assertEqual(set(layout.finish(root)), {layout.SOURCE, layout.PAGE})
             s = soup_of((root / layout.PAGE).read_text(encoding="utf-8"))
             self.assertEqual(s.select_one("#ai-copyright-background")["data-filing-phase"], "after_unconfirmed")
@@ -873,6 +894,17 @@ class LayoutTests(unittest.TestCase):
         self.assertEqual(refresh.count("materialize_ai_copyright(candidate_root)"), 1)
         adapter = (ROOT / "scripts/refresh_adapters/ai_copyright.py").read_text(encoding="utf-8")
         self.assertIn("current_page = source_for_refresh(root)", adapter)
+
+    def test_finish_rejects_trend_after_public_update(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = self._root(temp)
+            (root / layout.CONFIG).write_text('{"enabled": true}')
+            self._set_public_update(root, self._trend_date(root) - timedelta(days=1))
+            before = (root / layout.PAGE).read_bytes()
+            with self.assertRaisesRegex(ValueError, "「意見の推移」の時点が.*公開JSONの更新日より後"):
+                layout.finish(root)
+            self.assertEqual((root / layout.PAGE).read_bytes(), before)
+            self.assertFalse((root / layout.SOURCE).exists())
 
 
 if __name__ == "__main__":
