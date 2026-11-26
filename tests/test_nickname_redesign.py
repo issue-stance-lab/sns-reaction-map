@@ -658,7 +658,7 @@ class RedesignCandidateTests(unittest.TestCase):
             self.assertIn(href, hrefs)
         self.assertIn('<time datetime="2026-06-24">', self.release)
         self.assertIn(f'<time datetime="{PUBLIC["updated_on"]}">', self.release)
-        self.assertIsNotNone(self.s.select_one('header.modern-site-header a[href="index.html"]'))
+        self.assertIsNotNone(self.s.select_one('header.modern-site-header a[href="./"]'))
 
     def test_detail_data_is_kept_verbatim(self):
         """調査上の注意（#detail-data。あだ名禁止の元HTMLでは表を持たず「読み方」だけ）は元HTMLのまま。"""

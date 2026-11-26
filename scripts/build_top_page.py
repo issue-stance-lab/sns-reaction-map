@@ -189,7 +189,7 @@ def render_header(cfg: dict[str, Any]) -> str:
     nav = "".join(f'<a href="{e(item["href"])}">{e(item["label"])}</a>' for item in cfg["nav"])
     return (
         '<header class="site-header"><div class="shell header-inner">'
-        '<a class="logo" href="index.html" aria-label="SNS反応まっぷ トップ"><img class="logo-mark" src="images/brand/mark.svg" alt=""><span class="logo-text">SNS反応まっぷ</span></a>'
+        '<a class="logo" href="./" aria-label="SNS反応まっぷ トップ"><img class="logo-mark" src="images/brand/mark.svg" alt=""><span class="logo-text">SNS反応まっぷ</span></a>'
         f'<nav class="main-nav" aria-label="メインナビゲーション">{nav}</nav>'
         '<div class="header-actions"><a class="icon-button" href="https://x.com/sns_hannou_ma" target="_blank" rel="noopener" aria-label="Xを見る">'
         '<svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>'

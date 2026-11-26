@@ -591,7 +591,7 @@ class RedesignCandidateTests(unittest.TestCase):
             self.assertIn(href, hrefs)
         self.assertIn('<time datetime="2026-06-28">', self.release)
         self.assertIn(f'<time datetime="{PUBLIC["updated_on"]}">', self.release)
-        self.assertIsNotNone(self.s.select_one('header.modern-site-header a[href="index.html"]'))
+        self.assertIsNotNone(self.s.select_one('header.modern-site-header a[href="./"]'))
 
     def test_detail_data_drops_only_old_tables(self):
         """詳細データは旧体系の3表（旧177件）を外し、「注意」だけを元HTMLのまま残す（内容対応表 36〜39）。"""

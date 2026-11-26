@@ -659,7 +659,7 @@ class RedesignCandidateTests(unittest.TestCase):
             self.assertIn(href, hrefs)
         self.assertIn('<time datetime="2026-06-28">', self.release)
         self.assertIn(f'<time datetime="{PUBLIC["updated_on"]}">', self.release)
-        self.assertIsNotNone(self.s.select_one('header.modern-site-header a[href="index.html"]'))
+        self.assertIsNotNone(self.s.select_one('header.modern-site-header a[href="./"]'))
 
     def test_detail_data_is_kept_verbatim(self):
         """詳細データの3表（論点別・スタンス別・表現強度別。公開JSONと同じ455件の集計）は元HTMLのまま。"""

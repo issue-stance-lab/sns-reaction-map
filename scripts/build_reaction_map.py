@@ -1530,7 +1530,7 @@ def build(rows: list[dict[str, Any]], config: dict[str, Any]) -> str:
   <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
   <footer style="background:linear-gradient(135deg, var(--grad-2), var(--grad-1));border-top:none;padding:48px 24px;text-align:center;color:#fff;font-size:12px;line-height:1.8;">
     <div>Powered by Yahooリアルタイム検索 + AI分類</div>
-    <a href="index.html" style="color:rgba(255,255,255,.85);text-decoration:none;font-weight:700;font-size:13px;">← SNS反応まっぷ トップへ</a>
+    <a href="./" style="color:rgba(255,255,255,.85);text-decoration:none;font-weight:700;font-size:13px;">← SNS反応まっぷ トップへ</a>
     <div style="margin-top:8px;color:rgba(255,255,255,.6);">
       <a href="privacy.html" style="color:rgba(255,255,255,.7);margin-right:16px;">プライバシーポリシー</a>
       <a href="disclaimer.html" style="color:rgba(255,255,255,.7);">免責事項</a>

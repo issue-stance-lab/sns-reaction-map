@@ -753,7 +753,7 @@ class RedesignCandidateTests(unittest.TestCase):
             self.assertIn(href, hrefs)
         self.assertIn('<time datetime="2026-06-24">', self.release)
         self.assertIn(f'<time datetime="{PUBLIC["updated_on"]}">', self.release)
-        self.assertIsNotNone(self.s.select_one('header.modern-site-header a[href="index.html"]'))
+        self.assertIsNotNone(self.s.select_one('header.modern-site-header a[href="./"]'))
 
     def test_detail_data_uses_four_stances_and_keeps_notes(self):
         """詳細データの表は公開JSONの4立場・分類名で作り直す（元HTMLの「判断を保留・切り分ける448」は使わない）。注意は元のまま。"""
