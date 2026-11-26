@@ -212,7 +212,7 @@ class ReadingPageTests(unittest.TestCase):
         note = self.s.select_one(".fr-note").get_text()
         end = date.fromisoformat(PUBLIC["collection_period"]["end"])
         after = opening.jp_date((end + timedelta(days=1)).isoformat(), False)
-        next_collect = self.d["theme"].get("collect_at")
+        next_collect = self.d["bg"]["theme"].get("collect_at")
         self.assertIn(f"{after}より前の投稿", note)
         self.assertIn(opening.jp_date(str(next_collect), False), note)
 
@@ -535,13 +535,31 @@ class AllIssuesAndBackgroundTests(unittest.TestCase):
         later = date.fromisoformat(d["ocfg"]["checked_on"]) + timedelta(days=7)
         d["ocfg"]["checked_on"] = later.isoformat()
         bg = self.render_bg(d)
-        text = bg.get_text()
-        self.assertIn(opening.jp_date(later.isoformat()), text)
-        # 冒頭と背景台帳の確認日はそれぞれの入力から出す。
-        ledger = self.reading.jp_date(self.d["background"]["checked_on"])
-        for label in ("背景台帳の確認日 ", "背景台帳の確認 "):
-            text = text.replace(label + ledger, "")
-        self.assertNotIn(ledger, text)
+        checked = opening.jp_date(later.isoformat())
+        ledger = opening.jp_date(d["background"]["checked_on"])
+        checked_fields = (
+            "#bg-timeline .fb-sum",
+            "#bg-timeline [data-checked-on]",
+            "#bg-official .fb-sum",
+            "#bg-official .hop-pending__note",
+            "#henoko-faq .fb-cite",
+        )
+        for selector in checked_fields:
+            with self.subTest(selector=selector):
+                text = bg.select_one(selector).get_text(strip=True)
+                self.assertIn(checked, text)
+                self.assertNotIn(ledger, text)
+        self.assertEqual(bg.select_one("#bg-timeline [data-checked-on]")["data-checked-on"], later.isoformat())
+        footer = bg.select_one(".fr-footer").get_text(strip=True).split("・")
+        self.assertIn(f"一次資料の確認 {checked}", footer)
+        self.assertIn(f"背景台帳の確認 {ledger}", footer)
+
+    def test_background_collection_cutoff_matches_public_period(self):
+        footer = self.s.select_one("#henoko-student-accident-background .fr-footer")
+        fields = footer.get_text(strip=True).split("・")
+        cutoff = [field for field in fields if field.startswith("件数の締め ")]
+        expected = opening.jp_date(PUBLIC["collection_period"]["end"])
+        self.assertEqual(cutoff, [f"件数の締め {expected}"])
 
     def test_unverified_mentions_uncollected_and_next(self):
         text = self.s.find(id="bg-unverified").get_text()
