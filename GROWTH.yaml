@@ -50,15 +50,19 @@ kpi:
       pages_per_session: 0.833
       votes_total: 26
       votes_week: null
-      gsc_impressions: 3
+      gsc_impressions: 4
       gsc_clicks: 0
       x_followers: 20
       notes: >-
-        週次計測の取り直し。GA4は過去7日で5ユーザー・5PV・0.833 pages/session（28日間では59セッション・108PV）。
-        GSCは28日間で3表示・0クリック、90日間で210表示・11クリック。28日間の低下はインデックス状況の悪化
-        （登録1・クロール済み未登録27・未認識4）と関連。GSC検索語では「コベカツ 内申点」「副首都」「副首都 メリット デメリット」
-        「部活動 地域移行 失敗」「憲法改正 反対」などが表示あり（ほぼ全て0クリック）。
-        GA4の28日間ではchatgpt.com経由10セッション、perplexity.ai / gemini.google.com / copilot.microsoft.com は0。
+        週次計測の取り直し。GA4は過去7日で5ユーザー・5PV・0.833 pages/session（28日間では59セッション・108PV・45ユーザー）。
+        GSCはクロードによるブラウザ確認で、直近28日（10/28〜11/24）4表示・0クリック、直近3か月（8/29〜11/24）203表示・11クリック。
+        10/31時点の28日間138表示・9クリックから11月に入って急落。主因は10月下旬からのインデックス脱落
+        （10/20前後まで登録済み約25〜30件が、11/16時点で登録済み5・未登録30へ減少。「クロール済み-インデックス未登録」23件が急増）。
+        インデックス脱落の原因（内容の重複判定・品質評価・技術要因）は未特定。
+        GSC検索語では「コベカツ 内申点」「コベカツ 神戸市」「副首都」「副首都 メリット デメリット」
+        「部活動 地域移行 失敗」「憲法改正 反対」「あだ名禁止 文部科学省」などが表示あり（ほぼ全て0クリック）。
+        GA4の28日間ではAI Assistant経由10セッション（うちchatgpt.comが主）、perplexity.ai / gemini.google.com / copilot.microsoft.com は0。
+        チャネル構成はDirect 23 / Organic Search 13 / Referral 11 / AI Assistant 10 / Organic Social 2。
         cite_copy・classroom_print・classroom_link_clickはいずれも0。
         Xフォロワーはx.com/sns_hannou_maの公開画面で20人を確認（前回10/11の23人から減少）。
         Supabaseの週次投票数は現行APIで取得不可のためnull。
