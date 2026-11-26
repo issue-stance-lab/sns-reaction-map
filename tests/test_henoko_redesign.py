@@ -14,6 +14,7 @@ import shutil
 import tempfile
 import unittest
 from collections import Counter
+from datetime import date, timedelta
 from pathlib import Path
 
 from bs4 import BeautifulSoup
@@ -209,8 +210,11 @@ class ReadingPageTests(unittest.TestCase):
 
     def test_note_says_uncollected_and_next(self):
         note = self.s.select_one(".fr-note").get_text()
-        self.assertIn("11月8日より前の投稿", note)
-        self.assertIn("12月5日", note)
+        end = date.fromisoformat(PUBLIC["collection_period"]["end"])
+        after = opening.jp_date((end + timedelta(days=1)).isoformat(), False)
+        next_collect = self.d["theme"].get("collect_at")
+        self.assertIn(f"{after}より前の投稿", note)
+        self.assertIn(opening.jp_date(str(next_collect), False), note)
 
     def test_counts_and_stances_match_public_json(self):
         order = [s["id"] for s in self.reading.stance_order(self.d)]
@@ -528,20 +532,22 @@ class AllIssuesAndBackgroundTests(unittest.TestCase):
 
     def test_checked_on_drives_time_wording(self):
         d = copy.deepcopy(self.d)
-        d["ocfg"]["checked_on"] = "2026-11-20"
+        later = date.fromisoformat(d["ocfg"]["checked_on"]) + timedelta(days=7)
+        d["ocfg"]["checked_on"] = later.isoformat()
         bg = self.render_bg(d)
         text = bg.get_text()
-        self.assertIn("2026年11月20日", text)
-        # 冒頭の確認日（checked_on）だけが動く。背景台帳の確認日（台帳の checked_on、2026-10-13）は台帳から別に出る
+        self.assertIn(opening.jp_date(later.isoformat()), text)
+        # 冒頭と背景台帳の確認日はそれぞれの入力から出す。
         ledger = self.reading.jp_date(self.d["background"]["checked_on"])
         for label in ("背景台帳の確認日 ", "背景台帳の確認 "):
             text = text.replace(label + ledger, "")
-        self.assertNotIn("10月13日", text)
+        self.assertNotIn(ledger, text)
 
     def test_unverified_mentions_uncollected_and_next(self):
         text = self.s.find(id="bg-unverified").get_text()
-        self.assertIn("11月8日以降の投稿", text)
-        self.assertIn("12月5日", text)
+        dates = self.background.dates(self.d)
+        self.assertIn(f"{dates['after']}以降の投稿", text)
+        self.assertIn(dates["next_collect"], text)
         self.assertIn("404", (ROOT / "quality/research/henoko-student-accident-primary-sources.md").read_text(encoding="utf-8"))
 
     def test_faq_moved_from_opening_without_overlap(self):
