@@ -1,6 +1,6 @@
 # 貼り付け用｜note「消費税減税」第1回（経緯編）
 
-作成: 2026-09-17 / 公開予定: 未定（オーナー確認待ち）
+作成: 2026-09-17 / 公開: 2026-09-21 / URL: https://note.com/sns_hanno_ma/n/n18d7619c35c5
 根拠と一次資料は `quality/research/consumption-tax-cut-primary-sources.md`（資料N/O/P中心）、
 SNS集計は `social-samples/consumption-tax-cut_hermes_arena_classified.json` の
 `is_relevant && is_opinion` 3,358件、うち `main_issue == "公約と政治不信"` の1,198件。
