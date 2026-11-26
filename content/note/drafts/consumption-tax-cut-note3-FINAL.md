@@ -1,6 +1,6 @@
 # 貼り付け用｜note「消費税減税」第3回（SNSの賛否：効果をめぐる食い違い）
 
-作成: 2026-10-03 / 公開予定: 未定（オーナー確認待ち）
+作成: 2026-10-03 / 公開: 2026-10-04 / URL: https://note.com/sns_hanno_ma/n/n2e5d443b956c
 note記事タイトル（案）: 消費税減税の効果は「何と比べるか」で答えが変わる。SNSの「意味がない」を読む
 根拠と一次資料は `quality/research/consumption-tax-cut-primary-sources.md`（資料N=大綱、資料Q=ESPフォーキャスト調査、資料R=社会保障国民会議の中間とりまとめ、資料S=第一ライフ資産運用経済研究所のレポート、資料T=首相発言の報道）、
 SNS集計は `social-samples/consumption-tax-cut_hermes_arena_classified.json` の
