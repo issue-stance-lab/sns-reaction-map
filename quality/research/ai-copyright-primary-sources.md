@@ -309,3 +309,13 @@
 注：内閣官房（cas.go.jp）は、curl の既定の利用者名（User-Agent）だと404を返し、ブラウザーの利用者名だと200を返した。過去の「404」記録の一部はこの影響の可能性がある。
 
 - 確認日：2026-10-11
+
+## 2026-11-27 プリンシプル・コードの届出を確認
+
+内閣官房の案内で、内閣府知的財産戦略推進事務局の受付開始が2026年10月26日であることを確かめた。案内には提出様式と提出先がある。[届出の案内](https://www.cas.go.jp/jp/seisakukaigi/titeki2/ai_principle_code/index.html)
+
+内閣官房の届出事業者一覧で、表の1行目（株式会社ABEJA）と2行目（Google LLC）の届出日が「26/10/26」だと確認した。受付の実績も確認できたため、背景・年表・FAQの届出確認日を2026年11月27日とした。[届出事業者一覧](https://www.cas.go.jp/jp/seisakukaigi/titeki2/ai_principle_code/jigyousha_ichiran.html)
+
+同日、事実確認の既存6主張の出典を再確認した。e-Govの11月27日時点の条文で、著作権法第30条の4、第63条、第112条、第114条、第114条の3、民法第415条、第521条、第709条、AI法第1条、第3条、第16条を照合した。非享受目的の利用と契約・賠償、一般への事前開示と個別訴訟での書類提出を分けて扱った。[著作権法](https://laws.e-gov.go.jp/law/345AC0000000048)・[民法](https://laws.e-gov.go.jp/law/129AC0000000089)・[AI法](https://laws.e-gov.go.jp/law/507AC0000000053)
+
+文化庁の整理では、学習元の表現を享受する目的や権利者の利益、生成物への人の創作的寄与、差止めを求める条件を確かめた。内閣府資料では、権利者が取れる対応、契約による対価還元、プリンシプル・コードの受入れが任意であることを確認した。ページ全体の制度説明の確認日とは分けて扱った。[文化庁の考え方](https://www.bunka.go.jp/seisaku/bunkashingikai/chosakuken/pdf/94037901_01.pdf)・[中間とりまとめ](https://www.cas.go.jp/jp/seisakukaigi/titeki2/chitekizaisan2024/0528_ai.pdf)・[権利者のための手引き](https://www.cas.go.jp/jp/seisakukaigi/titeki2/chitekizaisan2024/2411_tebiki.pdf)・[プリンシプル・コード](https://www.cas.go.jp/jp/seisakukaigi/titeki2/ai_kentoukai/kaisai/pdf/ai_principle_code.pdf)
