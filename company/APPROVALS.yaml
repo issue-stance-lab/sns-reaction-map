@@ -1,5 +1,5 @@
 version: 1
-updated_at: "2026-11-02"
+updated_at: "2026-11-26"
 
 rules:
   required_for:
@@ -3184,3 +3184,60 @@ items:
       候補manifest内部SHA-256は1727269df9f57cce21baf5d513ba06b788b8a8c654afa5f72f0ed4716c291f4a。
       オーナーは最終検査と文章整理の進捗報告後に「続けて」と指示した。公開検査で見つかった文字数超過に対応し、
       昇格後に照合メモの文章を短くした。最終HTMLのSHA-256は3d59fc6adec4cc8bf88e5b575e5229d2c88bc94682e2cf5d9b980f1c50091586。
+
+  - id: approval-20261126-henoko-refresh
+    department: engineering-data
+    action: website_publication
+    summary: 辺野古高校生死亡事故の11月26日収集回と文科省の全国調査結果を公開する
+    reason: 既存テーマの定期更新として本文を確認し、公表資料を公開候補に反映したため
+    risks:
+      - SNS投稿は公開サンプルであり、世論調査ではない
+    recommendation: approve
+    evidence:
+      - quality/reviews/2026-11-26-henoko-student-accident-refresh-review.md
+      - quality/reviews/2026-11-26-henoko-student-accident-wave-reading.json
+    status: approved
+    requested_at: "2026-11-26"
+    decided_at: "2026-11-26"
+    decision_note: >-
+      既存テーマの更新を検査後にマージ・pushできるという2026-11-26大澤さんの決定を窓口のクロードが伝達。
+      対象は新規20件・意見17件を確認した11月26日収集回。候補の指紋は
+      26937c017af252dd93dd18d70839d09acc3f26b44a6bea5e0b9e8a6eb6891396。
+
+  - id: approval-20261127-bike-refresh
+    department: engineering-data
+    action: website_publication
+    summary: 自転車の青切符導入の11月27日収集回を公開する
+    reason: 11月25日予定の定期収集を実施し、公開候補へ反映したため
+    risks:
+      - SNS投稿は公開サンプルであり、世論調査ではない
+    recommendation: approve
+    evidence:
+      - quality/reviews/2026-11-27-bike-blue-ticket-refresh-review.md
+      - quality/reviews/2026-11-27-bike-blue-ticket-wave-reading.json
+    status: approved
+    requested_at: "2026-11-26"
+    decided_at: "2026-11-26"
+    decision_note: >-
+      既存テーマの更新を検査後にマージ・pushできるという2026-11-26大澤さんの決定を窓口のクロードが伝達。
+      辺野古の公開確認後に行った自転車の11月27日収集回が対象。候補の指紋は
+      7694e48ae11f03b501ca000e5253c2b1745933fc0634c917b0cd603831d31298。
+
+  - id: approval-20261127-ai-copyright-refresh
+    department: engineering-data
+    action: website_publication
+    summary: 生成AIと著作権の11月27日収集回とプリンシプル・コード届出の確認結果を公開する
+    reason: 11月26日予定の定期収集を実施し、10月26日付の届出を内閣官房の資料で確認したため
+    risks:
+      - SNS投稿は公開サンプルであり、世論調査ではない
+    recommendation: approve
+    evidence:
+      - quality/reviews/2026-11-27-ai-copyright-refresh-review.md
+      - quality/reviews/2026-11-27-ai-copyright-wave-reading.json
+    status: approved
+    requested_at: "2026-11-27"
+    decided_at: "2026-11-27"
+    decision_note: >-
+      既存テーマの定期更新は検査後にマージ・pushできる決定を踏まえ、窓口から自転車公開後に生成AIの更新へ進む指示を受領した。
+      届出確認済みへの切替と、時制のテストを別コミットにする扱いも確認済み。
+      候補の指紋は 9cba8c617f5739f63a0f63b48f92ed5c811b2ab364fc8aef5d058e53c0285bb9。

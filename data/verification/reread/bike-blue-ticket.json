@@ -4,8 +4,8 @@
   "snapshot_at": "2026-09-06T13:22:53.827514+00:00",
   "canonical_sha256": "23edd58fc4f5eae513d4b7a500da5ee0254fbe2008b2b6e9e57d41896fe55f6e",
   "sources": {
-    "data/bike-blue-ticket_issues-reread.json": "bf71a69b12f6a22cb5e2bf6ff21734d337bae8cd694c1bad464e0cdd4362691c",
-    "data/bike-blue-ticket_opposition_reread.json": "bb7764a4426c3b63d764420a933a21d9049a63ecec44c5d342975e1cb7c57633",
+    "data/bike-blue-ticket_issues-reread.json": "b401bbff37bd3677b55ce1faae9e922f9cdf9fa3e6acd7b53166f3bdfb49e5de",
+    "data/bike-blue-ticket_opposition_reread.json": "70ca8976567cddaf0b8ef10f6a8eb78800beb07a41b968699b0e0fd1d0579df0",
     "data/bike-blue-ticket_editorial-supplement.json": "4254d679d4b7cc548d3bdfa14fa9c4b9b283a7255dac43e3a9191dd1f6fdb1a3",
     "data/bike-blue-ticket_editorial-reread-20260906.json": "f293338ab2ab05e83d5cff1b5f4ae4b440c3b1f83ae64248e7c04a3538d145cb",
     "data/bike-blue-ticket_editorial-updates/20260912.json": "b8124685bafbbf30aba70edc07e3151a56d06834217f049935cf6645559d9802",
@@ -16,7 +16,8 @@
     "data/bike-blue-ticket_editorial-updates/20261107.json": "3dc0591227256b9ab4316884b9b919cc6fb50a0057e7e8cbe570fb7b34fbb489",
     "quality/reviews/2026-11-07-bike-blue-ticket-wave-reading.json": "07e7e8212322b8a7136dfae2c66ce514801d58e0f042b6a30947435488ecf98e",
     "data/bike-blue-ticket_editorial-updates/20261111.json": "754f8d61db1f8068ce3a78bf11b45318b31e044df559a58f2c11a8231e19e9d0",
-    "quality/reviews/2026-11-11-bike-blue-ticket-wave-reading.json": "00e2da424167f8821f69863b1bbeaa85c7ed82a17b7204c10cd5964c1f1db047"
+    "quality/reviews/2026-11-11-bike-blue-ticket-wave-reading.json": "00e2da424167f8821f69863b1bbeaa85c7ed82a17b7204c10cd5964c1f1db047",
+    "data/bike-blue-ticket_editorial-updates/20261127.json": "47bb77acea1f74c05def1a96ea1bfbbce17d326ceb8c6189bedc791a641243a7"
   },
   "source_date_labels": {
     "data/bike-blue-ticket_issues-reread.json": "2026-08-17（旧記録の日付） / 2026-09-06（追加分の本文再読日） / 2026-09-06T06:21:45.680273+00:00（追加本文確認）",
@@ -30,7 +31,8 @@
     "data/bike-blue-ticket_editorial-updates/20261107.json": "2026-11-07T10:21:44+09:00",
     "quality/reviews/2026-11-07-bike-blue-ticket-wave-reading.json": "2026-11-07",
     "data/bike-blue-ticket_editorial-updates/20261111.json": "2026-11-11T22:23:54+09:00",
-    "quality/reviews/2026-11-11-bike-blue-ticket-wave-reading.json": "2026-11-11"
+    "quality/reviews/2026-11-11-bike-blue-ticket-wave-reading.json": "2026-11-11",
+    "data/bike-blue-ticket_editorial-updates/20261127.json": "2026-11-27T01:21:56+09:00"
   },
   "records": [
     {
@@ -125,6 +127,25 @@
         "reason_sha256": "b47e72038f492a8365bda3fe1d82d5e19ec119ae32a8ce0ba7e71d0598c1da92",
         "source_file": "data/bike-blue-ticket_editorial-updates/20261011.json",
         "source_sha256": "f1520a6666c0db84b9fe00460405943c25c32eea08b99b708d71e701a6406b9d",
+        "bucket": "excluded_information_or_off_topic"
+      }
+    },
+    {
+      "baseline_text_sha256": "4727a7c3023816264cae6d1853b2434fd1f94cf054c67c9efe1ad4d95e8f3130",
+      "is_opinion": false,
+      "main_issue": "その他",
+      "post_key": "02d87824d9f8aa6c932da79406e640266cf2b50ac669804cfcc9451afb6d6072",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-11-27T01:21:56+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "Codex（編集担当）＋Claude Sonnet 読み手2名（自動分類を伏せて本文判定）",
+        "method_version": "bike-new-collection-editorial-review-v1",
+        "text_sha256": "4727a7c3023816264cae6d1853b2434fd1f94cf054c67c9efe1ad4d95e8f3130",
+        "reason_sha256": "b47e72038f492a8365bda3fe1d82d5e19ec119ae32a8ce0ba7e71d0598c1da92",
+        "source_file": "data/bike-blue-ticket_editorial-updates/20261127.json",
+        "source_sha256": "47bb77acea1f74c05def1a96ea1bfbbce17d326ceb8c6189bedc791a641243a7",
         "bucket": "excluded_information_or_off_topic"
       }
     },
@@ -297,6 +318,25 @@
         "source_file": "quality/reviews/2026-11-07-bike-blue-ticket-wave-reading.json",
         "source_sha256": "07e7e8212322b8a7136dfae2c66ce514801d58e0f042b6a30947435488ecf98e",
         "bucket": "non-opinion"
+      }
+    },
+    {
+      "baseline_text_sha256": "52ed1fc306becac5a0ce1dc28990b8d828aa8c25bc99051d6faec0fedf4d3983",
+      "is_opinion": false,
+      "main_issue": "その他",
+      "post_key": "07820e37b11e652ac71c0c5d41366d5caf7ac887ef4dac7f1da855342f1f0b2c",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-11-27T01:21:56+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "Codex（編集担当）＋Claude Sonnet 読み手2名（自動分類を伏せて本文判定）",
+        "method_version": "bike-new-collection-editorial-review-v1",
+        "text_sha256": "52ed1fc306becac5a0ce1dc28990b8d828aa8c25bc99051d6faec0fedf4d3983",
+        "reason_sha256": "b47e72038f492a8365bda3fe1d82d5e19ec119ae32a8ce0ba7e71d0598c1da92",
+        "source_file": "data/bike-blue-ticket_editorial-updates/20261127.json",
+        "source_sha256": "47bb77acea1f74c05def1a96ea1bfbbce17d326ceb8c6189bedc791a641243a7",
+        "bucket": "excluded_information_or_off_topic"
       }
     },
     {
@@ -1136,6 +1176,25 @@
       }
     },
     {
+      "baseline_text_sha256": "e43a2b51616d004cf82824cb63d64b67c252b446e44a4851573608fba5ba9206",
+      "is_opinion": true,
+      "main_issue": "インフラ整備優先",
+      "post_key": "139917e1a02121ba28c7fce0c5503ef418ea6b1150177d7473784f17bcb63057",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-11-27T01:21:56+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "Codex（編集担当）＋Claude Sonnet 読み手2名（自動分類を伏せて本文判定）",
+        "method_version": "bike-new-collection-editorial-review-v1",
+        "text_sha256": "e43a2b51616d004cf82824cb63d64b67c252b446e44a4851573608fba5ba9206",
+        "reason_sha256": "781570a4498e1501bc79e725fadb8d06cc01dca4ccc83871e2d972736bab4587",
+        "source_file": "data/bike-blue-ticket_editorial-updates/20261127.json",
+        "source_sha256": "47bb77acea1f74c05def1a96ea1bfbbce17d326ceb8c6189bedc791a641243a7",
+        "bucket": "scope"
+      }
+    },
+    {
       "post_key": "13a9878a6c4aa8af2bab1d84b50b4d86b30861f33225b6e3478c8fe579d5a3d8",
       "baseline_text_sha256": "47cba49452bb4b1cd6889a2a6486f9a6fd71e226878ac4face2aad0e141eb91b",
       "main_issue": "その他",
@@ -1341,6 +1400,25 @@
         "reason_sha256": "ef1febeeeca79dc838969ee0ecee91afd01fdf99b2be3f26d53bbe8edb9eab7e",
         "source_file": "data/bike-blue-ticket_editorial-updates/20260928.json",
         "source_sha256": "0ea0e6482a5e11f4a9f6e7b6a548b109f5578ba4550fb0a2b1fcc07cbdc9d6be",
+        "bucket": "excluded_information_or_off_topic"
+      }
+    },
+    {
+      "baseline_text_sha256": "cef2a1b059658ca379d3660712f76739f2069aeca2783108cb5b2b41c64d5b1b",
+      "is_opinion": false,
+      "main_issue": "その他",
+      "post_key": "1850bc4c64c79d139372dcd79cca487b94686a5965bddcbc7202715d6a937ffb",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-11-27T01:21:56+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "Codex（編集担当）＋Claude Sonnet 読み手2名（自動分類を伏せて本文判定）",
+        "method_version": "bike-new-collection-editorial-review-v1",
+        "text_sha256": "cef2a1b059658ca379d3660712f76739f2069aeca2783108cb5b2b41c64d5b1b",
+        "reason_sha256": "b47e72038f492a8365bda3fe1d82d5e19ec119ae32a8ce0ba7e71d0598c1da92",
+        "source_file": "data/bike-blue-ticket_editorial-updates/20261127.json",
+        "source_sha256": "47bb77acea1f74c05def1a96ea1bfbbce17d326ceb8c6189bedc791a641243a7",
         "bucket": "excluded_information_or_off_topic"
       }
     },
@@ -2200,6 +2278,25 @@
       }
     },
     {
+      "baseline_text_sha256": "6083023871637a34a7e6627a2903613b591dd7daded8fe54270f53e8676e3e69",
+      "is_opinion": true,
+      "main_issue": "免許制要求",
+      "post_key": "23622c79447418118fb0e140b6f0892e4ea7844fbbb4804998943c00e6488f71",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-11-27T01:21:56+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "Codex（編集担当）＋Claude Sonnet 読み手2名（自動分類を伏せて本文判定）",
+        "method_version": "bike-new-collection-editorial-review-v1",
+        "text_sha256": "6083023871637a34a7e6627a2903613b591dd7daded8fe54270f53e8676e3e69",
+        "reason_sha256": "ba7825d27e862382b121e4b1bfc276d1d34998d125ecafe2475f17ecf38d007c",
+        "source_file": "data/bike-blue-ticket_editorial-updates/20261127.json",
+        "source_sha256": "47bb77acea1f74c05def1a96ea1bfbbce17d326ceb8c6189bedc791a641243a7",
+        "bucket": "r_license_safety"
+      }
+    },
+    {
       "post_key": "238d7bbe9da1e4186da2129340b98aee178863a1a61bc74da6cd42ce0eaa13a5",
       "baseline_text_sha256": "cf0e48fb768d3d3acfbfdf2ba65895aeaa6cf5060227ee5dd4dbf0841c11131e",
       "main_issue": "その他",
@@ -2273,6 +2370,25 @@
         "source_file": "quality/reviews/2026-11-11-bike-blue-ticket-wave-reading.json",
         "source_sha256": "00e2da424167f8821f69863b1bbeaa85c7ed82a17b7204c10cd5964c1f1db047",
         "bucket": "non-opinion"
+      }
+    },
+    {
+      "baseline_text_sha256": "92421e9e8df46414e86276ca68f97586f1558f2b641d321b6be1789a699a80fb",
+      "is_opinion": true,
+      "main_issue": "取締り強化賛成",
+      "post_key": "24578430ac20896fcb19afd1b151e3a77614d7e4735d3a15701c98a558015ed1",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-11-27T01:21:56+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "Codex（編集担当）＋Claude Sonnet 読み手2名（自動分類を伏せて本文判定）",
+        "method_version": "bike-new-collection-editorial-review-v1",
+        "text_sha256": "92421e9e8df46414e86276ca68f97586f1558f2b641d321b6be1789a699a80fb",
+        "reason_sha256": "6b5e745aeb27711785852d37aec3265321eef06366d4cfef90835a2299fa3134",
+        "source_file": "data/bike-blue-ticket_editorial-updates/20261127.json",
+        "source_sha256": "47bb77acea1f74c05def1a96ea1bfbbce17d326ceb8c6189bedc791a641243a7",
+        "bucket": "s_enforcement_gap"
       }
     },
     {
@@ -3511,6 +3627,25 @@
       }
     },
     {
+      "baseline_text_sha256": "dafaabbc144379edae0164efcfd7e4ba4680d38d3f4211097efc50390adae3b2",
+      "is_opinion": false,
+      "main_issue": "その他",
+      "post_key": "3467faf059bb76389c6ad5192a86d117ed89065bbf543042c1ac33b34c6fec89",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-11-27T01:21:56+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "Codex（編集担当）＋Claude Sonnet 読み手2名（自動分類を伏せて本文判定）",
+        "method_version": "bike-new-collection-editorial-review-v1",
+        "text_sha256": "dafaabbc144379edae0164efcfd7e4ba4680d38d3f4211097efc50390adae3b2",
+        "reason_sha256": "94596b0c7d7eb00e551e4e133bb7365bb421345c730b870824df10229e689e97",
+        "source_file": "data/bike-blue-ticket_editorial-updates/20261127.json",
+        "source_sha256": "47bb77acea1f74c05def1a96ea1bfbbce17d326ceb8c6189bedc791a641243a7",
+        "bucket": "excluded_information_or_off_topic"
+      }
+    },
+    {
       "post_key": "352e3c49384be2fd903574416d43767d9455c2ea04642e4084cbfc2770e019e9",
       "baseline_text_sha256": "e672f8d0805e4874fa465ffa97b0ed94beef45480d457ec33a2c55823cb50d8b",
       "main_issue": "取締り強化賛成",
@@ -4157,6 +4292,25 @@
       }
     },
     {
+      "baseline_text_sha256": "8c1cf8ce2046aa0ab92d3de90bec4e80fcd3c085efb38e08380bf4a9787383e2",
+      "is_opinion": false,
+      "main_issue": "その他",
+      "post_key": "408cfe2500ed0564263244f86818e21d2cdd340ee978fbf0da41f04cc6874c21",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-11-27T01:21:56+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "Codex（編集担当）＋Claude Sonnet 読み手2名（自動分類を伏せて本文判定）",
+        "method_version": "bike-new-collection-editorial-review-v1",
+        "text_sha256": "8c1cf8ce2046aa0ab92d3de90bec4e80fcd3c085efb38e08380bf4a9787383e2",
+        "reason_sha256": "94596b0c7d7eb00e551e4e133bb7365bb421345c730b870824df10229e689e97",
+        "source_file": "data/bike-blue-ticket_editorial-updates/20261127.json",
+        "source_sha256": "47bb77acea1f74c05def1a96ea1bfbbce17d326ceb8c6189bedc791a641243a7",
+        "bucket": "excluded_information_or_off_topic"
+      }
+    },
+    {
       "post_key": "40cdd291a06a55ffa29f812d4a296746fefa9cbf6fad6209a38b82ea811ca82a",
       "baseline_text_sha256": "4e6c92577a23c09a7265ac663ba3b7df8d5b445e0102fafc035eeb9c82bd77a8",
       "main_issue": "取締り強化賛成",
@@ -4689,6 +4843,25 @@
       }
     },
     {
+      "baseline_text_sha256": "ce5f6032542046a25770058b423b8a02dbc8ffadacbbb1125c045b5dc8683872",
+      "is_opinion": false,
+      "main_issue": "その他",
+      "post_key": "4b282b7c300e258b049365a3762acb23502ed91d93d0c300c020eca6caaf22ed",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-11-27T01:21:56+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "Codex（編集担当）＋Claude Sonnet 読み手2名（自動分類を伏せて本文判定）",
+        "method_version": "bike-new-collection-editorial-review-v1",
+        "text_sha256": "ce5f6032542046a25770058b423b8a02dbc8ffadacbbb1125c045b5dc8683872",
+        "reason_sha256": "b47e72038f492a8365bda3fe1d82d5e19ec119ae32a8ce0ba7e71d0598c1da92",
+        "source_file": "data/bike-blue-ticket_editorial-updates/20261127.json",
+        "source_sha256": "47bb77acea1f74c05def1a96ea1bfbbce17d326ceb8c6189bedc791a641243a7",
+        "bucket": "excluded_information_or_off_topic"
+      }
+    },
+    {
       "baseline_text_sha256": "537357a2be4ca69edb17c9379bf18afcf150fc79ebfd29413da5ab126ef1312d",
       "is_opinion": false,
       "main_issue": "その他",
@@ -4705,6 +4878,25 @@
         "source_file": "quality/reviews/2026-10-23-bike-blue-ticket-wave-reading.json",
         "source_sha256": "265eed0753677828fab92562bbb845cedbf98a3a0faf9fb14c88497560868419",
         "bucket": "non-opinion"
+      }
+    },
+    {
+      "baseline_text_sha256": "2a469b0a7530da0c82c415640f8fdf4c2028cf48b77da19283189feaf6fb3c8d",
+      "is_opinion": false,
+      "main_issue": "その他",
+      "post_key": "4b8d8bf69a12a23ab63b11223ecd958aab4429a03ed48c1ef90642055da094ac",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-11-27T01:21:56+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "Codex（編集担当）＋Claude Sonnet 読み手2名（自動分類を伏せて本文判定）",
+        "method_version": "bike-new-collection-editorial-review-v1",
+        "text_sha256": "2a469b0a7530da0c82c415640f8fdf4c2028cf48b77da19283189feaf6fb3c8d",
+        "reason_sha256": "b47e72038f492a8365bda3fe1d82d5e19ec119ae32a8ce0ba7e71d0598c1da92",
+        "source_file": "data/bike-blue-ticket_editorial-updates/20261127.json",
+        "source_sha256": "47bb77acea1f74c05def1a96ea1bfbbce17d326ceb8c6189bedc791a641243a7",
+        "bucket": "excluded_information_or_off_topic"
       }
     },
     {
@@ -4933,6 +5125,25 @@
         "source_file": "data/bike-blue-ticket_opposition_reread.json",
         "source_sha256": "4dd8137e86c98a9cbf33bcbc6449251daefa2f94121fadfa872d832b869241be",
         "bucket": "scope"
+      }
+    },
+    {
+      "baseline_text_sha256": "9f0c3008816b2420ac6985eefc110023a670a7614c85be7c2c1434e6e206bfda",
+      "is_opinion": false,
+      "main_issue": "その他",
+      "post_key": "4f2d5af30ad6abdde007042be97538420019dd8731ea9ec1bf00ddfbe35b5dc1",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-11-27T01:21:56+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "Codex（編集担当）＋Claude Sonnet 読み手2名（自動分類を伏せて本文判定）",
+        "method_version": "bike-new-collection-editorial-review-v1",
+        "text_sha256": "9f0c3008816b2420ac6985eefc110023a670a7614c85be7c2c1434e6e206bfda",
+        "reason_sha256": "aeaa0083cb4d3bea8573218ea9f9ea17751aac168a18068164f81eb003559d83",
+        "source_file": "data/bike-blue-ticket_editorial-updates/20261127.json",
+        "source_sha256": "47bb77acea1f74c05def1a96ea1bfbbce17d326ceb8c6189bedc791a641243a7",
+        "bucket": "excluded_information_or_off_topic"
       }
     },
     {
@@ -5278,6 +5489,25 @@
       }
     },
     {
+      "baseline_text_sha256": "3e9eb36b5b2ae6a770a2a1c13174efe124443955f1df8dcf01234990a100f7fa",
+      "is_opinion": true,
+      "main_issue": "取締り強化賛成",
+      "post_key": "53d140a3d295032d85912fa80ae6745bd7668ddba97ebcecef928cc7fc68ddcb",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-11-27T01:21:56+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "Codex（編集担当）＋Claude Sonnet 読み手2名（自動分類を伏せて本文判定）",
+        "method_version": "bike-new-collection-editorial-review-v1",
+        "text_sha256": "3e9eb36b5b2ae6a770a2a1c13174efe124443955f1df8dcf01234990a100f7fa",
+        "reason_sha256": "4520ab704d0717c311dc78df0e0529b2cecdde127d404929b4bc3781fd392d06",
+        "source_file": "data/bike-blue-ticket_editorial-updates/20261127.json",
+        "source_sha256": "47bb77acea1f74c05def1a96ea1bfbbce17d326ceb8c6189bedc791a641243a7",
+        "bucket": "s_shared_responsibility"
+      }
+    },
+    {
       "post_key": "53d35a55030f0c2500774a7bfba5a521e1230527c4dc0b9aadf4dfca80d4f9b3",
       "baseline_text_sha256": "ef57b315c42a9f2bacdadf819ef8c8e6cd57122e4afd04cfd773c13915cefc36",
       "main_issue": "取締り強化賛成",
@@ -5294,6 +5524,25 @@
         "source_file": "data/bike-blue-ticket_editorial-reread-20260906.json",
         "source_sha256": "f293338ab2ab05e83d5cff1b5f4ae4b440c3b1f83ae64248e7c04a3538d145cb",
         "bucket": "s_pedestrian_safety"
+      }
+    },
+    {
+      "baseline_text_sha256": "275c8f04e415c61288a91ae08cf7ea340495cb308e0f569d282f63fefb078bfe",
+      "is_opinion": false,
+      "main_issue": "その他",
+      "post_key": "53e891101bb9f81e3a4fa27ed823b840f10093f8ba6a09c5291427a6319852b7",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-11-27T01:21:56+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "Codex（編集担当）＋Claude Sonnet 読み手2名（自動分類を伏せて本文判定）",
+        "method_version": "bike-new-collection-editorial-review-v1",
+        "text_sha256": "275c8f04e415c61288a91ae08cf7ea340495cb308e0f569d282f63fefb078bfe",
+        "reason_sha256": "b47e72038f492a8365bda3fe1d82d5e19ec119ae32a8ce0ba7e71d0598c1da92",
+        "source_file": "data/bike-blue-ticket_editorial-updates/20261127.json",
+        "source_sha256": "47bb77acea1f74c05def1a96ea1bfbbce17d326ceb8c6189bedc791a641243a7",
+        "bucket": "excluded_information_or_off_topic"
       }
     },
     {
@@ -5560,6 +5809,25 @@
         "source_file": "data/bike-blue-ticket_editorial-reread-20260906.json",
         "source_sha256": "f293338ab2ab05e83d5cff1b5f4ae4b440c3b1f83ae64248e7c04a3538d145cb",
         "bucket": "r_road_fear"
+      }
+    },
+    {
+      "baseline_text_sha256": "1b07c6d28774a4f8bdd5b38712b940b1aa1c8051bfc66379d257b0e8cf5a4547",
+      "is_opinion": false,
+      "main_issue": "その他",
+      "post_key": "595298f7926a5ad41043ed850a01e99caef72833cc6e59a3b9ef1280ca9549ae",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-11-27T01:21:56+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "Codex（編集担当）＋Claude Sonnet 読み手2名（自動分類を伏せて本文判定）",
+        "method_version": "bike-new-collection-editorial-review-v1",
+        "text_sha256": "1b07c6d28774a4f8bdd5b38712b940b1aa1c8051bfc66379d257b0e8cf5a4547",
+        "reason_sha256": "94596b0c7d7eb00e551e4e133bb7365bb421345c730b870824df10229e689e97",
+        "source_file": "data/bike-blue-ticket_editorial-updates/20261127.json",
+        "source_sha256": "47bb77acea1f74c05def1a96ea1bfbbce17d326ceb8c6189bedc791a641243a7",
+        "bucket": "excluded_information_or_off_topic"
       }
     },
     {
@@ -6000,6 +6268,25 @@
       }
     },
     {
+      "baseline_text_sha256": "31b45e3ee5909bb7859947a5354dba6398b54783fa7b4602823cd01b215ba3bb",
+      "is_opinion": true,
+      "main_issue": "取締り強化賛成",
+      "post_key": "5e26057d5e4a47a334e844a342283a69550025dfac5610e62b6289c4ca0cb2b6",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-11-27T01:21:56+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "Codex（編集担当）＋Claude Sonnet 読み手2名（自動分類を伏せて本文判定）",
+        "method_version": "bike-new-collection-editorial-review-v1",
+        "text_sha256": "31b45e3ee5909bb7859947a5354dba6398b54783fa7b4602823cd01b215ba3bb",
+        "reason_sha256": "79b69705dd585e3cff521bc2b5cf5d378f19db20d27a34210998b7084c69be30",
+        "source_file": "data/bike-blue-ticket_editorial-updates/20261127.json",
+        "source_sha256": "47bb77acea1f74c05def1a96ea1bfbbce17d326ceb8c6189bedc791a641243a7",
+        "bucket": "s_enforcement_gap"
+      }
+    },
+    {
       "baseline_text_sha256": "7036dc06ad22c74ff48fe555b4f7cbeb62a5a0a997fc9fad6bd10b5626026174",
       "is_opinion": false,
       "main_issue": "ルール曖昧・不信",
@@ -6187,6 +6474,25 @@
         "source_file": "data/bike-blue-ticket_editorial-supplement.json",
         "source_sha256": "4254d679d4b7cc548d3bdfa14fa9c4b9b283a7255dac43e3a9191dd1f6fdb1a3",
         "bucket": "distrust"
+      }
+    },
+    {
+      "baseline_text_sha256": "3aacf764bafd998d6378b6db16af96d0bbac2b51c351daaf7f3224818b95c26e",
+      "is_opinion": false,
+      "main_issue": "その他",
+      "post_key": "6150928c25ea4780f67d49f2937493c8624bd42449763a2e976cdff6a09283e4",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-11-27T01:21:56+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "Codex（編集担当）＋Claude Sonnet 読み手2名（自動分類を伏せて本文判定）",
+        "method_version": "bike-new-collection-editorial-review-v1",
+        "text_sha256": "3aacf764bafd998d6378b6db16af96d0bbac2b51c351daaf7f3224818b95c26e",
+        "reason_sha256": "b47e72038f492a8365bda3fe1d82d5e19ec119ae32a8ce0ba7e71d0598c1da92",
+        "source_file": "data/bike-blue-ticket_editorial-updates/20261127.json",
+        "source_sha256": "47bb77acea1f74c05def1a96ea1bfbbce17d326ceb8c6189bedc791a641243a7",
+        "bucket": "excluded_information_or_off_topic"
       }
     },
     {
@@ -6946,6 +7252,25 @@
         "reason_sha256": "30194a6e3e230973591af1f75c1a2dbe420898dccc3e7e5fe77520e2d3c06674",
         "source_file": "data/bike-blue-ticket_editorial-updates/20260928.json",
         "source_sha256": "0ea0e6482a5e11f4a9f6e7b6a548b109f5578ba4550fb0a2b1fcc07cbdc9d6be",
+        "bucket": "excluded_information_or_off_topic"
+      }
+    },
+    {
+      "baseline_text_sha256": "7db3b5b8d2ac63ed27999856b595123c53663a987a3068fb34582e78fe164565",
+      "is_opinion": false,
+      "main_issue": "その他",
+      "post_key": "6ecf9385dee9b4eb8700a4dc453935e4a1ea359dad93b0d705919b6657e3da0a",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-11-27T01:21:56+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "Codex（編集担当）＋Claude Sonnet 読み手2名（自動分類を伏せて本文判定）",
+        "method_version": "bike-new-collection-editorial-review-v1",
+        "text_sha256": "7db3b5b8d2ac63ed27999856b595123c53663a987a3068fb34582e78fe164565",
+        "reason_sha256": "94596b0c7d7eb00e551e4e133bb7365bb421345c730b870824df10229e689e97",
+        "source_file": "data/bike-blue-ticket_editorial-updates/20261127.json",
+        "source_sha256": "47bb77acea1f74c05def1a96ea1bfbbce17d326ceb8c6189bedc791a641243a7",
         "bucket": "excluded_information_or_off_topic"
       }
     },
@@ -8185,6 +8510,25 @@
       }
     },
     {
+      "baseline_text_sha256": "20ee15b2f1b2daaaaa13608f287c11d6b85a06cd2a8db28c52a26f745c4eacba",
+      "is_opinion": false,
+      "main_issue": "その他",
+      "post_key": "7f6bc223ee90271030b57f786d58858bf665d2a673a2fcc0d71fdbb293047d35",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-11-27T01:21:56+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "Codex（編集担当）＋Claude Sonnet 読み手2名（自動分類を伏せて本文判定）",
+        "method_version": "bike-new-collection-editorial-review-v1",
+        "text_sha256": "20ee15b2f1b2daaaaa13608f287c11d6b85a06cd2a8db28c52a26f745c4eacba",
+        "reason_sha256": "b47e72038f492a8365bda3fe1d82d5e19ec119ae32a8ce0ba7e71d0598c1da92",
+        "source_file": "data/bike-blue-ticket_editorial-updates/20261127.json",
+        "source_sha256": "47bb77acea1f74c05def1a96ea1bfbbce17d326ceb8c6189bedc791a641243a7",
+        "bucket": "excluded_information_or_off_topic"
+      }
+    },
+    {
       "baseline_text_sha256": "78b6225bcca3f94d20f5df17a411185b9f3aedac597e256f917431de0d177e23",
       "is_opinion": true,
       "main_issue": "インフラ整備優先",
@@ -8812,6 +9156,25 @@
       }
     },
     {
+      "baseline_text_sha256": "ece4c79bcf74a6397a82e50e88030abae2398fe577024f693b78f20fe04b571e",
+      "is_opinion": true,
+      "main_issue": "取締り強化賛成",
+      "post_key": "8a22644e54a41ee4eebc4a2efa32db640668faae909a51892342a217791496d6",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-11-27T01:21:56+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "Codex（編集担当）＋Claude Sonnet 読み手2名（自動分類を伏せて本文判定）",
+        "method_version": "bike-new-collection-editorial-review-v1",
+        "text_sha256": "ece4c79bcf74a6397a82e50e88030abae2398fe577024f693b78f20fe04b571e",
+        "reason_sha256": "47b819c87d9e51399c0a790a55cedda91a7397b50433538e0b75b6ca62247064",
+        "source_file": "data/bike-blue-ticket_editorial-updates/20261127.json",
+        "source_sha256": "47bb77acea1f74c05def1a96ea1bfbbce17d326ceb8c6189bedc791a641243a7",
+        "bucket": "s_stronger_sanctions"
+      }
+    },
+    {
       "baseline_text_sha256": "3d0cd0ba0ffae485a7a727a0f857d57be37563e3018a7ceb11c66310e6972a2e",
       "is_opinion": true,
       "main_issue": "免許制要求",
@@ -8923,6 +9286,25 @@
         "source_file": "quality/reviews/2026-11-07-bike-blue-ticket-wave-reading.json",
         "source_sha256": "07e7e8212322b8a7136dfae2c66ce514801d58e0f042b6a30947435488ecf98e",
         "bucket": "s_enforcement_gap"
+      }
+    },
+    {
+      "baseline_text_sha256": "5b2ebe36ed9f8a74deaf555ee312cb41d943d57dc58fc917b1943aaf56d77948",
+      "is_opinion": false,
+      "main_issue": "その他",
+      "post_key": "8b7125df4ec05bdbd8c3bb4483b8fa5996c511705b5fc8a72d53835ec08afd6d",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-11-27T01:21:56+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "Codex（編集担当）＋Claude Sonnet 読み手2名（自動分類を伏せて本文判定）",
+        "method_version": "bike-new-collection-editorial-review-v1",
+        "text_sha256": "5b2ebe36ed9f8a74deaf555ee312cb41d943d57dc58fc917b1943aaf56d77948",
+        "reason_sha256": "b47e72038f492a8365bda3fe1d82d5e19ec119ae32a8ce0ba7e71d0598c1da92",
+        "source_file": "data/bike-blue-ticket_editorial-updates/20261127.json",
+        "source_sha256": "47bb77acea1f74c05def1a96ea1bfbbce17d326ceb8c6189bedc791a641243a7",
+        "bucket": "excluded_information_or_off_topic"
       }
     },
     {
@@ -9113,6 +9495,25 @@
         "source_file": "data/bike-blue-ticket_opposition_reread.json",
         "source_sha256": "4dd8137e86c98a9cbf33bcbc6449251daefa2f94121fadfa872d832b869241be",
         "bucket": "distrust"
+      }
+    },
+    {
+      "baseline_text_sha256": "81d055284747a19f672e4dba124a7bedc958d5ae6cea754d35bcab0af64db5a7",
+      "is_opinion": false,
+      "main_issue": "その他",
+      "post_key": "8ef3098522bbc738fea0b9fe33805fbb04212c4061176b4fbca991f044009d6d",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-11-27T01:21:56+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "Codex（編集担当）＋Claude Sonnet 読み手2名（自動分類を伏せて本文判定）",
+        "method_version": "bike-new-collection-editorial-review-v1",
+        "text_sha256": "81d055284747a19f672e4dba124a7bedc958d5ae6cea754d35bcab0af64db5a7",
+        "reason_sha256": "b47e72038f492a8365bda3fe1d82d5e19ec119ae32a8ce0ba7e71d0598c1da92",
+        "source_file": "data/bike-blue-ticket_editorial-updates/20261127.json",
+        "source_sha256": "47bb77acea1f74c05def1a96ea1bfbbce17d326ceb8c6189bedc791a641243a7",
+        "bucket": "excluded_information_or_off_topic"
       }
     },
     {
@@ -9572,6 +9973,25 @@
       }
     },
     {
+      "baseline_text_sha256": "fbb5304323478e5a2716fd7ecfd8b1a46732fb7fed16fb64951f842ee2074d2d",
+      "is_opinion": true,
+      "main_issue": "車道走行への不安",
+      "post_key": "9581078645ceb52b1e733263dbfbab17894e5271ad6c2e7eb7e0b3bdf259108e",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-11-27T01:21:56+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "Codex（編集担当）＋Claude Sonnet 読み手2名（自動分類を伏せて本文判定）",
+        "method_version": "bike-new-collection-editorial-review-v1",
+        "text_sha256": "fbb5304323478e5a2716fd7ecfd8b1a46732fb7fed16fb64951f842ee2074d2d",
+        "reason_sha256": "c2ed8096a1f8d178716c4d4646292e585de198680e2ea33b2723250017f15f6d",
+        "source_file": "data/bike-blue-ticket_editorial-updates/20261127.json",
+        "source_sha256": "47bb77acea1f74c05def1a96ea1bfbbce17d326ceb8c6189bedc791a641243a7",
+        "bucket": "scope"
+      }
+    },
+    {
       "baseline_text_sha256": "f34b9fa4ff64a2439e3c35eee74ebfac49e1ae40678a9c5e78a0a5ba272e6645",
       "is_opinion": false,
       "main_issue": "その他",
@@ -9743,6 +10163,25 @@
       }
     },
     {
+      "baseline_text_sha256": "cb8d7ce4395cfa86883939c369d6df86b61f891048e518b1655655896c922d0e",
+      "is_opinion": false,
+      "main_issue": "その他",
+      "post_key": "97eef4bb89460d77c39bf9572fccfe0d47099b3d6b65ab0b27b78b1fc0987db5",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-11-27T01:21:56+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "Codex（編集担当）＋Claude Sonnet 読み手2名（自動分類を伏せて本文判定）",
+        "method_version": "bike-new-collection-editorial-review-v1",
+        "text_sha256": "cb8d7ce4395cfa86883939c369d6df86b61f891048e518b1655655896c922d0e",
+        "reason_sha256": "b47e72038f492a8365bda3fe1d82d5e19ec119ae32a8ce0ba7e71d0598c1da92",
+        "source_file": "data/bike-blue-ticket_editorial-updates/20261127.json",
+        "source_sha256": "47bb77acea1f74c05def1a96ea1bfbbce17d326ceb8c6189bedc791a641243a7",
+        "bucket": "excluded_information_or_off_topic"
+      }
+    },
+    {
       "post_key": "97f679ec2e7b90dc2e42851f0e7c6541beeb4ca678e74eb9e7fb1d85dcb8212f",
       "baseline_text_sha256": "767030f6d6ef0c3b503cfc92dcda56017702f5acc5af5ba71be22d80818c5403",
       "main_issue": "ルール曖昧・不信",
@@ -9778,6 +10217,25 @@
         "source_file": "quality/reviews/2026-10-23-bike-blue-ticket-wave-reading.json",
         "source_sha256": "265eed0753677828fab92562bbb845cedbf98a3a0faf9fb14c88497560868419",
         "bucket": "non-opinion"
+      }
+    },
+    {
+      "baseline_text_sha256": "1cff3ee879bc5de2ea395aa2c0a7dfaa940b2dd0f4b9251e46a8e42f53c1a12e",
+      "is_opinion": false,
+      "main_issue": "その他",
+      "post_key": "982deeba465e033ccf64ee51640ab893559519c49e1afc44347943876308d42e",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-11-27T01:21:56+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "Codex（編集担当）＋Claude Sonnet 読み手2名（自動分類を伏せて本文判定）",
+        "method_version": "bike-new-collection-editorial-review-v1",
+        "text_sha256": "1cff3ee879bc5de2ea395aa2c0a7dfaa940b2dd0f4b9251e46a8e42f53c1a12e",
+        "reason_sha256": "b47e72038f492a8365bda3fe1d82d5e19ec119ae32a8ce0ba7e71d0598c1da92",
+        "source_file": "data/bike-blue-ticket_editorial-updates/20261127.json",
+        "source_sha256": "47bb77acea1f74c05def1a96ea1bfbbce17d326ceb8c6189bedc791a641243a7",
+        "bucket": "excluded_information_or_off_topic"
       }
     },
     {
@@ -9892,6 +10350,25 @@
         "source_file": "data/bike-blue-ticket_editorial-updates/20260928.json",
         "source_sha256": "0ea0e6482a5e11f4a9f6e7b6a548b109f5578ba4550fb0a2b1fcc07cbdc9d6be",
         "bucket": "excluded_information_or_off_topic"
+      }
+    },
+    {
+      "baseline_text_sha256": "b3182bdbdc47e4db2e7f0aef7c913539af0cd1e6016f4a1477c45efe04b5a912",
+      "is_opinion": true,
+      "main_issue": "その他",
+      "post_key": "9acac75edf8fd6541dbb6afb2ec735dce8397ffaf2ab269a36332bf080aaeef6",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-11-27T01:21:56+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "Codex（編集担当）＋Claude Sonnet 読み手2名（自動分類を伏せて本文判定）",
+        "method_version": "bike-new-collection-editorial-review-v1",
+        "text_sha256": "b3182bdbdc47e4db2e7f0aef7c913539af0cd1e6016f4a1477c45efe04b5a912",
+        "reason_sha256": "f6415f7dd4d76028d258b0989fe8ac2625599aeb57160a885c910d320d50dd93",
+        "source_file": "data/bike-blue-ticket_editorial-updates/20261127.json",
+        "source_sha256": "47bb77acea1f74c05def1a96ea1bfbbce17d326ceb8c6189bedc791a641243a7",
+        "bucket": "n_transport"
       }
     },
     {
@@ -10329,6 +10806,25 @@
         "source_file": "data/bike-blue-ticket_editorial-reread-20260906.json",
         "source_sha256": "f293338ab2ab05e83d5cff1b5f4ae4b440c3b1f83ae64248e7c04a3538d145cb",
         "bucket": "n_information"
+      }
+    },
+    {
+      "baseline_text_sha256": "e8c647e48c2f9d5edf6e408266c68c09d56b3b7e07106ce4496f2b76c2dece42",
+      "is_opinion": true,
+      "main_issue": "取締り強化賛成",
+      "post_key": "a13cbbd9d6db690ccf8ae1216d50072b5cefc1c5bc501d2670520a19ef21cad5",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-11-27T01:21:56+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "Codex（編集担当）＋Claude Sonnet 読み手2名（自動分類を伏せて本文判定）",
+        "method_version": "bike-new-collection-editorial-review-v1",
+        "text_sha256": "e8c647e48c2f9d5edf6e408266c68c09d56b3b7e07106ce4496f2b76c2dece42",
+        "reason_sha256": "908c78ed547c95c13b9363e04f187e190862f3a935507f788ae66d505358784a",
+        "source_file": "data/bike-blue-ticket_editorial-updates/20261127.json",
+        "source_sha256": "47bb77acea1f74c05def1a96ea1bfbbce17d326ceb8c6189bedc791a641243a7",
+        "bucket": "s_enforcement_gap"
       }
     },
     {
@@ -10864,6 +11360,25 @@
       }
     },
     {
+      "baseline_text_sha256": "59fce856b798921d9bd036ed09f2c8519276ba43694f283e9cd9b493a999ff27",
+      "is_opinion": false,
+      "main_issue": "その他",
+      "post_key": "aaf79facf5f9b528b54da21b73c74291dccb255a79df2d153e23225e31dacc97",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-11-27T01:21:56+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "Codex（編集担当）＋Claude Sonnet 読み手2名（自動分類を伏せて本文判定）",
+        "method_version": "bike-new-collection-editorial-review-v1",
+        "text_sha256": "59fce856b798921d9bd036ed09f2c8519276ba43694f283e9cd9b493a999ff27",
+        "reason_sha256": "b47e72038f492a8365bda3fe1d82d5e19ec119ae32a8ce0ba7e71d0598c1da92",
+        "source_file": "data/bike-blue-ticket_editorial-updates/20261127.json",
+        "source_sha256": "47bb77acea1f74c05def1a96ea1bfbbce17d326ceb8c6189bedc791a641243a7",
+        "bucket": "excluded_information_or_off_topic"
+      }
+    },
+    {
       "post_key": "ab5f3ed805ef2ca8bb00a402bbc778aa95b5a2bfcfdd1d36a60984a9b057db2c",
       "baseline_text_sha256": "e85a63a606ad6e0d3010ff748d2523e34ab25b9c1562f2fb13269ea6e195322e",
       "main_issue": "免許制要求",
@@ -11088,6 +11603,25 @@
         "reason_sha256": "ef1febeeeca79dc838969ee0ecee91afd01fdf99b2be3f26d53bbe8edb9eab7e",
         "source_file": "data/bike-blue-ticket_editorial-updates/20260928.json",
         "source_sha256": "0ea0e6482a5e11f4a9f6e7b6a548b109f5578ba4550fb0a2b1fcc07cbdc9d6be",
+        "bucket": "excluded_information_or_off_topic"
+      }
+    },
+    {
+      "baseline_text_sha256": "1c1e196f8f35af12aa3fa41944582d8c49f8aeb46a2db684708d5ef8282c166b",
+      "is_opinion": false,
+      "main_issue": "その他",
+      "post_key": "ae7cac0d35b107984b156984293183cec992f56395c0c4b0ebe5bf97c18989e4",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-11-27T01:21:56+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "Codex（編集担当）＋Claude Sonnet 読み手2名（自動分類を伏せて本文判定）",
+        "method_version": "bike-new-collection-editorial-review-v1",
+        "text_sha256": "1c1e196f8f35af12aa3fa41944582d8c49f8aeb46a2db684708d5ef8282c166b",
+        "reason_sha256": "b47e72038f492a8365bda3fe1d82d5e19ec119ae32a8ce0ba7e71d0598c1da92",
+        "source_file": "data/bike-blue-ticket_editorial-updates/20261127.json",
+        "source_sha256": "47bb77acea1f74c05def1a96ea1bfbbce17d326ceb8c6189bedc791a641243a7",
         "bucket": "excluded_information_or_off_topic"
       }
     },
@@ -11890,6 +12424,25 @@
       }
     },
     {
+      "baseline_text_sha256": "56c4969f27d75cad3c471f56028be3bea5da4273954ab8c1e5a0929def812722",
+      "is_opinion": false,
+      "main_issue": "ルール曖昧・不信",
+      "post_key": "bbd4760513b8345fdf562038b2f190f4adca23cd72b8ce942165f3508746f474",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-11-27T01:21:56+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "Codex（編集担当）＋Claude Sonnet 読み手2名（自動分類を伏せて本文判定）",
+        "method_version": "bike-new-collection-editorial-review-v1",
+        "text_sha256": "56c4969f27d75cad3c471f56028be3bea5da4273954ab8c1e5a0929def812722",
+        "reason_sha256": "aeaa0083cb4d3bea8573218ea9f9ea17751aac168a18068164f81eb003559d83",
+        "source_file": "data/bike-blue-ticket_editorial-updates/20261127.json",
+        "source_sha256": "47bb77acea1f74c05def1a96ea1bfbbce17d326ceb8c6189bedc791a641243a7",
+        "bucket": "excluded_information_or_off_topic"
+      }
+    },
+    {
       "baseline_text_sha256": "934455159ef614a7862e5065f01530b13c759b112e10d52a428d62f0c1611dbc",
       "is_opinion": true,
       "main_issue": "ルール曖昧・不信",
@@ -12061,6 +12614,25 @@
       }
     },
     {
+      "baseline_text_sha256": "8164248184f1d4f97b761bf8664fdd81508f1ab1402d970c4b492988c74eb050",
+      "is_opinion": true,
+      "main_issue": "取締り強化賛成",
+      "post_key": "bfceb3136dbaeef353dc222c6af2f2ff77124cf2cbfea029c41cf8157bf1ddbc",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-11-27T01:21:56+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "Codex（編集担当）＋Claude Sonnet 読み手2名（自動分類を伏せて本文判定）",
+        "method_version": "bike-new-collection-editorial-review-v1",
+        "text_sha256": "8164248184f1d4f97b761bf8664fdd81508f1ab1402d970c4b492988c74eb050",
+        "reason_sha256": "03c237db09f7ffda4276ccab866d09aa9b112084d9a43651adb8e45ad359ea14",
+        "source_file": "data/bike-blue-ticket_editorial-updates/20261127.json",
+        "source_sha256": "47bb77acea1f74c05def1a96ea1bfbbce17d326ceb8c6189bedc791a641243a7",
+        "bucket": "s_enforcement_gap"
+      }
+    },
+    {
       "baseline_text_sha256": "0e5eccba03cc15c0522913a4abd9a655f23dc290e59ddb8497efac276e2fdbfc",
       "is_opinion": true,
       "main_issue": "その他",
@@ -12134,6 +12706,25 @@
         "source_file": "data/bike-blue-ticket_opposition_reread.json",
         "source_sha256": "4dd8137e86c98a9cbf33bcbc6449251daefa2f94121fadfa872d832b869241be",
         "bucket": "abolish"
+      }
+    },
+    {
+      "baseline_text_sha256": "bff4412ca00b4bf913c6b9fa89ecb07e17dc275346829e8d725878a5331615e7",
+      "is_opinion": false,
+      "main_issue": "車道走行への不安",
+      "post_key": "c183e3a6b49e8fa726ef9dfbb04f96efdb174d03d53aff8489f34e3e1781c14b",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-11-27T01:21:56+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "Codex（編集担当）＋Claude Sonnet 読み手2名（自動分類を伏せて本文判定）",
+        "method_version": "bike-new-collection-editorial-review-v1",
+        "text_sha256": "bff4412ca00b4bf913c6b9fa89ecb07e17dc275346829e8d725878a5331615e7",
+        "reason_sha256": "94596b0c7d7eb00e551e4e133bb7365bb421345c730b870824df10229e689e97",
+        "source_file": "data/bike-blue-ticket_editorial-updates/20261127.json",
+        "source_sha256": "47bb77acea1f74c05def1a96ea1bfbbce17d326ceb8c6189bedc791a641243a7",
+        "bucket": "excluded_information_or_off_topic"
       }
     },
     {
@@ -12305,6 +12896,25 @@
         "source_file": "data/bike-blue-ticket_editorial-updates/20261011.json",
         "source_sha256": "f1520a6666c0db84b9fe00460405943c25c32eea08b99b708d71e701a6406b9d",
         "bucket": "excluded_information_or_off_topic"
+      }
+    },
+    {
+      "baseline_text_sha256": "2538bb25afd0d000ab9736bfea0f7a8ab16471a5db0c1ea9f49811619991f407",
+      "is_opinion": true,
+      "main_issue": "その他",
+      "post_key": "c400bccbbd62406c69e0d3d3d88ea683ae93290165ca067fd92871dd51f735b2",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-11-27T01:21:56+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "Codex（編集担当）＋Claude Sonnet 読み手2名（自動分類を伏せて本文判定）",
+        "method_version": "bike-new-collection-editorial-review-v1",
+        "text_sha256": "2538bb25afd0d000ab9736bfea0f7a8ab16471a5db0c1ea9f49811619991f407",
+        "reason_sha256": "ab2ae8beba76fe0c58809ab919aee038f265169badc90fcddf7a05f8f4c653a8",
+        "source_file": "data/bike-blue-ticket_editorial-updates/20261127.json",
+        "source_sha256": "47bb77acea1f74c05def1a96ea1bfbbce17d326ceb8c6189bedc791a641243a7",
+        "bucket": "n_effects"
       }
     },
     {
@@ -12574,6 +13184,44 @@
       }
     },
     {
+      "baseline_text_sha256": "22e69b03515a32cca2c300709ee1bc59bf3eb347e970aa16c52237964142c422",
+      "is_opinion": true,
+      "main_issue": "取締り強化賛成",
+      "post_key": "c82beb56226c6ae81f49a95d4e9c29f222daaf14b17a59cf0fff7e8cabc05773",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-11-27T01:21:56+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "Codex（編集担当）＋Claude Sonnet 読み手2名（自動分類を伏せて本文判定）",
+        "method_version": "bike-new-collection-editorial-review-v1",
+        "text_sha256": "22e69b03515a32cca2c300709ee1bc59bf3eb347e970aa16c52237964142c422",
+        "reason_sha256": "610aa05ae51ef5d06712e269066e02e4d98923fa17b6626379782b6a2f82c5a6",
+        "source_file": "data/bike-blue-ticket_editorial-updates/20261127.json",
+        "source_sha256": "47bb77acea1f74c05def1a96ea1bfbbce17d326ceb8c6189bedc791a641243a7",
+        "bucket": "s_dangerous_riding"
+      }
+    },
+    {
+      "baseline_text_sha256": "087bcd8476c2947ffe267f968eb24b6bb05aea9961b8e8e14d19a3a78a4589ac",
+      "is_opinion": true,
+      "main_issue": "取締り強化賛成",
+      "post_key": "c8317222704a3513e676a102525b11da3a8ca01691111e8c7585f439d4bea311",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-11-27T01:21:56+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "Codex（編集担当）＋Claude Sonnet 読み手2名（自動分類を伏せて本文判定）",
+        "method_version": "bike-new-collection-editorial-review-v1",
+        "text_sha256": "087bcd8476c2947ffe267f968eb24b6bb05aea9961b8e8e14d19a3a78a4589ac",
+        "reason_sha256": "93e7627581254c4acac8125ba7dff3ecbde500f68abb0218f98066ed4e61d1cf",
+        "source_file": "data/bike-blue-ticket_editorial-updates/20261127.json",
+        "source_sha256": "47bb77acea1f74c05def1a96ea1bfbbce17d326ceb8c6189bedc791a641243a7",
+        "bucket": "s_enforcement_gap"
+      }
+    },
+    {
       "post_key": "c8a452ec828fd6a0281d06a0955011b6c9fd8edd74d6868f19a4683357f6005a",
       "baseline_text_sha256": "fbd1e9db5862f17095686ca81d81106f34dba9ead3f6a8df209adb4fb072bc8b",
       "main_issue": "免許制要求",
@@ -12590,6 +13238,44 @@
         "source_file": "data/bike-blue-ticket_editorial-reread-20260906.json",
         "source_sha256": "f293338ab2ab05e83d5cff1b5f4ae4b440c3b1f83ae64248e7c04a3538d145cb",
         "bucket": "r_training_incentive"
+      }
+    },
+    {
+      "baseline_text_sha256": "3b53ec732249b3134388bd2b3babbaf39e6324048a4f7414c4add05c5386dc50",
+      "is_opinion": true,
+      "main_issue": "免許制要求",
+      "post_key": "c8acdd3e31750987bcdc1b1c04634e258a974c267662622587988de4f67530d4",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-11-27T01:21:56+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "Codex（編集担当）＋Claude Sonnet 読み手2名（自動分類を伏せて本文判定）",
+        "method_version": "bike-new-collection-editorial-review-v1",
+        "text_sha256": "3b53ec732249b3134388bd2b3babbaf39e6324048a4f7414c4add05c5386dc50",
+        "reason_sha256": "e1bc6e7188c7d317b7fe5ad3b46c5ba9889d817e2b3d8aba3bfd4c043b797ffd",
+        "source_file": "data/bike-blue-ticket_editorial-updates/20261127.json",
+        "source_sha256": "47bb77acea1f74c05def1a96ea1bfbbce17d326ceb8c6189bedc791a641243a7",
+        "bucket": "r_training_required"
+      }
+    },
+    {
+      "baseline_text_sha256": "31f55f0558be10b348f4fa9929ee88e2af0b3e22fffad7ca7e60534d16c32e9b",
+      "is_opinion": true,
+      "main_issue": "インフラ整備優先",
+      "post_key": "c8ff4dfe8012eb995f7fb6c667800419af42e0f2e714653837a36a74807c5343",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-11-27T01:21:56+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "Codex（編集担当）＋Claude Sonnet 読み手2名（自動分類を伏せて本文判定）",
+        "method_version": "bike-new-collection-editorial-review-v1",
+        "text_sha256": "31f55f0558be10b348f4fa9929ee88e2af0b3e22fffad7ca7e60534d16c32e9b",
+        "reason_sha256": "abeab79569d6cc82055e511bb65134605b07b32d9feb9ee232de61c593170895",
+        "source_file": "data/bike-blue-ticket_editorial-updates/20261127.json",
+        "source_sha256": "47bb77acea1f74c05def1a96ea1bfbbce17d326ceb8c6189bedc791a641243a7",
+        "bucket": "scope"
       }
     },
     {
@@ -12764,6 +13450,25 @@
       }
     },
     {
+      "baseline_text_sha256": "2093ca1fc08f8d9e7c7344b8a558251c185d4e37f0499cd9c74455b95c780648",
+      "is_opinion": false,
+      "main_issue": "その他",
+      "post_key": "cbee43fb9d0634c6d64e811cae957b5c207ffb86791a09b555ce1582a397fed1",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-11-27T01:21:56+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "Codex（編集担当）＋Claude Sonnet 読み手2名（自動分類を伏せて本文判定）",
+        "method_version": "bike-new-collection-editorial-review-v1",
+        "text_sha256": "2093ca1fc08f8d9e7c7344b8a558251c185d4e37f0499cd9c74455b95c780648",
+        "reason_sha256": "b47e72038f492a8365bda3fe1d82d5e19ec119ae32a8ce0ba7e71d0598c1da92",
+        "source_file": "data/bike-blue-ticket_editorial-updates/20261127.json",
+        "source_sha256": "47bb77acea1f74c05def1a96ea1bfbbce17d326ceb8c6189bedc791a641243a7",
+        "bucket": "excluded_information_or_off_topic"
+      }
+    },
+    {
       "post_key": "cbee75fdcdd0444787b6ce4e402809918cb27cc2eae1f8e5cbb81f6b5c69fb1d",
       "baseline_text_sha256": "8e67a74b769fd4f9efc41ecdf9e40d766abf7300710fc0240eb8aa38a2c1f39d",
       "main_issue": "ルール曖昧・不信",
@@ -12836,6 +13541,25 @@
         "reason_sha256": "94596b0c7d7eb00e551e4e133bb7365bb421345c730b870824df10229e689e97",
         "source_file": "data/bike-blue-ticket_editorial-updates/20261011.json",
         "source_sha256": "f1520a6666c0db84b9fe00460405943c25c32eea08b99b708d71e701a6406b9d",
+        "bucket": "excluded_information_or_off_topic"
+      }
+    },
+    {
+      "baseline_text_sha256": "0f22c3ed52dd43a4461f9b8ced0c85d2f55d41c7e49350dd6489306ac267ccdc",
+      "is_opinion": false,
+      "main_issue": "インフラ整備優先",
+      "post_key": "cd18166e87486f33865785551ce704ad7a9933a670daea0da8777d17ab2a9771",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-11-27T01:21:56+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "Codex（編集担当）＋Claude Sonnet 読み手2名（自動分類を伏せて本文判定）",
+        "method_version": "bike-new-collection-editorial-review-v1",
+        "text_sha256": "0f22c3ed52dd43a4461f9b8ced0c85d2f55d41c7e49350dd6489306ac267ccdc",
+        "reason_sha256": "b47e72038f492a8365bda3fe1d82d5e19ec119ae32a8ce0ba7e71d0598c1da92",
+        "source_file": "data/bike-blue-ticket_editorial-updates/20261127.json",
+        "source_sha256": "47bb77acea1f74c05def1a96ea1bfbbce17d326ceb8c6189bedc791a641243a7",
         "bucket": "excluded_information_or_off_topic"
       }
     },
@@ -13638,6 +14362,25 @@
       }
     },
     {
+      "baseline_text_sha256": "3388f6f4825408af2972f6e52b4069ddfcc2687c4304c65568dc18dde63cf436",
+      "is_opinion": true,
+      "main_issue": "インフラ整備優先",
+      "post_key": "d69fe66b809ad9394f681f0761bed711799f636653d7cbbb9152962ec4aefe80",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-11-27T01:21:56+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "Codex（編集担当）＋Claude Sonnet 読み手2名（自動分類を伏せて本文判定）",
+        "method_version": "bike-new-collection-editorial-review-v1",
+        "text_sha256": "3388f6f4825408af2972f6e52b4069ddfcc2687c4304c65568dc18dde63cf436",
+        "reason_sha256": "e19884b658429bfd6d17fe35406f7d55c8a60252aa3cb2b8c6e75e493567829d",
+        "source_file": "data/bike-blue-ticket_editorial-updates/20261127.json",
+        "source_sha256": "47bb77acea1f74c05def1a96ea1bfbbce17d326ceb8c6189bedc791a641243a7",
+        "bucket": "place"
+      }
+    },
+    {
       "baseline_text_sha256": "ed129469386e807d09219ca5285c8c67f24e14abd39a606806fab256aa53375c",
       "is_opinion": true,
       "main_issue": "免許制要求",
@@ -13825,6 +14568,25 @@
         "source_file": "quality/reviews/2026-11-07-bike-blue-ticket-wave-reading.json",
         "source_sha256": "07e7e8212322b8a7136dfae2c66ce514801d58e0f042b6a30947435488ecf98e",
         "bucket": "non-opinion"
+      }
+    },
+    {
+      "baseline_text_sha256": "70171bd2c74859d3d90a54e415c3dc0a1f146ed20dadf067b55dd8fa5d564e61",
+      "is_opinion": false,
+      "main_issue": "その他",
+      "post_key": "d95f4d208102c232a6eacc3b5a4e418a2750a53194422d90244eb480a856f8b8",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-11-27T01:21:56+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "Codex（編集担当）＋Claude Sonnet 読み手2名（自動分類を伏せて本文判定）",
+        "method_version": "bike-new-collection-editorial-review-v1",
+        "text_sha256": "70171bd2c74859d3d90a54e415c3dc0a1f146ed20dadf067b55dd8fa5d564e61",
+        "reason_sha256": "b47e72038f492a8365bda3fe1d82d5e19ec119ae32a8ce0ba7e71d0598c1da92",
+        "source_file": "data/bike-blue-ticket_editorial-updates/20261127.json",
+        "source_sha256": "47bb77acea1f74c05def1a96ea1bfbbce17d326ceb8c6189bedc791a641243a7",
+        "bucket": "excluded_information_or_off_topic"
       }
     },
     {
@@ -14151,6 +14913,25 @@
       }
     },
     {
+      "baseline_text_sha256": "ed113501dcadb13b98c86e98ca000307ab9c4ee4fb9c1b04e95aa758f3bda0f0",
+      "is_opinion": true,
+      "main_issue": "その他",
+      "post_key": "dd8f65579b2d073ca498717bb15d6a2f79eae83c329a098e41b7feb47d21c160",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-11-27T01:21:56+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "Codex（編集担当）＋Claude Sonnet 読み手2名（自動分類を伏せて本文判定）",
+        "method_version": "bike-new-collection-editorial-review-v1",
+        "text_sha256": "ed113501dcadb13b98c86e98ca000307ab9c4ee4fb9c1b04e95aa758f3bda0f0",
+        "reason_sha256": "6a0cd736d1fa40f757655d27d358775daa65fdf6a91a4de417c012166af4c488",
+        "source_file": "data/bike-blue-ticket_editorial-updates/20261127.json",
+        "source_sha256": "47bb77acea1f74c05def1a96ea1bfbbce17d326ceb8c6189bedc791a641243a7",
+        "bucket": "abolish"
+      }
+    },
+    {
       "post_key": "dddf43b93ac324adc8d6c67e206f9ebb3f7fc6af0d7c4a9b6c596055c354aefa",
       "baseline_text_sha256": "da047899088df01efc4e3219f57e0850237a7699e8d4a129f00d702e834a0764",
       "main_issue": "その他",
@@ -14376,6 +15157,25 @@
         "source_file": "data/bike-blue-ticket_editorial-reread-20260906.json",
         "source_sha256": "f293338ab2ab05e83d5cff1b5f4ae4b440c3b1f83ae64248e7c04a3538d145cb",
         "bucket": "r_separation"
+      }
+    },
+    {
+      "baseline_text_sha256": "fe0ecb4103023f7a0a56b3a8193472310896bbd315ef94fa6be5951b43271d7e",
+      "is_opinion": true,
+      "main_issue": "車道走行への不安",
+      "post_key": "e10563425a78a1e9b706b977a6c69c0f399632a850dd280a4c950b01a49e4fbb",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-11-27T01:21:56+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "Codex（編集担当）＋Claude Sonnet 読み手2名（自動分類を伏せて本文判定）",
+        "method_version": "bike-new-collection-editorial-review-v1",
+        "text_sha256": "fe0ecb4103023f7a0a56b3a8193472310896bbd315ef94fa6be5951b43271d7e",
+        "reason_sha256": "f53ae5181df557e54caab9fd78666b10ed0fe172d9de5f51df2e99f747135113",
+        "source_file": "data/bike-blue-ticket_editorial-updates/20261127.json",
+        "source_sha256": "47bb77acea1f74c05def1a96ea1bfbbce17d326ceb8c6189bedc791a641243a7",
+        "bucket": "scope"
       }
     },
     {
@@ -14756,6 +15556,25 @@
         "source_file": "quality/reviews/2026-11-07-bike-blue-ticket-wave-reading.json",
         "source_sha256": "07e7e8212322b8a7136dfae2c66ce514801d58e0f042b6a30947435488ecf98e",
         "bucket": "abolish"
+      }
+    },
+    {
+      "baseline_text_sha256": "1bd0da288144a056736b5d5e9f074c85b40c45f7c326c6234ecd00ccf39d9f7c",
+      "is_opinion": false,
+      "main_issue": "その他",
+      "post_key": "e5e57b80e4e96b3d152cd8636edce7196836e6e2f038ba38a747ebd26e356019",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-11-27T01:21:56+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "Codex（編集担当）＋Claude Sonnet 読み手2名（自動分類を伏せて本文判定）",
+        "method_version": "bike-new-collection-editorial-review-v1",
+        "text_sha256": "1bd0da288144a056736b5d5e9f074c85b40c45f7c326c6234ecd00ccf39d9f7c",
+        "reason_sha256": "b47e72038f492a8365bda3fe1d82d5e19ec119ae32a8ce0ba7e71d0598c1da92",
+        "source_file": "data/bike-blue-ticket_editorial-updates/20261127.json",
+        "source_sha256": "47bb77acea1f74c05def1a96ea1bfbbce17d326ceb8c6189bedc791a641243a7",
+        "bucket": "excluded_information_or_off_topic"
       }
     },
     {
@@ -15158,6 +15977,25 @@
       }
     },
     {
+      "baseline_text_sha256": "5ca7a09c953cf0f06333204592163c511c1f02e392de50b750a764248fe01cd4",
+      "is_opinion": false,
+      "main_issue": "その他",
+      "post_key": "eb5d5f8f6e90e1ed745ae8a254cdecfced865743c93c46a7a5603830fd947ff7",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-11-27T01:21:56+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "Codex（編集担当）＋Claude Sonnet 読み手2名（自動分類を伏せて本文判定）",
+        "method_version": "bike-new-collection-editorial-review-v1",
+        "text_sha256": "5ca7a09c953cf0f06333204592163c511c1f02e392de50b750a764248fe01cd4",
+        "reason_sha256": "b47e72038f492a8365bda3fe1d82d5e19ec119ae32a8ce0ba7e71d0598c1da92",
+        "source_file": "data/bike-blue-ticket_editorial-updates/20261127.json",
+        "source_sha256": "47bb77acea1f74c05def1a96ea1bfbbce17d326ceb8c6189bedc791a641243a7",
+        "bucket": "excluded_information_or_off_topic"
+      }
+    },
+    {
       "post_key": "eb650b1282fe3281882e67008b35d7bccd3a4a05d1f44a8d2d82fadd3eb1b26f",
       "baseline_text_sha256": "b1aa33d06e697877bc2a12813d113bb3aac3ebec87fa5ac23759dfdf59b019a5",
       "main_issue": "取締り強化賛成",
@@ -15250,6 +16088,25 @@
         "source_file": "data/bike-blue-ticket_editorial-updates/20261011.json",
         "source_sha256": "f1520a6666c0db84b9fe00460405943c25c32eea08b99b708d71e701a6406b9d",
         "bucket": "s_enforcement_gap"
+      }
+    },
+    {
+      "baseline_text_sha256": "f615c9a822ebd4cf5e481217182b88f92324b09544df39a77d62b5ae30adaa8f",
+      "is_opinion": false,
+      "main_issue": "その他",
+      "post_key": "ebb8b45b928d9ac1fb5f7fc2d45097cef838ddc3309b28f5ab76ddbbcd36f604",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-11-27T01:21:56+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "Codex（編集担当）＋Claude Sonnet 読み手2名（自動分類を伏せて本文判定）",
+        "method_version": "bike-new-collection-editorial-review-v1",
+        "text_sha256": "f615c9a822ebd4cf5e481217182b88f92324b09544df39a77d62b5ae30adaa8f",
+        "reason_sha256": "b47e72038f492a8365bda3fe1d82d5e19ec119ae32a8ce0ba7e71d0598c1da92",
+        "source_file": "data/bike-blue-ticket_editorial-updates/20261127.json",
+        "source_sha256": "47bb77acea1f74c05def1a96ea1bfbbce17d326ceb8c6189bedc791a641243a7",
+        "bucket": "excluded_information_or_off_topic"
       }
     },
     {
@@ -15595,6 +16452,25 @@
       }
     },
     {
+      "baseline_text_sha256": "1374016ec6d63a782679a759e04ba00b83ad50192629c944207705148950ca2b",
+      "is_opinion": true,
+      "main_issue": "取締り強化賛成",
+      "post_key": "efbec79f949353a307eb470c2d7cdd59f2566e69f85aac7c118b9f21316ca133",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-11-27T01:21:56+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "Codex（編集担当）＋Claude Sonnet 読み手2名（自動分類を伏せて本文判定）",
+        "method_version": "bike-new-collection-editorial-review-v1",
+        "text_sha256": "1374016ec6d63a782679a759e04ba00b83ad50192629c944207705148950ca2b",
+        "reason_sha256": "28c5a37082aec9e1db7f8dbe9ca03ea82efec74264bb7574c96c260ed527c9d0",
+        "source_file": "data/bike-blue-ticket_editorial-updates/20261127.json",
+        "source_sha256": "47bb77acea1f74c05def1a96ea1bfbbce17d326ceb8c6189bedc791a641243a7",
+        "bucket": "s_pedestrian_safety"
+      }
+    },
+    {
       "baseline_text_sha256": "6d2e8ce9181462889b6c56673927ec6e41423f20abaf9303eb744d3a5ba40bf6",
       "is_opinion": true,
       "main_issue": "取締り強化賛成",
@@ -15649,6 +16525,25 @@
         "source_file": "data/bike-blue-ticket_opposition_reread.json",
         "source_sha256": "4dd8137e86c98a9cbf33bcbc6449251daefa2f94121fadfa872d832b869241be",
         "bucket": "abolish"
+      }
+    },
+    {
+      "baseline_text_sha256": "c7eb07cda4a8ac6612c56cecb92f6351b1f4ca6ef1ab3286eb66196ef5cd8dbe",
+      "is_opinion": false,
+      "main_issue": "その他",
+      "post_key": "f089a5d9a6eceaa9d0c3bdcbebc19f2211c14754401d03deabbb7897c7b039c4",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-11-27T01:21:56+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "Codex（編集担当）＋Claude Sonnet 読み手2名（自動分類を伏せて本文判定）",
+        "method_version": "bike-new-collection-editorial-review-v1",
+        "text_sha256": "c7eb07cda4a8ac6612c56cecb92f6351b1f4ca6ef1ab3286eb66196ef5cd8dbe",
+        "reason_sha256": "94596b0c7d7eb00e551e4e133bb7365bb421345c730b870824df10229e689e97",
+        "source_file": "data/bike-blue-ticket_editorial-updates/20261127.json",
+        "source_sha256": "47bb77acea1f74c05def1a96ea1bfbbce17d326ceb8c6189bedc791a641243a7",
+        "bucket": "excluded_information_or_off_topic"
       }
     },
     {
@@ -16374,6 +17269,25 @@
       }
     },
     {
+      "baseline_text_sha256": "368c0e6ad5dc51278862e4eb4e40752a60a9b86416f011aa85e946d6bc54ee90",
+      "is_opinion": true,
+      "main_issue": "その他",
+      "post_key": "fbe98e871d75f1853eeb17ac19dabf428594d968d19eb4079d44725384308f9a",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-11-27T01:21:56+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "Codex（編集担当）＋Claude Sonnet 読み手2名（自動分類を伏せて本文判定）",
+        "method_version": "bike-new-collection-editorial-review-v1",
+        "text_sha256": "368c0e6ad5dc51278862e4eb4e40752a60a9b86416f011aa85e946d6bc54ee90",
+        "reason_sha256": "cac87e05b54a8276bfcc43abe888eb0f45fbef7d5ceebac7cee21be45edc9de4",
+        "source_file": "data/bike-blue-ticket_editorial-updates/20261127.json",
+        "source_sha256": "47bb77acea1f74c05def1a96ea1bfbbce17d326ceb8c6189bedc791a641243a7",
+        "bucket": "oa_conduct_safety"
+      }
+    },
+    {
       "post_key": "fc1c073777392b7b9c5ac866f8c182c0653270f3b5f0ca57d01b4f4599b19e17",
       "baseline_text_sha256": "674478216a92ee7f85ee15b706f1ce465438940114858da66fda4fc1b5093629",
       "main_issue": "インフラ整備優先",
@@ -16561,6 +17475,25 @@
         "source_file": "data/bike-blue-ticket_opposition_reread.json",
         "source_sha256": "4dd8137e86c98a9cbf33bcbc6449251daefa2f94121fadfa872d832b869241be",
         "bucket": "distrust"
+      }
+    },
+    {
+      "baseline_text_sha256": "986373b65cb678c1f6b5479489169c5cee6f28ba2cf8272e4dcc84f0eafc0910",
+      "is_opinion": true,
+      "main_issue": "その他",
+      "post_key": "ff024eaf955303a36a3799766ec1d8720e72fb24342b5d84df6f83b9d19739f9",
+      "review": {
+        "kind": "editorial_body_reread",
+        "evidence_quality": "verified",
+        "read_at": "2026-11-27T01:21:56+09:00",
+        "reviewer_type": "editorial_ai",
+        "reviewer": "Codex（編集担当）＋Claude Sonnet 読み手2名（自動分類を伏せて本文判定）",
+        "method_version": "bike-new-collection-editorial-review-v1",
+        "text_sha256": "986373b65cb678c1f6b5479489169c5cee6f28ba2cf8272e4dcc84f0eafc0910",
+        "reason_sha256": "bf1f5f77d89481d8a34f2c1aaf57881734536d65a79d94daa6be0e3f9869c124",
+        "source_file": "data/bike-blue-ticket_editorial-updates/20261127.json",
+        "source_sha256": "47bb77acea1f74c05def1a96ea1bfbbce17d326ceb8c6189bedc791a641243a7",
+        "bucket": "abolish"
       }
     },
     {

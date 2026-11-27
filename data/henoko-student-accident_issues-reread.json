@@ -1,5 +1,5 @@
 {
-  "read_at": "2026-11-07T12:30:41+09:00",
+  "read_at": "2026-11-27T00:46:02+09:00",
   "reviewer_type": "editorial_ai",
   "reviewer": "Codex (GPT-6)",
   "method": "480件の本文を20件ずつ個別に読み、投稿者の評価と引用・告知を区別し、発言理由を手作業で割り当てた。コードは保存と件数計算のみ。2026-09-13の独立監査に基づき、同文投稿の整合性、賛否の明示性、理由見出しと本文の対応を再確認して修正。独立監査の確認範囲・結果は quality/reviews/2026-09-13-henoko-fix-reaudit.md を参照。2026-09-13にオーナーの公開承認を受け正式採用。 2026-09-24: 2026-09-23収集分の新規39件（政治利用・基地問題）をClaude Sonnet 5が個別に読み、既存の区分へ追加。詳細はquality/reviews/2026-09-24-henoko-base-politics-reread.mdを参照。",
@@ -25,7 +25,7 @@
     "報道・行政対応": {
       "media-bias": {
         "label": "報道の量・取り上げ方への疑問",
-        "count": 63
+        "count": 65
       },
       "media-authority": {
         "label": "行政・政党の説明と調査",
@@ -51,7 +51,7 @@
       },
       "neutral-consistency": {
         "label": "比較する場面でも同じ基準を求める",
-        "count": 8
+        "count": 9
       },
       "neutral-links": {
         "label": "教組・宗教団体と教育の関係",
@@ -69,7 +69,7 @@
       },
       "safety-accountability": {
         "label": "責任の所在・調査と説明を求める",
-        "count": 63
+        "count": 64
       },
       "safety-prevention": {
         "label": "再発防止と安全確認を優先する",
@@ -87,7 +87,7 @@
       },
       "dignity-priority": {
         "label": "犠牲者への配慮を先にしてほしい",
-        "count": 32
+        "count": 35
       },
       "dignity-mourning": {
         "label": "命を悼み、遺族や生徒の立場を考える",
@@ -101,15 +101,15 @@
     "政治利用・基地問題": {
       "politics-links": {
         "label": "活動団体・政党・教育機関への批判と関係",
-        "count": 47
+        "count": 52
       },
       "politics-base": {
         "label": "基地政策・反対運動の是非",
-        "count": 8
+        "count": 9
       },
       "politics-double": {
         "label": "批判する側にも説明と反省を求める",
-        "count": 46
+        "count": 50
       },
       "politics-election": {
         "label": "事故対応を選挙や政治家の評価につなげる",
@@ -5936,6 +5936,193 @@
       "reviewer": "Claude Fable 5.1（編集担当）＋Claude Sonnet 5.5 読み手2名（自動分類を伏せて本文判定）",
       "text_sha256": "636b1dd6cac490ed6e07b3fc2348381082c5afd39ebc1f941ed0875d9df2a86b",
       "reason_sha256": "93526065a48e8ce5a94cb5cea9b9e23ce58e13f341cb555b6d5af8175b4ffa52"
+    },
+    {
+      "post_key": "efdc287c859d83c9b21639bfa7e0301a6dfbabfd688b4836dea7ce2e906edb9f",
+      "main_issue": "政治利用・基地問題",
+      "bucket": "politics-links",
+      "body_reviewed": true,
+      "review_kind": "editorial_body_reread",
+      "read_at": "2026-11-27T00:46:02+09:00",
+      "reviewer": "編集担当AI＋独立した読み手2名（自動分類を伏せて本文判定）",
+      "text_sha256": "6f5d9bb34ccd173c5196c10e4943035d96c0a177142b7a58f71a8b3b90570b44",
+      "reason_sha256": "2f2aa0b4e236022a278cb69597250037f59bfcb60bdca46a612073a4adf5c3ee"
+    },
+    {
+      "post_key": "211d0ef75f77b639838fbc693308aa75a74ae193c4190ff1c8c63133ebcbf0cc",
+      "main_issue": "政治利用・基地問題",
+      "bucket": "politics-double",
+      "body_reviewed": true,
+      "review_kind": "editorial_body_reread",
+      "read_at": "2026-11-27T00:46:02+09:00",
+      "reviewer": "編集担当AI＋独立した読み手2名（自動分類を伏せて本文判定）",
+      "text_sha256": "c4dd93ffd1f8d6474b34ba86a314ced383581c0cf9f6d15a30b7ab99e8e599cd",
+      "reason_sha256": "ca190de151bd9d6842e0e28e2f05bbd23a87f3060c56fffccfabd1ec0e74d27b"
+    },
+    {
+      "post_key": "6ff0eeea1a09345bc137185c5ebf700dc484a55148eb69f1c25f1daa30380c30",
+      "main_issue": "政治利用・基地問題",
+      "bucket": "politics-links",
+      "body_reviewed": true,
+      "review_kind": "editorial_body_reread",
+      "read_at": "2026-11-27T00:46:02+09:00",
+      "reviewer": "編集担当AI＋独立した読み手2名（自動分類を伏せて本文判定）",
+      "text_sha256": "7cc40bba55e2f3f8b3ce9dd1e4f16fa8628f15b8b2387388307b3195d1aed139",
+      "reason_sha256": "06f9c8c2ae26bf2c466ee1996ab18ddded1221c08850ed3bd94529977c2e65bc"
+    },
+    {
+      "post_key": "e91047597967a44a70cf5f428546e746a53b53ee4156601afa29334f54bf23c1",
+      "main_issue": "政治利用・基地問題",
+      "bucket": "politics-double",
+      "body_reviewed": true,
+      "review_kind": "editorial_body_reread",
+      "read_at": "2026-11-27T00:46:02+09:00",
+      "reviewer": "編集担当AI＋独立した読み手2名（自動分類を伏せて本文判定）",
+      "text_sha256": "2d2cc6c2d97e25b545f6f7810f0c52724f5aec5398000d4a68d3adedf854e76d",
+      "reason_sha256": "6e8bdfdf849b147af28e39f1f9c212e172d6d06e6c6882d3e44d6040edf0fb46"
+    },
+    {
+      "post_key": "46a169603dfd7e13be113d9c804b62b0cfb84d2e54c44465d8e75ed959dbf5e0",
+      "main_issue": "政治利用・基地問題",
+      "bucket": "politics-base",
+      "body_reviewed": true,
+      "review_kind": "editorial_body_reread",
+      "read_at": "2026-11-27T00:46:02+09:00",
+      "reviewer": "編集担当AI＋独立した読み手2名（自動分類を伏せて本文判定）",
+      "text_sha256": "d8b94abc64182e057141df7fe77b743014eb83aa76cdcbb58f3848cde1099df4",
+      "reason_sha256": "32a257e7f19e21f5e69dcb939b12187873296bcaed48c2614222ed18ee2e97eb"
+    },
+    {
+      "post_key": "a5bd01586a7f6f12fb39457e5ef09e4889df815fcf15024bcd4e50ee982f894a",
+      "main_issue": "政治利用・基地問題",
+      "bucket": "politics-links",
+      "body_reviewed": true,
+      "review_kind": "editorial_body_reread",
+      "read_at": "2026-11-27T00:46:02+09:00",
+      "reviewer": "編集担当AI＋独立した読み手2名（自動分類を伏せて本文判定）",
+      "text_sha256": "6fa44dc6de48511ebcfc37a594162c30f6f450b95d919950c6b20f9f2a02f977",
+      "reason_sha256": "e8bd911547050299bcb5f29a8237d82e4a7a776db9828ab46d1d287ac6720b12"
+    },
+    {
+      "post_key": "e2525edfda40779b35fa5ecad5d5554ebf44bcdc413c114ca3d35386f7e90cbd",
+      "main_issue": "政治利用・基地問題",
+      "bucket": "politics-links",
+      "body_reviewed": true,
+      "review_kind": "editorial_body_reread",
+      "read_at": "2026-11-27T00:46:02+09:00",
+      "reviewer": "編集担当AI＋独立した読み手2名（自動分類を伏せて本文判定）",
+      "text_sha256": "68ddd03295033c89a085342d07dcd707f663415576d95917777b6ae486338fb9",
+      "reason_sha256": "bb62f4497bcff17efc39befa307cae00605876f98522ab846435bb57d267a630"
+    },
+    {
+      "post_key": "c95c0a5f217c4fc72f7799ebc6e11e7ee367e799e3f48a9893cc9c6fa062d76f",
+      "main_issue": "政治利用・基地問題",
+      "bucket": "politics-links",
+      "body_reviewed": true,
+      "review_kind": "editorial_body_reread",
+      "read_at": "2026-11-27T00:46:02+09:00",
+      "reviewer": "編集担当AI＋独立した読み手2名（自動分類を伏せて本文判定）",
+      "text_sha256": "4b65ff3f60e6f5c1c92969d1501bb45c06d73113ccb5bd3d08ef03d559cb8094",
+      "reason_sha256": "a75d5119bafd0914493bf2377f8f3753620bb10ba14eb0ccae03c5c218436297"
+    },
+    {
+      "post_key": "9176ff8fe6bcb26579a7ccf1285d2234c7b8e798612fe6ecca1e5a061e27eb4d",
+      "main_issue": "政治利用・基地問題",
+      "bucket": "politics-double",
+      "body_reviewed": true,
+      "review_kind": "editorial_body_reread",
+      "read_at": "2026-11-27T00:46:02+09:00",
+      "reviewer": "編集担当AI＋独立した読み手2名（自動分類を伏せて本文判定）",
+      "text_sha256": "72f188da5a839f7ef58dbb7f8854033e4cd9fe33b7ceb4af565f19ee30640feb",
+      "reason_sha256": "5d61d27106c3d33c59eafa7ce92c41f089e4ed6f1808186437cccce513eadb20"
+    },
+    {
+      "post_key": "09b120d77c7e56aa1cf2b7d04594f926b0c58d19a61f56f4c4ee286e46478691",
+      "main_issue": "政治利用・基地問題",
+      "bucket": "politics-double",
+      "body_reviewed": true,
+      "review_kind": "editorial_body_reread",
+      "read_at": "2026-11-27T00:46:02+09:00",
+      "reviewer": "編集担当AI＋独立した読み手2名（自動分類を伏せて本文判定）",
+      "text_sha256": "b5fca57e18ac1d198e3f8e1d818cc05cc1cc9633069f69542207412d887a017c",
+      "reason_sha256": "6d6e4f6e626de19bc0895b3a741164971cb17d9d3035052771d9fcbf2e8a0c33"
+    },
+    {
+      "post_key": "d8c9e4445a202d574a59b2dd245a82bdb08588d8961bbf3a4e6a082583ecb26e",
+      "main_issue": "政治的中立性",
+      "bucket": "neutral-consistency",
+      "body_reviewed": true,
+      "review_kind": "editorial_body_reread",
+      "read_at": "2026-11-27T00:46:02+09:00",
+      "reviewer": "編集担当AI＋独立した読み手2名（自動分類を伏せて本文判定）",
+      "text_sha256": "83a762db06fe0967b2db10e6bac06e5caa2b6996359160dc7f503d084a18db70",
+      "reason_sha256": "6d62f60561051dd1ec393129d1eee8522f5466c28bc8ec686ab5f6d2194737d2"
+    },
+    {
+      "post_key": "85cd02a36bc10f923ec7087c1bee3bf8fdc5302696b713b596be9fa6629c238c",
+      "main_issue": "安全管理・事故原因",
+      "bucket": "safety-accountability",
+      "body_reviewed": true,
+      "review_kind": "editorial_body_reread",
+      "read_at": "2026-11-27T00:46:02+09:00",
+      "reviewer": "編集担当AI＋独立した読み手2名（自動分類を伏せて本文判定）",
+      "text_sha256": "abc5d04fd4b4246384ec714e2184977cecfa8838b7c9468b2886e679380109ec",
+      "reason_sha256": "c7c72c537d0472e86337e827b6dcba0a0c40942ff795629476f26bc868af6541"
+    },
+    {
+      "post_key": "782a4fa20bab51a8e751188864a99132752d15e0e2efecc284e59bc360ff658e",
+      "main_issue": "報道・行政対応",
+      "bucket": "media-bias",
+      "body_reviewed": true,
+      "review_kind": "editorial_body_reread",
+      "read_at": "2026-11-27T00:46:02+09:00",
+      "reviewer": "編集担当AI＋独立した読み手2名（自動分類を伏せて本文判定）",
+      "text_sha256": "cbb5b757eeb963eee35023ade03987749763d35c3acaab77c5acaf6a3b9e0bf1",
+      "reason_sha256": "a87da73dd78727a9d61f7e35d724867fa48fc6709b58efd5a927defbe5d27935"
+    },
+    {
+      "post_key": "b60473ee9170b8d4cca88bec5f6c7d2d0a94aa7ed7d488968b3f10c225d70262",
+      "main_issue": "追悼・被害者の尊厳",
+      "bucket": "dignity-priority",
+      "body_reviewed": true,
+      "review_kind": "editorial_body_reread",
+      "read_at": "2026-11-27T00:46:02+09:00",
+      "reviewer": "編集担当AI＋独立した読み手2名（自動分類を伏せて本文判定）",
+      "text_sha256": "096c9d44032e3170705bff2564ac41080fa8d07c0700984589729bcdd7ae5efb",
+      "reason_sha256": "b9f1d9b3447d851e25fd93cf86acdb88a1b3970e0692df647cfa8ff1d2ff2e5e"
+    },
+    {
+      "post_key": "68a5ad39da78e696fd8849c47d6412d23402ecf0287b90130d8f4cdb072ee7e2",
+      "main_issue": "追悼・被害者の尊厳",
+      "bucket": "dignity-priority",
+      "body_reviewed": true,
+      "review_kind": "editorial_body_reread",
+      "read_at": "2026-11-27T00:46:02+09:00",
+      "reviewer": "編集担当AI＋独立した読み手2名（自動分類を伏せて本文判定）",
+      "text_sha256": "bef992b68884ac02a76755da382a0c793662a2b151f8f5670155577baa3a782b",
+      "reason_sha256": "feecf0e2ca62d706ef29d0c64627a2311e1133fc36cf557dd17dd4fd76911580"
+    },
+    {
+      "post_key": "7158c191ec1a6445b8a5b0d80d8c5bc91735207f8ca3c8fcf980ec7da9f7bda2",
+      "main_issue": "報道・行政対応",
+      "bucket": "media-bias",
+      "body_reviewed": true,
+      "review_kind": "editorial_body_reread",
+      "read_at": "2026-11-27T00:46:02+09:00",
+      "reviewer": "編集担当AI＋独立した読み手2名（自動分類を伏せて本文判定）",
+      "text_sha256": "c963ff14a5dc766c8b8ceb9e4f87037a2e3e1cdbdc7e81eba914a417bb9c7802",
+      "reason_sha256": "3a10ddf5ae85380ecb206fef4a001926b6d8a0919bac3b6310e89c29dc2c904d"
+    },
+    {
+      "post_key": "29f4f688599b453de4c2b198bc26e7018e3331456f99a1fef441794f67e70fa8",
+      "main_issue": "追悼・被害者の尊厳",
+      "bucket": "dignity-priority",
+      "body_reviewed": true,
+      "review_kind": "editorial_body_reread",
+      "read_at": "2026-11-27T00:46:02+09:00",
+      "reviewer": "編集担当AI＋独立した読み手2名（自動分類を伏せて本文判定）",
+      "text_sha256": "28c6f949c800b858dafd183be7c8a57b137c462d52dfc60973c7637a961bf689",
+      "reason_sha256": "2afe7c7cd194d47cc53556e948393c6b3a7f9762ed7ee7e2215d4722e6a7fe9f"
     }
   ],
   "catchup_2026_10_10": {
@@ -5952,5 +6139,10 @@
     "added": 18,
     "evidence": "quality/reviews/2026-11-07-henoko-student-accident-wave-reading.json",
     "evidence_sha256": "4e87b6947e6b27a80b6f74e86194da9014f4b3498b0cd75d160cd3294f4868b2"
+  },
+  "wave_2026_11_26": {
+    "added": 17,
+    "evidence": "quality/reviews/2026-11-26-henoko-student-accident-wave-reading.json",
+    "evidence_sha256": "e671831632f01fc89b4c1dc61e38567c3adbb20bacd34374b5c1143f0dbad96c"
   }
 }

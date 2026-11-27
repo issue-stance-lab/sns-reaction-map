@@ -2,11 +2,20 @@ from __future__ import annotations
 
 import json
 import unittest
+from pathlib import Path
+from unittest import mock
 
 from scripts import public_registry_common as prc
 
 
 class ClaimVerificationContractTest(unittest.TestCase):
+    def assert_ai_copyright_claim_counts(self, verification: dict) -> None:
+        path = prc.ROOT / "data/ai-copyright_claim_posts.json"
+        reviewed = json.loads(path.read_text(encoding="utf-8"))["claims"]
+        expected = {claim_id: len(set(post_ids)) for claim_id, post_ids in reviewed.items()}
+        actual = {claim["id"]: claim["matched_post_count"] for claim in verification["claims"]}
+        self.assertEqual(actual, expected, "公開する主張別の件数が本文照合の投稿ID集合と一致しません")
+
     def test_completed_and_not_started_are_distinguished(self) -> None:
         complete = prc.build_claim_verification("constitutional-amendment")
         self.assertEqual(complete["status"], "complete")
@@ -66,13 +75,33 @@ class ClaimVerificationContractTest(unittest.TestCase):
         self.assertEqual(done["status"], "complete")
         self.assertEqual(done["reviewer_type"], "ai_assisted")
         self.assertEqual(len(done["claims"]), 6)
-        self.assertEqual([item["matched_post_count"] for item in done["claims"]], [8, 0, 0, 0, 7, 87])
+        self.assert_ai_copyright_claim_counts(done)
         self.assertEqual([item["verdict"] for item in done["claims"]], ["gap", "fact", "fact", "gap", None, None])
         self.assertEqual([item["assessment_kind"] for item in done["claims"][-2:]],
                          ["conditional_explanation", "evaluation_context"])
         self.assertTrue(all(item["issue_ids"] for item in done["claims"]))
         self.assertTrue(all(item["sources"] for item in done["claims"]))
         self.assertNotIn("tweet_id", json.dumps(done, ensure_ascii=False))
+
+    def test_ai_copyright_rejects_missing_verification_post(self) -> None:
+        path = prc.ROOT / "data/verification/ai-copyright-claims.json"
+        rows = json.loads(path.read_text(encoding="utf-8"))
+        read_text = Path.read_text
+
+        def read(loaded, *args, **kwargs):
+            if loaded == path:
+                return json.dumps(rows[1:])
+            return read_text(loaded, *args, **kwargs)
+
+        with mock.patch.object(Path, "read_text", read):
+            with self.assertRaisesRegex(prc.RegistryError, "件数が確定データと一致しません"):
+                prc.build_claim_verification("ai-copyright")
+
+    def test_ai_copyright_detects_incorrect_published_count(self) -> None:
+        verification = prc.build_claim_verification("ai-copyright")
+        verification["claims"][0]["matched_post_count"] += 1
+        with self.assertRaisesRegex(AssertionError, "件数が本文照合の投稿ID集合と一致しません"):
+            self.assert_ai_copyright_claim_counts(verification)
 
 
 class EmptyClaimAssociationsTest(unittest.TestCase):

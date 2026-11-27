@@ -6,7 +6,7 @@
     "planet_config": "configs/planet/henoko-student-accident.yaml",
     "themes_registry": "THEMES.yaml"
   },
-  "checked_on": "2026-10-13",
+  "checked_on": "2026-11-26",
   "_checked_on": "一次資料の本文を確かめた日（1か所だけ）。冒頭の「◯月◯日時点」、未公表欄、背景の行はここから作る。2026-10-13 に運輸安全委員会の調査状況・文科省の見解と通知・国交省の発表・国会会議録（API）・県議会の委員会記録を取り直した（quality/research/henoko-student-accident-primary-sources.md【2026-10-13追記】）。背景台帳 data/verification/henoko-student-accident-background.json の checked_on より古いと生成が止まる。",
   "report": {
     "_about": "運輸安全委員会の事故調査報告書。published_on が null の間は「未公表（checked_on 時点）」と出す。公表されたら published_on に公表日を入れる（内容を編集部が読むまでは「確認中」、読んだら content_checked_on に読んだ日を入れる）。published_on は checked_on より後にできず、content_checked_on は published_on 以後・checked_on 以前でないと生成が止まる。副首都の law.enforcement_confirmed_on と同じ考え方。冒頭の短答・未公表欄と背景の両方がここを読む。",
@@ -31,7 +31,7 @@
       }
     }
   },
-  "checked_note": "年表と短答の事実は、公的機関の資料を{checked}に取り直して確かめた範囲です。",
+  "checked_note": "年表と短答は、公的機関の資料で確かめた範囲です。校外活動の全国調査と船舶事故の調査状況は{checked}に確認しました。",
   "crumb": [
     "教育・事故",
     "辺野古沖の船舶転覆事故"
@@ -168,6 +168,16 @@
           "label": "沖縄県議会の委員会記録",
           "url": "https://www.pref.okinawa.lg.jp/_res/projects/default_project/_page_/001/041/124/2gou.r80819henoko.pdf"
         }
+      },
+      {
+        "date": "2026-11-24",
+        "actor": "文部科学省",
+        "title": "校外活動の全国調査結果を公表",
+        "text": "文部科学省は、校外活動の安全確保や教育内容を学校が点検したかを調べ、11月24日に結果を公表しました。",
+        "source": {
+          "label": "文部科学省の調査結果（PDF）",
+          "url": "https://www.mext.go.jp/content/20261124-mxt_jidou01-000048865_1.pdf"
+        }
       }
     ],
     "pending_title": "まだ公表されていないもの",
@@ -181,15 +191,6 @@
           "url": "https://jtsb.mlit.go.jp/jtsb/ship/detail2.php?id=17113"
         },
         "_text": "文は report.texts の status から作る（公表の有無で変わる）。"
-      },
-      {
-        "actor": "文部科学省",
-        "title": "全国の学校への取組調査の結果",
-        "text": "7月末を回答期限とし、集計後に公表すると答弁しています。結果の公表は見つかっていません。",
-        "source": {
-          "label": "国会会議録（7月14日の答弁）",
-          "url": "https://kokkai.ndl.go.jp/txt/122115104X01220260714/51"
-        }
       }
     ],
     "pending_note_template": "{checked}に確かめた時点の状況です。"
