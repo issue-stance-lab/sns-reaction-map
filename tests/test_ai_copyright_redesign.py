@@ -11,6 +11,7 @@ import json
 import re
 import tempfile
 import unittest
+from datetime import date, timedelta
 from pathlib import Path
 
 from bs4 import BeautifulSoup
@@ -314,10 +315,13 @@ class BackgroundTests(unittest.TestCase):
 
     def test_filing_phase_switches(self):
         start = self.d["ocfg"]["principle_code"]["filing_starts_on"]
-        before = self.render_bg("2026-10-20")  # 届出開始日（2026-10-26）より前。公開JSONの更新日は開始日以降になった
+        def unconfirm(d):
+            d["ocfg"]["principle_code"]["filing_confirmed_on"] = None
+
+        before = self.render_bg("2026-10-20", unconfirm)
         self.assertEqual(before["data-filing-phase"], "before")
         self.assertIn("始まる予定です", before.select_one("#bg-rules").get_text())
-        after = self.render_bg(start)
+        after = self.render_bg(start, unconfirm)
         self.assertEqual(after["data-filing-phase"], "after_unconfirmed")
         self.assertIn("まだ確かめていません", after.select_one('[data-event="filing"]').get_text())
 
@@ -334,6 +338,12 @@ class BackgroundTests(unittest.TestCase):
             d["ocfg"]["principle_code"]["filing_confirmed_on"] = "2026-10-01"
         with self.assertRaises(SystemExit):
             self.render_bg("2026-10-28", early)
+
+        def prematurely_confirmed(d):
+            d["ocfg"]["principle_code"]["filing_confirmed_on"] = "2026-10-27"
+
+        with self.assertRaisesRegex(SystemExit, "基準日が届出の開始日より前"):
+            self.render_bg("2026-10-20", prematurely_confirmed)
 
     def test_missing_phase_text_stops(self):
         def drop(d):
@@ -394,6 +404,22 @@ INPUTS = (
 )
 
 
+def copy_layout_fixture(root: Path) -> Path:
+    """公開設定を変更せず、届出開始前と開始後の未確認状態を再現する。"""
+    shutil.copytree(ROOT / "configs", root / "configs")
+    shutil.copytree(ROOT / "scripts/ai_copyright_redesign", root / "scripts/ai_copyright_redesign")
+    for name in INPUTS:
+        (root / name).parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(ROOT / name, root / name)
+    config_path = root / "configs/ai-copyright-opening.json"
+    config = json.loads(config_path.read_text(encoding="utf-8"))
+    config["principle_code"]["filing_confirmed_on"] = None
+    config_path.write_text(json.dumps(config, ensure_ascii=False), encoding="utf-8")
+    source = root / layout.PAGE
+    shutil.copy2(layout.source_for_refresh(ROOT), source)
+    return source
+
+
 def vote_block(text: str, name: str) -> str:
     return re.search(r"var " + name + r"=\[(.*?)\];", text, re.S).group(1)
 
@@ -407,10 +433,11 @@ class RedesignCandidateTests(unittest.TestCase):
     def setUpClass(cls):
         cls.tmp = tempfile.TemporaryDirectory()
         out = Path(cls.tmp.name)
-        cls.source_path = layout.source_for_refresh(ROOT)
+        cls.fixture = out / "input"
+        cls.source_path = copy_layout_fixture(cls.fixture)
         cls.source = cls.source_path.read_text(encoding="utf-8")
-        redesign.build(cls.source_path, out / "release", "release", as_of=AS_OF)
-        redesign.build(cls.source_path, out / "preview", "preview", as_of=AS_OF)
+        redesign.build(cls.source_path, out / "release", "release", root=cls.fixture, as_of=AS_OF)
+        redesign.build(cls.source_path, out / "preview", "preview", root=cls.fixture, as_of=AS_OF)
         cls.release = (out / "release" / redesign.PAGE).read_text(encoding="utf-8")
         cls.preview = (out / "preview" / redesign.PAGE).read_text(encoding="utf-8")
         cls.s = soup_of(cls.release)
@@ -422,7 +449,7 @@ class RedesignCandidateTests(unittest.TestCase):
         cls.tmp.cleanup()
 
     def test_same_input_same_output(self):
-        redesign.build(self.source_path, self.out / "again", "release", as_of=AS_OF)
+        redesign.build(self.source_path, self.out / "again", "release", root=self.fixture, as_of=AS_OF)
         self.assertEqual(self.release, (self.out / "again" / redesign.PAGE).read_text(encoding="utf-8"))
 
     def test_refuses_docs_and_new_page_input(self):
@@ -434,7 +461,7 @@ class RedesignCandidateTests(unittest.TestCase):
             page = Path(temp) / "new.html"
             page.write_text(self.release, encoding="utf-8")
             with self.assertRaisesRegex(ValueError, "入力にできません"):
-                redesign.build(page, Path(temp) / "out", "release", as_of=AS_OF)
+                redesign.build(page, Path(temp) / "out", "release", root=self.fixture, as_of=AS_OF)
 
     def test_title_seo_and_article_are_inherited_verbatim(self):
         for name in ("SEO_META", "ARTICLE_JSON_LD", "ARTICLE_TRUST"):
@@ -600,7 +627,7 @@ class RedesignCandidateTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temp:
             path = Path(temp) / "source.html"
             path.write_text(changed, encoding="utf-8")
-            redesign.build(path, Path(temp) / "out", "release", as_of=AS_OF)
+            redesign.build(path, Path(temp) / "out", "release", root=self.fixture, as_of=AS_OF)
             page = (Path(temp) / "out" / redesign.PAGE).read_text(encoding="utf-8")
         self.assertIn("このページの見かた（更新確認）", page)
         broken = re.sub(r'<div class="dotbox" id="dotbox".*?<div class="waffle" id="waffle"></div>', "", self.source, count=1,
@@ -609,7 +636,7 @@ class RedesignCandidateTests(unittest.TestCase):
             path = Path(temp) / "source.html"
             path.write_text(broken, encoding="utf-8")
             with self.assertRaisesRegex(ValueError, "山なみの部品"):
-                redesign.build(path, Path(temp) / "out", "release", as_of=AS_OF)
+                redesign.build(path, Path(temp) / "out", "release", root=self.fixture, as_of=AS_OF)
 
     def test_no_legacy_widgets(self):
         for marker in ("TIDE_CARD_START", "AI_COPYRIGHT_SEARCH_ENTRY_START", "THEME_DESIGN_START",
@@ -631,9 +658,10 @@ class RedesignCandidateTests(unittest.TestCase):
 
     def test_filing_phase_switch_by_as_of(self):
         """基準日で届出の段階が切り替わり、届出開始日（10/26）を過ぎても生成は止まらない。"""
-        start = json.loads((ROOT / "configs/ai-copyright-opening.json").read_text(encoding="utf-8"))["principle_code"]["filing_starts_on"]
+        config = self.fixture / "configs/ai-copyright-opening.json"
+        start = json.loads(config.read_text(encoding="utf-8"))["principle_code"]["filing_starts_on"]
         self.assertEqual(self.s.select_one("#ai-copyright-background")["data-filing-phase"], "before")
-        redesign.build(self.source_path, self.out / "after", "release", as_of="2026-10-27")
+        redesign.build(self.source_path, self.out / "after", "release", root=self.fixture, as_of="2026-10-27")
         s = soup_of((self.out / "after" / redesign.PAGE).read_text(encoding="utf-8"))
         self.assertLess(start, "2026-10-27")
         self.assertEqual(s.select_one("#ai-copyright-background")["data-filing-phase"], "after_unconfirmed")
@@ -646,10 +674,12 @@ class CompactReadingTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.tmp = tempfile.TemporaryDirectory()
-        cls.source_path = layout.source_for_refresh(ROOT)
+        root = Path(cls.tmp.name)
+        fixture = root / "input"
+        cls.source_path = copy_layout_fixture(fixture)
         cls.source = cls.source_path.read_text(encoding="utf-8")
-        redesign.build(cls.source_path, Path(cls.tmp.name), "release", as_of=AS_OF)
-        cls.release = (Path(cls.tmp.name) / redesign.PAGE).read_text(encoding="utf-8")
+        redesign.build(cls.source_path, root / "release", "release", root=fixture, as_of=AS_OF)
+        cls.release = (root / "release" / redesign.PAGE).read_text(encoding="utf-8")
         cls.s = soup_of(cls.release)
         cls.cfg = json.loads((ROOT / "configs/ai-copyright-reading.json").read_text(encoding="utf-8"))
         cls.top = int(cls.cfg["compact"]["top_reasons"])
@@ -777,14 +807,28 @@ class CompactReadingTests(unittest.TestCase):
 class LayoutTests(unittest.TestCase):
     def _root(self, temp: str) -> Path:
         root = Path(temp)
-        shutil.copytree(ROOT / "configs", root / "configs")
-        shutil.copytree(ROOT / "scripts/ai_copyright_redesign", root / "scripts/ai_copyright_redesign")
-        for name in INPUTS:
-            (root / name).parent.mkdir(parents=True, exist_ok=True)
-            shutil.copy2(ROOT / name, root / name)
-        (root / layout.PAGE).parent.mkdir(parents=True, exist_ok=True)
-        shutil.copy2(layout.source_for_refresh(ROOT), root / layout.PAGE)
+        copy_layout_fixture(root)
         return root
+
+    def _trend_date(self, root: Path) -> date:
+        source = soup_of((root / layout.PAGE).read_text(encoding="utf-8"))
+        label = source.select_one(".trend-asof").get_text(strip=True)
+        match = re.fullmatch(r"(\d{4})年(\d{1,2})月(\d{1,2})日時点", label)
+        self.assertIsNotNone(match, label)
+        return date(*map(int, match.groups()))
+
+    def _set_public_update(self, root: Path, updated_on: date) -> None:
+        value = updated_on.isoformat()
+        for relative in ("docs/data/themes/ai-copyright.json", "data/public/themes/ai-copyright.json"):
+            path = root / relative
+            data = json.loads(path.read_text(encoding="utf-8"))
+            data["updated_on"] = value
+            path.write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
+        path = root / "THEMES.yaml"
+        themes = path.read_text(encoding="utf-8")
+        block = re.search(r"\n  ai-copyright:\n(?:    .*\n)+", themes).group()
+        updated = re.sub(r"(\n    updated_at: )['\"]?[0-9-]+['\"]?", rf"\g<1>{value}", block, count=1)
+        path.write_text(themes.replace(block, updated), encoding="utf-8")
 
     def test_disabled_has_no_effect(self):
         with tempfile.TemporaryDirectory() as temp:
@@ -856,15 +900,13 @@ class LayoutTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temp:
             root = self._root(temp)
             (root / layout.CONFIG).write_text('{"enabled": true}')
-            for rel in ("docs/data/themes/ai-copyright.json", "data/public/themes/ai-copyright.json"):
-                data = json.loads((root / rel).read_text(encoding="utf-8"))
-                data["updated_on"] = "2026-11-17"
-                (root / rel).write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
-            themes = (root / "THEMES.yaml").read_text(encoding="utf-8")
-            block = re.search(r"\n  ai-copyright:\n(?:    .*\n)+", themes).group()
-            fixed = re.sub(r"(\n    updated_at: )['\"]?[0-9-]+['\"]?", r"\g<1>2026-11-17", block, count=1)
-            (root / "THEMES.yaml").write_text(themes.replace(block, fixed), encoding="utf-8")
+            config_path = root / "configs/ai-copyright-opening.json"
+            config = json.loads(config_path.read_text(encoding="utf-8"))
+            filing = config["principle_code"]
+            filing_start = date.fromisoformat(filing["filing_starts_on"])
             # 「意見の推移」の時点（保存した収集回の最新日）は更新日より前のままでも止まらない
+            updated_on = max(filing_start, self._trend_date(root)) + timedelta(days=1)
+            self._set_public_update(root, updated_on)
             self.assertEqual(set(layout.finish(root)), {layout.SOURCE, layout.PAGE})
             s = soup_of((root / layout.PAGE).read_text(encoding="utf-8"))
             self.assertEqual(s.select_one("#ai-copyright-background")["data-filing-phase"], "after_unconfirmed")
@@ -873,6 +915,17 @@ class LayoutTests(unittest.TestCase):
         self.assertEqual(refresh.count("materialize_ai_copyright(candidate_root)"), 1)
         adapter = (ROOT / "scripts/refresh_adapters/ai_copyright.py").read_text(encoding="utf-8")
         self.assertIn("current_page = source_for_refresh(root)", adapter)
+
+    def test_finish_rejects_trend_after_public_update(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = self._root(temp)
+            (root / layout.CONFIG).write_text('{"enabled": true}')
+            self._set_public_update(root, self._trend_date(root) - timedelta(days=1))
+            before = (root / layout.PAGE).read_bytes()
+            with self.assertRaisesRegex(ValueError, "「意見の推移」の時点が.*公開JSONの更新日より後"):
+                layout.finish(root)
+            self.assertEqual((root / layout.PAGE).read_bytes(), before)
+            self.assertFalse((root / layout.SOURCE).exists())
 
 
 if __name__ == "__main__":
