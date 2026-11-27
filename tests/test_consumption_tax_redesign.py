@@ -685,7 +685,7 @@ class RedesignCandidateTests(unittest.TestCase):
         for href in ("about.html#operator", "about.html#method", "privacy.html", "disclaimer.html"):
             self.assertIn(href, hrefs)
         self.assertIn(f'<time datetime="{PUBLIC["updated_on"]}">', self.release)
-        self.assertIsNotNone(self.s.select_one('header.modern-site-header a[href="index.html"]'))
+        self.assertIsNotNone(self.s.select_one('header.modern-site-header a[href="./"]'))
 
     def test_detail_data_kept_and_closed(self):
         detail = self.s.select_one("#detail-data")

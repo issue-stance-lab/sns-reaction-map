@@ -1433,7 +1433,7 @@ def build(
 
     # --- 3. hero -------------------------------------------------------
     hero = (
-        '<section class="hero"><div class="hero-inner"><nav class="top-nav"><a href="index.html">トップ</a></nav>'
+        '<section class="hero"><div class="hero-inner"><nav class="top-nav"><a href="./">トップ</a></nav>'
         # h1 は apply_theme_trust.py が HEADLINE で上書きするので、最初から揃えておく
         f'<span class="badge">税・財政</span><h1>{HEADLINE}</h1>'
         '<p class="question-line">食料品8％→1％の政府案。いつから、何が対象で、法律は成立した？</p>'

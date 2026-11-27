@@ -569,7 +569,7 @@ class RedesignCandidateTests(unittest.TestCase):
             self.assertIn(href, hrefs)
         self.assertIn('<time datetime="2026-06-24">', self.release)
         self.assertIn(f'<time datetime="{PUBLIC["updated_on"]}">', self.release)
-        self.assertIsNotNone(self.s.select_one('header.modern-site-header a[href="index.html"]'))
+        self.assertIsNotNone(self.s.select_one('header.modern-site-header a[href="./"]'))
 
     def test_tide_card_is_inherited_verbatim_inside_fold(self):
         block = re.search(r'<section class="update-dashboard"[^>]*><!-- TIDE_CARD_START -->.*?<!-- TIDE_CARD_END --></section>',

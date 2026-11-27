@@ -191,7 +191,7 @@ addEventListener('hashchange',resolve);resolve();})();"""
     for a in s.select('a[href]'):
         if a['href'].startswith('https://sns-reaction-map.jp/'):
             relative=a['href'].removeprefix('https://sns-reaction-map.jp/')
-            a['href']=('index.html'+relative) if relative.startswith('#') else relative or 'index.html'
+            a['href']=('./'+relative) if relative.startswith('#') else relative or './'
     for node in src.select('link[href*="fonts.googleapis.com"]'):
         s.head.append(BeautifulSoup(str(node),'html.parser'))
     helper=s.new_tag('script',src='topic-modern.js?v=15',defer=True);s.head.append(helper)

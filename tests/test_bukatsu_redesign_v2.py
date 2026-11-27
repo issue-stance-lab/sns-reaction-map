@@ -480,7 +480,7 @@ class RedesignCandidateTests(unittest.TestCase):
         for sel in ("#related-topics", "body > footer", "#related-theme-tracking"):
             self.assertEqual(self.s.select_one(sel).get_text(), self.src.select_one(sel).get_text(), sel)
         self.assertEqual(self.s.select_one("#planet-data").string, self.src.select_one("#planet-data").string)
-        self.assertIsNotNone(self.s.select_one('header.modern-site-header a[href="index.html"]'))
+        self.assertIsNotNone(self.s.select_one('header.modern-site-header a[href="./"]'))
 
     def test_ga_and_adsense_only_in_release(self):
         for name in ("GA_TAG", "ADSENSE_TAG"):

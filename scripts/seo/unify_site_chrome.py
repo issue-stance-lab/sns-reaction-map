@@ -86,7 +86,7 @@ def site_footer_links() -> str:
 
 
 def plain_footer_links() -> str:
-    parts = ['<a href="index.html">トップ</a>']
+    parts = ['<a href="./">トップ</a>']
     parts += [_anchor(href, label) for href, label in FOOTER_LINKS]
     return " · ".join(parts)
 

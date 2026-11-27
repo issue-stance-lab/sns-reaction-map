@@ -186,14 +186,14 @@ def _related(src: BeautifulSoup) -> str:
 def _header() -> str:
     # topic-modern.js が後から差し込む共通ヘッダーと同じ中身。JavaScriptなしでもトップへ戻れるよう静的に置く。
     return ('<header class="modern-site-header"><div class="modern-header-inner">'
-            '<a class="modern-logo" href="index.html" aria-label="SNS反応まっぷ トップ">'
+            '<a class="modern-logo" href="./" aria-label="SNS反応まっぷ トップ">'
             '<span class="modern-logo-mark" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></span>'
             '<span class="modern-logo-text">SNS反応まっぷ</span></a>'
             '<nav class="modern-nav" aria-label="メインナビゲーション">'
-            '<a href="index.html#topics">テーマ一覧</a><a href="index.html#featured-questions">注目の問い</a>'
+            '<a href="./#topics">テーマ一覧</a><a href="./#featured-questions">注目の問い</a>'
             '<a href="about.html">データについて</a><a href="usage.html">使い方</a>'
             '<a href="usage.html#faq">よくある質問</a></nav>'
-            '<a class="modern-header-button" href="index.html#topics">テーマを見る</a></div></header>')
+            '<a class="modern-header-button" href="./#topics">テーマを見る</a></div></header>')
 
 
 def _phase_script(ocfg: dict) -> str:
